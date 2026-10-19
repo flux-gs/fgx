@@ -4,6 +4,21 @@ All notable changes to FGX, a port of 2.11BSD to the Apple IIgs.  Format:
 [Keep a Changelog](https://keepachangelog.com); versions:
 [SemVer](https://semver.org).  See docs/VERSIONING.md.
 
+## [2.0.1] - 2026-10-19
+
+### Changed
+
+- gitignore: the disk_src staging rules name the directories as they are spelt
+  The rules for staged binaries, man cat pages, modules and fixture staging
+  named disk_src/SBIN, TESTBIN, USR/MAN/CAT[1-8] and the rest in upper case,
+  the ProDOS-era spelling; the directories are lower case.  They matched only
+  where git folds case, so a clone without core.ignorecase -- a case-sensitive
+  checkout, or a fresh macOS clone -- showed 219 build outputs as untracked
+  after one build.  That also moved the tree hash release.sh compares against
+  the gate receipt.  The comment that said these rules covered case-sensitive
+  layouts is gone with the problem.
+
+
 ## [2.0.0] - 2026-10-15
 
 The first release from the GitHub repository, whose history starts here.
