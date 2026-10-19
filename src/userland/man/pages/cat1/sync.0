@@ -1,0 +1,36 @@
+SYNC(1)		    UNIX Programmer's Manual		  SYNC(1)
+
+
+
+NAME
+     sync - force all filesystem state to disk
+
+SYNOPSIS
+     sync
+
+DESCRIPTION
+     _S_y_n_c executes the _s_y_n_c(2) primitive: every open file's
+     buffered state is committed across every task, and then each
+     mounted filesystem writes back the inodes its write path left
+     dirty and the super block that block allocation left ahead of
+     the disk.
+
+     Use _s_y_n_c to insure that all disk writes have been completed
+     before the machine is halted or the disk image is inspected
+     from outside.
+
+     A program that needs the same guarantee for ONE open file
+     should call _f_s_y_n_c(_2) on its descriptor instead; a failed
+     background flush latched on that file is reported there, and
+     _s_y_n_c reports nothing.
+
+     Nothing else on a running machine calls _s_y_n_c(2) on a clock.
+     A super block reaches the disk when its allocation batch fills
+     and an inode when its last reference goes, neither of which is
+     a timer, so _u_p_d_a_t_e(8) runs this every thirty seconds out of
+     /etc/rc.  _S_y_n_c is the same thing on demand.
+
+SEE ALSO
+     fsync(2), sync(2), update(8), halt(8)
+
+Printed 7/17/26		 FGX (2.11BSD port)			1

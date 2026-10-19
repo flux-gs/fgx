@@ -1,0 +1,18 @@
+{
+ "name": "tcstatic",
+ "description": "tcsh's command substitution and here-documents behave correctly, asserted in the shape that the pending static-buffer conversion would break (src/userland/tcsh/sh.glob.c backeval, sh.dol.c heredoc, sh.lex.c bgetc -- the bank-0 stack shrink that takes tcsh from 133 pages needed to 74, written and MEASURED but currently DISABLED because tcsh's data bank has no room; see docs/history/audits/bank0-stack-status.md section 4).  It runs against the shipping build too, where it is a plain regression guard on those three paths.  A static buffer's one real failure mode is STATE LEFT OVER FROM THE PREVIOUS CALL, so the fixture is built to expose exactly that: every long payload is followed by a SHORT one, and each assertion carries a trailing '=' so a leaked tail cannot hide inside a prefix match.  '=T1BB=' follows a 40-character substitution through the same ibuf/tibuf; '=T3S=' follows a 50-character here-document through the same obuf/lbuf/mbuf; '=T4AAAA...=' proves the first substitution's value survived intact in a variable, i.e. it was copied out before the buffer was reused.  The script is itself read through bgetc's now-static tbuf, so a corrupted read buffer takes the whole run down.  NOT asserted: nesting.  csh cannot nest backquotes or put a here-document inside them (the first draft of this fixture tried and got 'Unmatched `.'), which is also the strongest part of the safety argument -- the source language gives no way to re-enter either function.",
+ "command": "tcsh /testdata/tcstatic",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "=T1BB=",
+   "=T3S=",
+   "=T4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+   "=T5END"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

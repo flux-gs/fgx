@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# pre-push: start the gate in the background for what is being pushed, so a
+# pull request's head has a receipt by the time anyone reads it.  Branch and
+# tag protection live on GitHub, not here.
+#
+# Enabled via: git config core.hooksPath tools/hooks   (disable: git config --unset core.hooksPath)
+remote="$1"
+[ "$remote" = origin ] || exit 0
+cat >/dev/null                                  # the ref list is not needed
+
+# --- spawn the gate, DETACHED ---------------------------------------------
+# The push returns immediately; the gate runs in the background and writes
+# .gate/<sha>.json.  Not a daemon: nothing is resident, the job exits when done.
+# gate.sh takes an atomic mkdir lock, so two rapid pushes cannot gate at once:
+# the second exits 75 without running, which is the only thing a resident
+# process would have arbitrated.  Its status is discarded here on purpose --
+# the receipt, or its absence, is the verdict.
+#
+# The gate is NOT a push blocker.  Blocking here would just recreate the
+# foreground wait this work exists to remove -- release.sh is where a red or
+# MISSING receipt stops something shipping.
+#
+# Set FGX_NO_GATE=1 to skip (e.g. pushing docs).
+if [ "${FGX_NO_GATE:-0}" != 1 ] && [ -x tools/gate.sh ]; then
+  repo="$(git rev-parse --show-toplevel)"
+  (
+    cd "$repo" || exit 0
+    # git runs hooks with GIT_DIR (and its siblings) exported.  The gate is not
+    # a git subcommand: left set, they point every scratch repository a checker
+    # creates back at this one.
+    unset $(git rev-parse --local-env-vars)
+    # pre-push fires BEFORE the push lands, so a status mirror would reference a
+    # sha the server has not seen.  Give it a moment; the local receipt -- the
+    # actual verdict -- does not care either way.
+    sleep 5
+    tools/gate.sh >.gate.log 2>&1     # gate.sh takes its own lock
+  ) </dev/null >/dev/null 2>&1 &
+  echo "==> gate spawned in background; verdict -> .gate/<sha>.json (log: .gate.log)" >&2
+fi
+
+exit 0

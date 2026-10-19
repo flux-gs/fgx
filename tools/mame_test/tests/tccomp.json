@@ -1,0 +1,79 @@
+{
+ "name": "tccomp",
+ "description": "tcsh filename completion works, asserted in the shape that the pending conversion of t_search's five name buffers to static would break (src/userland/tcsh/tw.parse.c -- 803 of a 926-byte frame, part of the shrink that takes tcsh from 133 pages of bank-0 stack to 74; written, measured, and DISABLED on the data bank -- see docs/history/audits/bank0-stack-status.md section 4).  t_search is the riskiest of the five conversions: it fills those buffers inside a loop over directory entries, so a static that were re-entered would corrupt a name mid-scan.  Typed one keystroke at a time through raw_inject because the interesting character is a TAB, which post_commands cannot deliver: 'ls /testda' + TAB + Enter.  /testda DOES NOT EXIST, so plain ls would fail -- a directory listing can only appear if completion filled in the rest.  Both halves are asserted: 'ls /testdata/' is the completed line echoed back (the completion itself), and 'colors.txt' is a file in that directory (the completed command actually ran).  Neither string is in the typed command, which is just 'tcsh'.",
+ "command": "tcsh",
+ "exit_on_prompt": false,
+ "timeout_s": 200,
+ "raw_inject": [
+  [
+   900,
+   108,
+   0
+  ],
+  [
+   930,
+   115,
+   0
+  ],
+  [
+   960,
+   32,
+   0
+  ],
+  [
+   990,
+   47,
+   0
+  ],
+  [
+   1020,
+   116,
+   0
+  ],
+  [
+   1050,
+   101,
+   0
+  ],
+  [
+   1080,
+   115,
+   0
+  ],
+  [
+   1110,
+   116,
+   0
+  ],
+  [
+   1140,
+   100,
+   0
+  ],
+  [
+   1170,
+   97,
+   0
+  ],
+  [
+   1200,
+   9,
+   0
+  ],
+  [
+   1260,
+   13,
+   0
+  ]
+ ],
+ "expect": {
+  "screen_contains": [
+   "ls /testdata/",
+   "colors.txt"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

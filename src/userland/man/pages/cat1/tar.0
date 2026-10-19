@@ -1,0 +1,99 @@
+TAR(1)                      General Commands Manual                     TAR(1)
+
+NNAAMMEE
+       tar - file archiver
+
+SSYYNNOOPPSSIISS
+       ttaarr [ key ] f archive [ name ... ]
+
+DDEESSCCRRIIPPTTIIOONN
+       _T_a_r saves and restores multiple files on a single archive file.  _T_a_r's
+       actions are controlled by the _k_e_y argument.  The _k_e_y is a string of
+       characters containing at most one function letter and possibly one or
+       more function modifiers.  Other arguments to _t_a_r are file or directory
+       names specifying which files to dump or restore.  In all cases,
+       appearance of a directory name refers to the files and (recursively)
+       subdirectories of that directory.
+
+       This is the file-only tar: there is no tape/rmt support, no multi-
+       volume handling, and no append/update.  The archive is an ordinary file
+       (given with ff) or standard input/output (ff --).  The old V7 512-byte-
+       header format is used.
+
+       The function portion of the key is specified by one of the following
+       letters:
+
+       cc       Create a new archive; writing begins at the beginning of the
+               archive.
+
+       xx       The named files are extracted from the archive.  If the named
+               file matches a directory whose contents had been written onto
+               the archive, this directory is (recursively) extracted,
+               creating intermediate directories as needed.  The modification
+               time is restored (unless mm is given).  If no file argument is
+               given, the entire archive is extracted.  A symbolic link is
+               made again with _s_y_m_l_i_n_k(2) and a hard link with _l_i_n_k(2) to
+               the name it was archived with; ownership is restored.
+
+       tt       The names of the specified files are listed each time they
+               occur in the archive.  If no file argument is given, all of the
+               names are listed.
+
+       The following characters may be used in addition to the letter which
+       selects the function desired.
+
+       ff         _T_a_r uses the next argument as the name of the archive.  If
+                 the name is `--', tar writes to standard output or reads from
+                 standard input, whichever is appropriate, so _t_a_r can be the
+                 head or tail of a pipeline.  This modifier is required.
+
+       vv         Verbose: print the name of each file preceded by the function
+                 letter.  With tt, gives more information about each entry.
+
+       ww         Print the action and file name, then wait for confirmation; a
+                 word beginning with `y' does the action, anything else skips
+                 it.
+
+       oo         On output, suppress the directory-ownership records.
+
+       pp         Restore files to their original modes, ignoring the present
+                 umask(2).  Setuid and sticky information will also be
+                 restored to the super-user.
+
+       ll         Complain if tar cannot resolve all of the links to the files
+                 dumped.  If this is not specified, no error messages are
+                 printed.
+
+       hh         Follow symbolic links as if they were normal files or
+                 directories.  Normally, tar does not follow symbolic links.
+
+       mm         Do not restore modification times; extracted files carry the
+                 time of extraction.
+
+       bb         Use the next argument as the blocking factor (blocks per
+                 record).  The default and maximum is 20.  The block size is
+                 determined automatically when reading.
+
+       BB         Force input/output blocking to fill each record, so _t_a_r works
+                 across a pipe where a single read may return short.  Implied
+                 for `ff --' on input.
+
+       ii         Ignore directory checksum errors while reading, instead of
+                 aborting.
+
+       CC         If a file name is preceded by --CC, _t_a_r performs a _c_h_d_i_r(2) to
+                 that name first, so directories not sharing a close parent
+                 can be archived with short relative names, e.g.
+                      tar cf a.tar -C /usr include -C /etc passwd
+
+DDIIAAGGNNOOSSTTIICCSS
+       Complaints about bad key characters, checksum errors, and read/write
+       errors.
+
+BBUUGGSS
+       On a mounted ProDOS volume
+       only the owner's read and write bits of a mode survive; see
+       mount_prodos(8).
+       The limit on file-name length is 100 characters.
+
+7th Edition                      May 12, 1986                           TAR(1)

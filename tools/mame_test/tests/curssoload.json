@@ -1,0 +1,18 @@
+{
+ "name": "curssoload",
+ "description": "Shared libc SP4: two traced first users of curses on a fresh boot, the first stopped inside its load while the second starts: curses is loaded once, and both traces list it.",
+ "command": "sh /testdata/curssoload",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "LDC loading libcurses",
+   "RCE curses=1 traced=2"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

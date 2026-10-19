@@ -1,0 +1,8 @@
+x=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+x=$x$x$x$x
+x=$x$x$x$x
+x=$x$x$x$x
+x=$x$x$x$x
+echo =SO16K
+y=$x$x$x$x
+echo =SOPAST

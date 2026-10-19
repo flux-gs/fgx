@@ -1,0 +1,16 @@
+{
+ "name": "ensoniqplaystereo",
+ "description": "ensoniqplay placed stereo: pan.wav (16-bit stereo, ~26460 frames/ch) plays as true stereo -- left channel uploaded to DOC RAM $0000 on oscillator 0 (DOC channel 0 = left), right to $8000 on oscillator 1 (channel 1 = right), both one-shot.  'stereo' proves the size dispatch chose the two-oscillator path and 'halted after 7' (~72 ticks; 26460/22050 = 1.2 s) proves both oscillators clocked through their channel.  L/R output separation was confirmed by capturing MAME's per-channel audio (left on output ch1, right on ch2).  Baked at /root/audio.",
+ "command": "ensoniqplay /root/audio/pan.wav",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "expect": {
+  "screen_contains": [
+   "wav 16-bit signed stereo 22050 Hz",
+   "26460 samples/ch @ 22050 Hz (freq 429), stereo",
+   "halted after 7",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "timed out", "Fatal" ]
+ }
+}

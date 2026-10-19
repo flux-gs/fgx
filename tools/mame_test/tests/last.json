@@ -1,0 +1,25 @@
+{
+ "name": "last",
+ "description": "last(1) reads /etc/wtmp and lists sessions most recent first. At the boot prompt the log holds exactly two records init and login(3) wrote: a `~'/reboot boot record and the root/console login that is still open. So last prints the console session as `still logged in', the reboot line below it, and the `wtmp begins' trailer stamped with the oldest record. Proves the whole W1+W2 chain end to end: init's boot record, login(3)'s wtmp append, the 36-byte record layout, and last's backwards block walk + ctime/gmtime formatting over it.",
+ "command": "last",
+ "timeout_s": 60,
+ "exit_on_prompt": true,
+ "expect": {
+  "screen_contains": [
+   "reboot",
+   "root",
+   "console",
+   "still logged in",
+   "wtmp begins",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "No such",
+   "cannot",
+   "wtmp:",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ]
+ }
+}

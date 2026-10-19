@@ -1,0 +1,13 @@
+{
+ "name": "exectrunc",
+ "description": "A TRUNCATED IMAGE IS REFUSED WITH ITS ERRNO, NOT ZERO (apple/fgx#520).  The fixture is /bin/true's first 400 bytes: the header and segment table are whole, segment 0 is cut short, so the loader's segment read hits end of file and `_LoadOneSegment` answers EIO.  Before the fix, code that ran after every segment load clobbered the low byte of that errno with an 8-bit flag test, so execve failed with errno 0 and ldd printed `Undefined error: 0'.  ldd execs the image and perror()s the failure (SunOS ldd's own shape, bin/ldd.c).  Expect `Input/output error'; `Undefined error: 0' is the old bug's signature.",
+ "command": "/bin/ldd /testbin/trunc",
+ "timeout_s": 240,
+ "stage_files": [
+  {"host": "tools/mame_test/fixtures/trunc.bin", "prodos_dir": "/FGX/testbin", "name": "trunc"}
+ ],
+ "expect": {
+  "screen_contains": ["execution failed: Input/output error"],
+  "screen_lacks": ["Undefined error", "PANIC", "BRK"]
+ }
+}

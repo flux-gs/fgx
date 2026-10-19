@@ -1,0 +1,24 @@
+{
+ "name": "fsckroot",
+ "description": "THE LIVE ROOT CHECKS CLEAN, WITH ITS MAPS IN MEMORY.  apple/fgx#330 step 2.  This is the run /etc/rc will make, and the thing it proves is that fsck needs no scratch file for a 32000-block root -- because rc's own `-t' path is on the root (2.11BSD usr/etc/rc:40, `fsck -p -t /_FSCK_TMP_FILE'), so a root that needs a scratch file gets one on the filesystem being checked -- and setup.c:147 refuses that, pfatal under -p being exit(8).  Upstream says so itself four lines above: `this will *only* work if fsck can do your root file system without a temporary file'.  So `no NEED SCRATCH FILE' is a correctness assertion about the boot sequence, not a performance one.\n\nIT ALSO RETIRES A PREMISE.  apple/fgx#330's description says a boot fsck cannot be done on a read-write root because the same run reports UNREF inodes and BAD FREE LIST that are artifacts of the filesystem moving underneath it.  Measured 2026-09-12: those artifacts were fsck's OWN scratch file.  At FSCK_ARENA 8192 the run reported `UNREF FILE I=566 SIZE=24576' -- 24576 is exactly the 24 blocks it had just been told it needed -- plus ALLOCATED INODE(S) IN IFREE LIST, 25 DUP BLKS IN FREE LIST and BAD FREE LIST.  At 32000 every one of them is gone and the volume is clean, three runs out of three with identical counts.\n\nWHY THE `lacks' ARMS ARE THE POINT.  The positive arms only say fsck finished; any build reaches Phase 5 on a healthy volume.  What discriminates is the absence of the four complaints, and they are not hypothetical -- they are what this exact command printed on the build before the arena was sized.  Measured discriminating: set FSCK_ARENA back to 8192 and NEED SCRATCH FILE, TMP FILE ON ROOT WHEN CHECKING ROOT and UNREF FILE all return.\n\nTHE ROOT IS REACHED THROUGH /dev/rsd0, AND /dev/sd0 IS ASSERTED TO REFUSE.  A block device carrying a mount cannot also be opened raw -- spec_open's VBLK arm answers EBUSY through mountedon() -- so `fsck /dev/sd0' on the live root prints `Can't open /dev/sd0', which is what 2.11BSD and 4.3BSD-Reno both do and what this machine did not do until the SI_MOUNTEDON flag mountedon() reads was actually set.  The two halves are asserted on one boot because they are one claim: the block name must refuse AND the raw name must work, and a build that got only the first would look like a pass on the refusal and a hang on the check.\n\n`** Root file system' IS THE hotroot WITNESS, and it is asserted because the whole safety argument rests on it.  hotroot is what arms setup.c's scratch-file refusal and fsck.c's `exit(4)' after a modified root, which is what makes /etc/rc reboot rather than carry on with stale buffers.  Through the RAW name the comparison upstream makes -- stat(\"/\").st_dev against the device's st_rdev -- cannot match, a character device having its own number, so setup() derives the block counterpart by dropping the `r' and compares that.  This assertion is the only thing that says that derivation works; without it a mounted root checked by hand would be stamped MNT_CLEAN while it was being written.\n\n-t IS PASSED ON PURPOSE even though no scratch file is wanted: without it, a build that DID need one stops at an interactive `ENTER FILENAME:' prompt and the run times out with no diagnostic, which reads as a hang rather than as the answer it is.\n\n-f IS REQUIRED NOW, and the reason is the point of 2.11BSD update #456 rather than a workaround: the root was clean when the kernel mounted it, so its superblock carries MNT_WASCLEAN and setup() answers `file system is clean; not checking' for a hotroot. Without -f this fixture would assert nothing about the five phases it exists to exercise -- it would be green because fsck did no work at all. fsckclean covers the skip itself.",
+ "command": "/sbin/fsck -n /dev/sd0; /sbin/fsck -f -n -t /tmp/fscktmp /dev/rsd0; echo rc=$?",
+ "timeout_s": 400,
+ "expect": {
+  "screen_contains": [
+   "Can't open /dev/sd0",
+   "** /dev/rsd0 (NO WRITE)",
+   "** Root file system",
+   "** Phase 5 - Check Free List",
+   "rc=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "NEED SCRATCH FILE",
+   "ON ROOT WHEN CHECKING ROOT",
+   "UNREF",
+   "BAD FREE LIST",
+   "ALLOCATED INODE"
+  ]
+ }
+}

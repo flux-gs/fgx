@@ -1,0 +1,12 @@
+{
+ "name": "argvcap",
+ "description": "EVERY ARGUMENT THE KERNEL ACCEPTS ARRIVES, and the ones it will not are refused OUT LOUD.  Three caps govern an exec here and they used to disagree: libc's execve stages 32, the kernel's _Loader_StageArgs takes LSARGV_MAX and answers EINVAL past it, and crt0 unpacked ARGS_MAX = 8 -- past which it copied the string and then silently declined to record a pointer.  So arguments between the two caps were accepted, laid into the child's frame, and dropped on arrival with nothing said: `echo' with twelve printed seven (apple/fgx#300).  THE REFUSAL IS E2BIG SINCE apple/fgx#303, not the generic `cannot execute'.  libc used to stage 32 and let the kernel refuse the 17th with EINVAL, which sh reports as `cannot execute'; it now refuses at the real bound and reports E2BIG -- `echo: arg list too long' -- which is what BSD answers for an over-long arg list (`nc >= NCARGS-1 -> E2BIG', 4.3BSD-Reno kern/kern_exec.c:373).  The assertion still discriminates a TRUNCATING kernel, which is the point: that one prints the sixteen-argument line instead of any error.  THE SILENT HALF IS THE ONE THAT MATTERS -- a loop over a glob quietly processes a prefix of its files, which is data loss wearing a success.  FIFTEEN IS THE LAST THAT FITS (argc counts argv[0], so 15 + the program name = LSARGV_MAX) and SIXTEEN IS REFUSED, so both arms are asserted: the long line must come back WHOLE, needle `o' last, and the over-long one must produce sh's `cannot execute' rather than a short answer.  Asserting only the first would pass on a kernel that had gone back to truncating, since a truncated fifteen still starts with `a'.  THE LAST ARGUMENT IS BUILT BY EXPANSION -- `O=o' and `$O' -- because screen_contains searches a ring that holds the shell's echo of the typed line, and a needle spelled out in that line matches its own echo: the first cut asserted `a b ... n o' while typing it, so it passed whatever the kernel delivered.  With `$O' the fifteen-word run appears only if the shell expanded it and the child printed it.",
+ "command": "O=o; echo a b c d e f g h i j k l m n $O; echo -; echo a b c d e f g h i j k l m n $O p",
+ "timeout_s": 12,
+ "expect": {
+  "screen_contains": [
+   "a b c d e f g h i j k l m n o",
+   "arg list too long"
+  ]
+ }
+}

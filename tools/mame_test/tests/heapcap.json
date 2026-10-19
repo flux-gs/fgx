@@ -1,0 +1,4 @@
+{"name":"heapcap",
+ "description":"Per-process heap ceiling and the MID SIZE BAND, from a clean start. The band (32762 up to the $F000 big-block threshold) failed outright after the sbrk rework -- too big for malloc's signed-sbrk guard, too small for the MM path -- a hole in the middle of a size range that a capacity sweep never notices. The capacity FLOOR is asserted inside the fixture, not here: the exact byte count moves with the heap start and block header, but losing an order of magnitude is issue #11 recurring.",
+ "command":"/testbin/heapcap","timeout_s":180,
+ "expect":{"screen_contains":["HEAPMID 40000 ok","HEAPMID 32768 ok","HEAPCAP OK"]}}

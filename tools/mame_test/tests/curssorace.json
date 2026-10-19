@@ -1,0 +1,19 @@
+{
+ "name": "curssorace",
+ "description": "Shared libc SP4: two first users of curses on a fresh boot, the first stopped inside its load while the second waits on the row: both run and exit 0.",
+ "command": "sh /testdata/curssorace",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "LDC loading libcurses",
+   "RCE a=0",
+   "RCE b=0"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

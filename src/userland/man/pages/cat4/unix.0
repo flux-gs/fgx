@@ -1,0 +1,136 @@
+
+
+UNIX(4)              UNIX Programmer's Manual               UNIX(4)
+
+
+
+NAME
+     unix - UNIX-domain protocol family
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+     #include <sys/un.h>
+
+     s = socket(AF_UNIX, SOCK_DGRAM, 0);
+
+DESCRIPTION
+     The UNIX-domain protocol family delivers datagrams between
+     sockets on one machine.  It uses the filesystem name space
+     for addresses and no network of any kind: there is no
+     protocol below it, nothing is serialised onto a wire, and a
+     machine with no Ethernet card has the whole family available.
+
+     Only SOCK_DGRAM is provided.  Upstream also offers
+     SOCK_STREAM, which is what pipe(2) is built from on those
+     systems; this kernel has real pipes, so a request for
+     SOCK_STREAM is refused with EPROTOTYPE rather than answered
+     with a descriptor that has no transport behind it.
+
+ADDRESSING
+     A UNIX-domain address is a pathname, carried in a
+     sockaddr_un:
+
+          struct sockaddr_un {
+                  short   sun_family;     /* AF_UNIX */
+                  char    sun_path[108];
+          };
+
+     sun_path IS 108 BYTES AND A sockaddr IS 16 IN TOTAL, so an
+     address buffer sized as a sockaddr truncates every path past
+     the thirteenth character -- and bind(2) then names a
+     different, shorter file and succeeds, so the caller learns
+     nothing until a later stat(2) of the name it meant answers
+     ENOENT.  Declare a sockaddr_un, or size the buffer SUN_LEN.
+
+     bind(2) creates a socket node on the filesystem, of type
+     VSOCK: stat(2) reports it through S_ISSOCK and ls(1) shows it
+     as a socket.  connect(2) resolves a path to the socket bound
+     to it and requires write permission on the node, which is
+     what makes chmod(1) on the name mean something.
+
+     A BOUND SOCKET HOLDS ITS NODE'S VNODE for as long as it is
+     open, and close(2) releases it.  close(2) does NOT remove the
+     name -- a daemon that wants to rebind should unlink(2) first,
+     which is what syslogd does -- so a socket node outliving its
+     socket is the ordinary case after a restart.  Connecting to
+     such a name answers ECONNREFUSED.
+
+     The receive queue belongs to the BOUND socket rather than to
+     a connection, so one queue serves every client that has
+     connected to a name, however many there are.  A client end
+     holds no queue of its own.
+
+DIAGNOSTICS
+     A socket(2) for SOCK_STREAM or SOCK_RAW answers EPROTOTYPE.
+     SOCK_SEQPACKET is not refused because it does not exist:
+     <sys/socket.h> defines only the three types above.
+
+     A bind(2) of a name that already exists answers EADDRINUSE;
+     upstream marks adopting the existing node as a FIFO-style
+     improvement it did not make, and neither does this.
+
+     A connect(2) to a name that is not a socket answers ENOTSOCK,
+     to a socket node whose socket has closed ECONNREFUSED, and to
+     one now held by another protocol EPROTOTYPE.
+
+     A send(2) of a datagram larger than the receive queue can
+     ever hold answers EMSGSIZE, decided before the transport is
+     entered.  ENOBUFS means the queue has no room AT THIS MOMENT
+     and is worth retrying; EMSGSIZE never is.
+
+SEE ALSO
+     socket(2), bind(2), connect(2), send(2), recv(2), unlink(2),
+     syslog(3), pipe(2)
+
+BUGS
+     NO ACCESS RIGHTS.  Upstream passes descriptors between
+     processes over a UNIX-domain socket, as ancillary data with
+     an SCM_RIGHTS control message.  Nothing of that is here:
+     sendmsg(2) and recvmsg(2) do not exist, there is no msghdr,
+     and the garbage collector upstream needs for descriptors in
+     flight has nothing to collect.  A port that expects to hand a
+     descriptor to another process cannot do it this way.
+
+     EVERY DATAGRAM ARRIVES FROM AN UNNAMED SENDER.  Upstream
+     attaches the sender's bound address to each record, so
+     recvfrom(2) can answer who sent it; here a sender's name is
+     not carried, and recvfrom(2) answers with upstream's own
+     sun_noname: a 16-byte sockaddr whose family is AF_UNIX and
+     whose path is empty.  That is what upstream gives for a
+     sender that never bound, so a caller written against
+     upstream reads a legitimate answer -- it just always reads
+     that one.  A protocol that identifies its peers by their
+     bound names will not work.
+
+     SENDTO(2) DOES NOT NAME A DESTINATION.  Upstream lets a
+     datagram socket give a path per call: an unconnected socket
+     is connected for that one datagram, and a connected one
+     answers EISCONN.  Here an AF_UNIX socket reaches a peer only
+     through connect(2), and sendto(2) on one answers EINVAL
+     whatever it names; send(2) on the connected socket is the
+     form that works.
+
+     TRUNCATION IS SILENT.  A recv(2) whose buffer is smaller than
+     the datagram returns as many bytes as fit and discards the
+     remainder, which is upstream's behaviour; but MSG_TRUNC is
+     not reported in the flags, so a caller cannot tell a message
+     that exactly filled its buffer from one that was cut.  Size
+     the buffer, or compare against what the sender promised.
+
+     THE QUEUE CEILING IS A GROWN RING AND NOT AN MBUF BUDGET.
+     Upstream bounds a receive queue by sb_hiwat against a shared
+     mbuf pool, so pressure elsewhere in the system shows up here;
+     this queue is a pipe ring that grows to 4096 bytes and is
+     bounded by that alone.  The observable difference is that
+     EMSGSIZE arrives at a fixed size rather than a varying one.
+
+     The number of simultaneously bound sockets is bounded by the
+     machine's pipe count, which is shared with pipe(2) -- so
+     enough bound sockets will stop pipelines working in a shell.
+     Upstream has no equivalent coupling.
+
+HISTORY
+     A UNIX-domain protocol family appeared in 4.2BSD.  This one
+     provides the SOCK_DGRAM half of it, added so that syslog(3)
+     would have a deterministic sink.

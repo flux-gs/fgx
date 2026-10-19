@@ -1,0 +1,55 @@
+
+
+IFCONFIG(8)         UNIX Programmer's Manual         IFCONFIG(8)
+
+
+
+NAME
+     ifconfig - configure network interface parameters
+
+SYNOPSIS
+     ifconfig
+     ifconfig -a
+     ifconfig interface
+     ifconfig interface inet address netmask mask broadcast addr
+
+DESCRIPTION
+     Ifconfig shows or configures a network interface.  With no
+     arguments (or -a) it lists every interface; with an interface
+     name it shows that one; with address arguments it assigns them.
+
+     The status line reports the real interface flags read from the
+     kernel: UP and RUNNING appear only when the card is present and
+     the link is up (a card that is down no longer reads as up),
+     BROADCAST for the Ethernet medium.  The options line lists the
+     W5100's hardware offload -- IPv4, ARP, TCP, UDP, inbound ICMP,
+     and the IP/TCP/UDP checksums are all computed by the card:
+
+          u2s1: flags=67<UP,BROADCAST,RUNNING>
+                  options=<TCP4,UDP4,ICMP4,ARP,CSUM_IP,CSUM_TCP,CSUM_UDP>
+                  ether 00:08:dc:00:00:01
+                  inet 192.168.2.10 netmask 0xffffff00 broadcast 192.168.2.255
+
+     Interfaces are named u2sN for the Uthernet-II (W5100) card in
+     slot N.  The address, netmask, and broadcast keywords may be
+     abbreviated to their first letter.
+
+     The v1 tool talks to the kernel ifnet table over SYS_IFCONFIG.
+     The BSD socket-ioctl model (SIOCGIFCONF / SIOCGIFFLAGS) is a
+     roadmap item; see the Track B netinet-port scope.
+
+FILES
+     /etc/hostname       interface name read at boot
+     /etc/netstart       brings interfaces up at login
+
+SEE ALSO
+     dhclient(8), route(8), netstat(1)
+
+BUGS
+     Only one Uthernet-II card is driven; a second card is detected
+     but not used (multi-NIC is a roadmap item).  Loopback (lo0) is
+     not yet present -- it arrives with the software stack.
+
+
+
+Printed 7/20/86                                                8

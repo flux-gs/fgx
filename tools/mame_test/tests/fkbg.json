@@ -1,0 +1,4 @@
+{"name":"fkbg",
+ "description":"A snapshot-fork parent runs CONCURRENTLY with its exec'd child (beyond GNO fork2).",
+ "command":"/testbin/fkbg","timeout_s":120,
+ "expect":{"screen_contains":["FKBG OK"]}}

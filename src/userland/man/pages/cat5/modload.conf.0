@@ -1,0 +1,48 @@
+
+
+MODLOAD.CONF(5)      UNIX Programmer's Manual     MODLOAD.CONF(5)
+
+
+
+NAME
+     modload.conf - kernel modules loaded at boot
+
+DESCRIPTION
+     The file /etc/modload.conf lists the FGXM modules the kernel
+     loads once the filesystem is up.  One module name per line,
+     each resolved as /lib/modules/<name>.  Blank lines are
+     ignored, as is any line whose first non-blank character is
+     `#'.  The name is the first run of non-blank characters;
+     anything after it on the line is ignored.
+
+     Modules load top to bottom, so one that depends on another
+     must follow it.  A module that fails to load is reported to
+     the kernel log and LOADING CONTINUES with the next line -- a
+     bad entry costs you that module, not the boot.  A missing
+     file is not an error either.
+
+     THE FILESYSTEM DOES NOT BELONG HERE: not prodos, and since
+     the 2.11BSD root landed, not vfs, ufs or ufsdir either.  A
+     module named here is read THROUGH a filesystem -- including
+     the open of this file -- so a filesystem module named here
+     could never be read at all.  The boot loader stages those
+     instead; see fgxunix(5).
+
+     What is left is every module that can wait until there is a
+     root, which is where 4.3BSD runs modload(8) from as well: out
+     of /etc/rc, once the filesystem is mounted.
+
+     hello is a demonstration module: the smallest working example
+     of the module interface.  It ships in /lib/modules and is
+     commented out here.
+
+FILES
+     /etc/modload.conf
+     /lib/modules
+
+SEE ALSO
+     fgxunix(5), boot.conf(5), init(8)
+
+
+
+Printed 8/8/26                                                 5

@@ -1,0 +1,77 @@
+VI(1)                      UNIX Programmer's Manual                      VI(1)
+
+NNAAMMEE
+       vi - visual text editor
+
+SSYYNNOOPPSSIISS
+       vvii [--eeiiRRvv] [++_c_m_d] [_f_i_l_e ...]
+
+DDEESSCCRRIIPPTTIIOONN
+       _v_i is the visual screen editor.  On FGX it is provided by _e_l_v_i_s, a
+       compact clone of the Berkeley _v_i/_e_x editor by Steve Kirkendall.  It
+       opens each _f_i_l_e in turn for interactive editing and, on write, replaces
+       the file with the edited text.
+
+       _v_i has two principal modes.  In ccoommmmaanndd mode, keystrokes are editing
+       commands (move the cursor, delete, change, yank, put).  In iinnppuutt mode
+       -- entered with ii, aa, oo, and friends -- keystrokes are inserted into
+       the text; press EESSCC to return to command mode.  A line beginning with ::
+       introduces an _e_x command (::ww, ::qq, ::wwqq, ::ss, ::rr, ::!!, and so on); the
+       command line is read at the bottom of the screen and executed when
+       RREETTUURRNN is pressed.
+
+OOPPTTIIOONNSS
+       --RR     Set the rreeaaddoonnllyy option so a file is not accidentally
+              overwritten.
+
+       --ee     Start in _e_x (colon command) mode rather than visual mode.
+
+       --vv     Start in visual command mode (the default).
+
+       --ii     Start in input mode.
+
+       ++_c_m_d   After the first file is loaded, execute _c_m_d as an _e_x command.
+              vvii ++223377 ffoooo edits _f_o_o and jumps to line 237.
+
+FFGGXX NNOOTTEESS
+       The FGX console is a vvtt110000 terminal (TTEERRMM=vvtt110000); the kernel emits
+       vt100 escape sequences for the arrow keys system-wide.  In _v_i the arrow
+       keys move the cursor as hh, jj, kk, and ll in command and input modes.  On
+       the :: command line -- which is append/erase only and has no cursor
+       motion -- the arrow keys are inert rather than corrupting the line.
+
+       The DDeelleettee key is a destructive backspace: it erases the character it
+       removes, both while typing text and on the :: command line.  CCoonnttrrooll--HH,
+       CCoonnttrrooll--UU, and the erase/kill characters set by _s_t_t_y(1) behave as
+       usual.
+
+EENNVVIIRROONNMMEENNTT
+       TTEERRMM   The terminal type; normally vvtt110000 on FGX.
+
+       SSHHEELLLL  The shell used for ::!! filters and wildcard expansion.  The
+              default is //bbiinn//sshh.
+
+       HHOOMMEE   _v_i reads its initialization file (..eexxrrcc) from this directory, if
+              set.
+
+       EEXXIINNIITT _e_x commands executed before any ..eexxrrcc file.
+
+FFIILLEESS
+       //ttmmpp//eellvv**
+              Temporary edit buffer, one per edited file.
+
+       ..eexxrrcc  Per-user (home and current directory) startup _e_x commands.
+
+SSEEEE AALLSSOO
+       _e_x(1), _e_d(1), _s_e_d(1), _s_t_t_y(1)
+
+BBUUGGSS
+       Long lines are scrolled sideways rather than wrapped onto multiple
+       screen rows.  There is no LISP support, and auto-indent is not quite
+       _v_i-compatible.
+
+AAUUTTHHOORR
+       Steve Kirkendall (elvis).  Ported to FGX as a multi-bank userland
+       editor.
+
+FGX                                   FGX                                VI(1)

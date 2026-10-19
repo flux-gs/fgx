@@ -1,0 +1,25 @@
+{
+ "name": "wuptime",
+ "description": "w(1) and uptime(1) on the console shell, which is the one session every boot has.  THE LOAD-BEARING NEEDLE IS `root     console': it exists only if init(8) wrote the console line's /etc/utmp record at boot (login(1) never runs on that line) AND w(1) read the file back with the right record layout -- a w that opened nothing, or read a struct of the wrong size, prints nothing or garbage, never that pair of columns.  Verified by mutation: with init's login(3) call removed, `root     console' and `1 user' both go and the header still prints.  `User     tty' is w's own table header, printed only after it counted users and formatted the uptime.  `1 user' is the count itself, this boot having exactly the console session.  RC=0 proves uptime(1) -- the same binary under its other name -- ran and exited; the needle is built by the shell from $?, so the typed command cannot contain it.  No needle asserts that uptime printed the HEADER-ONLY form rather than the full table, substring matching being unable to count occurrences of a line w has already printed; that half rests on w.c's argv[0] test and the port.  `fgx!root' is who(1) on its `who am i' path and nothing else: that arm prints gethostname(3) from /etc/hostname, a `!', then the record -- so it proves who read the same file back AND that the hostname lookup works, and the typed command cannot contain the string.  ` 2 root' is the LINK COUNT on /bin/uptime: uptime(1) is not a copy of w(1) but a second name for the same inode, as 2.11BSD ships it (`ln w uptime'), so a staging that put two files down instead of linking them shows 1 there.  screen_lacks rules out the failure paths both names print on, and the kernel's.",
+ "command": "who; who am i; w; uptime; echo RC=$?; ls -l /bin/uptime",
+ "timeout_s": 40,
+ "expect": {
+  "screen_contains": [
+   "root     console",
+   "fgx!root",
+   "User     tty",
+   "1 user",
+   "RC=0",
+   " 2 root",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "cannot open",
+   "Usage:",
+   "GUARD stkhwm"
+  ]
+ }
+}

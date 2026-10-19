@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_bytes",
+ "description": "Concurrent fork (apple/fgx#494): parent and child each keep their own global, sbrk heap byte and stack local across alternating sleeps, so every swap of the shared image must carry each member's bytes.  The child's last check also needs a marker the parent writes after its own sleeps, so the case cannot pass unless the parent ran while the child slept: on a deferred-parent fork it prints FP BYTES FAIL.",
+ "command": "/testbin/forkpair bytes",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "FP BYTES ok"
+  ],
+  "screen_lacks": [
+   "FP BYTES FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

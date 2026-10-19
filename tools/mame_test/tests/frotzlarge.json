@@ -1,0 +1,31 @@
+{
+ "name": "frotzlarge",
+ "description": "frotz(6) plays Book and Volume (Nick Montfort, 2005, CC BY-NC-SA 2.5; 225,792 bytes, Z-machine v5) -- the LARGE-STORY regression.  The story far exceeds the 64 KB data bank, so its routines and strings live above 64 KB in the bank-spanning Memory Manager block: exactly what Mini-Cluedo (16 KB) and CZECH do not exercise.  The script begins a session from the title menu (B), looks, asks the score and quits; 'glow-in-the-dark stars' and '0 of the 0 tasks' print only if code and strings above 64 KB were reached, and the returned prompt proves the quit unwinds.  Runs the shipped copy at /usr/games/frotz.",
+ "command": "frotz -m /usr/games/frotz/bookvol.z5",
+ "timeout_s": 200,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "post_commands": [
+  "B",
+  "look",
+  "score",
+  "quit",
+  "y"
+ ],
+ "post_gap_frames": 900,
+ "expect": {
+  "screen_contains": [
+   "glow-in-the-dark stars",
+   "0 of the 0 tasks",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "Fatal",
+   "Stack overflow",
+   "not found"
+  ]
+ }
+}

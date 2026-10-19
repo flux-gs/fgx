@@ -1,0 +1,38 @@
+# EditorConfig — https://editorconfig.org
+# Codifies FGX's existing whitespace conventions so an editor doesn't reformat
+# files (especially the column-aligned 65816 assembly) on save.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown: a double trailing space is a hard line break — don't strip it.
+[*.md]
+trim_trailing_whitespace = false
+
+# C (userland tools + libc + the toolchain's host C): 4-space.
+[*.{c,h}]
+indent_style = space
+indent_size = 4
+
+# Python build/test tooling: 4-space.
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Shell scripts: 2-space.
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# 65816 assembly (Merlin32): spaces — column alignment is manual, so no fixed
+# indent size is enforced, only "no tabs".
+[*.{s,inc}]
+indent_style = space
+
+# Makefiles require real tabs.
+[Makefile]
+indent_style = tab

@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_exec",
+ "description": "Shared libc SP4: an exec releases the old image's uses; a failed exec keeps them.",
+ "command": "/testbin/ldctl exec",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC exec ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

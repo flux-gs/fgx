@@ -1,0 +1,18 @@
+{
+ "name": "rebootclean",
+ "description": "A DELIBERATE REBOOT LEAVES THE ROOT CLEAN, which is the invariant BSD has and the reason a reboot is not a crash.  2.11BSD update #456 puts fsclean() in boot(); FGX's _Sys_Reboot reaches it through far slot 37.\n\nThe assertion is on the SECOND boot: `file system is clean; not checking' can only appear there, because boot one's rc remounts the root read-write and that clears the on-disk flag.  So seeing it after a reboot means the shutdown put it back.  Without fsclean the same run shows the full five-phase check instead -- correct, and over 45 seconds of it.\n\n`UNEXPECTED INCONSISTENCY' is the other half: a reboot that leaves damage behind would be a reboot marked clean over a filesystem nobody checked, which is worse than the slow boot it replaced.",
+ "command": "sync; /sbin/reboot",
+ "boot_s": 45,
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "file system is clean; not checking",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "UNEXPECTED INCONSISTENCY",
+   "/sbin/reboot"
+  ]
+ }
+}

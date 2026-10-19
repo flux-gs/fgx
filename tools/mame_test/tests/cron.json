@@ -1,0 +1,19 @@
+{
+ "name": "cron",
+ "description": "cron(8), started by /etc/rc, runs a crontab(1) entry within two minutes, and crontab -l lists it with the header crontab wrote.  The libc overlay's first tools: cron's localtime and syslog, and crontab's ctime, run from the overlay segment; crontab installs the table with fchown(2) and fchmod(2).  Both needles appear only in output, never in the typed command.",
+ "command": "echo '* * * * * /bin/date > /tmp/cronran' > /tmp/ct; crontab /tmp/ct; crontab -l; sleep 130; cat /tmp/cronran && echo CRON''RAN",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "/tmp/ct installed on",
+   "CRONRAN"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "No such file",
+   "fchown",
+   "fchmod"
+  ]
+ }
+}

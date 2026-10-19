@@ -1,0 +1,20 @@
+{
+ "name": "securelevel",
+ "description": "SECURELEVEL 1 MAKES A MOUNTED FILESYSTEM'S RAW DEVICE READ-ONLY, and the two halves are asserted on ONE boot because they are one claim.  apple/fgx#410.\n\nTHE EFFECT, second command.  `fsck -f' with no `-n' on the live root opens /dev/rsd0 for reading and then for WRITING; setup.c prints ` (NO WRITE)' when the second open fails (2.11BSD usr/sbin/fsck/setup.c, `if (nflag || (fswritefd = open(dev, O_WRONLY)) < 0)').  So the string is fsck reporting that the kernel refused it -- and refusing it is the point: before this the same command would have repaired a filesystem with daemons running on it.  READING STILL WORKS, which the five phases and rc=0 say; that asymmetry is upstream's design (the securelevel clause sits inside `if (mode & FWRITE)', sys_inode.c:650) and is how an operator finds out whether the machine needs to come down.\n\nMEASURED DISCRIMINATING: on the build where init's raise silently failed -- the argument block was read from the wrong stack offset, so every sysctl answered EINVAL and getsecuritylevel returned -1 -- this exact command printed `** /dev/rsd0' with no `(NO WRITE)' and repaired away.  THE GATE ALONE IS NOT THE FEATURE: spec_open's check cannot fire while the level is 0, which is the dead-check shape apple/fgx#406 turned out to be, so the raise and the gate are tested together or nothing is tested.\n\nTHE SYSCALL, first command.  sysctltest asserts what the fsck line cannot see: that the level reads back as 1 on a multiuser machine, that an unserved name answers ENOTSUP at both the top level and the leaf, and -- the one that is a security rule rather than an interface detail -- that a process which is not pid 1 cannot LOWER the level, AND that the level is unchanged after the refusal.  A rule that returned EPERM having already written would be no rule, and nothing about a machine that quietly dropped to level 0 would look wrong.",
+ "command": "/testbin/sysctltest; /sbin/fsck -f -t /tmp/fscktmp /dev/rsd0; echo rc=$?",
+ "timeout_s": 400,
+ "expect": {
+  "screen_contains": [
+   "securelevel=1",
+   "SYSCTLTEST DONE",
+   "** /dev/rsd0 (NO WRITE)",
+   "** Phase 5 - Check Free List",
+   "rc=0"
+  ],
+  "screen_lacks": [
+   "FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

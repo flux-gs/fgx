@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_eperm",
+ "description": "Shared libc SP4: only the loading owner may grant, commit or abort.",
+ "command": "/testbin/ldctl eperm",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC eperm ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

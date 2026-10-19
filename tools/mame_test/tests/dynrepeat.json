@@ -1,0 +1,10 @@
+{
+ "name": "dynrepeat",
+ "description": "A DYNAMIC PROGRAM BOUND BY NAME, RUN TWICE IN ONE BOOT (shared libc SP5 spec 5.1, 5.5).  dynsomisdyn is linked against a libc.so whose core is two bytes larger, so the machine binds it by name and every data site moves by a nonzero delta.  The second exec finds its code in the shared-text table, already patched by the first; the binder must write the same bytes again, not add the delta twice.  dynso.c checks libc data through code-segment sites (errno, __progname, the block table) and through a data-segment site (`int *ep = &errno'), and prints DSO FAIL on any wrong value.  The markers are built by expansion so the typed line cannot satisfy them.  Control: restore the ADD in _ld_patch's data path and the second run prints DSO FAIL.",
+ "command": "A=R; DSO_ENV=yes /testbin/dynsomisdyn; echo ${A}1=$?; DSO_ENV=yes /testbin/dynsomisdyn; echo ${A}2=$?",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": ["R1=0", "R2=0"],
+  "screen_lacks": ["DSO FAIL", "ld.so:", "PANIC", "BRK"]
+ }
+}

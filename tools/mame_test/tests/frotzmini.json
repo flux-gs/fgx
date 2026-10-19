@@ -1,0 +1,33 @@
+{
+ "name": "frotzmini",
+ "description": "frotz(6) plays an actual game: Mini-Cluedo (Daniel M. Stelzer, 2025, public domain; 16,008 bytes, Z-machine v5), staged at /etc so the test does not depend on the shipping manifest.  Mini-Cluedo is choice-driven: the script sends an empty line (the opening is still drawing, and keystrokes typed into it arrive garbled) and then takes one of the offered actions by name, 'wait', which exercises the read opcode, the dictionary and the object tree where frotzczech exercises opcodes in isolation.  'Time passes.' prints only if the game world resolved the command, and the re-offered choices ('Search the fountain') only if the turn completed.  The murder is placed at random, so nothing about it is asserted.  The game has no quit; the run ends at its frame cap with the game live.",
+ "command": "frotz -m /etc/cluedo.z5",
+ "timeout_s": 150,
+ "exit_on_prompt": false,
+ "post_commands": [
+  "",
+  "wait"
+ ],
+ "post_gap_frames": 600,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/cluedo.z5",
+   "prodos_dir": "/FGX/etc",
+   "name": "cluedo.z5",
+   "replace": false
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "Time passes.",
+   "Search the fountain"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm",
+   "Fatal"
+  ]
+ }
+}

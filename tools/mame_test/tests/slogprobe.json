@@ -1,0 +1,25 @@
+{
+ "name": "slogprobe",
+ "description": "THE BANK-0 STACK HINT MUST COVER LIBC, and syslog(3) is the path that showed it did not.  apple/fgx#404.\n\nstack_measure builds its call graph from the program's OWN .s and drops every edge whose callee it cannot see, on the reasoning that those are `_fcc_*' helpers with a register ABI.  libc is not: syslog reaches fprintf reaches __lc_vpf, each pushing a return address and its arguments onto the same bank-0 stack.  /sbin/reboot was sized at 2 pages -- 512 bytes -- and this probe measures 526 through the same three calls.\n\nWHAT IT ASSERTS: the syslog line comes out INTACT, read back from /usr/adm/messages, where syslogd(8) writes it.  `reboot: -; rebooted by root' is what reboot(8) logs, and the reported symptom was that line with characters replaced -- `D-Fm>t: -; rebooted by rootD8m<'.  A stack that overruns its reservation writes into whatever is below it, and strings are what that looks like.  The probe waits up to 20 s for a line past the file's size at the call that carries the text EXACTLY, and prints `SPLINE found:' only then, so a corrupted line, a syslogd that is not running and a datagram that never reached it all fail the same needle.  The console shows the line too -- the conf sends *.crit there -- which is why the needle is SPLINE's and not the text alone.\n\nSP lines report stksize against stkhwm from procinfo, so a future under-size is visible in the transcript rather than only in its consequences.\n\nTHEN logger(1), through the same daemon and file.  `LGT: a%sb x y' is the line grep reads back, and the typed command cannot supply it: the command has `-t LGT' and a quoted `'a%sb'', never `LGT:' with a colon, which syslog(3) adds after the tag.  Each part is a defect 2.11BSD's logger had: the `%s' survives only because the text goes through \"%s\" rather than being the format; the words are joined by the loop that replaced the unbounded strcat; and `-p user.notice' goes through pencode and both brace-elided name tables, where a wrong row layout answers `unknown priority name' and logs nothing.\n\nAND A MESSAGE LONGER THAN syslog(3)'s 640-BYTE LINE IS CUT AT IT.  `SP bigline x=610' is 637 bytes of room (two kept for LOG_CONS's \"\\r\\n\") less the 27-byte `<13>Mon dd hh:mm:ss SPBIG: ' head.  MEASURED THE OTHER WAY: with 2.11BSD's unbounded vsprintf the message runs past tbuf into fmt_cpy, the format vsprintf is still reading, so it reads its own `x's back as literal text and runs away through the bank -- the screen fills with them and the run hits the frame cap with every needle here missing, SPSTART included.",
+ "command": "/testbin/slogprobe; logger -p user.notice -t LGT 'a%sb' x y; sleep 2; grep LGT /usr/adm/messages",
+ "boot_s": 45,
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "SPSTART",
+   "SPBEFORE",
+   "SPAFTER",
+   "SPLINE found: ",
+   "reboot: -; rebooted by root",
+   "SP bigline x=610",
+   "SPDONE",
+   "LGT: a%sb x y"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "NOT FOUND",
+   "SP FAIL"
+  ]
+ }
+}

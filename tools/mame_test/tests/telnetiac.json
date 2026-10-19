@@ -1,0 +1,24 @@
+{
+ "name": "telnetiac",
+ "description": "A 255 in a telnet session's OUTPUT survives the trip to the client.  RFC 854 reserves 255 as IAC, so telnetd must send a data byte of 255 as IAC IAC -- 2.11BSD telnetd.c:583-586 doubles it on the way from the pty to the net -- and the client turns the pair back into one 255.  The session logs in over `telnet localhost' and runs `echo 7A8B | tr AB '\\377Q'' under `stty litout', whose output is `7', 255, `8Q'.  LITOUT is required: a cooked tty clears bit 7 on output (2.11BSD tty.c ttyoutput, `c &= 0177' unless RAW or LITOUT), so without it the 255 leaves the pty as 127 and telnetd never sees one -- the first version of this test passed on the unfixed telnetd for exactly that reason.  Undoubled, the client reads 255 `8' as a command and eats the `8', so the screen shows `7Q'; doubled, `8Q' arrives.  `8Q' is not in the typed line, so the shell's echo cannot satisfy the assertion.  apple/fgx#449.",
+ "command": "true",
+ "exit_on_prompt": false,
+ "timeout_s": 240,
+ "post_gap_frames": 600,
+ "expect": {
+  "screen_contains": [
+   "Connected to localhost.",
+   "8Q"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ },
+ "post_commands": [
+  "telnet localhost",
+  "root",
+  "fgx",
+  "stty litout; echo 7A8B | tr AB '\\377Q'; stty -litout"
+ ]
+}

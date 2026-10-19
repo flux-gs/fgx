@@ -1,0 +1,19 @@
+{
+ "name": "ensoniqplaydetect",
+ "description": "ensoniqplay(1) M3 raw signedness autodetect: a raw 8-bit SIGNED file (0.5 s silence at 0x00 + 0.5 s low-amplitude signed tone, 22050 Hz) is played with -a.  Its histogram mode is 0x00 (the silence), which sits at a code edge, so the detector picks signed -- proving -a keys on the quiet level.  '(detected)' + 'signed' confirm the choice; playing it correctly (silence -> DOC $80) and halting after ~60 ticks (22050 samples at 22050 Hz = 1.0 s) confirm the sign conversion.",
+ "command": "ensoniqplay -a /etc/tone_signed.pcm",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "stage_files": [
+  { "host": "tools/mame_test/fixtures/tone_signed.pcm", "prodos_dir": "/FGX/etc", "name": "tone_signed.pcm", "replace": false }
+ ],
+ "expect": {
+  "screen_contains": [
+   "raw 8-bit signed mono 22050 Hz (detected)",
+   "22050 bytes @ 22050 Hz (freq 429), playing",
+   "halted after 6",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "cannot open", "timed out", "Fatal" ]
+ }
+}

@@ -1,0 +1,12 @@
+# Two first users of curses run to the end: A is stopped inside its
+# load, B waits on the row, A continues; both exit 0.
+/testbin/curssodyn > /dev/null &
+A=$!
+/testbin/ldctl waitload libcurses $A
+(/testbin/curssodyn > /dev/null; echo RCE b=$? > /tmp/sb) &
+sleep 2
+kill -19 $A
+wait $A
+echo RCE a=$? > /tmp/sa
+wait
+cat /tmp/sa /tmp/sb

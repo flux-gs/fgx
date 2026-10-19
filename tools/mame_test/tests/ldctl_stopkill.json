@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_stopkill",
+ "description": "A process stopped by SIGSTOP dies when sent SIGKILL (apple/fgx#505), as 2.11BSD's psignal() makes it runnable for it.",
+ "command": "/testbin/ldctl stopkill",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "LDC stopkill ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

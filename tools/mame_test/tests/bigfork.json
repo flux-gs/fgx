@@ -1,0 +1,4 @@
+{"name":"bigfork",
+ "description":"A large allocation must be COPIED by fork, not shared. malloc(80000L) lands in dedicated MM banks OUTSIDE the task's data bank, so a snapshot fork that does not include them lets the child's writes survive into the restored parent -- issue #4's leak, one allocator over. Sentinels straddle the bank crossing so a snapshot covering only the first bank still fails.",
+ "command":"/testbin/bigfork","timeout_s":120,
+ "expect":{"screen_contains":["BIGFORK OK"]}}

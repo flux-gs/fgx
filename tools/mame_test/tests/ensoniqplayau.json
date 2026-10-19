@@ -1,0 +1,17 @@
+{
+ "name": "ensoniqplayau",
+ "description": "ensoniqplay AU support: play a mu-law .au (bell.au, 8000 Hz, ~1.6s) then a 16-bit big-endian .au (tone16.au, 22050 Hz, 1.0s), both baked at /root/audio.  'au mu-law' and 'au 16-bit signed' prove the AU header parse + encodings; the halts prove the decoded samples play at the right rate.  Baked in disk_src/root/audio (not staged).",
+ "command": "ensoniqplay /root/audio/bell.au ; ensoniqplay /root/audio/tone16.au",
+ "timeout_s": 150,
+ "exit_on_prompt": true,
+ "expect": {
+  "screen_contains": [
+   "au mu-law mono 8000 Hz",
+   "12800 bytes @ 8000 Hz (freq 156), playing",
+   "au 16-bit signed mono 22050 Hz",
+   "22050 bytes @ 22050 Hz (freq 429), playing",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "cannot open", "no samples", "Fatal" ]
+ }
+}

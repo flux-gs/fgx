@@ -1,0 +1,23 @@
+{
+  "name": "ufslink",
+  "description": "link(2) MAKES A SECOND NAME FOR ONE INODE.  UFS 2.6, and the last of the namespace operations: ufs_link has been a live entry in the vnodeops table since 1.12c-b and driven by ufs_wprobe, while every layer above it was missing -- so `ln a b' answered ENOSYS out of libc, which supplied the errno on purpose so ln(1) could be ported verbatim (its `int (*linkf)() = sflag ? symlink : link' names link(2) whether the system has one or not).  9 is 2.11BSD's own number for it (usr/sys/sys/init_sysent.c:119) and the table slot had been kept.\n\nWHAT EACH ARM DISCRIMINATES, and the point is that a hard link is NOT a copy:\n  ` 2 root' in BOTH listings is THE LINK COUNT, and it is the whole assertion.  A copy would leave each name at 1.  It appears twice because ls(1) prints it per name and both names must report the SAME inode's count -- a count kept on the directory entry rather than the inode would give 2 and 1.\n  `two' is the second name's CONTENT, read back through it: `echo two >> la' appends through the FIRST name and `cat lb' reads through the SECOND.  Two files that merely started equal would diverge here.  This is the arm that says one inode, not two identical ones -- the count could in principle be right on two separate inodes, and this cannot.\n  `lacks Function not implemented' is the ENOSYS libc used to return, kept as an absence arm because that message is the exact shape of a regression to the stub.\n  `lacks File exists' catches the CREATE|LOCKPARENT arm answering EEXIST on a name that is not there.\n\nMEASURED DISCRIMINATING: make ufs_link return before `ip->i_nlink++' and both `2 root' arms go red while `two' stays green -- the entry is made, the count is not.  Make vfs_link pass `linkname' to the first namei and `target' to the second and the walk reverses: `two' goes red because lb is then the name that already exists.\n\nTHE APPEND IS THROUGH la AND THE READ THROUGH lb, deliberately opposite ways round.  Appending through the name that was created SECOND and reading through the first would pass on a filesystem that had quietly made lb an alias of la's directory entry rather than of its inode.\n\nNOT ASSERTED: that a DIRECTORY cannot be linked.  Reno gates that on `suser', this kernel has no credential and treats every caller as root, so `ln d d2' succeeds here as it does for root upstream -- link(2)'s BUGS section says so and vfs_link's header carries the reasoning.  A test would be asserting a thing this system does not do.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.\n\nTHE NEEDLE IS ASSEMBLED FROM SHELL VARIABLES, and it has to be: the harness ECHOES the command line it types, so a needle that appears in the command is satisfied by a run that produced no output at all.  tools/check_vacuous_assertions.py fails the gate on exactly this shape, and it named this manifest.  Splitting the word across two assignments means the typed line cannot contain it and only the system can print it.  Here that matters more than usual: `two' IS the assertion.  It is the byte the SECOND name returns after the FIRST was appended to, which is the whole claim that ln(1) made one inode and not two files -- and it was being matched by `echo two >> la' in the echoed command, so the arm would have stayed green on a link(2) that copied.",
+  "command": "cd /tmp; echo one > la; ln la lb; ls -l la lb; A=tw; B=o; echo $A$B >> la; cat lb; sync",
+  "boot_s": 45,
+  "timeout_s": 40,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      " 2 root",
+      "two"
+    ],
+    "screen_lacks": [
+      "Function not implemented",
+      "File exists",
+      "not found"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

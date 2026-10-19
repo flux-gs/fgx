@@ -1,0 +1,5 @@
+# test(1) translation units.  test.c is the entry point and so is NOT listed
+# here (the generator takes src/userland/<tool>/<tool>.c); this names the rest.
+# operators.c is upstream's own second file -- 2.11BSD's Makefile builds
+# SRCS = test.c operators.c -- and holds the operator tables.
+src/userland/test/operators.c

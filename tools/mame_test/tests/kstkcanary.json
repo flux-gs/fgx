@@ -1,0 +1,55 @@
+{
+ "name": "kstkcanary",
+ "description": "THE CANARY REPORT IS A LOG LINE, NOT A DEATH.  _Sys_KStkReport's RTS sat AFTER its five ASC literals, so Kern_LogEOL returned into the string bytes and executed them: '!!' decodes as ORA $04 and the NUL terminating ' kCurPid ' is a BRK, whose native vector at $00:FFE6 reads $0000 -- so the machine ran BRK at $00:0000 forever, four bytes of frame per lap, until bank 0 was wall-to-wall '05 04 00 00'.  THE POISON IS THE POINT: the canary at $00:F000 is zeroed mid-command so the check at syscall.s:204-231 fires on the next entry for that pid, exercising the reporter deliberately rather than waiting for a real overrun.  ASSERTS BOTH HALVES -- the report line must appear AND the machine must carry on to run the command and print a prompt.  Asserting only the report would pass on the broken build, which printed the whole line and died immediately after; asserting only 'hello' would pass on a kernel whose canary check never fired at all.  'hello' IS BUILT BY EXPANSION -- `H=hel; L=lo; echo $H$L' -- because a needle spelled out in the command matches the shell's echo of it, so `echo hello' asserting 'hello' passed even on a machine that died before running it.  apple/fgx#305.\n\nTHE TARGET IS EVERY PER-TASK SLOT, NOT ONE, AND THAT IS THE REPAIR.  This poisoned $00:F000 -- which is `FGX_STK_KTASKS + 8 * FGX_KSTK_SIZE', i.e. pid 8's canary, with the base $E000 baked into the manifest as a bare number.  The login shell was pid 8 when this was written and is pid 9 now: the boot gained processes, every pid after them shifted, and the poke landed on a slot whose task never entered a syscall.  The poke DID land -- a dump of $00:F000 reads 0000 -- so the test failed with the canary genuinely zeroed four kilobytes from anything the check reads, which is the worst shape a miss can take.  MEASURED 2026-09-06: poisoning the whole row makes the report read `curTask 0009 kCurPid 0009'.\n\nEvery slot is poisoned now -- the SEVEN kernel-image slot canaries, $E000 + s * 1024 (kernel.kslots = 7, kernel.kstk = 1024 in cfg/system.cfg; the canary is each slot's bottom word).  The list was a 1216-byte stride from an older geometry, which hit slot 0's canary and missed the other six, so the test passed only while the shell happened to run in slot 0 and went red when syslogd, one more resident process, moved it.  With all seven poisoned the assertion does not depend on which slot the shell happens to be in.  The poison frame is ABSOLUTE and lands in the last seconds of the boot, before the prompt: poisoned after the prompt instead, no report fired, which says a slot move re-lays a canary before any entry checks it -- a question about the canary scheme, not about this test.  The check LATCHES (`_kStkOvfLatch'), so exactly one report is printed however many slots are zeroed, and the assertion is the message rather than the pid in it.  Zeroing a slice's bottom word is harmless to a healthy stack, which is why that word is the canary.",
+ "boot_s": 45,
+ "command": "H=hel; L=lo; echo $H$L",
+ "timeout_s": 40,
+ "poison": [
+  {
+   "addr": 57344,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 58368,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 59392,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 60416,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 61440,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 62464,
+   "hex": "0000",
+   "frame": 2760
+  },
+  {
+   "addr": 63488,
+   "hex": "0000",
+   "frame": 2760
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "KSTK CANARY DEAD",
+   "hello",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

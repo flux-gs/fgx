@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_intr",
+ "description": "Shared libc SP4: a signal ends a wait in ACQUIRE with EINTR; the owner's exit frees its row.",
+ "command": "/testbin/ldctl intr",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC intr ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

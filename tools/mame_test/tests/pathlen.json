@@ -1,0 +1,28 @@
+{
+  "name": "pathlen",
+  "description": "A PATH OVER 63 CHARACTERS RESOLVES (apple/fgx#436). Every path-taking syscall stages the caller's path through _Sys_CopyPathToBuf into a kernel-bank buffer; that buffer was 64 bytes and the copy stopped at 63, wrote a NUL and RETURNED SUCCESS, so a longer path was looked up as a different, shorter name. The usual result was ENOENT for a file that exists, and a truncation that happened to land on another real name acted on the WRONG FILE. THE LENGTH COMES FROM `.' COMPONENTS AND NOT FROM A DEEP TREE. `/etc/././.../issue' names /etc/issue at any length, so this needs no mkdir chain -- the first draft built five nested directories and, between a 400-character command line the shell would not hold and a paste that raced the first post-command, asserted nothing while looking like a kernel failure. A dot path is also the stronger case: every component is real, so nothing but the LENGTH can make it fail. EVERY ARM READS A DIFFERENT FILE AND EVERY ASSERTED STRING IS CONTENT THAT IS NEVER TYPED. Two drafts got that wrong in two ways: the first created its own file with `echo deeppath > /tmp/g' and asserted `deeppath', which the shell's echo of the command line put on screen whether or not any cat ran; the second pointed arms 2 and 3 at the same /etc/hosts, so arm 3 satisfied arm 2's string on its own. Both passed under mutation. ARM 1 IS THE DISCRIMINATING ONE. MEASURED: rebuilt with SYS_PATH_MAX back at 63 (kernel 52,865 B against the fix's 53,057 B), arm 1 goes red on `FGX/gs' and `cannot open' appears -- a truncated dot path resolves to the DIRECTORY rather than the file, which is what cat refuses. Arm 2 alone does NOT discriminate and is carried for range: at 120 characters its truncation also lands on /etc, so it trips the same `cannot open' but its own string would be printed by arm 3 regardless if the files were shared -- which is exactly why they no longer are. ARM 3 IS THE POSITIVE CONTROL: a short path to a third file, so a kernel where cat(1) is broken outright is distinguishable from one where only long paths fail. THE OVER-MAXPATHLEN ARM EXISTS BECAUSE apple/fgx#438 MADE IT REACHABLE. When this test was first written the ENAMETOOLONG return could not be reached from a command line at all, and the note here said so and blamed the terminal line -- which was WRONG: the cut was argv, not the line. crt0 copied argv[0] plus every argument into a 128-byte per-binary buffer and truncated in silence, so no typed path could exceed SYS_PATH_MAX to begin with. argv points at the kernel's frame now, a 138-character path arrives whole, and the guard answers `File name too long' -- ENAMETOOLONG, which stat(1) prints and cat(1) would not (cat says `cannot open' and names no errno). tools/check_path_copy.py holds the other half, failing the build if any of the 26 call sites stops testing the carry. POST_GAP_FRAMES IS 450 AND WAS 240: stat(1) echoes its 138-character argument back inside the error message, which takes three screen lines, and the next command was being typed over it -- `File name too long' arrived on screen SPLIT by the interleaving and the assertion missed a string the machine had actually printed. THE OVER-LIMIT PATH IS 128 CHARACTERS AND THE LENGTH IS LOAD-BEARING TWICE. It is the tightest case -- SYS_PATH_MAX is 127, so 128 is the first path that must be refused. And it keeps the assertion off a line break: stat(1) echoes the path inside its message, `stat: ' + 128 + `: ' + `File name too long' is 154 characters, and on an 80-column screen that puts the whole phrase inside the second line. At 138 characters the message ran to 164 and `File name too long' STRADDLED column 160 -- the machine printed it and the screen assertion missed it, which looked exactly like the guard not firing.",
+  "command": "pwd",
+  "post_commands": [
+    "cat /etc/./././././././././././././././././././././././././././././././issue",
+    "cat /etc/./././././././././././././././././././././././././././././././././././././././././././././././././././././././hosts",
+    "stat /etc/./././././././././././././././././././././././././././././././././././././././././././././././././././././././././././issue",
+    "cat /etc/passwd"
+  ],
+  "post_gap_frames": 450,
+  "exit_on_prompt": false,
+  "boot_s": 45,
+  "timeout_s": 420,
+  "expect": {
+    "screen_contains": [
+      "FGX/gs",
+      "gateway gw router",
+      "UNIX-to-UNIX Copy",
+      "File name too long"
+    ],
+    "screen_lacks": [
+      "cannot open",
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

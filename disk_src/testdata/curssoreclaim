@@ -1,0 +1,15 @@
+# After curssodyn exits, drain the pool: curses's unused row is
+# reclaimed, libc's pinned row is not; curses reloads at the same base.
+# Everything goes to /tmp/rl, printed last: curses clears the screen.
+/testbin/curssodyn > /dev/null
+/testbin/ldctl row libcurses | grep "LDC base" > /tmp/b1
+/testbin/ldctl row libc | grep "LDC banks" > /tmp/c1
+/testbin/ldctl drain libcurses > /tmp/rl
+/testbin/ldctl row libcurses >> /tmp/rl
+/testbin/ldctl row libc | grep "LDC banks" > /tmp/c2
+cmp /tmp/c1 /tmp/c2 && echo RCL libc kept >> /tmp/rl
+LD_TRACE_LOADED_OBJECTS=1 /testbin/curssodyn | grep lcurses >> /tmp/rl
+/testbin/curssodyn | grep "CURS ok" >> /tmp/rl
+/testbin/ldctl row libcurses | grep "LDC base" > /tmp/b2
+cmp /tmp/b1 /tmp/b2 && echo RCL same base >> /tmp/rl
+cat /tmp/rl

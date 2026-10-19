@@ -1,0 +1,28 @@
+{
+ "name": "stkdefer",
+ "description": "A SESSION SHELL SPAWNS A SESSION SHELL, AND BOTH COME BACK WHOLE.  Two session shells do not fit the arena side by side, and the only range the second can have is the first's -- which the first is standing on while it spawns.  So Task_AllocStack places the second OVER the first without clearing it: the image is built in the second's home image (the paint and the argv staging are pointed there) and the second starts out parked; when the scheduler first picks it, the first shell is in wait(), gets parked, and the second is brought in (Uimg_Ensure).  This is the case the B3 lane's spawn hand-off existed for, generalised to any range.  The inner shell echoes a value it can only have got from the outer shell's expansion, and the outer shell echoes its own variable again AFTER the inner has exited -- a restore that dropped a live byte of the outer's frames would not print OUTER=ok.  The klog must carry the deferred placement (stkdefer), a park (upark) and a restore (urest), and no refusal (upin): the mechanism is observed, not trusted.  The needles are built by expansion, so neither appears in anything typed.",
+ "command": "tcsh -c 'set a=ok; tcsh -c \"echo INNER=$a\"; echo OUTER=$a'",
+ "post_gap_frames": 120,
+ "timeout_s": 180,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "INNER=ok",
+   "OUTER=ok"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "GUARD stkhwm",
+   "KSTK CANARY",
+   "uimg:"
+  ],
+  "klog_region": "klog"
+ }
+}

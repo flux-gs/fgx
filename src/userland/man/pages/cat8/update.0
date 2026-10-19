@@ -1,0 +1,40 @@
+UPDATE(8)            UNIX Programmer's Manual            UPDATE(8)
+
+
+
+NAME
+     update - periodically update the super block
+
+SYNOPSIS
+     update
+
+DESCRIPTION
+     Update is a program that executes the sync(2) primitive every
+     30 seconds.  This insures that the file system is fairly up to
+     date in case of a crash.  This command should not be executed
+     directly, but should be executed out of the initialization
+     shell command file, /etc/rc, which backgrounds it.
+
+     Nothing else on a running machine calls sync(2).  A dirty
+     buffer reaches the disk when something needs the buffer back,
+     and a super block when its allocation batch fills; neither is
+     a clock.  The boot allocates a block for /etc/utmp and fills
+     no batch, so without update a machine powered off at the shell
+     prompt leaves a super block that lists a block an inode owns,
+     which fsck(8) reports as "on the FREE LIST and also owned by".
+
+FILES
+     /etc/rc                starts it
+
+SEE ALSO
+     sync(1), sync(2), fsck(8), init(8), rc(8)
+
+BUGS
+     With update running, if the machine is powered off just as the
+     sync is executed, a file system can still be damaged.  fsck(8)
+     is the other half of the arrangement: update shrinks the
+     window, fsck cleans up what the window still loses.
+
+
+
+Printed 9/11/26                                                8

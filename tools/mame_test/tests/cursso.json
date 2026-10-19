@@ -1,0 +1,21 @@
+{
+ "name": "cursso",
+ "description": "Shared libc SP3: a curses program linked dynamically against libcurses.so, libtermlib.so and libc.so and bound on the host: initscr/addstr/refresh/endwin on the console, curses's core data (LINES, COLS, stdscr) read by the program, and termlib's UP, which curses's setterm fills and the program reads through its own import.",
+ "command": "/testbin/cursso",
+ "boot_s": 45,
+ "timeout_s": 90,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "CURS ok"
+  ],
+  "screen_lacks": [
+   "CURS FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,7 @@
+{
+ "name": "textfresh",
+ "description": "SHARED TEXT IS NEVER STALE: /tmp/tf is /bin/echo for one run and then, rewritten in place by cp (same inode), /bin/pwd.  The text table keys a program by device, inode and change time, so the second run must load pwd and print the directory; a key without the change time would run echo's cached text again and print an empty line.  The directory name appears only in pwd's output, never in a typed line.",
+ "command": "sh /testdata/textfresh",
+ "timeout_s": 90,
+ "expect": {"screen_contains": ["TF FIRST", "/tmp/tfdir", "TF DONE"], "screen_lacks": ["PANIC", "BRK"]}
+}

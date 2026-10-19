@@ -1,0 +1,47 @@
+{
+ "name": "coremap",
+ "description": "THE USER POOL'S PAGE MAP STAYS WELL FORMED UNDER CHURN.  The pool is a 2.11BSD resource map (src/kernel/bank.s, usr/sys/sys/subr_rmap.c) of free pieces {size, address} in 256-byte pages, address = bank << 8 | page.  After textchurn's spawn/exit/fork/exec paths and fifty failed execs of a truncated image (exectrunc's fixture), coremap_check.py reads the map and requires it sorted, coalesced, inside the pool and non-empty (tools/coremap_model.py check()), and prints the free total, which each step's commit records: a page lost per failed exec would cost fifty.  Each failed exec claimed a text entry before its load and gave it up; coremap_check also reads the text table (src/kernel/tty/text.s, 36-byte entries) and refuses an entry with a key and no banks: a claim never filled and never freed, which a later exec of the same file would take for a loaded text.",
+ "command": "sh",
+ "post_commands": [
+  "sleep 20; sh /testdata/coremap"
+ ],
+ "post_gap_frames": 1800,
+ "timeout_s": 300,
+ "exit_on_prompt": false,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/trunc.bin",
+   "prodos_dir": "/FGX/testbin",
+   "name": "trunc"
+  }
+ ],
+ "memory_regions": [
+  {
+   "name": "coremap",
+   "symbol": "_coremap",
+   "len": 128
+  },
+  {
+   "name": "first",
+   "symbol": "_kUserFirstBank",
+   "len": 2
+  },
+  {
+   "name": "texttab",
+   "symbol": "_kTextTab",
+   "ttybank": true,
+   "len": 608
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "CHURNED"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "coremap: overflow"
+  ],
+  "check_script": "coremap_check.py"
+ }
+}

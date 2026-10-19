@@ -1,0 +1,10 @@
+{
+ "name": "ttysprobe",
+ "description": "libc ttyent parser reads the shipped /etc/ttys",
+ "command": "/testbin/ttysprobe",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["TTYSPROBE PASS"],
+  "screen_lacks": ["FAIL"]
+ }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "ufswrite",
+  "description": "USERLAND CREATES A FILE ON THE UFS ROOT, which is apple/fgx#318 and which nothing else in the suite reaches.  `ufswprobe' already asserts ufs.mod's WRITING vnops -- ufs_write, ufs_maknode, itrunc -- but it does so from a KERNEL PROBE against a scratch volume it mounts itself, so it proves the filesystem can write while saying nothing about whether a process can.  It could not: `_Sys_Open' answered O_CREAT by calling the legacy ProDOS `Fs_Create' BEFORE `Fs_Open', and the root hook lived INSIDE Fs_Open, so a create never reached the root at all and `vi' could not make a temp file in /var/tmp on a volume that plainly had one.  The gap was exactly the shape the /dev hook's own comment warned about ten lines above the branch: vn_open honours FCREAT, FTRUNC and FEXCL itself, so whoever claims the name owns the whole open.  THIS TEST GOES THROUGH THE SHELL AND NOT A PROBE, because the defect was in the syscall layer's ROUTING and a probe entering below it would pass on a kernel that no process can create a file on -- which is precisely the state this test was written to end.  THE NEEDLE IS BUILT BY EXPANSION -- `W=wr' and then `ok$W' -- for the reason ufscwd records: screen_contains searches a ring that still holds the shell's ECHO of the command, so a literal `okwr' in the command line would be matched from the echo whether or not `cat' ever printed a byte, and the test would pass on a kernel where the write did nothing.  Typed as `ok$W', the string `okwr' can only reach the screen from cat reading back what echo wrote -- so it asserts the round trip: O_CREAT|O_WRONLY|O_TRUNC through vn_open and VOP_CREATE, the data through vfs_write, and the read back through vfs_read.  `count_delta' IS THE SEGMENT COUNT because bsh bumps the prompt between `;'-separated commands and the default of 1 samples the screen before the last has printed.  THE CONTROL IS RECORDED IN THE COMMIT: on the parent commit this test fails with the needle absent, which is what makes it coverage rather than decoration.\n\nTHE APPEND ARM (2026-09-05).  `echo ap1 > f; echo ap2 >> f' and BOTH lines asserted, because the failure this catches leaves exactly one of them on screen. src/kernel/vfs/vfs_syscalls.c masked the open's flags to (FREAD|FWRITE), so FAPPEND was accepted by open(2), carried through vn_open and discarded one line later -- which made vn_write's `if (vp->v_type == VREG && (fp->f_flag & FAPPEND))' unreachable and every `>>' a write at offset ZERO.  4.3BSD-Reno's own line is `fp->f_flag = fmode & FMASK' (kern/vfs_syscalls.c:578) over FMASK = (FREAD|FWRITE|O_APPEND|O_ASYNC|O_NONBLOCK) (sys/file.h:68).\n\nIT IS NOT ONLY THE SHELL.  2.11BSD's sh opens a `>>' with open(ion, O_WRONLY|O_APPEND) (vendor/2.11BSD/usr/bin/sh/service.c:61), and libc's fopen(path, \"a\") returns O_WRONLY|O_CREAT|O_APPEND (toolchain/lib/libc_c/stdio_core.c:189), so every C program that appends had the same bug; elvis's `:w >>file' (src/userland/elvis/cmd1.c:248) is the third caller.\n\nTHE NEEDLES ARE ASSEMBLED FROM VARIABLES ($P$X, $P$Y) for the reason this manifest's first arm already does it: the command line is ECHOED to the screen, so a literal `ap1' in the command satisfies `screen_contains ap1' whether or not the file ever held it. Written literally, this arm PASSED WITH THE BUG RESTORED -- measured 2026-09-05, which is how the vacuity was found.\n\nMEASURED DISCRIMINATING: restore the (FREAD|FWRITE) mask and the file holds `ap2' alone at 2 bytes -- `ap1' is overwritten in place, so the `ap1' arm goes red while `ap2' stays green.  ASSERTING ONLY THE LAST LINE WOULD PASS ON THE BUG, which is why both are here.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.\n\nTHE TIMEOUT ROSE WITH THE `sync'.  Writing the superblock back is a synchronous block write on a SmartPort device and the capture window closed on top of it, leaving the screen at `okwr' with the two append arms unprinted -- a red that looks like a write failure and is a clock.",
+  "command": "W=wr; echo ok$W > /tmp/t318; cat /tmp/t318; P=ap; X=1; Y=2; echo $P$X > /tmp/t327a; echo $P$Y >> /tmp/t327a; cat /tmp/t327a; sync",
+  "boot_s": 45,
+  "timeout_s": 60,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 6
+  },
+  "expect": {
+    "screen_contains": [
+      "okwr",
+      "ap1",
+      "ap2"
+    ],
+    "screen_lacks": [
+      "not found",
+      "cannot create",
+      "No such file",
+      "BRK",
+      "PANIC"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

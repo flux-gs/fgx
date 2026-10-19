@@ -1,0 +1,15 @@
+Story files for frotz(6).
+
+cluedo.z5     Mini-Cluedo, an Interactive Demonstration, by Daniel M. Stelzer.
+              Release 1, 2025-07-11.  Public domain: so stated by the IF
+              Archive's listing (games/zcode/cluedo.z5) and IFDB's licence
+              field; the story file itself states no terms.
+
+bookvol.z5    Book and Volume, by Nick Montfort.  Release 8, 2005-12-25.
+              The story's own text: "Copyright (C) 2005 Nick Montfort.  This
+              work is licensed under the Creative Commons Attribution-
+              NonCommercial-ShareAlike License.  To view a copy of this
+              license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/".
+              Not for commercial use.
+
+Both are from the IF Archive (https://www.ifarchive.org/), unmodified.

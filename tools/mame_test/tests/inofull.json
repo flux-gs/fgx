@@ -1,0 +1,34 @@
+{
+  "name": "inofull",
+  "description": "A CREATE THAT FAILS FOR WANT OF INODES MUST NOT LEAVE THE DIRECTORY LOCKED.  disk/ufsfewino.po has 45 inodes in total, so it is permanently under NICINOD (100) free and every ufs_ialloc on it takes the rescan-from-the-top path; filling it past 45 files drives the create-fails-with-ENOSPC arm, which nothing else in the suite reaches.  THE ASSERTION IS THAT THE MACHINE IS STILL THERE.  vn_open takes LOCKPARENT and this tree's ufs_maknode never touches ni_dvp -- the caller owns it, unlike Reno where maknode ends with iput(pdir) -- so a failing create that returns early leaves the parent locked by a process that has moved on, and the next lookup descending into it waits for a lock it already owns.  MEASURED BOTH WAYS: before the fix this run ended `f6: cannot create' then `lockself 0002' and PANIC, naming the mount point's own inode; after it, the fill reports its errors and the shell answers.  apple/fgx#278.  The needle is built by shell expansion (Z=ok; echo ALIVE=$Z) so the typed line cannot contain it, and the fill lines are kept SHORT: a 150-character `for' left the shell with no prompt and every later line merely echoed, which is a dropped keystroke (apple/fgx#265) and not a filesystem result.",
+  "command": "/sbin/mount /dev/sd1 /mnt; echo m=$?",
+  "post_commands": [
+    "cd /mnt",
+    "for f in a1 a2 a3 a4 a5 a6 a7 a8; do echo x >$f; done",
+    "for f in b1 b2 b3 b4 b5 b6 b7 b8; do echo x >$f; done",
+    "for f in c1 c2 c3 c4 c5 c6 c7 c8; do echo x >$f; done",
+    "for f in d1 d2 d3 d4 d5 d6 d7 d8; do echo x >$f; done",
+    "for f in e1 e2 e3 e4 e5 e6 e7 e8; do echo x >$f; done",
+    "for f in f1 f2 f3 f4 f5 f6 f7 f8; do echo x >$f; done",
+    "for f in g1 g2 g3 g4 g5 g6 g7 g8; do echo x >$f; done",
+    "cd /",
+    "Z=ok; echo ALIVE=$Z",
+    "/sbin/umount /dev/sd1; echo u=$?",
+    "sync"
+  ],
+  "post_gap_frames": 400,
+  "timeout_s": 300,
+  "extra_hards": [
+    "disk/ufsfewino.po"
+  ],
+  "expect": {
+    "screen_contains": [
+      "m=0",
+      "ALIVE=ok"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

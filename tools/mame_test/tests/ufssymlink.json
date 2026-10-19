@@ -1,0 +1,26 @@
+{
+  "name": "ufssymlink",
+  "description": "symlink(2) ON THE MOUNTED ROOT, with ln(1) as its caller -- both new on 2026-09-05.  `ufs_symlink' had been ported and sat with no caller: there was no vfs_symlink, no SYS_SYMLINK and no ln, so a symlink could not be created at all, which is why readlink(2) returning ENOSYS had never bitten anything.\n\nTHREE CLAIMS, and the third is the one that says the link is real rather than a file with an l in its mode:\n  `ln=0' -- symlink(2) succeeded.\n  `lrwxrwxrwx' -- lstat reports VLNK, so the inode carries IFLNK.\n  `s1' from `cat lnk' -- NAMEI FOLLOWED IT.  That is the load-bearing arm: it proves the link's contents are the target path and that lookup() reads and resolves them (vfs_lookup.c:517).  A symlink that lstat calls a symlink but nothing can follow would satisfy the first two.\n\nAND `hard=0' IS ASSERTED TOO, WHICH IS THIS ARM DOING WHAT IT SAID IT WOULD.  It read `hard=1' from 2026-09-05 to 2026-09-06 and its own sentence was \"if link(2) ever arrives this arm is the thing that notices\" -- link(2) arrived on 2026-09-06 and this is what noticed, going red on the same run that turned it on.  ln(1) is verbatim 2.11BSD and its `int (*linkf)() = sflag ? symlink : link' names link(2); libc's link() set ENOSYS while there was no syscall behind it, so a hard link had to FAIL, and now it must SUCCEED.  The arm is kept rather than deleted because it is the one place the two halves of ln(1) are exercised in one command, and an inverted expectation is a stronger statement than a missing one.  WHAT THE LINK ITSELF DOES is ufslink's, which asserts the count and reads content back through the second name.\n\n`-> tgt' IS THE READLINK ARM, apple/fgx#326, closed the same day after a long detour.  The target column is what the report was about and it is asserted here as a CONTAINS, needle and arrow together, because `->' alone appears whenever readlink returns any non-negative count -- including the 0 and the 1 that two wrong versions of this returned.  MEASURED DISCRIMINATING: with libc's readlink back on plain __syscall the same command prints `-> ??????????' (ten bytes of the caller's own $A5 stack paint); with the bufsiz clamped by a sizeof on an incomplete array it prints `-> /'.\n\nThe needles are assembled from variables ($P$X) for the reason ufswrite's are.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.  THE MODE IS 0777 LESS THE UMASK, as Reno's symlink sets it (`vattr.va_mode = 0777 &~ u.u_cmask', kern/vfs_syscalls.c:805): umask 0 gives lrwxrwxrwx and umask 077 lrwx------ (apple/fgx#527).",
+  "command": "cd /tmp; P=s; X=1; echo $P$X > tgt; umask 0; ln -s tgt lnk; echo ln=$?; ls -l lnk; cat lnk; umask 077; ln -s tgt lnk2; ls -l lnk2; ln tgt hard; echo hard=$?; rm -f lnk lnk2 tgt; sync",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 14
+  },
+  "expect": {
+    "screen_contains": [
+      "ln=0",
+      "lrwxrwxrwx", "lrwx------",
+      "-> tgt",
+      "s1",
+      "hard=0"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK",
+      "not found"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

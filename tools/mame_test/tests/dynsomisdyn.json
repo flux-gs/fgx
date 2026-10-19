@@ -1,0 +1,10 @@
+{
+ "name": "dynsomisdyn",
+ "description": "Shared libc SP4: dynso with its shared-library checks, linked against a libc whose core is two bytes larger (fgx_libso --core-pad 2), so its export CRC and every data address differ from the resident libc's: the machine binder binds it by name and it runs.",
+ "command": "DSO_ENV=yes /testbin/dynsomisdyn",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["DSO ok"],
+  "screen_lacks": ["DSO FAIL", "ld.so:", "libc: no room", "PANIC", "BRK"]
+ }
+}

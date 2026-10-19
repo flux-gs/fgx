@@ -1,0 +1,27 @@
+{
+ "name": "mutstk_deep",
+ "description": "The prologue-guard half of the stack guards. sink() is self-recursive with a 200-byte frame, so STKGUARD arms -- and there is NO syscall in the cycle, so increment 0.2's dispatcher floor check never sees this task at all. That matters because 0.2 made the floor check fire first for everything that syscalls, which took the prologue-guard path out of srcdepth_loud and every other test that used to cover it. Asserts the message WITHOUT the '(syscall floor)' suffix, so it fails if the wrong detector fires, and asserts =DEEPALIVE from the parent shell so a hung machine cannot read as a pass. Increment 3.1 has to rewrite this guard to be resumable; this is what will say whether it still works.",
+ "command": "sh /testdata/deeprun",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "klog_contains": [
+   "stack overflow: killed pid"
+  ],
+  "screen_contains": [
+   "MUTSTK DEEP",
+   "=DEEPALIVE"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "MUTSTK RETURNED"
+  ]
+ }
+}

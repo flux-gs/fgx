@@ -1,0 +1,10 @@
+{
+ "name": "curssodyn",
+ "description": "Shared libc SP4: cursso linked dynamically and bound on the machine: on a fresh boot the trace loads curses (first use), the program runs its checks, a second trace says resident, and ldd lists the three libraries with their core bases and the hole bytes.",
+ "command": "sh /testdata/curssodyn",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": ["CTR first=1", "CURS ok", "CTR second=1", "-ltermlib.1 => /lib/libtermlib.so.1.0 (core $", "-lcurses.1 => /lib/libcurses.so.1.0 (core $", "bytes of unused cores between them"],
+  "screen_lacks": ["CURS FAIL", "ld.so:", "PANIC", "BRK"]
+ }
+}

@@ -1,0 +1,96 @@
+
+
+TTYS(5)              UNIX Programmer's Manual              TTYS(5)
+
+
+
+NAME
+     ttys - terminal line database
+
+DESCRIPTION
+     The file /etc/ttys lists the terminal lines init(8) manages.
+     Each line describes one tty:
+
+          name   getty   type   status
+
+     Fields are separated by spaces or tabs.  Blank lines and text
+     from a `#' to the end of line are ignored.  For example:
+
+          # name  getty              type    status
+          console /bin/sh            vt100   on secure
+          ttyv1   /bin/getty         vt100   off secure
+
+     name    the tty's device name, e.g. "ttyp0".  The physical
+             console is named "console", which is what ttyname(3)
+             reports for it.  init(8) opens /dev/console for that
+             line like any other, in the child that will run on
+             it: the open is what binds the controlling terminal.
+
+     getty   the command init(8) runs on the line.  This is
+             usually getty(8), which prompts and execs login(1);
+             pointing a line directly at a shell skips the
+             login prompt.
+
+     type    the terminal type, used to set TERM in the
+             environment login(1) builds.
+
+     status  a list of words: "on" enables the line (init runs
+             getty on it) and "secure" allows root to log in on
+             it directly.  A line without "on" is not started.
+
+VIRTUAL CONSOLES
+     ttyv1 and ttyv2 are virtual consoles: independent screens on
+     the one physical display, each running its own getty(8) and
+     login(1).  Switch between them with OPTION-N -- OPTION-1 for
+     the console, OPTION-2 for ttyv1, OPTION-3 for ttyv2.  Ctrl-N
+     is not used: on a real IIgs keyboard it never reaches the
+     handler that would see it.
+
+     Turning a line "on" is not free.  Each costs one process slot
+     for its getty and another for the session shell, so the
+     shipped three-console configuration needs kernel.nproc to be
+     at least 11 (cfg/system.cfg).  tools/check_stack_budget.py
+     ties the two together and fails the build by name if a line
+     is enabled that the process table cannot fund, rather than
+     letting the machine discover it at login time.
+
+     The session shells share one bank-0 stack region between
+     them, so a third console does not cost a third shell's stack.
+     See docs/b3-stack-swap-scope.md.
+
+     A line that is "off" is still worth listing.  login(1) reads
+     this file for TERM and for the secure flag whoever opened the
+     line, so an unlisted line silently gets login's vt100
+     fallback and no root check at all.  The pty slaves are listed
+     for exactly that reason:
+
+          ttyp0   none               fgxpty  off secure
+          ttyp1   none               fgxpty  off
+
+     init never starts a getty on a pty -- the session belongs to
+     whoever opened the master -- so their getty field is "none"
+     and their status is "off".  ttyp1 is deliberately not secure,
+     so login(1)'s root gate has a line it can be tested on.
+
+     Two narrowings from BSD's /etc/ttys, both because FGX has no
+     window system: the getty field is a single command path, not
+     a quoted string with arguments (BSD allows "getty std.9600");
+     and there is no window field.
+
+     Like BSD's, this file carries no commentary beyond its header
+     line, and the reason here is not only convention.  login(1)
+     reads /etc/ttys from the top on every login, before it can
+     print the password prompt, and it reads a line at a time --
+     so anything written in the file is paid for by every user on
+     every login.  A 4 KB commented version cost 2.6 seconds per
+     login (apple/fgx#50).  Explanations belong in this page.
+
+FILES
+     /etc/ttys
+
+SEE ALSO
+     getty(8), init(8), login(1)
+
+
+
+Printed 8/4/26                                                 5

@@ -1,0 +1,16 @@
+{
+ "name": "trapquiet",
+ "description": "NO KERNEL TRAP FIRED DURING THIS BOOT, and if one had, the machine would say which and where. apple/fgx#261. The fcc stack-overflow traps in src/kernel/far/fcc_ktrap.s used to stop the machine with a border colour and a spin, and a colour is the whole of what a wedged machine could say -- apple/fgx#194 and apple/fgx#225 each cost a long bisect for that reason. They now record magic, D, S and the floor into fixed bank-0 cells (KFGX_TRAP_MAGIC, $0310) before spinning, and main.s zeroes those cells before the first guarded prologue can fire, so a NON-ZERO magic means a trap fired in THIS boot. This asserts the magic is zero on a healthy boot; the value of that is not the assertion but the DUMP, because any gate test that wedges now carries the reason in its own dump instead of timing out silently. TO FORCE ONE AND SEE THE REPORT (this is how the mechanism was verified, and it reproduces apple/fgx#225 exactly): put `LDA #$FFA9 / STAL $00B2B9' immediately after `JSR _KcDp_Zero' in main.s -- that is a fictional floor over FGX_DP_KERNELC's _fcc_stkfloor -- rebuild, and read the cells. Measured: magic $C5D0, D $B200, S $F9BD, floor $FFA9, which are #225's own reported values.",
+ "command": "sh",
+ "post_commands": ["A=ok", "echo TRAPQ=$A"],
+ "post_gap_frames": 300,
+ "timeout_s": 400,
+ "exit_on_prompt": false,
+ "use_state": false,
+ "memory_regions": [{"name": "trap", "addr": 784, "len": 8}],
+ "expect": {
+  "screen_contains": ["TRAPQ=ok"],
+  "screen_lacks": ["PANIC", "BRK"],
+  "check_script": "trapquiet_check.py"
+ }
+}

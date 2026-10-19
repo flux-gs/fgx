@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_orphan",
+ "description": "Concurrent fork (apple/fgx#494): the owner exits first.  The parent _exits at once; the child sleeps 2 s, is reparented to init, and execs echo.  The image must survive its owner's exit (the hand-off).  On a deferred-parent fork the parent cannot exit until the child execs, so getppid() is still the parent and the child prints FP ORPHAN FAIL.  The trailing sleep keeps the console up while the orphan prints after the prompt.",
+ "command": "/testbin/forkpair orphan; sleep 4",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "FP ORPHAN ok"
+  ],
+  "screen_lacks": [
+   "FP ORPHAN FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

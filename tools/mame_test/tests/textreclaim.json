@@ -1,0 +1,45 @@
+{
+ "name": "textreclaim",
+ "description": "A DRY POOL TAKES BANKS BACK FROM UNUSED TEXTS: twenty-five distinct programs run once and exit, leaving their texts cached (2.11BSD keeps all text sticky in an LRU cache), and then twenty sleeps are spawned (twenty: the script's shell is one more of the 32 processes).  Bank_Alloc, finding the pool dry, frees the least recently used text no process runs (xuncore) before it asks the Memory Manager.  Every sleep must start: `too big' (sh's word for ENOMEM from exec) is asserted absent, and the marker is built by expansion so the typed line cannot satisfy it.  textchurn_check.py then holds the references balanced and every bank to one owner after the reclaims.",
+ "command": "sh /testdata/textreclaim",
+ "timeout_s": 240,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  },
+  {
+   "name": "tcbs",
+   "addr_equ": "FGX_TASK_TBL",
+   "kbank": true,
+   "len": 2048
+  },
+  {
+   "name": "texttab",
+   "symbol": "_kTextTab",
+   "ttybank": true,
+   "len": 608
+  },
+  {
+   "name": "setab",
+   "ptr_addr_hex": "CFG_DP_KKERN+A4",
+   "len": 1024
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "TR=done"
+  ],
+  "screen_lacks": [
+   "too big",
+   "No more processes",
+   "PANIC",
+   "BRK"
+  ],
+  "klog_lacks": [
+   "PANIC"
+  ],
+  "check_script": "textchurn_check.py"
+ }
+}

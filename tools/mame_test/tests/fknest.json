@@ -1,0 +1,4 @@
+{"name":"fknest",
+ "description":"Nested snapshot forks: the LIFO restore order must hold when a fork child forks again.",
+ "command":"/testbin/fknest","timeout_s":120,
+ "expect":{"screen_contains":["FKNEST OK"]}}

@@ -1,0 +1,48 @@
+LDD(1)               UNIX Programmer's Manual               LDD(1)
+
+
+
+NAME
+     ldd - list a program's shared libraries
+
+SYNOPSIS
+     ldd file ...
+
+DESCRIPTION
+     Ldd runs each dynamic program file with LD_TRACE_LOADED_OBJECTS
+     in its environment, and the binder in libc, rather than run
+     the program, prints the libraries it needs, as SunOS's
+     run-time linker does, and exits:
+
+          -lc.1 => /lib/libc.so.1.0 (core $F6A3, prebound, resident)
+
+     One line a library: its name and major, the file, the base its
+     core is copied to in every process's data bank, whether the
+     program bound to it prebound (the library is the one it was
+     linked against) or by name, and whether it was resident or
+     loaded now -- ldd makes an absent library resident, as running
+     the program would.  A last line gives the bytes of other
+     libraries' cores lying between the program's, which its data
+     cannot use.  A library that cannot be found is listed as
+     `not found'.
+
+     A file that is not a dynamic program is reported as
+     statically linked, or not an executable.
+
+SEE ALSO
+     ldload(8)
+
+BUGS
+     Ldd runs the program's startup, not just its loader: a file it
+     cannot run is reported as an execution failure.
+
+     A program whose library another process is loading waits
+     for that load, for as long as the loading process is
+     stopped; an interrupt ends the wait.
+
+     Any user can make an installed library resident, until the
+     bank pool needs its banks back.
+
+
+
+Printed 10/1/26                                                1

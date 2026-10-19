@@ -1,0 +1,19 @@
+{
+ "name": "lddelta",
+ "description": "Shared libc SP4: with 100 bytes of the arena held after libc, a conf listing curses alone loads termlib first (the loader's absent-dependency path) and then curses, both 100 below the bases they were linked at; lddig checks both against the host's layout for that order, so curses's data imports from termlib are bound at a non-zero delta.  The host's layout (ld.digest.pad, fgx_lddigest --boot) has libc and libfgx, resident from boot (/etc/ld.so.conf), above the 100 bytes.  Control: lddig against ld.digest, the layout without the pad, reports `LDD FAIL libtermlib its row'.",
+ "command": "/sbin/ldload /nonexistent; /testbin/ldctl pad 100; /sbin/ldload /testbin/ld.so.conf.cur; /testbin/lddig -f /testbin/ld.digest.pad libtermlib libcurses",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "LDC pad",
+   "LDD libtermlib ok",
+   "LDD libcurses ok"
+  ],
+  "screen_lacks": [
+   "LDD FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

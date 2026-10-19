@@ -1,0 +1,19 @@
+CU(1)               UNIX Programmer's Manual                  CU(1)
+
+
+
+NAME
+     cu - serial terminal (same program as tip)
+
+SYNOPSIS
+     cu [ tty00 | tty01 | /dev/ttyNN ]
+
+DESCRIPTION
+     _C_u is _t_i_p under its other name; the two are one program
+     and behave identically.  See tip(1) for the escapes and
+     details.
+
+SEE ALSO
+     tip(1)
+
+FGX                          FGX-native                          1

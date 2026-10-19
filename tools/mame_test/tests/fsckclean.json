@@ -1,0 +1,28 @@
+{
+ "name": "fsckclean",
+ "description": "THE CLEAN FLAG, BOTH WAYS.  2.11BSD update #456 puts MNT_CLEAN in the superblock's fs_flags when a filesystem is cleanly unmounted, and fsck(8) skips it unless -f.  That is what makes a boot fsck affordable: a full check of a 32000-block root reads the whole i-list and every block of every file through a single-block read path, measured at over 45 seconds.\n\nBOTH ARMS ARE HERE BECAUSE EITHER ALONE IS VACUOUS.  `clean; not checking' on its own would pass for a fsck that refused the volume for some other reason and said so in a line nobody matched; `** Phase 1' on its own would pass for a build where the flag was never written.  Together they say the flag is read, honoured, and overridable.\n\n/dev/rsd1 is the scratch spindle (disk/ufsscratch.po, via extra_hards), which fgxfs stamps clean as it writes -- a volume it has just finished writing is consistent by construction, which is the same statement a clean unmount makes.",
+ "command": "/sbin/fsck -n /dev/rsd1; echo a=$?; /sbin/fsck -f -n /dev/rsd1; echo b=$?",
+ "boot_s": 45,
+ "timeout_s": 180,
+ "extra_hards": [
+  "disk/ufsscratch.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "file system is clean; not checking",
+   "a=0",
+   "** Phase 1 - Check Blocks and Sizes",
+   "** Phase 5 - Check Free List",
+   "b=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "CAN'T CHECK"
+  ]
+ }
+}

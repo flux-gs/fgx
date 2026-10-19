@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_kill",
+ "description": "Shared libc SP4: a waiter SIGKILLed asleep in ACQUIRE dies; the row stays loading.",
+ "command": "/testbin/ldctl kill",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC kill ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

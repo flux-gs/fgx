@@ -1,0 +1,20 @@
+{
+ "name": "vnprobe",
+ "description": "apple/fgx#467: every namei path gives back the vnode references it takes.  Eighty directories, more than the 64-vnode pool, once per path: mkdir, create, stat, stat of '..', rename, unlink, rmdir.  A leaked parent reference pins every directory and the next phase answers ENFILE; a clean run is its own control, since each phase touches more distinct vnodes than the pool holds.",
+ "command": "/testbin/vnprobe",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "VNSTART",
+   "VN ok   mkdir x80",
+   "VN ok   create x80",
+   "VN ok   stat x80",
+   "VN ok   stat dotdot x80",
+   "VN ok   rename x80",
+   "VN ok   unlink x80",
+   "VN ok   rmdir x80",
+   "VNDONE 0 failed"
+  ],
+  "screen_lacks": ["PANIC", "BRK", "VN FAIL"]
+ }
+}

@@ -1,0 +1,11 @@
+# Two traced first users of curses: A is stopped inside its load, B
+# starts and must wait, A continues.  curses is loaded once.
+LD_TRACE_LOADED_OBJECTS=1 /testbin/curssodyn > /tmp/r1 &
+A=$!
+/testbin/ldctl waitload libcurses $A
+LD_TRACE_LOADED_OBJECTS=1 /testbin/curssodyn > /tmp/r2 &
+sleep 2
+kill -19 $A
+wait
+cat /tmp/r1 /tmp/r2 > /tmp/r
+echo RCE curses=`grep -c "lcurses.1 => .*loaded)" /tmp/r` traced=`grep -c "lcurses.1 =>" /tmp/r`

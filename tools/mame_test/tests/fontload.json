@@ -1,0 +1,12 @@
+{
+  "name": "fontload",
+  "description": "font(1) LOADS A FONT, which it could not do on a UFS root at all (apple/fgx#357: `font vga' answered errno 9 for every name on the image, and no manifest ran the tool).  TWO DEFECTS WERE STACKED.  The path was upper-cased and `.FNT' appended -- the ProDOS convention -- so a case-sensitive 2.11BSD root never had the name; and the far-bank loader read the file with `_FarSh_Fs_Read', which reaches the core `Fs_Read', which answers EBADF for every descriptor now that nothing writes FCB_StorageType.  The open was wrong too, in a third way the errno hid: `_FarSh_Fs_Open' captures its CALLER's DBR as the path's bank, and the path here is a CORE-bank offset handed across the seam, so it copied the far bank at that offset.  THE ASSERTION IS THE STAR, NOT THE EXIT STATUS.  `font' with no argument lists the directory and marks the ACTIVE font, and that name comes from the KERNEL (fontname(3) reads what _Sys_FontStoreBasename recorded), so `* bold' can only be printed if the load reached the console and was accepted -- an exit status of 0 alone would pass on a kernel that returned success without loading anything.  `load failed' is asserted absent as the other half: that is the string font(1) prints on any failure, and it is what every arm of #357 produced.  THE NEEDLE IS BUILT BY EXPANSION -- `F=bold' and `$F' -- because screen_contains searches a ring that holds the shell's echo of the typed line; spelled literally, `bold' would match its own echo whether or not the font loaded.  The face is bold.fnt because it ships in every copy of the tree and is not the boot font, so the star can only move to it by a load.",
+  "command": "F=bold; font $F; echo RC=$?; font",
+  "boot_s": 45,
+  "timeout_s": 40,
+  "exit_on_prompt": { "sentinel": "fgx#", "count_delta": 4 },
+  "expect": {
+    "screen_contains": ["RC=0", "* bold"],
+    "screen_lacks": ["load failed", "PANIC", "BRK"]
+  }
+}

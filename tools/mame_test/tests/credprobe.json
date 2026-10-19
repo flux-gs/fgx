@@ -1,0 +1,22 @@
+{
+  "name": "credprobe",
+  "description": "Credentials P2 gate, and the standing gate for P1's fork inheritance.  Walks the POSIX setuid rule end to end: seteuid(77) as root moves ONLY the effective uid (first point where real != effective, which also proves geteuid is no longer the pre-P2 'return getuid()' delegation -- the kernel answers both from one syscall, real in A and effective in Y, as V7 does); setuid(77) moves real+effective+saved; setuid(0) is then REFUSED with EPERM because 0 is neither the real nor the saved-set id -- that refusal is what proves the rule is ENFORCED rather than assumed, since every other assertion here would also pass on a kernel that let anyone become root; setuid back to our own real id is permitted.  Finally fork() and require the child to report the same non-root ids -- P1's inheritance gate, only reachable because the preceding steps established a non-root parent (before setuid existed this could only be shown by poking a sentinel into init's u-area and rebuilding).  Invoked by absolute path: /testbin reaches PATH only via /root/.profile, which only bsh reads, and a build without the vendored 2.11BSD tree falls back to jsh.  RESTORED 2026-08-13, having been removed with the other 309 manifests in the 2026-07-29 suite purge and -- unlike the 96 since reinstated -- never brought back, so the credentials gate has been absent while its program stayed compiled into every image.  It now also carries UFS 1.2's u-area gate: umask(2) reports the previous mask, the default 022 comes from the KERNEL (Task_AllocUarea) rather than a libc static, the mask crosses fork with the credentials, and the child's own umask does NOT reach the parent's copy.  The mask is the discriminating half of the fork check: credentials inherited even under the old copy-the-exceptions policy because they were the one block on the list, whereas the mask is the first field that depends on the u-area being copied WHOLE.",
+  "command": "/testbin/credprobe",
+  "timeout_s": 20,
+  "stage_files": [
+    {
+      "host": "bin/credprobe.bin",
+      "prodos_dir": "/FGX/TESTBIN",
+      "name": "CREDPROBE",
+      "replace": true
+    }
+  ],
+  "expect": {
+    "screen_contains": [
+      "credprobe: PASS uid=77 gid=88"
+    ],
+    "screen_lacks": [
+      "credprobe: FAIL"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+ "name": "ldctl_deps",
+ "description": "Shared libc SP4: under a dry pool a row that a READY row imports from is reclaimed only after its importer, and a pinned importer keeps its import.",
+ "command": "/testbin/ldctl deps",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["LDC deps ok"],
+  "screen_lacks": ["LDC FAIL", "PANIC", "BRK"]
+ }
+}

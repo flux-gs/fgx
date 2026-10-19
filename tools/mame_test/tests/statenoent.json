@@ -1,0 +1,24 @@
+{
+  "name": "statenoent",
+  "description": "stat(2) OF A NAME THAT IS NOT THERE ANSWERS ENOENT, and it answered EIO until 2026-09-06. Fs_Stat asks the mounted root first and, on ANY failure, fell through to _Fst_Dispatch(FOP_Stat) -- the ProDOS FST, which is not registered on a UFS root and answers the legacy resolver's errno to everything it is asked. So the root's own ENOENT was replaced on the way out. Fs_Open's sibling arm has returned the root's errno since apple/fgx#318 and carries the reasoning in as many words: `A WRONG ERRNO IS NOT COSMETIC, because callers BRANCH on it' -- elvis dropped the filename it had been given because a failed open did not report exactly ENOENT. stat never got the same treatment. THE ASSERTION IS THE MESSAGE AND NOT THE EXIT STATUS. stat(1) exits 1 either way, so a test on $? passes on the broken kernel; what changed is which string strerror(3) produces. `Input/output error' is asserted ABSENT as the other half, because that is the answer the fall-through gave and the one a regression would give again. THE POSITIVE CONTROL IS THE `-rw-r--r--' LINE, NOT `r=0'. A kernel that failed every stat would satisfy the ENOENT arms above, so a name that exists has to be checked too -- but `ls' returns 0 whether or not the name resolves (measured 2026-09-06: `ls -l /nosuchdir' prints `not found' and exits 0), so `r=0' is carried for the record and discriminates nothing. The mode line does: it can only be printed from a stat that succeeded. `ls -ld' rather than a second `stat' because stat(1) reports eleven lines and would push the message this test is about off a 24-row snapshot. MEASURED DISCRIMINATING: on the tree one commit earlier this prints `stat: /nosuchfile: Input/output error'. THE SECOND ARM ASSERTS `r=0' AND NOT THE PATH: `/etc/rc' is in the command this test types, so the shell's echo of the command line satisfied it whether ls ran or not -- check_vacuous_assertions caught that. The exit status is produced by the SHELL from $?, and `r=0' is not a substring of the typed `echo r=$?', so it can only appear if ls actually succeeded. That arm is the control for the first: stat of a name that IS there must still work, or ENOENT for one that is not proves nothing.",
+  "command": "stat /nosuchfile; echo s=$?; ls -ld /etc/rc; echo r=$?",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "No such file or directory",
+      "s=1",
+      "-rw-r--r--",
+      "r=0"
+    ],
+    "screen_lacks": [
+      "Input/output error",
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+# a library above one it needs; one with no file; one with no major
+
+libcurses 1   
+libtermlib 1
+libnope 1
+libtermlib

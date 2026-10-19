@@ -1,0 +1,37 @@
+# elvis (vi) translation units: netbsd-0-9's elvis 1.x from
+# vendor/netbsd-0-9/usr.bin/elvis (ruled the porting source for this tool),
+# with five TUs replaced by FGX copies in this directory.  main.c is the entry
+# (manifest "main"); these are the rest.
+#
+# system.c is the machine-layer seam.  modify.c is verbatim except that add()'s
+# two BLK locals are static -- a 4 KB frame stack_measure charges to vi twice
+# (fn-ptr and signal one-hop allowances); its header says why that is safe and
+# why not CRUNCH.  unix.c is the vendored BSD backend: it selects on fd 0
+# (apple/fgx#151).
+vendor/netbsd-0-9/usr.bin/elvis/cmd2.c
+vendor/netbsd-0-9/usr.bin/elvis/ctype.c
+vendor/netbsd-0-9/usr.bin/elvis/curses.c
+vendor/netbsd-0-9/usr.bin/elvis/cut.c
+vendor/netbsd-0-9/usr.bin/elvis/ex.c
+vendor/netbsd-0-9/usr.bin/elvis/input.c
+vendor/netbsd-0-9/usr.bin/elvis/misc.c
+vendor/netbsd-0-9/usr.bin/elvis/move1.c
+vendor/netbsd-0-9/usr.bin/elvis/move2.c
+vendor/netbsd-0-9/usr.bin/elvis/move3.c
+vendor/netbsd-0-9/usr.bin/elvis/move4.c
+vendor/netbsd-0-9/usr.bin/elvis/move5.c
+vendor/netbsd-0-9/usr.bin/elvis/opts.c
+vendor/netbsd-0-9/usr.bin/elvis/redraw.c
+vendor/netbsd-0-9/usr.bin/elvis/regexp.c
+vendor/netbsd-0-9/usr.bin/elvis/regsub.c
+vendor/netbsd-0-9/usr.bin/elvis/tio.c
+vendor/netbsd-0-9/usr.bin/elvis/unix.c
+vendor/netbsd-0-9/usr.bin/elvis/tmp.c
+vendor/netbsd-0-9/usr.bin/elvis/vars.c
+vendor/netbsd-0-9/usr.bin/elvis/vcmd.c
+vendor/netbsd-0-9/usr.bin/elvis/vi.c
+src/userland/elvis/system.c
+src/userland/elvis/modify.c
+src/userland/elvis/blk.c
+src/userland/elvis/recycle.c
+src/userland/elvis/cmd1.c

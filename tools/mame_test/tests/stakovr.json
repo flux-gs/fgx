@@ -1,0 +1,18 @@
+{
+ "name": "stakovr",
+ "description": "bsh grows its string stack before writing, not on a write fault.  2.11BSD sh's macro.c pushes an expansion onto the stak with no bound and relies on the MEMF fault (fault.c:29) to grow the break when it runs past; FGX has no write fault, so the push runs past the break silently.  The script doubles $x by expansion to 16 KB, then expands it four times, which is more than the data bank holds: the shell must report `no space' and exit, and never reach the line after.  Without the guard the 64 KB push wraps the bank's 16-bit offset over the shell's own globals.  The markers are built from quoted halves so the typed command line cannot satisfy them.",
+ "command": "sh /testdata/stakovr; echo =SO\"RC\"",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "=SO16K",
+   "no space",
+   "=SORC"
+  ],
+  "screen_lacks": [
+   "=SOPAST",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

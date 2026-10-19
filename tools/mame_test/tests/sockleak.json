@@ -1,0 +1,22 @@
+{
+ "name": "sockleak",
+ "description": "apple/fgx#132: a loopback descriptor must never keep a W5100 hardware socket.  An AF_INET descriptor claims one only when a verb first drives the chip (_Xport_Claim); one bound or connected to 127/8 is stamped SOCK_HW_LOOP and gives back any it holds (_Loop_ReleaseHw), which matters for the wildcard listener whose hardware listen failed after claiming.  _W5_SockAlloc hands out 1..3 only (0 is reserved for /dev/bpf0 MACRAW), so there are exactly three for the machine, and teardown skips the free for anything >= W5_NSOCK, so a sentinel stamped over a held slot strands it for the boot.  THREE RUNS, NOT TWO: each loopprobe makes two socket() calls, so a loopback path that held slots leaves the machine dry partway through the second run.  A third run costs one boot and proves the slots are genuinely recycled rather than merely sufficient for one repeat.",
+ "command": "/testbin/loopprobe",
+ "exit_on_prompt": false,
+ "timeout_s": 240,
+ "post_gap_frames": 800,
+ "post_commands": [
+  "/testbin/loopprobe",
+  "/testbin/loopprobe"
+ ],
+ "expect": {
+  "screen_contains": [
+   "loopprobe: PASS both directions + EOF"
+  ],
+  "screen_lacks": [
+   "loopprobe: FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

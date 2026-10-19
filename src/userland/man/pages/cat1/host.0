@@ -1,0 +1,53 @@
+
+
+
+HOST(1)             UNIX Programmer's Manual              HOST(1)
+
+
+
+NAME
+     host - look up host names and addresses
+
+SYNOPSIS
+     host name
+     host address
+
+DESCRIPTION
+     Host looks up Internet host information using the resolver.
+     Given a host name, it prints the host's IP address; given a
+     dotted-quad IP address, it prints the host's name (reverse
+     lookup).
+
+     A name is resolved by first consulting /etc/hosts, then, on
+     a miss, by a DNS query to the name server listed in
+     /etc/resolv.conf (which dhclient(8) writes from the DHCP
+     lease).  An unqualified name (one with no dot) is also tried
+     with each domain from the resolv.conf "search"/"domain"
+     directive appended, so `host www' resolves as www.example.com
+     when the search domain is example.com.  An address is
+     resolved by a reverse (PTR) DNS query.
+
+     Output takes one of the forms:
+
+          name has address a.b.c.d
+          a.b.c.d domain name pointer name
+
+     If the name or address cannot be resolved, host prints
+          Host name not found
+     and exits with a non-zero status.
+
+FILES
+     /etc/hosts          static host table (consulted first)
+     /etc/resolv.conf    name server address
+
+SEE ALSO
+     gethostbyname(3), resolv.conf(5), dhclient(8)
+
+BUGS
+     Only address (A) and pointer (PTR) records are looked up;
+     there is no -t option for other record types yet.  Unlike
+     nslookup(8) there is no interactive mode.
+
+
+
+Printed 7/20/86                                                1

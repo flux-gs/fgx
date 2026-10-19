@@ -1,0 +1,4 @@
+# libfgx.so's data exports: include/fgx.h declares no extern objects, so
+# the block table is the only one.
+# The block table crt0's _crt0_inits passes to _lib_init.
+_libfgx_blktab

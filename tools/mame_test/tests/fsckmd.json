@@ -1,0 +1,25 @@
+{
+ "name": "fsckmd",
+ "description": "THE SECOND SLOT-7 CARD BOOTS AND ITS ROOT CHECKS CLEAN.  apple/fgx#408.\n\nEvery other fixture runs on the DEFAULT `retronet' card -- standard SmartPort, single-block reads, device subtype $FF -- so a fault that only appears on the extended multi-block path is invisible to the whole suite.  That is not hypothetical: apple/fgx#409 presented as `fsck always finds an issue with /' and was found on a MicroDrive boot, on an image the suite had been calling clean for weeks.  A boot and an `fsck -n' on the other card is the cheapest thing that would have caught it on day one.\n\nTHE BOOT LINE IS THE LOAD-BEARING ASSERTION.  `extended SmartPort - multi-block read path (dev subtype $A0)' is what the block driver prints when it has negotiated the OTHER path, and without it this fixture would pass by running on retronet -- a card-selection failure, a missing mdttool or a manifest typo would all look like a green run.  It is the only line on the screen that says which card is underneath.\n\nWHY `-f'.  The root was clean when the kernel mounted it, so its superblock carries MNT_WASCLEAN and setup() answers `file system is clean; not checking' -- fsckroot's note explains the same thing.  Without -f the five phases would not run and the fixture would assert nothing about reading the i-list, which is exactly what went wrong.\n\nWHY `-n'.  A read-only check is all this needs, and it is all securelevel 1 permits once init has gone multiuser (apple/fgx#410).  The point here is whether the READS are right on this card, not whether fsck can repair.\n\nWHAT THE `lacks' ARMS ARE.  The complaints #409 produced on this card and no other: PARTIALLY ALLOCATED INODE, SIZE=0 FILE HAS ALLOCATED BLOCKS, UNREF.  They are what a wrong i-list read looks like to fsck, and they are the reason this fixture exists rather than a generic boot test.",
+ "boot_device": "microdrive",
+ "command": "/sbin/fsck -f -n -t /tmp/fscktmp /dev/rsd0; echo rc=$?",
+ "timeout_s": 400,
+ "expect": {
+  "screen_contains": [
+   "extended SmartPort - multi-block read path (dev subtype $A0)",
+   "** /dev/rsd0 (NO WRITE)",
+   "** Root file system",
+   "** Phase 5 - Check Free List",
+   "rc=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "PARTIALLY ALLOCATED INODE",
+   "SIZE=0 FILE HAS ALLOCATED BLOCKS",
+   "UNREF",
+   "CANNOT READ",
+   "UNEXPECTED INCONSISTENCY"
+  ]
+ }
+}

@@ -1,0 +1,1125 @@
+                FGX2_MODE 2
+;---------------------------------------
+; fcc 0.0 — generated from arrfield_incdec.c
+;---------------------------------------
+
+                MX      %00
+                FGX2_EXPORT main
+main            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #main_FRAMESIZE
+                DO      main_STKGUARD
+                BCC     main_stkovf
+                CMP     _fcc_stkfloor
+                BCS     main_stkok
+main_stkovf       JMP     _fcc_stkoflow
+                FIN
+main_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     #0
+                STA     _fcc_img0
+                LDA     #10
+                STA     _arrfield_incdec_obj+0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #20
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #30
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #40
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #31
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L5
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #20
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L5
+                LDA     #1
+                BRL     _arrfield_incdec_L6
+_arrfield_incdec_L5
+                LDA     #0
+_arrfield_incdec_L6
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L3
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #40
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L3
+                LDA     #1
+                BRL     _arrfield_incdec_L4
+_arrfield_incdec_L3
+                LDA     #0
+_arrfield_incdec_L4
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L1
+                LDA     _arrfield_incdec_obj+0
+                TAX
+                LDA     #10
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L1
+                LDA     #1
+                BRL     _arrfield_incdec_L2
+_arrfield_incdec_L1
+                LDA     #0
+_arrfield_incdec_L2
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L0
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L0
+                LDA     #2
+                STA     _fcc_img1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     _fcc_img1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #39
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L10
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #31
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L10
+                LDA     #1
+                BRL     _arrfield_incdec_L11
+_arrfield_incdec_L10
+                LDA     #0
+_arrfield_incdec_L11
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L8
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #20
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L8
+                LDA     #1
+                BRL     _arrfield_incdec_L9
+_arrfield_incdec_L8
+                LDA     #0
+_arrfield_incdec_L9
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L7
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L7
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #97
+                SEP     #$20
+                MX      %10
+                STA     [_fcc_fpr0]
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #98
+                SEP     #$20
+                MX      %10
+                STA     [_fcc_fpr0]
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #99
+                SEP     #$20
+                MX      %10
+                STA     [_fcc_fpr0]
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                SEP     #$20
+                MX      %10
+                STA     [_fcc_fpr0]
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #99
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L15
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #97
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L15
+                LDA     #1
+                BRL     _arrfield_incdec_L16
+_arrfield_incdec_L15
+                LDA     #0
+_arrfield_incdec_L16
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L13
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #99
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L13
+                LDA     #1
+                BRL     _arrfield_incdec_L14
+_arrfield_incdec_L13
+                LDA     #0
+_arrfield_incdec_L14
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L12
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L12
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                STA     _fcc_fpr0
+                LDA     _fcc_fpr0+2
+                STA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_fpr0
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #21
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L18
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #31
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L18
+                LDA     #1
+                BRL     _arrfield_incdec_L19
+_arrfield_incdec_L18
+                LDA     #0
+_arrfield_incdec_L19
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L17
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L17
+                LDA     #2
+                STA     _fcc_img1
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     _fcc_img1
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                SEP     #$20
+                MX      %10
+                STA     [_fcc_fpr0]
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #98
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L23
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #99
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L23
+                LDA     #1
+                BRL     _arrfield_incdec_L24
+_arrfield_incdec_L23
+                LDA     #0
+_arrfield_incdec_L24
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L21
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_obj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                TAX
+                LDA     #97
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L21
+                LDA     #1
+                BRL     _arrfield_incdec_L22
+_arrfield_incdec_L21
+                LDA     #0
+_arrfield_incdec_L22
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L20
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L20
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #100
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #200
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #300
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #7
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #107
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L28
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #200
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L28
+                LDA     #1
+                BRL     _arrfield_incdec_L29
+_arrfield_incdec_L28
+                LDA     #0
+_arrfield_incdec_L29
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L26
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #300
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L26
+                LDA     #1
+                BRL     _arrfield_incdec_L27
+_arrfield_incdec_L26
+                LDA     #0
+_arrfield_incdec_L27
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L25
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L25
+                LDA     #1
+                STA     _fcc_img1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     _fcc_img1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #50
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #250
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L31
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrfield_incdec_vs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #107
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _arrfield_incdec_L31
+                LDA     #1
+                BRL     _arrfield_incdec_L32
+_arrfield_incdec_L31
+                LDA     #0
+_arrfield_incdec_L32
+                CMP     #0
+                BNE     *+5
+                BRL     _arrfield_incdec_L30
+                LDA     _fcc_img0
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_arrfield_incdec_L30
+                LDA     _fcc_img0
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+main_FRAMESIZE   EQU     8
+main_STKGUARD    EQU     0
+                FGX2_RELOC_COUNT 2

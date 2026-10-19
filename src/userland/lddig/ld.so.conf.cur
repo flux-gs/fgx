@@ -1,0 +1,2 @@
+# curses alone: termlib, which it needs, loads first, unlisted
+libcurses 1

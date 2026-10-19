@@ -1,0 +1,16 @@
+# robots(6) translation units (curses/termcap come from libcurses.so and
+# libtermlib.so).  Named by tools/ninja/manifest.json's tu_list; the main TU
+# is robots.c (upstream main.c).  rob_move.c is upstream move.c (basename collides with the
+# curses move.c TU).
+src/userland/robots/extern.c
+src/userland/robots/flush_in.c
+src/userland/robots/init_field.c
+src/userland/robots/make_level.c
+src/userland/robots/rob_move.c
+src/userland/robots/move_robs.c
+src/userland/robots/play_level.c
+src/userland/robots/query.c
+src/userland/robots/rnd_pos.c
+src/userland/robots/score.c
+# curses: the ONE aggregated toolchain TU (needs -DNOSCCS; termcap via
+# libs="termlib" — curses does not fit the shared LIBC seg next to libc)

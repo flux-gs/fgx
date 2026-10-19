@@ -1,0 +1,39 @@
+{
+ "name": "ufsvnprobe",
+ "description": "The FILESYSTEM asserted THROUGH ITS VNODE OPERATIONS -- the half of the probe that needs a struct mount, split out of ufsprobe at UFS 1.12a because the two no longer fit one 64 KB module bank (measured: ufs.mod ships at 29,372 bytes; the single-gate probe build was 61,287 of 65,536, and 1.12a's shipping code alone is 4,612).  It mounts disk/ufsscratch.po itself and then drives the vnode layer: cases 700-715 build a struct mount with a struct ufsmount hanging off it and assert the df numbers against `fgxfs` (4030 blocks, 3725 free, 1024 inodes, 1020 free, and f_bavail == f_bfree because the mapping is 2.11BSD's statfs1 and not Reno's cylinder-group one); 750-762 the in-core inode and its hash, including the device-vnode reference iget takes and ufs_reclaim gives back (apple/fgx#175); 800-819 VOP_GETATTR and VOP_READ; 820-856 VOP_LOOKUP and VOP_READDIR against the 2.11BSD variable-length directory format that `fgxfs ls` put on the volume; and 860-900 the WRITE PATH, new at 1.12a.  WHAT THE WRITE CASES HAVE TO CATCH IS A WRITE PATH THAT DOES NOTHING, which is why every one of them verifies with a RAW kc_blkio read under the buffer cache, under bio_strategy and under everything vfs.mod owns: a filesystem that accepts writes and touches no block leaves a volume fsck calls perfect and passes any test that reads its own writes back through the cache.  They cover the three buffer decisions separately -- a partial write into a block that does not exist yet must clear rather than read (867/869), a partial write into one that does must bread or it destroys what it is not overwriting (876), and a full-block write needs neither; the indirect block built when the file passes logical block 4, checked to be ZERO in every entry but the one threaded (884), which is what says a block off the free list was cleared before anything pointed at it; the inode itself read back as BYTES so the PDP-11 encode direction is pinned rather than round-tripped (871/872); and case 893, which is the sequence a lost write actually takes -- read a hole, caching a buffer whose b_blkno is -1, then write it, where a write path that does not overwrite b_blkno hands bio_strategy a buffer still marked as a hole and the bytes are silently discarded.  IT WRITES AND IT PUTS THE VOLUME BACK, including on failure: inode 5 (checked free first, so a volume whose layout changes stops the probe rather than being overwritten) and three blocks off the free list, against an sb_nfree of 26 so no chain block is consumed -- a consumed chain block is NOT restorable by rewriting the superblock.  The image is handed to MAME by path with no per-run copy and ninja will not rebuild an output newer than its inputs, so a run that left it changed would poison it until someone deleted it by hand.  AND THE ORACLE JUDGES WHAT IT LEAVES BEHIND.  `ufsfsck_check.py' fscks every staged spindle once the machine has finished with it, which is the campaign plan's phase-1 arm 1 -- \"mount -t ufs survives a full read/write exercise; host fgxfs fsck clean\".  It works even though this probe RESTORES the volume, because the restore is SEMANTIC rather than byte for byte: a completed run puts the free list and the counts back where it found them, so anything the exercise damaged OUTSIDE what it meant to touch still shows.  Measured on two completed runs: 305 used, 3,725 free, 1,020 free inodes, identical to a fresh mkfs.  IT IS NOT SELF-SUFFICIENT and must not be read as though it were -- a run that PANICS before doing anything leaves a clean volume too, which is exactly what apple/fgx#272 did -- so this arm is worth something only beside the `ufs: ok' above it and tryprobe.sh's exit status (apple/fgx#273).",
+ "command": "ls /",
+ "timeout_s": 30,
+ "extra_hards": [
+  "disk/ufsscratch.po"
+ ],
+ "expect": {
+  "screen_contains": [
+   "ufs: ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "ufs: BROKEN",
+   "ufs: vfs.mod not loaded",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ],
+  "klog_lacks": [
+   "fs: /dev SELF-TEST FAILED"
+  ],
+  "check_script": "ufsfsck_check.py"
+ },
+ "requires": {
+  "config": {
+   "kernel.ufsvnprobe": "1"
+  },
+  "reason": "the vnode-operation half of the filesystem probe is compiled into ufs.mod only at kernel.ufsvnprobe = 1, and it is a SEPARATE GATE from kernel.ufsprobe because the two do not fit in one 64 KB module bank -- see cfg/system.cfg for the measurement.  It is off by default because it WRITES to a disk on the boot path.  Run it with `sh tools/tryprobe.sh ufsvnprobe`."
+ },
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ]
+}

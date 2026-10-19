@@ -1,0 +1,19 @@
+{
+ "name": "ptyflush",
+ "description": "INPUT QUEUED FOR A SESSION DOES NOT SURVIVE IT.  TTY campaign T4 increment 3, written before it the way ptyhup was written before increment 2.  `ptsclose' is three calls (2.11BSD tty_pty.c:88-96) and the middle one is the property: `ttyclose' (tty.c:695) flushes both queues, clears t_pgrp, and clears the WHOLE of t_state.  Without it a line is a ratchet rather than a cycle -- whatever the last session left in t_canq is what the next session's first read(2) returns, and TS_ISOPEN never comes down so the next ttyopen takes its already-open arm.  THE LEFTOVER IS MADE ON PURPOSE: six bytes go in and two come out, so 'CDE\\n' stays queued, which is upstream's ttread leaving what the caller did not ask for.  The second session then reads ONE byte after a fresh 'Z\\n', and the two kernels differ in a single character -- 'Z' if the queue was flushed, 'C' if it was not.  ONE PROCESS, NO SPAWN: the property belongs to the LINE, not to a session's ownership of it.  THE MASTER STAYS OPEN throughout, which is needed twice -- /dev/ttyp0 cannot be opened without one, and `_Pty_MaybeReset' would flush the pty rings and hide the defect, but only fires when both sides are shut.  THE FIRST READ IS THE POSITIVE CONTROL: no 'AB' means the leftover was never made and the second read is about something else.  EXPECTED RED BEFORE INCREMENT 3: _PtyS_Close clears PTYF_SOPEN and wakes sleepers, and the discipline is never told the line closed -- so r2 reports b=67, the 'C' of the previous session.  UPDATED AT T4 INCREMENT 4: the fixture now drains the ECHO from the master before closing the slave, and without that read the close BLOCKS FOREVER on FGX and on 2.11BSD alike -- reading 'AB' echoed those characters into t_outq, ptsclose's l_close is ttylclose which for an ordinary close is ttywflush -> ttywait, and since increment 4 the only thing that empties that queue is the master's read.  That is BSD's behaviour and not a defect: the wait exists so a session's output reaches the far end before the line goes away.  This fixture only ever avoided it because FGX drained t_outq eagerly into a ring that absorbed the echo.",
+ "command": "/testbin/ptyflush",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "PTYFLUSH r1 n=2 b=6566",
+   "PTYFLUSH r2 n=1 b=90",
+   "PTYFLUSH OK"
+  ],
+  "screen_lacks": [
+   "PTYFLUSH BAD",
+   "PTYFLUSH FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

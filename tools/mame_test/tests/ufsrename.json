@@ -1,0 +1,27 @@
+{
+  "name": "ufsrename",
+  "description": "rename(2) ON THE MOUNTED ROOT -- the syscall that did not exist until 2026-09-05, because vfs_rename was written once, measured 783 bytes past the end of a vfs.mod with 267 free, and deleted again.  nd_begin (vfs_vnops.c:846) is the only thing that remembered it.  The room came from moving spec_vnops.c to the module that already held its only caller.\n\nFOUR SHAPES, because rename's bugs are shape-specific and a single `mv a b' would miss three of them:\n  SAME DIRECTORY is the case where the two walks land on the SAME parent vnode, held twice -- WANTPARENT unlocked from the from-walk and LOCKPARENT locked from the to-walk.  Release it once and the next descent into that directory waits on a lock this process owns; vfs_unlink's header records that exact hang.\n  INTO A SUBDIRECTORY is the case where they differ, which is the one a same-vnode special case would break.\n  OVER AN EXISTING FILE drives ufs_rename's dirrewrite arm rather than direnter, and is where the target's link count is dropped.\n  ONTO ITSELF IS IMPLEMENTED AND IS NOT TESTED HERE, said plainly because an arm for it was written and then removed.  vfs_rename carries Reno's no-op -- `error = -1' turned back into 0 at the exit (kern/vfs_syscalls.c:1460,1479) -- but mv(1) refuses `mv f f' ITSELF, printing \"d/a3 and d/a3 are identical\" without ever reaching rename(2).  The arm passed judgement on mv's path comparison and nothing else, which is worse than no arm.  Reaching that path needs a caller that is not mv.\n\nTHE NEEDLES ARE ASSEMBLED FROM VARIABLES ($P$X, $P$Y) and the counts are `mv=$?' in the typed line but `mv=0' on screen -- neither can be satisfied by the command echo, which is how the append arm in ufswrite was found to be vacuous the same day.\n\nMEASURED DISCRIMINATING, and not synthetically: this exact command on the tree one commit earlier printed `mv: a1: rename' and `mv=1' with no r1 and no r2 anywhere, because rename(2) answered ENOSYS.  Every arm below was red.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.",
+  "command": "cd /tmp; P=r; X=1; Y=2; echo $P$X > a1; mv a1 a2; echo mv=$?; cat a2; mkdir d; mv a2 d/a3; echo mv2=$?; cat d/a3; echo $P$Y > b1; mv b1 d/a3; echo mv3=$?; cat d/a3; rm -f d/a3 b1; rmdir d; sync",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 16
+  },
+  "expect": {
+    "screen_contains": [
+      "mv=0",
+      "mv2=0",
+      "mv3=0",
+      "r1",
+      "r2"
+    ],
+    "screen_lacks": [
+      "rename",
+      "Cannot access",
+      "PANIC",
+      "BRK"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

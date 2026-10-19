@@ -1,0 +1,11 @@
+{
+  "name": "prof_fas",
+  "description": "Phase-0 profiler: fas assembles a staged big.s (compute-bound: lexer + symbol table + two-pass emit). pc_sample enabled. Profile against tools/fas/dyn.ld/seg0_Output.txt (HEAD fcc, == the disk FAS; fas is dynamic, so libc samples fall in libc.so's banks).",
+  "command": "fas /docs/big.s -o /root/bigout",
+  "timeout_s": 150,
+  "pc_sample": true,
+  "stage_files": [
+    {"host": "tools/profile/workloads/big.s", "prodos_dir": "/FGX/DOCS", "name": "BIG.S"}
+  ],
+  "expect": {"screen_lacks": ["PANIC", "BRK"]}
+}

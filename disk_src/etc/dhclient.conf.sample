@@ -1,0 +1,17 @@
+# /etc/dhclient.conf - resolver overrides for dhclient(8).
+#
+# dhclient normally takes the DNS server and search domain from DHCP
+# (options 6 and 15).  Uncomment a line below to OVERRIDE the DHCP value
+# on this machine -- useful when the LAN's DHCP server sends no search
+# domain, or a better nameserver is known locally.  The command-line
+# flags -d/-n override even these.
+#
+# This is the tracked TEMPLATE.  It is NOT copied onto the disk image.
+# To set a persistent override for YOUR build, copy it to the real name
+# (which is gitignored, so it never lands in anyone else's download):
+#
+#     cp disk_src/etc/dhclient.conf.sample disk_src/etc/dhclient.conf
+#     $EDITOR disk_src/etc/dhclient.conf     # uncomment/edit a line
+#
+# domain      example.com          # search domain for unqualified names
+# nameserver  192.168.1.1          # DNS server IP

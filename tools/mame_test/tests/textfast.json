@@ -1,0 +1,7 @@
+{
+ "name": "textfast",
+ "description": "SHARED TEXT IS NEVER STALE, EVEN WITHIN A SECOND: four rounds of cp /bin/echo over /tmp/tg, run it, cp /bin/pwd over it (same inode), run it.  The key's change time is whole seconds, so a rewrite in the same second as the load before it carries the same key; the table must not have cached a text that young, or the pwd run prints echo's output and the round reports `TG STALE'.  The marker is built by expansion so the typed line cannot satisfy it.",
+ "command": "sh /testdata/textfast",
+ "timeout_s": 150,
+ "expect": {"screen_contains": ["TG DONE"], "screen_lacks": ["TG STALE", "PANIC", "BRK"]}
+}

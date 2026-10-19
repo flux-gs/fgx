@@ -1,0 +1,19 @@
+{
+ "name": "ensoniqplaywav",
+ "description": "ensoniqplay(1) M3 WAV parse: an 8-bit unsigned WAV (RIFF/WAVE, 22050 Hz mono, 0.5 s) is played placed.  Proves the WAV header parser reads bits/channels/rate and that 8-bit WAV is treated as unsigned.  Same DOC outcome as the raw 8-bit test (11025 samples, ~30 ticks) but reached through the header path.",
+ "command": "ensoniqplay /etc/tone440_u8.wav",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "stage_files": [
+  { "host": "tools/mame_test/fixtures/tone440_u8.wav", "prodos_dir": "/FGX/etc", "name": "tone440_u8.wav", "replace": false }
+ ],
+ "expect": {
+  "screen_contains": [
+   "wav 8-bit unsigned mono 22050 Hz",
+   "11025 bytes @ 22050 Hz (freq 429), playing",
+   "halted after 3",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "cannot open", "timed out", "Fatal" ]
+ }
+}

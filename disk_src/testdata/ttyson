@@ -1,0 +1,10 @@
+# Test fixture for the inithup manifest: the shipped /etc/ttys with ttyv1
+# flipped from "off" to "on" and pointed at a command that does not exist.
+# The console line is byte-identical to the shipped one on purpose -- init
+# must recognise it as unchanged and leave its running shell alone, which is
+# what the test's post_command proves.
+console /bin/sh            vt100   on secure
+ttyv1   /bin/nosuchgetty   vt100   on secure
+ttyv2   /bin/getty         vt100   off secure
+ttyp0   none               fgxpty  off secure
+ttyp1   none               fgxpty  off

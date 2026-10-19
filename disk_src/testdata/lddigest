@@ -1,0 +1,8 @@
+# The machine binder's digest of each program's binding against the host's
+# (fgx_bind --digest).  curssodyn's is taken through a first-use load.
+LD_BIND_DIGEST=1 /testbin/dynsodyn > /tmp/dg1
+cmp /tmp/dg1 /testbin/dynsodyn.digest && echo LDB same1
+LD_BIND_DIGEST=1 /testbin/dynsomisdyn > /tmp/dg2
+cmp /tmp/dg2 /testbin/dynsomisdyn.digest && echo LDB same2
+LD_BIND_DIGEST=1 /testbin/curssodyn > /tmp/dg3
+cmp /tmp/dg3 /testbin/curssodyn.digest && echo LDB same3

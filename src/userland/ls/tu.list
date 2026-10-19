@@ -1,0 +1,8 @@
+# ls(1) translation units.  ls.c is the entry point and so is NOT listed here
+# (the generator takes src/userland/<tool>/<tool>.c); this names the rest.
+#
+# stat_flags.c is upstream's own second file -- 2.11BSD's ls Makefile builds
+# SRCS= ls.c stat_flags.c -- and it holds flags_to_string(), which the -o
+# column calls.  The trimmed port dropped it along with -o; the verbatim one
+# brings both back.
+src/userland/ls/stat_flags.c

@@ -1,0 +1,61 @@
+
+
+LAST(1)              UNIX Programmer's Manual                LAST(1)
+
+
+
+NAME
+     last - indicate last logins of users and terminals
+
+SYNOPSIS
+     last [ -f file ] [ -number ] [ name ... ] [ tty ... ]
+
+DESCRIPTION
+     Last reads the login-accounting log /etc/wtmp and lists, most
+     recent first, every session it holds: for each it prints the
+     user, the terminal, the remote host if any, the login time,
+     and the logout time with the length of the session in
+     parentheses.  A session still open shows "still logged in"
+     in place of the logout, and one cut short by a reboot or a
+     crash shows "down" or "crash".
+
+     A line whose terminal is `~' is a system boot, written by
+     init(8); last prints it as "reboot".  Every session open at
+     that instant is taken to have ended there.
+
+     With no name or terminal argument last reports every session.
+     Given names or terminals, it restricts the report to those:
+     a name matches the user, and a terminal matches the line.  A
+     bare terminal such as `p0' is taken as `ttyp0'; an argument
+     that names a user in the password file is matched as a name.
+
+     The options are:
+
+     -f file      Read the accounting records from file rather than
+                  from /etc/wtmp.
+
+     -number      Stop after number lines have been printed.
+
+     An interrupt (the INT signal, typically Ctrl-C) makes last
+     print how far back into the log it has reached and stop; a
+     quit is armed the same way but is not delivered on FGX.
+
+     When the log is exhausted last prints the time of its oldest
+     record as "wtmp begins".
+
+FILES
+     /etc/wtmp     the login and logout accounting log
+
+SEE ALSO
+     ac(8), who(1), w(1), login(1), init(8), utmp(5)
+
+NOTES
+     Accounting is kept only while /etc/wtmp exists, which is how it
+     is turned on and off; FGX ships the file empty.  The log grows
+     without bound -- there is no cron to roll it over -- so a site
+     that wants it short truncates or recreates the file itself.
+
+     A login name longer than eight characters is truncated in the
+     accounting record and therefore here; see utmp(5).
+
+FGX                            2.11BSD                           1

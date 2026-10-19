@@ -1,0 +1,37 @@
+{
+  "name": "allocwarm",
+  "description": "apple/fgx#120 root cause: a non-zero _taskAllocCur at boot must not break FGX. _KMem_ClearGlobals started at DetectedROM = FGX_DATA+4, skipping LastExitStatus and _taskAllocCur -- they were prepended to memmap.s after the zeroer was written. FGX_DATA is a DUM section with no image bytes, so nothing else writes them: on a warm boot they hold the last run's values. _taskAllocCur is Task_Alloc's round-robin cursor and its own declaration says 'Zero-init => first alloc = slot 0 (init must be pid 1)'. Non-zero, init gets another slot and is not pid 1 while the boot path hardcodes _kCurPid = 1, so pid 1's kernel DP page is never seeded and its identity cell still reads the boot loader -- the reported 'curTask $44B1 kCurPid $0001'. A cold boot escapes because garbage >= NPROC wraps to slot 0; only 1..NPROC-1 misallocates, which is exactly what a real run leaves. This pokes the cursor at RESET on a COLD boot, which is the whole warm-boot input in one cell. RED before the fix: measured, the machine dies with a blank screen. The address is derived from the build listing ($02/ED72 -> live kernel bank), NOT from memmap.s's header comment, which still says FGX_DATA is $02E000 when it is $02ED70 -- poking the stale address hit dead memory and reported a false pass, which is how this test learned to assert DetectedROM = $0003 as its own address check. The needle is built by shell expansion (A=ok; echo ALLOC=$A) so the typed command cannot contain it.",
+  "command": "sh",
+  "poison": [
+    {
+      "symbol": "_taskAllocCur",
+      "addr": 8252786,
+      "hex": "0100",
+      "frame": 0
+    }
+  ],
+  "post_commands": [
+    "A=ok",
+    "echo ALLOC=$A"
+  ],
+  "post_gap_frames": 300,
+  "timeout_s": 300,
+  "exit_on_prompt": false,
+  "use_state": false,
+  "expect": {
+    "screen_contains": [
+      "ALLOC=ok"
+    ],
+    "screen_lacks": [
+      "CANARY"
+    ],
+    "check_script": "allocwarm_check.py"
+  },
+  "memory_regions": [
+    {
+      "name": "fgxdata",
+      "symbol": "LastExitStatus",
+      "len": 8
+    }
+  ]
+}

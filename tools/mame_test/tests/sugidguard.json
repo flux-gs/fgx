@@ -1,0 +1,53 @@
+{
+ "name": "sugidguard",
+ "description": "A SET-USER-ID BIT MUST NOT BE REACHABLE BY THE PERSON IT WOULD PROMOTE.  exec honours ISUID since apple/fgx#416, and the moment it does, chmod(2) and chown(2) stop being a correctness question and become the way in: give a file you own to root, set the bit, run it.  ufs_setattr had no credential test at all -- its own header said so, `a caller with a non-zero U_Uid is treated as the superuser here' -- which was harmless for exactly as long as nothing could gain privilege.\n\nFOUR RULES, EACH WITH ITS OWN ARM, AND ONE OF THEM MUST SUCCEED:\n\n  `-rwsr-xr-x  1 fgx' after `chmod 4755 note' is the POSITIVE CONTROL and it must PASS.  4.3BSD-Reno chmod1 (ufs/ufs_vnops.c:473) lets the OWNER set the mode, set-id bits included; the bit is harmless because it names fgx, who is already fgx.  A gate that simply refused everything would satisfy all three refusals here and break chmod for the whole system, and this is the line that catches it.\n\n  `chown: note: Operation not permitted' is chown1's gate (ufs/ufs_vnops.c:515-522): a non-root caller may not change a file's owner, even on a file it owns.  This is the arm that closes the hole; the `ls -l' after it says the file is still fgx's and still carries the bit.\n\n  `-rwxr-xr-x  1 fgx' after `echo more >> note' is the WRITE clearing -- Reno ufs_vnops.c:736-738, 2.11BSD usr/sys/sys/sys_inode.c:300-302 -- and it is the rule that says a bit cannot outlive the contents it was granted for.  The `s' is gone and nothing else about the line changed.\n\n  `chmod: /etc/passwd: Operation not permitted' is chmod1's gate from the other side: not the owner, not root, refused.\n\n  `/dev/sd1 on /mnt: Operation not permitted' is mount(2), and it is here because setuid is what made it urgent rather than untidy.  mount(2) and umount(2) were UNPRIVILEGED -- vfs_mountat's own header said so, \"a REAL hole and not a simplification\" -- which cost nothing while nothing could gain privilege and became the shortest way to root the moment exec honoured a set-user-ID bit: bring a volume with a set-user-ID-root shell on it and mount it.  MNT_NOSUID is no defence, being the CALLER's flag to pass.  Both upstreams gate it -- 2.11BSD in getmdev (usr/sys/sys/ufs_mount.c:331), which serves smount and umount both, and Reno at the head of each (kern/vfs_syscalls.c:63 and :209).\n\nMEASURED DISCRIMINATING, EACH MUTATION HITTING ONLY ITS OWN ARM: delete the chown1 gate and the two chown arms go red together (`c1=0', no message) while the rest stay green; delete the write clearing and `-rwxr-xr-x  1 fgx' alone goes red.\n\n`-rwsr-xr-x  1 root' IS A BACKSTOP AND NOT A DISCRIMINATOR, which is worth saying because it looks like the main assertion.  It is the string a successful escalation would print -- a set-user-ID-root binary in a directory uid 100 can write -- but producing it takes TWO of these rules to fail at once: with the chown gate removed the chown succeeds, and then the chmod gate refuses the bit because fgx no longer owns the file; with the chmod done first instead, the clearing in chown1 strips the bit as the owner changes.  MEASURED: the chown-gate mutation above does NOT make this arm fire.  It is kept as defence in depth against a combination no single mutation models, and the arms above are what actually hold the line.\n\nTHE STATUS NEEDLES ARE tcsh's `$status' AND NOT `$?' -- fgx's shell is /bin/tcsh, where `$?' is a variable-existence test and the whole line comes back `Illegal variable name'.  Measured, not assumed.  Neither `c1=1' nor `c2=1' appears in the typed line, which carries `$status'.\n\nTHE POSITIVE CONTROL FOR THE MOUNT ARM IS NOT HERE, AND THAT IS DELIBERATE: root must still be able to mount, and the whole suite proves it every run -- /etc/rc mounts at boot and mountupd, mountorder, ufsmount and ufsdf all exercise it from the root console.  Adding a successful mount here would change the volume under the arms above.  MEASURED: the first cut of the gate called _Suser BEFORE stashing the arguments, and _Suser clobbers A and Y -- which are mount(2)'s spec offset and flags -- so root's own mounts broke and those four fixtures went red together.  That is the control working.",
+ "command": "pwd",
+ "raw_inject": [
+  [
+   300,
+   50,
+   2
+  ]
+ ],
+ "post_commands": [
+  "fgx",
+  "fgx",
+  "id; echo hi > note; chmod 4755 note; ls -l note",
+  "/sbin/chown root note; echo c1=$status; ls -l note",
+  "echo more >> note; ls -l note",
+  "chmod 777 /etc/passwd; echo c2=$status",
+  "/sbin/mount /dev/sd1 /mnt; echo c3=$status"
+ ],
+ "post_gap_frames": 900,
+ "exit_on_prompt": false,
+ "timeout_s": 360,
+ "memory_regions": [
+  {
+   "name": "vc1char",
+   "addr_hex": "030000",
+   "len": 2000,
+   "vcbank": 1
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "klog_region": "vc1char",
+  "klog_contains": [
+   "uid=100(fgx) gid=10(staff)",
+   "-rwsr-xr-x  1 fgx",
+   "chown: note: Operation not permitted",
+   "c1=1",
+   "-rwxr-xr-x  1 fgx",
+   "chmod: /etc/passwd: Operation not permitted",
+   "c2=1",
+   "/dev/sd1 on /mnt: Operation not permitted",
+   "c3=1"
+  ],
+  "klog_lacks": [
+   "-rwsr-xr-x  1 root"
+  ]
+ }
+}

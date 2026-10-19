@@ -1,0 +1,30 @@
+{
+ "name": "frotzczech",
+ "description": "frotz(6) end-to-end: the CZECH 0.8 Z-machine conformance suite (fixtures/czech.z5, Amir Karger -- free use/distribution, fixtures/czech-README.txt) runs to completion under the dumb interface.  CZECH is self-driving: 425 tests over every opcode family the core implements -- arithmetic, jumps, objects, the property table, indirect variables, print formatting -- and its own tail is the verdict, so the assertion is the suite's, not ours: 'Performed 425 tests' proves the interpreter survived the whole program (a crash mid-run never prints it), 'Failed: 0' is the conformance claim itself (any Z-machine defect fcc codegen introduces lands here as a count), and 'hooray' is CZECH's own didn't-crash marker.  -m suppresses the MORE pager so the run needs no input.  The story stages onto the image at test time; the shipped disk carries Mini-Cluedo and Book and Volume.z3 instead (see tools/ninja/manifest.json staging).",
+ "command": "frotz -m /etc/czech.z5",
+ "timeout_s": 240,
+ "exit_on_prompt": true,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/czech.z5",
+   "prodos_dir": "/FGX/etc",
+   "name": "czech.z5",
+   "replace": false
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "Performed 425 tests",
+   "Failed: 0",
+   "hooray",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm",
+   "Fatal"
+  ]
+ }
+}

@@ -1,0 +1,3 @@
+/bin/uncompress -c /testdata/badz.z > /dev/null
+/bin/uncompress -c /testdata/goodz.z
+echo =CZEND

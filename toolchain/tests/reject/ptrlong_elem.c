@@ -1,0 +1,4 @@
+/* expect: a pointer converts to a long only by a cast */
+/* apple/fgx#543, K&R A.6.6: pointer-to-integer conversions "must be specified
+ * by an explicit type-conversion operator, or cast".  Form: array element. */
+long a[4]; char b[2]; int f() { char *p = b; a[1] = p; return 0; }

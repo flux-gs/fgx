@@ -1,0 +1,24 @@
+{
+ "name": "ldfit",
+ "description": "Shared libc SP4: the binder's errors, and a first use with no room to spare.  With termlib renamed aside, a program needing it fails `not found' and ldd lists it so.  Restored, with 100 bytes of arena held, fitunder (data 150 bytes under its link-time limit) is the FIRST program to need termlib: its binder must load termlib with no room past its own scratch (apple/fgx#509: the /lib listing and the trailer once needed kilobytes of the data bank, and this failed `too many entries'), and it runs, `FIT ok'.  termlib then lies 100 bytes lower than linked, so fitover (50 under) fails `no room for its data'.  Both programs are linked against termlib's assembled base, directly under libc and libfgx, which are resident from boot (/etc/ld.so.conf), so the margins hold at run time.  Control: fitover staged as /testbin/fitunder (data 100 bytes nearer the limit, as a link that put termlib 140 bytes higher would be) fails `no room for its data' and prints `FIT under=1'.",
+ "command": "sh /testdata/ldfit",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "ld.so: libtermlib.so.1: not found",
+   "FIT nf=1",
+   "-ltermlib.1 => not found",
+   "fitover: no room for its data (ends $",
+   "FIT over=1",
+   "FIT tres=1",
+   "FIT ok",
+   "FIT under=0"
+  ],
+  "screen_lacks": [
+   "FIT FAIL",
+   "too many entries",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,10 @@
+# Test fixture for initthrottle: the shipped /etc/ttys with the CONSOLE line
+# pointed at a command that exits immediately.  init respawns it, it exits,
+# init respawns it again -- six times inside one GETTYTIME window takes
+# milliseconds, so the throttle trips without the test having to type anything.
+# The other lines are the shipped ones, unchanged.
+console /bin/true          vt100   on secure
+ttyv1   /bin/getty         vt100   on secure
+ttyv2   /bin/getty         vt100   on secure
+ttyp0   none               fgxpty  off secure
+ttyp1   none               fgxpty  off secure

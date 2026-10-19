@@ -1,0 +1,6 @@
+# libcurses.so's core statics beyond its data exports: cr_tty.c's sflags[]
+# and sstrs[] hold the addresses of core cells (&AM, &_PC), which a block
+# template cannot hold, and _PC is one of them.
+sflags
+sstrs
+_PC

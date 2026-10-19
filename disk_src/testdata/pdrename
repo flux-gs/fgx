@@ -1,0 +1,29 @@
+P=/testbin/pdmount
+mount -t prodos -o write /dev/sd1 /mnt
+echo mw=$?
+cd /mnt
+$P -M hello Greeting
+$P -M f01 sub/Moved
+$P -c fresh
+$P -p fresh 0 700 31
+$P -M sub/inner sub/Deeper
+$P -M sub/Deeper Top
+cd Top
+echo cwd=`pwd`
+cat deep
+cd /mnt
+$P -M f04 f05
+$P -M f02 f02x
+$P -M sap sapx
+$P -M ._ext rfork
+$P -d sub/a
+$P -M sub sub/a/b
+$P -T tree 100000
+$P -T sap 300
+$P -T ext 0
+$P -T f06 70000
+$P -T ._ext 0
+echo new > f07
+cd /
+umount /dev/sd1
+echo um=$?

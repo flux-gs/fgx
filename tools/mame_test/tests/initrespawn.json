@@ -1,0 +1,32 @@
+{
+ "name": "initrespawn",
+ "description": "init respawns a dead console line instead of halting.  The console line's /bin/sh IS init's child, so SIGKILLing it is exactly the 'a line died' event; MARK2 can only reach the screen if a SECOND shell reached a prompt afterwards.  Before the itab rewrite init waited on that one pid and returned when it died, and since init has no parent the kernel halted -- nothing after the kill was typeable.  ECHO_OK: 'MARK2' also appears in a post_command. It discriminates because post_commands are typed only if the machine is still alive: against the pre-respawn init the shell's death halted the machine, so MARK2 was never typed and never echoed. Mutation-verified red on the old init.",
+ "command": "echo MARK1 > /root/rs; kill -9 $$",
+ "post_commands": [
+  "echo MARK2"
+ ],
+ "post_gap_frames": 300,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 2
+ },
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "MARK2"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "disk_files": [
+   {
+    "path": "/root/rs",
+    "size": 6
+   }
+  ],
+  "echo_ok": [
+   "MARK2"
+  ]
+ }
+}

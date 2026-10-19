@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_order",
+ "description": "Concurrent fork (apple/fgx#494): the parent runs while its child sleeps.  The child sleeps 2 s and then looks for a file the parent creates after fork; the parent then waits.  On a deferred-parent fork the parent cannot run until the child exits, so the file is absent and FP ORDER FAIL.",
+ "command": "/testbin/forkpair order",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "FP ORDER ok"
+  ],
+  "screen_lacks": [
+   "FP ORDER FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

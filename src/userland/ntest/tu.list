@@ -1,0 +1,2 @@
+# ntest, upstream Makefile `ntest: test.o ntpsubs.o' (test.c is the entry point, as ntest.c).
+src/userland/ntp/ntpsubs.c

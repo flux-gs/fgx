@@ -1,0 +1,256 @@
+#!/usr/bin/env python3
+"""Generate src/kernel/w5100_patchsites.s from the kernel build listing.
+
+W5100 slot-bind self-mod table (slotscan Phase B).  The kernel's W5100 register
+accesses bake slot 1 (U2_MR=$E0C094, U2_ARH=$E0C095, U2_ARL=$E0C096,
+U2_DAT=$E0C097 -- the EQUs in src/kernel/uthernet.s).  At boot, once _ScanSlots
+has found the card's real slot (_u2Slot), _W5_PatchSlot rewrites each of these
+STAL/LDAL instructions' operand LOW byte so they address the detected slot's
+W5100 base ($E0C084 + (slot<<4)).  For slot 1 the new low byte equals the baked
+$94/$95/$96/$97 -> the patch is a no-op (backward compatible).
+
+This generator scrapes the freshly-built kernel listing for every fixed-base
+STAL/LDAL whose operand resolves to $E0C094..$E0C097 and records, per site:
+  - the 16-bit in-kernel-bank OFFSET of the operand low byte (instr_addr + 1),
+  - the register index regoff (0=MR/$94, 1=ARH/$95, 2=ARL/$96, 3=DAT/$97).
+_W5_PatchSlot then computes newlow = $84 + (_u2Slot<<4) + regoff and stores it at
+kernel_bank:offset via the _RelocPatchWaveE self-mod idiom (DBR=kernel-bank,
+STA: $0000,X).
+
+BSD ld-A-style build-time resolution, mirroring tools/gen_kernel_exports.py: the
+table is regenerated from the listing every build, so the offsets can never
+drift stale.  Because w5100_patchsites.s is PUT into the kernel itself (not a
+module), there is a chicken-and-egg (the listing comes from a build that PUTs
+this file): the committed file is used to build, and `--check` re-renders
+against the fresh listing and fails the build on any drift (same pattern as
+tools/gen_syscall_table.py --check).  To update after the W5100 sites move:
+run this with no flag, rebuild, and commit the regenerated .s.
+
+The same generator serves the kernel (default bank `02`) AND the loadable
+modules net.mod/bpf.mod, which bake their own U2_* sites.  Modules ORG at
+$050000 for ASSEMBLY ONLY (their listing rows are `05/XXXX`), so pass
+`--bank 05` to scrape a module listing -- BUT the recorded values are still
+16-bit bank-relative OFFSETS (`& 0xFFFF`).  The bank `05` is purely a
+listing-parse filter: at RUNTIME a module loads at a dynamically-allocated bank
+(never $05), and its _W5_PatchSlot self-mods load_bank:offset (the bank coming
+from PHK at load time).  No $05 is ever baked into a runtime store.
+
+Usage:
+  gen_w5100_patchsites.py <listing> <out.s>                       # (re)generate (kernel, bank 02)
+  gen_w5100_patchsites.py <listing> <out.s> --check               # gate: exit 1 on drift
+  gen_w5100_patchsites.py <listing> <out.s> --bank 05             # module listing (rows 05/XXXX)
+  gen_w5100_patchsites.py <listing> <out.s> --bank 05 --check
+"""
+import os
+import re
+import sys
+
+# regoff: $94=MR=0, $95=ARH=1, $96=ARL=2, $97=DAT=3.
+REGOFF = {0x94: 0, 0x95: 1, 0x96: 2, 0x97: 3}
+REGNAME = {0: 'MR', 1: 'ARH', 2: 'ARL', 3: 'DAT'}
+
+
+def site_re(bank):
+    """Build the per-listing site regex for the given two-hex-digit bank prefix.
+
+    A listing Code row's byte column is "<bank>/XXXX : <opcode> <op0> <op1> <op2>".
+    We want fixed-base STAL ($8F) / LDAL ($AF) whose 24-bit operand is
+    $E0C094..97: bytes = <8F|AF> <94..97> C0 E0 (operand stored little-endian
+    lo,mid,hi).  The indexed forms ($9F/$BF STAL/LDAL abs,X used by the kernel's
+    _ScanSlots) target the $E0C084,X base and are ALREADY slot-relative -- they
+    must NOT be patched, and are excluded by requiring opcode in {8F, AF}.
+    (net.mod/bpf.mod have ZERO indexed sites, so the same {8F,AF} filter holds.)
+    `bank` is only a listing-row filter; recorded offsets are always 16-bit."""
+    return re.compile(
+        r'\b' + re.escape(bank) + r'/([0-9A-Fa-f]{4})\s*:\s*(8F|AF)\s+(9[4-7])\s+C0\s+E0\b',
+        re.IGNORECASE)
+
+
+def parse_listing(path, bank='02'):
+    """Return [(operand_low_byte_offset_16bit, regoff), ...] for every fixed-base
+    STAL/LDAL U2_* site, in listing (address) order."""
+    rx = site_re(bank)
+    sites = []
+    with open(path, errors='replace') as f:
+        for line in f:
+            m = rx.search(line)
+            if not m:
+                continue
+            instr_addr = int(m.group(1), 16)
+            low = int(m.group(3), 16)               # baked slot-1 low byte 94..97
+            # operand low byte is the 2nd instruction byte (opcode is the 1st).
+            op_low_off = (instr_addr + 1) & 0xFFFF
+            sites.append((op_low_off, REGOFF[low]))
+    return sites
+
+
+def die(msg):
+    sys.exit('gen_w5100_patchsites: ' + msg)
+
+
+def render(sites, bank='02', anchor=None):
+    # The kernel (bank 02) PUTs this into its own relocatable bank and self-mods
+    # kernel-bank:offset; net.mod/bpf.mod (bank 05 listing) PUT it into their
+    # load bank and self-mod load_bank:offset (bank from PHK).  Either way the
+    # table holds 16-bit bank-relative OFFSETS only -- never a $05 absolute.
+    target = 'kernel' if bank == '02' else 'module (load bank)'
+    out = []
+    out.append('; GENERATED by tools/gen_w5100_patchsites.py from the %s listing -- do not edit.' % target)
+    out.append(';')
+    out.append('; W5100 slot-bind self-mod table (slotscan Phase B).  One DA+DFB pair per')
+    out.append('; fixed-base STAL/LDAL U2_MR/ARH/ARL/DAT site:')
+    out.append(';   DA  = 16-bit bank-relative offset of the instruction operand LOW byte')
+    out.append(';   DFB = regoff (0=MR, 1=ARH, 2=ARL, 3=DAT)')
+    out.append('; _W5_PatchSlot walks this, computing the per-slot low byte')
+    out.append('; ($84 + (_u2Slot<<4) + regoff) and writing it at <load/kernel>-bank:offset')
+    out.append('; (self-mod; bank from PHK/_DBRK -- reloc-correct, never a baked $05).')
+    out.append('; Slot 1 -> low == baked $94/$95/$96/$97 = no-op.')
+    out.append(';')
+    out.append('; Counts: %d MR, %d ARH, %d ARL, %d DAT (%d total).' % (
+        sum(1 for _, r in sites if r == 0),
+        sum(1 for _, r in sites if r == 1),
+        sum(1 for _, r in sites if r == 2),
+        sum(1 for _, r in sites if r == 3),
+        len(sites)))
+    if anchor:
+        out.append(';')
+        out.append('; Offsets are RELATIVE TO %s, the first site in the listing, so a' % anchor)
+        out.append('; change to the kernel\'s size elsewhere leaves this file byte-identical')
+        out.append('; (apple/fgx#79).  The assembler resolves the anchor, so the values are')
+        out.append('; still absolute bank-relative offsets at runtime.')
+    out.append('_w5PatchTbl     ENT')
+    # The anchor is the first site's INSTRUCTION address; parse_listing records
+    # the operand low byte, which is one past it.
+    base = (sites[0][0] - 1) if (anchor and sites) else 0
+    for off, regoff in sites:
+        if anchor:
+            delta = off - base
+            if delta < 0:
+                die('%s is not the first U2_* site in the listing: a site sits '
+                    '$%04X bytes BEFORE it, so its offset would be negative.  '
+                    'Move the label to the earliest site.' % (anchor, -delta))
+            out.append('                DA  %s+$%04X' % (anchor, delta))
+        else:
+            out.append('                DA  $%04X' % off)
+        out.append('                DFB %d           ; %s' % (regoff, REGNAME[regoff]))
+    out.append('                DA  $FFFF        ; sentinel (no DFB)')
+    return '\n'.join(out) + '\n'
+
+
+def parse_args(argv):
+    """Pull out --check, --bank XX and --anchor SYM; return (positionals, check,
+    bank, anchor).
+
+    --anchor names a source label the emitted offsets are measured FROM.  The
+    kernel passes it; the modules do not, and that asymmetry is deliberate --
+    a module's listing does not move when the kernel's size changes, so its
+    table only churns when the module itself changes, which is signal rather
+    than noise (apple/fgx#79)."""
+    positionals = []
+    check = False
+    anchor = None
+    bank = '02'
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a == '--check':
+            check = True
+        elif a == '--bank':
+            i += 1
+            if i >= len(argv):
+                sys.exit('gen_w5100_patchsites: --bank requires a two-hex-digit value')
+            bank = argv[i]
+        elif a.startswith('--bank='):
+            bank = a.split('=', 1)[1]
+        elif a == '--anchor':
+            i += 1
+            if i >= len(argv):
+                sys.exit('gen_w5100_patchsites: --anchor requires a symbol')
+            anchor = argv[i]
+        elif a.startswith('--anchor='):
+            anchor = a.split('=', 1)[1]
+        elif a.startswith('--'):
+            sys.exit(f'gen_w5100_patchsites: unknown option {a!r}')
+        else:
+            positionals.append(a)
+        i += 1
+    if not re.fullmatch(r'[0-9A-Fa-f]{2}', bank):
+        sys.exit(f'gen_w5100_patchsites: --bank must be two hex digits, got {bank!r}')
+    return positionals, check, bank, anchor
+
+
+def _selftest():
+    """Prove the site scanner can see, and that --check is drift-sensitive.
+
+    The gate re-renders the patch table from the kernel listing and compares it
+    to the committed src/kernel/w5100_patchsites.s.  If the site regex stopped
+    matching -- a listing format change, a renamed U2_* symbol -- the scan finds
+    zero sites, and "zero sites, table unchanged" is not distinguishable from
+    "no drift" without checking that it found anything at all.
+    """
+    import glob
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    lst = sorted(glob.glob(os.path.join(root, "build", "fgx_S01_*Output.txt")))
+    if not lst:
+        print("  SELFTEST NOTE: no kernel listing -- run `ninja kernel` first")
+        return 0
+    fails = 0
+    sites = parse_listing(lst[0])
+    if len(sites) < 10:
+        print(f"  SELFTEST FAIL: only {len(sites)} W5100 sites found in "
+              f"{os.path.basename(lst[0])} -- the gate would compare an empty table")
+        fails += 1
+    # The regex must be selective, not matching every line in the listing.
+    total = sum(1 for _ in open(lst[0], errors="replace"))
+    if len(sites) > total // 10:
+        print(f"  SELFTEST FAIL: {len(sites)} sites out of {total} lines -- "
+              f"the site regex is matching far too much")
+        fails += 1
+    if fails:
+        print(f"gen_w5100_patchsites self-test: {fails} FAILURE(S)")
+        return 1
+    print(f"gen_w5100_patchsites self-test: OK ({len(sites)} sites from "
+          f"{total} listing lines)")
+    return 0
+
+
+def main():
+    if "--self-test" in sys.argv:
+        return _selftest()
+
+    args, check, bank, anchor = parse_args(sys.argv[1:])
+    if len(args) != 2:
+        sys.exit(__doc__.strip().splitlines()[-1])
+    listing, outpath = args
+    sites = parse_listing(listing, bank)
+    if not sites:
+        sys.exit('gen_w5100_patchsites: no U2_* STAL/LDAL sites found in '
+                 f'{listing} (bank {bank}) -- wrong listing/bank, or the W5100 '
+                 'EQUs/registers changed?  (kernel uses bank 02; net.mod/bpf.mod '
+                 'listings use --bank 05.)')
+    block = render(sites, bank, anchor)
+    src = 'kernel' if bank == '02' else f'module (bank {bank})'
+    bankflag = '' if bank == '02' else f' --bank {bank}'
+    if anchor:
+        bankflag += f' --anchor {anchor}'
+    if check:
+        try:
+            cur = open(outpath).read()
+        except FileNotFoundError:
+            cur = None
+        if cur != block:
+            sys.stderr.write(
+                f'error: {outpath} is OUT OF DATE vs the {src} listing '
+                f'(W5100 U2_* sites moved).\n  Run: '
+                f'python3 tools/gen_w5100_patchsites.py {listing}{bankflag} {outpath}\n')
+            return 1
+        print(f'w5100 patch table OK: {len(sites)} sites, in sync with the {src} listing')
+        return 0
+    with open(outpath, 'w') as f:
+        f.write(block)
+    print(f'gen_w5100_patchsites: wrote {outpath} ({len(sites)} U2_* patch sites)')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

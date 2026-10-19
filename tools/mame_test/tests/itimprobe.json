@@ -1,0 +1,18 @@
+{
+    "name": "itimprobe",
+    "description": "setitimer(2) REPEATS, and the repeat is the only thing it adds over the alarm(2) FGX already had.  A probe that merely watched one SIGALRM arrive would pass on a kernel where SYS_SETITIMER had been wired straight to _Sys_Alarm and the interval dropped, so the assertion is a COUNT: with a one-second interval, more than one SIGALRM must arrive from ONE call.  That is what _kAlarmReload and the re-arm in _Sys_AlarmTickAll exist for, and nothing else in the suite covers it.\n\nThe reload is copied UNCONDITIONALLY when the counter reaches zero, which is upstream's own rule (p->p_realtimer.it_value = p->p_realtimer.it_interval, vendor/2.11BSD/usr/sys/sys/kern_synch.c:50), so a ZERO interval must leave exactly the one-shot alarm(2) is.  ITONCE asserts that, and it is the arm that tells a working repeat from a timer that re-arms when it should not -- a kernel reloading unconditionally from a stale non-zero cell would pass ITCOUNT and fail here.\n\nTHE REFUSALS ARE THE OTHER HALF, because both failure modes they cover are silent.  A kernel that accepted ITIMER_VIRTUAL would simply never fire it -- FGX does not account the CPU time those two are charged against -- and a kernel that masked an over-long interval the way _Sys_Alarm masks its seconds would arm a SHORT timer and report success, which is apple/fgx#301's shape.  1024 s is asserted refused because it is one past the bound the s*64 intermediate imposes (1023*64 fits sixteen bits, 1024*64 does not).\n\nITDONE fails=0 is the completion marker, so a run that died part-way cannot read as a pass.",
+    "command": "/testbin/itimprobe",
+    "boot_s": 45,
+    "timeout_s": 260,
+    "expect": {
+        "screen_contains": [
+            "ITSTART",
+            "ITDONE fails=0"
+        ],
+        "screen_lacks": [
+            "PANIC",
+            "BRK",
+            "IT FAIL"
+        ]
+    }
+}

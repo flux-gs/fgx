@@ -1,0 +1,167 @@
+SYSCTL(3)           UNIX Programmer's Manual            SYSCTL(3)
+
+
+
+NAME
+     sysctl - get or set system information
+
+SYNOPSIS
+     #include <sys/sysctl.h>
+
+     int
+     sysctl(name, namelen, oldp, oldlenp, newp, newlen)
+        int *name;
+        u_int namelen;
+        void *oldp;
+        size_t *oldlenp;
+        void *newp;
+        size_t newlen;
+
+DESCRIPTION
+     The _s_y_s_c_t_l function retrieves system information and allows
+     processes with appropriate privileges to set system informa-
+     tion.
+
+     The state is described using a ``Management Information
+     Base'' (MIB) style name, listed in _n_a_m_e, which is a _n_a_m_e_l_e_n
+     length array of integers.
+
+     The information is copied into the buffer specified by _o_l_d_p.
+     The size of the buffer is given by the location specified by
+     _o_l_d_l_e_n_p before the call, and that location gives the amount
+     of data copied after a successful call.  If the buffer is
+     too small the call returns ENOMEM.  If the old value is not
+     desired, _o_l_d_p and _o_l_d_l_e_n_p should be set to NULL.
+
+     To set a new value, _n_e_w_p is set to point to a buffer of
+     length _n_e_w_l_e_n from which the requested value is to be taken.
+     If a new value is not to be set, _n_e_w_p should be set to NULL
+     and _n_e_w_l_e_n set to 0.
+
+     THIS KERNEL SERVES: three names under CTL_KERN, four under
+     CTL_MACHDEP for the kernel clock, whose identifiers are in
+     <machine/cpu.h>, and four under CTL_VM, whose identifiers
+     are in <sys/vmparam.h>.  Every other name returns -1 with
+     _e_r_r_n_o set to ENOTSUP.  See BUGS.
+
+   CTL_KERN.KERN_SECURELVL
+     The security level of the system.  An _i_n_t:
+
+           -1  permanently insecure mode
+            0  insecure mode.  All devices may be read or written
+               subject to permission modes.
+            1  secure mode.  Raw disks of mounted filesystems are
+               read-only.
+
+     The level may be RAISED by the super-user and LOWERED only
+     by process 1, _i_n_i_t(8), which raises it to 1 once /etc/rc has
+     returned.  FGX has no single-user mode, so /etc/rc is the
+     only window in which the machine runs at level 0 -- which is
+     what lets _f_s_c_k(8) repair the root at boot and stops it
+     repairing a mounted root afterwards.
+
+   CTL_KERN.KERN_CLOCKRATE
+     A struct clockinfo, read only: hz, tick, stathz, profhz.
+
+   CTL_KERN.KERN_BOOTTIME
+     A struct timeval, read only: when the clock was started at
+     boot.  A step by _s_e_t_t_i_m_e_o_f_d_a_y(2) moves it with the clock.
+
+   CTL_VM
+     Read only.  Each is a structure, the kernel's own counts
+     and maps, and VM_SUM and VM_CPTIME are FGX's.  A click is
+     a 256-byte page.
+
+     VM_METER        A struct vmtotal (<sys/vmmeter.h>),
+                     computed when asked.
+
+     VM_COREMAP      The user pool's map: {size, addr} pairs
+                     of _u_n_s_i_g_n_e_d, in pages, a size of 0 ending
+                     the map.
+
+     VM_SUM          A struct vmsum: switches, system calls and
+                     interrupts since boot.
+
+     VM_CPTIME       A _l_o_n_g cp_time[CPUSTATES] (<sys/dk.h>):
+                     clock ticks charged to user, system and
+                     idle time.
+
+   CTL_MACHDEP
+     The kernel clock's variables, FreeBSD's.  A write needs the
+     super-user.
+
+     CPU_ADJKERNTZ   A _l_o_n_g: the seconds by which the battery
+                     clock, when it keeps local time, is behind
+                     UTC.  _a_d_j_k_e_r_n_t_z(8) sets it; a write rewrites
+                     the battery clock.
+
+     CPU_DISRTCSET   An _i_n_t: nonzero stops the kernel writing
+                     the battery clock.
+
+     CPU_WALLCLOCK   An _i_n_t: nonzero, the default, says the
+                     battery clock keeps local time.
+
+     CPU_TICK        An _i_n_t, FGX's own: the microseconds the
+                     kernel clock advances per VBL, 16688 by
+                     default.  It must be above 0.
+
+RETURN VALUES
+     Upon successful completion 0 is returned.  Otherwise -1 is
+     returned and _e_r_r_n_o is set.
+
+ERRORS
+     [EFAULT]        The name array is not readable.
+
+     [EINVAL]        _n_a_m_e_l_e_n is less than 2 or greater than
+                     CTL_MAXNAME; or _n_e_w_l_e_n is not the size of the
+                     leaf; or the new security level is above 1;
+                     or the new CPU_TICK is not above 0.
+
+     [ENOTDIR]       A name continues below a leaf of CTL_VM
+                     or CTL_MACHDEP.
+
+     [ENOMEM]        The length pointed to by _o_l_d_l_e_n_p is smaller
+                     than the leaf.
+
+     [ENOTSUP]       The name is not one this kernel serves.
+
+     [EPERM]         A write was attempted by a process whose
+                     effective user ID is not 0, or a LOWERING of
+                     the security level was attempted by a process
+                     other than process 1.
+
+SEE ALSO
+     adjkerntz(8), fsck(8), init(8), reboot(2)
+
+BUGS
+     ELEVEN LEAVES.  4.4BSD's kernel answers six top-level
+     identifiers and twenty-four under CTL_KERN; this one answers
+     the leaves above.  <sys/sysctl.h> still carries the whole
+     numbering, so a name keeps the value it has on every other
+     BSD, but asking for one returns ENOTSUP.
+
+     VM_SUM AND VM_CPTIME ARE FGX'S.  2.11BSD's _v_m_s_t_a_t(1) reads
+     those counters through /dev/kmem, which FGX does not have.
+     VM_LOADAVG and VM_SWAPMAP return ENOTSUP: no load average
+     is kept, and there is no swap.
+
+     A NEW VALUE IS AT MOST 8 BYTES.  The six arguments do not
+     fit the FGX syscall ABI, so libc marshals them into a block
+     that carries a value of up to 8 bytes; a larger old value is
+     copied to _o_l_d_p by the kernel.  A larger _n_e_w_l_e_n returns
+     EINVAL from libc.  *_o_l_d_l_e_n_p is read and written as an
+     _u_n_s_i_g_n_e_d_ _i_n_t, the low half of _s_i_z_e___t.
+
+     SECURITY LEVEL 2 IS REFUSED with EINVAL rather than accepted.
+     Upstream's level 2 makes raw disks read-only whether mounted
+     or not, and FGX does not enforce that clause; accepting the
+     value would leave a setting that reads as protection and is
+     none.
+
+     THE OTHER TWO THINGS LEVEL 1 PROTECTS UPSTREAM ARE ABSENT.
+     /dev/mem and /dev/kmem do not exist on FGX, and the immutable
+     and append-only file flags arrive with _c_h_f_l_a_g_s(2).
+
+
+
+Printed 9/12/26          FGX (2.11BSD port)                      3

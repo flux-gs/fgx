@@ -1,0 +1,31 @@
+P=/testbin/pdmount
+mount -t prodos -o write /dev/sd1 /mnt
+echo mw=$?
+cd /mnt
+$P -p hello 27 600 1
+$P -p sap 20000 120000 2
+$P -p sap 2100 100 3
+$P -p tree 0 700 4
+$P -p ext 1500 1000 5
+$P -p ._ext 0 10 6
+$P -A f01 0 5 7
+$P -p sub/inner/deep 0 5000 8
+$P -P f03 0 1 9
+$P -p sub 0 1 10
+$P -c NewFile.Txt a_b HELLO ._ext
+$P -K sub/nope
+$P -d sub/NewDir sub
+$P -p NewFile.Txt 0 700 13
+cd sub/NewDir
+$P -n f 20
+echo cwd=`pwd`
+cd /mnt
+$P -n v 60
+$P -p f09 0 400000 12
+cd /
+umount /dev/sd1
+echo um=$?
+mount -t prodos -r /dev/sd1 /mnt
+$P -p /mnt/f04 0 1 11
+umount /dev/sd1
+echo ro=$?

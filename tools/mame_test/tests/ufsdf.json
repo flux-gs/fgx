@@ -1,0 +1,33 @@
+{
+ "name": "ufsdf",
+ "description": "df(1) ON THE MOUNTED ROOT -- the first thing in FGX able to say how full a volume is.  Until 2026-09-05 `df' printed NOTHING and returned 0, and `df /' answered `df: /: not found' and returned 0, because SYS_GETFSSTAT walked the ProDOS SmartPort volume table (_fsMountTable via Bm_CountFree) rather than the filesystem mount list.  On a UFS root that table is empty, so the handler did everything correctly and reported silence.  apple/fgx#329.\n\nWHAT EACH ARM DISCRIMINATES:\n  `1K-blocks' is the HEADER, and proves prtstat ran at all -- the old df printed no header because the loop body never executed.\n  `/dev/sd0' is f_mntfromname and `Mounted on' its column.  ufs_statfs did not set either name until today: it was taken from 2.11BSD's statfs1, which keeps the two names in a separate `struct xmount', and 4.3BSD-Reno's four-line name-copy tail (ufs/ufs_vfsops.c:508-513) was dropped with it.  Blank names here mean that tail is gone again.\n  `dfree=0' and `dslash=0' are the EXIT STATUS of `df' and `df /'.  Both returned 0 before as well -- which is exactly why they are not the only arms.\n  THE FREE-BLOCK COUNT is the point of the program and is checked by dfcmp below, not by a literal: the number is the volume's and this test must not hardcode a figure the image is free to change.\n\nTHE NEEDLES CANNOT BE SATISFIED BY THE COMMAND ECHO.  `1K-blocks' and `root_device' appear nowhere in the typed line, and the two status arms are `dfree=$?' when typed and `dfree=0' on screen.  That trap ate the ufswrite append arm on 2026-09-04.\n\nMEASURED DISCRIMINATING: on the tree one commit earlier this manifest is red on every arm -- no header, no names, no rows.\n\nTWO ARMS ADDED AFTER THE FIRST GREEN RUN, BOTH BECAUSE IT WAS GREEN WHILE HALF THE PROGRAM WAS BROKEN.  `df' printed its row; `df /' printed `df: /: Function not implemented' and the manifest passed anyway, because the only negative needle was `not found' -- the message the OLD df gave. A `screen_lacks' list is a claim about the failure you have already seen, and it goes stale the moment the failure changes shape.\n  `Function not implemented' and `df: /' catch the ENOSYS directly: SYS_STATFS was 114 with SYS_NUM_MAX still at 113 (include/loader.s), so the dispatcher refused a syscall whose handler and table entry both existed.\n  `.%' catches the capacity column printing `52.%' where upstream prints `52%'.  printf's %f emitted the decimal point before consulting the precision, against K&R 2nd ed B.1.2 p.203: \"The default precision is 6; a precision of 0 suppresses the decimal point.\"  The needle is `.%' and not a number because the figure is the VOLUME's and this test must not pin it -- but a '.' can only reach that column through the bug.\n\n-h IS EXERCISED AND IT IS UPSTREAM'S, NOT AN EXTENSION.  2.11BSD patch 466 (df.c 8.7.2 -> 8.8, 2020) adds it, and its Repeat-By is the exact symptom this tree had before the patch was applied: `df -h' -> `df: illegal option -- h'.  `Megabytes' is the header -h prints and `1K-blocks' the one it does not, so asserting BOTH in one run is what discriminates the flag from a df that ignores it -- a single `Megabytes' needle would also pass on a df that printed megabytes always.\n\nTHE DEVICE NAME IS THE POINT OF THE `/dev/sd0' NEEDLE, and it is one string standing for four things that must agree: the block node's unit (ROOT_BLKUNIT, tools/ninja/gen.py), the unit the kernel mounts (ROOT_UNIT, root_mount.c), the name ufs_devname builds from the mounted device's own rdev, and the line /etc/fstab carries.  Only the last is hand-typed; the rest are derived, so this needle appearing in BOTH df's output and the fstab dump is the two halves meeting.  It read `root_device' before -- 4.3BSD-Reno's ROOTNAME literal -- because FGX had no block node for the boot volume at all.",
+ "command": "df; echo dfree=$?; df /; echo dslash=$?; df -h; echo dh=$?; cat /etc/fstab; echo fst=$?",
+ "boot_s": 45,
+ "timeout_s": 90,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 9
+ },
+ "expect": {
+  "screen_contains": [
+   "1K-blocks",
+   "Megabytes",
+   "Mounted on",
+   "/dev/sd0",
+   "ufs",
+   "dfree=0",
+   "dslash=0",
+   "dh=0",
+   "fst=0"
+  ],
+  "screen_lacks": [
+   "not found",
+   "Function not implemented",
+   "df: /",
+   ".%",
+   "PANIC",
+   "BRK",
+   "Cannot access"
+  ]
+ }
+}

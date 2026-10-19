@@ -1,0 +1,20 @@
+{
+ "name": "ptyremote",
+ "description": "REMOTE MODE IS REFUSED, AND THAT IS THE DIVERGENCE PINNED.  TTY campaign T4 increment 6, whose row said `port it or declare it in BUGS with the reason -- do not drop it silently'.  2.11BSD's pty has a SECOND INPUT PATH: with PF_REMOTE set, `ptcwrite' fills the slave's t_canq with `b_to_q' straight past the line discipline and ends each write with `putc(0, &tp->t_canq)', and `ptsread' drains until ONE character is left and discards it -- so the NUL is what makes one write(2) one record.  It exists for a master that does its own line editing and must not be edited a second time locally; the canonical customer is a login daemon in LINEMODE.  NOT PORTED, AND THE REASON IS STRUCTURAL RATHER THAN EFFORT: the pty master's d_write slot is 0, so spec_chwrite hands it one byte at a time, and a per-byte path cannot place a per-write(2) sentinel because no byte in it knows it is the last.  REMOTE mode needs the master to take the whole uio in a bulk d_write.  AND NOTHING ASKS FOR IT: TIOCREMOTE appears in exactly two files in the 2.11BSD tree, ioctl.h and tty_pty.c, and 2.11BSD's own rlogin is vendored and does not use it; FGX's telnetd sets TIOCPKT and drops the status byte unread, so it is not a LINEMODE daemon either (apple/fgx#143).  WHAT THIS ASSERTS IS THE REFUSAL, because the alternative to porting is not `do nothing' -- it is `fail the way an unsupported ioctl must'.  A TIOCREMOTE that returned SUCCESS would leave a caller believing its next write went in as a record, while the bytes were edited by the very discipline REMOTE mode exists to bypass; that is the ACCEPTED verdict and it is a failure.  THE SECOND HALF IS NOT DECORATION: a refused ioctl must not disturb the device, so an ordinary write and read follow on the same pair and DISTURBED is its own verdict.  ENOTTY is upstream's answer for a command a device does not implement, and the fall-through in _Io_CdThenTty already produces it -- but `already produces' is a claim, and this is the measurement.",
+ "command": "/testbin/ptyremote",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "PTYREMOTE remote rc=-1 e=25",
+   "PTYREMOTE after n=3 b0=82 b2=84",
+   "PTYREMOTE REFUSED"
+  ],
+  "screen_lacks": [
+   "PTYREMOTE FAIL",
+   "PTYREMOTE ACCEPTED",
+   "PTYREMOTE DISTURBED",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

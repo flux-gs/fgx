@@ -1,0 +1,10 @@
+{
+ "name": "dyntools",
+ "description": "MANIFEST TOOLS LINKED DYNAMICALLY THROUGH THE BUILD (shared libc SP5 step 1).  ul runs first so libtermlib is loaded on first use under the new tables (nothing in ld.so.conf pins it); ldd shows each tool resolved against the shared libraries; wc and ls run from their dynamic images; worm and ntpd are proven through ldd, which runs their binders in full (libcurses first use for worm; ntpd's second code segment).  Markers by expansion: the file's contents, its name and wc's count are assembled from variables, so the typed line cannot satisfy them.  cat, linked dynamically by default, is on the ldd line too.  None of the programs on that line calls libfgx (worm's mention of it is a comment), so the dynamic link drops libfgx.so from every one of them and no `-lfgx.1' line may appear.  A pile or static binary makes ldd say `statically linked'.",
+ "command": "A=UL; echo xyz | ul; echo ${A}=$?; ldd /bin/wc /bin/ls /bin/ul /bin/worm /sbin/ntpd /bin/cat; H=hel; D=/tmp/d; echo ${H}lo wor${H} > ${D}t; wc -w ${D}t; ls ${D}t",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": ["UL=0", "-lc.1 => /lib/libc.so.1.0", "-ltermlib.1 => /lib/libtermlib.so.1.0", "-lcurses.1 => /lib/libcurses.so.1.0", "2 /tmp/dt", "/tmp/dt", "/bin/cat:"],
+  "screen_lacks": ["statically linked", "-lfgx.1", "ld.so:", "PANIC", "BRK"]
+ }
+}

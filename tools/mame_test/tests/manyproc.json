@@ -1,0 +1,15 @@
+{
+ "name": "manyproc",
+ "description": "TWENTY-TWO BACKGROUND PROCESSES FROM THE CONSOLE SHELL, AND THE PROMPT COMES BACK.  Each FGX2 process holds two banks (its code and data segments); the resident shared libraries (libc.so and the rest) hold their own banks once for the whole system, not per process, so a run of sleeps is the cheapest way to spend banks: the 56-bank bitmap pool is dry after the ninth, and from there Bank_Alloc lives on runtime Memory Manager grants, one row of the arena block table each.  MEASURED before this test existed: with 16 rows the fifteenth sleep was the last, the sixteenth answered `/bin/sleep: too big' (2.11BSD sh's word for ENOMEM from exec), and nothing could exec after it -- not ps, not echo -- while six pool banks sat idle as zero-reference libc classes and the MM still had 1.6 MB.  Twenty-two is the number that reaches past both: with the boot's eight tasks and the shell's fork it needs 31 of the 32 process slots, 45 banks beyond the 36 the boot holds, and it lands on the arena's overlap tier (22 x 8 pages over 98 free), so it also drives the user-image cache and the kernel-image slots with more sleepers than either has room for.  The marker is built by expansion so the typed line cannot satisfy it, `too big' is asserted absent on the screen, and `stk ENOMEM' absent in the klog: the arena must place every one of them, by overlap where it has to.  THEN A SECOND ROUND, once the first has exited (a fixed pause rather than `wait', which apple/fgx#508 hangs on main): every first-round grant row must have been found, disposed and reused, rows past offset 255 included, so the table holds the same rows rather than leaking one per bank.  Discriminates: BLKTAB_ROWS back to 32 (apple/fgx#512: cron at boot left the table full by the twentieth sleep), the reclaim in Bank_Alloc removed, or a row walker back to an 8-bit offset, and a sleep prints `too big'.",
+ "command": "L='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22'; for i in $L; do /bin/sleep 25 & done; /bin/sleep 60; for i in $L; do /bin/sleep 25 & done; A=MA; B=NY; echo $A$B=done",
+ "timeout_s": 300,
+ "memory_regions": [
+  {"name": "klog", "ptr_addr_hex": "CFG_DP_KKERN+B0", "len": 4096},
+  {"name": "blkcount", "symbol": "_kBlkCount", "len": 1}
+ ],
+ "expect": {
+  "screen_contains": ["MANY=done"],
+  "screen_lacks": ["too big", "No more processes", "PANIC", "BRK"],
+  "klog_lacks": ["stk ENOMEM", "PANIC"]
+ }
+}

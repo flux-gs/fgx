@@ -1,0 +1,121 @@
+Subject: profiling is broken for larger programs (+fix)
+Index:	lib/libc/pdp/csu/mon.c 2.11BSD
+
+Description:
+	Profiling is broken for programs with text segments larger than
+	32kb.
+
+Repeat-By:
+	Compile a program which has more than 32kb of text ('fsck' is a good 
+	choice) with the -p option.  Run the program and observe the core dump.
+
+Fix:
+	Apply the patch below, compile and reinstall /lib/mcrt0.o
+	The Makefile is also updated, it was lacking a CFLAGS statement
+	to use when compiling the mon.c module.
+
+	The problem was a negative increment to sbrk() was being
+	calculated when the text size was greater than 32kb.  This
+	released part of the program's .bss segment back to the system
+	causing a segmentation violation when mcount: was called the
+	first time.
+	
+---------------------------------------------------------------------
+*** /usr/src/lib/libc/pdp/csu/mon.c.old	Thu May  7 19:56:56 1987
+--- /usr/src/lib/libc/pdp/csu/mon.c	Mon Mar 30 16:01:22 1992
+***************
+*** 5,11 ****
+   */
+  
+  #if defined(LIBC_SCCS) && !defined(lint)
+! static char sccsid[] = "@(#)mon.c	5.4 (Berkeley) 5/3/87";
+  #endif LIBC_SCCS and not lint
+  
+  #define ARCDENSITY	1	/* density of routines per 100 bytes */
+--- 5,11 ----
+   */
+  
+  #if defined(LIBC_SCCS) && !defined(lint)
+! static char sccsid[] = "@(#)mon.c	5.5 (GTE) 3/23/92";
+  #endif LIBC_SCCS and not lint
+  
+  #define ARCDENSITY	1	/* density of routines per 100 bytes */
+***************
+*** 38,52 ****
+  	char *lowpc;
+  	char *highpc;
+  {
+! 	int cntsize, monsize;
+  	char *buffer;
+  	extern char *sbrk();
+  	extern char *minbrk;
+  
+! 	cntsize = (highpc - lowpc) * ARCDENSITY / 100;
+  	if (cntsize < MINARCS)
+  		cntsize = MINARCS;
+! 	monsize = (highpc - lowpc + HISTFRACTION - 1) / HISTFRACTION
+  		+ sizeof(struct phdr) + cntsize * sizeof(struct cnt);
+  	monsize = (monsize + 1) & ~1;
+  	buffer = sbrk(monsize);
+--- 38,52 ----
+  	char *lowpc;
+  	char *highpc;
+  {
+! 	unsigned int cntsize, monsize;
+  	char *buffer;
+  	extern char *sbrk();
+  	extern char *minbrk;
+  
+! 	cntsize = (unsigned)(highpc - lowpc) * ARCDENSITY / 100;
+  	if (cntsize < MINARCS)
+  		cntsize = MINARCS;
+! 	monsize = (unsigned)(highpc - lowpc + HISTFRACTION - 1) / HISTFRACTION
+  		+ sizeof(struct phdr) + cntsize * sizeof(struct cnt);
+  	monsize = (monsize + 1) & ~1;
+  	buffer = sbrk(monsize);
+*** /usr/src/lib/libc/pdp/csu/Makefile.old	Fri Aug  3 12:13:37 1990
+--- /usr/src/lib/libc/pdp/csu/Makefile	Mon Mar 30 17:11:45 1992
+***************
+*** 13,18 ****
+--- 13,19 ----
+  SRCS=	crt0.s mon.c mcount.s gmon.c
+  #OBJS=	crt0.o mcrt0.o gcrt0.o mon.o gmon.o
+  OBJS=	crt0.o mcrt0.o mon.o
++ CFLAGS=	-O ${DEFS}
+  TAGSFILE=tags
+  
+  all: ${OBJS}
+***************
+*** 41,47 ****
+  	ld -x -r -o mcrt0.o moncrt0.o mon.o
+  
+  mon.o: mon.c mcount.s mon.ex
+! 	cc -S ${DEFS} ${DFLAGS} mon.c
+  	ex - mon.s < mon.ex
+  	cat mon.s mcount.s > x.s
+  	/lib/cpp ${DEFS} ${DFLAGS} x.s | sed 's;^#;/;' > xx.s
+--- 42,48 ----
+  	ld -x -r -o mcrt0.o moncrt0.o mon.o
+  
+  mon.o: mon.c mcount.s mon.ex
+! 	cc ${CFLAGS} -S ${DFLAGS} mon.c
+  	ex - mon.s < mon.ex
+  	cat mon.s mcount.s > x.s
+  	/lib/cpp ${DEFS} ${DFLAGS} x.s | sed 's;^#;/;' > xx.s
+***************
+*** 50,56 ****
+  	rm -f x.o x.s xx.s mon.s
+  
+  gmon.o: gmon.c gmon.h gmon.ex
+! 	cc -S ${DEFS} ${DFLAGS} gmon.c
+  	ex - gmon.s < gmon.ex
+  	as -o x.o gmon.s
+  	ld -x -r -o gmon.o x.o
+--- 51,57 ----
+  	rm -f x.o x.s xx.s mon.s
+  
+  gmon.o: gmon.c gmon.h gmon.ex
+! 	cc ${CFLAGS} -S ${DFLAGS} gmon.c
+  	ex - gmon.s < gmon.ex
+  	as -o x.o gmon.s
+  	ld -x -r -o gmon.o x.o

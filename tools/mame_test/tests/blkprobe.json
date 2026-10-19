@@ -1,0 +1,13 @@
+{
+  "name": "blkprobe",
+  "description": "The block cache's boot self-test actually PASSES. _BlkCache_Probe runs before the console exists, so its verdict only ever reaches the kernel log ring -- which means a FAIL has always been invisible unless someone went looking, and a probe nobody reads is a probe that does not exist. Case 8 is the one this test was added for (apple/fgx#15): it fills and pins every slot AllocLRU is allowed to evict, then demands that the next claim REFUSE. Before the fix AllocLRU seeded BCS_BestLru but not BCS_BestIdx and read it unconditionally, so a round where every candidate was pinned returned a STALE index from a previous call -- quite possibly one of the pinned slots -- and claimed it, refilling a 512 B buffer under a live pointer. Its only protection was the comment's assumption that pins stay 'far below BLKCACHE_NBUF', which nothing enforced: the victim search covers BLKCACHE_LRU_NBUF (16) while FS_MAX_FDS is 30. Asserting PASS rather than the absence of FAIL is deliberate -- a probe that never ran also never prints FAIL.\n\nTHE PASS VERDICT IS GONE FROM THE LOG (2026-09-06) AND THIS TEST IS WEAKER FOR IT.  The probe still runs and still prints its FAILURE, but it no longer announces success -- a boot log carries what the machine detected, not a developer's checkmarks -- so what is left here is a `lacks' arm, and this tree's own rule is that a `lacks' alone passes when the probe never ran at all.  apple/fgx#336 carries the fix: the probes should record a verdict BYTE, as _ttyVerdict already does and as smoke reads `rootstatus', and this test should assert that byte through memory_regions.  Kept rather than deleted because the probe is real and its failure arm still discriminates.",
+  "command": "ls /",
+  "timeout_s": 25,
+  "expect": {
+    "screen_lacks": [
+      "BRK",
+      "PANIC",
+      "BLKPROBE: FAIL"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+ "name": "cmpport",
+ "description": "cmp(1) as 2.11BSD's: `differ: char N, line M' in one piece with lines counted on LF, -l's offset and octal bytes, -s's status for different and identical files, and `EOF on' the shorter file.",
+ "command": "sh /testdata/cmpport",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["/tmp/ca /tmp/cb differ: char 3, line 1", "/tmp/cc /tmp/cd differ: char 3, line 2", "     3 143 144", "CMP s1=1", "CMP s0=0", "cmp: EOF on /tmp/ca"],
+  "screen_lacks": ["PANIC", "BRK"]
+ }
+}

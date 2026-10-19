@@ -1,0 +1,45 @@
+# Built toolchain binaries (produced by `make`)
+/fcc
+/fas
+*.o
+
+# Python bytecode (src/ld, tests)
+__pycache__/
+*.pyc
+
+# macOS / Nextcloud sync cruft
+.DS_Store
+
+# Merlin32 byproducts (regenerated per assemble; not source)
+_FileInformation.txt
+_Output.txt
+error_output.txt
+*.lst
+
+# Transient test intermediates (tests/run.sh emits these and self-cleans;
+# ignored so an interrupted run leaves a clean tree)
+fcc_output.s
+fcc_data.s
+.diff.out
+.ld/
+.link.err
+fixture_fgx
+
+# fcc fixture BINARIES — derived, never committed.  Each is merlin32+fgx_ld over
+# the committed .expected.s plus the runtime/libc pile, so it holds nothing the
+# repo does not already hold; committing them meant a one-line libc change
+# rewrote ~550 blobs (33 MB) in every change.  tests/run.sh rebuilds them on each
+# run for run_runtime.py and metrics.sh.  NOTE: src/as/tests/**/*.expected.bin
+# are NOT covered here -- those are real goldens (byte-eq vs the Merlin32
+# oracle, an external reference) and stay committed.
+tests/M*/*.expected.bin
+
+# MAME working state dropped at the toolchain root by the bench/runtime harnesses
+# (fbench_kernel.py, run_runtime.py, cycles.py boot MAME from here) — regenerated
+# per run; never source.
+/cfg/
+/nvram/
+/snap/
+
+# Local planning/scaffolding artifacts (not part of the shipped toolchain)
+docs/superpowers/

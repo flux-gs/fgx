@@ -1,0 +1,123 @@
+# Host-side build of FGX: the toolchain, its library tests, and the release
+# disk image; on a vX.Y.Z tag, a GitHub release carrying that image.  The
+# emulator tests do not run here: they need an Apple IIgs ROM, which cannot be
+# distributed.
+#
+# The build is heavy, so it runs only when a release manager asks for it:
+# pushing a version tag, or a manual run (Actions > build > Run workflow).
+# Both need write access to the repository.  Pull requests, from forks or
+# otherwise, never start it; a merged contribution is built with the next
+# release.
+name: build
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+# A re-pushed tag cancels the run it replaces rather than queueing another.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+# The build reads the repository and nothing more; the release job asks for
+# write access to releases itself.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Host packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential git python3 ninja-build xxd file unifdef
+
+      # merlin32 at the commit FGX builds with, plus the one fix FGX carries:
+      # a CR look-back that reads before the source buffer.  Upstream plus
+      # this patch is byte-for-byte the tree FGX's own builds use.
+      - name: Merlin32
+        run: |
+          git clone https://github.com/digarok/merlin32 /tmp/merlin32
+          git -C /tmp/merlin32 checkout --detach a0fe91076aab094a3af92818ad785333ba66ccd2
+          git -C /tmp/merlin32 apply "$GITHUB_WORKSPACE/.github/merlin32-cr-lookback.patch"
+          make -C /tmp/merlin32/Source
+          sudo install -m755 /tmp/merlin32/Source/merlin32 /usr/local/bin/merlin32
+
+      # cadius at a fixed commit, the one FGX's own builds use.
+      - name: cadius
+        run: |
+          git clone https://github.com/mach-kernel/cadius /tmp/cadius
+          git -C /tmp/cadius checkout --detach 75c4aa684f6aa0de0c2879b729be465196a348ba
+          make -C /tmp/cadius release
+          sudo install -m755 /tmp/cadius/bin/release/cadius /usr/local/bin/cadius
+
+      - name: Toolchain
+        run: make -C toolchain
+
+      - name: Disk image
+        run: |
+          python3 tools/ninja/gen.py
+          ninja release
+
+      # After the image: the library tests read build/static_libs, which
+      # only ninja writes.
+      - name: Toolchain library tests
+        run: make -C toolchain test-libs
+
+      # fcc's own suites, as the maintainers' gate runs them: the golden
+      # fixtures (a run that finds no fixtures fails too, rather than reading
+      # as green), the programs fcc must refuse after their runner's
+      # self-test, and the --sections check.  fcc's output does not depend on
+      # the compiler that built it (apple/fgx#544), so a golden that differs
+      # here is a real change.
+      - name: fcc fixtures
+        run: |
+          # The fixtures link against these; `ninja release' builds only what
+          # the image needs, which leaves libtermlib out.
+          ninja build/static_libs/libfgx.s build/static_libs/libtermlib.s \
+                build/static_libs/ffltpr.s
+          bash toolchain/tests/run.sh > fixtures.log 2>&1 || true
+          s=$(grep -E '[0-9]+ passed, [0-9]+ failed' fixtures.log | tail -1)
+          echo "fixtures: ${s:-no summary}"
+          echo "$s" | grep -qE '^[1-9][0-9]* passed, 0 failed$' || {
+            grep -E '^FAIL ' fixtures.log | head -20; tail -5 fixtures.log; exit 1; }
+          bash toolchain/tests/run_reject.sh --self-test
+          bash toolchain/tests/run_reject.sh
+          (cd toolchain && python3 tests/sections.py)
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fgxufs
+          path: disk/fgxufs.po
+
+  # A vX.Y.Z tag publishes the image it built as fgx-X.Y.Z.po.  Re-pushing a
+  # tag replaces the asset rather than failing on the existing release.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: fgxufs
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          img="fgx-$v.po"
+          cp fgxufs.po "$img"
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$img" --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$GITHUB_REF_NAME" "$img#$img (32MB hard-disk image)" \
+              --repo "$GITHUB_REPOSITORY" --title "FGX $GITHUB_REF_NAME" \
+              --notes "Bootable image: $img (32MB hard disk).  See CHANGELOG.md.  The image includes GPL programs (frotz); their source is this release's tagged tree."
+          fi

@@ -1,0 +1,32 @@
+{
+  "name": "mountorder",
+  "description": "SECONDARY VOLUMES ARE MOUNTED AT BOOT. Nothing asserted this: when Fs_EnumerateMounts moved (2026-08-11) so that a MODULE could register a block device and still have its volume mounted, a grep of the whole suite found no test that touched a secondary mount at all -- the reorder would have been landed blind, and a boot that quietly stopped mounting /MNT/RAM5 would have looked identical to a good one. Fs_Init establishes only the BOOT mount (slot 0); Fs_EnumerateMounts populates slots 1..13 from the SmartPort scan plus the RAM disk, so the RAM disk is the cheapest observable proof that the second pass ran. The assertion is on df(1)'s own output rather than on a boot log line, because df reads the live mount table -- a log line would only prove the code was reached, not that a mount landed in the table. Goes red by deleting the Fs_EnumerateMounts call: df then reports the root volume alone, which is exactly what a mis-ordered boot would produce. 2026-08-15: also asserts the BOOT volume's own mount line is VISIBLE. It was not. _BootScreen arms _kernLogMirror at main.s:438 while Fs_Init runs at :307, so the boot mount -- and the whole SmartPort bus/unit inventory from Dev_Init at :304 -- reached the log ring and no screen, and dmesg(1) can only fetch them from a shell, which a boot that dies before init never reaches. The visible boot log was a strict SUFFIX of the real one, missing exactly the device inventory; apple/fgx#111 was diagnosed against a photograph that could not show it. Goes red by deleting the Kern_LogReplay call.\n\nBOTH HALVES ARE RE-AIMED AT THE UFS ROOT (2026-09-06, apple/fgx#335).  SECONDARY VOLUMES ARE NO LONGER MOUNTED AT BOOT and that is deliberate: Fs_EnumerateMounts populated /MNT from the SmartPort scan because ProDOS's enumerator did, and a UFS root mounts the root and nothing else -- 2.11BSD mounts / in the kernel and leaves every fstab(5) line to mount(8) from /etc/rc.  So the RAM disk is no longer an observable of anything: it has no node and no mount, only a registration.\n\nWHAT SURVIVES IS THE SECOND CLAIM, WHICH IS THE ONE THAT CAUGHT A REAL DEFECT: the boot mount is ANNOUNCED and it is VISIBLE.  `root on sd0' is the UFS root's equivalent of `fs: /FGX on s7d1', it is printed by main.s at the root mount, and it is asserted ON THE SCREEN rather than in the ring -- which is the whole point.  The line reached the ring and no screen for months (_BootScreen armed the mirror at main.s:438 while Fs_Init ran at :307), so the visible boot log was a strict SUFFIX of the real one and apple/fgx#111 was diagnosed against a photograph that could not show the device inventory.  Goes red by deleting the Kern_LogReplay call: the ring arm stays green and the screen arm does not, which is exactly the distinction that was invisible before.\n\nAND df(1) STILL READS THE LIVE MOUNT TABLE, so the announcement is checked against the kernel's own list rather than believed: a boot that printed the line and mounted nothing fails on `/dev/sd0'.",
+  "command": "/bin/df",
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "root on sd0",
+      "Mounted on",
+      "/dev/sd0"
+    ],
+    "klog_contains": [
+      "root on sd0"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  },
+  "boot_s": 45,
+  "memory_regions": [
+    {
+      "name": "klog",
+      "ptr_addr_hex": "CFG_DP_KKERN+B0",
+      "len": 4096
+    }
+  ]
+}

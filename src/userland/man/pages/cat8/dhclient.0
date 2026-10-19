@@ -1,0 +1,60 @@
+
+
+DHCLIENT(8)         UNIX Programmer's Manual         DHCLIENT(8)
+
+
+
+NAME
+     dhclient - Dynamic Host Configuration Protocol client
+
+SYNOPSIS
+     dhclient [-d domain] [-n nameserver] [iface]
+
+DESCRIPTION
+     Dhclient configures a network interface from a DHCP server: it
+     runs the DISCOVER/OFFER/REQUEST/ACK exchange (with retransmit
+     and backoff), assigns the leased address, netmask, broadcast,
+     and gateway, and writes the resolver configuration to
+     /etc/resolv.conf.  With no iface it configures the primary
+     (first) interface.
+
+     The lease is remembered in /etc/dhcp.lease; on the next boot
+     dhclient re-requests that same address (INIT-REBOOT) before
+     falling back to a fresh DISCOVER.  There is no background renew
+     daemon; re-run dhclient to renew.
+
+     The DNS server and search domain come from the DHCP reply
+     (options 6 and 15) by default.  They may be overridden, in
+     increasing order of precedence:
+
+     /etc/dhclient.conf
+          A line `domain name' (or `search name') sets the search
+          domain; a line `nameserver a.b.c.d' sets the DNS server.
+          Blank lines and `#' comments are ignored.
+
+     -d domain
+          Override the search domain.
+
+     -n nameserver
+          Override the DNS server IP address.
+
+     An override is useful when the LAN's DHCP server sends no
+     search domain, or a better nameserver is known locally.
+
+FILES
+     /etc/resolv.conf    resolver configuration (written)
+     /etc/dhcp.lease     remembered lease address
+     /etc/dhclient.conf  local resolver overrides (read)
+
+SEE ALSO
+     host(1), ifconfig(8), resolv.conf(5)
+
+BUGS
+     Only the first nameserver and a single search domain are
+     honored, matching the slim FGX resolver.  DHCP option 119 (the
+     domain search list) is not parsed; use option 15, the conf
+     file, or -d.
+
+
+
+Printed 7/20/86                                                8

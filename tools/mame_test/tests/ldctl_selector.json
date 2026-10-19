@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_selector",
+ "description": "Shared libc SP4: SYS_LDCTL (syscall 8) refuses a hook selector ($80-$84) from user code with ENOSYS; only the kernel calls hooks.",
+ "command": "/testbin/ldctl selector",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "LDC selector ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

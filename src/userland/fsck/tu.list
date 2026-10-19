@@ -1,0 +1,26 @@
+# fsck(8) translation units.  Named by tools/ninja/manifest.json's tu_list.
+# The main TU is fsck.c -- upstream's main.c, renamed because the generator
+# takes src/userland/<tool>/<tool>.c as the entry point and so is NOT listed
+# here; robots.c is the same rename for the same reason.  globals.c has no upstream counterpart -- it holds the
+# definitions behind fsck.h's declarations, because fcc has no common-symbol
+# model (the file's own header explains, and src/userland/robots/extern.c is
+# the same arrangement).
+#
+# ufs_sb.c and ufs_dinode.c are the KERNEL's, compiled in here rather than
+# copied: they are the on-disk format's decoders, they have no outward call,
+# and one definition of the byte order is the whole point.  fsck reading a
+# volume differently from the kernel that wrote it is the failure this
+# campaign exists to prevent.
+src/userland/fsck/globals.c
+src/userland/fsck/dir.c
+src/userland/fsck/inode.c
+src/userland/fsck/pass1.c
+src/userland/fsck/pass1b.c
+src/userland/fsck/pass2.c
+src/userland/fsck/pass3.c
+src/userland/fsck/pass4.c
+src/userland/fsck/pass5.c
+src/userland/fsck/setup.c
+src/userland/fsck/utilities.c
+src/kernel/vfs/ufs_sb.c
+src/kernel/vfs/ufs_dinode.c

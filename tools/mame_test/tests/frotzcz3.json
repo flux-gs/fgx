@@ -1,0 +1,11 @@
+{
+ "name": "frotzcz3",
+ "description": "temp: CZECH conformance for Z-machine version 3",
+ "command": "frotz -m /etc/czech.z3",
+ "timeout_s": 240,
+ "exit_on_prompt": {"sentinel": "fgx#", "count_delta": 1},
+ "stage_files": [
+  {"host": "tools/mame_test/fixtures/czech.z3", "prodos_dir": "/FGX/etc", "name": "czech.z3", "replace": false}
+ ],
+ "expect": {"screen_contains": ["fgx#"], "screen_lacks": ["PANIC"]}
+}

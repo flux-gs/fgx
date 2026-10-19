@@ -1,0 +1,69 @@
+{
+  "name": "dirperm",
+  "description": "DIRECTORY WRITE PERMISSION IS ENFORCED, AND THE STICKY BIT WITH IT, asked of the RUNNING SYSTEM the way the bug was reported.  apple/fgx#419: ufs_lookup asked VEXEC of a directory and never VWRITE, so any account could create and delete in any directory it could search -- `echo pwned > /etc/zz' and `rm /etc/motd' both succeeded from the unprivileged account against a drwxr-xr-x /etc owned by root, which put `rm /etc/passwd' and `rm /bin/sh' in reach of anybody with a login.  THESE ARE THE ISSUE'S OWN TWO LINES, typed at a real login rather than reimplemented in a test binary: nothing is added to the volume, so the measurement costs the image nothing and cannot perturb what any other fixture boots.  Four probes whose answers must DIFFER, because a run where every answer agrees cannot tell an enforced machine from an open one: c1 and c2 are a create and a delete in /etc and must FAIL; c3 is a create in /tmp and must SUCCEED, which is the control that says the check did not simply break every create on the system -- /tmp and /var/tmp became 1777 in the same increment and vi, sh and half the suite write there; c4 deletes a ROOT-OWNED file from that sticky /tmp and must FAIL, which is the whole reason 1777 is safe to ship.  THE NEEDLES CANNOT BE TYPED: the shell expands `$status' and the digits appear in nothing on the command line.  THE TWO ERRNOS ARE THEMSELVES AN ASSERTION and not decoration: the /etc refusals are EACCES, printed `Permission denied', because ufs_access answered no to VWRITE; the /tmp one is EPERM, `Operation not permitted', because the directory was writable and the STICKY rule refused it.  A machine that enforced the directory mode and skipped the sticky test would delete root's file and print nothing at all there.  c1 HAS NO STATUS LINE ON PURPOSE: tcsh abandons the whole command line when a redirection cannot be opened, so `echo c1=$status' never runs, and the refusal message is what the machine actually prints -- while `c1=0', which an unprotected machine WOULD print, is asserted absent.  THE cd ARM READS THE DIRECTORY AND NOT THE STATUS, because the status lies: tcsh answers 0 for a `cd' the kernel refused, while its own $cwd correctly stays put.  So the arm changes to /tmp, attempts /tmp/nx -- a directory the account OWNS and has chmod'd to 000, which denies the owner too since only root is exempt -- and prints $cwd each time.  A machine enforcing chdir(2)'s VEXEC never leaves /tmp; one that is not prints AT-/tmp/nx-AT, which is asserted absent.  The needle is built by expansion, so neither spelling appears in anything typed.  c5 RENAMES the account's own /tmp/mine OVER root's /etc/motd and must FAIL: a rename onto an existing name is a write to the TARGET's directory (Reno ufs/ufs_lookup.c:440, `flag == RENAME && wantparent'), and rename(2) walks the target with LOCKPARENT, which upstream's wantparent includes.",
+  "command": "pwd",
+  "post_commands": [
+    "fgx",
+    "fgx",
+    "echo pwned > /etc/zz; echo c1=$status",
+    "rm /etc/motd; echo c2=$status",
+    "echo ok > /tmp/mine; echo c3=$status",
+    "mv /tmp/mine /etc/motd; echo c5=$status",
+    "rm /tmp/dproot; echo c4=$status",
+    "mkdir /tmp/nx; chmod 0 /tmp/nx; cd /tmp; echo AT-$cwd-AT",
+    "cd /tmp/nx; echo AT-$cwd-AT",
+    "cd /home/fgx; echo AT-$cwd-AT"
+  ],
+  "post_gap_frames": 900,
+  "timeout_s": 540,
+  "exit_on_prompt": false,
+  "raw_inject": [
+    [
+      300,
+      50,
+      2
+    ]
+  ],
+  "memory_regions": [
+    {
+      "name": "vc1char",
+      "addr_hex": "030000",
+      "len": 2000,
+      "vcbank": 1
+    }
+  ],
+  "stage_files": [
+    {
+      "host": "tools/mame_test/fixtures/dproot.dirperm",
+      "prodos_dir": "/FGX/tmp",
+      "name": "dproot",
+      "replace": false
+    }
+  ],
+  "expect": {
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ],
+    "klog_region": "vc1char",
+    "klog_contains": [
+      "/etc/zz: Permission denied",
+      "rm: /etc/motd: Permission denied",
+      "c2=1",
+      "c3=0",
+      "c5=1",
+      "rm: /tmp/dproot: Operation not permitted",
+      "c4=1",
+      "AT-/tmp-AT",
+      "AT-/home/fgx-AT"
+    ],
+    "klog_lacks": [
+      "c1=0",
+      "c2=0",
+      "c3=1",
+      "c5=0",
+      "c4=0",
+      "AT-/tmp/nx-AT"
+    ]
+  }
+}

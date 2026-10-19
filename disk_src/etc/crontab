@@ -1,0 +1,11 @@
+# /etc/crontab -- the system crontab, read by cron(8); see crontab(5).
+#
+# 2.11BSD's (usr/etc/crontab) runs atrun and the daily, weekly and monthly
+# scripts, none of which this system has, so its four lines are not here.
+#
+# Every half hour from midnight to five, adjkerntz follows a daylight-saving
+# change the machine is up across: FreeBSD's entry, with the path in full
+# because cron's PATH is /usr/bin:/bin.
+#
+#minute	hour	mday	month	wday	who	command
+1,31	0-5	*	*	*	root	/sbin/adjkerntz -a

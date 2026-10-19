@@ -1,0 +1,13 @@
+{
+ "name": "rcnolibc",
+ "description": "SHARED LIBC SP5 STEP 2 (spec 6.1): A libc.so THAT WILL NOT LOAD STOPS /etc/rc WITH THE ROOT READ-ONLY.  The image's /lib/libc.so.1.0 is replaced by a text file, so ldload cannot make libc resident and exits 2, and rc exits before its fsck block and its remount (the static fsck and mount) and before the dynamic programs after them.  init then starts the console's /bin/sh, which is static and needs no libc.so.  The typed `/sbin/mount', which is static, prints the root's flags: `read-only' is the proof the remount did not run, and the autoboot line rc prints before fsck must be absent.  Control: run with rc.in's `case' block deleted -- rc carries on, the remount runs, and `read-only' is gone.",
+ "command": "/sbin/mount",
+ "timeout_s": 300,
+ "stage_files": [
+  {"host": "tools/mame_test/fixtures/libc.so.garbage", "prodos_dir": "/FGX/lib", "name": "libc.so.1.0"}
+ ],
+ "expect": {
+  "screen_contains": ["read-only"],
+  "screen_lacks": ["Running disk integrity checks", "PANIC", "BRK"]
+ }
+}

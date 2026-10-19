@@ -1,0 +1,71 @@
+
+
+GETPEERNAME(2)      UNIX Programmer's Manual      GETPEERNAME(2)
+
+
+
+NAME
+     getpeername - get the name of a connected peer
+
+SYNOPSIS
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+
+     int getpeername(s, name, namelen)
+     int s;
+     struct sockaddr *name;
+     int *namelen;
+
+DESCRIPTION
+     Getpeername returns the address of the peer connected to
+     socket s.  On entry *namelen must give the size of the buffer
+     name points at; on return it holds the number of bytes
+     written, which is always sizeof(struct sockaddr_in).
+
+     FGX writes a whole sockaddr_in or nothing.  A buffer smaller
+     than one is refused with EINVAL rather than short-written,
+     because a caller that has to notice a truncated address is a
+     caller that will not.
+
+     The peer lives in a different place on each transport, and
+     neither of them is the socket descriptor.  A connection on the
+     Uthernet II carries it in the W5100's Sn_DIPR and Sn_DPORT
+     registers; a 127.0.0.1 connection knows its peer by descriptor
+     and reports the loopback address with the peer's own local
+     port.
+
+RETURN VALUE
+     0 on success.  On failure -1 is returned and errno is set.
+
+ERRORS
+     [EBADF]        s is not a valid descriptor.
+     [ENOTSOCK]     s is a file, not a socket.
+     [ENOTCONN]     the socket is not connected.  A listening
+                    socket has no peer, and neither does a spent
+                    listener whose hardware socket has moved to an
+                    accepted connection.
+     [EINVAL]       *namelen is smaller than a sockaddr_in, or
+                    namelen is a null pointer.
+
+SEE ALSO
+     accept(2), bind(2), getsockname(2), socket(2)
+
+BUGS
+     A 127.0.0.1 CONNECTOR IS NEVER GIVEN A LOCAL PORT -- connect(2)
+     does not bind one and nothing needed it before these calls
+     existed -- so getpeername on the accepted end of a loopback
+     pair reports 127.0.0.1:0.  That is the port the socket
+     actually has rather than an invented one.  Binding an
+     ephemeral port to loopback connectors would change it and is
+     filed as apple/fgx#156; the ADDRESS is right in every case,
+     and the address is what a server wants.
+
+     On an AF_UNIX socket getpeername fails with ENOTCONN,
+     connected or not: the peer test knows only a TCP connection
+     and a datagram socket's foreign address.  2.11BSD copies
+     the connected peer's bound name, or returns an empty one
+     (uipc_usrreq.c, PRU_PEERADDR).  Filed as apple/fgx#546.
+
+
+
+Printed 8/18/26                                                 2

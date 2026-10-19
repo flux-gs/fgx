@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_reclaim",
+ "description": "Shared libc SP4: the pool drained through ld.mod's grants: reclaim frees unused rows' banks, READY or FREE, never a pinned row's; the arena slot is kept.",
+ "command": "/testbin/ldctl reclaim",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC reclaim ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,17 @@
+# cmp(1), 2.11BSD's: the differ message, its line count (LF), -l, -s, EOF.
+echo abc > /tmp/ca
+echo abd > /tmp/cb
+cmp /tmp/ca /tmp/cb
+echo x > /tmp/cc
+echo y >> /tmp/cc
+echo x > /tmp/cd
+echo z >> /tmp/cd
+cmp /tmp/cc /tmp/cd
+cmp -l /tmp/ca /tmp/cb
+cmp -s /tmp/ca /tmp/cb
+echo CMP s1=$?
+cmp -s /tmp/ca /tmp/ca
+echo CMP s0=$?
+cp /tmp/ca /tmp/ce
+echo more >> /tmp/ce
+cmp /tmp/ca /tmp/ce

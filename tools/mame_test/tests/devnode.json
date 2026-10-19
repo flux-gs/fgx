@@ -1,0 +1,20 @@
+{
+ "name": "devnode",
+ "description": "A REAL /dev NODE, OPENED THROUGH THE FILESYSTEM AND WRITTEN THROUGH ITS VNODE.  UFS 1.7d I3.  open(2) now recognises a /dev/ path before any legacy resolution and resolves it with namei against the mounted UFS volume's root, so a descriptor under /dev names an IFCHR inode whose f_ops are vfs.mod's `vnops' -- and the core bank, which cannot jump to an arm in another bank, hands the whole write over the seam instead.  THE NAME IS SPELLED /dev/./console AND THAT IS THE WHOLE POINT OF THE TEST: the synthesized registry (path.s) scans the suffix only to the next '/', so it looks up `.', finds no such device, and falls through -- and the ProDOS /dev directory has no `console' either, so the legacy road ends in ENOENT.  Only the real mount can serve this name, which is what makes a green result evidence rather than agreement.  Plain /dev/console would be served identically by both roads and would prove nothing, which is the trap this campaign has hit before: when two roads give the same answer, only a name (or a mutation) can tell which one was walked.  IT ALSO PROVES THE DEVICE NUMBER: `console' is registry index 7, written into the inode by the build's mknod, so the text arriving on screen says the vnode carried i_rdev through to kc_cdwrite and did not land on some other device.  THE NEEDLES ARE BUILT BY EXPANSION so neither can be satisfied by the console echo of the command itself.  THE READ ARM IS WITNESSED SEPARATELY by `cat /dev/./null': a device opened this way is read through the same cross-bank route as the write, and cat says `cat: read error' on a failing read(2) (src/userland/cat/cat.c:161) -- so an arm that answered EBADF would print rather than stay silent.  It reads EOF, which is the right answer for null and the only one this volume can give without a stateful device to drive; the count arithmetic under it is what UFS 1.7c's rwcommon mutation already covers.  AND THE BOOT LINE IS ASSERTED, because dev_mount runs a vnode self-test on its own root before reporting -- apple/fgx#196's lseek L_XTND arm, the one the seam could not drive because it needs a real vnode and the seam runs twelve lines earlier in main.s.  A failure there prints its OWN line and NOT this one, deliberately: the volume did mount, so `no /dev volume found' would be a diagnosis nobody could make.  Requiring `fs: /dev on unit' is therefore the witness for that arm as well as for the mount.  THE SEPARATE /dev MOUNT IS OBSOLETE (2026-09-04) and will not be reused: the UFS root carries its own /dev with real character nodes in it, and a ProDOS volume will arrive as a mount(2) with an FST rather than as a boot-time scan.  The assertion on that mount's boot message is retired with it -- it asserted a configuration this machine no longer has, and keeping it would be asserting the past.  DEVCON WENT RED AND IS GREEN AGAIN, and the arc is worth keeping because the test earned its keep twice.  When the separate /dev mount was retired it began reporting nothing, while `echo x >> /dev/console' still wrote -- and it was left red deliberately rather than relaxed, on the grounds that a test passing over a console nobody can write to is worse than a failing one.  The cause was NOT the retired mount and not the kernel: libc's creat(), which is what the shell's `>' is, UNLINKED the path before opening it, so `> /dev/console' deleted the character node and wrote to a plain file that replaced it.  Fixed in apple/fgx#323.  This assertion is what caught it, so it stays exactly as it is.",
+ "command": "E=DEVC; echo ${E}ON > /dev/./console ; cat /dev/./null ; F=DEVD; echo ${F}ONE",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "DEVCON",
+   "DEVDONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "cat: read error",
+   "cat: cannot open",
+   "cannot create",
+   "SELF-TEST FAILED"
+  ]
+ }
+}

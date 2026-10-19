@@ -1,0 +1,27 @@
+{
+ "name": "strerrprobe",
+ "description": "strerror(3) is 2.11BSD string/strerror.c over syserrlst(): a known errno gets its message, a number with none gets upstream's hand-built `Unknown error: <n>'.",
+ "command": "/testbin/strerrprobe",
+ "boot_s": 45,
+ "timeout_s": 60,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "A[No such file or directory]",
+   "B[Permission denied]",
+   "C[Unknown error: 99]",
+   "D[Unknown error: 1234]",
+   "E[Unknown error: 99]",
+   "F[Undefined error: 0]",
+   "SEDONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "Unknown error: 9934"
+  ]
+ }
+}

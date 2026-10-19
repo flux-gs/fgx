@@ -1,0 +1,156 @@
+MOUNT_PRODOS(8)      UNIX Programmer's Manual      MOUNT_PRODOS(8)
+
+
+
+NAME
+     mount_prodos - mount a ProDOS volume
+
+SYNOPSIS
+     mount_prodos [ -o options ] special node
+
+DESCRIPTION
+     Mount_prodos attaches the ProDOS volume on the block device
+     special to the directory node.  It is not normally run by
+     hand: mount(8) runs it for "mount -t prodos".  The options
+     are mount(8)'s -o list.
+
+     The volume is read-only unless -o write is given.  A mount
+     asked for read-write without it is made read-only, and
+     mount_prodos says so:
+
+   /dev/sd1 on /mnt: writing needs -o write, mounted read-only.
+
+     Asked with -r (or -o ro) it is quiet.  A writable mount the
+     kernel refuses is retried read-only and reported as
+     "Read-only file system, mounted read-only".  A device that is
+     not a ProDOS volume is reported as "not a ProDOS volume".
+
+OPTIONS
+     -o write  mount the volume writable.  Files can be written,
+               extended, truncated, created, removed and renamed,
+               and directories made, removed and renamed.  The
+               writing half of the file system is the module
+               prodosw; without it loaded, a writable mount is
+               refused and made read-only.
+
+NAMES
+     A ProDOS name is 1 to 15 characters of A-Z, 0-9 and ".",
+     starting with a letter.  Lookup ignores case, as ProDOS and
+     GS/OS do, so Casper, CASPER and casper are one file.  A name
+     that no ProDOS volume could hold is refused with EINVAL.
+
+     A directory lists each name in the case GS/OS recorded for it
+     (GS/OS Technical Note #8), and in lowercase where no case was
+     recorded.  A file or directory created here records the case
+     of the name it was created with.
+
+FORKED FILES
+     A GS/OS extended file has a data fork and a resource fork.
+     NAME reads and writes its data fork.  Beside it is ._NAME, an
+     AppleDouble version 2 file (RFC 1740) holding the file's
+     Finder information and then its resource fork, as macOS and
+     netatalk store one on a filesystem without extended
+     attributes.  The Finder information is the volume's own when
+     the file carries it, and otherwise what GS/OS's HFS file
+     system translator makes of the ProDOS file type and auxiliary
+     type: creator "pdos", and type "p" followed by the file type
+     and auxiliary type unless the translator's table names one.
+     A file with no resource fork has no ._NAME, and ._NAME is
+     never written, created or removed: opening one with O_CREAT
+     or unlinking, renaming or truncating it fails with EPERM.
+     Unlinking NAME removes both forks, renaming it renames both,
+     and truncating it truncates the data fork.
+
+PERMISSIONS
+     ProDOS has no owners.  Every file and directory is owned by
+     user 0 and group 0.
+
+     The mode comes from the ProDOS access byte:
+
+          $01  read    r for owner, group and other
+          $02  write   w for the owner
+
+     A directory is searchable (x) wherever it is readable; a file
+     is never executable.
+
+     So an ordinary file ($C3 or $E3) is -rw-r--r--, a locked one
+     ($01) -r--r--r--, and a directory drwxr-xr-x.  The destroy
+     ($80) and rename ($40) bits have no file-mode counterpart and
+     do not appear in the mode, but a file or directory whose
+     destroy bit is clear cannot be removed, and one whose rename
+     bit is clear cannot be renamed, even by the super-user
+     (EPERM); moving it to another directory under the same name
+     is allowed, as GS/OS allows it.  The backup bit ($20) and GS/OS's
+     invisible bit ($04) are not permissions.  Every write,
+     truncation and rename sets the backup bit, as ProDOS 8 does,
+     so backup programs see the change.  The super-user reads and writes everything, as on any
+     other file system.
+
+     A new file or directory takes destroy, rename and backup,
+     and read and write from the owner's bits of the mode it is
+     created with: $E3 for 0644 or 0755.  A new file is a ProDOS
+     file of type $00, as GS/OS creates one.
+
+DATES
+     A file's access, modification and change times are all its
+     ProDOS modification date and time; ProDOS keeps no access
+     time, and its other date is a creation date.  A directory's
+     are those of its entry in its parent, and the volume
+     directory's are its creation date.  A year value from 0 to 39
+     is 2000 to 2039; any larger value is 1900 plus it, which is
+     how GS/OS reads it.  Times are local, as FGX has no
+     timezone.  An entry with no date reads as the epoch.
+
+     A write sets the file's modification date and time and, when
+     the file is closed, those of every directory above it up to
+     the volume, as ProDOS 8 does.  A time outside 1940 to 2039 is
+     stored as no date.
+
+RENAMING
+     A rename keeps the file's blocks, dates and access, and takes
+     the case of its new name.  A name that already exists is
+     replaced, as rename(2) requires, by removing it first, so its
+     destroy bit must be set and a directory it names must be
+     empty (ENOTEMPTY); neither ProDOS 8 nor GS/OS replaces a
+     name.  A directory cannot be moved beneath itself (EINVAL).
+
+TRUNCATING
+     A file made longer allocates nothing: the new bytes read as
+     zeros and take blocks when written.  A file made shorter gives
+     back every block past its new end, and becomes a sapling or a
+     seedling again when one holds it, as ProDOS 8's SET_EOF does.
+     A file is at most 16777215 bytes (EFBIG).  A directory cannot
+     be truncated (EISDIR).
+
+SEE ALSO
+     mount(2), mount(8), umount(8), df(1), ls(1)
+
+BUGS
+     A file's mode, owner and dates cannot be changed: chmod(2),
+     chown(2) and utimes(2) fail with ENOTSUP.
+
+     A tree whose first index block is a hole stays a tree when
+     truncated to a length one index block could address.
+
+     A removed file's blocks are given back when its last
+     reference goes, so a file unlinked while it is open keeps
+     working; if the system stops first, the blocks stay marked
+     in use and nothing names them.
+
+     The volume directory holds 51 entries and cannot grow; a
+     create past them fails with ENOSPC, as ProDOS's does.
+
+     A file's inode number is the block that holds its index, and
+     that block moves when a file grows past 512 bytes or 128
+     kilobytes: a growing file's inode number changes.  A
+     directory's never does.
+
+     Owner, group and mode cannot be chosen at mount time.
+
+     A pathname longer than 63 characters is shortened by the
+     system call layer rather than refused (apple/fgx#436); change
+     directory part of the way first.
+
+
+
+Printed 9/14/26                                                8

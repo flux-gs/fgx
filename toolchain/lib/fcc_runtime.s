@@ -1,0 +1,2369 @@
+;==============================================================================
+; fcc_runtime.s - mandatory runtime helpers for fcc-emitted code.
+;
+; PUT-included by every M1+ fixture's _wrap.s, after fcc_output.s, before
+; args.s.  Exposes:
+;   _fcc_tmp_b       16-bit scratch for binop RHS (push-pop scheme)
+;   _fcc_mul16       (M1 Task 6)  signed/unsigned 16-bit mul mod 2^16
+;   _fcc_divs16      (M1 Task 7)  signed 16-bit division (toward zero)
+;
+; All entries: caller MX %00, DBR = own bank.  See
+; docs/superpowers/specs/2026-05-20-fcc-m1-design.md.
+;==============================================================================
+
+                MX      %00
+
+; ---  ALL DA-DECLARED SCRATCH GLOBALS MOVED TO fcc_runtime_data.s  ---
+;
+; Storage for _fcc_tmp_b, _fcc_mul_*, _fcc_div_*, _fcc_cmp_*,
+; _fcc_long_*, etc. is now in fcc_runtime_data.s.  Single-bank builds PUT
+; that file after this one; multi-bank builds PUT it into seg1.  See
+; fcc_runtime_data.s for the full rationale (multi-bank DBR routing).
+
+; _fcc_ptr - 4-byte DP slot for indirect-long [dp] dereferences of
+; long pointers.  Must be DP-resident so `LDA [_fcc_ptr]` (opcode $A7)
+; assembles correctly.  Each userland task runs with D = its own per-task
+; direct page (the first page of its stack reservation), page-aligned, distinct from
+; the kernel's DP page and from every other task's.  So `$E8` here is the
+; task page + $E8, private to this process.  Layout: offset @ +0..+1,
+; bank @ +2, pad @ +3.
+;
+; DP map in fcc-compiled binaries (all offsets within the task's DP page):
+;   $10-$97   free (userland task DP page; kernel DP is a different page)
+;   $98-$B7   _fcc_fpr0.._fcc_fpr7        (P3-2 T1: far-pointer expression
+;                                          register band; 8 x 4-byte slots,
+;                                          offset @ +0..+1, bank @ +2, pad @
+;                                          +3 — deref via `LDA [_fcc_fprK]`.
+;                                          Walker-allocated expression temps;
+;                                          caller-save, FPR0 = pointer return.
+;                                          Retires _fcc_ptr/_fcc_ptr2 at the
+;                                          P3-2.2 flip.)
+;   $B8       _LS_DATA_DP (libc_start.s)  (task's DATA bank; _libc_start
+;                                          stashes, _libc_sigtramp reads.  P3-3 3.2b: relocated
+;                                          from $BF to dodge the then-live prologue
+;                                          16-bit bank-seed STZ, which zeroed $BE AND
+;                                          $BF each fn entry -> handlers ran DBR=0.
+;                                          P3-3 3.3 deleted that STZ, but $B8 stays
+;                                          put — no reason to move back.)
+;   $B9-$BA   _fcc_stkfloor               (P3-3 3.2b: lowest legal S for this
+;                                          task; KERNEL-seeded from TCB_StackBase
+;                                          at spawn.  The prologue guard traps when
+;                                          the new S falls below it — see this file
+;                                          + emit.c emit_prologue_unconditional.)
+;   $BB-$BC   _fcc_fb                    (frame-base pointer, bank invariantly 0;
+;                                          prologue TSC-seeds it = S+1.  Survives
+;                                          libc calls -> kept below the libc/shim
+;                                          scratch bands; this file.  Moved down
+;                                          one byte from $BC when _fcc_sfp grew a
+;                                          bank byte -- $BB was the only free byte
+;                                          adjacent to the band, and $C0 is img0.)
+;   $BD-$BF   _fcc_sfp                    (soft-frame ptr: offset @ +0..+1, BANK
+;                                          @ +2.  Three bytes because the soft
+;                                          stack lives in its OWN bank, so a slot
+;                                          is `[_fcc_sfp],Y`.  It was a two-byte
+;                                          DBR-relative pointer into the data bank
+;                                          until that bank turned out not to be
+;                                          private: bsh's stak arena claims ~50 KB
+;                                          of it during parse, leaving the soft
+;                                          stack seven levels.  Measured, #12.)
+;   $C0-$DF   _fcc_img0.._fcc_img15       (fcc2 P1.3-inc2: promoted-local
+;                                          register file; 16 word slots.  FREE
+;                                          in the task DP page — the kernel's
+;                                          console owns $C0-$EF only in the
+;                                          *kernel* DP page, a different page.)
+;   $E0-$E3   ARGS_DP_WORD / ARGS_DP_SPEC (args.s)
+;   $E4-$E7   libc SRC/DST scratch        (libc.s — DO NOT reuse)
+;   $E8-$EB   _fcc_ptr                    (this file)
+;   $EC-$ED   _fcc_long_hi                (M20: high word of long in A)
+;   $EE-$EF   _fcc_long_b_lo              (M20: RHS scratch low)
+;   $F0-$F1   _fcc_long_b_hi              (M20: RHS scratch high)
+;   $F2-$F7   c_strcmp_a/c_strcmp_b       (fcc_libc_shims.s — DO NOT reuse)
+;   $F8-$FB   _fcc_fp                     (G53: far frame-slot access ptr;
+;                                          offset @ +0..+1, bank @ +2, pad @ +3)
+;   $FC-$FF   _fcc_ptr2                   (struct-copy dest long-ptr; offset
+;                                          @ +0..+1, bank @ +2, pad @ +3 —
+;                                          transient, used only inside an
+;                                          inline `*pd = *ps` struct copy)
+;
+; Frame-base pointer (offset word $BC-$BD; bank invariantly 0 — the frame lives
+; on the bank-0 HARDWARE stack).  Each function's prologue TSC-seeds it (= S+1)
+; and the epilogue restores the caller's; it is NOT crt0-inited.  MUST live
+; OUTSIDE the libc DP scratch band — it survives EVERY libc call, but libc
+; string/sprintf/mem routines freely clobber $E4-$EA (SRC/DST/SPOUT/TMP) and
+; fcc_libc_shims.s clobbers $F2-$F7 (c_strcmp_a/b).  It sat at $E4 through Task
+; 5 and collided (pf_long / sprintf_farbuf / lc_fopen_fail miscompiled).
+; P3-3 3.3 freed the old bank byte $BE and $BF; the bank-0 stack campaign
+; (docs/history/plans/bank0-stack.md, increment 1.1) took them back for _fcc_sfp, below.
+_fcc_fb        EQU     $BB
+
+; SOFT-FRAME pointer (bank-0 stack campaign 1.3).  Offset word at +0..+1, BANK
+; at +2, into a DEDICATED bank the loader grants at spawn from FGX2 header byte
+; 15.  A frame slot is `[_fcc_sfp],Y` -- the long form, because that bank is
+; neither DBR nor bank 0.
+;
+; It was a two-byte DBR-relative pointer into the task's DATA bank through 1.1.
+; That bank is not private enough: bsh's 2.11BSD stak arena claims ~50 KB of it
+; while PARSING a sourced script, before a single command runs, and left the soft
+; stack seven levels.  Partitioning it did not work either -- capping the break
+; makes sbrk FAIL, and 2.11BSD's setbrk never checks its return, so the cap
+; corrupted the shell instead of bounding it.  apple/fgx#12.
+;
+; SETJMP CARRIES THE OFFSET ONLY (jmp_buf +10..11).  That is correct because the
+; bank is granted once per image and never changes while the task runs -- an
+; invariant this comment exists to state, since widening the pointer to three
+; bytes did not widen what setjmp saves.
+_fcc_sfp        EQU     $BD
+
+; P3-3 3.2b prologue-guard floor: lowest legal hardware-stack S for this task.
+; KERNEL-seeded from TCB_StackBase at spawn (src/kernel/process.s, after
+; Task_AllocStack); 0 in the kernel's own DP / any binary the kernel didn't
+; seed, so the guard's `CMP _fcc_stkfloor / BCC` never false-traps there.
+_fcc_stkfloor   EQU     $B9
+
+; P3-2 T1 far-pointer expression register band (see DP map above).  Inert
+; until the P3-2.2 walker flip emits against it; EQUs emit no bytes.
+_fcc_fpr0       EQU     $98
+_fcc_fpr1       EQU     $9C
+_fcc_fpr2       EQU     $A0
+_fcc_fpr3       EQU     $A4
+_fcc_fpr4       EQU     $A8
+_fcc_fpr5       EQU     $AC
+_fcc_fpr6       EQU     $B0
+_fcc_fpr7       EQU     $B4
+
+; DP-IMG promotion register file.  Each EQU is <= $FF so `STA _fcc_imgN`
+; assembles as 2-byte direct-page (opcode $85), landing at task-page + $C0+2N.
+; A promoted int/char scalar local lives here for its whole function instead
+; of thrashing its `n,S` frame slot.  See ir.c::ir_promote_locals.
+_fcc_img0       EQU     $C0
+_fcc_img1       EQU     $C2
+_fcc_img2       EQU     $C4
+_fcc_img3       EQU     $C6
+_fcc_img4       EQU     $C8
+_fcc_img5       EQU     $CA
+_fcc_img6       EQU     $CC
+_fcc_img7       EQU     $CE
+_fcc_img8       EQU     $D0
+_fcc_img9       EQU     $D2
+_fcc_img10      EQU     $D4
+_fcc_img11      EQU     $D6
+_fcc_img12      EQU     $D8
+_fcc_img13      EQU     $DA
+_fcc_img14      EQU     $DC
+_fcc_img15      EQU     $DE
+_fcc_ptr        EQU     $E8
+_fcc_long_hi    EQU     $EC
+_fcc_long_b_lo  EQU     $EE
+_fcc_long_b_hi  EQU     $F0
+_fcc_fp         EQU     $F8
+_fcc_ptr2       EQU     $FC
+
+;------------------------------------------------------------------------------
+; _fcc_sfoflow - SOFT-stack overflow trap (bank-0 stack campaign 1.3).
+;
+; Reached by a NEAR JMP from a cycle member's prologue when the new _fcc_sfp
+; would fall below FCC_SOFT_BOTTOM ($0100), or borrow past 0.  The soft stack
+; owns its bank outright and grows DOWN from $FFFE, so the only floor is the
+; bottom of that bank; page 0 is left unused so a runaway trips the guard rather
+; than wrapping into an offset that still looks valid.
+;
+; It exists because the DEPTH win moves O(recursion depth) of growth out of a
+; bank-0 arena that IS guarded -- fcc's prologue guard, plus the kernel's
+; syscall-entry floor check -- into a bank that was guarded by nothing.  Without
+; it a deep sourced script marches soft frames into the heap and corrupts it
+; silently, which is issue #4/#9/#11's class rebuilt in a new bank at exactly
+; the moment longer scripts become possible.
+;
+; Same distinct exit status as the hardware-stack trap: to a program it is one
+; condition, "this recursion was too deep".  The kernel's _Sys_Exit prints which
+; guard fired.
+;------------------------------------------------------------------------------
+_fcc_sfoflow    MX      %00
+                LDA     #_FCC_SFOFLOW_CODE
+                JSL     SYS_TRAMP
+                DFB     SYS_EXIT
+@sf_safety      BRA     @sf_safety          ; SYS_EXIT does not return
+
+;------------------------------------------------------------------------------
+; _fcc_stkoflow - hardware-stack overflow trap (P3-3 3.2b prologue guard).
+; Reached via a NEAR `JMP _fcc_stkoflow` from a guarded function's prologue
+; (this file is duplicated into every code segment, so the guard hits its own
+; bank's copy — a cross-bank JML operand would go unrelocated).  Fires when its
+; frame would drop S below _fcc_stkfloor (or wrap past 0).  The guard fires
+; BEFORE the frame's `TCS`, so S is still the caller's valid stack — safe to
+; JSL a syscall.  Aborts the task with a distinct exit code (134 = 128+SIGABRT
+; convention: "stack overflow, killed") so a runaway/mis-sized binary faults
+; loudly instead of scribbling below its stack pages.  Does not return.
+;   Caller MX %00, DBR = own data bank (as any guarded fn's prologue).
+;------------------------------------------------------------------------------
+_FCC_STKOFLOW_CODE EQU  134                 ; task exit status on stack overflow
+_FCC_SFOFLOW_CODE EQU   135                 ; ... and on SOFT-frame overflow.  A
+                                            ; separate code costs ZERO bytes here
+                                            ; (same LDA immediate) and is the only
+                                            ; way the kernel can say WHICH stack
+                                            ; ran out -- they were indistinguishable
+                                            ; and that cost a debugging cycle.
+_fcc_stkoflow   MX      %00
+                LDA     #_FCC_STKOFLOW_CODE
+                JSL     SYS_TRAMP
+                DFB     SYS_EXIT
+@so_safety      BRA     @so_safety          ; SYS_EXIT does not return
+
+;------------------------------------------------------------------------------
+; _fcc_safepoint - preemption P2' loop safepoint, SLOW PATH.  A compute-bound
+; loop that never makes a syscall still has to reach a scheduling boundary, so
+; fcc puts a safepoint at the top of every loop (while/do/for, and a backward
+; `goto', which K&R A.9.6 defines `continue' in terms of).
+;
+; THE TEST IS INLINE AT THE LOOP TOP and only the taken arm reaches here:
+;
+;                 LDAL    KFGX_YIELD_MIRROR
+;                 BEQ     *+5
+;                 JSR     _fcc_safepoint
+;
+; so the common path is 8 cycles with no call at all (emit_safepoint(), fcc's
+; emit.c).  This routine re-reads the mirror, which is redundant on that path
+; and is what keeps it correct for a direct call.
+;
+; THE MIRROR is KFGX_YIELD_MIRROR, fixed bank-0 $00030A, user-readable: set by
+; the heartbeat on quantum expiry or kbd input, cleared by the dispatcher.  If
+; set, this makes a SYS_YIELD, which is an ordinary syscall boundary -- so
+; quantum fairness AND signal delivery (Ctrl-C on a hung loop) both compose
+; here.
+; PRECONDITION (why no register save): the safepoint sits ONLY at a
+; loop TOP — the point just before the condition re-test / body entry — where A
+; and the N/Z flags are DEAD (the cond walk recomputes A from scratch).  So the
+; LDAL's clobber of A/flags is harmless and needs no PHP/PHA.  X/Y (loop
+; induction vars) ARE live, and are carried across the yield by the context
+; switch, so they need no save either.  The inline test clobbers exactly what
+; this routine already clobbered, which is why hoisting it needed no new
+; argument.  Do NOT call this from anywhere A/flags are live.
+; This file is duplicated into every code segment, so the JSR is always near.
+;------------------------------------------------------------------------------
+KFGX_YIELD_MIRROR EQU   $00030A             ; kernel-published, user-readable
+SYS_YIELD       EQU     79                  ; cooperative reschedule (no args)
+_fcc_safepoint  MX      %00
+                LDAL    KFGX_YIELD_MIRROR
+                BEQ     @sp_done
+                JSL     SYS_TRAMP
+                DFB     SYS_YIELD            ; 79 — cooperative, context-preserving
+@sp_done        RTS
+
+;------------------------------------------------------------------------------
+; _fcc_mul16 - 16-bit multiply, mod 2^16.  Signed and unsigned share the
+; low 16 bits, so this is unsigned shift-and-add.
+;   In:   A          = LHS
+;         _fcc_tmp_b = RHS
+;   Out:  A          = (LHS * RHS) & 0xFFFF
+;   Clobbers: X, _fcc_tmp_b (consumed), _fcc_mul_lhs, _fcc_mul_acc.  Y is
+;             left alone: it can hold a loop variable across the call.
+;   Caller MX %00.
+;
+; THE SMALLER OPERAND IS SCANNED, AND THE SCAN STOPS WHEN ITS BITS RUN OUT.
+; That is the early exit of llvm816's __mulhi3 (runtime/src/libgcc.s) and of
+; BBC BASIC 2's array-size multiply (omult33 in TobyLobster's multiply_test,
+; which counts it at 92 cycles on average there), with one unsigned compare
+; added to pick the shorter operand.  It stays in A, so a bit costs 20 cycles
+; when clear and 38 when set, and a product costs what its smaller operand's
+; length says -- an index times a 10-byte stride is four bits, where the
+; fixed 16 passes this replaces cost the same for 1 as for 65535.  Quarter-
+; square tables are faster again, but carry a 1 KB table, and this file is
+; copied into every code segment.
+;------------------------------------------------------------------------------
+_fcc_mul16      MX      %00
+                CMP     _fcc_tmp_b
+                BCC     @m_ord              ; LHS < RHS: scan LHS
+                LDX     _fcc_tmp_b          ; otherwise swap, so A is the
+                STA     _fcc_tmp_b          ;   smaller of the two
+                TXA
+@m_ord          LDX     _fcc_tmp_b
+                STX     _fcc_mul_lhs        ; the larger, doubled per bit
+                STZ     _fcc_mul_acc
+@m_lp           LSR                         ; C = this bit, Z = none left
+                TAX
+                BCC     @m_nobit
+                LDA     _fcc_mul_acc
+                CLC
+                ADC     _fcc_mul_lhs
+                STA     _fcc_mul_acc
+                TXA                         ; the bits left, and Z with them
+@m_nobit        BEQ     @m_done
+                ASL     _fcc_mul_lhs
+                BRA     @m_lp
+@m_done         LDA     _fcc_mul_acc
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_divs16 - signed 16-bit division, rounds toward zero.
+;   In:   A          = dividend (LHS)
+;         _fcc_tmp_b = divisor  (RHS)
+;   Out:  A          = quotient
+;   Clobbers: X, _fcc_tmp_b, scratch
+;   Div-by-zero returns 0 (UB in C).
+;   Caller MX %00.
+;
+; Algorithm: capture sign of each operand, take absolute values, run
+; unsigned 16-iter long-division (rem<<1|bit; if rem>=divisor SBC and
+; set quotient bit), then negate quotient if exactly one input was
+; negative.
+;------------------------------------------------------------------------------
+_fcc_divs16     MX      %00
+                LDX     _fcc_tmp_b
+                BNE     @ds_nonzero
+                LDA     #0
+                RTS
+
+@ds_nonzero     STA     _fcc_div_dvd        ; save dividend
+                LDA     #0
+                STA     _fcc_div_negq
+
+                ; |dividend|
+                LDA     _fcc_div_dvd
+                BPL     @ds_dvd_pos
+                EOR     #$FFFF
+                INC
+                STA     _fcc_div_dvd
+                LDA     _fcc_div_negq
+                EOR     #1
+                STA     _fcc_div_negq
+@ds_dvd_pos
+                ; |divisor|
+                LDA     _fcc_tmp_b
+                BPL     @ds_dvs_pos
+                EOR     #$FFFF
+                INC
+                STA     _fcc_tmp_b
+                LDA     _fcc_div_negq
+                EOR     #1
+                STA     _fcc_div_negq
+@ds_dvs_pos
+                ; Unsigned 16-bit long division: dvd / divisor.
+                LDA     #0
+                STA     _fcc_div_rem
+                STA     _fcc_div_quo
+                LDX     #16
+@ds_lp          ASL     _fcc_div_dvd        ; top bit -> C
+                ROL     _fcc_div_rem        ; rem = (rem<<1) | bit
+                ROL     _fcc_div_quo        ; quo <<= 1
+                LDA     _fcc_div_rem
+                CMP     _fcc_tmp_b
+                BCC     @ds_skip            ; rem < divisor → no subtract
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_div_rem
+                LDA     _fcc_div_quo
+                ORA     #1
+                STA     _fcc_div_quo
+@ds_skip        DEX
+                BNE     @ds_lp
+
+                LDA     _fcc_div_quo
+                LDX     _fcc_div_negq
+                BEQ     @ds_done
+                EOR     #$FFFF
+                INC
+@ds_done        RTS
+
+;------------------------------------------------------------------------------
+; _fcc_mods16 - signed 16-bit modulus.  Result has sign of dividend
+; (C99 truncated-division semantics).
+;   In:   A          = dividend
+;         _fcc_tmp_b = divisor
+;   Out:  A          = remainder (sign matches dividend)
+;   Clobbers: X, _fcc_tmp_b, scratch
+;   Mod-by-zero returns 0 (UB in C).
+;   Caller MX %00.
+;
+; Algorithm: capture dividend's sign, take |a| % |b| via the same
+; long-division loop as _fcc_divs16 (but keep the REMAINDER not the
+; quotient), then negate if the dividend was negative.
+;------------------------------------------------------------------------------
+_fcc_mods16     MX      %00
+                LDX     _fcc_tmp_b
+                BNE     @ms_nonzero
+                LDA     #0
+                RTS
+
+@ms_nonzero     STA     _fcc_div_dvd
+                LDA     #0
+                STA     _fcc_div_negq           ; reuse: sign of dividend
+
+                ; |dividend|, remembering sign for the result
+                LDA     _fcc_div_dvd
+                BPL     @ms_dvd_pos
+                EOR     #$FFFF
+                INC
+                STA     _fcc_div_dvd
+                LDA     #1
+                STA     _fcc_div_negq
+@ms_dvd_pos
+                ; |divisor| (sign discarded — modulus result follows
+                ; dividend's sign only)
+                LDA     _fcc_tmp_b
+                BPL     @ms_dvs_pos
+                EOR     #$FFFF
+                INC
+                STA     _fcc_tmp_b
+@ms_dvs_pos
+                ; Unsigned 16-bit long-division loop, same as _fcc_divs16
+                ; but we keep _fcc_div_rem as the final result.
+                LDA     #0
+                STA     _fcc_div_rem
+                STA     _fcc_div_quo
+                LDX     #16
+@ms_lp          ASL     _fcc_div_dvd
+                ROL     _fcc_div_rem
+                ROL     _fcc_div_quo
+                LDA     _fcc_div_rem
+                CMP     _fcc_tmp_b
+                BCC     @ms_skip
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_div_rem
+                LDA     _fcc_div_quo
+                ORA     #1
+                STA     _fcc_div_quo
+@ms_skip        DEX
+                BNE     @ms_lp
+
+                LDA     _fcc_div_rem
+                LDX     _fcc_div_negq
+                BEQ     @ms_done
+                EOR     #$FFFF
+                INC
+@ms_done        RTS
+
+;------------------------------------------------------------------------------
+; _fcc_eq16 - A == _fcc_tmp_b → A=1 else A=0.
+;------------------------------------------------------------------------------
+_fcc_eq16       MX      %00
+                CMP     _fcc_tmp_b
+                BEQ     @eq_yes
+                LDA     #0
+                RTS
+@eq_yes         LDA     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_ne16 - A != _fcc_tmp_b → A=1 else A=0.
+;------------------------------------------------------------------------------
+_fcc_ne16       MX      %00
+                CMP     _fcc_tmp_b
+                BEQ     @ne_no
+                LDA     #1
+                RTS
+@ne_no          LDA     #0
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_lts16 - signed A < _fcc_tmp_b → A=1 else A=0.
+;   Standard N-XOR-V trick: subtract, then if V was set, flip the
+;   sign bit so the N flag reflects (N XOR V).
+;------------------------------------------------------------------------------
+_fcc_lts16      MX      %00
+                SEC
+                SBC     _fcc_tmp_b          ; A = LHS - RHS, sets N + V
+                BVC     @lts_check
+                EOR     #$8000              ; flip sign so N := N XOR V
+@lts_check      BMI     @lts_yes
+                LDA     #0
+                RTS
+@lts_yes        LDA     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_gts16 - signed A > _fcc_tmp_b → A=1 else A=0.
+;   Equivalent to RHS < LHS.  Swap A and _fcc_tmp_b, then JMP to lts16
+;   (tail call: same caller frame).
+;------------------------------------------------------------------------------
+_fcc_gts16      MX      %00
+                STA     _fcc_cmp_scratch    ; save LHS
+                LDA     _fcc_tmp_b          ; A = RHS
+                STA     _fcc_cmp_swap
+                LDA     _fcc_cmp_scratch    ; A = LHS
+                STA     _fcc_tmp_b          ; tmp_b := LHS
+                LDA     _fcc_cmp_swap       ; A := RHS
+                JMP     _fcc_lts16
+
+;------------------------------------------------------------------------------
+; _fcc_les16 - signed A <= _fcc_tmp_b → A=1 else A=0.
+;   NOT (A > _fcc_tmp_b).
+;------------------------------------------------------------------------------
+_fcc_les16      MX      %00
+                JSR     _fcc_gts16
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_ges16 - signed A >= _fcc_tmp_b → A=1 else A=0.
+;   NOT (A < _fcc_tmp_b).
+;------------------------------------------------------------------------------
+_fcc_ges16      MX      %00
+                JSR     _fcc_lts16
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_shl16 - logical left shift, A <<= _fcc_tmp_b.
+;   In:   A          = value
+;         _fcc_tmp_b = count (low byte used)
+;   Out:  A          = value << count
+;   Clobbers: X.  count=0 leaves A unchanged.
+;------------------------------------------------------------------------------
+_fcc_shl16      MX      %00
+                LDX     _fcc_tmp_b
+                BEQ     @shldn
+@shllp          ASL
+                DEX
+                BNE     @shllp
+@shldn          RTS
+
+;------------------------------------------------------------------------------
+; _fcc_shr16 - logical right shift, A >>= _fcc_tmp_b.
+;------------------------------------------------------------------------------
+_fcc_shr16      MX      %00
+                LDX     _fcc_tmp_b
+                BEQ     @shrdn
+@shrlp          LSR
+                DEX
+                BNE     @shrlp
+@shrdn          RTS
+
+;==============================================================================
+; A-1 — unsigned 16-bit compare / divide / modulo.  Same convention as the
+; signed *s16 helpers: A = LHS, _fcc_tmp_b = RHS, result in A, caller MX %00.
+; Compares use the carry flag (CMP sets C iff A >= RHS unsigned); divide/mod
+; lift the unsigned long-division loop from _fcc_divs16 sans sign fix-up.
+;==============================================================================
+
+;------------------------------------------------------------------------------
+; _fcc_ltu16 - unsigned A < _fcc_tmp_b → A=1 else A=0.
+;------------------------------------------------------------------------------
+_fcc_ltu16      MX      %00
+                CMP     _fcc_tmp_b          ; C clear iff A < RHS (unsigned)
+                BCC     @ltu_yes
+                LDA     #0
+                RTS
+@ltu_yes        LDA     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_gtu16 - unsigned A > _fcc_tmp_b → A=1 else A=0.
+;   A > RHS  ==  RHS < A: swap operands, tail-call _fcc_ltu16.
+;------------------------------------------------------------------------------
+_fcc_gtu16      MX      %00
+                STA     _fcc_cmp_scratch    ; save LHS
+                LDA     _fcc_tmp_b          ; A = RHS
+                STA     _fcc_cmp_swap
+                LDA     _fcc_cmp_scratch    ; A = LHS
+                STA     _fcc_tmp_b          ; tmp_b := LHS
+                LDA     _fcc_cmp_swap       ; A := RHS
+                JMP     _fcc_ltu16
+
+;------------------------------------------------------------------------------
+; _fcc_leu16 - unsigned A <= _fcc_tmp_b → A=1 else A=0.  NOT (A > RHS).
+;------------------------------------------------------------------------------
+_fcc_leu16      MX      %00
+                JSR     _fcc_gtu16
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_geu16 - unsigned A >= _fcc_tmp_b → A=1 else A=0.  NOT (A < RHS).
+;------------------------------------------------------------------------------
+_fcc_geu16      MX      %00
+                JSR     _fcc_ltu16
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_divu16 - unsigned 16-bit division.  A=dividend, _fcc_tmp_b=divisor.
+;   Out A = quotient.  Div-by-zero → 0 (UB in C).
+;------------------------------------------------------------------------------
+_fcc_divu16     MX      %00
+                LDX     _fcc_tmp_b
+                BNE     @du_nz
+                LDA     #0
+                RTS
+@du_nz          STA     _fcc_div_dvd
+                LDA     #0
+                STA     _fcc_div_rem
+                STA     _fcc_div_quo
+                LDX     #16
+@du_lp          ASL     _fcc_div_dvd
+                ROL     _fcc_div_rem
+                ROL     _fcc_div_quo
+                LDA     _fcc_div_rem
+                CMP     _fcc_tmp_b
+                BCC     @du_skip
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_div_rem
+                LDA     _fcc_div_quo
+                ORA     #1
+                STA     _fcc_div_quo
+@du_skip        DEX
+                BNE     @du_lp
+                LDA     _fcc_div_quo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_modu16 - unsigned 16-bit modulus.  A=dividend, _fcc_tmp_b=divisor.
+;   Out A = remainder.  Mod-by-zero → 0 (UB in C).
+;------------------------------------------------------------------------------
+_fcc_modu16     MX      %00
+                LDX     _fcc_tmp_b
+                BNE     @mu_nz
+                LDA     #0
+                RTS
+@mu_nz          STA     _fcc_div_dvd
+                LDA     #0
+                STA     _fcc_div_rem
+                STA     _fcc_div_quo
+                LDX     #16
+@mu_lp          ASL     _fcc_div_dvd
+                ROL     _fcc_div_rem
+                ROL     _fcc_div_quo
+                LDA     _fcc_div_rem
+                CMP     _fcc_tmp_b
+                BCC     @mu_skip
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_div_rem
+                LDA     _fcc_div_quo
+                ORA     #1
+                STA     _fcc_div_quo
+@mu_skip        DEX
+                BNE     @mu_lp
+                LDA     _fcc_div_rem
+                RTS
+
+;==============================================================================
+; M20 — 32-bit long helpers.  "Long in A" carrying convention: low word in A,
+; high word in _fcc_long_hi DP slot.  RHS for binops in _fcc_long_b_lo /
+; _fcc_long_b_hi.  All helpers preserve caller MX %00.
+;==============================================================================
+
+;------------------------------------------------------------------------------
+; _fcc_bank_for_int - apple/fgx#12: the BANK an integer takes when it becomes a
+; pointer.  A = the integer (which is the pointer's offset) on entry; A = the
+; bank on return.  Caller MX %00; call it BEFORE any SEP to 8-bit, since the
+; test must see the whole 16-bit offset.
+;
+; Offset 0 is the NULL pointer and MUST keep bank 0: fcc #6 made the far-pointer
+; truth test compare bank AND offset, so a DBR:0000 "null" reads as TRUE and
+; every `if (p)` / NULL-terminated walk on it runs on.  2.11BSD sh hits this in
+; its hottest path -- macro.c:86 `v = (... : (dolg=0))` assigns a RUNTIME zero
+; to a pointer for an unset positional parameter, and getch() runs that for
+; every `$` expansion.
+;
+; This is the half of ccom's rule that does not survive the port.  ccom cancels
+; the int->pointer conversion and takes the bits verbatim (c01.c:250), which on
+; a PDP-11 silently carries the guarantee that a runtime integer zero IS the
+; null pointer, because there sizeof(int) == sizeof(char*).  On FGX the bank has
+; to be invented, so the guarantee has to be restored explicitly.
+;------------------------------------------------------------------------------
+_fcc_bank_for_int   MX  %00
+                CMP     #0
+                BEQ     @bfi_null
+                ; THE LIVE DATA BANK, NOT A SNAPSHOT OF IT.  This read
+                ; `_fcc_dbr', a cell crt0 (crt0_lib.s) and _libc_start
+                ; (libc_start.s) seed once from DBR on the grounds that DBR
+                ; never changes in user code, so one snapshot serves every
+                ; conversion site.  That premise is true of a user program and FALSE of
+                ; the kernel, which has no crt0 and several data banks: the far
+                ; bank, the tty bank and every module PUT this runtime and each
+                ; gets its OWN copy of the cell, image-zero and never written.
+                ; So every runtime int->pointer cast in kernel C reconstituted
+                ; BANK 0 -- measured, apple/fgx#234: `cinit' built the whole
+                ; clist free chain through bank-0 pointers, putting the pool at
+                ; bank 0 $2E80..$3240 inside the STK_PAINT user-stack arena,
+                ; where a later spawn's paint fill overwrote the chain links.
+                ; The tty bank's own `cfree[]' was all 1,024 bytes still
+                ; image-zero on a booted machine.
+                ;
+                ; Reading DBR is what the snapshot was approximating, so it is
+                ; identical in userland and correct everywhere else.  Two PHBs
+                ; and one 16-bit PLA: the pull takes both copies, and the AND
+                ; keeps the low one.  The stack is balanced.
+                PHB
+                PHB
+                PLA
+                AND     #$00FF
+                RTS
+@bfi_null       LDA     #0
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_bank_from_carrier - apple/fgx#42: the bank a STRUCT VALUE already has.
+;
+; A struct value is an ADDRESS carried the legacy way (A = offset, _fcc_ptr+2 =
+; bank), and that bank is its storage's -- 0 for a hardware frame, DBR for a
+; global or a soft frame.  Casting it to a pointer is a RETYPE, so the bank must
+; come from the CARRIER, never from _fcc_bank_for_int's int->pointer rule (which
+; stamps DBR unconditionally and made `(char *)automatic_struct` address the
+; data bank at a bank-0 frame offset).
+;
+; This exists as a JSR rather than an inline SEP/LDA/STA/REP island purely for
+; SIZE: it makes the correct sequence byte-identical to the wrong one it
+; replaces (STA/JSR/STA/LDA), and tcsh packs into its 7 code banks with 268
+; bytes to spare -- an inline bridge does not fit.
+;
+; A = offset on entry (contract shared with _fcc_bank_for_int, ignored here);
+; A = bank on return, high byte cleared so the caller's 16-bit STA fprK+2 also
+; zeroes the pad byte.  Caller MX %00.
+;------------------------------------------------------------------------------
+_fcc_bank_from_carrier  MX  %00
+                LDA     _fcc_ptr+2
+                AND     #$00FF
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_from_int - sign-extend A → (A, _fcc_long_hi).
+;------------------------------------------------------------------------------
+_fcc_long_from_int  MX  %00
+                BPL     @lfi_pos
+                LDX     #$FFFF
+                STX     _fcc_long_hi
+                RTS
+@lfi_pos        LDX     #0
+                STX     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_add - (A, _fcc_long_hi) += (_fcc_long_b_lo, _fcc_long_b_hi).
+;------------------------------------------------------------------------------
+_fcc_long_add   MX      %00
+                CLC
+                ADC     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                ADC     _fcc_long_b_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_sub - (A, _fcc_long_hi) -= (_fcc_long_b_lo, _fcc_long_b_hi).
+;------------------------------------------------------------------------------
+_fcc_long_sub   MX      %00
+                SEC
+                SBC     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                SBC     _fcc_long_b_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_neg - (A, _fcc_long_hi) = -(A, _fcc_long_hi).
+;------------------------------------------------------------------------------
+_fcc_long_neg   MX      %00
+                EOR     #$FFFF
+                CLC
+                ADC     #1
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                EOR     #$FFFF
+                ADC     #0
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_not - (A, _fcc_long_hi) = ~(A, _fcc_long_hi).  apple/fgx#209.
+;
+; BOTH WORDS, which is the whole point: `~' used to be emitted as a bare
+; `EOR #$FFFF' on A with the high word passed through untouched, so
+; ~0x00800000L came out as 0x0080FFFF and `x &= ~MASK' cleared NOTHING above
+; bit 15 -- silently.
+;
+; _fcc_long_b_lo as the parking spot, exactly as _fcc_long_neg above uses it:
+; the low word has to survive the high word's load, and A is the only register
+; the long carrier owns.
+;------------------------------------------------------------------------------
+_fcc_long_not   MX      %00
+                EOR     #$FFFF
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                EOR     #$FFFF
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_mul - (A, _fcc_long_hi) *= (b_lo, b_hi).
+; 32-bit shift-and-add multiply mod 2^32.  _fcc_long_b_lo/_hi are consumed.
+;
+; The smaller operand is scanned and the scan stops when its bits run out, as
+; _fcc_mul16 does and for the reason given there: the fixed 32 passes this
+; replaces cost the same for a multiplier of 1 as for 2^32-1.  The compare is
+; unsigned and whole-word, high halves first; the low 32 bits of a product
+; are the same whichever operand is scanned, and whatever the signs.
+;------------------------------------------------------------------------------
+_fcc_long_mul   MX      %00
+                STA     _fcc_long_mul_lhs_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_mul_lhs_hi
+                CMP     _fcc_long_b_hi
+                BCC     @lm_swap            ; LHS high < B high: scan LHS
+                BNE     @lm_ord             ; LHS high > B high: scan B
+                LDA     _fcc_long_mul_lhs_lo
+                CMP     _fcc_long_b_lo
+                BCS     @lm_ord             ; LHS >= B: scan B
+@lm_swap        LDA     _fcc_long_b_lo
+                LDX     _fcc_long_mul_lhs_lo
+                STA     _fcc_long_mul_lhs_lo
+                STX     _fcc_long_b_lo
+                LDA     _fcc_long_b_hi
+                LDX     _fcc_long_mul_lhs_hi
+                STA     _fcc_long_mul_lhs_hi
+                STX     _fcc_long_b_hi
+@lm_ord         STZ     _fcc_long_mul_acc_lo
+                STZ     _fcc_long_mul_acc_hi
+@lm_lp          LDA     _fcc_long_b_lo
+                ORA     _fcc_long_b_hi
+                BEQ     @lm_done
+                LSR     _fcc_long_b_hi
+                ROR     _fcc_long_b_lo
+                BCC     @lm_noadd
+                LDA     _fcc_long_mul_acc_lo
+                CLC
+                ADC     _fcc_long_mul_lhs_lo
+                STA     _fcc_long_mul_acc_lo
+                LDA     _fcc_long_mul_acc_hi
+                ADC     _fcc_long_mul_lhs_hi
+                STA     _fcc_long_mul_acc_hi
+@lm_noadd       ASL     _fcc_long_mul_lhs_lo
+                ROL     _fcc_long_mul_lhs_hi
+                BRA     @lm_lp
+@lm_done        LDA     _fcc_long_mul_acc_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_mul_acc_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_divs - signed 32-bit division.  Divisor 0 returns 0.
+;------------------------------------------------------------------------------
+_fcc_long_divs  MX      %00
+                LDX     _fcc_long_b_lo
+                BNE     @lds_nz
+                LDX     _fcc_long_b_hi
+                BNE     @lds_nz
+                LDA     #0
+                STA     _fcc_long_hi
+                RTS
+@lds_nz         STA     _fcc_long_div_dvd_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_div_dvd_hi
+                LDA     #0
+                STA     _fcc_long_div_negq
+
+                LDA     _fcc_long_div_dvd_hi
+                BPL     @lds_dpos
+                LDA     _fcc_long_div_dvd_lo
+                EOR     #$FFFF
+                CLC
+                ADC     #1
+                STA     _fcc_long_div_dvd_lo
+                LDA     _fcc_long_div_dvd_hi
+                EOR     #$FFFF
+                ADC     #0
+                STA     _fcc_long_div_dvd_hi
+                LDA     _fcc_long_div_negq
+                EOR     #1
+                STA     _fcc_long_div_negq
+@lds_dpos
+                LDA     _fcc_long_b_hi
+                BPL     @lds_vpos
+                LDA     _fcc_long_b_lo
+                EOR     #$FFFF
+                CLC
+                ADC     #1
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_b_hi
+                EOR     #$FFFF
+                ADC     #0
+                STA     _fcc_long_b_hi
+                LDA     _fcc_long_div_negq
+                EOR     #1
+                STA     _fcc_long_div_negq
+@lds_vpos
+                LDA     #0
+                STA     _fcc_long_div_rem_lo
+                STA     _fcc_long_div_rem_hi
+                STA     _fcc_long_div_quo_lo
+                STA     _fcc_long_div_quo_hi
+                LDX     #32
+@lds_lp         ASL     _fcc_long_div_dvd_lo
+                ROL     _fcc_long_div_dvd_hi
+                ROL     _fcc_long_div_rem_lo
+                ROL     _fcc_long_div_rem_hi
+                ROL     _fcc_long_div_quo_lo
+                ROL     _fcc_long_div_quo_hi
+                LDA     _fcc_long_div_rem_hi
+                CMP     _fcc_long_b_hi
+                BCC     @lds_skip
+                BNE     @lds_sub
+                LDA     _fcc_long_div_rem_lo
+                CMP     _fcc_long_b_lo
+                BCC     @lds_skip
+@lds_sub        LDA     _fcc_long_div_rem_lo
+                SEC
+                SBC     _fcc_long_b_lo
+                STA     _fcc_long_div_rem_lo
+                LDA     _fcc_long_div_rem_hi
+                SBC     _fcc_long_b_hi
+                STA     _fcc_long_div_rem_hi
+                LDA     _fcc_long_div_quo_lo
+                ORA     #1
+                STA     _fcc_long_div_quo_lo
+@lds_skip       DEX
+                BNE     @lds_lp
+
+                LDA     _fcc_long_div_quo_lo
+                LDX     _fcc_long_div_negq
+                BEQ     @lds_done
+                EOR     #$FFFF
+                CLC
+                ADC     #1
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_div_quo_hi
+                EOR     #$FFFF
+                ADC     #0
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+@lds_done       STA     _fcc_long_b_lo
+                LDA     _fcc_long_div_quo_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_mods - signed 32-bit modulo.
+;
+; THE DIVIDE LOOP ALREADY COMPUTED THIS, as it did for _fcc_long_modu.  divs
+; runs its restoring loop on the ABSOLUTE values and leaves |dvd| % |dvr| in
+; _fcc_long_div_rem_*; the old body threw that away and rebuilt it with a
+; 32-bit multiply and a 32-bit subtract -- evaluating the left side of K&R
+; A.7.6's own identity to recover a value the loop had already produced: "it is
+; always true that (a/b)*b + a%b is equal to a" (2nd ed p.166).
+;
+; THE SIGN IS THE DIVIDEND'S, and it has to be taken HERE.  _fcc_long_div_negq
+; is the XOR of the two operands' signs -- the QUOTIENT's sign -- and is the
+; wrong answer whenever the divisor is negative.  A.7.6 does not mandate which
+; sign the remainder takes; it requires only that the identity above holds and
+; that |a%b| < |b|.  divs truncates toward zero, so the identity FIXES the
+; remainder's sign as the dividend's, which is also what this routine has
+; always returned.
+;
+; DIVISOR ZERO IS CHECKED HERE, not left to divs, for the reason modu states:
+; divs's zero arm returns before the loop runs, which would leave
+; _fcc_long_div_rem_* holding the PREVIOUS operation's remainder.  Answering
+; the dividend, as dvd - 0*0 did, is both deterministic and what callers have
+; been getting.
+;------------------------------------------------------------------------------
+_fcc_long_mods  MX      %00
+                LDX     _fcc_long_b_lo
+                BNE     @lmods_go
+                LDX     _fcc_long_b_hi
+                BNE     @lmods_go
+                RTS                             ; A/_fcc_long_hi are still the
+                                                ;   dividend, untouched
+@lmods_go         STA     _fcc_long_mods_dvd_lo   ; park it: the sign test below
+                LDA     _fcc_long_hi            ;   needs the high word, and
+                STA     _fcc_long_mods_dvd_hi   ;   divs consumes both
+                LDA     _fcc_long_mods_dvd_lo
+                JSR     _fcc_long_divs          ; leaves |dvd| % |dvr| in rem_*
+                LDA     _fcc_long_div_rem_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_div_rem_lo
+                LDX     _fcc_long_mods_dvd_hi   ; sets N from the DIVIDEND's
+                BPL     @lmods_dn               ;   high word; A is untouched
+                EOR     #$FFFF                  ; negate the 32-bit remainder
+                CLC
+                ADC     #1
+                STA     _fcc_long_mods_dvd_lo
+                LDA     _fcc_long_hi
+                EOR     #$FFFF
+                ADC     #0
+                STA     _fcc_long_hi
+                LDA     _fcc_long_mods_dvd_lo
+@lmods_dn       RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_shl - (A, _fcc_long_hi) <<= _fcc_long_b_lo (count, low byte).
+;------------------------------------------------------------------------------
+_fcc_long_shl   MX      %00
+                STA     _fcc_long_b_hi          ; reuse: stash low (b_hi was count high, unused)
+                LDX     _fcc_long_b_lo
+                BEQ     @lsl_dn
+@lsl_lp         ASL     _fcc_long_b_hi
+                ROL     _fcc_long_hi
+                DEX
+                BNE     @lsl_lp
+@lsl_dn         LDA     _fcc_long_b_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_shr - arithmetic right shift (sign-preserving).
+;------------------------------------------------------------------------------
+_fcc_long_shr   MX      %00
+                STA     _fcc_long_b_hi
+                LDX     _fcc_long_b_lo
+                BEQ     @lsr_dn
+@lsr_lp         LDA     _fcc_long_hi
+                AND     #$8000
+                LSR     _fcc_long_hi
+                ROR     _fcc_long_b_hi
+                ORA     _fcc_long_hi
+                STA     _fcc_long_hi
+                DEX
+                BNE     @lsr_lp
+@lsr_dn         LDA     _fcc_long_b_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_and / _or / _xor - 32-bit bitwise.
+;------------------------------------------------------------------------------
+_fcc_long_and   MX      %00
+                AND     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                AND     _fcc_long_b_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+_fcc_long_or    MX      %00
+                ORA     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                ORA     _fcc_long_b_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+_fcc_long_xor   MX      %00
+                EOR     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                EOR     _fcc_long_b_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_eq / _ne - 32-bit equality.  Result in A (0/1), hi=0.
+;------------------------------------------------------------------------------
+_fcc_long_eq    MX      %00
+                CMP     _fcc_long_b_lo
+                BNE     @leq_no
+                LDA     _fcc_long_hi
+                CMP     _fcc_long_b_hi
+                BNE     @leq_no
+                LDA     #1
+                STZ     _fcc_long_hi
+                RTS
+@leq_no         LDA     #0
+                STZ     _fcc_long_hi
+                RTS
+
+_fcc_long_ne    MX      %00
+                JSR     _fcc_long_eq
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_lts - signed (A, _fcc_long_hi) < (b_lo, b_hi).
+;------------------------------------------------------------------------------
+_fcc_long_lts   MX      %00
+                SEC
+                SBC     _fcc_long_b_lo
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                SBC     _fcc_long_b_hi
+                BVC     @llts_ck
+                EOR     #$8000
+@llts_ck        BMI     @llts_yes
+                LDA     #0
+                STZ     _fcc_long_hi
+                RTS
+@llts_yes       LDA     #1
+                STZ     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_gts / _les / _ges - derived.
+;------------------------------------------------------------------------------
+_fcc_long_gts   MX      %00
+                ; gts(LHS, RHS) = lts(RHS, LHS).  Swap (A, hi) with (b_lo, b_hi)
+                ; using two tmp slots so we don't clobber mid-swap.
+                STA     _fcc_long_gts_tmp_lo     ; tmp_lo := LHS lo (A)
+                LDX     _fcc_long_hi
+                STX     _fcc_long_gts_tmp_hi     ; tmp_hi := LHS hi
+                LDX     _fcc_long_b_lo
+                STX     _fcc_long_gts_swap_lo    ; swap_lo := RHS lo
+                LDX     _fcc_long_b_hi
+                STX     _fcc_long_gts_swap_hi    ; swap_hi := RHS hi
+                ; Now move tmp (orig LHS) into b, and swap (orig RHS) into A:hi.
+                LDX     _fcc_long_gts_tmp_lo
+                STX     _fcc_long_b_lo
+                LDX     _fcc_long_gts_tmp_hi
+                STX     _fcc_long_b_hi
+                LDA     _fcc_long_gts_swap_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_gts_swap_lo
+                JMP     _fcc_long_lts
+
+_fcc_long_les   MX      %00
+                JSR     _fcc_long_gts
+                EOR     #1
+                RTS
+
+_fcc_long_ges   MX      %00
+                JSR     _fcc_long_lts
+                EOR     #1
+                RTS
+
+;==============================================================================
+; A-1 — UNSIGNED 32-bit compare / divide / modulo / logical shr.
+; Same ABI as the signed long family: LHS in (A : _fcc_long_hi), RHS in
+; (_fcc_long_b_lo : _fcc_long_b_hi); compares return 0/1 in A with
+; _fcc_long_hi zeroed; div/mod/shr return the 32-bit result in (A : hi).
+;==============================================================================
+
+;------------------------------------------------------------------------------
+; _fcc_long_ltu - unsigned (A, hi) < (b_lo, b_hi): 32-bit subtract, borrow
+; (C clear) means LHS < RHS.  No overflow dance needed.
+;------------------------------------------------------------------------------
+_fcc_long_ltu   MX      %00
+                SEC
+                SBC     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                SBC     _fcc_long_b_hi
+                BCC     @lltu_yes
+                LDA     #0
+                STZ     _fcc_long_hi
+                RTS
+@lltu_yes       LDA     #1
+                STZ     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_gtu / _leu / _geu - derived (same swap cells as the signed gts).
+;------------------------------------------------------------------------------
+_fcc_long_gtu   MX      %00
+                STA     _fcc_long_gts_tmp_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_gts_tmp_hi
+                LDX     _fcc_long_b_lo
+                STX     _fcc_long_gts_swap_lo
+                LDX     _fcc_long_b_hi
+                STX     _fcc_long_gts_swap_hi
+                LDX     _fcc_long_gts_tmp_lo
+                STX     _fcc_long_b_lo
+                LDX     _fcc_long_gts_tmp_hi
+                STX     _fcc_long_b_hi
+                LDA     _fcc_long_gts_swap_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_gts_swap_lo
+                JMP     _fcc_long_ltu
+
+_fcc_long_leu   MX      %00
+                JSR     _fcc_long_gtu
+                EOR     #1
+                RTS
+
+_fcc_long_geu   MX      %00
+                JSR     _fcc_long_ltu
+                EOR     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_divu - unsigned 32-bit divide.  The _fcc_long_divs core WITHOUT
+; the sign-strip prologue / negate epilogue (those run on BMI, which is
+; exactly wrong for unsigned operands >= $80000000).  Deliberately a
+; standalone copy of the 32-iteration restoring loop: Merlin @-locals are
+; scoped per global label, so the signed core can't be branched into, and
+; restructuring the proven signed path for sharing isn't worth the risk.
+; Divide-by-zero returns 0 (matches divs).  Same _fcc_long_div_* scratch.
+;------------------------------------------------------------------------------
+_fcc_long_divu  MX      %00
+                LDX     _fcc_long_b_lo
+                BNE     @ldu_nz
+                LDX     _fcc_long_b_hi
+                BNE     @ldu_nz
+                LDA     #0
+                STA     _fcc_long_hi
+                RTS
+@ldu_nz         STA     _fcc_long_div_dvd_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_div_dvd_hi
+                LDA     #0
+                STA     _fcc_long_div_rem_lo
+                STA     _fcc_long_div_rem_hi
+                STA     _fcc_long_div_quo_lo
+                STA     _fcc_long_div_quo_hi
+                LDX     #32
+@ldu_lp         ASL     _fcc_long_div_dvd_lo
+                ROL     _fcc_long_div_dvd_hi
+                ROL     _fcc_long_div_rem_lo
+                ROL     _fcc_long_div_rem_hi
+                ROL     _fcc_long_div_quo_lo
+                ROL     _fcc_long_div_quo_hi
+                LDA     _fcc_long_div_rem_hi
+                CMP     _fcc_long_b_hi
+                BCC     @ldu_skip
+                BNE     @ldu_sub
+                LDA     _fcc_long_div_rem_lo
+                CMP     _fcc_long_b_lo
+                BCC     @ldu_skip
+@ldu_sub        LDA     _fcc_long_div_rem_lo
+                SEC
+                SBC     _fcc_long_b_lo
+                STA     _fcc_long_div_rem_lo
+                LDA     _fcc_long_div_rem_hi
+                SBC     _fcc_long_b_hi
+                STA     _fcc_long_div_rem_hi
+                LDA     _fcc_long_div_quo_lo
+                ORA     #1
+                STA     _fcc_long_div_quo_lo
+@ldu_skip       DEX
+                BNE     @ldu_lp
+                LDA     _fcc_long_div_quo_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_div_quo_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_modu - unsigned 32-bit modulo.
+;
+; THE DIVIDE LOOP ALREADY COMPUTED THIS.  _fcc_long_divu's restoring loop leaves
+; the remainder in _fcc_long_div_rem_*, and the old body threw it away and
+; recovered it with a 32-bit multiply and a 32-bit subtract -- computing the
+; left side of K&R A.7.6's own identity to get back a value the loop had
+; produced: "it is always true that (a/b)*b + a%b is equal to a" (2nd ed p.166).
+; _fcc_mods16 is the template; it runs the same loop as _fcc_divs16 and keeps
+; the REMAINDER rather than the quotient.
+;
+; DIVISOR ZERO IS CHECKED HERE, not left to divu.  A.7.6 makes the result
+; undefined, so any answer conforms -- but divu's zero arm returns before the
+; loop runs, which would leave _fcc_long_div_rem_* holding the PREVIOUS
+; operation's remainder.  Answering the dividend, as dvd - 0*0 did, is both
+; deterministic and what callers have been getting.
+;------------------------------------------------------------------------------
+_fcc_long_modu  MX      %00
+                LDX     _fcc_long_b_lo
+                BNE     @lmu_go
+                LDX     _fcc_long_b_hi
+                BNE     @lmu_go
+                RTS                             ; A/_fcc_long_hi are still the
+                                                ;   dividend, untouched
+@lmu_go         JSR     _fcc_long_divu
+                LDA     _fcc_long_div_rem_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_long_div_rem_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_shru - LOGICAL right shift (zero-filling) — unsigned long >>.
+; (The arithmetic _fcc_long_shr sign-fills; wrong for unsigned.)
+;------------------------------------------------------------------------------
+_fcc_long_shru  MX      %00
+                STA     _fcc_long_b_hi          ; stash low (count is in b_lo)
+                LDX     _fcc_long_b_lo
+                BEQ     @lsru_dn
+@lsru_lp        LSR     _fcc_long_hi
+                ROR     _fcc_long_b_hi
+                DEX
+                BNE     @lsru_lp
+@lsru_dn        LDA     _fcc_long_b_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_shrs16 - ARITHMETIC 16-bit right shift (sign-preserving) — signed >>.
+; (_fcc_shr16 is logical/LSR; correct for unsigned, wrong for a negative
+; signed LHS, which zero-filled before A-1.)  A = value, _fcc_tmp_b = count.
+; CMP #$8000 sets C iff the sign bit is set; ROR feeds it back into bit 15.
+;------------------------------------------------------------------------------
+_fcc_shrs16     MX      %00
+                LDX     _fcc_tmp_b
+                BEQ     @sas_dn
+@sas_lp         CMP     #$8000
+                ROR
+                DEX
+                BNE     @sas_lp
+@sas_dn         RTS
+
+;==============================================================================
+; B-6 softfloat — IEEE-754 single precision (float == double).
+;
+; ABI mirrors the long convention: a float lives in (A : _fcc_long_hi)
+; (low 16 in A, high 16 in _fcc_long_hi); the second operand is in
+; (_fcc_long_b_lo : _fcc_long_b_hi).  Results return in (A : _fcc_long_hi).
+; All entries: caller MX %00, DBR = own bank.
+;
+; Layout: bit31 sign | bits30..23 exponent (bias 127) | bits22..0 mantissa
+; (implicit leading 1).  No NaN/Inf/denormal generation (flush-to-zero on
+; tiny results); adequate for the cc65-class single-precision target.
+;
+; Arithmetic (fmul/fadd/fsub/fdiv) and the (float)long cast (ltof) round to
+; nearest, ties to even, via _fcc_fround.  ftoi/ftol/ffloor truncate toward
+; zero (C cast / printf integer-part semantics — correct as-is).
+;==============================================================================
+
+;------------------------------------------------------------------------------
+; _fcc_fround - apply round-to-nearest-even to a 24-bit mantissa.
+;   In:  _fcc_f_lo:_fcc_f_hi = mantissa (leading 1 at bit 23, implicit bit
+;          still present), _fcc_f_guard (nonzero => guard bit set),
+;          _fcc_f_sticky (nonzero => some lower dropped bit set),
+;          _fcc_f_exp = exponent field.
+;   Out: mantissa rounded; on carry into bit 24, mantissa >>=1 and f_exp++.
+;   Rule: round up iff guard && (sticky || mantissa-LSB).  Clobbers A.
+;------------------------------------------------------------------------------
+_fcc_fround     MX      %00
+                LDA     _fcc_f_guard
+                BEQ     @frd_done           ; guard 0 -> truncate
+                LDA     _fcc_f_sticky
+                BNE     @frd_up             ; guard & sticky -> round up
+                LDA     _fcc_f_lo           ; exact tie -> round to even
+                AND     #1
+                BEQ     @frd_done           ; LSB already even -> keep
+@frd_up         INC     _fcc_f_lo
+                BNE     @frd_ovf
+                INC     _fcc_f_hi
+@frd_ovf        LDA     _fcc_f_hi           ; carried into bit 24?
+                AND     #$0100
+                BEQ     @frd_done
+                LSR     _fcc_f_hi           ; renormalize: >>1, exp++
+                ROR     _fcc_f_lo
+                INC     _fcc_f_exp
+@frd_done       RTS
+
+;------------------------------------------------------------------------------
+; _fcc_itof - signed 16-bit int (A) -> IEEE-754 single in (A:_fcc_long_hi).
+; A 16-bit int converts EXACTLY (mantissa needs <= 15 bits), so no rounding.
+;------------------------------------------------------------------------------
+_fcc_itof       MX      %00
+                CMP     #0
+                BNE     @if_nz
+                STA     _fcc_long_hi        ; 0 -> 0x00000000 (A already 0)
+                RTS
+@if_nz          STZ     _fcc_f_sign
+                BPL     @if_pos
+                LDX     #$8000
+                STX     _fcc_f_sign         ; remember sign
+                EOR     #$FFFF
+                INC                          ; A = |int| (unsigned magnitude)
+@if_pos         STA     _fcc_f_lo
+                STZ     _fcc_f_hi           ; 32-bit accumulator = magnitude
+                ; find leading-bit position e (0..15)
+                LDX     #0
+@if_findlp      CMP     #1
+                BEQ     @if_found
+                LSR
+                INX
+                BRA     @if_findlp
+@if_found       TXA                          ; e
+                STA     _fcc_f_tmp
+                CLC
+                ADC     #127
+                STA     _fcc_f_exp          ; exponent field = e + 127
+                LDA     #23
+                SEC
+                SBC     _fcc_f_tmp          ; A = 23 - e  (8..23)
+                TAX
+@if_shlp        ASL     _fcc_f_lo           ; place leading 1 at bit 23
+                ROL     _fcc_f_hi
+                DEX
+                BNE     @if_shlp
+                LDA     _fcc_f_hi
+                AND     #$007F              ; mantissa bits 22..16 (drop implicit)
+                STA     _fcc_f_hi
+                LDA     _fcc_f_exp
+                ASL                          ; exp field << 7 -> bits 14..7
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_sign
+                STA     _fcc_long_hi        ; high word
+                LDA     _fcc_f_lo           ; low word
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_ftoi - IEEE-754 single (A:_fcc_long_hi) -> signed 16-bit int (A),
+; truncating toward zero.  Magnitudes < 1 give 0; magnitudes that overflow
+; 16 bits return the low 16 bits (C truncation is UB on overflow).
+;------------------------------------------------------------------------------
+_fcc_ftoi       MX      %00
+                STA     _fcc_f_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_hi
+                AND     #$8000
+                STA     _fcc_f_sign         ; sign bit
+                LDA     _fcc_f_hi
+                AND     #$7F80              ; exponent bits 14..7
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_f_exp          ; exponent field
+                CMP     #127
+                BCC     @ft_zero            ; |val| < 1 -> 0
+                SEC
+                SBC     #127
+                STA     _fcc_f_exp          ; e (unbiased) >= 0
+                LDA     _fcc_f_hi
+                AND     #$007F
+                ORA     #$0080              ; restore implicit leading 1 (bit 23)
+                STA     _fcc_f_hi           ; 24-bit mantissa = f_hi:f_lo
+                LDA     #23
+                SEC
+                SBC     _fcc_f_exp          ; A = 23 - e
+                BMI     @ft_big             ; e > 23: shift left instead
+                TAX
+                BEQ     @ft_noshift
+@ft_shlp        LSR     _fcc_f_hi
+                ROR     _fcc_f_lo
+                DEX
+                BNE     @ft_shlp
+@ft_noshift     LDA     _fcc_f_lo
+                LDX     _fcc_f_sign
+                BEQ     @ft_done
+                EOR     #$FFFF              ; apply sign
+                INC
+@ft_done        RTS
+@ft_zero        LDA     #0
+                RTS
+@ft_big         LDA     _fcc_f_exp
+                SEC
+                SBC     #23                 ; e - 23
+                TAX
+@ft_biglp       ASL     _fcc_f_lo
+                ROL     _fcc_f_hi
+                DEX
+                BNE     @ft_biglp
+                LDA     _fcc_f_lo
+                LDX     _fcc_f_sign
+                BEQ     @ft_bigdone
+                EOR     #$FFFF
+                INC
+@ft_bigdone     RTS
+
+;------------------------------------------------------------------------------
+; _fcc_fneg - negate a float in (A:_fcc_long_hi): flip the sign bit.
+;------------------------------------------------------------------------------
+_fcc_fneg       MX      %00
+                PHA
+                LDA     _fcc_long_hi
+                EOR     #$8000
+                STA     _fcc_long_hi
+                PLA
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_fmul - (A:_fcc_long_hi) * (_fcc_long_b_lo:_fcc_long_b_hi).
+; Result in (A:_fcc_long_hi).  Mantissas multiplied via a 24x24->48 shift-add;
+; result truncated toward zero (no round-to-nearest yet).  Zero / denormal
+; operands (exp field 0) yield 0; over/underflowing results flush to 0.
+;------------------------------------------------------------------------------
+_fcc_fmul       MX      %00
+                ; --- unpack a (A:_fcc_long_hi) ---
+                STA     _fcc_fa_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fa_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fa_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080              ; implicit leading 1 -> bit 23
+                STA     _fcc_fa_hi
+                ; --- unpack b (_fcc_long_b_lo:_fcc_long_b_hi) ---
+                LDA     _fcc_long_b_lo
+                STA     _fcc_fb_lo
+                LDA     _fcc_long_b_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fb_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fb_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080
+                STA     _fcc_fb_hi
+                ; --- zero check (exp field 0 -> treat as zero) ---
+                ; (BRL: @fmz is past the 8-bit branch range from here.)
+                LDA     _fcc_fa_exp
+                BNE     @fm_a_nz
+                BRL     @fmz
+@fm_a_nz        LDA     _fcc_fb_exp
+                BNE     @fm_b_nz
+                BRL     @fmz
+@fm_b_nz        ; --- result sign / exponent ---
+                LDA     _fcc_fa_sign
+                EOR     _fcc_fb_sign
+                STA     _fcc_f_sign
+                LDA     _fcc_fa_exp
+                CLC
+                ADC     _fcc_fb_exp
+                SEC
+                SBC     #127
+                STA     _fcc_f_exp
+                ; --- 24x24 -> 48 multiply: mc (=mant_a) * multiplier (=mant_b) ---
+                LDA     _fcc_fa_lo
+                STA     _fcc_fmc0
+                LDA     _fcc_fa_hi
+                STA     _fcc_fmc1
+                STZ     _fcc_fmc2
+                STZ     _fcc_fm0
+                STZ     _fcc_fm1
+                STZ     _fcc_fm2
+                LDX     #24
+@fm_lp          LDA     _fcc_fb_lo
+                AND     #1
+                BEQ     @fm_noadd
+                LDA     _fcc_fm0
+                CLC
+                ADC     _fcc_fmc0
+                STA     _fcc_fm0
+                LDA     _fcc_fm1
+                ADC     _fcc_fmc1
+                STA     _fcc_fm1
+                LDA     _fcc_fm2
+                ADC     _fcc_fmc2
+                STA     _fcc_fm2
+@fm_noadd       ASL     _fcc_fmc0
+                ROL     _fcc_fmc1
+                ROL     _fcc_fmc2
+                LSR     _fcc_fb_hi
+                ROR     _fcc_fb_lo
+                DEX
+                BNE     @fm_lp
+                ; --- round bits: product bits 0..22 are dropped by the >>23.
+                ; guard = product bit 22 (fm1 bit 6); sticky = product bits 0..21
+                ; (all of fm0, plus fm1 bits 5..0). ---
+                LDA     _fcc_fm1
+                AND     #$0040              ; product bit 22 -> guard
+                STA     _fcc_f_guard
+                LDA     _fcc_fm0            ; product bits 0..15
+                STA     _fcc_f_sticky
+                LDA     _fcc_fm1
+                AND     #$003F              ; product bits 16..21
+                ORA     _fcc_f_sticky
+                STA     _fcc_f_sticky
+                ; --- result_mant = product >> 23  (take top 32 bits, >>7) ---
+                LDA     _fcc_fm1
+                STA     _fcc_f_lo
+                LDA     _fcc_fm2
+                STA     _fcc_f_hi
+                LDX     #7
+@fm_sh7         LSR     _fcc_f_hi
+                ROR     _fcc_f_lo
+                DEX
+                BNE     @fm_sh7
+                ; --- normalize: product in [1,4) -> leading bit at 23 or 24 ---
+                LDA     _fcc_f_hi
+                AND     #$0100              ; bit 24
+                BEQ     @fm_norm_done
+                ; case [2,4): >>1.  product bit 23 (current f_lo bit 0) becomes
+                ; the new guard; old guard folds into sticky.
+                LDA     _fcc_f_guard
+                ORA     _fcc_f_sticky
+                STA     _fcc_f_sticky
+                LDA     _fcc_f_lo
+                AND     #1
+                STA     _fcc_f_guard
+                LSR     _fcc_f_hi
+                ROR     _fcc_f_lo
+                INC     _fcc_f_exp
+@fm_norm_done   JSR     _fcc_fround         ; round to nearest even
+                ; --- exponent range check ---
+                LDA     _fcc_f_exp
+                BMI     @fmz                ; underflow
+                BEQ     @fmz
+                CMP     #255
+                BCS     @fmz                ; overflow -> flush to 0 (no Inf)
+                ; --- pack ---
+                LDA     _fcc_f_hi
+                AND     #$007F
+                STA     _fcc_f_hi
+                LDA     _fcc_f_exp
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_sign
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+@fmz            LDA     #0
+                STA     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_fsub - (A:_fcc_long_hi) - (b_lo:b_hi).  a - b == a + (-b): flip b's
+; sign bit and fall into _fcc_fadd.
+;------------------------------------------------------------------------------
+_fcc_fsub       MX      %00
+                PHA
+                LDA     _fcc_long_b_hi
+                EOR     #$8000
+                STA     _fcc_long_b_hi
+                PLA
+                ; fall through to _fcc_fadd
+
+;------------------------------------------------------------------------------
+; _fcc_fadd - (A:_fcc_long_hi) + (b_lo:b_hi).  Result in (A:_fcc_long_hi).
+; Aligns the smaller operand, adds/subtracts 24-bit mantissas, normalizes,
+; and truncates (no round-to-nearest yet).  Zero operands handled; results
+; that under/overflow flush to 0 (no Inf/NaN).
+;------------------------------------------------------------------------------
+_fcc_fadd       MX      %00
+                ; --- unpack a ---
+                STA     _fcc_fa_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fa_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fa_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080
+                STA     _fcc_fa_hi
+                ; --- unpack b ---
+                LDA     _fcc_long_b_lo
+                STA     _fcc_fb_lo
+                LDA     _fcc_long_b_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fb_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fb_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080
+                STA     _fcc_fb_hi
+                ; --- zero handling ---
+                LDA     _fcc_fa_exp
+                BNE     @fa_a_ok
+                LDA     _fcc_long_b_lo      ; a == 0 -> return b
+                LDX     _fcc_long_b_hi
+                STX     _fcc_long_hi
+                RTS
+@fa_a_ok        LDA     _fcc_fb_exp
+                BNE     @fa_b_ok
+                LDA     _fcc_fa_lo          ; b == 0 -> return a (hi unchanged)
+                RTS
+@fa_b_ok        ; --- ensure |a| >= |b| (swap if a smaller) ---
+                LDA     _fcc_fa_exp
+                CMP     _fcc_fb_exp
+                BCC     @fa_swap
+                BNE     @fa_noswap
+                LDA     _fcc_fa_hi
+                CMP     _fcc_fb_hi
+                BCC     @fa_swap
+                BNE     @fa_noswap
+                LDA     _fcc_fa_lo
+                CMP     _fcc_fb_lo
+                BCS     @fa_noswap
+@fa_swap        LDX     _fcc_fa_lo
+                LDA     _fcc_fb_lo
+                STA     _fcc_fa_lo
+                STX     _fcc_fb_lo
+                LDX     _fcc_fa_hi
+                LDA     _fcc_fb_hi
+                STA     _fcc_fa_hi
+                STX     _fcc_fb_hi
+                LDX     _fcc_fa_exp
+                LDA     _fcc_fb_exp
+                STA     _fcc_fa_exp
+                STX     _fcc_fb_exp
+                LDX     _fcc_fa_sign
+                LDA     _fcc_fb_sign
+                STA     _fcc_fa_sign
+                STX     _fcc_fb_sign
+@fa_noswap      ; exp_diff = exp_a - exp_b
+                LDA     _fcc_fa_exp
+                SEC
+                SBC     _fcc_fb_exp
+                CMP     #40
+                BCC     @fa_align
+                ; b negligible (below guard+sticky resolution) -> result = a
+                LDA     _fcc_fa_lo
+                STA     _fcc_f_lo
+                LDA     _fcc_fa_hi
+                STA     _fcc_f_hi
+                LDA     _fcc_fa_exp
+                STA     _fcc_f_exp
+                LDA     _fcc_fa_sign
+                STA     _fcc_f_sign
+                BRL     @fa_pack
+@fa_align       STZ     _fcc_fb_g           ; b's 16-bit guard word (bits below LSB)
+                STZ     _fcc_f_sticky       ; set when a 1 falls past the guard word
+                TAX                          ; X = exp_diff (1..39)
+                BEQ     @fa_aligned
+@fa_shr         LSR     _fcc_fb_hi          ; align b, capturing dropped bits
+                ROR     _fcc_fb_lo
+                ROR     _fcc_fb_g
+                BCC     @fa_shr_nx
+                LDA     #1                  ; a 1 bit fell off the guard word
+                STA     _fcc_f_sticky
+@fa_shr_nx      DEX
+                BNE     @fa_shr
+@fa_aligned     LDA     _fcc_fa_exp
+                STA     _fcc_f_exp
+                LDA     _fcc_fa_sign
+                STA     _fcc_f_sign
+                LDA     _fcc_fa_sign
+                CMP     _fcc_fb_sign
+                BNE     @fa_diffsign
+                ; --- same sign: 40-bit mantissa add (a's guard word is 0) ---
+                LDA     _fcc_fb_g
+                STA     _fcc_f_g
+                LDA     _fcc_fa_lo
+                CLC
+                ADC     _fcc_fb_lo
+                STA     _fcc_f_lo
+                LDA     _fcc_fa_hi
+                ADC     _fcc_fb_hi
+                STA     _fcc_f_hi
+                LDA     _fcc_f_hi
+                AND     #$0100              ; carry into bit 24?
+                BEQ     @fa_round
+                LSR     _fcc_f_hi           ; >>1 through the guard word
+                ROR     _fcc_f_lo
+                ROR     _fcc_f_g
+                BCC     @fa_smc
+                LDA     #1                  ; bit fell off guard -> sticky
+                ORA     _fcc_f_sticky
+                STA     _fcc_f_sticky
+@fa_smc         INC     _fcc_f_exp
+                BRA     @fa_round
+@fa_diffsign    ; --- opposite sign: 40-bit mantissa subtract (|a| >= |b|) ---
+                LDA     #0
+                SEC
+                SBC     _fcc_fb_g           ; 0 - fb_g (a's guard word is 0)
+                STA     _fcc_f_g
+                LDA     _fcc_fa_lo
+                SBC     _fcc_fb_lo
+                STA     _fcc_f_lo
+                LDA     _fcc_fa_hi
+                SBC     _fcc_fb_hi
+                STA     _fcc_f_hi
+                LDA     _fcc_f_lo
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_g
+                BNE     @fa_norm
+                LDA     #0                   ; exact cancellation -> 0
+                STA     _fcc_long_hi
+                RTS
+@fa_norm        LDA     _fcc_f_hi
+                AND     #$0080              ; bit 23 set?
+                BNE     @fa_round
+                ASL     _fcc_f_g            ; <<1, pulling guard bits up
+                ROL     _fcc_f_lo
+                ROL     _fcc_f_hi
+                DEC     _fcc_f_exp
+                BRA     @fa_norm
+@fa_round       LDA     _fcc_f_g            ; guard = bit15 of f_g; sticky |= bits14..0
+                AND     #$7FFF
+                BEQ     @fa_gset
+                LDA     #1
+                ORA     _fcc_f_sticky
+                STA     _fcc_f_sticky
+@fa_gset        LDA     _fcc_f_g
+                AND     #$8000
+                STA     _fcc_f_guard
+                JSR     _fcc_fround
+@fa_pack        LDA     _fcc_f_exp
+                BMI     @fa_zero
+                BEQ     @fa_zero
+                CMP     #255
+                BCS     @fa_zero
+                LDA     _fcc_f_hi
+                AND     #$007F
+                STA     _fcc_f_hi
+                LDA     _fcc_f_exp
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_sign
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+@fa_zero        LDA     #0
+                STA     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_fcmp - 3-way compare of (A:_fcc_long_hi) vs (b_lo:b_hi).
+; Returns A = 0 (a==b), 1 (a>b), or $FFFF (a<b).  IEEE ordering with
+; +0 == -0; no NaN handling (none generated).  The six relational wrappers
+; below map this to a 0/1 bool.
+;------------------------------------------------------------------------------
+_fcc_fcmp       MX      %00
+                STA     _fcc_f_lo           ; a_lo
+                LDA     _fcc_long_hi        ; identical bits -> equal
+                CMP     _fcc_long_b_hi
+                BNE     @fc_diff
+                LDA     _fcc_f_lo
+                CMP     _fcc_long_b_lo
+                BNE     @fc_diff
+                LDA     #0
+                RTS
+@fc_diff        LDA     _fcc_long_hi        ; both zero (ignoring sign)? +0/-0
+                AND     #$7FFF
+                ORA     _fcc_f_lo
+                BNE     @fc_a_nz
+                LDA     _fcc_long_b_hi
+                AND     #$7FFF
+                ORA     _fcc_long_b_lo
+                BNE     @fc_a_nz
+                LDA     #0
+                RTS
+@fc_a_nz        LDA     _fcc_long_hi        ; signs differ?
+                EOR     _fcc_long_b_hi
+                AND     #$8000
+                BEQ     @fc_same
+                LDA     _fcc_long_hi        ; a positive -> a>b ; else a<b
+                AND     #$8000
+                BEQ     @fc_gt
+                BRA     @fc_lt
+@fc_same        LDA     _fcc_long_hi        ; same sign: unsigned 32-bit mag compare
+                CMP     _fcc_long_b_hi
+                BNE     @fc_byhi
+                LDA     _fcc_f_lo
+                CMP     _fcc_long_b_lo
+                BCS     @fc_mag_gt
+                BRA     @fc_mag_lt
+@fc_byhi        BCS     @fc_mag_gt
+                BRA     @fc_mag_lt
+@fc_mag_gt      LDA     _fcc_long_hi        ; |a|>|b|: positive -> +1, negative -> -1
+                AND     #$8000
+                BEQ     @fc_gt
+                BRA     @fc_lt
+@fc_mag_lt      LDA     _fcc_long_hi
+                AND     #$8000
+                BEQ     @fc_lt
+                BRA     @fc_gt
+@fc_gt          LDA     #1
+                RTS
+@fc_lt          LDA     #$FFFF
+                RTS
+
+_fcc_feq        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #0
+                BEQ     @feq_y
+                LDA     #0
+                RTS
+@feq_y          LDA     #1
+                RTS
+
+_fcc_fne        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #0
+                BNE     @fne_y
+                LDA     #0
+                RTS
+@fne_y          LDA     #1
+                RTS
+
+_fcc_flt        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #0
+                BMI     @flt_y
+                LDA     #0
+                RTS
+@flt_y          LDA     #1
+                RTS
+
+_fcc_fgt        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #1
+                BEQ     @fgt_y
+                LDA     #0
+                RTS
+@fgt_y          LDA     #1
+                RTS
+
+_fcc_fle        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #1
+                BEQ     @fle_n              ; >0 -> false
+                LDA     #1                  ; ==0 or <0 -> true
+                RTS
+@fle_n          LDA     #0
+                RTS
+
+_fcc_fge        MX      %00
+                JSR     _fcc_fcmp
+                CMP     #0
+                BPL     @fge_y              ; 0 or +1 -> non-negative -> true
+                LDA     #0
+                RTS
+@fge_y          LDA     #1
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_fdiv - (A:_fcc_long_hi) / (b_lo:b_hi).  Result in (A:_fcc_long_hi).
+; Computes Q = floor(mant_a * 2^24 / mant_b) via a 48-iteration bit-serial
+; long division, then M = Q (>>1 if Q has bit 24) with expfield adjusted.
+; Truncates.  Divide-by-zero or zero dividend -> 0 (div-by-0 is UB in C).
+;------------------------------------------------------------------------------
+_fcc_fdiv       MX      %00
+                ; --- unpack a ---
+                STA     _fcc_fa_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fa_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fa_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080
+                STA     _fcc_fa_hi
+                ; --- unpack b ---
+                LDA     _fcc_long_b_lo
+                STA     _fcc_fb_lo
+                LDA     _fcc_long_b_hi
+                STA     _fcc_f_tmp
+                AND     #$8000
+                STA     _fcc_fb_sign
+                LDA     _fcc_f_tmp
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                STA     _fcc_fb_exp
+                LDA     _fcc_f_tmp
+                AND     #$007F
+                ORA     #$0080
+                STA     _fcc_fb_hi
+                ; --- zero checks (BRL: @fd_zero is past 8-bit branch range) ---
+                LDA     _fcc_fb_exp
+                BNE     @fd_bok
+                BRL     @fd_zero            ; divide by zero -> 0
+@fd_bok         LDA     _fcc_fa_exp
+                BNE     @fd_go
+                BRL     @fd_zero            ; 0 / x -> 0
+@fd_go          ; --- long division: Q = floor(mant_a*2^24 / mant_b) ---
+                STZ     _fcc_fm0            ; rem_lo
+                STZ     _fcc_fm1            ; rem_hi
+                STZ     _fcc_fmc0           ; q_lo
+                STZ     _fcc_fmc1           ; q_hi
+                LDX     #48
+@fd_lp          ASL     _fcc_fm0            ; rem <<= 1
+                ROL     _fcc_fm1
+                LDA     _fcc_fa_hi          ; feed bit 23 of mant_a
+                AND     #$0080
+                BEQ     @fd_nobit
+                INC     _fcc_fm0            ; rem bit0 = 1
+@fd_nobit       ASL     _fcc_fa_lo          ; mant_a <<= 1
+                ROL     _fcc_fa_hi
+                LDA     _fcc_fm1            ; rem >= mant_b ?
+                CMP     _fcc_fb_hi
+                BCC     @fd_q0
+                BNE     @fd_q1
+                LDA     _fcc_fm0
+                CMP     _fcc_fb_lo
+                BCC     @fd_q0
+@fd_q1          LDA     _fcc_fm0            ; rem -= mant_b
+                SEC
+                SBC     _fcc_fb_lo
+                STA     _fcc_fm0
+                LDA     _fcc_fm1
+                SBC     _fcc_fb_hi
+                STA     _fcc_fm1
+                SEC                          ; quotient bit = 1
+                BRA     @fd_qsh
+@fd_q0          CLC                          ; quotient bit = 0
+@fd_qsh         ROL     _fcc_fmc0           ; q = (q<<1) | C
+                ROL     _fcc_fmc1
+                DEX
+                BNE     @fd_lp
+                ; --- one extra division step for the guard bit ---
+                ; rem (fm0:fm1) < mant_b.  guard bit = (2*rem >= mant_b); the
+                ; leftover (2*rem - mant_b) being nonzero is the sticky bit.
+                ASL     _fcc_fm0            ; rem <<= 1
+                ROL     _fcc_fm1
+                LDA     _fcc_fm1            ; 2*rem >= mant_b ?
+                CMP     _fcc_fb_hi
+                BCC     @fd_g0
+                BNE     @fd_g1
+                LDA     _fcc_fm0
+                CMP     _fcc_fb_lo
+                BCC     @fd_g0
+@fd_g1          LDA     _fcc_fm0            ; rem -= mant_b
+                SEC
+                SBC     _fcc_fb_lo
+                STA     _fcc_fm0
+                LDA     _fcc_fm1
+                SBC     _fcc_fb_hi
+                STA     _fcc_fm1
+                LDA     #1
+                STA     _fcc_f_guard        ; guard = 1 (provisional)
+                BRA     @fd_gsk
+@fd_g0          STZ     _fcc_f_guard        ; guard = 0 (provisional)
+@fd_gsk         LDA     _fcc_fm0            ; sticky = (leftover remainder != 0)
+                ORA     _fcc_fm1
+                BEQ     @fd_stz
+                LDA     #1
+                STA     _fcc_f_sticky
+                BRA     @fd_norm
+@fd_stz         STZ     _fcc_f_sticky
+                ; --- normalize Q -> M, set exponent ---
+@fd_norm        LDA     _fcc_fmc1
+                AND     #$0100              ; Q bit 24 set? (Q >= 2^24)
+                BEQ     @fd_qlt
+                ; case Q>=2^24: M = Q>>1.  Q bit0 becomes the guard; the old
+                ; provisional guard folds into sticky.
+                LDA     _fcc_f_guard
+                ORA     _fcc_f_sticky
+                STA     _fcc_f_sticky
+                LDA     _fcc_fmc0
+                AND     #1
+                STA     _fcc_f_guard
+                LSR     _fcc_fmc1           ; M = Q >> 1
+                ROR     _fcc_fmc0
+                LDA     _fcc_fa_exp
+                SEC
+                SBC     _fcc_fb_exp
+                CLC
+                ADC     #127
+                STA     _fcc_f_exp
+                BRA     @fd_haveM
+@fd_qlt         LDA     _fcc_fa_exp         ; M = Q, exponent one less
+                SEC
+                SBC     _fcc_fb_exp
+                CLC
+                ADC     #126
+                STA     _fcc_f_exp
+@fd_haveM       LDA     _fcc_fmc0
+                STA     _fcc_f_lo
+                LDA     _fcc_fmc1
+                STA     _fcc_f_hi
+                LDA     _fcc_fa_sign
+                EOR     _fcc_fb_sign
+                STA     _fcc_f_sign
+                JSR     _fcc_fround         ; round to nearest even
+                ; --- range check + pack ---
+                LDA     _fcc_f_exp
+                BMI     @fd_zero
+                BEQ     @fd_zero
+                CMP     #255
+                BCS     @fd_zero
+                LDA     _fcc_f_hi
+                AND     #$007F
+                STA     _fcc_f_hi
+                LDA     _fcc_f_exp
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_sign
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+@fd_zero        LDA     #0
+                STA     _fcc_long_hi
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_ftol - IEEE-754 single (A:_fcc_long_hi) -> signed 32-bit long
+; (A:_fcc_long_hi), truncating toward zero.  |val|<1 -> 0; |val| >= 2^31
+; returns low 32 bits (UB).  Used by printf %f for the integer part and
+; available for a future (long)float cast.
+;------------------------------------------------------------------------------
+_fcc_ftol       MX      %00
+                STA     _fcc_f_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_hi
+                AND     #$8000
+                STA     _fcc_f_sign
+                LDA     _fcc_f_hi
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                CMP     #127
+                BCS     @ftl_ge1
+                LDA     #0                  ; |val| < 1 -> 0
+                STA     _fcc_long_hi
+                RTS
+@ftl_ge1        SEC
+                SBC     #127
+                STA     _fcc_f_exp          ; e (unbiased) >= 0
+                LDA     _fcc_f_hi
+                AND     #$007F
+                ORA     #$0080              ; restore implicit 1 -> 24-bit mantissa
+                STA     _fcc_f_hi
+                LDA     #23
+                SEC
+                SBC     _fcc_f_exp          ; 23 - e
+                BMI     @ftl_left
+                TAX
+                BEQ     @ftl_sgn
+@ftl_shr        LSR     _fcc_f_hi           ; mant >> (23-e)
+                ROR     _fcc_f_lo
+                DEX
+                BNE     @ftl_shr
+                BRA     @ftl_sgn
+@ftl_left       LDA     _fcc_f_exp          ; e > 23: mant << (e-23)
+                SEC
+                SBC     #23
+                TAX
+@ftl_shl        ASL     _fcc_f_lo
+                ROL     _fcc_f_hi
+                DEX
+                BNE     @ftl_shl
+@ftl_sgn        LDA     _fcc_f_sign
+                BEQ     @ftl_pos
+                SEC                          ; 32-bit negate
+                LDA     #0
+                SBC     _fcc_f_lo
+                STA     _fcc_f_lo
+                LDA     #0
+                SBC     _fcc_f_hi
+                STA     _fcc_f_hi
+@ftl_pos        LDA     _fcc_f_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_ffloor - truncate a NON-NEGATIVE IEEE-754 single toward zero, returning
+; a float (clears the low (23-e) fractional mantissa bits).  |val|<1 -> +0.0;
+; |val| >= 2^23 (no fractional bits) -> unchanged.  Used by printf %f to split
+; off the integer part as a float.  (Caller strips the sign first.)
+;------------------------------------------------------------------------------
+_fcc_ffloor     MX      %00
+                STA     _fcc_f_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_f_hi
+                AND     #$7F80
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                LSR
+                CMP     #127
+                BCS     @ffl_ge1
+                LDA     #0                  ; |val| < 1 -> 0.0
+                STA     _fcc_long_hi
+                RTS
+@ffl_ge1        SEC
+                SBC     #127                ; e
+                CMP     #23
+                BCC     @ffl_clear
+                LDA     _fcc_f_hi           ; e >= 23: already integral
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+@ffl_clear      STA     _fcc_f_exp          ; e (0..22)
+                LDA     #23
+                SEC
+                SBC     _fcc_f_exp          ; nbits = 23 - e (1..23)
+                CMP     #17
+                BCS     @ffl_big
+                TAX                          ; nbits 1..16: clear low nbits of f_lo
+                LDA     #$FFFF
+@ffl_mk         ASL
+                DEX
+                BNE     @ffl_mk
+                AND     _fcc_f_lo
+                STA     _fcc_f_lo
+                BRA     @ffl_emit
+@ffl_big        STZ     _fcc_f_lo           ; nbits 17..23: clear f_lo + low bits of f_hi
+                SEC
+                SBC     #16                 ; extra = nbits - 16 (1..7)
+                TAX
+                LDA     #$FFFF
+@ffl_mk2        ASL
+                DEX
+                BNE     @ffl_mk2
+                AND     _fcc_f_hi
+                STA     _fcc_f_hi
+@ffl_emit       LDA     _fcc_f_hi
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_utof  - UNSIGNED 16-bit int (A) -> IEEE-754 single in (A:_fcc_long_hi).
+; _fcc_ultof - UNSIGNED 32-bit long (A:_fcc_long_hi) -> the same.
+;
+; K&R A.6.3 (p.159): an integral value "in the representable range" converts
+; to floating by VALUE, so 40000u is 40000.0 and $FFFFFFFF is 4294967295.0 --
+; what _fcc_itof and _fcc_ltof would read as -25536 and -1.  An unsigned int
+; zero-extends (A.6.2) and is then an unsigned long; an unsigned long has no
+; sign, so it joins _fcc_ltof at the magnitude, where the normalise, the
+; round-to-nearest and the packing are the same work.
+;------------------------------------------------------------------------------
+_fcc_utof       MX      %00
+                STZ     _fcc_long_hi        ; zero-extend: A.6.2
+_fcc_ultof      MX      %00
+                STA     _fcc_f_lo
+                ORA     _fcc_long_hi
+                BNE     @ultf_nz
+                STA     _fcc_long_hi        ; 0 -> 0.0 (A already 0)
+                RTS
+@ultf_nz        STZ     _fcc_f_sign
+                LDA     _fcc_long_hi
+                STA     _fcc_f_hi
+                BRA     _fcc_ltof_mag
+
+;------------------------------------------------------------------------------
+; _fcc_ltof - signed 32-bit long (A:_fcc_long_hi) -> IEEE-754 single in
+; (A:_fcc_long_hi).  Exact for |value| < 2^24; larger values truncate the
+; low bits (no round-to-nearest yet).  Used by the (float)long cast.
+;------------------------------------------------------------------------------
+_fcc_ltof       MX      %00
+                STA     _fcc_f_lo
+                ORA     _fcc_long_hi
+                BNE     @ltf_nz
+                STA     _fcc_long_hi        ; 0 -> 0.0 (A already 0)
+                RTS
+@ltf_nz         STZ     _fcc_f_sign
+                LDA     _fcc_long_hi
+                STA     _fcc_f_hi
+                AND     #$8000
+                BEQ     _fcc_ltof_mag
+                LDA     #$8000
+                STA     _fcc_f_sign         ; negative -> magnitude
+                SEC
+                LDA     #0
+                SBC     _fcc_f_lo
+                STA     _fcc_f_lo
+                LDA     #0
+                SBC     _fcc_f_hi
+                STA     _fcc_f_hi
+_fcc_ltof_mag   ; the 32-bit MAGNITUDE in _fcc_f_hi:_fcc_f_lo, sign in _fcc_f_sign
+                ; (_fcc_ultof joins here).  Normalize so the leading 1 is at
+                ; bit 31; count shifts.
+                LDX     #0
+@ltf_norm       LDA     _fcc_f_hi
+                AND     #$8000
+                BNE     @ltf_normed
+                ASL     _fcc_f_lo
+                ROL     _fcc_f_hi
+                INX
+                BRA     @ltf_norm
+@ltf_normed     ; sh = X; exp field = (31 - sh) + 127 = 158 - sh
+                TXA
+                STA     _fcc_f_tmp
+                LDA     #158
+                SEC
+                SBC     _fcc_f_tmp
+                STA     _fcc_f_exp
+                ; capture the low 8 bits about to be dropped by >>8 (round bits)
+                LDA     _fcc_f_lo
+                AND     #$00FF
+                STA     _fcc_f_round
+                ; mantissa = M_norm >> 8 (top 24 bits, leading 1 -> bit 23)
+                LDX     #8
+@ltf_sh8        LSR     _fcc_f_hi
+                ROR     _fcc_f_lo
+                DEX
+                BNE     @ltf_sh8
+                ; round to nearest even from the dropped byte
+                LDA     _fcc_f_round
+                AND     #$0080              ; guard = dropped bit 7
+                STA     _fcc_f_guard
+                LDA     _fcc_f_round
+                AND     #$007F              ; sticky = dropped bits 6..0
+                STA     _fcc_f_sticky
+                JSR     _fcc_fround
+                LDA     _fcc_f_hi
+                AND     #$007F
+                STA     _fcc_f_hi
+                LDA     _fcc_f_exp
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ASL
+                ORA     _fcc_f_hi
+                ORA     _fcc_f_sign
+                STA     _fcc_long_hi
+                LDA     _fcc_f_lo
+                RTS

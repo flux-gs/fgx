@@ -1,0 +1,4 @@
+{"name":"pipegrow",
+ "description":"Pipe ring growth 512 -> 4096 on full, which the kernel-resident ring must survive across a snapshot restore.",
+ "command":"/testbin/pipegrow","timeout_s":120,
+ "expect":{"screen_contains":["PIPEGROW OK"]}}

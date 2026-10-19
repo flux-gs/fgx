@@ -1,0 +1,32 @@
+# libc.so's data exports: the extern data libc's public headers declare
+# (shared libc SP2 spec, section 4).  fgx_ld's library link exports exactly
+# these, each from the core, and refuses the link if the core lacks one.
+# Every other core cell is libc's own and is not in the export table.
+errno
+environ
+stdin
+stdout
+stderr
+optarg
+optind
+opterr
+optopt
+optreset
+_ctype_
+sys_siglist
+tzname
+h_errno
+# The cells crt0 and every compiled main name (parse_stmt.c: args_argc,
+# args_argv), BSD's __progname, and the block table crt0's _crt0_inits
+# passes to _lib_init.
+args_argc
+args_argv
+__progname
+_libc_blktab
+# The long long carrier's high words: the argument cells of libc's long long
+# and double entries (_fcc_ll_*, _fcc_d*), which a program or library above
+# libc binds to rather than defining its own (fgx_libso.runtime_data).
+_fcc_q2
+_fcc_q3
+_fcc_qb2
+_fcc_qb3

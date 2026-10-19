@@ -1,0 +1,88 @@
+FROTZ(6)	    UNIX Programmer's Manual		 FROTZ(6)
+
+
+
+NAME
+     frotz - interpreter for Infocom and other Z-machine story files
+
+SYNOPSIS
+     frotz [ _o_p_t_i_o_n_s ] _s_t_o_r_y_-_f_i_l_e
+
+DESCRIPTION
+     _F_r_o_t_z plays a Z-machine _s_t_o_r_y_ _f_i_l_e -- the compiled form
+     Infocom shipped Zork and its kin in, and the one modern authoring
+     systems such as Inform still target.  Story versions 1 through 8
+     are understood.
+
+     The screen is full-screen, not teletype: a status line (versions 1
+     to 3) or a split upper window (version 4 and later) sits above a
+     scrolling lower window; reverse video, bold and underline render on
+     the Super-Hi-Res console, and version 5 and later may use its eight
+     colours.  The whole story -- which for later versions far exceeds a
+     single 64 KB bank -- is loaded into one bank-spanning Memory-Manager
+     block, so any game the machine has room for will run.
+
+     Save and restore use the portable Quetzal format, so a saved game
+     moves between _f_r_o_t_z and other Standard interpreters.
+
+OPTIONS
+     -h _N   Set the screen height to _N rows.  The default is the
+           console's own size.
+
+     -w _N   Set the screen width to _N columns.
+
+     -m    Do not pause with a ***MORE*** prompt when the screen fills.
+           Use it when input is coming from a file rather than the
+           keyboard, so the game never blocks waiting for a keypress.
+
+     -p    Plain ASCII output: render accented (Latin-1) characters as
+           their nearest plain-ASCII spelling.
+
+     -s _N   Seed the random number generator with _N, for repeatable
+           play.  Without it the seed comes from the clock.
+
+     -u _N   Keep _N levels of undo (0 disables the undo verb).
+
+     -x    Expand the single-letter abbreviations g, x and z to the
+           words again, examine and wait.
+
+     -Z _N   Error-reporting mode: 0 reports nothing, 1 the first error,
+           2 every error, 3 exits on any error.
+
+     The debugging switches -a and -A (watch attribute set/test) and -o
+     and -O (watch object movement/location) trace the running game and
+     are of interest mainly to authors.
+
+PLAYING
+     Type commands to the game at its prompt.  While a game runs, a line
+     that begins with a backslash is read by the interpreter rather than
+     the game; _\_\_h_e_l_p lists those runtime commands.
+
+     The save and restore verbs prompt for a filename and write or read
+     a Quetzal save file in the current directory.  With undo enabled
+     (see -u), the undo verb steps back one turn.
+
+FILES
+     /usr/games/frotz/        the bundled stories: cluedo.z5 (Mini-Cluedo,
+                              public domain) and bookvol.z5 (Book and Volume,
+                              CC BY-NC-SA 2.5); README there gives their terms.
+
+NOTES
+     The whole story is held in a Memory-Manager block; the writable
+     dynamic memory also stays resident for speed.  On a stock 2.8 MHz
+     Apple IIgs play is unhurried -- an accelerator is recommended, as
+     it is for the system generally.
+
+BUGS
+     Timed input is not implemented, so a game's real-time puzzles play
+     as untimed.  Sound and graphics (Blorb) are not supported.  A
+     single-key prompt reads a whole line and takes its first character.
+     A story with more than about 24 KB of dynamic memory runs without
+     undo: its undo buffer, two and a half times the dynamic memory, has
+     to fit the 64 KB data bank's heap.
+
+AUTHORS
+     Frotz by Stefan Jokisch; the terminal interface after Alembic
+     Petrofsky's dumb-frotz; the FGX screen, input and story-memory
+     layers by the FGX project.  Frotz is distributed under the GNU
+     General Public License.

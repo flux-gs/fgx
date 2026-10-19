@@ -1,0 +1,18 @@
+{
+ "name": "ptyswsel",
+ "description": "probe: does select on a pty slave track t_outq",
+ "command": "/testbin/ptyswsel",
+ "timeout_s": 150,
+ "expect": {
+  "screen_contains": [
+   "PTYSWSEL TRACKS"
+  ],
+  "screen_lacks": [
+   "PTYSWSEL FAIL",
+   "PTYSWSEL ALWAYS",
+   "PTYSWSEL OTHER",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

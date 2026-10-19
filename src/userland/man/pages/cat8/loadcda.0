@@ -1,0 +1,71 @@
+LOADCDA(8)           UNIX Programmer's Manual           LOADCDA(8)
+
+
+
+NAME
+     loadcda - install a classic desk accessory
+
+SYNOPSIS
+     loadcda file
+
+DESCRIPTION
+     Loadcda installs the Apple IIgs classic desk accessory (a
+     ProDOS file of type $B9) in file, so that it appears in the
+     Ctrl-OA-Esc menu until the machine restarts.  It reads the
+     file's OMF load segments, reserves one block for them
+     through /dev/cda, relocates each segment for its place in
+     that block, copies it in, and has the Desk Manager install
+     it.  If loadcda stops before the last step the block is
+     given back.
+
+     Loadcda also hands the module the file's absolute pathname
+     and its resource fork, which it reads from ._file beside
+     file, the AppleDouble file mount_prodos(8) presents for a
+     forked ProDOS file.  While the desk accessory runs, the
+     module answers the System Loader's LGetPathname2 with that
+     pathname and serves the fork to GS/OS Open, SetMark, Read
+     and Close from memory, and the GS/OS flag at $E1/00BC reads
+     1.  A file with no ._file gets the pathname alone.
+
+     Only the super-user can open /dev/cda.  The cda module must
+     be loaded; /etc/rc loads it.  No desk accessory is installed
+     at boot: each holds its segments and resource fork in memory
+     from its loadcda until the machine restarts, because none of
+     it can be read from disk while the Ctrl-OA-Esc menu runs, so
+     one is installed when it is wanted, with loadcda.
+
+     A desk accessory's first load segment must begin with its
+     header.  The ~ExpressLoad segment is skipped.  Loadcda
+     refuses a file that is not OMF version 2, a dynamic segment,
+     a segment that is neither code nor data or has an absolute
+     origin, desk accessories whose segments together need more
+     than one bank, and the SUPER INTERSEG relocation records.
+
+     Loadcda is silent when it succeeds.
+
+FILES
+     /dev/cda       the cda module's device
+     ._file         file's resource fork, if it has one
+     /usr/fgx/cda   the desk accessories shipped with the system
+
+SEE ALSO
+     mount_prodos(8), modload(8)
+
+BUGS
+     A desk accessory stays installed until the machine restarts;
+     there is no way to remove one.
+
+     The only GS/OS a desk accessory finds is its own resource
+     fork, opened for reading: every other GS/OS call returns
+     $0001, and every Loader function but LGetPathname2 returns
+     $0002.  SetMark accepts only a position from the start of
+     the fork, and a fork and pathname together must fit one
+     bank.
+
+     Loadcda installs at most eight desk accessories.  A UFS name
+     holds 14 characters, so a desk accessory whose name is longer
+     than 12 cannot have its ._file beside it there.
+
+
+
+Printed 9/15/26                                                8

@@ -1,0 +1,30 @@
+{
+ "name": "klogintr",
+ "description": "A BLOCKING READ ON A LOADABLE MODULE'S CHARDEV MUST BE INTERRUPTIBLE.  `cat /dev/klog' drains the log ring and then sleeps in klog.mod's wait loop on WCHAN_LBOLT, which is the only place that path blocks.  A raw $03 is injected at frame 1000 of the paste and `pwd' is typed at frame 1500 with NO Enter in between, so the two share one line buffer exactly as ctrlc.json does: if the SIGINT reached the sleeper, cat dies, the prompt returns and pwd prints /root; if it did not, the machine is still parked in the read and /root never appears.  GOES RED WITHOUT THE FIX (apple/fgx#468): the chardev bulk arm is reached through kc_cddread's ENTERK, which used to point D at a page captured once at mod_init -- pid 0's template, whose `_curTask' reads 0 (include/kernel.s at KFGX_CUR_KDP).  `_Slp_Block' then computed seoff (0-1)<<5, wrote SE_WaitChan 20 bytes BELOW the sched table, marked the wrong TCB blocked, and `swtch @sw_save' skipped the caller's SE_KernSP because it gates on the same `_curTask' -- so the task was neither BLOCKED nor READY, `_wakeup(WCHAN_LBOLT)' could not match it and `_Kill_Apply' could not either.  ENTERK now reads the running task's slot page from the bank-0 cell the scheduler publishes.  THE CONTROL IS ctrlc.json: same injection frame, same liveness probe, and it passes on the TTY -- so only the device differs, and a failure here is this device's blocking read rather than the harness or the injection.  THE ASSERTION IS POSITIVE ON PURPOSE.  A `lacks'-style assertion cannot separate \"^C was ignored\" from \"the test never had a chance\": in the original investigation the failing case and a no-injection control failed IDENTICALLY.  /root is pwd's OUTPUT and differs from its input, so it can only appear if the shell ran the command after the interrupt.\n\nSYSLOGD IS STOPPED FIRST, the way syslogd(8) says to bring it down (`kill `cat /var/run/syslog.pid`'), because /dev/klog has ONE reader and /etc/rc starts syslogd as that reader.  The frames are late enough for the stop: the command is typed at about six frames a character, and cat must be asleep in the read before the $03 arrives or the $03 interrupts the sleep instead.  The cursor resumes where syslogd stopped reading (apple/fgx#484), so cat finds little or nothing and goes straight to sleep in the read, which is where this test needs it.  `busy' is refused on the screen so that a syslogd still holding the device -- cat answering EBUSY and exiting at once, after which pwd prints /root anyway -- fails rather than passing with nothing tested.",
+ "command": "kill `cat /var/run/syslog.pid`; sleep 1; cat /dev/klog",
+ "exit_on_prompt": false,
+ "timeout_s": 120,
+ "raw_inject": [
+  [
+   1000,
+   3,
+   0
+  ]
+ ],
+ "post_commands": [
+  "pwd"
+ ],
+ "post_gap_frames": 1500,
+ "expect": {
+  "screen_contains": [
+   "/root"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not found",
+   "cannot execute",
+   "busy"
+  ]
+ }
+}

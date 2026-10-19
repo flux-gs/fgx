@@ -1,0 +1,28 @@
+
+
+
+STAT(1)             UNIX Programmer's Manual                STAT(1)
+
+
+
+NAME
+     stat - display file status
+
+SYNOPSIS
+     stat file ...
+
+DESCRIPTION
+     _S_t_a_t displays the status of each _f_i_l_e: name, size in bytes,
+     blocks allocated (st_blocks), type (regular file, directory
+     or other), a mode string in the shape of ls -l, the i-number
+     (as printed by ls -i), and the modification time.  On a
+     mounted ProDOS volume these are synthesized as
+     mount_prodos(8) describes.
+
+     This is an FGX-native tool (there is no BSD stat(1) of this
+     vintage); output is shaped after the modern stat utilities.
+
+SEE ALSO
+     ls(1), touch(1), strmode(3), mount_prodos(8)
+
+FGX                          FGX-native                          1

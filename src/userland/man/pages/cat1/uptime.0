@@ -1,0 +1,36 @@
+
+
+UPTIME(1)           UNIX Programmer's Manual              UPTIME(1)
+
+
+
+NAME
+     uptime - show how long the system has been running
+
+SYNOPSIS
+     uptime
+
+DESCRIPTION
+     _U_p_t_i_m_e prints the current time, how long the system has
+     been up, and the number of users logged in.
+
+     It is w(1) under another name: /bin/uptime and /bin/w are two
+     directory entries for one inode, and the program chooses its
+     behaviour from the name it was invoked by.  `w -u' prints the
+     same line.
+
+     Elapsed time is measured from the 60 Hz system tick counter,
+     which counts from boot: about one second of precision, good
+     to roughly two years.
+
+FILES
+     /etc/utmp     the login accounting file, for the user count
+
+SEE ALSO
+     w(1), who(1), ps(1)
+
+BUGS
+     No load average is printed, this system keeping no run-queue
+     average.  See w(1) for the rest of what is not measured.
+
+FGX                            2.11BSD                           1

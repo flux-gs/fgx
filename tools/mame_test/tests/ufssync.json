@@ -1,0 +1,22 @@
+{
+  "name": "ufssync",
+  "description": "sync(2) WRITES THE SUPERBLOCK BACK, and the volume FGX wrote is handed to the independent oracle to say so.  apple/fgx#332.\n\nWHAT WAS WRONG.  ufs_alloc hands out blocks from a batch of up to fifty read into sb_free[], writing the superblock to disk only when the batch empties -- which is upstream's own policy and correct, because the on-disk free-list HEAD must not lag the blocks already given away.  It sets sb_fmod for everything in between and trusts sync(2) to notice.  Nothing noticed: _Sys_Sync called Fs_SyncAll, which walks every task's fd table and fsyncs descriptors, and never touched the mount list; there was no VFS_SYNC slot and no ufs_sync.  So an allocated block stayed on the on-disk free list, df over-reported free space, and after a remount the block was handed out a SECOND time.\n\nMEASURED, and the second measurement is what made it a defect rather than an unclean shutdown: `echo one > f; sync' left `block 17159 is on the FREE LIST and also owned by inode 567', with the superblock byte-identical to before the write (nfree 22, tfree 14821 both sides).  Feeding that image back as the boot volume and creating one more file gave `block 17159 is claimed by BOTH inode 567 and inode 568 (cross-linked)'.\n\nTHE ASSERTION IS THE CHECK SCRIPT, NOT THE SCREEN.  ufsfsck_check.py hands every volume the run wrote to `fgxfs fsck' -- an independent implementation of the same format, written from the spec rather than from this kernel -- which is the campaign's stated bar for phase 1: \"attribution comes from THE ORACLE, not from the disk image being unchanged\".  The screen arm only says the file was made; a green screen with a corrupt volume is exactly the state this test exists to refuse, and was the state of every write test in the suite until now.\n\nWHY NO WRITE TEST CAUGHT IT.  ufsfsck_check.py existed and ran on five manifests -- ufsprobe, ufsvnprobe, ufswprobe, ufsdevprobe, vnopsprobe -- ALL OF WHICH ARE GATED OFF BY DEFAULT (tools/tryprobe.sh flips one at a time).  No ordinary write test named it, so the oracle was pointed only at volumes nobody normally writes.  It is on the write tests now.\n\nMEASURED DISCRIMINATING: delete the `JSL KFAR_VFS_SYNC' from _Sys_Sync and this goes red on the check script while every screen arm stays green -- which is the whole point of the arm being the oracle's and not the screen's.\n\nTHE NEEDLE IS ASSEMBLED FROM SHELL VARIABLES, and it has to be: the harness ECHOES the command line it types, so a needle that appears in the command is satisfied by a run that produced no output at all.  tools/check_vacuous_assertions.py fails the gate on exactly this shape, and it named this manifest.  Splitting the word across two assignments means the typed line cannot contain it and only the system can print it.  The name is built the same way for the same reason: `sy' was both the file's name and a substring of `echo one > sy', so the screen arm could not fail.  What this manifest actually asserts is carried by its check_script -- ufsfsck_check.py fscks the volume the run wrote -- and the screen arm is the supporting half saying the file is there to have been synced.",
+  "command": "cd /tmp; A=sy; B=zz; echo one > $A$B; sync; ls -l $A$B",
+  "boot_s": 45,
+  "timeout_s": 40,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "syzz"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK",
+      "not found"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

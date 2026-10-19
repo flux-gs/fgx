@@ -1,0 +1,23 @@
+{
+ "name": "ldload",
+ "description": "Shared libc SP4: libc is resident from boot (rc runs ldload); ldload then makes termlib and curses resident from a conf file, pinned; lddig checks each library's banks against the host's layout (every runtime bank byte, a digest per bank); a second ldload finds all three resident.  libfgx is resident from boot too (/etc/ld.so.conf), so the host's layout (ld.digest, fgx_lddigest --boot) places libc and libfgx first and termlib and curses below them.  Control: lddig against a digest made without the boot set (libc, termlib, curses) reports `LDD FAIL libtermlib its row' and the same for curses -- run, red.",
+ "command": "/testbin/lddig libc; /sbin/ldload /testbin/ld.so.conf.t; /testbin/lddig libtermlib libcurses; /sbin/ldload /testbin/ld.so.conf.t; echo st=$?",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "ldload: libtermlib.so.1.0",
+   "ldload: libcurses.so.1.0",
+   "LDD libc ok",
+   "LDD libtermlib ok",
+   "LDD libcurses ok",
+   "0 loaded, 3 resident",
+   "st=0"
+  ],
+  "screen_lacks": [
+   "LDD FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

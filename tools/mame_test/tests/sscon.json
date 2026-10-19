@@ -1,0 +1,34 @@
+{
+ "name": "sscon",
+ "description": "THE CARD SHOWS THE FOURTH VIRTUAL CONSOLE, AND THE IIGS SCREEN KEEPS THE FIRST.  The machine carries a Second Sight card (mame_slots) and /etc/rc loads sscon, which finds the card, takes a cell buffer in bank $E0, brings Host Text up and registers as the display of ttyv3 (VC_CARD).  ttyv3's getty then writes its login prompt, which the console's write bracket renders onto the card because that console has a display of its own; the console on the IIgs screen is untouched.  Three assertions, each for a different reason: the klog line proves the module got as far as registering and says where the cells are; the prompt in the SHR console's ring proves the primary console still runs a shell through the same VT layer; and card_screen_min reads the CARD's own bitmap, since the ring is what screen_contains reads and it looks the same whether or not a cell reached the card.  The floor is 2 because the plugin samples a grid and a two-line login prompt measures 4 non-background samples of 4500; a blank card measures 0.  The console shell sleeps first so the getty's prompt is on the card before the dump.  Without the card the module logs 'no card' and ttyv3 is a fourth SHR console.",
+ "command": "sleep 3; ls /",
+ "timeout_s": 30,
+ "mame_slots": [
+  "-sl3",
+  "secondsight"
+ ],
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "klog_contains": [
+   "sscon: 80x25 in slot 3, cells at $E0:"
+  ],
+  "klog_lacks": [
+   "sscon: no card",
+   "refused"
+  ],
+  "screen_contains": [
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "card_screen_min": 2
+ }
+}

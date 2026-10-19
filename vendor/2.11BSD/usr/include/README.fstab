@@ -1,0 +1,18 @@
+fstab.h and ../lib/libc/gen/fstab.c were taken from the LIVE 2.11BSD oracle
+(host `bsd`, kernel #18) on 2026-08-31, not from examples/2.11BSD, and the
+difference matters.
+
+examples/2.11BSD is internally inconsistent for this header: its
+usr/include/fstab.h is @(#)fstab.h 5.1 (Berkeley) 5/30/85 and has no
+fs_vfstype, while its own usr/lib/libc/gen/fstab.c is the 1993 rewrite that
+SETS fs_vfstype and fs_mntops.  A port built against that header would not
+compile the library beside it, and vendor/2.11BSD/usr/sbin/fsck/main.c -- 5.4.1
+(2.11BSD) 1996/2/3 -- reads fsp->fs_vfstype directly.
+
+The machine settles it: /usr/include/fstab.h there is @(#)fstab.h 8.1.1
+(2.11BSD) 1996/1/15, carries fs_vfstype/fs_mntops/fs_type, and matches the
+fsck vintage.  That is what is vendored here.
+
+Consistent with the rest of vendor/2.11BSD being a ~1999 snapshot at patch
+level ~429 while the oracle runs 498: when the snapshot and the machine
+disagree, the machine is the one running the code.

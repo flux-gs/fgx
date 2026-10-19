@@ -1,0 +1,32 @@
+{
+ "name": "fsckraw",
+ "description": "THE RAW DISK DEVICE, WALKED END TO END BY fsck(8).  apple/fgx#330.  /dev/rsd1 is the character face of the same spindle /dev/sd1 names, and this is the pair of fsckro: same volume, same fault, same read-only claim, the other side of conf.c's two switches.  BSD gives a disk driver a row in bdevsw and a row in cdevsw and the character row is what a filesystem check reads through -- fsck's own blockcheck() rawifies the name for every filesystem that is not the mounted root (usr/sbin/fsck/fsck.c:334), so the raw node is not a convenience, it is the road /etc/rc takes.\n\nWHY fsck AND NOT A ONE-BLOCK READ.  The driver stages one 512-byte sector and moves the bytes with uiomove, in a loop that re-derives the block number from uio_offset every turn; a single read exercises one turn of it and cannot tell a working cursor from a frozen one.  A five-phase check of a 4096-block filesystem runs thousands of turns at every alignment the i-list and the directory blocks produce, and its ANSWER is checked rather than its liveness: `UNREF FILE  I=7' is the fault tools/ufscorrupt.py --one planted, so a driver returning zeroes, or the wrong sector, or a short count, reports a different filesystem instead of reporting this one.\n\nMEASURED: the first cut of this driver reached _FarSh_Uiomove with `JSL', which bakes the assembler's ORG bank ($02) into the operand while the kernel runs relocated.  The read did not fault and did not return -- the machine went idle in the scheduler with the calling process gone -- and the whole visible symptom was fsck stopping after its banner, which is the line above the first assertion here.  tools/check_selfbank_jsl.py now refuses that shape at build time.\n\nTHE PLATTER IS CHECKED, NOT THE SCREEN, and fsckro_check.py is shared with fsckro deliberately: `(NO WRITE)' is printed because -n was PASSED, so a build whose raw WRITE path ignored nflag would print the same banner and repair the volume. The checker compares the spindle the machine had against the one the build made and requires it unchanged AND still broken.\n\nAND THE ABSENT UNIT, on the same boot.  /dev/rsd2 is a node for a bus address with no drive behind it -- gen.py makes eight because MAKEDEV does, and 2.11BSD's answer for a unit that does not answer is EIO rather than ENOENT.  fsck reports that as `Can't open' and then exits ZERO, which is upstream's answer and not this driver's: setup() returns 0, checkfilesys() returns without recording anything, and the explicit-argument loop exits 0 regardless -- byte-identical to vendor/2.11BSD/usr/sbin/fsck/main.c:105-111, and 4.3BSD-Reno's sbin/fsck/main.c:107-109 casts the return away to do the same.  That is the INTERACTIVE form and not the boot one: /etc/rc runs `fsck -p' with no arguments, which takes the fstab road, where blockcheck() returning NULL under preen is `exit(8)' (main.c:130-131).  The 0 is asserted here so the two roads' different answers are written down rather than assumed to be one.  It is the arm that proves registration does NOT consult the device table and open does: a driver that refused to register the absent units would give ENOENT here, from namei, and the screen would say so differently.",
+ "command": "/sbin/fsck -n /dev/rsd1; echo ro=$?; /sbin/fsck -n /dev/rsd2; echo no=$?",
+ "timeout_s": 150,
+ "boot_s": 45,
+ "extra_hards": [
+  "disk/ufsbadspin.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 3
+ },
+ "expect": {
+  "screen_contains": [
+   "** /dev/rsd1 (NO WRITE)",
+   "** Phase 5 - Check Free List",
+   "UNREF FILE",
+   "ro=0",
+   "Can't open /dev/rsd2",
+   "no=0"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "Can't open /dev/rsd1",
+   "CANNOT READ",
+   "COULD NOT BE READ"
+  ],
+  "check_script": "fsckro_check.py"
+ }
+}

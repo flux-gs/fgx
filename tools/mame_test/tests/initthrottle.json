@@ -1,0 +1,18 @@
+{
+ "name": "initthrottle",
+ "description": "init's gettytime/gettycnt throttle fires on the SHIPPED /etc/ttys.  A throttle that has never fired is untested code whose whole job is to contain a fault, and the brief's manual check needed a scratch ttys pointing a line at /bin/false -- a broken line nobody would ship.  This drives the same path with the real console line instead: five SIGKILLs in a row make init spawn /bin/sh six times inside one 60-second window, which is one more than GETTYCNT, so the line is disabled and says so.  With the line disabled nothing is left to respawn, so init exits and the machine halts -- which is the point: a throttled line stops the machine loudly rather than spinning invisibly.\n\nIT NO LONGER TYPES `kill -9 $$' FIVE TIMES, AND THAT IS THE REPAIR.  GETTYCNT is 5, so the line is disabled on the SIXTH spawn inside one GETTYTIME (60 s) window, and the boot's own spawn was the first -- five kills were exactly enough with nothing to spare.  Two things had eaten the margin.  A kill typed while the shell is respawning reaches nothing: the dumps show `kill -9 $$' echoed with no prompt between, and roughly half to two thirds of them were landing.  And the guest clock runs about 1.5x the harness's frame gaps -- measured 2026-09-07, two `sleep 5's advanced date(1) by 8 and 7 seconds -- so a long enough sequence to compensate ages out of the 60-second window instead.  Fifteen kills at three-second gaps still did not trip it.\n\nTYPING IS THE WRONG MECHANISM FOR THIS CLAIM.  The subject is init respawning a line too fast, so the fixture makes the LINE do it: /testdata/ttysfast is the shipped ttys with the console pointed at /bin/true, which exits at once.  After the HUP, init respawns it, reaps it, respawns it -- six times in milliseconds, well inside one window, with no cadence to tune and nothing for a slow respawn to swallow.  `merge' calls fillline on a command change, which zeroes count and window, so the window starts clean at the HUP.\n\nTHE CONSOLE IS GONE once the line is disabled, which is why exit_on_prompt is false and the dump comes at the gap: the assertion is init's message on the screen, and there is deliberately no shell left to prompt for it.",
+ "command": "cp /testdata/ttysfast /etc/ttys; kill -1 1",
+ "post_commands": [],
+ "post_gap_frames": 600,
+ "exit_on_prompt": false,
+ "timeout_s": 150,
+ "expect": {
+  "screen_contains": [
+   "respawning too fast -- line disabled"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

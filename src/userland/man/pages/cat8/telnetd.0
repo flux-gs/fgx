@@ -1,0 +1,109 @@
+TELNETD(8)          UNIX Programmer's Manual          TELNETD(8)
+
+
+
+NAME
+     telnetd - DARPA TELNET protocol server
+
+SYNOPSIS
+     telnetd [-i | port]
+
+DESCRIPTION
+     Telnetd serves one TELNET session: it listens on a TCP port,
+     accepts a connection, allocates a pseudo-terminal pair, starts
+     getty(8) on the slave side, and relays bytes between the
+     connection and the pty until either end closes.  The login
+     prompt, authentication and shell all come from getty(8) and
+     login(1); telnetd itself carries bytes and negotiates options.
+
+     Port is the TCP port to listen on, 23 by default.
+
+     -i      Run as an inetd(8) child: the connection has already
+             been accepted and handed over as standard input,
+             output and error, so telnetd binds nothing and serves
+             that connection directly.  This is the way telnetd is
+             normally started on other systems, and it is how
+             /etc/inetd.conf starts it here.  Nothing is written to
+             standard output in this mode, because standard output
+             IS the connection.
+
+     Started by hand, telnetd binds 127.0.0.1, so it serves this
+     machine only -- useful for reaching a second session from
+     another virtual console: start telnetd on one console and run
+     `telnet localhost' from another.  For logins from the network,
+     run it under inetd(8), which owns the listening socket and can
+     bind any address.
+
+     ONE SESSION, THEN EXIT.  Telnetd accepts a single connection
+     and exits when that session ends.  That is not a shortcut: on
+     the W5100 path accept(2) DETACHES the listener, handing its
+     hardware socket to the accepted connection, so a listener is
+     single-use and a server must re-create it for the next client.
+     The loopback transport mirrors that deliberately so the same
+     shape works on both.  Run telnetd again for each session, or
+     from a loop.
+
+     Option negotiation follows the server side of the protocol:
+     telnetd offers WILL ECHO and WILL SUPPRESS-GO-AHEAD, and asks
+     the client DO TERMINAL-TYPE and DO NAWS.  Every other option
+     is refused with a well-formed DONT or WONT rather than with
+     silence, so a client asking for LINEMODE gets an answer.
+
+     The terminal type is asked for and WAITED FOR before the
+     session is started, because the name has to be known while
+     there is still an argument list to put it in: telnetd passes
+     it to getty(8) as -T type, getty passes it on to login(1),
+     and login prefers it over the type in ttys(5).  So a session
+     runs as the terminal the client says it is rather than as the
+     pty line's entry.  A client that does not answer within two
+     seconds keeps the ttys(5) type, which is what every session
+     got before this existed.
+
+     Diagnostics go to syslog(3), which on FGX writes to standard
+     error rather than to a logging daemon.  Telnetd also prints
+     `telnetd: listening', `telnetd: session on /dev/ttypN [type]'
+     and `telnetd: session ended' to standard output as it goes.
+     Empty brackets mean the client never named its terminal.
+
+FILES
+     /testbin/telnetd    the server itself; see BUGS
+     /bin/getty          started on the pty slave
+     /dev/ptypN          pty master claimed for the session
+     /dev/ttypN          pty slave the session runs on
+
+SEE ALSO
+     telnet(1), inetd(8), getty(8), login(1), pty(4)
+
+BUGS
+     Started by hand, the listen address is 127.0.0.1 and cannot be
+     changed, so telnetd itself does not accept logins from the
+     network.  Under inetd(8) it does: inetd owns the listening
+     socket, and the wildcard telnet line in /etc/inetd.conf serves
+     the LAN and this machine alike.
+
+     The peer host name is not recorded: telnetd does not call
+     getpeername(2), so getty(8) is started without the -h
+     argument BSD passes it.
+
+     Telnetd is a reimplementation following 2.11BSD rather than a
+     port of it, so much of what upstream does is simply absent --
+     output buffering and urgent-data handling among it.  See
+     apple/fgx#143.
+
+     The terminal type reaches login(1) as an argument rather than
+     in the environment.  Upstream sets TERM in the child and execs
+     `login -p' to have it preserved; FGX's spawnx(2) carries file
+     actions with an empty environment, so there is no environment
+     to set.
+
+     A session at a time.  A second client cannot connect while one
+     is running, and telnetd exits rather than looping.
+
+     Telnetd ships as /testbin/telnetd rather than in /usr/sbin,
+     and /testbin is not on the default path, so it must be invoked
+     by its full name.  It moves when it stops being staged as a
+     test binary.
+
+
+
+Printed 7/20/86                                                8

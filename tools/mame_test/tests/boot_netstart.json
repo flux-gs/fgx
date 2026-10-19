@@ -1,0 +1,32 @@
+{
+ "name": "boot_netstart",
+ "description": "Regression guard for boot-time network bring-up (commit 477052b8, v1.14.0). The SHIPPED image's /etc/rc sources /etc/netstart so the machine gets a DHCP lease at boot with no user action. That path silently died once already: when bsh replaced jsh as the login shell, only jsh sourced rc/netstart, so boot DHCP stopped happening and nothing noticed -- the v1.13 net-gate waiver hid it. The dev/test image STRIPS netstart from /etc/rc (tools/ninja/mkimage.sh generates it from disk_src/etc/rc.in) so tests do not pay a boot DHCP they do not need -- an optimisation that re-opens exactly the hole 477052b8 closed. So this test stages the release-flavour rc.in back over /etc/rc and asserts the lease appears WITHOUT anyone running dhclient by hand. If it fails, the shipped image boots with no network. The command is a bare `true`: every assertion is about what BOOT printed, not about the command. NOT part of tools/gate.sh -- it needs a real DHCP server on the host LAN and real-time MAME pacing (mame_slots names uthernet2, which run.py uses to suppress -nothrottle), so it is an on-demand check. Its partner is tools/test_release_image.sh, which proves the release IMAGE actually ships this rc content; this test proves the content WORKS. Restored 2026-08-01 -- it was collateral of the 2026-07-30 gate collapse, which left test_release_image.sh's header describing a partner that no longer existed.",
+ "command": "true",
+ "timeout_s": 60,
+ "mame_slots": [
+  "-sl1",
+  "uthernet2"
+ ],
+ "stage_files": [
+  {
+   "host": "disk_src/etc/rc.in",
+   "prodos_dir": "/FGX/etc",
+   "name": "rc",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "Starting network",
+   "bound to",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "no DHCPOFFER",
+   "no DHCPACK",
+   "socket failed",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

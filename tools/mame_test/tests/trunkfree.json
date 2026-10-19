@@ -1,0 +1,18 @@
+{
+ "name": "trunkfree",
+ "description": "apple/fgx#68: shrinking a file must return its blocks to the volume, and must not leave the file naming blocks it gave away.  ftruncate(2) set the LENGTH correctly all along -- read(2), stat(2) and a fresh open all agreed -- so nothing but the VOLUME's free-block count can see this, and that is what the probe reads, through getfsstat(2), the same number df(1) prints.  MEASURED before the fix: 16 blocks written cost 17 (16 data + the sapling's index) and truncating to 0 returned NONE of them.  TWO PATHS, and the second is the dangerous one: truncating to zero frees the index block outright, so nothing is left pointing at the released data, while a PARTIAL shrink keeps the index -- so every slot it frees must also be zeroed and the block rewritten, or the file still names blocks the volume has handed to someone else.  That is the cross-linked-block shape the elvis /tmp bug produced.  A free-count check cannot see it (the count is right either way), so the probe claims the freed space with a SECOND file and reads both back byte for byte.  AND THEN GROWS THE FIRST FILE BACK, which is the only thing that can see a stale slot on a partial shrink: the truncated file's EOF stops short of the released slots, so a slot still naming a freed block stays invisible until the file reaches that far again -- at which point the zero-fill writes through it and destroys the other file.  MUTATION-VERIFIED 2026-08-18: removing the slot zeroing gives `/root/TRUNKG blk 0 byte 0 ... BLOCKS ARE SHARED', and WITHOUT the grow-back step that mutation passes, which is why the step is there.  Trees (files over 128 KB) still retain -- apple/fgx#159.",
+ "command": "/testbin/trunkfree",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "trunkfree: to-zero ok",
+   "trunkfree: OK to-zero and partial shrink both return their blocks unshared"
+  ],
+  "screen_lacks": [
+   "trunkfree: FAIL",
+   "BLOCKS ARE SHARED",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

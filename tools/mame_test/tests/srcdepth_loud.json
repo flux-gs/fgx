@@ -1,0 +1,26 @@
+{
+  "name": "srcdepth_loud",
+  "description": "The other half of issue #9: a sourced script deep enough to overrun the stack ON PURPOSE (200 commands, past the ~60 the raised size allows) must SAY SO. fcc's prologue guard kills the task with exit 134 and no message of its own -- it lives in fcc_runtime.s, duplicated into every code segment, so a per-binary message costs tcsh nine copies and its bank cap. The kernel reports it instead. Silence here is what made #9 a two-session hunt. The GUARD line is the other half: the high-water-mark instrument (0.1) suppresses its console mirror EXCEPT when the deepest address touched lands inside the guard page, and asserting it here is what keeps that loud path from being a branch no test ever takes. Measured 2026-08-02: 'GUARD stkhwm 5 8120/8192'. As of increment 0.2 the kill comes from the DISPATCHER's user-SP floor check rather than fcc's prologue guard -- the floor check sees S the moment it enters the reserved margin, where the prologue guard has to wait for a prologue to run, so it fires 26 bytes earlier (8094/8192 vs 8120/8192). The wording is asserted rather than the generic prefix so this cannot silently regress to the other detector. mutstk_deep covers the prologue guard, which no test would otherwise reach.  DETECTOR NOTE (2026-08-03): this asserted the '(syscall floor)' wording until the sbrk-kill work changed the libc pile and shifted bsh's frame layout, after which the PROLOGUE guard trips first.  Both are legitimate stack-overflow detectors and the point of naming one is unchanged -- so the name was updated rather than relaxed to the generic prefix, which would have made this test satisfiable by any of the three.  Floor-check coverage did not move: mutstk asserts '(syscall floor)' and still passes.  DETECTOR, 2026-08-03 (final): back to '(syscall floor)'.  It moved to the prologue guard when the libc pile grew and back again when bsh's stack_pad shrank to 2304 -- both times the NAME was updated rather than relaxed to the generic prefix, which would make this test satisfiable by any of the three detectors.  mutstk_deep covers the prologue guard; heapkill covers heap exhaustion.  With 1.3 enabled bsh dies here at ~84 sourced commands rather than ~60, and it dies LOUDLY: the pad is deliberately sized so the stack guard fires BEFORE bsh's stak arena fills and truncates the sourced read in silence at ~184 (apple/fgx#12).  Trading a loud limit for a deeper silent one would undo what this test exists to protect.  DEPTH, 2026-09-06 (apple/fgx#339): 200 STOPPED BEING DEEP ENOUGH.  It ran to =V200DONE with nothing killed -- the klog carried the GUARD line and no kill at all -- so this failed reporting a missing detector when what was missing was the overflow.  The fixture is 400 now.  MEASURED RATHER THAN PICKED: at 200 the script COMPLETES; at 300 and at 400 it prints through =V205 and is killed with `stack overflow (syscall floor): killed pid', which is the detector this test has always named; at 500 and at 800 the same message arrives with NO output at all, because bsh parses the whole file into its TLST chain before executing and the PARSE recursion overflows first.  So the execute-recursion window this test exists for is roughly 206..450 and 400 sits inside it.\n\nAND THE LIMIT IS STILL LOUD, which is the property the paragraph above says must not be traded away.  apple/fgx#12's hazard is bsh's stak arena filling and truncating the sourced read IN SILENCE; every depth probed from 300 to 800 produced a kill line, none produced a silent truncation.  That is why the answer here was to move the fixture rather than to relax the assertion to the generic prefix -- the same answer as both 2026-08-03 moves, and for the same reason: a generic prefix would be satisfiable by any of the three detectors.\n\n`=V20' IS ASSERTED WITH THE KILL, and it is not decoration.  The kill line alone would be satisfied by a build that overflowed in the PARSE, before a single command ran -- which is what 500 and 800 do.  Requiring output first pins this to the execute-recursion path the description above is about, and `=V400DONE' asserted ABSENT pins that it did not simply finish, which is exactly how the 200-deep fixture failed.\n\nIT IS `=V20' AND NOT `=V100' BECAUSE THE SCREEN IS A SNAPSHOT.  screen_text_concat holds the visible 24 rows, and by the time the kill arrives at ~205 everything below about =V182 has scrolled off -- an earlier marker would assert the absence of scrolling rather than the presence of output.  The needle is three digits wide on purpose: with `/bin/echo =V%03d' it matches =V200..=V209 and nothing else (=V020 does not contain it), so it says `this reached the two hundreds', which is the claim.  If the kill depth moves this goes red and someone re-measures, which is what happened here and twice before it.",
+  "command": "sh -c '. /testdata/src400'",
+  "timeout_s": 400,
+  "memory_regions": [
+    {
+      "name": "klog",
+      "ptr_addr_hex": "CFG_DP_KKERN+B0",
+      "len": 4096
+    }
+  ],
+  "expect": {
+    "screen_contains": [
+      "=V20"
+    ],
+    "screen_lacks": [
+      "=V400DONE"
+    ],
+    "klog_contains": [
+      "stack overflow (syscall floor): killed pid",
+      "GUARD stkhwm"
+    ]
+  },
+  "boot_s": 45
+}

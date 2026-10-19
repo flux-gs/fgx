@@ -1,0 +1,61 @@
+
+
+GETTY(8)            UNIX Programmer's Manual            GETTY(8)
+
+
+
+NAME
+     getty - set terminal modes, greet, exec login
+
+SYNOPSIS
+     getty [-T type] ttyname
+
+DESCRIPTION
+     Getty is invoked by init(8) once per terminal line listed in
+     /etc/ttys, with the line already open on file descriptors 0,
+     1 and 2.  Getty itself opens nothing.
+
+     It sets the line to cooked mode with echo on (so the login
+     name is echoed; only the password, read later by login, is
+     not), prints /etc/issue if it exists, then prompts:
+
+          login:
+
+     A bare return re-prompts.  End of file on the line (the
+     connection dropped) makes getty exit 1, so init respawns it
+     for the next user.  Otherwise getty reads a name and execs
+
+          /bin/login name
+
+     The -T option names the terminal type of the line, and getty
+     passes it straight through to login, which prefers it over
+     the type in ttys(5).  telnetd(8) supplies it from the
+     client's TERMINAL-TYPE negotiation; init(8) does not pass it,
+     so a line in ttys(5) keeps the type recorded there.
+
+     replacing itself -- getty's stack is freed before login's is
+     allocated.
+
+     FGX narrowings.  This is not full BSD getty(8): there is no
+     gettytab, no baud rate negotiation, no modem control (carrier
+     detect, DTR drop) and no parity autodetection.  The ttyname
+     argument is accepted for compatibility with init's invocation
+     but is otherwise unused -- the line is already open.
+
+FILES
+     /etc/issue            greeting printed before each prompt
+     /etc/ttys             lines and programs init starts
+
+SEE ALSO
+     login(1)
+
+BUGS
+     Explicit mode-setting (rather than inheriting whatever the
+     line was left in) matters because init respawns getty after
+     any session that may have left the line raw -- an inherited
+     raw line would swallow the login name with no echo and look
+     like a dead terminal.
+
+
+
+Printed 7/20/86                                                8

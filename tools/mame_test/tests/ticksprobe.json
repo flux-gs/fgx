@@ -1,0 +1,24 @@
+{
+ "name": "ticksprobe",
+ "description": "IS A PLUGIN FRAME AN EMULATED FRAME?  The harness counts frames by counting `emu.register_frame_done' callbacks (plugins/fgxdebug/init.lua:1552), and every scheduled action -- every injected keystroke, the dump itself, the hard exit cap -- is scheduled against that counter.  If MAME coalesces or skips those callbacks under host load then the counter runs slow, the guest receives its input at different EMULATED moments, and NOTHING IN ANY LOG SAYS SO: both runs print the same frame numbers.  That is indistinguishable from an OS defect, and apple/fgx#265 and apple/fgx#266 are both currently blocked on telling the two apart.  This asks the guest what time IT thinks it is: `_kSystemTicks' is the 60 Hz counter the heartbeat increments (src/kernel/toolbox.s::_HBTickTask), so at a FIXED plugin frame it is a direct reading of how much emulated time has actually passed.  The frame is fixed by construction -- `exit_on_prompt' is false, so the run ends at paste_frame + timeout_s*60 and the dump is taken there every time.  The machine is left IDLE at a shell prompt on purpose: a quiescent guest makes the tick count a function of emulated time and nothing else.  READ IT WITH ticksprobe_check.py, which is where the comparison lives.",
+ "command": "sh",
+ "timeout_s": 60,
+ "exit_on_prompt": false,
+ "memory_regions": [
+  {
+   "name": "systicks",
+   "symbol": "_kSystemTicks",
+   "len": 4
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "ticksprobe_check.py"
+ }
+}

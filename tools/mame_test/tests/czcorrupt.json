@@ -1,0 +1,24 @@
+{
+ "name": "czcorrupt",
+ "description": "uncompress must REPORT a corrupt .Z, not decode the heap (apple/fgx#17).  2.11BSD armed signal(SIGSEGV, oops) and let the MMU catch a runaway LZW decode stack -- the handler says so outright, 'wild pointer -- assume bad input'.  It is the corrupt-input detector, not a debug aid.  FGX cannot deliver SIGSEGV, and the port dropped oops() without replacing it, so the overrun ran off de_stack and into the malloc arena in SILENCE.  A cycle is reachable because the CLEAR path resets free_ent to 256 while still writing tab_prefixof(free_ent) = oldcode, which can store a code ABOVE it -- breaking the 'prefix is strictly smaller' invariant that otherwise makes the chain acyclic -- and because our codetab is malloc'd where BSD's was a zero-filled static array, so an unwritten entry reads garbage rather than 0.  The fixture is a real fuzzed file: of 300 byte-flipped .Z files, 71 overran, and on a HOST build (which has an MMU) those same 71 and only those 71 died of a memory fault -- 300/300 agreement between 'my guard fires' and 'the hardware would have faulted'.  This one was chosen for producing the least output first.  Asserts BOTH halves: a valid .Z still round-trips (no false positive, which a too-tight bound would cause) and the corrupt one reports.  Mutation-tested on FGX: with the three bounds removed, the decompressed stream leaks '/testdata/badz' -- an adjacent heap allocation -- into stdout and =CZEND still prints, i.e. the failure is silent.",
+ "command": "sh -c '. /testdata/czrun'",
+ "timeout_s": 90,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "FGX compress round trip.",
+   "uncompress: corrupt input",
+   "=CZEND"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

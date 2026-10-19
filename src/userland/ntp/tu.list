@@ -1,0 +1,2 @@
+# ntp(8) translation units, upstream Makefile `ntp: ntp.o ntpsubs.o' less ntp.o, the entry point.
+src/userland/ntp/ntpsubs.c

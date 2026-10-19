@@ -1,0 +1,10 @@
+{
+ "name": "ldd",
+ "description": "Shared libc SP4: ldd(1) lists a dynamic program's libraries as SunOS's rtld traces them, says a static program is statically linked, and names a file it cannot read.",
+ "command": "ldd /testbin/dynsodyn; ldd /bin/echo; ldd /nonexistent; echo st=$?",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["-lc.1 => /lib/libc.so.1.0", "/bin/echo: statically linked", "ldd: /nonexistent unreadable"],
+  "screen_lacks": ["ld.so:", "PANIC", "BRK"]
+ }
+}

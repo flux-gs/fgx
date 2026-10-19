@@ -1,0 +1,31 @@
+{
+ "name": "bootstk",
+ "description": "The BOOT stack keeps real headroom, and the number is published. apple/fgx#195 reported the low-water at ~$F801 with one to two bytes spare in the 512-byte slice, and proposed growing the slice and arming a floor on that basis. RE-MEASURED 2026-08-29: it is $F920 with 288 spare -- 218 bytes used of 512. The issue's own text said the figure was worth re-measuring before acting, and it was: the original reading was taken after userland had started, by which point Task_AllocKernStack has repainted the slice boot borrowed and seeded a $C5C5 canary at its base, so it measured a TASK's stack and a canary rather than boot's marks. This fixture asserts the published number exists and that the headroom has not collapsed, which is the guard #195 actually wanted -- growing the slice was a fix for a number that was wrong.\n\nTHE FIGURE IS READ OFF THE PAINT NOW, NOT OFF A BOOT-LOG LINE (2026-09-06).  `bstk $F920 (288 spare)' was deleted with the rest of the development messages: a boot log carries what the machine DETECTED, and a stack headroom figure is for whoever is sizing a stack.  The measurement is unchanged and so is the claim -- only the instrument moved, which is the same move kstkhwm_check already makes for the per-pid slices.\n\nboot_frame 700 IS NOT A GUESS.  The deleted assembly's own comment states it: `an external sample taken at frame 700 reads $F926; this reports $F920, six bytes deeper, and six bytes is the call depth between them'.  The in-kernel scan ran ON the stack it measured, so it counted its own frames; an external sample does not, and reports six bytes MORE headroom.  Under-reporting headroom is the safe bias and this direction gives up six bytes of it, which is why the floor stays at 128 rather than being retuned to the new number.\n\nIT MUST BE SAMPLED BEFORE PID NPROC SPAWNS, and that is the whole reason for the frame: Task_AllocKernStack REPAINTS this slice and seeds a $C5C5 canary at its base, so a sample taken at dump time measures that task's stack while looking exactly like a measurement of boot's.  apple/fgx#195's original ~$F801 figure is what that mistake produces.  The checker refuses a slice carrying the canary for the same reason.\n\nTHE REGION IS THE WHOLE ARENA AND THE CHECKER TAKES ITS LAST SLICE, so CFG_KERNEL_NPROC can change without editing an address here: FGX_STK_BOOT is CFG_STK_KTASKS + NPROC*FGX_KSTK_SIZE, i.e. always the slice above the last task's.  $00E000/6656 is the same region the fgxdebug plugin dumps for kstkhwm_check; this asks for it again at a boot frame, which that one does not need.\n\nTHE FLOOR IS 48 AND IT IS A RATCHET, NOT A SAFE MARGIN (apple/fgx#338).  It was 128 against a measured 288.  The chain has grown by hundreds of bytes since: on a UFS root the mark is $F834, 52 spare, measured at seven boot frames from 300 to 2400 with the same answer at every one and no canary at any of them -- so it is the boot chain's own depth and the slice was still boot's throughout.  The deepening is NOT caused by the move to the paint: the scan reads the mark the chain left, and would have read 52 at any point since the root swap.  What the deleted boot-log line cost was the ability to SEE it.",
+ "command": "sh",
+ "post_commands": [
+  "A=ok",
+  "echo BSTKOK=$A"
+ ],
+ "post_gap_frames": 300,
+ "timeout_s": 400,
+ "exit_on_prompt": false,
+ "use_state": false,
+ "expect": {
+  "screen_contains": [
+   "BSTKOK=ok"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "bootstk_check.py"
+ },
+ "memory_regions": [
+  {
+   "name": "bootstk_arena",
+   "addr_hex": "00E000",
+   "len": 7296,
+   "boot_frame": 700
+  }
+ ]
+}

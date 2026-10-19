@@ -1,0 +1,24 @@
+{
+  "name": "ufsstat",
+  "description": "stat(2) REPORTS A BSD struct stat, which is the STX_ cutover (2026-09-05) and the thing three tracker items were waiting on.  The kernel used to fill a 15-byte ProDOS-shaped image -- a mode BYTE whose whole vocabulary was $80/$40/$20, a 3-byte size, and a raw ProDOS bit-packed date -- and libc unpacked it, calendar arithmetic included.  There was nowhere in it for a uid, a gid, an nlink, an rdev or a Unix epoch, so `ls -l' could not report them and did not try.\n\nWHAT EACH ARM DISCRIMINATES, because `ls -l' printing SOMETHING is not the claim:\n  `-rw-r--r--' is the full nine-bit mode.  ls's fmtmode was cut down to two bits with the note that ProDOS could store no others, so it printed seven fixed dashes; restoring upstream's pair-table walker (vendor/2.11BSD/usr/bin/ls/ls.c:614-640) is what makes the group and other triples real.  MEASURED DISCRIMINATING: put the seven dashes back and this reads `-rw-------'.\n  `lacks Jan  1  1970' is the DATE, apple/fgx#319.  It is an absence arm because the dates are the staged files' own mtimes and therefore move; what cannot move is that they are no longer all epoch zero.  TWO causes had to go for this: the kernel's image had nowhere to put an epoch (fixed by the cutover) AND fgxfs stamped every inode from sb.time, which defaulted to 0 -- so the fixed kernel went on reporting 1970 faithfully until `put' started taking the host file's mtime.  The first fix alone leaves this arm red, which is why it is here rather than assumed.\n  `root' is the owner, from va_uid.  The legacy image had no uid field at all and libc hardcoded 0.\n\nTHE PRESENCE ARM IS LOAD-BEARING and the absence arm alone would not do: run.py refuses screen_lacks on an empty capture, but a boot that reached a prompt and printed an ERROR instead of a listing would satisfy `lacks Jan  1 1970' on its own.  `total' and the mode string say a listing happened.\n\n/etc AND NOT /: the root directory's entries are a mix this test would have to track, where /etc is uniformly 0644 regular files staged by the same rule.  A directory's own `d' arm belongs to whatever tests chdir.\n\nTHE `lacks not found' ARM ARRIVED WITH apple/fgx#317's FIX (2026-09-05) and is the reason `dhclient.conf.sample' is a presence arm beside it.  This listing used to carry `/etc/dhclient.conf.s not found': toolchain/include/sys/dir.h defined MAXNAMLEN 15 with the comment \"ProDOS name cap\" while both kernel headers said 63, so readdir stopped copying at fifteen characters and ls then stat'd a name that is not there.  Nothing disagreed across a wire -- SYS_LISTDIR returns bare NUL-terminated names -- so the fix was the constant.  MEASURED DISCRIMINATING: put 15 back and the twenty-character name reappears truncated and the `not found' line with it, failing both arms.\n\n/dev IS A DIFFERENT PRODUCER AND HAS ITS OWN TEST (ufsdevstat).  A name under /dev is claimed by the synthesized chardev registry before the vnode is reached, so it exercises Fs_Stat's chardev arm where this exercises root_stat.  It is separate rather than a second command here because this test's date arm is a screen-wide `lacks' and a /dev listing has no dates to pass it with -- the registry has no time to report.\n\nSINCE 2026-09-05 THIS ALSO GUARDS apple/fgx#327, and it is the only test that does.  /etc is 22 entries, and ls's getdir() starts at `nent = 20' and reallocs past it -- so this command is exactly the growth path that a two-byte size sent to realloc's four-byte parameter kills with `ls: out of memory'.  It could not discriminate that while ls.c was the trimmed port, because that file carried an #include <stdlib.h> and so had the prototype in scope; now that ls.c is upstream VERBATIM, it calls realloc undeclared exactly as every 2.11BSD source does, and the only thing standing between it and the bug is build/libc.sigs reaching the call.  MEASURED DISCRIMINATING: drop --sigs from the fcc_c rule in tools/ninja/gen.py and this test prints `ls: out of memory' and nothing else -- no `total', no mode string, so three of its four presence arms go red at once.",
+  "command": "ls -l /etc",
+  "boot_s": 45,
+  "timeout_s": 30,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "total",
+      "-rw-r--r--",
+      "root",
+      "modload.conf",
+      "dhclient.conf.sample"
+    ],
+    "screen_lacks": [
+      "Jan  1  1970",
+      "not found"
+    ]
+  }
+}

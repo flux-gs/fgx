@@ -1,0 +1,32 @@
+
+
+SERVICES(5)          UNIX Programmer's Manual         SERVICES(5)
+
+
+
+NAME
+     services - Internet service name database
+
+DESCRIPTION
+     The file /etc/services maps service names to port numbers and
+     protocols; it is consulted by getservbyname(3).  Each line is:
+
+          name   port/protocol   [alias ...]
+
+     as in
+
+          telnet   23/tcp
+          domain   53/udp   nameserver
+
+     Fields are separated by spaces or tabs.  Blank lines and text
+     from a `#' to the end of line are ignored.
+
+FILES
+     /etc/services
+
+SEE ALSO
+     getservbyname(3)
+
+
+
+Printed 7/20/86                                                5

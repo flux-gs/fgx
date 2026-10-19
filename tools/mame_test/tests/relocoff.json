@@ -1,0 +1,23 @@
+{
+ "name": "relocoff",
+ "description": "AN OFFSET RELOCATION NAMING A SEGMENT THE IMAGE DOES NOT HAVE IS REFUSED WITH ENOEXEC.  The fixture is relocseg's /bin/true with its first relocation's source restored to segment 0 and its target byte set to $89: FGX2_RELOC_ADDOFF ($80) on segment 9.  The loader masks the kind bit and checks the segment against the image's count, as it checks a bank relocation's (apple/fgx#522); unchecked, it would add a page read past _ldSegPage.  ldd execs the image and perror()s the failure (bin/ldd.c).",
+ "command": "/bin/ldd /testbin/relocoff",
+ "timeout_s": 240,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/relocoff.bin",
+   "prodos_dir": "/FGX/testbin",
+   "name": "relocoff"
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "execution failed: Exec format error"
+  ],
+  "screen_lacks": [
+   "Undefined error",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

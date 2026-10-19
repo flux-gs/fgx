@@ -1,0 +1,7 @@
+/testbin/tztest
+cp /usr/share/zoneinfo/America/New_York /etc/localtime
+/sbin/adjkerntz -a
+/testbin/tztest -k
+cp /usr/share/zoneinfo/UTC /etc/localtime
+/sbin/adjkerntz -a
+/testbin/tztest -z

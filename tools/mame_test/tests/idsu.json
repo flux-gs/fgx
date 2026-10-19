@@ -1,0 +1,28 @@
+{
+  "name": "idsu",
+  "description": "id(1) AND su(1), 2.11BSD's, on the credentials UFS 2.6 built.  THE POINT IS THE THIRD LINE: `su root' FROM nobody must be REFUSED, because upstream's rule is that only a member of group 0 in /etc/group may su to root, and nobody is not one.  That is the single assertion here that cannot pass by accident -- every other line would read identically on a machine with no permission model at all.  Around it: `id' as root reports uid=0(root) gid=0(wheel), which proves the passwd and group lookups resolve names rather than printing bare numbers; `su nobody' succeeds without a password because su skips the prompt for uid 0, which is the asymmetry wanted (root may become nobody, nobody may not become anyone); and `id' inside that shell reports uid=32767(nobody) gid=31(guest), which proves setuid AND setgid both took.  This is also the interactive half of what permtest does programmatically -- a way to BE a non-privileged user.",
+  "command": "sh",
+  "post_commands": [
+    "id",
+    "su nobody",
+    "id",
+    "su root",
+    "echo SUBACK=$?"
+  ],
+  "post_gap_frames": 300,
+  "timeout_s": 150,
+  "exit_on_prompt": false,
+  "expect": {
+    "screen_contains": [
+      "uid=0(root) gid=0(wheel)",
+      "uid=32767(nobody) gid=31(guest)",
+      "You do not have permission to su root",
+      "SUBACK=1"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK",
+      "not found"
+    ]
+  }
+}

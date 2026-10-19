@@ -1,0 +1,10 @@
+{
+ "name": "dateset",
+ "description": "apple/fgx#451: settimeofday reaches the clock.  date(1) as root sets 12:34 and the next date reads it back.  The write had every word byte-swapped on its way to WriteTimeHex, so the ROM was handed month 18, day 8, year 1912 and the clock kept its old time -- with no error reported.  date -u sets TZ=GMT through setenv(3) (2.11BSD patch #454), so it prints GMT, which the image's own zone does not (UTC by default, or a zone named by FGX_TZ or .fgx_tz): the GMT needle fails if setenv does not reach getenv.",
+ "command": "date 1234; date; date -u",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": ["12:34:0", " GMT 20"],
+  "screen_lacks": ["PANIC", "BRK"]
+ }
+}

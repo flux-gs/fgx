@@ -1,0 +1,23 @@
+{
+ "name": "curssoreclaim",
+ "description": "Shared libc SP4: after curssodyn exits, the pool is drained through ld.mod's grants: curses's unused row is reclaimed (no banks, its slot kept) and libc's pinned row is not; curssodyn then reloads curses at the same base and runs.",
+ "command": "sh /testdata/curssoreclaim",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "LDC drain ok",
+   "LDC row state=1 users=0 nbanks=0",
+   "RCL libc kept",
+   "prebound, loaded)",
+   "CURS ok",
+   "RCL same base"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "CURS FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

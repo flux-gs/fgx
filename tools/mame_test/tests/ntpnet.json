@@ -1,0 +1,15 @@
+{
+ "name": "ntpnet",
+ "description": "NTP over the Uthernet II, on the host's real network (NOT in the gate: real DHCP, DNS and NTP servers, real-time pacing, several minutes).  The release /etc/rc is staged back so /etc/netstart takes a lease and sets INET, and /etc/rc then starts ntpd; a test syslog.conf sends ntpd's facility (local3) to the console.  Three things are asserted, each by a needle only output can print: ntp(8) gets a reply from time.apple.com over a connected UDP socket (`delay:', its report line); ifcprobe's SIOCGIFCONF lists the card with an AF_INET address alongside lo0 (the ioctls' card path); and ntpd selects a peer (`clock: select peer').",
+ "command": "ntp time.apple.com; /testbin/ifcprobe; sleep 420",
+ "timeout_s": 720,
+ "mame_slots": ["-sl1", "uthernet2"],
+ "stage_files": [
+  {"host": "disk_src/etc/rc.in", "prodos_dir": "/FGX/etc", "name": "rc", "replace": true},
+  {"host": "tools/mame_test/fixtures/syslog.conf.ntpnet", "prodos_dir": "/FGX/etc", "name": "syslog.conf", "replace": true}
+ ],
+ "expect": {
+  "screen_contains": ["bound to", "delay:", "IFC if u2s1 family 2", "IFC OK", "clock: select peer"],
+  "screen_lacks": ["unknown host", "not responding", "IFC FAIL", "Clock is too far off", "PANIC", "BRK"]
+ }
+}

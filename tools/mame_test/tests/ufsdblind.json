@@ -1,0 +1,13 @@
+{
+ "name": "ufsdblind",
+ "description": "A READ THROUGH THE DOUBLE INDIRECT BLOCK, which nothing in the suite had ever done.  apple/fgx#322 named the gap: `bigread' is the only test that goes past the direct blocks at all and it is 48 KB, which is single indirect.  With FS_BLKSIZE 1024, NDADDR 4 and NINDIR 256 the single indirect reaches 266,240 bytes; /root/ntp/beatbox.ntp is 379,464, and this reads at offset 300,000 -- 33,760 bytes past the ceiling, far enough that no fencepost reaches it by accident.  IT SEEKS RATHER THAN READING 300 KB, which also makes it depend on lseek reaching the VFS -- the other half of the same issue, and deliberate: both are one fix.  THE EXPECTED SUM IS THE HOST TOOL'S ANSWER: fgxfs.py is this tree's INDEPENDENT implementation of the 2.11BSD format, so 1646 is two implementations agreeing about the same sixteen bytes rather than FGX agreeing with itself.  A SUM AND NOT A LENGTH, because a short read, a hole and the wrong block all return bytes and only the values say the descent landed where it was asked -- a hole reads as zeros and sums to 0, which is the failure this is likeliest to meet.  By hand, ntpplay plays both the largest and the smallest .ntp file after the lseek fix; this is that result turned into something the gate can hold.",
+ "command": "sh",
+ "post_commands": ["/testbin/dblind"],
+ "boot_s": 45,
+ "timeout_s": 40,
+ "exit_on_prompt": {"sentinel": "fgx#", "count_delta": 2},
+ "expect": {
+  "screen_contains": ["dblind: OK double-indirect read past 266240"],
+  "screen_lacks": ["dblind: FAIL", "PANIC", "BRK"]
+ }
+}

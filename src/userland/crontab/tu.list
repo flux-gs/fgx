@@ -1,0 +1,7 @@
+# crontab(1) translation units, upstream's CRONTAB_OBJ (Makefile) less
+# crontab.o, the entry point.  They are cron(8)'s own files, compiled again
+# here as upstream's Makefile links them into both programs.
+src/userland/cron/misc.c
+src/userland/cron/entry.c
+src/userland/cron/env.c
+src/userland/cron/compat.c

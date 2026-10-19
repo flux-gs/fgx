@@ -1,0 +1,30 @@
+{
+ "name": "softexec",
+ "description": "Does a NON-FORK exec work, and does it leak?  `exec cmd` -- the shell builtin that does not fork -- was broken disk-wide until apple/fgx#14: it took a 'replace the caller in its own bank' arm that called Load_Binary with A=0, 'honor the header's bank', which _LoadFGX2 (shared by FGX3) rejects with EINVAL because it requires a caller-supplied override bank.  Every binary this OS builds is FGX2/FGX3, so that arm was reached and could not load a single one.  Reaching that path takes care, which is why this is a binary and not a shell line: the shell fork+execs the probe, and THAT exec clears the child flags, so the probe's own execv is the first to run with them clear.  Two independent failures are covered.  deep(55) runs 55 levels of SOFT (data-bank) frames in EVERY generation, so each exec'd image must have been granted its own soft-frame bank and a DP page clean enough that crt0 seeds _fcc_sfp rather than inheriting a stale mid-recursion one from the dead image.  And the probe execs itself 61 times, which is the half a functional test cannot see: #14's commit-side reclaim frees the outgoing banks and user stack, and if it is wrong the FIRST exec still works perfectly -- the machine merely starves later, in some unrelated program, long after the change that caused it.  The generation count is CALIBRATED, not guessed: mutation-tested 2026-08-04 by disabling each free in turn, leaking the outgoing BANKS dies at generation 12 (pool ~22) and leaking the outgoing STACK dies at generation 29 (arena 149 pages).  The first draft used 20 rounds, which caught the bank leak and let the stack leak through GREEN -- 60 is ~2x the worse case.  Either way the chain stops with SXLEAK and ENOMEM.  Assertions are POSITIVE on SXOK (which only the last generation prints) rather than merely the absence of failure, and every SX* string asserted absent is one this path demonstrably CAN print -- SXEXECFAIL errno=22 is exactly what the unfixed kernel shows.  =SXDONE comes from the parent shell so a hung machine cannot read as a pass.  Mutation-tested 2026-08-04: reverting the #14 kernel change turns this red at the first exec. THIRD check, added the same day: before the real chain the probe execs a path that does not exist and must come back -- execve(2) returns -1 and the caller keeps running.  That is not a formality for this fix.  The new image needs a DP page; DP pages are FIXED per pid and a plain exec does not change pid, so allocating one on the way in zeroes the page the CALLER is still running on, before the load can fail.  fcc keeps its frame pointer, soft-frame pointer and stack floor there.  deep(55) after the failed exec is the detector: with a wiped DP, _fcc_sfp reads 0 and the next soft frame traps, so SXSURVIVED never prints at all.   Tracked in apple/fgx#36; rework to an expansion-built marker.  MARKER REBUILT 2026-08-08 (apple/fgx#36): this asserted '=SXDONE', which sat INSIDE the typed command, so the shell's echo of that command satisfied it whether or not softexec produced anything. mid40st passed on exactly this shape for as long as it existed and only went red when unrelated output pushed the echoed line out of the ring. The marker is now built by SHELL EXPANSION -- the command contains `$A$B`, never the literal -- and it carries the child's EXIT STATUS, so it asserts more than it used to: a crashed or signalled child fails it.  The status is the MEASURED contract, not a presumed 0: softfork exits 42, softexec 0, and heapkill 136 = TASK_EXIT_HEAPFULL, the death this probe deliberately opts into -- so asserting 0 there would have demanded the opposite of the behaviour under test.",
+ "command": "A=SX; B=DONE; sh -c '/testbin/softexec'; echo $A$B=$?",
+ "timeout_s": 180,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "SXEXEC",
+   "SXSURVIVED",
+   "SXOK",
+   "SXDONE=0"
+  ],
+  "screen_lacks": [
+   "SXBADRET",
+   "SXFAILWRECK",
+   "SXEXECFAIL",
+   "SXLEAK",
+   "SXBAD",
+   "PANIC",
+   "stack overflow"
+  ]
+ }
+}

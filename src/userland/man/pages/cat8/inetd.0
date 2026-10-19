@@ -1,0 +1,108 @@
+INETD(8)            UNIX Programmer's Manual            INETD(8)
+
+
+
+NAME
+     inetd - internet super-server
+
+SYNOPSIS
+     inetd [-d]
+
+DESCRIPTION
+     Inetd listens for connections on behalf of other servers, so a
+     service costs nothing until someone uses it.  At startup it
+     reads /etc/inetd.conf, binds and listens on the port of each
+     service it finds, and then waits in select(2).  When a
+     connection arrives it accepts it and starts the configured
+     server with the connection as that server's standard input,
+     output and error.  The server does not bind anything itself.
+
+     -d      Debug: stay in the foreground, and report each service
+             armed, re-armed and handed to a child, and each child
+             reaped.
+
+     Each line of /etc/inetd.conf describes one service:
+
+           [host:]service socktype protocol wait server-user \
+                   server-program [server-arguments]
+
+     Fields are separated by blanks or tabs.  A line whose first
+     character is `#' is a comment, and so is anything after a `#'
+     on a line.  The service name is looked up in /etc/services; a
+     decimal port number may be given instead.
+
+     Host is the address to bind, as a dotted quad; `*', or no host
+     at all, means every address.  Upstream has no host part and
+     always binds the wildcard, and so does the shipped file:
+
+           telnet  stream tcp nowait root /testbin/telnetd telnetd -i
+
+     That one line answers the network when an Ethernet card is
+     fitted and `telnet localhost' whether or not one is.  A host is
+     needed only to serve a single address: 127.0.0.1 keeps a
+     service off the network.
+
+     A wildcard listener on a machine with a card holds one of the
+     three hardware sockets for as long as inetd runs; a loopback
+     listener costs none.  Services past that limit are refused as
+     the file is read.
+
+     This inetd honours `stream tcp nowait root' lines.  Every
+     other combination is REPORTED and SKIPPED rather than silently
+     ignored, so a stock configuration file works with the
+     unsupported lines naming themselves in the log.  See BUGS for
+     what is missing and why.
+
+     A line asking for an unprivileged server-user is refused, not
+     run as root.  Running a service with more privilege than its
+     configuration asked for is worse than not running it.
+
+     Inetd detaches with daemon(3), as BSD's does, and reports
+     through syslog(3) to syslogd(8).
+
+     A LISTENER IS SINGLE-USE.  On the hardware path accept(2)
+     detaches the listener, handing its socket to the accepted
+     connection, so inetd rebuilds each listener after every
+     connection, reporting `re-armed' under -d.  A service
+     whose rebuild fails is carried as down and retried rather than
+     dropped, so a transient failure costs one connection and not
+     the service.
+
+FILES
+     /etc/inetd.conf     the configuration file
+     /etc/services       service name to port number
+
+SEE ALSO
+     telnetd(8), services(5), telnet(1), syslogd(8)
+
+BUGS
+     Only `stream tcp nowait' services run.  Datagram and `wait'
+     services are parsed and skipped: the single-threaded model
+     hands the socket itself to the server and waits for it, which
+     nothing in this system wants yet.
+
+     The built-in services -- echo, discard, chargen, daytime and
+     time -- are not provided.  A line naming `internal' is
+     skipped.
+
+     There is no privilege dropping, so the server-user field is
+     required to read `root'.  Setting it to anything else refuses
+     the line.
+
+     At most two services can be armed against the network at once:
+     the Ethernet controller has three usable sockets and a live
+     connection holds one for its lifetime, so the last is reserved
+     rather than handed to a listener.  Configurations past that
+     limit are refused as they are read, not partway through.
+
+     A service that cannot arm -- a wire listener with no card
+     fitted, say -- is retried on a timer rather than abandoned,
+     and each failed attempt is logged.
+
+     TCP wrappers, tcpmux, the RPC services and the connection rate
+     limiter are all absent.  A configuration file that relies on
+     any of them will be quietly less protected than it looks.
+
+
+
+Printed 7/20/86                                                8

@@ -1,0 +1,21 @@
+{
+ "name": "wtmpprobe",
+ "description": "The wtmp append path at the libc/init layer, below last(1) and ac(8).  At the prompt /etc/wtmp holds exactly two 36-byte records -- init's `~'/reboot (logwtmp(3)) and the console login login(3) appended -- so its size is 72.  The size is the assertion: 0 means nothing was appended, and anything above 72 means a stray record, the shape an unconditional session-end record took before logout(3) went back to upstream's and the end record became the caller's `if (logout(line)) logwtmp(line, \"\", \"\")'.  The marker is built by expansion (`$A$B'), so the typed line cannot satisfy it.",
+ "command": "A=WT; B=MP; set `wc -c </etc/wtmp`; echo $A$B=$1",
+ "timeout_s": 60,
+ "exit_on_prompt": true,
+ "expect": {
+  "screen_contains": [
+   "WTMP=72",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "not found",
+   "No such",
+   "cannot",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ]
+ }
+}

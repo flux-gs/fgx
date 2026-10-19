@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_reuse",
+ "description": "Shared libc SP4: forty fork children counted in and out across recycled slots.",
+ "command": "/testbin/ldctl reuse",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC reuse ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

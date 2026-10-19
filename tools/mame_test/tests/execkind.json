@@ -1,0 +1,13 @@
+{
+ "name": "execkind",
+ "description": "A SEGMENT KIND THE LOADER DOES NOT KNOW IS REFUSED WITH ENOEXEC.  The fixture is /bin/true with segment 0's kind byte set to 4, the retired by-reference libc pile kind, so it stands for any binary linked for the pile path: its segment table names bytes the file does not carry.  The loader answers a kind past RODATA with ENOEXEC, as 2.11BSD exec answers a magic it does not know (sys/kern_exec.c), rather than reading the next segment's bytes into a fresh bank.  ldd execs the image and perror()s the failure (bin/ldd.c); sh is not used, because 2.11BSD sh runs an ENOEXEC file as a shell script (sh/service.c).  Control: the unpatched /bin/true, which ldd reports the libraries of instead.",
+ "command": "/bin/ldd /testbin/kind4",
+ "timeout_s": 240,
+ "stage_files": [
+  {"host": "tools/mame_test/fixtures/kind4.bin", "prodos_dir": "/FGX/testbin", "name": "kind4"}
+ ],
+ "expect": {
+  "screen_contains": ["execution failed: Exec format error"],
+  "screen_lacks": ["Undefined error", "PANIC", "BRK"]
+ }
+}

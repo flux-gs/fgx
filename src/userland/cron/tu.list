@@ -1,0 +1,11 @@
+# cron(8) translation units, upstream's CRON_OBJ (Makefile) less cron.o,
+# which is the entry point the generator takes as src/userland/cron/cron.c.
+src/userland/cron/database.c
+src/userland/cron/user.c
+src/userland/cron/entry.c
+src/userland/cron/job.c
+src/userland/cron/do_command.c
+src/userland/cron/misc.c
+src/userland/cron/env.c
+src/userland/cron/popen.c
+src/userland/cron/compat.c

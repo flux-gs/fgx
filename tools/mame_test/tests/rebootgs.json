@@ -1,0 +1,19 @@
+{
+ "name": "rebootgs",
+ "description": "reboot(2) COLD-STARTS THE MACHINE.  /sbin/reboot syncs, signals, and calls reboot(2); the kernel banks the Monitor ROM in and enters PWRUP ($00FAA6) in emulation mode, which re-runs the IIgs cold start and boots FGX again.\n\nWHAT DISCRIMINATES IT: `/sbin/reboot' is the command the harness TYPED, so it is echoed on the screen of any run that did not restart.  A run that did restart cleared the screen and rendered a fresh boot over it, so the echo is gone and the banner on screen is the SECOND boot's.  `NEVER' is the shell command after the reboot: reaching it means reboot(2) returned, which it must not.\n\nMeasured while building this: with the language card still selected for RAM -- FGX's own IRQ direct page lives at bank 0 $FA00 -- $00FAA6 was interrupt scratch rather than PWRUP, and the machine wedged with the screen holding FGX's last frame.  That reads exactly like `the reboot did nothing', which is why this asserts on the ECHO being gone rather than on the banner being present.",
+ "command": "/sbin/reboot; echo NEVER",
+ "boot_s": 45,
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "fgx on Apple IIgs",
+   "spawning init...",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "/sbin/reboot",
+   "NEVER"
+  ]
+ }
+}

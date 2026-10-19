@@ -1,0 +1,25 @@
+{
+  "name": "rename",
+  "description": "rename(2) and mv(1) -- the coverage apple/fgx#29 says never existed.  Nothing in this suite exercised either, and rename(2) never took effect on ANY path: _Mod_RegistryAppend ran with DBR = the module bank and stashed its entry-offset multiplicands with plain STA/LDA, so both stores landed in the freshly loaded module image at its own offsets $1AD2..$1AD5.  prodos.mod is the only module long enough for that window to be code -- it fell inside _fop_rename's @rn_sback -- so `BMI @rn_exdevJ` + `LDA _fsPathScratch,X` became four $00 bytes (BRK) and every rename(2) died there.  MARKERS ARE BUILT BY SHELL EXPANSION (A=CON; B=TENT; ... echo $A$B) so the command line MAME echoes cannot contain them: the first two diagnoses of #29 both 'passed' on markers that were literals in the echoed command, or that a `;` printed regardless of whether mv worked.  This asserts the POSITIVE claim in both directions -- the NEW name holds the data, the OLD name is gone -- and it asserts the SYSCALL CONTRACT via /testbin/rnprobe, whose only file operations are mv's own (stat, stat, rename) with markers written through write(2): <renyes> for a same-directory rename, <exdev> for a cross-directory one (which is what lets mv fall back to copy+unlink).  mv(1) alone cannot distinguish those, because it swallows the errno.  Directory rename is covered too: step 6 of _fop_rename rewrites the directory's own header name in its key block, and that code had never once executed.  The workload lives in /testdata/renamet rather than on the command line: MAME's -autoboot_command SILENTLY TRUNCATES a long line (the first cut of this test stopped mid-`mv` at a `>` continuation prompt and every assertion read as a miss), and a marker that is not in the command line cannot be matched from the command line either.\n\n`<exdev>' MEANS ACROSS A MOUNT, NOT ACROSS A DIRECTORY (2026-09-06, apple/fgx#335).  The cross-DIRECTORY rnprobe run asserted `<exdev>' and that is the opposite of what BSD does: Reno returns EXDEV when `fvp->v_mount != tdvp->v_mount' (kern/vfs_syscalls.c:1450), a MOUNT comparison, and this kernel makes the same one (vfs_vnops.c, `fvp->v_mount != tdirp->v_mount').  /tmp and /root are one filesystem, so that rename SUCCEEDS and must -- the old expectation was ProDOS's FST answering EXDEV for a rename it could not do, frozen into a needle.\n\nSO THE ARM MOVED TO A REAL MOUNT POINT, and it is the first thing to exercise that check at all.  vfs_vnops.c says so against vfs_link's copy of it: `EXDEV IS UNREACHABLE TODAY ... there is one UFS mount, so two names cannot land on different ones.  The day a second volume is mountable, a missing test is a hard link across filesystems -- an inode number pointing into the wrong i-list, which is corruption rather than a refusal.'  A second volume is mountable now: disk/ufsscratch.po comes in through extra_hards as unit 1, the workload mounts it on /mnt, renames into it and unmounts.  That is what makes `<exdev>' evidence instead of a restatement.\n\nBOTH `<renyes>' RUNS STAY, and they are not redundant: same-directory and cross-directory are different paths through ufs_rename -- the second rewrites the moved entry into a different parent and adjusts `..' -- and the cross-directory one is the case that used to be asserted as a refusal.",
+  "command": "sh -c '. /testdata/renamet'",
+  "timeout_s": 150,
+  "expect": {
+    "screen_contains": [
+      "CONTENT",
+      "GONE",
+      "CROSSOVER",
+      "DIRROK",
+      "<renyes>",
+      "<exdev>"
+    ],
+    "screen_lacks": [
+      "STILLTHERE",
+      "BRK",
+      "PANIC"
+    ]
+  },
+  "extra_hards": [
+    "disk/ufsscratch.po"
+  ],
+  "boot_s": 45
+}

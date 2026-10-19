@@ -1,0 +1,11 @@
+{
+ "name": "sigreuse",
+ "description": "Task_Alloc zeroes a RECYCLED pid's signal-handler slots across all SIGHND_NHND tables, not just the original three.  This is the sibling of sigexec: same counted walk over the same table run, same silent failure if the count missed the SIGTERM/SIGHUP tables added 2026-08-04, but reachable only through pid REUSE, which exec never exercises.  The probe forks a child that catches SIGTERM and exits WITHOUT exec'ing, then keeps forking until a child comes back with that same pid and has it raise SIGTERM on itself.  A cleared slot means SA_TERM and the parent reaps a signalled child (REUSE CLEAN, sig=15); a stale slot means the leftover trampoline offset runs, no-ops against the fresh cell, and the child exits 9 (REUSE STALE).  REUSE NOPID is asserted absent on purpose: it is what prints if the pid never came back around, and without that assertion the test would pass by never reaching the interesting case.",
+ "command": "/testbin/sigexec reuse",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["SIGEXEC REUSE CLEAN"],
+  "screen_lacks": ["SIGEXEC REUSE STALE", "SIGEXEC REUSE NOPID",
+                   "SIGEXEC REUSE FORKFAIL", "PANIC", "BRK"]
+ }
+}

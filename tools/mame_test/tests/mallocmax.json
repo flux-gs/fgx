@@ -1,0 +1,5 @@
+{"name":"mallocmax",
+ "description":"malloc across the $F000 threshold: the byte-grain heap and the dedicated-MM-block path are different allocators, so both sides get probed. Asserts the LARGE side comes back non-NULL -- a dedicated block is bank-aligned, so it prints as ptr=00XX0000 and a failure is the all-zero pointer this greps for the absence of -- and that realloc still grows a block. It deliberately does NOT assert the sweep total or the biggest realloc: mallocmax never frees its probes, so both are leftovers of everything held above them, and reading the total as a ceiling is what made #11 look like a 19,712-byte heap. heapcap measures capacity from a clean start.",
+ "command":"/testbin/mallocmax","timeout_s":180,
+ "expect":{"screen_contains":["MSZ 61440 ptr=","RSZ 8192 ok","MMDONE2"],
+           "screen_lacks":["MSZ 61440 ptr=00000000","MSZ 65536 ptr=00000000","MSZ 262144 ptr=00000000"]}}

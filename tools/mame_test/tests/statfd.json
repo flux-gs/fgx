@@ -1,0 +1,21 @@
+{
+ "name": "statfd",
+ "description": "stat(2) and fstat(2) must give the SAME answer for the same object (apple/fgx#366).  /testbin/statid stats `/' by NAME and fstats it by DESCRIPTOR and prints MATCH or MISMATCH, rather than leaving a fixture to match printed numbers with exact spacing -- a program that only prints cannot fail.  GOES RED WITHOUT THE FIX, and that is measured rather than assumed: forcing `_Sys_Fstat' back down the legacy arm (`CLC' in place of the `JSR _Fs_RootFstat') takes this to `missing SID MATCH' + `unexpectedly contains SID MISMATCH'.  Before the fix `_Sys_Fstat' answered from the FCB, which cannot know an inode, so fstat reported st_ino 0 where stat reported the real 2; libc's stat.c wrote that up as intended behaviour and no caller could tell a `not reported' zero from a real one.  THE getwd ARM IS A SMOKE ASSERTION AND NOT A DISCRIMINATOR, and it is labelled so because it was nearly shipped as the opposite: the same mutation run leaves `SID getwd=[/root]' PASSING.  getwd walks up until fstat's inode equals stat's, and with both broken values reading 0 it exits through its second break (`cino == d.st_ino', 0 == 0) one iteration late with the right answer by accident.  It is kept because it proves getwd runs and returns at all, which nothing else here does -- not because it witnesses this fix.  MATCH is a `contains' and MISMATCH only a `lacks': a run that never reached the program prints neither word, and a `lacks' alone passes when nothing ran.",
+ "command": "/testbin/statid",
+ "boot_s": 45,
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "SID MATCH",
+   "SID getwd=[/root]",
+   "SID DONE"
+  ],
+  "screen_lacks": [
+   "SID MISMATCH",
+   "SID FAIL",
+   "stack overflow",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

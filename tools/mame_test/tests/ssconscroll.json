@@ -1,0 +1,57 @@
+{
+ "name": "ssconscroll",
+ "description": "THE CARD'S BUFFER IS ITS CONSOLE'S RING, ROW FOR ROW, AFTER SCROLLING.  With the card in slot 3 and sscon up as ttyv3's display, the console shell writes two long listings into /dev/ttyv3, which scrolls the card's console several screens through the card's start_line while the IIgs screen shows the shell that did it.  sscon_check.py then compares every one of ttyv3's 100 ring rows (its own bank, read through the vcbank registry) with the mirror in bank $E0, characters where the line-drawing bit is off, and the card's start_line with the VT_TOP_ROW saved in ttyv3's console block; a divergence anywhere means a bracketed write, a scroll or a clear left the card showing something its console does not.  The mirror's address is taken from the module's own log line, so a block placed elsewhere makes the check inconclusive rather than a silent pass over the wrong bytes.  card_screen_min proves the device is still drawing after the scrolls.",
+ "command": "sh",
+ "post_commands": [
+  "ls -l /usr/fgx/bin > /dev/ttyv3",
+  "ls -l /etc > /dev/ttyv3"
+ ],
+ "post_gap_frames": 400,
+ "timeout_s": 300,
+ "exit_on_prompt": false,
+ "mame_slots": ["-sl3", "secondsight"],
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  },
+  {
+   "name": "mirror",
+   "addr_hex": "E06000",
+   "len": 16032
+  },
+  {
+   "name": "vc3chars",
+   "vcbank": 3,
+   "addr_hex": "0000",
+   "len": 8000
+  },
+  {
+   "name": "vc3attrs",
+   "vcbank": 3,
+   "addr_hex": "2000",
+   "len": 8000
+  },
+  {
+   "name": "vcstate",
+   "symbol": "CON_VC_STATE",
+   "farbank": true,
+   "len": 512
+  }
+ ],
+ "expect": {
+  "klog_contains": [
+   "sscon: 80x25 in slot 3, cells at $E0:"
+  ],
+  "screen_contains": [
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "card_screen_min": 100,
+  "check_script": "sscon_check.py"
+ }
+}

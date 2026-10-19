@@ -1,0 +1,2397 @@
+                FGX2_MODE 2
+;---------------------------------------
+; fcc 0.0 — generated from wide_bump.c
+;---------------------------------------
+
+                MX      %00
+                FGX2_EXPORT main
+main            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #main_FRAMESIZE
+                DO      main_STKGUARD
+                BCC     main_stkovf
+                CMP     _fcc_stkfloor
+                BCS     main_stkok
+main_stkovf       JMP     _fcc_stkoflow
+                FIN
+main_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     #0
+                STA     3,S   ; fccstk d=0 b=3
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                STA     _wide_bump_gp
+                LDA     _fcc_fpr0+2
+                STA     _wide_bump_gp+2
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_chain
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                STA     _wide_bump_gobj+26
+                TAY
+                LDA     _fcc_ptr+2
+                STA     _wide_bump_gobj+28
+                TYA
+                LDA     #1234
+                STA     _wide_bump_gobj+0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #7
+                JSR     _fcc_long_from_int
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_long_add
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                STA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                STA     7,S   ; fccstk d=0 b=7
+                TYA
+                LDA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_long_hi
+                LDA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L3
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L3
+                LDA     #1
+                BRL     _wide_bump_L4
+_wide_bump_L3
+                LDA     #0
+_wide_bump_L4
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #7
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L1
+                LDA     #1
+                BRL     _wide_bump_L2
+_wide_bump_L1
+                LDA     #0
+_wide_bump_L2
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L0
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #$FFFF
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_long_add
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_long_add
+                STA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                STA     7,S   ; fccstk d=0 b=7
+                TYA
+                LDA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_long_hi
+                LDA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L6
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L6
+                LDA     #1
+                BRL     _wide_bump_L7
+_wide_bump_L6
+                LDA     #0
+_wide_bump_L7
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L5
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L5
+                LDA     #1
+                STA     1,S   ; fccstk d=0 b=1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFE
+                LDY     #10
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #12
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #3
+                JSR     _fcc_long_from_int
+                LDY     #10
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #12
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #10
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #5
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_add
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0003
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L9
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #3
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L9
+                LDA     #1
+                BRL     _wide_bump_L10
+_wide_bump_L9
+                LDA     #0
+_wide_bump_L10
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L8
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L8
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                LDY     #10
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #12
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #10
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_long_add
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                LDA     #$FFFF
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_long_add
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L11
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L11
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                STA     _wide_bump_chain+10
+                TAY
+                LDA     _fcc_long_hi
+                STA     _wide_bump_chain+12
+                TYA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gp
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #26
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #28
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                CLC
+                ADC     #10
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_add
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                LDA     _wide_bump_chain+12
+                STA     _fcc_long_hi
+                LDA     _wide_bump_chain+10
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L12
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L12
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                STA     _wide_bump_gobj+10
+                TAY
+                LDA     _fcc_long_hi
+                STA     _wide_bump_gobj+12
+                TYA
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                JSR     _fcc_long_add
+                LDY     #10
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #12
+                STA     [_fcc_fpr0],Y
+                TXA
+                LDA     #$FFFF
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                JSR     _fcc_long_add
+                STA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                STA     7,S   ; fccstk d=0 b=7
+                TYA
+                LDA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_long_hi
+                LDA     5,S   ; fccstk d=0 b=5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L16
+                LDA     _wide_bump_gobj+12
+                STA     _fcc_long_hi
+                LDA     _wide_bump_gobj+10
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0002
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_eq
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L16
+                LDA     #1
+                BRL     _wide_bump_L17
+_wide_bump_L16
+                LDA     #0
+_wide_bump_L17
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L14
+                LDA     _wide_bump_gobj+0
+                TAX
+                LDA     #1234
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _wide_bump_L14
+                LDA     #1
+                BRL     _wide_bump_L15
+_wide_bump_L14
+                LDA     #0
+_wide_bump_L15
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L13
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L13
+                LDA     #16388
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                FGX2_FARCALL _fcc_dtof
+                STA     _wide_bump_gobj+14
+                TAY
+                LDA     _fcc_long_hi
+                STA     _wide_bump_gobj+16
+                TYA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                LDA     _wide_bump_gobj+16
+                STA     _fcc_long_hi
+                LDA     _wide_bump_gobj+14
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16396
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L18
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L18
+                SEP     #$20
+                MX      %10
+                LDA     _wide_bump_gp+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _wide_bump_gp
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #16
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                JSR     _fcc_fsub
+                LDY     #14
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #16
+                STA     [_fcc_fpr0],Y
+                TXA
+                STA     9,S   ; fccstk d=0 b=9
+                TAY
+                LDA     _fcc_long_hi
+                STA     11,S   ; fccstk d=0 b=11
+                TYA
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_long_hi
+                LDA     9,S   ; fccstk d=0 b=9
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16388
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L20
+                LDA     _wide_bump_gobj+16
+                STA     _fcc_long_hi
+                LDA     _wide_bump_gobj+14
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16388
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L20
+                LDA     #1
+                BRL     _wide_bump_L21
+_wide_bump_L20
+                LDA     #0
+_wide_bump_L21
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L19
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L19
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #16352
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _fcc_dtof
+                TAY
+                PLA
+                STA     _fcc_fpr0
+                PLA
+                STA     _fcc_fpr0+2
+                TYA
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #16416
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _fcc_dtof
+                TAY
+                PLA
+                STA     _fcc_fpr0
+                PLA
+                STA     _fcc_fpr0+2
+                TYA
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                STA     9,S   ; fccstk d=0 b=9
+                TAY
+                LDA     _fcc_long_hi
+                STA     11,S   ; fccstk d=0 b=11
+                TYA
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_long_hi
+                LDA     9,S   ; fccstk d=0 b=9
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16352
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L25
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16376
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L25
+                LDA     #1
+                BRL     _wide_bump_L26
+_wide_bump_L25
+                LDA     #0
+_wide_bump_L26
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L23
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gobj
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16416
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L23
+                LDA     #1
+                BRL     _wide_bump_L24
+_wide_bump_L23
+                LDA     #0
+_wide_bump_L24
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L22
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L22
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #16400
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _fcc_dtof
+                TAY
+                PLA
+                STA     _fcc_fpr0
+                PLA
+                STA     _fcc_fpr0+2
+                TYA
+                LDY     #14
+                STA     [_fcc_fpr0],Y
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #16
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                JSR     _fcc_fsub
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                PLA
+                TAY
+                PLA
+                TYA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #16
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16392
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L27
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L27
+                LDA     #16336
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                FGX2_FARCALL _fcc_dtof
+                STA     _wide_bump_chain+14
+                TAY
+                LDA     _fcc_long_hi
+                STA     _wide_bump_chain+16
+                TYA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gp
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #26
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #28
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                STA     9,S   ; fccstk d=0 b=9
+                TAY
+                LDA     _fcc_long_hi
+                STA     11,S   ; fccstk d=0 b=11
+                TYA
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_long_hi
+                LDA     9,S   ; fccstk d=0 b=9
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16336
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L29
+                LDA     _wide_bump_chain+16
+                STA     _fcc_long_hi
+                LDA     _wide_bump_chain+14
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16372
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L29
+                LDA     #1
+                BRL     _wide_bump_L30
+_wide_bump_L29
+                LDA     #0
+_wide_bump_L30
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L28
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L28
+                LDA     #16410
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                FGX2_FARCALL _fcc_dtof
+                STA     13,S   ; fccstk d=0 b=13
+                TAY
+                LDA     _fcc_long_hi
+                STA     15,S   ; fccstk d=0 b=15
+                TYA
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                STA     9,S   ; fccstk d=0 b=9
+                TAY
+                LDA     _fcc_long_hi
+                STA     11,S   ; fccstk d=0 b=11
+                TYA
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_long_hi
+                LDA     9,S   ; fccstk d=0 b=9
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16410
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L32
+                LDA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_long_hi
+                LDA     13,S   ; fccstk d=0 b=13
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16414
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L32
+                LDA     #1
+                BRL     _wide_bump_L33
+_wide_bump_L32
+                LDA     #0
+_wide_bump_L33
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L31
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L31
+                LDA     #16368
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                FGX2_FARCALL _fcc_dtof
+                STA     _wide_bump_fv
+                TAY
+                LDA     _fcc_long_hi
+                STA     _wide_bump_fv+2
+                TYA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_fv
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_fv
+                STA     _fcc_fpr0
+                LDA     #1
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDA     _fcc_long_hi
+                STA     _fcc_long_b_hi
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                JSR     _fcc_fsub
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                STA     9,S   ; fccstk d=0 b=9
+                TAY
+                LDA     _fcc_long_hi
+                STA     11,S   ; fccstk d=0 b=11
+                TYA
+                LDA     _wide_bump_fv+2
+                STA     _fcc_long_hi
+                LDA     _wide_bump_fv
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16368
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L35
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_long_hi
+                LDA     9,S   ; fccstk d=0 b=9
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16368
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L35
+                LDA     #1
+                BRL     _wide_bump_L36
+_wide_bump_L35
+                LDA     #0
+_wide_bump_L36
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L34
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L34
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDA     [_fcc_fpr0]
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #2
+                JSR     _fcc_itof
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_fadd
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                LDA     #1
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #16
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_long_hi
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                FGX2_FARCALL _fcc_dfromf
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16404
+                STA     _fcc_q3
+                LDA     #0
+                STA     _fcc_q2
+                LDA     #0
+                STA     _fcc_long_hi
+                LDA     #0
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_dcmp
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                CMP     #0
+                BNE     *+5
+                BRL     _wide_bump_L37
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #3
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+_wide_bump_L37
+                LDA     3,S   ; fccstk d=0 b=3
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+main_FRAMESIZE   EQU     16
+main_STKGUARD    EQU     0
+                FGX2_RELOC_COUNT 37

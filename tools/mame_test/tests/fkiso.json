@@ -1,0 +1,4 @@
+{"name":"fkiso",
+ "description":"snapshot-fork ISOLATION: the child mutates a data-bank global, an sbrk-heap byte and a stack local, dies pre-exec, and the parent must see all three untouched.",
+ "command":"/testbin/fkiso","timeout_s":120,
+ "expect":{"screen_contains":["FKISO OK"]}}

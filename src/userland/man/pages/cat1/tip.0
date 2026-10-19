@@ -1,0 +1,56 @@
+TIP(1)              UNIX Programmer's Manual                 TIP(1)
+
+
+
+NAME
+     tip, cu - serial terminal
+
+SYNOPSIS
+     tip [ tty00 | tty01 | /dev/ttyNN ]
+     cu [ tty00 | tty01 | /dev/ttyNN ]
+
+DESCRIPTION
+     _T_i_p connects the console to a serial line and passes
+     characters both ways: keys you type go out the line (no
+     local echo; the remote side echoes), and bytes arriving on
+     the line are shown on the console.  _C_u is the same program
+     under its other name.
+
+     The line defaults to /dev/tty01, the modem port.  A single
+     argument names another line: a bare name (tty00) is looked
+     up under /dev, an absolute path is used as given.  Line
+     speed and framing come from the IIgs Control Panel; FGX
+     programs the port from those settings when the serial
+     module loads.
+
+     A tilde (~) typed at the beginning of a line is an escape:
+
+     ~.        drop the connection and exit (also ~^D)
+
+     ~~        send one literal tilde
+
+     ~>        send a local file raw out the line.  Prompts for
+               the file name.
+
+     ~<        toggle capture: incoming bytes are written to a
+               local file (recorded raw, before CR/LF
+               normalization).  Prompts for the file name; a
+               second ~< closes it.
+
+     ~?        print a summary of the escapes
+
+     Any other character after the tilde sends the tilde and
+     that character down the line.
+
+     Incoming CR/LF pairs are collapsed to a single newline so
+     remote lines do not double-space on the console.
+
+DIFFERENCES FROM BSD
+     The historical tip's remote(5)/phones(5) system database,
+     ACU dialers, uucp lock files, variables (~s), shell and
+     file-transfer escapes bound to a remote UNIX (~!, ~c, ~t,
+     ~p, ~|, ~$), BREAK (~#), and job control (~^Y, ~^Z) are not
+     implemented: this tip is one process driving two fixed
+     lines, with no modems to dial.
+
+FGX                          FGX-native                          1

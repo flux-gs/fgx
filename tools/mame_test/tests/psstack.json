@@ -1,0 +1,11 @@
+{
+ "name": "psstack",
+ "description": "ps(1) reports the bank-0 stack per process: pages RESERVED out of the arena, bytes actually TOUCHED (the STK_PAINT high-water scan, now run against a LIVE task rather than only at free time), and the arena occupancy footer.  The screen assertions cover only the shape -- the header carries both new columns and the footer prints at all.  Everything that can go subtly wrong is in psstack_check.py, which checks the RELATIONSHIPS no substring match can express: the footer denominator against FGX_STK_ARENA_PAGES read from include/kernel.s (this is a fixed-size record crossing the syscall boundary with no version tag, so a kernel/ps layout drift prints a full table of the wrong cells), ps's own row carrying a numeric hwm in 0 < hwm <= reservation, and the per-row page total not exceeding what the allocator bitmap says is allocated.  No page or byte COUNT is asserted anywhere: those move with every codegen change.",
+ "command": "ps",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["STK", "HWM", "pages used"],
+  "screen_lacks": ["PANIC", "BRK"],
+  "check_script": "psstack_check.py"
+ }
+}

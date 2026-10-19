@@ -1,0 +1,29 @@
+A=CON
+B=TENT
+C=CROSS
+V=OVER
+G=G
+O=ONE
+S=STIL
+T=LTHERE
+D=DIR
+R=ROK
+echo $A$B > /tmp/rn1
+mv /tmp/rn1 /tmp/rn2
+cat /tmp/rn2
+cat /tmp/rn1 && echo $S$T || echo $G$O
+echo $C$V > /tmp/rn3
+mv /tmp/rn3 /root/rn4
+cat /root/rn4
+mkdir /tmp/rd1
+mv /tmp/rd1 /tmp/rd2
+echo $D$R > /tmp/rd2/f
+cat /tmp/rd2/f
+echo $A$B > /tmp/rn5
+/testbin/rnprobe /tmp/rn5 /tmp/rn6
+echo $A$B > /tmp/rn7
+/testbin/rnprobe /tmp/rn7 /root/rn8
+/sbin/mount /dev/sd1 /mnt
+echo $A$B > /tmp/rn9
+/testbin/rnprobe /tmp/rn9 /mnt/rn10
+/sbin/umount /dev/sd1

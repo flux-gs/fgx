@@ -1,0 +1,16 @@
+------+------------------------------------------------+-------------+----+---------+------+-----------------------+----------------------------------------------------------------------
+ Line | # File                                    Line | Line Type   | MX |  Reloc  | Size | Address   Object Code |  Source Code
+------+------------------------------------------------+-------------+----+---------+------+-----------------------+----------------------------------------------------------------------
+    1 |  4        ../../src/userland/lib/crt0.s     50 | Global      | 00 |         |    0 | 0B/0000               | _crt0_start                   ENT
+    2 |  4        ../../src/userland/lib/crt0.s     51 | Code        | 00 |         |    2 | 0B/0000 : C2 30       |                               REP          #$30
+    3 |  4        ../../src/userland/lib/crt0.s     59 | Code        | 00 |         |    3 | 0B/0002 : 20 12 00    |                               JSR          _crt0_setup_argv
+    4 |  4        ../../src/userland/lib/crt0.s     90 | Code        | 00 |         |    1 | 0B/0010 : 60          |                               RTS
+    5 |  5                                sed.s      6 | Global      | 00 |         |    0 | 0B/0112               | main                          ENT
+    6 |  5                                sed.s      7 | Code        | 00 |         |    1 | 0B/0112 : 3B          |                               TSC
+    7 |  5                                sed.s      8 | Code        | 00 |         |    3 | 0B/0113 : 20 40 02    |                               JSR          _sed_match
+    8 |  5                                sed.s    372 | Global      | 00 |         |    0 | 0B/0358               | _sed_match                    ENT
+    9 |  5                                sed.s    373 | Code        | 00 |         |    3 | 0B/0358 : A9 00 00    |                               LDA          #{0}
+   10 |  6                                sed.s    400 | Code        | 00 |         |    1 | 0B/035C : 60          | @loop_done                    RTS
+   11 |  5                                sed.s    500 | Global      | 00 |         |    0 | 0B/0400               | _sed_emit                     ENT
+   12 |  5                                sed.s    501 | Code        | 00 |         |    1 | 0B/0400 : 1B          |                               TCS
+   13 |  5                                sed.s    510 | Code        | 00 |         |    4 | 0B/0408 : AF 00 05 0B |                               LDAL         {$0B0500}

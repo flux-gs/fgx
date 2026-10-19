@@ -1,0 +1,4 @@
+{"name":"bigforkx",
+ "description":"The FAIL-CLOSED half of #11: a fork that cannot copy one of the parent's mutable banks must return EAGAIN, never fall through to sharing it. Holds eight big-block banks (past FORK_MAX_PAIRS), fails the fork five times, and then forks successfully after freeing -- which is what catches an unwind that leaks the spares it claimed before giving up.",
+ "command":"/testbin/bigforkx","timeout_s":180,
+ "expect":{"screen_contains":["BIGFORKX OK"]}}

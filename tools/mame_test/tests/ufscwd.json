@@ -1,0 +1,22 @@
+{
+  "name": "ufscwd",
+  "description": "THE THREE NAMEI CALLERS THAT SERVE A UFS ROOT, on the volume they serve.  `cd /etc` is vfs_chdir, `pwd` reads back the cwd VNODE it stored, and `ls /etc` is root_stat followed by vfs_listdir -- stat gates every directory operation in 2.11BSD ls (ls.c:326), so a listing on screen means both ran.  ALL THREE ASK namei FOR `LOOKUP | FOLLOW | LOCKLEAF' AND PUT THE LEAF DOWN WITH vput, which is what apple/fgx#294 changed and what nothing else here covers: the ProDOS suite cannot reach them at all, because root_stat and root_listdir answer ENXIO when root_status is not 1 and every path then falls through to the legacy resolver.  vput crosses the module seam through VFSCORE_Vput, added for these callers, so a listing here is also the only thing that exercises that slot.  THE FILENAMES ARE THE ASSERTION AND NOT THE COUNT: `ls' prints in columns and the column width moves with the longest name, so matching two known entries is stable where matching a shape is not.  'not found' is asserted ABSENT because that is what the LEGACY resolver says when it is handed a 2.11BSD volume -- a fall-through would otherwise read as a quiet pass with an empty listing.  THE PATH IS BUILT BY EXPANSION -- `E=/e; T=tc' -- so that '/etc' reaches the screen only from pwd.  Typed literally it is also the shell's echo of the command, which is the whole ring screen_contains searches, so the pwd half asserted nothing at all.  THE CONTROL IS RECORDED: with the same needles and `ls' moved AHEAD of `pwd', '/etc' comes back MISSING, which is what the literal form could never do.  `count_delta' IS SET TO THE SEGMENT COUNT because bsh bumps the prompt between `;'-separated commands and the default of 1 samples the screen before the last one has printed -- measured here, where the listing was absent and pwd's line was not.  THE /etc NEEDLE WAS `preload.conf' AND IS `modload.conf' (2026-09-05): the kernel image carries its own module list now, so that file no longer exists.  Any third name in the listing serves; this one is from the same family and is still shipped.",
+  "command": "E=/e; T=tc; cd $E$T; pwd; ls $E$T",
+  "boot_s": 45,
+  "timeout_s": 20,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 5
+  },
+  "expect": {
+    "screen_contains": [
+      "/etc",
+      "modload.conf",
+      "resolv.conf",
+      "hostname"
+    ],
+    "screen_lacks": [
+      "not found"
+    ]
+  }
+}

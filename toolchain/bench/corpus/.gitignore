@@ -1,0 +1,18 @@
+# build intermediates — not for version control
+fcc_output.s
+_Output.txt
+_FileInformation.txt
+# assembled bench binaries (bare filename, no extension)
+bsearch
+bubbleSort
+djb2Hash
+dotProduct
+fib
+memcmp
+popcount
+strLen
+strcpy
+sumOfSquares
+t12_divmod
+t12_mul
+t12_shift

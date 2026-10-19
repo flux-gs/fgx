@@ -1,0 +1,30 @@
+{
+ "name": "ensoniqplaystream",
+ "description": "ensoniqplay(1) M2 streamed playback: a 44100-byte PCM (2 s of 440 Hz sine at 22050 Hz, 8-bit unsigned) exceeds the 32 KB one-oscillator wavetable, so the tool takes the streaming path -- it holds the file in an mm_alloc'd pool and feeds a 512 B DOC-RAM double-buffer under the sound IRQ (oscillator B free-runs the buffer; a silent rate-locked timer oscillator A raises a refill IRQ each 256-byte half).  'streaming' proves the size dispatch chose the IRQ path; 'finished after 1' (100-199 ticks; 44100/22050 = 2.0 s = ~120 ticks) proves the IRQ engine actually clocked through the whole file at the programmed rate and the end-of-stream drain fired.  The streamed-sample static (docs/history/audits/ntpplay-streaming.md) may perturb the audio in emulation but not the timing.  The story stages at test time.",
+ "command": "ensoniqplay /etc/tone2s.pcm",
+ "timeout_s": 180,
+ "exit_on_prompt": true,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/tone2s.pcm",
+   "prodos_dir": "/FGX/etc",
+   "name": "tone2s.pcm",
+   "replace": false
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "44100 bytes @ 22050 Hz (freq 429), streaming",
+   "finished after 1",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "cannot open",
+   "out of memory",
+   "timed out",
+   "Fatal"
+  ]
+ }
+}

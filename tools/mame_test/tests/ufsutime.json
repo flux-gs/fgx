@@ -1,0 +1,24 @@
+{
+  "name": "ufsutime",
+  "description": "utimes(2) SETS BOTH TIMES ON A UFS FILE, and until UFS 2.7 it set neither.  `_Fs_Utime' had no VFS arm at all: its own header said it \"dispatches FOP_Utime into prodos.mod, which walks the path to the dir entry, patches its DE_ModDate (4 bytes = packed ProDOS date + time)\", and prodos.mod is not loaded on a UFS root -- so the call reached the ProDOS resolver and failed.  It was the LAST path-taking syscall in that state; every other one (stat, lstat, open, creat, unlink, chdir, mkdir, rmdir, rename, link, symlink, readlink, chmod, chown, statfs, ftruncate) already reached the mounted root.  apple/fgx#343.\n\nNOTHING TESTED IT, WHICH IS WHY IT SURVIVED THE ROOT SWAP.  No manifest mentioned utime; /testbin/utimetest has been BUILT AND STAGED ON EVERY IMAGE and run by nothing.  The fixture already prints the four verdicts this needs -- UTIMES_FAIL, STAT_FAIL, UTIME_OK, UTIME_MISMATCH -- so only this file was missing.\n\nTHE ASSERTION IS `UTIME_OK' AND NOT A RETURN CODE, because the interesting failure is UTIME_MISMATCH: a utimes(2) that returns 0 and stamps the wrong value passes any check on $?.  The probe sets a FIXED epoch and reads it back through stat(2), so the two implementations of the timestamp -- the one that writes i_mtime and the one that reports it -- have to agree on a number chosen in advance rather than on \"now\", which both would produce.\n\n`touch f' ON AN EXISTING FILE IS THE ORDINARY CALLER and is NOT a discriminator, which is worth writing down because it is the obvious test: on a file that was just created the mtime is `now' whether or not utimes did anything, so it passes on the broken kernel.  That is what this manifest exists instead of.\n\nMEASURED DISCRIMINATING: before the port this printed UTIMES_FAIL and rc=1.",
+  "command": "cd /tmp; echo x > uf; /testbin/utimetest uf; echo rc=$?",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 4
+  },
+  "expect": {
+    "screen_contains": [
+      "UTIME_OK",
+      "rc=0"
+    ],
+    "screen_lacks": [
+      "UTIMES_FAIL",
+      "UTIME_MISMATCH",
+      "STAT_FAIL",
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

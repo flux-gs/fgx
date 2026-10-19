@@ -1,0 +1,10 @@
+{
+ "name": "dynrebind",
+ "description": "THE BIND RECORD'S COMPARE AND REPATCH (shared libc SP5 spec 5.3, step 1 plan ruling R2).  No kernel path reclaims a library while a cached text bound to it exists, so the probe makes the mismatch itself: it corrupts the errno store in seterr() in its own shared code and a bank byte of its bind record, then execs itself.  The second run's binder must find the record stale, repatch every code site and write a new record; its errno check passes only if the site was repaired.  Control: treat the record as matching; the second run prints RBD FAIL.",
+ "command": "/testbin/dynrebind",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["RBD ok"],
+  "screen_lacks": ["RBD FAIL", "ld.so:", "PANIC", "BRK"]
+ }
+}

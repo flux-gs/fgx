@@ -1,0 +1,10 @@
+{
+ "name": "clkprobe",
+ "description": "sysctl kern.clockrate, 2.11BSD kern_sysctl.c sysctl_clockrate: hz is the clock's rate in whole hertz from its tick, stathz = hz, profhz = 0; a short buffer is ENOMEM and a write EPERM (sysctl_rdstruct).",
+ "command": "/testbin/clkprobe",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["CLK OK"],
+  "screen_lacks": ["CLK FAIL", "PANIC", "BRK"]
+ }
+}

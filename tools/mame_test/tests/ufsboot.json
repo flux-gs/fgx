@@ -1,0 +1,45 @@
+{
+  "name": "ufsboot",
+  "description": "UFS campaign 2.4: THE 2.11BSD VOLUME BOOTS ITSELF.  disk/fgxufs.po is built by tools/make_ufsboot.sh with fgxfs and fscked clean before shipping; stage 1 finds stage 2 from a baked block list, stage 2 finds /fgxunix BY PATH on a 2.11BSD filesystem and places the six segments its table names, the kernel mounts that volume as its root, and Load_Binary reads /sbin/init off it.  THE ASSERTION USED TO BE A HALT AND IS NOW A BOOT, which this test's previous description said would have to happen: 'reaching a shell would mean 2.4 had landed and this test needs rewriting.'  THE SCREEN CARRIES THE CLAIM NOW, and it is stronger there than it was in memory. 'Starting network...' is printed by /etc/rc, so asserting it asserts the whole chain: init was found on the UFS root, read through a far-bank descriptor, execve'd, and ran its script.  The two absence arms are the two ways this boot used to end -- 'init load failed' and 'system halted' -- and they are allowed to count only because the presence arm sits beside them: run.py refuses screen_lacks on an empty capture, and a machine that never started cannot print /etc/rc's line. THE TWO OLD ARMS COULD NOT SIMPLY BE INVERTED.  Both read DIRECT PAGE cells at a baked bank-0 address -- _conStrPtr ($E0) as $0009E0 -- which was sound only because the direct page AT THE HALT is $0900.  On a running machine the page belongs to whichever task the sample frame caught, so such an arm would go red on scheduling.  That is noise, not evidence, and it is why the constrptr region is gone rather than negated.  WHAT STAYS IN MEMORY IS WHAT THE SCREEN CANNOT SAY.  Two windows of the LIVE kernel bank must equal bin/fgx.bin, one ~1 KB in and one ~52 KB in.  The deep one is load-bearing: four direct blocks cover 4 KB, so every byte past that came through the single indirect block, its half-swapped daddr_t and the multipass MVN. The shallow arm is kept because it PASSED a broken reader -- the indirect address was read at di_addr[(12+4)*4] rather than di_addr[12+4*4], Merlin32 evaluating strictly left to right, which found a zero, took the legal-hole path and zero-filled fifty-four of the kernel's fifty-eight blocks.  _PreStaged_Banks is the only thing that says /fgxunix was found under its LOWERCASE spelling and that its module segments landed, which is the half of campaign 2.4a nothing else here can see; an all-zero list is what the ProDOS-cased strings would produce on this volume.  root_status 1 says root_mount() took the volume as the root rather than refusing it.  And the SHR framebuffer is still the only thing that can state the boot program's staged font was delivered AND accepted, because CharBuf holds codepoints whether or not a glyph exists for them.  THE THREE KERNEL-BANK REGIONS SAMPLE AT boot_frame 700, RAISED FROM 200 when the pre-staged set grew from one module to four: stage 2 stages about 138 KB more before it relocates the kernel, and at frame 200 the sample landed BEFORE relocation.  What that looks like is not an empty dump but a plausible one -- the regions resolve against bank $02, the assembly ORG, which at runtime belongs to the ramdisk, so every window reads as zeros and the checker reports the kernel missing on a boot that in fact staged everything and mounted its root.  A region sampled before the thing it names exists reads as a claim about that thing.  THE DEEP KERNEL WINDOW GOT DEEPER ON 2026-09-05 WITHOUT MOVING.  It still sits ~52 KB into the core bank, but the core is now segment 0 of /fgxunix rather than a file of its own, so those bytes arrive through the image's segment table -- and every byte past file block 520 arrives through the DOUBLE indirect block, which a 314,880-byte image is the first file in this system to need.  The shallow arm keeps its old job of catching a reader that zero-fills what it cannot map. 'Running disk integrity checks...' is printed only inside /etc/rc's autoboot arm, so it proves rc received init's `autoboot' argument and the boot fsck ran: a shell that loses $1 (apple/fgx#454) takes the else arm, skips fsck, and boots silently without it.",
+  "disk_image": "disk/fgxufs.po",
+  "command": "",
+  "timeout_s": 40,
+  "expect": {
+    "screen_contains": [
+      "Starting network...",
+      "Running disk integrity checks..."
+    ],
+    "screen_lacks": [
+      "init load failed",
+      "system halted"
+    ],
+    "check_script": "ufsboot_check.py"
+  },
+  "memory_regions": [
+    {
+      "name": "kearly",
+      "symbol": "_msg_startshell",
+      "len": 16,
+      "boot_frame": 700
+    },
+    {
+      "name": "kdeep",
+      "symbol": "_agm_grewMsg",
+      "len": 16,
+      "boot_frame": 700
+    },
+    {
+      "name": "prestaged",
+      "symbol": "_PreStaged_Banks",
+      "len": 4,
+      "boot_frame": 700
+    },
+    {
+      "name": "rootstatus",
+      "symbol": "root_status",
+      "farbank": true,
+      "len": 2,
+      "boot_frame": 420
+    }
+  ]
+}

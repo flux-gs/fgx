@@ -1,0 +1,28 @@
+{
+ "name": "stkover",
+ "description": "A RESERVATION LAID OVER A PARKED TASK, AND THE TASK COMES BACK WHOLE.  When the arena has no free run for a request of kernel.stkover pages or more, Task_AllocStack places it OVER tasks that are not running and can be parked, parks them at the placement (live extent only, to a home image in a swap bank), and the SCHEDULER restores each to its own addresses when it next picks it (Uimg_Ensure).  So: the console shell backgrounds a session shell that sleeps, waits a second for it to settle into wait(), and runs a second session shell -- two of them do not fit the arena side by side, the first is asleep, so the second lands on it and parks it.  The second shell echoes a value it can only have got from its own expansion; the first wakes after the second has exited, is restored, and echoes its own -- a restore that dropped a live byte of the parked shell's frames would not print A=ok.  The klog must carry the placement (stkover), a park (upark) and a restore (urest), and no refusal (upin): the mechanism is observed, not trusted.  The needles are built by expansion, so neither appears in anything typed.",
+ "command": "tcsh -c 'sleep 3; set a=ok; echo A=$a' & sleep 1; tcsh -c 'set b=ok; echo B=$b'; wait",
+ "post_gap_frames": 120,
+ "timeout_s": 180,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "B=ok",
+   "A=ok"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "GUARD stkhwm",
+   "KSTK CANARY",
+   "uimg:"
+  ],
+  "klog_region": "klog"
+ }
+}

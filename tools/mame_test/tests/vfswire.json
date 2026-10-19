@@ -1,0 +1,29 @@
+{
+ "name": "vfswire",
+ "description": "The buffer cache's KERNEL WIRING, end to end on a real second spindle. The fcc fixture toolchain/tests/M37/biocache.c exercises the same cache against a fake disk, where there is no block layer, no second bank and no device -- it proves nothing about the wiring. This drives bread and bwrite down to real device blocks and checks the result with a RAW kc_blkio read, so the ORACLE IS THE LAYER BELOW rather than the cache's own flags. It covers three things that each fail silently: the block layer's 24-bit buffer address (_blkBufBank), the per-device legacy-cache bypass (DEV_FLAG_VFSOWNED), and bio_strategy's split of one 1024-byte filesystem block into two 512-byte device transfers. Requires kernel.kcprobe = 1. The target is disk/ufsscratch.po, a 2.11BSD volume the ProDOS layer cannot mount and therefore never touches; device 0, the boot disk, is never a candidate. A missing image is a hard error rather than a silent fallback, because falling back to the boot disk would both pass vacuously and be dangerous.  THE FILESYSTEM CASES LEFT AT 1.10b -- the 2.11BSD superblock (1.10a) and the block and inode allocators (1.10b) are tools/mame_test/tests/ufsprobe.json now, behind kernel.ufsprobe, and the reason is again the bank: the allocators cost ~5.8 KB of SHIPPING code and this gate had 410 free bytes with them linked.  apple/fgx#169 tracks what that means for 1.10c and 1.11.",
+ "command": "ls /",
+ "timeout_s": 25,
+ "extra_hards": [
+  "disk/ufsscratch.po"
+ ],
+ "expect": {
+  "screen_contains": [
+   "vfs: cache wiring ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "vfs: CACHE WIRING BROKEN",
+   "vfs: no scratch disk",
+   "vfs: buffer arena UNAVAILABLE",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ]
+ },
+ "requires": {
+  "config": {
+   "kernel.vfsprobe": "1"
+  },
+  "reason": "the wiring probe WRITES two device blocks on the boot path, so it is a separate build gate from kernel.kcprobe and is off by default. Set kernel.vfsprobe = 1 in cfg/system.cfg, `ninja disk/ufsscratch.po`, rebuild, and re-run with --fresh. The probe identifies the volume by its 2.11BSD superblock before writing and skips when it finds none, so a build with it on is safe on a machine that has no such volume attached -- but it is still not a kernel to ship."
+ }
+}

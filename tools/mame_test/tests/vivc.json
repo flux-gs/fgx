@@ -1,0 +1,41 @@
+{
+ "name": "vivc",
+ "description": "vi renders a full screen on a VIRTUAL console, not just on the primary one.  Switches to VC1 with Option-2, logs in, runs `vi /etc/passwd`, and asserts VC1's own CharBuf holds the file body AND the tilde column -- read from _kVcBank[1], because the console the harness displays is not the one under test.  THE TILDES ARE THE POINT: the status line and the first screen line show up even when line advancement is broken, so asserting the filename alone would pass on the bug.  GOES RED WITHOUT THE FIX: _Ttyv_Write's RAW arm branched to the shared emit carrying the RESULT OF THE SG_CRMOD TEST -- zero, by definition, since the branch was taken -- so every raw-mode newline reached the console as NUL.  Cooked output hid it completely (the cooked arm reloads $0A), which is why shells, getty and login all looked perfect and only vi broke.  Measured by logging the byte stream: elvis emitted '<00><0D>~' per line where it should read '<0A><0D>~', so the cursor never advanced, every line landed on row 1, and the screen showed ONE tilde plus a status line.  THE PRIMARY COMMAND MUST NOT LEAVE A PROCESS RUNNING.  It was `sh', which parks a nested shell on the primary console holding its stack reservation for the whole run, and once the bank-0 stack arena had no margin for that the exec on VC1 failed with `stk ENOMEM 24p' -- the test went red with vi never started, which says nothing about vi.\n\nTHE RING IS SAMPLED AT paste+1200, not at the end.  The switch line is logged at paste+300, and a session on VC1 beside syslogd runs more tasks than the seven kernel slots, so kpark/krest traces fill the 4 KB ring and overwrite it well before the run's frame cap -- measured, the end-of-run ring held 240 of them and no switch line.  The traces are hidden from /dev/klog (apple/fgx#482) but still take ring space.",
+ "command": "echo vivc",
+ "exit_on_prompt": false,
+ "timeout_s": 180,
+ "raw_inject": [
+  [
+   300,
+   50,
+   2
+  ]
+ ],
+ "post_commands": [
+  "root",
+  "fgx",
+  "vi /etc/passwd"
+ ],
+ "post_gap_frames": 700,
+ "memory_regions": [
+  {
+   "name": "vc1char",
+   "addr_hex": "030000",
+   "len": 2000,
+   "vcbank": 1
+  },
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096,
+   "frame": 1200
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "vivc_check.py"
+ }
+}

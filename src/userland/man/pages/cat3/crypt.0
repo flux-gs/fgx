@@ -1,0 +1,98 @@
+
+
+CRYPT(3)            UNIX Programmer's Manual            CRYPT(3)
+
+
+
+NAME
+     crypt - hash a password
+
+SYNOPSIS
+     char *crypt(key, salt)
+     char *key, *salt;
+
+     char *crypt_salt(hash)
+     char *hash;
+
+DESCRIPTION
+     Crypt hashes key against salt and returns a pointer to a
+     static buffer holding the result in the tagged form
+
+          $f$xy$hhhhhhhh
+
+     where xy is the two-character salt, verbatim, and hhhhhhhh
+     is eight hex digits.  The buffer is overwritten by the next
+     call; a caller that needs to keep the result copies it out.
+
+     login(1), su(1) and passwd(1) are the current callers.  All
+     dispatch on the leading "$f$" tag to recognise a hash of
+     this form, never on the string's length, so a second hash
+     format can be added later without breaking stored entries.
+
+     _C_r_y_p_t___s_a_l_t returns the salt that produced a stored hash: the
+     two characters after the tag for a tagged hash, and the
+     hash itself for an untagged one, which is its own salt.
+     It is the function that dispatch is done WITH.
+
+     CHECKING A PASSWORD IS
+
+          strcmp(stored, crypt(given, crypt_salt(stored)))
+
+     and never _c_r_y_p_t(given, stored).  The second form is
+     upstream's and is right for DES, where a hash is its own
+     salt; against a tagged hash it folds "$f" where the salt
+     belongs and returns "$f$$f$........", which equals no
+     stored hash at all -- so every password is rejected,
+     including the correct one.  _s_u(1) did that and could
+     not authenticate anybody (apple/fgx#414).
+
+ALGORITHM
+     THIS IS DELIBERATELY NOT DES CRYPT.  FGX's crypt is FNV-1a,
+     a cheap 32-bit non-cryptographic hash, folded over salt then
+     key and printed as eight hex digits.  A 25-round DES crypt at
+     2.8 MHz would make every login visibly pause, and buys little
+     on a single-user IIgs with no shared password database to
+     defend across a network.
+
+     The "$f$" tag is a forward-compatibility seam, not a version
+     stamp that happens to be used once: a real DES crypt can be
+     added later and coexist in the same /etc/passwd, because a
+     13-character untagged DES hash cannot be confused with a
+     tagged FNV-1a one.  Any code that reads hashes must dispatch
+     on the tag, not on length.
+
+SECURITY
+     THE THREAT MODEL IS DELIBERATELY LIMITED.  This hash stops a
+     shoulder-surfer reading the screen and a casual reader of
+     /etc/passwd -- the password does not appear in the clear, and
+     two accounts that choose the same password do not get the
+     same hash provided their salts differ.
+
+     It is NOT a defence against an attacker who already has the
+     file and wants the password.  FNV-1a is a 32-bit
+     non-cryptographic hash with no per-call cost; it was designed
+     for hash tables, not for resisting an offline guesser, and it
+     is brute-forced in a fraction of a second on any host built
+     in this decade.  Treat a copy of /etc/passwd as equivalent to
+     the plaintext passwords it hashes.
+
+RETURN VALUE
+     A pointer to a static 14-byte buffer, valid until the next
+     call to crypt().  There is no failure return; a null or empty
+     salt or key is treated as absent, not an error.
+
+FILES
+     /etc/passwd            stores the hashed form
+
+SEE ALSO
+     login(1), passwd(1), getpass(3)
+
+BUGS
+     There is no per-installation pepper and no iteration count:
+     the cost of computing one hash is fixed and small by design,
+     which is also exactly its weakness against an offline
+     attacker (see SECURITY).
+
+
+
+Printed 8/5/26                                                  3

@@ -1,0 +1,10 @@
+{
+ "name": "ldlibexec",
+ "description": "Shared libc SP4: the loader refuses a shared library (header flags bit 1) with ENOEXEC; ldctl execs /testbin/libtermlib.so directly (sh would run an ENOEXEC file as a script).",
+ "command": "/testbin/ldctl libexec",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["LDC libexec ok"],
+  "screen_lacks": ["LDC FAIL", "PANIC", "BRK"]
+ }
+}

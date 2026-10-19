@@ -1,0 +1,57 @@
+LDLOAD(8)            UNIX Programmer's Manual            LDLOAD(8)
+
+
+
+NAME
+     ldload - make shared libraries resident
+
+SYNOPSIS
+     /sbin/ldload [conf]
+
+DESCRIPTION
+     Ldload makes libc resident, then each library the file conf
+     lists, in its order -- /etc/ld.so.conf when conf is not
+     given.  Each one it loads is pinned: it stays resident until
+     the machine restarts.  Every other library is loaded when a
+     program that needs it first runs, and stays cached while the
+     bank pool can spare it.  /etc/rc runs ldload after modload(8)
+     has loaded ld.mod, the registry ldload fills.
+
+     The file holds one library a line, its name and its major
+     version (`libtermlib 1'); `#' starts a comment.  A missing or
+     empty file is not an error.  Cores stack in the order
+     libraries load, so a library must be listed after every
+     library it needs: one listed above a library it needs is
+     refused, naming both, and the rest still load.  A library
+     that a listed one needs and that is not listed loads first,
+     unpinned.
+
+     A library is /lib/name.so.major.minor, the highest minor of
+     its major.
+
+     Ldload prints a line for each library -- its version, banks,
+     core base, and the time its load took, or `(resident)' when
+     it already was -- and then how many it loaded and how many
+     were resident.  It exits 2 if libc could not be made
+     resident, 1 if any other library failed, and 0 otherwise.
+
+FILES
+     /etc/ld.so.conf    libraries resident from boot
+     /lib/*.so.*.*      the shared libraries
+
+SEE ALSO
+     modload(8)
+
+BUGS
+     A library a program loaded before ldload ran, and that the
+     file lists, stays unpinned.
+
+     A library whose needed library changed since it was linked is
+     refused until it is relinked.
+
+     Any user can make an installed library resident, bounded by
+     the banks its file needs.
+
+
+
+Printed 10/1/26                                                8

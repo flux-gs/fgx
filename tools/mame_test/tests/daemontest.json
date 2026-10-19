@@ -1,0 +1,18 @@
+{
+ "name": "daemontest",
+ "description": "daemon(3) returns its invoker (apple/fgx#494).  daemontest calls daemon(), sleeps 2 s and writes /tmp/dt.mark; the shell's next command must run at once and the mark must appear later.  The markers are built by expansion so the typed line cannot satisfy them.  EARLYDT is the discriminator: today daemon(3) does not fork, so daemontest sleeps and writes the mark before the shell moves on and EARLYDT never prints.  It goes green with daemon(3)'s restored fork (plan Task 8), not with the kernel release alone.",
+ "command": "sh -c 'rm -f /tmp/dt.mark; /testbin/daemontest; A=DT; B=BACK; echo $A$B; test -f /tmp/dt.mark || echo EARLY$A; sleep 4; test -f /tmp/dt.mark && echo DT=$A$B'",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "DTBACK",
+   "EARLYDT",
+   "DT=DTBACK"
+  ],
+  "screen_lacks": [
+   "DT FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

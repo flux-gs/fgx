@@ -1,0 +1,49 @@
+# tcsh 6.00 translation units: vendor/2.11BSD/usr/bin/tcsh, with sh.c the
+# entry (manifest "main").  alloc11 is not linked: config_f.h sets SYSMALLOC,
+# so tc.alloc.c defines only its Malloc/Realloc/Calloc/Free wrappers over
+# libc's malloc.  tcsh_trim.c is FGX source standing in for the six TUs
+# dropped for code size.
+#
+# Five TUs are FGX copies under src/userland/tcsh, each verbatim apart from
+# making one function's large locals `static' (tcsh 133 -> 74 bank-0 stack
+# pages); `tcstatic' and `tccomp' test them, and docs/PROVENANCE.md registers
+# them.
+vendor/2.11BSD/usr/bin/tcsh/ed.chared.c
+vendor/2.11BSD/usr/bin/tcsh/ed.defns.c
+vendor/2.11BSD/usr/bin/tcsh/ed.init.c
+vendor/2.11BSD/usr/bin/tcsh/ed.inputl.c
+vendor/2.11BSD/usr/bin/tcsh/ed.refresh.c
+src/userland/tcsh/ed.screen.c
+vendor/2.11BSD/usr/bin/tcsh/ed.xmap.c
+vendor/2.11BSD/usr/bin/tcsh/glob.c
+vendor/2.11BSD/usr/bin/tcsh/sh.char.c
+vendor/2.11BSD/usr/bin/tcsh/sh.dir.c
+src/userland/tcsh/sh.dol.c
+vendor/2.11BSD/usr/bin/tcsh/sh.err.c
+vendor/2.11BSD/usr/bin/tcsh/sh.exec.c
+vendor/2.11BSD/usr/bin/tcsh/sh.exp.c
+vendor/2.11BSD/usr/bin/tcsh/sh.file.c
+vendor/2.11BSD/usr/bin/tcsh/sh.func.c
+src/userland/tcsh/sh.glob.c
+vendor/2.11BSD/usr/bin/tcsh/sh.hist.c
+vendor/2.11BSD/usr/bin/tcsh/sh.init.c
+src/userland/tcsh/sh.lex.c
+vendor/2.11BSD/usr/bin/tcsh/sh.misc.c
+vendor/2.11BSD/usr/bin/tcsh/sh.parse.c
+vendor/2.11BSD/usr/bin/tcsh/sh.print.c
+vendor/2.11BSD/usr/bin/tcsh/sh.proc.c
+vendor/2.11BSD/usr/bin/tcsh/sh.sem.c
+vendor/2.11BSD/usr/bin/tcsh/sh.set.c
+vendor/2.11BSD/usr/bin/tcsh/tc.alloc.c
+vendor/2.11BSD/usr/bin/tcsh/tc.const.c
+vendor/2.11BSD/usr/bin/tcsh/tc.disc.c
+vendor/2.11BSD/usr/bin/tcsh/tc.func.c
+vendor/2.11BSD/usr/bin/tcsh/tc.os.c
+vendor/2.11BSD/usr/bin/tcsh/tc.printf.c
+vendor/2.11BSD/usr/bin/tcsh/tc.prompt.c
+vendor/2.11BSD/usr/bin/tcsh/tc.sig.c
+vendor/2.11BSD/usr/bin/tcsh/tc.str.c
+vendor/2.11BSD/usr/bin/tcsh/tc.vers.c
+vendor/2.11BSD/usr/bin/tcsh/tw.init.c
+src/userland/tcsh/tw.parse.c
+src/userland/tcsh/tcsh_trim.c

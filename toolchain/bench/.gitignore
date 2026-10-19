@@ -1,0 +1,29 @@
+# fbench generated output (the superproject .gitignore does not cover paths
+# inside this submodule, so ignore them here).
+reports/
+__pycache__/
+cfg/
+nvram/
+snap/
+corpus/cfg/
+corpus/nvram/
+corpus/snap/
+corpus/.ld/
+corpus/fixture_fgx
+# fbench_kernel.py stages each bench here under its ProDOS name (uppercase,
+# no extension).  Named one by one: this checkout ignores case, so a pattern
+# such as corpus/[A-Z]* also matches every lowercase source file.  A new bench
+# adds its name here.
+corpus/BSEARCH
+corpus/BUBBLESORT
+corpus/DJB2HASH
+corpus/DOTPRODUCT
+corpus/FIB
+corpus/MEMCMP
+corpus/POPCOUNT
+corpus/STRCPY
+corpus/STRLEN
+corpus/SUMOFSQUARES
+corpus/T12DIVMOD
+corpus/T12MUL
+corpus/T12SHIFT
