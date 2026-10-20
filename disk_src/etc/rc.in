@@ -1,29 +1,8 @@
-# Blank lines and lines starting with '#' are ignored.
-
-# THIS FILE HAS NO CONSOLE OF ITS OWN.  init runs it with "/" on descriptors
-# 0, 1 and 2, as 2.11BSD's runcom() does (usr/sbin/init/init.c:320-324), so
-# every line meant to be seen names /dev/console itself -- 2.11BSD's rc does
-# exactly this (usr/etc/rc) -- and a daemon started here writes nowhere unless
-# it logs through syslog.
-
-# THE SHARED LIBRARIES COME FIRST, so they are resident before anything that
-# needs them runs.  Every program below except the static set -- init, getty,
-# login, sh, fsck, mount, ifconfig, modload, ldload, test, echo, hostname,
-# mv, tar and ln -- is dynamic, and a dynamic program started before libc.so
-# is resident prints `ld.so: libc.so.1 not loaded' and exits 1.  SunOS
-# 4.1.3's rc.boot makes its libraries reachable the same way, mounting /usr
-# read-only before fsck checks it (etc/files/rc.boot, `intr mount -n -r
-# /usr').  Both commands only read, and the root is still read-only here.
-# ld.mod comes first, alone, because ldload fills its registry; the rest of
-# the modules load below, after the root is writable.
 #
-# A LIBRARY /etc/ld.so.conf LISTS FAILING (ldload exits 1) DOES NOT STOP THE
-# BOOT; ANY OTHER FAILURE DOES -- libc not resident (ldload exits 2), ldload
-# missing or unreadable (127), ldload killed by a signal (128+n) -- and rc
-# exits before fsck and before `mount -u -w /' could make an unchecked root
-# writable.  init starts the console's /bin/sh regardless of rc's status.
-# rc's own conditions run on `[', which is static, and the console shell is
-# the recovery shell: test, echo, mount, fsck, mv, tar and ln are static.
+#	FGX /etc/rc, after 2.11BSD's (usr/etc/rc)
+#
+
+# shared libraries first: everything below but the static set needs libc.so
 /sbin/modload ld >/dev/console 2>&1
 /sbin/ldload >/dev/console 2>&1
 case $? in
@@ -34,23 +13,6 @@ case $? in
 	;;
 esac
 
-# CHECK THE ROOT BEFORE ANYTHING WRITES TO IT.  This is 2.11BSD's own rc block
-# (usr/etc/rc), including the comment it carries about the temporary file; the
-# autoboot arm, its two `date's and the exit-code case are upstream's.  init
-# passes "autoboot" as upstream's runcom() does for any boot that is not
-# single-user, and FGX has no single-user mode.  The kernel mounts the root
-# READ-ONLY (root_mount.c, Reno's `mp->mnt_flag = MNT_RDONLY' in
-# ufs_mountroot), so fsck sees a filesystem that is not moving underneath it.
-#
-# "Running disk integrity checks..." is FGX's line.  A root left dirty by a
-# power-off gets a full check that runs for over a minute before fsck prints
-# anything, and the console should say what the machine is doing.
-#
-# FGX DOES NOT PASS `-t': upstream's `-t /_FSCK_TMP_FILE' names a scratch file
-# ON THE ROOT, which is the practice its own comment warns about, and setup()
-# refuses it for exactly that reason.  It is not needed here -- the maps fit in
-# the arena (24,004 bytes of them for a 32000-block root), so there is nothing
-# to spill.  A root too big for memory would need a `-t' on another filesystem.
 if [ "$1" = autoboot ]
 then
 	echo Automatic reboot in progress... >/dev/console 2>&1
@@ -88,47 +50,16 @@ else
 	date >/dev/console 2>&1
 fi
 
-# AND NOW THE ROOT BECOMES WRITABLE.  Everything below this line writes --
-# modload reads modules but update syncs, inetd binds, and the gettys log in --
-# so the remount is the first thing after the check passes.  mount(8) adds
-# MNT_UPDATE for a mount on `/' by itself (`if (strcmp(name, "/") == 0) flags
-# |= MNT_UPDATE'), so `-u' is upstream's spelling rather than a requirement.
+# the kernel mounts the root read-only
 /sbin/mount -u -w /
 
-# THE KERNEL'S ZONE OFFSET, for a battery clock that keeps local time, as the
-# IIgs clock does: adjkerntz(8) sets machdep.adjkerntz from /etc/localtime (or
-# TZ) and, on FGX, exits -- it does not stay resident for a DST change, which
-# `adjkerntz -a' from cron follows.  FreeBSD 2.2.8's etc/rc runs
-# it here -- after the root is writable and mounted (lines 71 and 79), before
-# /var/run is cleaned and any daemon starts (line 96) -- and it does nothing
-# unless /etc/wall_cmos_clock exists.
+# the IIgs clock keeps local time; see adjkerntz(8)
 /sbin/adjkerntz -i
-
-# A ZONE NOBODY CHOSE IS SAID ONCE, AT BOOT.  The image cannot know where the
-# machine is, so it ships UTC, and the IIgs clock -- which keeps local time --
-# then reads as UTC.  Nothing corrects it behind the user's back: the kernel
-# does not write the battery clock unless machdep.disable_rtc_set is cleared,
-# and ntpd does not run unless /etc/rc.local starts it.  docs/CONFIGURING.md
-# says how to choose a zone.
 if [ -f /etc/wall_cmos_clock ] && cmp -s /etc/localtime /usr/share/zoneinfo/UTC
 then
 	echo 'time zone not set (UTC); the IIgs clock is read as UTC -- see /etc/rc.local' >/dev/console 2>&1
 fi
 
-# LEFT-OVER RUN STATE GOES, AND utmp STARTS EMPTY, before anything reads them.
-# This is 4.3BSD-Reno's line (etc/rc, `(cd /var/run; rm -rf *; cp /dev/null
-# utmp; chmod 644 utmp)'), which comes from the same read-only-root boot FGX
-# has: 2.11BSD's init empties utmp before rc instead, and cannot here, because
-# the root is not writable until the remount above.  syslogd is the reader that
-# needs it -- every message it sends to a user opens utmp -- and it starts
-# below.  FGX's utmp is /etc/utmp (<utmp.h> _PATH_UTMP), not /var/run/utmp.
-#
-# SPELLED WITH TWO PROCESSES WHERE RENO'S TAKES FOUR -- a subshell, rm, cp and
-# chmod -- because every command here is a fork, and a fork is four full-bank
-# copies (apple/fgx#372) on the path to the first prompt.  `rm -rf /var/run/*'
-# is the subshell's `cd; rm -rf *' without the subshell, and cannot run in the
-# wrong directory if /var/run is missing; a bare `>' creates or empties utmp in
-# the shell itself, as `cp /dev/null' does in a child.
 rm -rf /var/run/*
 >/etc/utmp; chmod 644 /etc/utmp
 
@@ -137,93 +68,30 @@ cat /etc/motd >/dev/console 2>&1
 # color -fg -x C0C0C0
 # color -bd blue
 # font vga
-# MODULES A ROOT CAN SUPPLY, which is where BSD runs modload(8) from --
-# /etc/rc, exactly as modload.conf(5)'s own header says.  These are the entries
-# of /etc/modload.conf that the boot program does not pre-stage.
-#
-# THIS IS THE ONLY THING THAT LOADS THEM.  The kernel's own Mod_LoadConf reads
-# through Fs_ReadN, which answers EBADF for a root descriptor, so without this
-# line a boot reaches the shell with no serial, no bpf, no net, no ramdisk and
-# no pty -- `dhclient: no network interface' is what that looks like.
-#
-# THESE ARE THE ONES EVERY MACHINE NEEDS: net carries the sockets AND pipe(2),
-# ramdisk finds the RAM disk the Control Panel set up, pty the
-# pseudo-terminals, klog syslogd's /dev/klog, and fpsim every double (without
-# it a floating-point operation raises SIGILL).  The modules for hardware a
-# machine may not have -- serial, bpf, sscon, cda -- are loaded by
-# /etc/rc.local, which ships with them commented out.
-#
-# THE NAMES ARE LOWERCASE, and so are the files under /lib/modules: a 2.11BSD
-# root is case-sensitive.
-#
-# BEFORE netstart, which needs net.mod to have arrived.
-# ONE PROCESS FOR THESE: modload(8) takes a list, so the modules cost one
-# fork/exec rather than one each.  ld.mod, loaded above, is the one
-# other modload process.
-#
-# THE LIST IS /etc/modload.conf's, IN ITS ORDER: rc's two modload lines, the
-# one above and this one, and any rc.local enables, are that list together, and
-# tools/check_modload_lists.py fails the build when the two disagree.
-# ufsprobe is last because it drives its cases from its own mod_init, so a
-# case touching a pty needs pty.mod already up.
-# ufsprobe, last, only when the image carries it: a probe build stages it, and
-# a shipping build has no probe gate on and leaves it off the disk.
+
+# the rest of /etc/modload.conf; rc.local loads the optional ones
 UFSPROBE=
 [ -f /lib/modules/ufsprobe ] && UFSPROBE=ufsprobe
 /sbin/modload net ramdisk pty klog fpsim $UFSPROBE >/dev/console 2>&1
 
-# THE CONTROL PANEL'S RAM DISK, WRITABLE, AT /ram5, when the machine has one.
-# ramdisk.mod takes it up only when BRAM asks for one (Control Panel, "RAM
-# disk") and registers it as /dev/ram0; the ROM formats it as a ProDOS volume
-# and keeps it across soft reboots, so what is on it survives a reboot.
-# mount_prodos loads prodos and prodosw itself.  Quiet when there is none: the
-# mount fails on an empty device row, and that is the machine without a RAM
-# disk, not an error.
+# the Control Panel's RAM disk, when there is one
 /sbin/mount_prodos -o write /dev/ram0 /ram5 >/dev/null 2>&1 &&
 	echo 'ram5: /dev/ram0 mounted on /ram5' >/dev/console 2>&1
 
-# DESK ACCESSORIES ARE NOT INSTALLED HERE.  loadcda(8) installs one, from
-# /usr/fgx/cda or anywhere, when it is wanted: a desk accessory holds its code
-# and resource fork in memory from then until the machine restarts, since none
-# of it can be read from disk while the Ctrl-OA-Esc menu runs.
-
+# set hostname and INET, turn on network
 . /etc/netstart
 
-# THE SYSTEM LOGGER, where 2.11BSD's rc starts it: once the network is up and
-# before the standard daemons, with any old /dev/log removed first
-# (usr/etc/rc, `starting system logger').  It needs net.mod's AF_UNIX transport
-# for /dev/log and klog.mod for /dev/klog, both loaded above.
 echo 'starting system logger' >/dev/console 2>&1
 rm -f /dev/log
 /sbin/syslogd
-
-# AND rc WAITS FOR IT TO READ THE BOOT LOG, which it has done when it writes
-# /var/run/syslog.pid.  On 2.11BSD that replay is over long before anyone is at
-# a login prompt, so the boot log is shown once, as the machine boots.  Here the
-# console is a root shell as soon as rc ends and the replay takes seconds, so
-# without the wait syslogd delivered the kernel's boot lines to root's console a
-# second time (kern.crit, for `operator,root' in /etc/syslog.conf).  Bounded, so
-# a syslogd that never starts costs the boot fifteen seconds, not the machine.
+# wait for syslogd to replay the boot log before the console shell starts
 for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 do
 	test -f /var/run/syslog.pid && break
 	sleep 1
 done
 
-# THE ONLY THING THAT SYNCS A RUNNING MACHINE.  A dirty buffer reaches the disk
-# when something needs the buffer back and a superblock when its allocation
-# batch fills, and neither of those is a clock -- so without this daemon a
-# machine powered off at the prompt leaves a superblock listing a block an inode
-# owns.  BSD starts it first among the standard daemons and so does this.
 /sbin/update
-
-# The clock daemon, second of the standard daemons as in 2.11BSD's rc
-# (usr/etc/rc, `update; cron;').  It detaches itself, so no `&'; it reads
-# /etc/crontab and the user tables crontab(1) keeps in /var/cron/tabs.
 /sbin/cron
 
-# THE MACHINE'S OWN CHOICES, LAST, as 2.11BSD's rc ends with `/etc/rc.local'
-# (usr/etc/rc): the optional modules, inetd (telnet logins) and ntpd, each
-# shipped commented out.  Sourced rather than run, so it sees $INET from
-# /etc/netstart without an export and costs no fork.
 [ -f /etc/rc.local ] && . /etc/rc.local
