@@ -6,6 +6,7 @@ $P
 echo pd=$?
 mount -t prodos /dev/sd1 /mnt
 echo mt=$?
+mount
 ls /mnt
 cd /mnt/Sub/INNER
 echo PWD=`pwd`
