@@ -186,8 +186,10 @@ change that rests on K&R or BSD text quotes or names that text, as
 
 ## Issues and pull requests
 
-**Report problems** in [GitHub Issues](https://github.com/flux-gs/fgx/issues),
-with what you ran, what you saw, and how to reproduce it. Issue references
+**Report problems** in [GitHub Issues](https://github.com/flux-gs/fgx/issues/new/choose);
+the bug report form asks for the version, the hardware, what happened, and how
+to reproduce it in Ample or MAME.  Ask questions in #fgx on the
+[Apple II Infinitum Slack](https://apple2.gs/slack/). Issue references
 already in the tree (`#123`, `apple/fgx#123`) point to the project's earlier
 tracker.
 
@@ -195,13 +197,14 @@ tracker.
 
 1. Branch off `main`, and keep each pull request to one change.
 2. Run `tools/gate.sh` and make it green. Say in the pull request what you ran
-   and the result. CI does not build pull requests (the full build is heavy and
-   runs only for releases), so your gate result is the evidence.
+   and the result. CI does not build pull requests (it builds release tags
+   and `main`), so your gate result is the evidence.
 3. A maintainer reviews the pull request on GitHub.
 
 Maintainers cut releases with `release.sh`; [RELEASING.md](/docs/RELEASING.md) has the
 procedure. Pushing a `vX.Y.Z` tag makes CI build the image and publish
-`fgx-X.Y.Z.fs` as the release's download.
+`fgx-X.Y.Z.fs` as the release's download; every push to `main` publishes
+`fgx-main-<commit>.fs` on the rolling `main-latest` pre-release.
 
 ## Where to read next
 

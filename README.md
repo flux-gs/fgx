@@ -185,12 +185,54 @@ essentials:
 
 See [CHANGELOG.md](CHANGELOG.md).
 
-## Issues and contributions
+## Support, issues and contributions
 
-Report problems in [GitHub Issues](https://github.com/flux-gs/fgx/issues) and
-send changes as pull requests; [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)
-has the workflow.  References already in the tree (`#123`, `apple/fgx#123`)
-name issues in the project's earlier, archived tracker.
+**No support is offered or implied.**  FGX is a hobby project, provided as is.
+We will try to answer questions, and contributions are welcome.
+
+- **Questions and discussion:** join the community in **#fgx** on the
+  [Apple II Infinitum Slack](https://apple2.gs/slack/).
+- **Bugs:** open a [GitHub issue](https://github.com/flux-gs/fgx/issues/new/choose).
+- **Changes:** send a pull request; [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)
+  has the workflow.
+
+References already in the tree (`#123`, `apple/fgx#123`) name issues in the
+project's earlier, archived tracker.
+
+### Reporting bugs
+
+The bug report form asks for what we need to find the problem:
+
+- **The FGX version**: the image file you booted, and `uname -r`.
+- **The full hardware description**: model and ROM version, RAM, accelerator,
+  the storage the image is on, and every card with its slot -- or, in an
+  emulator, Ample or MAME with its version and settings.
+- **A detailed explanation**: what you did, what you expected, what happened
+  instead, any messages exactly as shown, and `dmesg` for a problem at boot.
+- **How to reproduce it in Ample or MAME**, step by step from a fresh boot.  A
+  bug we can reproduce in the emulator is one we can fix; if it happens only on
+  real hardware, say what you tried in the emulator.
+- **Screenshots**, or a photo of the screen.
+
+## Acknowledgements
+
+FGX's own code -- the kernel's IIgs layer, the fcc compiler and toolchain, and
+the drivers -- was written from scratch, almost entirely with
+[Claude Code](https://claude.com/claude-code), with feedback from ChatGPT.
+
+Tremendous thanks to everyone who published Apple IIgs source code for others
+to learn from. FGX leans on that reference material throughout, and above all
+on the work of the **GNO Consortium**, whose GNO/ME showed that Unix on the
+IIgs could be done.
+
+Our thanks also go to the developers and maintainers of **2.11BSD**, which
+gave FGX its kernel design, its userland and its filesystem, and still runs on
+PDP-11s today. FGX stands on the BSD heritage, from 4.3BSD-Reno's VFS to
+NetBSD's long memory, and on **SunOS 4.1.3**, whose shared library model FGX
+adopted. We are grateful to be building on them.
+
+And finally, thanks to the **[cCc]** crew and the extended [cCc] family for
+their input and moral support along the way.
 
 ## License
 

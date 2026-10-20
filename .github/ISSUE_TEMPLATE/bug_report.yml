@@ -1,0 +1,81 @@
+name: Bug report
+description: Something in FGX does not work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        FGX comes with no support, offered or implied, but every report is read.
+        A bug we can reproduce in Ample or MAME is a bug we can fix, so the
+        steps below matter most.  Questions are better asked in #fgx on the
+        [Apple II Infinitum Slack](https://apple2.gs/slack/).
+
+  - type: input
+    id: version
+    attributes:
+      label: FGX version
+      description: The image file you booted, and the output of `uname -r` on the machine.
+      placeholder: fgx-2.0.0.fs, v2.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where it happens
+      options:
+        - Real hardware only
+        - Ample / MAME only
+        - Both
+        - Real hardware; not tried in Ample / MAME
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware
+      description: |
+        The whole machine: model and ROM version (01 or 03), RAM, accelerator
+        and its speed, the storage the image is on (card, drive, interface),
+        and every card with its slot.  For an emulator: Ample or MAME and its
+        version, the machine and slot settings, and the command line or
+        `mame-hd.sh` flags.
+      placeholder: |
+        Apple IIgs ROM 03, 8 MB RAM, TransWarp GS at 7 MHz
+        Slot 1: Uthernet II
+        Slot 7: CFFA 3000, image on CF
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: |
+        What you did, what you expected, and what happened instead, in detail.
+        Include any messages exactly as they appeared, and the boot log
+        (`dmesg`) if the problem is at boot.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it in Ample or MAME
+      description: |
+        Steps from a fresh boot of the image to the bug, in Ample or MAME, with
+        the settings that matter.  If it happens only on real hardware, say
+        what you tried in the emulator and what it did there.
+      placeholder: |
+        1. Ample, Apple IIgs ROM 03, 8 MB, fgx-2.0.0.fs on slot 7
+        2. Log in, run `...`
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images here.  A photo of the screen is fine for real hardware.
