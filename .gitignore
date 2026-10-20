@@ -371,6 +371,9 @@ examples
 build.ninja
 .ninja_deps
 .ninja_log
+# held only while ninja runs, which is when make_ufsboot.sh decides whether
+# the tree is dirty for /etc/version
+.ninja_lock
 
 # Local gate receipts (tools/gate.sh).  The VERDICT lives here, not in
 # the old CI -- see docs/history/plans/2026-07-28-monorepo-ninja-ci-design.md.
