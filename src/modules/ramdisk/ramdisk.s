@@ -691,6 +691,21 @@ _RamDisk_WriteDirBuf MX %00
                 STA     _blkNum                 ; block number
                 LDA     #_fsDirBuf              ; source buffer OFFSET (kernel bank)
                 STA     _blkBuf
+                ;--- THE LATCHES Blk_Write WOULD HAVE SET, since this goes to
+                ;    the body directly.  Blk_Read/Blk_Write leave the last
+                ;    transfer's _blkCurHi and _blkCurBufBank latched, and the
+                ;    body reads both: a UFS read before this module loaded left
+                ;    the vfs_bio arena's bank there, and the directory went in
+                ;    from that bank instead of _fsDirBuf (measured: block 2 all
+                ;    zeros after a format that reported success).  A 16-bit
+                ;    block in the kernel bank, not a pool entry. ---
+                STZ    |_blkCurHi
+                STZ    |_blkCurBufBank
+                SEP     #$20
+                MX      %10
+                STZ    |_blkSrcPool
+                REP     #$20
+                MX      %00
                 JSR     _RamWrBody              ; C / A=EIO propagate to caller
                                                 ; (the BODY: _RAM_WriteBlock is
                                                 ;  the RTL wrapper the kernel
