@@ -1,0 +1,41 @@
+
+
+WHO(1)              UNIX Programmer's Manual                 WHO(1)
+
+
+
+NAME
+     who - who is on the system
+
+SYNOPSIS
+     who [ who-file ]
+     who am i
+
+DESCRIPTION
+     _W_h_o, without an argument, lists the login name, terminal name
+     and login time for each current user of the system.
+
+     _W_h_o with one argument reads the named file instead of
+     /etc/utmp, so that `who /etc/utmp' is the default and any
+     file of the same record format may be examined.
+
+     _W_h_o with two arguments, as in `who am i' (and also `who are
+     you'), prints the invoker's own line prefixed by the host
+     name and a `!'.
+
+FILES
+     /etc/utmp     the login accounting file
+     /etc/hostname the host name, for `who am i'
+
+SEE ALSO
+     w(1), getty(8), login(1), utmp(5)
+
+BUGS
+     A login name longer than eight characters is truncated in the
+     accounting record and therefore here; see utmp(5).
+
+     The host field is always empty, no login here arrives over a
+     network with a name to record, so the parenthesised remote
+     host never prints.
+
+FGX                            2.11BSD                           1

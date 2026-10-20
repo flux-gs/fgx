@@ -1,0 +1,27 @@
+{
+ "name": "tcdata",
+ "description": "The baked termcap entries (libtermlib_helpers_data.s) as tgetent/tgetstr/tgoto see them: tctest prints the console entry's up and cm capabilities and five cursor motions.",
+ "command": "/testbin/tctest",
+ "boot_s": 45,
+ "timeout_s": 60,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "UP = ^[[A",
+   "CM = ^[[%i%d;%dH",
+   "0 0 -> ^[[1;1H",
+   "5 10 -> ^[[11;6H",
+   "23 79 -> ^[[80;24H",
+   "9 9 -> ^[[10;10H",
+   "12 40 -> ^[[41;13H",
+   "TCDONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

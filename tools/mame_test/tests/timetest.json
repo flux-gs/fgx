@@ -1,0 +1,26 @@
+{
+ "name": "timetest",
+ "description": "The kernel clock (src/kernel/tty/kern_time.c): the heartbeat advances a UTC time of day in 32.32 fixed point, inittodr sets it at boot from the root's fs_time and then the battery clock, and gettimeofday(2) reads it.  A1: it advances 2..4 s across sleep(3).  A2: tv_usec takes more than one value over 20 ticks, which a 1 s-granular battery-clock read cannot.  A3: less the boot's machdep.adjkerntz, its seconds match the battery clock read directly within 2 s, which is inittodr's conversion checked against arithmetic done in the test rather than in the kernel.  B (as root, each undone): settimeofday(now + 1000) reads back within 1 s; the battery clock read directly then agrees within 2 s, which is resettodr's write-back; a zone-only call sets the zone and leaves the time; a tv_usec of 1000000 is EINVAL (FreeBSD kern_time.c:111) and changes nothing.  C (adjtime, over exactly 120 ticks, cancelled after): a +1 s slew runs 120 x 66 us fast; the next adjtime reports what was still owed, just under 1 s; a -1 s slew runs as much slow.  D (machdep sysctls, restored): the four leaves read their defaults (adjkerntz the boot's, then 0,1,16688) and round-trip; adjkerntz = 3600 writes the battery clock back an hour behind the kernel and 0 puts it back (FreeBSD machdep.c:716); tick at 25000 runs the clock 120 x 8312 us fast over 120 ticks; an unknown leaf is EOPNOTSUPP; adjkerntz holds -46800 (New Zealand), which it could not while it was a 16-bit int (#496).  E (UFS stamps through KSVC_TIME): a new file on the root has gettimeofday's time within 2 s, and still does with adjkerntz at 3600, when the battery clock the retired path read is an hour behind.  A4: the boot's adjkerntz is minus /etc/localtime's gmtoff now, which is adjkerntz -i having run at boot: 0 on a UTC image, 25200 or 28800 on America/Los_Angeles.  Every case that writes adjkerntz puts back the boot value, not 0.",
+ "command": "/testbin/timetest",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "TT A1 adv=",
+   "TT A2 vals=",
+   "TT A3 diff=",
+   "TT A4 kz=",
+   "TT B1 diff=",
+   "TT B2 rtc=",
+   "TT B3 tz=",
+   "TT B4 e=", "TT C1 extra=", "TT C3 old=", "TT C2 extra=", ",0,1,16688 ok", "TT D2 rtc=", "TT D3 extra=", "TT D4 e=45 ok", "TT D5 -46800 ok", "TT E1 diff=", "TT E2 diff=",
+   "TT VERDICT PASS"
+  ],
+  "screen_lacks": [
+   "TT VERDICT FAIL",
+   "FAIL",
+   "Invalid time in real time clock",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

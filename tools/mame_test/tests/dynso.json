@@ -1,0 +1,10 @@
+{
+ "name": "dynso",
+ "description": "Shared libc SP3: a program linked dynamically against libc.so and bound prebound on the host (fgx_bind), run as an ordinary image: libcso's checks plus a pointer cell (qsort/strcmp), &errno in data, stdout's pointer, a far helper through its thunk, and the carve below the copied core.",
+ "command": "/testbin/dynso",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["DSO ok"],
+  "screen_lacks": ["DSO FAIL", "libc: no room", "PANIC", "BRK"]
+ }
+}

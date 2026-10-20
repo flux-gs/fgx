@@ -1,0 +1,21 @@
+{
+ "name": "killprobe",
+ "description": "kill(-1) IS A BROADCAST AND IT HAS TO DRAIN.  reboot(8)'s teardown ends when kill(-1, SIGKILL) answers ESRCH -- nothing left to signal -- so a broadcast that keeps finding victims is a shutdown that never finishes.  This runs reboot(8)'s exact sequence (SIGTSTP to init, SIGTERM to all, SIGKILL in a loop) and names what is left after each round, which a shell script cannot do because the shell is one of the things being killed.\n\nKPDRAINED is the assertion: kill(-1) returned ESRCH within three rounds.\n\nKPSTUCK is what it printed before apple/fgx#401 was fixed, and the cause is worth knowing: the fan-out decided a TCB slot was free by reading TCB_TaskID, which a released slot keeps, instead of TCB_Status, which Task_Lookup uses.  Seven slots that procinfo does not list answered as live tasks.  A GROUP kill could not show it -- a stale slot's SE_PGroup almost never matches -- so only the broadcast exposed it.\n\nThe dump also shows init STOPPING on SIGTSTP, which is what stops it respawning gettys faster than they are killed.\n\nNo exit-status echo: the shell that would print it is one of the things the probe kills, which is also why the probe reports through markers rather than rc.  Also asserts that SIGKILL and SIGSTOP cannot be BLOCKED (apple/fgx#471): a task that blocked SIGKILL would be one cause of the very drain failure this probe measures, since the pending bit is posted and _Sys_CheckSignal steps over it for ever.  The kernel subtracts sigcantmask on the write, so asking to block everything must come back with those two bits clear -- KPMASK ok says it did.  Goes red without the fix, because sigsetmask stored whatever 32 bits it was handed.",
+ "command": "/testbin/killprobe",
+ "boot_s": 45,
+ "timeout_s": 150,
+ "expect": {
+  "screen_contains": [
+   "KPSTART",
+   "KPMASK ok",
+   "KPDRAINED",
+   "1/init/stopped"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "KPSTUCK",
+   "KPMASK FAIL"
+  ]
+ }
+}

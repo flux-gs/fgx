@@ -1,0 +1,20 @@
+{
+ "name": "boundshare",
+ "description": "TWO HOST-BOUND PROCESSES SHARING ONE TEXT EACH GET THEIR OWN DATA BANK IN EVERYTHING THEY COPY (shared libc SP5 final review, apple/fgx#517; SP5 step 2).  A host-bound image (fgx_bind) carries each library's banks, core template and block templates in its own CODE segments -- shared text, whose relocs the loader applies only at the first load.  So nothing a later process copies may hold a bank from a reloc into the data segment.  Two things did: the startup's MVN, whose destination bank byte was such a reloc (#517), and every library's core FIXUPS -- core pointers into the core, such as libcurses's sflags[]/sstrs[] -- which were relocs from the last library bank into the data segment, so each later copy pointed into the FIRST process's bank (curses then read UP and CM from it: 'CURS FAIL up').  The startup now copies the cores into this process's bank and sets each fixup's bank byte from DBR, as the binder does for a dynamic program.  Here dynso and cursso each run once (their texts cached), then twice at once, so the two processes hold different banks.  Each writes its checks to its own file; all four must end ok.  Control: emit the fixups as relocs again (fgx_bind.add_lib) -- the concurrent cursso pair goes red.  Markers are file:count lines grep prints, which the typed line does not contain.",
+ "command": "/testbin/dynso > /dev/null; /testbin/dynso > /tmp/o1 & /testbin/dynso > /tmp/o2; wait; /testbin/cursso > /dev/null; /testbin/cursso > /tmp/c1 & /testbin/cursso > /tmp/c2; wait; grep -c 'DSO ok' /tmp/o1 /tmp/o2; grep -c 'CURS ok' /tmp/c1 /tmp/c2",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "/tmp/o1:1",
+   "/tmp/o2:1",
+   "/tmp/c1:1",
+   "/tmp/c2:1"
+  ],
+  "screen_lacks": [
+   "DSO FAIL",
+   "CURS FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

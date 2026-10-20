@@ -1,0 +1,37 @@
+{
+ "name": "kslots",
+ "description": "THE KERNEL-IMAGE SLOTS ARE OBSERVED, NOT TRUSTED.  A task's kernel image lives in a slot the scheduler binds when it picks the task (task.s _Slot_Ensure), and every bind, park and restore is one klog line -- kbind/kpark/krest <pid> slot <n> -- because a mechanism that leaves no trace can be inert while every test stays green.  This boots to a shell, spawns a child, and reads the ring: init's bind is the first line the scheduler ever writes (kbind 1 slot 0, from boot's own hand-off), and the shell that runs the commands was bound too.  Two refusals are asserted absent: the dispatcher's canary report, and the halt _Slot_Image raises when a saved kernel SP falls outside its slot.  kstkhwm_check.py runs on the dump, so the slot depth ratchet is gated here: every slot's deepest mark is measured against the config's slot size.",
+ "command": "sh",
+ "post_commands": [
+  "A=ok; ls /tmp > /dev/null; echo KS=$A"
+ ],
+ "post_gap_frames": 120,
+ "timeout_s": 120,
+ "exit_on_prompt": false,
+ "use_state": false,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "KS=ok"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "KSTK CANARY",
+   "swstk:",
+   "kslot:"
+  ],
+  "klog_region": "klog",
+  "klog_lacks": [
+   "kslot: pid",
+   "KSTK CANARY"
+  ],
+  "check_script": "kstkhwm_check.py"
+ }
+}

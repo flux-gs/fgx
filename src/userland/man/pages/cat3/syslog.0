@@ -1,0 +1,93 @@
+
+
+SYSLOG(3)            UNIX Programmer's Manual             SYSLOG(3)
+
+
+
+NAME
+     syslog, openlog, closelog, setlogmask, vsyslog - control
+     system log
+
+SYNOPSIS
+     #include <syslog.h>
+
+     openlog(ident, logopt, facility)
+     syslog(priority, message, ...)
+     closelog()
+     setlogmask(maskpri)
+
+DESCRIPTION
+     syslog() writes a message to the system log.  It forms the
+     line
+
+          <pri>Mon dd hh:mm:ss tag[pid]: message
+
+     and sends it as one datagram to /dev/log, which is where a
+     syslogd reads it from.  The bracketed pid appears only under
+     LOG_PID.  The tag is what openlog() was given, or the
+     program's own name if openlog() was not called.
+
+     The message is a printf(3) format string, with one addition:
+     %m is replaced by the error text for the errno current on
+     entry, and consumes no argument.
+
+     openlog() sets the tag, the option bits and the default
+     facility.  LOG_PID prefixes the process id; LOG_CONS falls
+     back to the console when the log cannot be reached;
+     LOG_PERROR writes the line to standard error as well;
+     LOG_NDELAY opens the log immediately rather than at the first
+     syslog(); LOG_ODELAY is upstream's own no-op and LOG_NOWAIT
+     is deprecated there.
+
+     closelog() closes the descriptor.
+
+     Priorities and facilities are the values in <syslog.h>, whose
+     numbers match 2.11BSD's exactly so that a ported source
+     compares against the same constants upstream did.
+
+     WHERE THE LINE GOES WHEN NOTHING IS LISTENING.  FGX has no
+     syslogd yet.  With nothing bound to /dev/log the datagram is
+     dropped, which is what 2.11BSD does when syslogd is not
+     running.  Two fallbacks remain, and both are upstream's own:
+     when the socket cannot be created at all -- a boot with no
+     net module, so there is no transport -- the line is appended
+     to /usr/adm/messages; and a caller that asked for LOG_CONS
+     gets it on /dev/console.
+
+SEE ALSO
+     unix(4), printf(3), strerror(3)
+
+BUGS
+     setlogmask() NEVER FILTERS ANYTHING.  It records the mask and
+     returns the previous one, and no priority is ever suppressed.
+     This is upstream's defect, carried deliberately: the test in
+     2.11BSD's vsyslog reads
+
+          if (!LOG_MASK(LOG_PRI(pri)) & LogMask)
+
+     where the unary ! binds tighter than the &, so its left
+     operand is the negation of LOG_MASK alone -- which is 1 << pri
+     for a priority in 0 through 7, never zero, so the negation is
+     zero and the test is never true.  NetBSD 0.9 carries the same
+     expression and 4.3BSD-Reno a different equally non-filtering
+     one.  Diverging would make this drop messages that 2.11BSD
+     delivers, so a program calling setlogmask() behaves exactly
+     as it does upstream: it is heard in full.
+
+     THE LOG DESCRIPTOR SURVIVES exec(2).  Upstream marks it
+     close-on-exec; there is no fcntl(2) here and no
+     close-on-exec bit in the kernel, so a process that logs and
+     then execs passes the descriptor to its child.
+
+     THE TIMESTAMP IS BUILT FROM ctime(3) rather than
+     strftime(3).  The bytes are identical -- 4.3BSD-Reno and
+     NetBSD 0.9 form the line this way and 2.11BSD uses strftime
+     -- but a program that expects its own strftime settings to
+     reach the log line will not find them doing so.
+
+     With no syslogd(8) running, a line sent to a /dev/log nobody
+     has bound goes nowhere and says so to no one, which is what
+     2.11BSD does in the same state.
+
+HISTORY
+     These functions appeared in 4.2BSD.

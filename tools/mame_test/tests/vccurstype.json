@@ -1,0 +1,56 @@
+{
+ "name": "vccurstype",
+ "description": "TYPING AT A VIRTUAL CONSOLE'S `login:' PROMPT MUST NOT TAKE THE CURSOR AWAY.  On a VC the cursor sits after `login: ' as it should, and the moment you type the first character it disappears; it comes back on the `Password:' line and behaves normally afterwards.  COUNTABLE FOR THE REASON `vccursor' GIVES: the cursor is one AttrBuf cell with the inverse bit ($20) OR-ed in (Con_ShowCursor, console_char.s), so an idle console at a prompt has exactly ONE inverse cell -- and this fixture dumps VC1's AttrBuf either side of a single keystroke rather than asking a human to stare at the screen.  Option+2 selects VC1, which sits at a getty `login:' prompt from boot; the keystroke is a raw `r' (the first character of `root').  Generous settle frames on BOTH samples because a dump can race the deferred repaint -- `vccursor's header records that costing a run, and the same trap applies here.",
+ "command": "sleep 90",
+ "exit_on_prompt": false,
+ "timeout_s": 200,
+ "raw_inject": [
+  [
+   300,
+   50,
+   2
+  ],
+  [
+   1200,
+   114,
+   0
+  ]
+ ],
+ "memory_regions": [
+  {
+   "name": "vc1_before",
+   "addr_hex": "032000",
+   "len": 8000,
+   "vcbank": 1,
+   "frame": 1100
+  },
+  {
+   "name": "vc1_after",
+   "addr_hex": "032000",
+   "len": 8000,
+   "vcbank": 1,
+   "frame": 1500
+  },
+  {
+   "name": "vc1_late",
+   "addr_hex": "032000",
+   "len": 8000,
+   "vcbank": 1,
+   "frame": 2400
+  },
+  {
+   "name": "vc0_late",
+   "addr_hex": "032000",
+   "len": 8000,
+   "conbank": true,
+   "frame": 2400
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "vccurstype_check.py"
+ }
+}

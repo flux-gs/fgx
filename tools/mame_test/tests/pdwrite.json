@@ -1,0 +1,51 @@
+{
+ "name": "pdwrite",
+ "description": "A ProDOS VOLUME MOUNTED WITH -o write IS WRITTEN AS ProDOS 8 WOULD WRITE IT, AND OTHER READERS AGREE.  /dev/sd1 is disk/pdscratch.po; /testdata/pdwrite writes through pdmount -p/-A/-P and the check script reads the volume the machine left.\n\nON THE SCREEN:\n  mw=0      mount -o write mounted writable.\n  PDWR hello 600   a seedling written past its first block: promotion to sapling.\n  PDWR sap 120000  a sapling grown past 256 blocks: promotion to tree.\n  PDWR sap 100     a write into the sapling's holes.\n  PDWR tree 700    an overwrite of existing blocks.\n  PDWR ext 1000    a GS/OS extended file's data fork grows.\n  PDWR ._ext 0 errno=1   the resource fork file is not written: EPERM.\n  PDWR f01 5       O_APPEND lands at the EOF.\n  PDWR sub/inner/deep 5000   a file two directories down, whose writes ripple.\n  PDWR f03 open errno=13  uid 1 cannot open a 0644 root-owned file for write.\n  PDWR sub open errno=21  a directory cannot be opened for write.\n  PDCR NewFile.Txt errno=0   a file is created in the volume directory.\n  PDCR a_b errno=22        a name ProDOS cannot hold: EINVAL.\n  PDCR HELLO errno=17      O_EXCL on a name that exists, whatever its case: EEXIST.\n  PDCR ._ext errno=1       the resource fork file is never created: EPERM.\n  PDCR sub/nope errno=13   uid 1 cannot name a file in a 755 root-owned directory.\n  PDMK sub/NewDir errno=0  a directory is made in a subdirectory; PDMK sub errno=17.\n  PDWR NewFile.Txt 700     the new seedling grows into a sapling.\n  PDCN f 20 errno=0        twenty files in the new directory, which grows a block.\n  cwd=/mnt/sub/NewDir      pwd climbs out of it by inode number and name.\n  PDCN v N errno=28        creating until the volume directory is full: ENOSPC.\n  PDWR f09 N errno=28     writing until the volume is full ends in ENOSPC.\n  PDWR /mnt/f04 open errno=30  a read-only remount refuses a write open.\n  um=0 ro=0  both unmounts succeed.\n\nIN THE CHECK SCRIPT (pdwrite_check.py): cadius CHECKVOLUME silent (after a control it must flag), cadius EXTRACTVOLUME byte-identical to the writes replayed on the generator's contents, each written entry's storage type, blocks used, backup bit and date, with the ripple re-dating SUB and INNER, each created entry's fields, and every directory's file count, parent pointers, block chain and entry size.",
+ "command": "sh /testdata/pdwrite",
+ "boot_s": 45,
+ "timeout_s": 900,
+ "extra_hards": [
+  "disk/pdscratch.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "mw=0",
+   "PDWR hello 600 errno=0",
+   "PDWR sap 120000 errno=0",
+   "PDWR sap 100 errno=0",
+   "PDWR tree 700 errno=0",
+   "PDWR ext 1000 errno=0",
+   "PDWR ._ext 0 errno=1",
+   "PDWR f01 5 errno=0",
+   "PDWR sub/inner/deep 5000 errno=0",
+   "PDWR f03 open errno=13",
+   "PDWR sub open errno=21",
+   "PDCR NewFile.Txt errno=0",
+   "PDCR a_b errno=22",
+   "PDCR HELLO errno=17",
+   "PDCR ._ext errno=1",
+   "PDCR sub/nope errno=13",
+   "PDMK sub/NewDir errno=0",
+   "PDMK sub errno=17",
+   "PDWR NewFile.Txt 700 errno=0",
+   "PDCN f 20 errno=0",
+   "cwd=/mnt/sub/NewDir",
+   "errno=28",
+   "PDWR /mnt/f04 open errno=30",
+   "um=0",
+   "ro=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "PDWR usage",
+   "setuid errno",
+   "PDCN usage"
+  ],
+  "check_script": "pdwrite_check.py"
+ }
+}

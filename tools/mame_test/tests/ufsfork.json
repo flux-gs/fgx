@@ -1,0 +1,17 @@
+{
+ "name": "ufsfork",
+ "description": "A FORKED CHILD INHERITS THE WORKING DIRECTORY, which is Reno's `VREF(u.u_cdir)' (kern_fork.c:272) and the last of the four lines Reno spends on that vnode.  TWO ASSERTIONS FOR ONE FACT, at different removes.  `fgx# ' is the far one and the whole point: /bin/sh is FORKED by init, which chdir()s to /root first, and sh opens `.profile' RELATIVE to its cwd (vendor/2.11BSD/usr/bin/sh/msg.c:70 is `MSG profile = \".profile\"').  A child that did not inherit starts at the root, never finds it, and keeps the Bourne `# ' prompt -- so the prompt IS the inheritance, and until it appeared every manifest taking run.py's default exit_on_prompt sentinel failed on a UFS root for that one reason.  `cat .cshrc' is the near one, and it is what tells the two halves apart: sourcing a relative file in the SHELL worked before this landed (chdir sets the cwd vnode and a relative open resolves against it), while the same open in a FORKED CHILD did not.  Without the near assertion a regression in the fork half reads identically to one in the chdir half.  RUN AGAINST THE UFS IMAGE: on ProDOS every path falls through to the legacy resolver and none of this is entered.",
+ "command": "cd /root; cat .cshrc",
+ "boot_s": 45,
+ "timeout_s": 14,
+ "expect": {
+  "screen_contains": [
+   "fgx#",
+   "set history=50 savehist=50",
+   "set autolist"
+  ],
+  "screen_lacks": [
+   "cannot open"
+  ]
+ }
+}

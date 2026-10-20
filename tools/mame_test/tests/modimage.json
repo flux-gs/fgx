@@ -1,0 +1,57 @@
+{
+ "name": "modimage",
+ "description": "EVERY LOADED MODULE'S IMAGE STILL MATCHES THE FILE IT CAME FROM (apple/fgx#110).  A module is read into a bank and then nothing ever looks at that bank again: apple/fgx#29 was two stray 16-bit stores landing inside a freshly loaded image, turning four bytes of _fop_rename into BRKs, presenting as 'rename(2) is broken' -- a symptom nobody traces back to module loading -- and costing a long investigation past two wrong diagnoses.  A byte-for-byte compare settled it in ten minutes, and that compare existed nowhere in the tree.  modstale covers Mod_Load REFUSING a module built against another kernel; ckmodule covers C in a module running with the right bank and DP.  Neither notices an image that loaded correctly and was then scribbled on.\n\nThe regions are WHOLE BANKS named by ORDINAL, carrying no module offsets at all.  That is deliberate: gen_modplace reassigns offsets whenever a module grows, so a manifest with baked addresses would compare the wrong bytes and still say PASS.  The plugin resolves the ordinal through _modBankTab, so the bank is the one the allocator actually chose rather than the one it chose the day this was written; modimage_check.py slices each image out using that module's own FGXM header and reads modload.conf for who should be there.  See the checker's header for the three measured-legitimate differences and for the one gap this cannot close without a text/data split in FGXM.",
+ "command": "true",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "modbank0",
+   "modbank": 0,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank1",
+   "modbank": 1,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank2",
+   "modbank": 2,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank3",
+   "modbank": 3,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank4",
+   "modbank": 4,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank5",
+   "modbank": 5,
+   "addr_hex": "000000",
+   "len": 65536
+  },
+  {
+   "name": "modbank6",
+   "modbank": 6,
+   "addr_hex": "000000",
+   "len": 65536
+  }
+ ],
+ "expect": {
+  "check_script": "modimage_check.py",
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

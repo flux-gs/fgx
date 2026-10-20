@@ -1,0 +1,45 @@
+{
+ "name": "pdrename",
+ "description": "A ProDOS VOLUME MOUNTED WITH -o write RENAMES, MOVES AND TRUNCATES AS ProDOS 8 AND GS/OS DO, AND OTHER READERS AGREE.  /dev/sd1 is a fresh disk/pdscratch.po; /testdata/pdrename works through pdmount -M/-T and the shell, and the check script reads the volume the machine left.\n\nON THE SCREEN:\n  PDMV hello Greeting     a rename in place, to a mixed-case name.\n  PDMV f01 sub/Moved      a file moved to another directory.\n  PDCR fresh / PDWR fresh 700   a new file in the slot the move freed -- written through a node that must NOT be the moved file's stale one.\n  PDMV sub/inner sub/Deeper, then sub/Deeper Top   a directory renamed, then moved to the volume directory.\n  cwd=/mnt/Top, deep file   pwd climbs out of the moved directory and its file still reads.\n  PDMV f04 f05            a rename onto a name that exists replaces it.\n  PDMV f02 f02x / sap sapx errno=1   a clear rename bit ($40) refuses: EPERM.\n  PDMV ._ext rfork errno=1   a resource fork does not move on its own.\n  PDMV sub sub/a/b errno=22  a directory into its own subtree: EINVAL.\n  PDTR tree 100000 / sap 300 / ext 0   truncation of a tree, a sapling and an extended file's data fork.\n  PDTR f06 70000          a truncate that lengthens.\n  PDTR ._ext 0 errno=1    a resource fork is not truncated.\n\nIN THE CHECK SCRIPT (pdrename_check.py): cadius CHECKVOLUME silent (after a control it must flag); every directory whole, with no name twice; each renamed or moved entry at its new place with its old key block, its new name's case word and the backup bit; the moved directory's header named and pointing back; the truncated files' storage types, EOFs and blocks used; and every file byte-identical in cadius's extraction.",
+ "command": "sh /testdata/pdrename",
+ "boot_s": 45,
+ "timeout_s": 600,
+ "extra_hards": [
+  "disk/pdscratch.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "mw=0",
+   "PDMV hello Greeting errno=0",
+   "PDMV f01 sub/Moved errno=0",
+   "PDCR fresh errno=0",
+   "PDWR fresh 700 errno=0",
+   "PDMV sub/inner sub/Deeper errno=0",
+   "PDMV sub/Deeper Top errno=0",
+   "cwd=/mnt/Top",
+   "deep file",
+   "PDMV f04 f05 errno=0",
+   "PDMV f02 f02x errno=1",
+   "PDMV sap sapx errno=1",
+   "PDMV ._ext rfork errno=1",
+   "PDMK sub/a errno=0",
+   "PDMV sub sub/a/b errno=22",
+   "PDTR tree 100000 errno=0",
+   "PDTR sap 300 errno=0",
+   "PDTR ext 0 errno=0",
+   "PDTR f06 70000 errno=0",
+   "PDTR ._ext 0 errno=1",
+   "um=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "usage errno"
+  ],
+  "check_script": "pdrename_check.py"
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "name": "vnopsprobe",
+ "description": "THE FILE/VNODE GLUE asserted end to end -- the fifth of ufsprobe.mod's mutually exclusive gates and the first whose subject is not the filesystem.  CASES 1400-1432.  The four gates before it ask what UFS does with a vnode it is HANDED; this asks how a vnode comes to be handed over at all: vn_open turning a path and a mode into an open vnode, and vn_read/vn_write moving bytes through a `struct file` while keeping its offset.  It is worth its own gate because every layer under it has been green with no user -- syscall.s contains no reference to namei or to any VOP_, so until 1.7d nothing outside a probe reaches the VFS -- and these are the first cases that exercise the layer in the SHAPE a syscall will.  Case 1408 is the one that matters most: vn_open must hand back a vnode that is REFERENCED AND UNLOCKED, because an open file is held across other operations and a handle kept across other operations must be kept unlocked, or the next lookup to reach it waits in ufs_ihashget BEFORE the self-deadlock check and hangs naming nothing.  Cases 1412-1414 and 1417-1420 are the offset: it lives in the file struct and not the vnode, which is what makes an inherited offset inherited, and the payload is ASCENDING BYTES read back in two halves so that a read returning the right COUNT from the wrong OFFSET goes red.  Cases 1426-1428 are vn_rdwr's aresid contract -- the same call is a SHORT transfer with a residual pointer and an EIO without one.  Case 1410 drives the only arm of vn_writechk that has a setter (a read-only mount); the ETXTBSY arm cannot fire because nothing in the tree sets VTEXT.  WHAT NO CASE HERE COVERS: the access checks, because vn_open's three VOP_ACCESS calls are not ported while ufs_access is ufs_enotsup until 2.6 -- nothing here is evidence that permissions work -- and FNDELAY, which has no O_NONBLOCK to set it.  It writes to inode 12 and the file vn_open creates, checks the slot is FREE first so a volume whose layout changes stops the probe rather than being overwritten, and puts every slot back.  AND THE ORACLE JUDGES WHAT IT LEAVES BEHIND.  `ufsfsck_check.py' fscks every staged spindle once the machine has finished with it, which is the campaign plan's phase-1 arm 1 -- \"mount -t ufs survives a full read/write exercise; host fgxfs fsck clean\".  It works even though this probe RESTORES the volume, because the restore is SEMANTIC rather than byte for byte: a completed run puts the free list and the counts back where it found them, so anything the exercise damaged OUTSIDE what it meant to touch still shows.  Measured on two completed runs: 305 used, 3,725 free, 1,020 free inodes, identical to a fresh mkfs.  IT IS NOT SELF-SUFFICIENT and must not be read as though it were -- a run that PANICS before doing anything leaves a clean volume too, which is exactly what apple/fgx#272 did -- so this arm is worth something only beside the `ufs: ok' above it and tryprobe.sh's exit status (apple/fgx#273).",
+ "command": "ls /",
+ "timeout_s": 30,
+ "extra_hards": [
+  "disk/ufsscratch.fs"
+ ],
+ "expect": {
+  "screen_contains": [
+   "ufs: ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "ufs: BROKEN",
+   "ufs: vfs.mod not loaded",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ],
+  "klog_lacks": [
+   "fs: /dev SELF-TEST FAILED"
+  ],
+  "check_script": "ufsfsck_check.py"
+ },
+ "requires": {
+  "config": {
+   "kernel.vnopsprobe": "1"
+  },
+  "reason": "the file/vnode glue probe is compiled into ufsprobe.mod only at kernel.vnopsprobe = 1, and it is a SEPARATE GATE from the other four because the five do not fit in one 64 KB module bank -- see cfg/system.cfg.  It is off by default because it WRITES to a disk on the boot path.  Run it with `sh tools/tryprobe.sh vnopsprobe`."
+ },
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ]
+}

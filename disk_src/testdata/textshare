@@ -1,0 +1,8 @@
+# Two spawned instances of one program, and a different program beside them.
+/bin/sleep 60 &
+A=$!
+/bin/sleep 60 &
+B=$!
+/bin/sleep 60 &
+echo TS A=$A B=$B
+echo TS SH=$$

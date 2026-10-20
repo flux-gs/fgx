@@ -1,0 +1,19 @@
+{
+ "name": "manrender",
+ "description": "A MANUAL PAGE'S EMPHASIS REACHES THE SCREEN AS EMPHASIS.  A `.0' page is nroff CAT output, where an underlined word is the overstrike run `_\\bs_\\by_\\bn_\\bc'; tools/man_preformat.py turns those into the SGR escapes the FGX console renders, and man(1) shows the result.  Nothing in the corpus exercised any of that chain, so when eighteen of FGX's own hand-written pages spelled the emphasis as LITERAL underscores -- no backspaces at all -- every page still staged, every build stayed silent, and the only witness was a reader seeing `_s_y_n_c' where a word belonged (on sync(1)).\n\ntools/check_man_overstrike.py refuses that page at build time, which is the source half.  THIS IS THE PIPELINE HALF, and the two fail differently: a page written wrong fails the checker, while a preformatter that stops converting, a staging rule that drops a section, or a man(1) that cannot find one fails only here.  Measured discriminating against the second of those -- make man_preformat.py pass overstrike through unchanged and this goes red on `_S_y_n_c' while the checker stays green.\n\nTHE `lacks' ARMS ARE POSITIONED, NOT JUST PRESENT.  `head -16' is chosen so the DESCRIPTION paragraph is on screen when the assertion runs; the first cut used `head -8', the emphasised line never appeared, and all three `lacks' passed against a screen that could not have contained them.  `executes the' is asserted alongside to keep it that way -- it is on the same line as the emphasis, so the negative arms cannot go quiet without the positive one going red first.\n\nIT IS ALSO man(1)'S ONLY TEST.  The page is reached by name with no section digit, which exercises the default search order (cat1 first, 2.11BSD man.c's), and `man sync | head' puts stdout on a pipe, which is man's !isatty cat mode rather than the more(1) pager.\n\nTHE SENTINEL IS BUILT BY EXPANSION (`M=MAN; ... echo ${M}DONE') because MAME echoes the command line it types, so a literal `MANDONE' in the command would satisfy the assertion on a machine that never ran it -- which is what check_vacuous_assertions refuses, and did refuse to the first cut of this manifest.",
+ "command": "M=MAN; man sync | head -16 ; echo ${M}DONE",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "sync - force all filesystem state to disk",
+   "Sync executes the sync(2) primitive",
+   "MANDONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "_S_y_n_c",
+   "_s_y_n_c",
+   "No manual entry"
+  ]
+ }
+}

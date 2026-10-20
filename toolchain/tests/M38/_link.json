@@ -1,0 +1,5 @@
+{
+  "code": ["toolchain/lib/libtermlib_helpers.s"],
+  "data": ["toolchain/lib/libtermlib_helpers_data.s"],
+  "lib": [["build/static_libs/libtermlib.s", "build/static_libs/libtermlib.data.s"]]
+}

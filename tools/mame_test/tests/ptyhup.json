@@ -1,0 +1,10 @@
+{
+  "name": "ptyhup",
+  "description": "CLOSING A PTY MASTER HANGS UP THE SLAVE'S SESSION, AND THE CLOSE SAYS IT SUCCEEDED.  ptyhup spawns spinner(8) on /dev/ttyp1 as its controlling terminal, requires it RUNNING just before the master is closed (the positive control: 'died of SIGHUP' is vacuous for a child already dead of something else), and dead of exactly SIGHUP after it -- ptcclose's `(*linesw[t_line].l_modem)(tp, 0)', whose ttymodem arm signals the line's foreground group (vendor/2.11BSD/usr/sys/sys/tty_pty.c:222, tty.c:709).  spinner never reads its tty, so FGX's `^D'-to-a-blocked-reader arm cannot pass this in the signal's place.  THE CLOSE'S RETURN IS ASSERTED TOO: until apple/fgx#352 every pty close answered -1 with errno 10 -- Fs_Close carried its deferred-error latch across the teardown in _shTmp2, which pty.mod's _Pty_PairFromMinor overwrites with the last byte written to a chardev (the `\\n' of the previous line) -- so `PTYHUP FAIL close e=10' is that defect's signature.",
+  "command": "/testbin/ptyhup",
+  "timeout_s": 120,
+  "expect": {
+    "screen_contains": ["PTYHUP alive", "PTYHUP OK SIG1"],
+    "screen_lacks": ["PTYHUP FAIL", "PTYHUP NONE", "PANIC", "BRK"]
+  }
+}

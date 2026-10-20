@@ -1,0 +1,40 @@
+
+
+GETPASS(3)          UNIX Programmer's Manual          GETPASS(3)
+
+
+
+NAME
+     getpass - read a password
+
+SYNOPSIS
+     char *getpass(prompt)
+     char *prompt;
+
+DESCRIPTION
+     Getpass reads a password from the file /dev/tty, or if that
+     cannot be opened, from the standard input, after prompting
+     with the null-terminated string prompt on the standard error
+     and disabling echoing.  A pointer is returned to a
+     null-terminated string of at most _PASSWORD_LEN (32)
+     characters; the rest of the line is read and discarded.
+
+     SIGINT is ignored while echo is off, so an interrupt cannot
+     leave the terminal silent.  The terminal's flags and the
+     caller's SIGINT disposition are restored before returning.
+
+FILES
+     /dev/tty
+
+SEE ALSO
+     login(1), passwd(1), su(1), crypt(3)
+
+BUGS
+     The return value points to static data whose content is
+     overwritten by each call.
+
+     The buffer holds 32 characters, where 2.11BSD's holds 8.
+
+
+
+Printed 8/5/26                                                  3

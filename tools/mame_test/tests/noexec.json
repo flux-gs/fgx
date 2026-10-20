@@ -1,0 +1,23 @@
+{
+ "name": "noexec",
+ "description": "A FILE WITH NO EXECUTE BIT IS REFUSED, AND IT IS REFUSED TO ROOT.  Until apple/fgx#416 nothing on the volume was executable and everything ran: Load_Binary opened the image through Fs_Open -> root_open -> vfs_openat -> vn_open with FREAD and never asked the mode, so a file was executable exactly when it was readable -- and every file staged was 0644.\n\nTHE SHELL HERE IS ROOT'S, WHICH IS THE WHOLE POINT.  4.3BSD-Reno's exec makes two tests (kern/kern_exec.c:129-138) and they answer different questions.  `VOP_ACCESS(vp, VEXEC, cred)' asks whether THIS caller may execute the file, and root passes it always.  The second -- `(vattr.va_mode & (VEXEC|(VEXEC>>3)|(VEXEC>>6))) == 0' -- takes no credential at all and refuses a file with no execute bit in any triple to everybody, root included.  2.11BSD usr/sys/sys/kern_exec.c:88-93 is the same pair.  A port that implemented only the first would still pass a non-root test and would leave this volume exactly as it was, because root is who runs everything on the primary console.\n\nWHAT EACH ARM DISCRIMINATES.  `a=0' is the POSITIVE CONTROL and it is not decoration: /bin/true copied and chmod'd 755 must still run, or `b=1' below would be satisfied by a kernel that had simply stopped executing anything. `b=1' is the refusal, and `cannot execute' is the shell's word for it (vendor/2.11BSD/usr/bin/sh/service.c) as against `not found', which is what an ENOENT would print -- so the two are distinguishable and a check that lost the file rather than refusing it cannot pass.  The trailing `ls -l' says the chmod is what changed, and 0644 is what it changed to.\n\nNEITHER NEEDLE CAN MATCH THE ECHOED COMMAND, which is the trap ufswrite's append arm was written on: the line typed carries `echo a=$?' and `echo b=$?', so `a=0' and `b=1' can only come from the shell's own output.\n\nMEASURED DISCRIMINATING: delete the `JSR _Ld_ExecCheck' branch from Load_Binary and this prints `b=0' with no `cannot execute' line -- the 0644 copy runs, which is the defect this fixture exists for.\n\n/tmp AND A COPY, not a file on the volume: run.py copies the image per run so either would be honest, but chmod'ing a real binary would leave the one readable account of what `ls -l /bin' should say inside a test.",
+ "command": "cd /tmp; cp /bin/true v; chmod 755 v; /tmp/v; echo a=$?; chmod 644 v; /tmp/v; echo b=$?; ls -l /tmp/v; sync",
+ "boot_s": 45,
+ "timeout_s": 40,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "a=0",
+   "cannot execute",
+   "b=1",
+   "-rw-r--r--"
+  ],
+  "screen_lacks": [
+   "b=0"
+  ],
+  "check_script": "ufsfsck_check.py"
+ }
+}

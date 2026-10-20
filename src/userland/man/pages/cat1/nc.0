@@ -1,0 +1,47 @@
+
+
+NC(1)               UNIX Programmer's Manual                NC(1)
+
+
+
+NAME
+     nc - arbitrary TCP connections (netcat)
+
+SYNOPSIS
+     nc [-g] host port
+
+DESCRIPTION
+     Nc opens a TCP connection to host on port and copies data
+     between the connection and the standard streams.  The host may
+     be a dotted-quad address or a name resolved through /etc/hosts
+     and DNS (see gethostbyname(3)); port is a decimal number.
+
+     In the default mode nc copies standard input to the socket and
+     the socket to standard output, so a redirect drives it:
+
+          nc host port < file
+
+     An interactive console never reaches end-of-file, so use a
+     redirect (or -g) rather than typing at nc directly.
+
+     The options are:
+
+     -g   Send the request line `GET / HTTP/1.0' followed by a blank
+          line, then print the response and exit -- a one-shot HTTP
+          probe that needs no standard input.
+
+EXAMPLES
+     nc bsd 23                 connect to the telnet port on `bsd'
+     nc -g www.example.com 80  fetch the root document over HTTP
+     nc 192.168.2.1 79 < q     send file q to the finger port
+
+SEE ALSO
+     telnet(1), host(1)
+
+BUGS
+     Only TCP (stream) connections are supported; there is no UDP
+     (-u) or listen (-l) mode.
+
+
+
+Printed 7/20/86                                                1

@@ -1,0 +1,13 @@
+{
+  "name": "rmlinks",
+  "description": "rm -r removes a symbolic link, not what it points to, as 2.11BSD's rm does with lstat(2) (usr/bin/rm.c:92) (apple/fgx#530).  d holds a symlink to the directory keep; `rm -r d' must take d and the link and leave keep/f, which cat then reads.  The ProDOS-era port stat(2)ed, so the link looked like a directory, rm descended through it and deleted keep/f before failing on the link itself; `kept' would never print.  A probe, not a gate test.",
+  "command": "cd /tmp; mkdir keep d; P=ke; X=pt; echo $P$X > keep/f; ln -s ../keep d/l; rm -r d; echo rm=$?; cat keep/f; rm -r keep; sync",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {"sentinel": "fgx#", "count_delta": 14},
+  "expect": {
+    "screen_contains": ["rm=0", "kept"],
+    "screen_lacks": ["PANIC", "BRK", "not removed", "nonexistent"],
+    "check_script": "ufsfsck_check.py"
+  }
+}

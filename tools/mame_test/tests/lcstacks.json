@@ -1,0 +1,11 @@
+{
+ "name": "lcstacks",
+ "description": "The per-pid kernel stacks must really live in language-card RAM ($00:E000+), not merely appear to. A green suite is consistent with a config change that silently failed to take, so this counts the $C5C5 canary Task_AllocKernStack seeds: at least one page carrying it in the language card, and ZERO in the vacated $0C00 region. Reading the vacated region is the half that a passing suite would otherwise hide. It is deliberately not asserted to be empty -- it holds stage-2 boot residue, which is expected and unrelated.",
+ "command": "S=LCS; echo $S=live",
+ "timeout_s": 40,
+ "expect": {
+  "screen_contains": ["LCS=live"],
+  "screen_lacks": ["PANIC", "BRK"],
+  "check_script": "lcstacks_check.py"
+ }
+}

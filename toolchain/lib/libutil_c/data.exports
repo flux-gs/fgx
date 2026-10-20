@@ -1,0 +1,4 @@
+# libutil.so's data exports: 2.11BSD's libutil (login.c, logout.c,
+# logwtmp.c) defines no extern objects, so the block table is the only one.
+# The block table crt0's _crt0_inits passes to _lib_init.
+_libutil_blktab

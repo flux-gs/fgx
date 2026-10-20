@@ -1,0 +1,11 @@
+# Twenty-five distinct programs leave twenty-five texts behind (the table
+# holds sixteen), then twenty sleeps need the pool those texts hold.  Twenty,
+# not manyproc's twenty-two: this shell is one more process, and 32 slots.
+/bin/true; /bin/false; /bin/echo x; /bin/pwd; /bin/date; /bin/hostname
+/bin/uname; /bin/id; /bin/basename x; /bin/dirname x/y; /bin/printenv HOME
+/bin/sync; /bin/expr 1; /bin/test 1; /bin/cal 1 2000; /bin/df; /bin/who
+/bin/ls /; /bin/wc </dev/null; /bin/od </dev/null; /bin/head </dev/null
+/bin/tr a b </dev/null; /bin/uniq </dev/null; /bin/stat /; /bin/arch
+L='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20'
+for i in $L; do /bin/sleep 25 & done
+A=TR; echo $A=done

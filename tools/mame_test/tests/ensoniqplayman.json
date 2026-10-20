@@ -1,0 +1,14 @@
+{
+ "name": "ensoniqplayman",
+ "description": "ensoniqplay(1) M5 man page: 'man ensoniqplay' resolves the newly-added cat1 page (src/userland/man/pages/cat1/ensoniqplay.0, staged by gen.py to /usr/man/cat1/ensoniqplay.1) and renders it.  Piping to head puts man in its non-interactive cat mode (like the manrender test).  The asserted strings appear in the page but not in the typed command line (uppercase ENSONIQPLAY(1); the full NAME clause), and the sentinel is expansion-built (M=MAN; echo ${M}DONE) so MAME's echo of the command cannot satisfy the assertion -- what check_vacuous_assertions requires.  'No manual entry' would appear if man could not find the page.",
+ "command": "M=MAN; man ensoniqplay | head -16 ; echo ${M}DONE",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "ENSONIQPLAY(1)",
+   "play PCM audio through the Ensoniq 5503 DOC",
+   "MANDONE"
+  ],
+  "screen_lacks": [ "PANIC", "No manual entry", "not found" ]
+ }
+}

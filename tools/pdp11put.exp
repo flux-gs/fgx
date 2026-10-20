@@ -1,0 +1,167 @@
+#!/usr/bin/expect -f
+#==============================================================================
+# pdp11put.exp -- put a file ONTO the 2.11BSD oracle.  The other direction.
+#
+# tools/pdp11.exp gets bytes OFF the 11/70 and says in its header that it is
+# READ-ONLY BY CONVENTION, because that machine is somebody's working system.
+# This is the deliberate exception, kept in a separate file so the convention
+# stays legible: pdp11.exp still never writes, and anything that does is named
+# for it.  It writes only under a temp directory.
+#
+# Usage:
+#   tools/pdp11put.exp LOCALFILE REMOTEPATH
+#   tools/pdp11put.exp vol.img /usr/tmp/vol.img
+#
+# WHY THIS EXISTS: phase 1's gate, arm 3.  "2.11BSD's own fsck clean on the same
+# image" is the only arm that points THEIR code at OUR bytes -- arm 2 checks
+# FGX's volumes with fgxfs and arm 4 checks 2.11BSD's volumes with FGX, but
+# fgxfs and FGX were both written here from the same reading of the same
+# headers, so a shared misreading passes both.  Getting an FGX-written volume
+# onto this machine is the whole of what was missing.
+#
+# NOT /tmp, WHICH IS THE OBVIOUS PLACE AND THE WRONG ONE.  `df` on that machine:
+# / has 4.7M free, /usr has 291.6M, /home 530.5M.  /tmp is on the root
+# filesystem, so a few megabytes there is a real risk to somebody's working
+# system rather than a tidy temp file.  /usr/tmp is the default below.
+#
+# THE PAYLOAD IS COMPRESSED FIRST, and that is what makes this practical rather
+# than theoretical.  A 4 MB volume is 52 KB after compress(1) and 72 KB after
+# uuencode -- 1,160 lines -- because a filesystem is mostly free blocks.  Sent
+# raw it would be 5.5 MB of uuencoded text over a telnet session, which is both
+# slow and, on a root filesystem with 4.7M free, dangerous.
+#
+# FOUR THINGS THAT BIT, EACH FOUND BEFORE INVOLVING THE MACHINE by round
+# tripping the whole pipeline locally first:
+#
+# 1. uudecode(1) EMITS MODE 0000.  pdp11.exp's header already says this for the
+#    other direction; it bites the same way here, and the next tool in the pipe
+#    fails with a permission error that reads like a transfer fault.
+#
+# 2. uncompress(1) INSISTS ON A `.Z' NAME.  `uncompress -c FILE' where FILE does
+#    not end in .Z reports "FILE.Z: No such file or directory" -- it appends
+#    rather than complaining about the argument.  Feed it on STDIN instead.
+#
+# 3. THE TTY IS THE FLOW CONTROL, so this waits for the echo.  `cat > file'
+#    leaves the tty in cooked mode with ECHO on, so every line comes back; a
+#    batch that is not waited for overruns 2.11BSD's clists, which are small by
+#    design.  Waiting on the echo of the last line in each batch is
+#    self-throttling and cannot outrun the receiver.
+#
+# 4. uuencode's payload is TTY-SAFE and that is not an accident: printable
+#    ASCII only, 61-char lines, and a backtick rather than a space for zero,
+#    which is the classic choice that survives transports that eat spaces.
+#    Verified on the actual payload before sending: ords 10 and 32..118, no
+#    control characters but LF.
+#
+# THE REMOTE SIDE CLEANS UP AFTER ITSELF -- the .uu and the .Z are removed and
+# only REMOTEPATH is left.  Removing REMOTEPATH is the CALLER's job, because the
+# caller is what knows when it has finished with it.
+#==============================================================================
+set timeout 300
+log_user 0
+match_max 400000
+
+if {[llength $argv] != 2} {
+    puts stderr "usage: pdp11put.exp LOCALFILE REMOTEPATH"
+    exit 2
+}
+set local  [lindex $argv 0]
+set remote [lindex $argv 1]
+
+if {![file exists $local]} {
+    puts stderr "pdp11put.exp: no such file: $local"
+    exit 1
+}
+
+# ---- local preparation ------------------------------------------------------
+# The embedded name is fixed rather than derived: it is what uudecode(1) creates
+# on the far side, and a name with a shell metacharacter in it would be run by
+# tcsh rather than written by uudecode.
+set work [exec mktemp -d]
+set uu   $work/fgxput.uu
+# -b 12, AND THE MACHINE IS WHY.  2.11BSD's uncompress refuses a 16-bit stream
+# outright -- "stdin: compressed with 16 bits, can only handle 12 bits" -- and
+# it is right to: the code table for 16-bit codes does not fit a PDP-11's 64 KB
+# data space.  macOS compress(1) defaults to 16.  The cost of the limit is
+# 99,715 bytes against 52,065, which is nothing next to the 4 MB it started as.
+exec sh -c "compress -b 12 -c [list $local] > $work/fgxput.Z"
+exec sh -c "cd $work && uuencode fgxput.Z fgxput.Z > fgxput.uu"
+
+set f [open $uu r]
+set lines [split [string trimright [read $f] "\n"] "\n"]
+close $f
+set nlines [llength $lines]
+set rawsz  [file size $local]
+set uusz   [file size $uu]
+puts stderr "pdp11put: $local ($rawsz bytes) -> $remote via $uusz bytes, $nlines lines"
+
+# ---- the transfer -----------------------------------------------------------
+spawn telnet bsd
+expect {
+    timeout { puts stderr "pdp11put: no login prompt from bsd"; exit 1 }
+    "login:"
+}
+send "root\r"
+expect -re {[#$] $}
+
+send "cat > /usr/tmp/fgxput.uu\r"
+# No prompt comes back until EOF, so there is nothing to expect here; the echo
+# of the first batch is the acknowledgement that cat is running.
+
+set batch 16
+set i 0
+foreach line $lines {
+    send -- "$line\r"
+    incr i
+    if {$i % $batch == 0 || $i == $nlines} {
+        # Wait for this line to come back. The tail is enough to identify it and
+        # is safer than the whole line against any echo mangling.
+        # -ex, NOT the default glob.  A uuencode payload is full of `*', `[',
+        # `?' and `\\', so a glob pattern built from one matches something other
+        # than itself -- which shows up as a timeout waiting for an echo that
+        # did arrive.  Cost one run to find.
+        set tail [string range $line end-23 end]
+        expect {
+            timeout {
+                puts stderr "pdp11put: timed out waiting for echo at line $i/$nlines"
+                exit 1
+            }
+            -ex $tail
+        }
+    }
+}
+send "\004"
+expect -re {[#$] $}
+
+# ---- decode, and leave only REMOTEPATH --------------------------------------
+# tcsh, so `>&' rather than `2>/dev/null' -- pdp11.exp's header records that one.
+# THE MARKER COMES FROM A VARIABLE, and that is not fussiness.  The tty
+# echoes the command line, so a marker appearing literally in what is TYPED
+# is matched by its own echo before the command has run -- which reported
+# success on a run whose uncompress had failed and left a zero-byte file.
+# Setting it first means the typed text says `$M' and only the OUTPUT can
+# match.
+send "set M=PUT_OK\r"
+expect -re {[#$] $}
+send "cd /usr/tmp && uudecode fgxput.uu && chmod u+r fgxput.Z && uncompress -c < fgxput.Z > [list $remote] && rm -f fgxput.uu fgxput.Z && echo \$M\r"
+expect {
+    timeout { puts stderr "pdp11put: the far side did not report success -- decode or uncompress failed"; exit 1 }
+    -ex "PUT_OK"
+}
+expect -re {[#$] $}
+
+# The size is asserted rather than assumed: a truncated transfer that still
+# decodes would otherwise be fsck'd as if it were the volume.
+send "wc -c < [list $remote]\r"
+expect -re {(\d+)\s*\r?\n}
+set got $expect_out(1,string)
+expect -re {[#$] $}
+send "exit\r"
+expect eof
+
+if {$got != $rawsz} {
+    puts stderr "pdp11put: FAILED -- $remote is $got bytes, expected $rawsz"
+    exit 1
+}
+puts stderr "pdp11put: OK -- $remote is $got bytes"
+exit 0

@@ -1,0 +1,74 @@
+# git-cliff config for FGX.
+# Commits -> CHANGELOG.md (Keep a Changelog).  See docs/VERSIONING.md.
+# Subjects are `area: statement` (docs/CONTRIBUTING.md); older history uses
+# Conventional Commits types, which still sort into their own groups.
+
+[changelog]
+header = """
+# Changelog
+
+All notable changes to FGX, a port of 2.11BSD to the Apple IIgs.  Format:
+[Keep a Changelog](https://keepachangelog.com); versions:
+[SemVer](https://semver.org).  See docs/VERSIONING.md.\n
+"""
+body = """
+{% if version %}\
+## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}\
+{% set subject = commit.raw_message | split(pat="\n") | first | trim %}\
+{% if subject is matching("^(feat|fix|perf|refactor|docs|test|build|chore|revert)[(!:]") %}
+- {{ commit.message | upper_first }}{% if commit.scope %} (_{{ commit.scope }}_){% endif %}\
+{% else %}
+- {{ subject }}\
+{% endif %}\
+{% if commit.conventional %}{% set body = commit.body | default(value="") %}\
+{% else %}{% set body = commit.raw_message | split(pat="\n") | slice(start=1) | join(sep="\n") %}{% endif %}\
+{% if body | trim %}
+{% for line in body | trim | split(pat="\n") %}\
+{% if not line is starting_with("Co-Authored-By:") and not line is starting_with("Claude-Session:") %}  {{ line }}
+{% endif %}\
+{% endfor %}\
+{% endif %}\
+{% endfor %}
+{% endfor %}\n
+"""
+trim = true
+
+[git]
+conventional_commits = true
+# Changelog entries carry the WHOLE commit body (indented under the subject
+# bullet): the reasoning lives there.  Commit bodies ARE the changelog, so
+# write them accordingly.  Session/attribution trailers are stripped:
+commit_preprocessors = [
+  { pattern = '(?m)^Co-Authored-By:.*\n?', replace = "" },
+  { pattern = '(?m)^Claude-Session:.*\n?', replace = "" },
+]
+# An `area: statement` subject is not a Conventional Commit, so it is kept
+# unparsed and lands in "Changed" through the catch-all below; merges and
+# wip commits are skipped.
+filter_unconventional = false
+split_commits = false
+protect_breaking_commits = true
+# Anchored to real semver release tags only.  An unanchored "v[0-9]*" matches
+# any tag *containing* a 'v' (compiler-vi-wip, claudemd-v2, ...) and shatters the
+# changelog into one section per checkpoint tag.
+tag_pattern = "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+commit_parsers = [
+  { message = "^feat", group = "Added" },
+  { message = "^fix", group = "Fixed" },
+  { message = "^perf", group = "Performance" },
+  { message = "^refactor", group = "Changed" },
+  { message = "^docs", group = "Documentation" },
+  { message = "^test", group = "Tests" },
+  { message = "^build", group = "Build" },
+  { message = "^chore", group = "Chore" },
+  { message = "^revert", group = "Reverted" },
+  { message = "^Merge ", skip = true },
+  { message = "^wip", skip = true },
+  { message = ".*", group = "Changed" },
+]

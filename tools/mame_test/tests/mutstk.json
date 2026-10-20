@@ -1,0 +1,27 @@
+{
+ "name": "mutstk",
+ "description": "Bank-0 stack campaign 0.2: unbounded MUTUAL recursion through small frames must die cleanly instead of eating a neighbour's stack. fcc's prologue guard arms only on indirect calls, SELF-recursion, or frames >= 128 bytes -- ping/pong are none of those and compile with ping_STKGUARD = pong_STKGUARD = 0, so before 0.2 nothing checked them anywhere and the pair walked straight past TCB_StackBase. tcsh has a 117-member recursion SCC, so the shape is not hypothetical. getpid() sits in the cycle because a runaway recursion cannot do anything useful without a syscall, which makes the dispatcher the one place it must pass through. Asserts the distinct '(syscall floor)' wording, so this test cannot be satisfied by the prologue guard firing instead, and asserts =MUTALIVE, printed by the PARENT shell after the child dies -- dying cleanly is the whole point, and a hung machine would otherwise read the same as a pass. It is a marker rather than the prompt because 'fgx#' also appears in the echoed command line, which is the vacuous-probe trap; measured pre-0.2, this test 'passed' that assertion on a machine that had silently stopped dead.",
+ "command": "sh /testdata/mutrun",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "klog_contains": [
+   "stack overflow (syscall floor): killed pid"
+  ],
+  "screen_contains": [
+   "MUTSTK START",
+   "=MUTALIVE"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "MUTSTK RETURNED"
+  ]
+ }
+}

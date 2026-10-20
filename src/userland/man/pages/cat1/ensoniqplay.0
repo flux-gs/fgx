@@ -1,0 +1,100 @@
+
+
+
+ENSONIQPLAY(1)        FGX Programmer's Manual        ENSONIQPLAY(1)
+
+
+
+NAME
+     ensoniqplay - play PCM audio through the Ensoniq 5503 DOC
+
+SYNOPSIS
+     ensoniqplay [ -r rate ] [ -s | -u | -a ] file
+     ensoniqplay [ -r rate ] [ -s | -u ] -
+
+DESCRIPTION
+     Ensoniqplay plays a PCM sample through the Apple IIGS
+     Ensoniq 5503 "DOC" sound chip.  It accepts WAV files and
+     raw 8-bit PCM, and reads from a file or, when the argument
+     is a single dash, from standard input.
+
+     Input is converted to the 8-bit unsigned samples the DOC
+     plays natively: 16-bit WAV is reduced to 8-bit, stereo is
+     mixed to mono, and a source faster than the chip's ceiling
+     of about 26320 Hz is decimated to fit so the pitch stays
+     correct.
+
+     How the sample reaches the chip depends on its size.  One
+     that fits the DOC's 32 KB wavetable is uploaded once and
+     played by a single oscillator (a "placed" sample).  A
+     larger one is streamed: it is fed to a wavetable double-
+     buffer under the sound interrupt while a second, silent
+     oscillator locked to the playback rate drives the refills.
+     Streaming from standard input works the same way, filling a
+     RAM ring from the pipe as the chip drains it, so playback
+     needs neither the whole input in memory nor a file it can
+     seek.
+
+FILE FORMATS
+     WAV          RIFF/WAVE, 8-bit (unsigned) or 16-bit
+                  (signed), mono or stereo, any sample rate --
+                  every parameter comes from the header.
+
+     raw          Headerless 8-bit mono.  The sample rate is set
+                  by -r (default 22050 Hz) and the signedness by
+                  the options below.  Standard input is always
+                  raw.
+
+OPTIONS
+     -r rate      Sample rate in Hz for raw input (default
+                  22050).  Ignored for WAV, which carries its
+                  own rate.
+
+     -u           Treat raw input as 8-bit unsigned: the default,
+                  the DOC-native form, silence at 128.
+
+     -s           Treat raw input as 8-bit signed (two's
+                  complement, silence at 0).
+
+     -a           Autodetect raw signedness from the sample
+                  histogram.  Reliable for recordings, which
+                  rest at their quiet level, but ambiguous for
+                  full-scale tones, so it is not the default.
+                  Unavailable on standard input, which cannot be
+                  rewound.
+
+EXAMPLES
+     ensoniqplay drum.wav
+                  play a WAV file.
+
+     ensoniqplay -r 11025 voice.pcm
+                  play raw 8-bit unsigned PCM at 11025 Hz.
+
+     ensoniqplay -s amiga.raw
+                  play raw signed 8-bit PCM.
+
+     cat song.pcm | ensoniqplay -
+                  stream raw 8-bit PCM from a pipe.
+
+NOTES
+     The player claims the DOC while it runs, so the system
+     silences the chip if the program is killed and audio keeps
+     playing when the player is backgrounded.
+
+     8-bit signed and unsigned data are the same bytes with a
+     different zero point, so a raw file with no quiet passages
+     is indistinguishable between the two; give -s or -u when -a
+     guesses wrong.
+
+BUGS
+     Streamed samples can carry an audible buzz under emulation
+     (MAME, KEGS): writing the wavetable while the chip reads it
+     perturbs the oscillators there in a way real hardware does
+     not.  Placed samples are unaffected.
+
+     Standard input is raw 8-bit only; a WAV piped in is not
+     parsed as a header.
+
+
+
+Printed 9/21/26          September 21, 2026                     1

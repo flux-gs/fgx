@@ -1,0 +1,27 @@
+MKDIR(1)                    General Commands Manual                   MKDIR(1)
+
+NNAAMMEE
+       mkdir - make directories
+
+SSYYNNOOPPSSIISS
+       mkdir [ -p ] ddiirreeccttoorryy__nnaammee ...
+
+DDEESSCCRRIIPPTTIIOONN
+       Mkdir creates the directories named as operands, in the order
+       specified, using mode 0777 modified by the current umask(2).  On a
+       mounted ProDOS volume only the owner's read and write bits reach the
+       new directory's access byte; see mount_prodos(8).
+
+       The options are as follows:
+
+       -p     Create intermediate directories as required.  If this option is
+              not specified, the full path prefix of each operand must already
+              exist.
+
+       Mkdir exits 0 if successful, and >0 if an error occurred.
+
+SSTTAANNDDAARRDDSS
+       Mkdir is POSIX 1003.2 compliant.  This manual page is derived from the
+       POSIX 1003.2 manual page.
+
+3rd Berkeley Distribution       August 16, 1993                       MKDIR(1)

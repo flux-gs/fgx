@@ -1,0 +1,27 @@
+{
+ "name": "frotzscreen",
+ "description": "frotz(6) full-screen layout: Book and Volume's status window stays FIXED at the top while the lower window scrolls.  Begins a session (B) and looks, and does NOT quit, so the frame-cap capture is the LIVE game screen.  The status window carries the location ('Home') and the game clock ('Sunday 9:07 pm'; the minutes follow the input's timing, so only the day is asserted); frotzscreen_check.py additionally requires row 0 to render as a reverse-video bar against a normal text row.",
+ "command": "frotz -m /usr/games/frotz/bookvol.z5",
+ "timeout_s": 150,
+ "post_commands": [
+  "B",
+  "look"
+ ],
+ "post_gap_frames": 600,
+ "expect": {
+  "screen_contains": [
+   "Sunday",
+   "Home",
+   "glow-in-the-dark stars"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm",
+   "Fatal",
+   "@move_obj"
+  ],
+  "check_script": "frotzscreen_check.py"
+ }
+}

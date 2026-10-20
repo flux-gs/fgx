@@ -1,0 +1,59 @@
+
+
+
+DATE(1)             UNIX Programmer's Manual                DATE(1)
+
+
+
+NAME
+     date - print and set the date
+
+SYNOPSIS
+     date [ -u ] [ [[[yy]mm]dd]hhmm[.ss] ]
+
+DESCRIPTION
+     If no arguments are given, the current date and time are
+     printed, with the time zone's abbreviation.  Providing an
+     argument will set the desired date; only the super-user can
+     set the date.  The kernel keeps UTC and writes the IIgs
+     battery clock in local time (see _a_d_j_k_e_r_n_t_z(8)).
+
+     The time given and the time printed are local time in the
+     time zone TZ names, else /etc/localtime (see _c_t_i_m_e(3)).
+     The kernel timezone structure is obsolete, as in 2.11BSD
+     since patch #454: _d_a_t_e neither reads nor sets it.
+
+     The -_u flag is used to display or set the date in GMT
+     (universal) time.
+
+     This is the 2.11BSD _d_a_t_e adapted to FGX.  There is no
+     _t_i_m_e_d(8) network time daemon (-_n is gone; setting is
+     always local), and no _w_t_m_p or _s_y_s_l_o_g logging.
+
+     _y_y_m_m_d_d_h_h_m_m[._s_s] is interpreted as follows: _y_y is the year
+     (last two digits; values before 70 mean the next century),
+     _m_m the month, _d_d the day, _h_h the hour (24-hour clock), _m_m
+     the minute, and ._s_s an optional seconds field.  Trailing
+     components may be omitted from the left: giving only _h_h_m_m
+     sets the time within the current day.
+
+EXAMPLES
+     date 2607111845.30
+
+     sets the date to July 11, 2026, 6:45:30 PM.
+
+FILES
+     The clock is the IIgs battery RAM real-time clock, written
+     via the Miscellaneous Tool Set.  The year must be 1904 or
+     later.
+
+SEE ALSO
+     gettimeofday(2), settimeofday(2), ctime(3), adjkerntz(8)
+
+BUGS
+     Near a change to or from summer time, a time set within the
+     zone's offset of the change can be an hour out: the offset
+     used is the one in force at the time given read as UTC, as
+     in 2.11BSD's _d_a_t_e.
+
+FGX                        2.11BSD port                          1

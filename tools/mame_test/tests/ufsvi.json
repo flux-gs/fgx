@@ -1,0 +1,64 @@
+{
+  "name": "ufsvi",
+  "description": "vi (elvis) OPENS, WRITES ITS TEMP FILE AND SAVES, on a UFS root.  This is apple/fgx#318's reported symptom end to end: elvis failed at `Error writing headers to \"/var/tmp/elv2.1\"' because it does creat(), close(), then open(O_RDWR) on the SAME name -- and the reopen took vn_open's non-FCREAT arm, the only path that consulted MNT_RDONLY (through vn_writechk).  ufs_mountfs forced MNT_RDONLY on every mount as a placeholder for the write path; 1.12 landed and the force outlived its reason.  THE CREATE SUCCEEDING WHILE THE REOPEN FAILED IS THE TELL, and it is why a shell redirection test passed while vi did not: namei was missing Reno's two EROFS gates (kern/vfs_lookup.c:260 and :373), so MNT_RDONLY was enforced on ONE of the two paths.  Both gates are ported now.  THE KEYS GO IN AS raw_inject PRE-TRANSLATION ASCII, copied from viinsert, because post_commands append Enter and insert mode consumes it as a line break: `i' `h' `i' ESC `:' `w' `q' CR.  IT ASSERTS THE SAVE NOW, which it could not when it was written.  vi cleared three separate walls in one day and each hid the next: the temp file could not be CREATED (the mount forced MNT_RDONLY), then its headers could not be RE-READ (lseek never reached the VFS, so `garbage() failed to read oldhdr??'), then the filename was DROPPED (an absent file answered EIO where elvis branches on exactly ENOENT, so it restarted with no name and said `Don't know a name for this file -- NOT WRITTEN').  All three are asserted absent here, because each one is what the previous fix revealed and any of them returning would look like the others.\n\nTHE ORACLE ARM IS NOT HERE, and the reason is the command: this manifest drives a vi SESSION with injected keys and has no shell tail to append a `sync' to, so ufsfsck_check.py would be asserting that an unclean shutdown leaves a clean volume -- which is false on any BSD and would be a red nobody could act on.  The write path it exercises is covered against the oracle by ufswrite and ufssync, which do sync.",
+  "command": "vi /tmp/vt",
+  "post_commands": [],
+  "exit_on_prompt": false,
+  "timeout_s": 200,
+  "raw_inject": [
+    [
+      600,
+      105,
+      0
+    ],
+    [
+      640,
+      104,
+      0
+    ],
+    [
+      660,
+      105,
+      0
+    ],
+    [
+      700,
+      27,
+      0
+    ],
+    [
+      740,
+      58,
+      0
+    ],
+    [
+      760,
+      119,
+      0
+    ],
+    [
+      780,
+      113,
+      0
+    ],
+    [
+      800,
+      13,
+      0
+    ]
+  ],
+  "expect": {
+    "screen_contains": [
+      "hi"
+    ],
+    "screen_lacks": [
+      "Error writing headers",
+      "garbage() failed to read oldhdr",
+      "NOT WRITTEN",
+      "Can't create temp file",
+      "Can't open",
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

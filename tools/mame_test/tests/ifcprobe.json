@@ -1,0 +1,10 @@
+{
+ "name": "ifcprobe",
+ "description": "The SIOCGIF* socket ioctls (2.11BSD net/if.c ifioctl/ifconf, netinet/in.c in_control): SIOCGIFCONF lists lo0 with 127.0.0.1 and fills nothing when the buffer is exactly one record (upstream's `space > sizeof (ifr)'); lo0's SIOCGIFFLAGS is UP|LOOPBACK|RUNNING, its address 127.0.0.1 and netmask 255.0.0.0, SIOCGIFBRDADDR on it is EINVAL, and an unknown name is ENXIO.  The harness has no network card, so lo0 is the interface it can see.",
+ "command": "/testbin/ifcprobe",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["IFC OK"],
+  "screen_lacks": ["IFC FAIL", "PANIC", "BRK"]
+ }
+}

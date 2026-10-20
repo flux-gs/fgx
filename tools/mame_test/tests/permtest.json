@@ -1,0 +1,11 @@
+{
+  "name": "permtest",
+  "description": "PERMISSIONS ARE ENFORCED AGAINST A NON-ROOT CALLER, which is the one thing no other test on this machine can ask: everything else runs as root, and ufs_access returns on its super-user line before the mode logic executes. /testbin/permtest creates a root-owned 0644 file, drops to uid 77 with setuid(2) -- irreversibly, so it is the last thing it does -- and then asks four questions whose answers must DIFFER: access(R_OK) and open(O_RDONLY) are granted because other has read, access(W_OK) and open(O_WRONLY) are refused because other has not. A test whose answers are all the same cannot tell a working check from an absent one. This is the standing witness for the three defects found while UFS 2.6 landed, every one of which failed SILENTLY OPEN: kc_curuid answering root for every caller (the per-task direct page), an EACCES discarded by _Sys_Open reading only the carry, and vn_open's VOP_ACCESS calls being absent. Each of those makes this manifest print a different wrong line -- the DP defect gives `r=0 w=0 or=0 ow=0', the discarded refusal gives `ow=0' alone -- so the exact line is asserted rather than a verdict word alone. apple/fgx#320.  The one question that is not the filesystem's is asked here because this is the one caller that is not root: settimeofday(2) with the time the clock already has must fail with EPERM, as 2.11BSD setthetime() refuses anyone but the super user (kern_time.c:80) -- `st=0 e=0' is a kernel that asks nothing, and `e=22' a libc that lost the errno.  apple/fgx#446.",
+  "command": "/testbin/permtest",
+  "timeout_s": 60,
+  "expect": {
+    "screen_contains": ["PT r=0 w=-1 or=0 ow=-1", "PT st=-1 e=1", "PT adj=-1 e=1 kz=-1 e=1",
+                        "PT VERDICT ENFORCED"],
+    "screen_lacks": ["PT VERDICT OPEN", "PT SETUP", "PANIC", "BRK"]
+  }
+}

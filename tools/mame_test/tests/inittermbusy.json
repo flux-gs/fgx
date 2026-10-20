@@ -1,0 +1,13 @@
+{
+ "name": "inittermbusy",
+ "description": "SIGTERM is serviced when it arrives while init is BUSY, not only while it is parked in wait().  initterm covers the parked case; this covers the one that hung.  Delivery happens at syscall exit and CLEARS the kernel's pending bit, so a TERM that lands on a syscall inside startline() leaves a set flag and nothing pending -- init's following wait() then blocks with no signal left to interrupt it, and the shutdown waits for whenever a child next dies.  The sequencing here is deterministic rather than a race: _Sys_CheckSignal scans signals in NUMERIC order, so SIGHUP (1) is always delivered before SIGTERM (15), and the HUP sends init into rereadttys()/startline() -- which is exactly where the still-pending TERM gets delivered.  So this always lands the TERM on a busy init.  Goes red with the flag tests after wait() instead of before it: the machine hangs and 'init: shutting down' never appears.",
+ "command": "cp /testdata/ttyson /etc/ttys; kill -1 1; kill -15 1",
+ "post_commands": [],
+ "post_gap_frames": 300,
+ "exit_on_prompt": false,
+ "timeout_s": 150,
+ "expect": {
+  "screen_contains": ["cannot spawn '/bin/nosuchgetty'", "init: shutting down"],
+  "screen_lacks": ["PANIC", "BRK"]
+ }
+}

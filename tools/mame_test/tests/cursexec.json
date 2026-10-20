@@ -1,0 +1,19 @@
+{
+ "name": "cursexec",
+ "description": "Shared libc SP4: curssodyn's first exec on a fresh boot (termlib and curses loaded on first use), its mean over 20 with both resident, and cursso's (bound on the host: it reads every library's banks per exec); the first-use cost is the first less the resident mean.",
+ "command": "sh /testdata/cursexec",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "EXT /testbin/curssodyn ",
+   "EXT /testbin/cursso ",
+   "prebound, resident)"
+  ],
+  "screen_lacks": [
+   "failed",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

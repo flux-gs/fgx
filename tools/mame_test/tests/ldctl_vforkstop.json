@@ -1,0 +1,10 @@
+{
+ "name": "ldctl_vforkstop",
+ "description": "A forked child that stops itself before its first sleep does not hold its parent (apple/fgx#511): as 2.11BSD's issignal() does for a child still holding its parent, the stop stays pending, and it acts once the child lets go.",
+ "command": "/testbin/ldctl vforkstop",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["LDC vforkstop ok"],
+  "screen_lacks": ["LDC FAIL", "PANIC", "BRK"]
+ }
+}

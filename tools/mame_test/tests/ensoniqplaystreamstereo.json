@@ -1,0 +1,12 @@
+{
+ "name": "ensoniqplaystreamstereo",
+ "description": "ensoniqplay streamed stereo: sbig.wav (16-bit stereo, 44100 frames/ch at 22050 Hz -- a per-channel pool > 32 KB, so it streams) plays as true stereo under the sound IRQ.  The file de-interleaves into left/right halves of one mm_alloc pool; oscillator 0 plays the left double-buffer on DOC channel 0, oscillator 1 the right on channel 1, and a silent timer (osc 2) drives refills of BOTH per fire.  'streaming stereo' proves the two-voice path; 'finished after 1' (~120 ticks; 44100/22050 = 2.0 s) proves both voices clocked the whole file.  L/R separation confirmed by capturing MAME per-channel audio (left continuous on output ch1, right on ch2).",
+ "command": "ensoniqplay /etc/sbig.wav",
+ "timeout_s": 150,
+ "exit_on_prompt": true,
+ "stage_files": [ { "host": "tools/mame_test/fixtures/sbig.wav", "prodos_dir": "/FGX/etc", "name": "sbig.wav", "replace": false } ],
+ "expect": {
+  "screen_contains": [ "44100 samples/ch @ 22050 Hz (freq 429), streaming stereo", "finished after 1", "fgx#" ],
+  "screen_lacks": [ "BRK", "PANIC", "out of memory", "timed out", "Fatal" ]
+ }
+}

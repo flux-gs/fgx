@@ -1,0 +1,51 @@
+
+
+ANSICAT(1)           UNIX Programmer's Manual          ANSICAT(1)
+
+
+
+NAME
+     ansicat - show ANSI art on a terminal
+
+SYNOPSIS
+     aannssiiccaatt [ --bb _b_a_u_d ] [ _f_i_l_e ... ]
+
+DESCRIPTION
+     _A_n_s_i_c_a_t copies each _f_i_l_e, or the standard input, to
+     the standard output byte for byte, for a terminal that
+     shows ANSI art: code page 437 text and ECMA-48 control
+     sequences written for a PC's ANSI.SYS.  The Second Sight
+     card's console, /dev/ttyv3, shows sixteen colours on six-
+     teen backgrounds and the code page's glyphs; the IIgs
+     screen shows the art in its four colours and ASCII.
+
+     Before the first file it resets the attributes, clears the
+     screen and homes the cursor.  Each file is copied up to its
+     first ^Z, the DOS end-of-file byte that precedes a SAUCE
+     record, so the record is not shown.  The terminal's LLITOUT
+     mode is set for the copy, since without it the tty strips
+     the eighth bit of every byte; the local mode word and the
+     attributes are put back on exit and on an interrupt.
+
+     --bb _b_a_u_d
+          Pace the output at _b_a_u_d/10 bytes a second, as the
+          file arrived over a modem; an ANSI animation is drawn
+          for that timing.  10 to 115200.
+
+     Each console keeps its own default colours: ESC [ 8 ]
+     makes the current colours the default, as on the Linux
+     console, and ESC [ 0 m returns to them.
+
+SEE ALSO
+     color(1), stty(1)
+
+BUGS
+     Blinking text shows as a bright background (iCE colour);
+     a SAUCE record's flags are not read.  Bytes $01-$1F are
+     controls, so their code page glyphs are not shown.  An
+     ESC [ 2 J inside a file does not home the cursor.  Art
+     taller than the screen scrolls.
+
+
+
+FGX                          FGX-native                         1

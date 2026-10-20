@@ -1,0 +1,24 @@
+{
+ "name": "ufsdevstat",
+ "description": "A DEVICE NODE STATS AS A DEVICE, which it did not until 2026-09-05.\n\nTHE SECOND LISTING IS /dev, AND IT IS A DIFFERENT PRODUCER.  A name under /dev is claimed by the SYNTHESIZED chardev registry before the vnode is reached, so `ls -l /dev' exercises Fs_Stat's chardev arm where the /etc half exercises root_stat.  Both had to learn the BSD struct and they learned it separately.\n  `crw-rw-rw-' is the type AND the mode.  The arm synthesised MODE_OTHER ($20) because the legacy mode byte had no value meaning `device', and libc mapped $20 to no type at all -- so every node in /dev printed as an ordinary file. ls had no S_IFCHR arm either, so this needed a fix at BOTH ends and either one alone leaves it reading `-rw-...'.\n  `0,   7' is /dev/console's device number, in the major,minor columns ls prints in place of a size for a device (upstream ls.c:591-598, dropped in the port along with the type arms).  7 is console's index in gen.py's DEV_NODES and the same number `fgxfs mknod' wrote into the inode, so the arm checks the registry and the volume agree rather than merely that a number appeared.  MEASURED DISCRIMINATING: before the fix this column read `255, 255' -- _Fs_StatInit's NODEV default, printed because the arm never set a real one.\n\nWHY THERE IS NO DATE ARM, and it is a real gap rather than an omission: the entries read `Jan  1  1970' because the chardev registry answers this stat and has no time to give, while the inode under the same name now DOES have one (fgxfs mknod stamps it). Two authorities for one name, which is apple/fgx#311's shape -- the registry claims /dev names that are real inodes on the mounted root. Asserting a date here would be asserting that gap closed.\n\nAND IT IS THE LISTING THAT EXHAUSTED THE SPECINFO POOL.  `ls -l /dev' stats all 27 device nodes in one pass, so 27 device vnodes exist at once and each holds a specinfo from checkalias until vgone; the pool was VFS_NMOUNT + 8 = 22 and the 23rd panicked with `checkalias: out of specinfo' (apple/fgx#411).  THE PANIC REPORTED ITSELF AS TWO MISSING STRINGS -- `crw-rw-rw-' and `0,   7' -- which reads as a formatting regression, so `out of specinfo' and PANIC are named explicitly below: the next pool that is outgrown should say so.",
+ "command": "ls -l /dev",
+ "boot_s": 45,
+ "timeout_s": 30,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "crw-rw-rw-",
+   "0,   7",
+   "root"
+  ],
+  "screen_lacks": [
+   "255, 255",
+   "out of specinfo",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

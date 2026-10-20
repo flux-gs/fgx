@@ -1,0 +1,24 @@
+{
+  "name": "ufsperm",
+  "description": "A CREATED FILE GETS THE MODE ITS CREATOR ASKED FOR, NARROWED BY THE UMASK.  Measured 2026-09-06, before: `echo hi > f' produced mode 0 (`----------') and `mkdir d' produced 0777 with the umask ignored (`drwxrwxrwx').  Two independent causes, and the symptom hid both.\n\nTHE FILE HALF WAS A DROPPED ARGUMENT.  libc's open(2) took TWO parameters, so open(path, flags, mode) call sites lost the mode at the library boundary; root_mount.c:249 then passed a hardcoded 0 as vn_open's cmode.  The chain behind it was intact the whole time -- vn_open -> vn_mknode -> va_mode -> ufs_makeinode -- faithfully writing a zero.\n\nTHE DIRECTORY HALF WAS AN UNAPPLIED MASK.  _Sys_Mkdir pushed a literal 0777 and said so, and _Sys_Umask (#104) had shipped the u-area storage in 2.6 with its own header promising \"nothing applies it yet ... the apply sites arrive with the UFS write path\".  The write path arrived; the apply sites did not.  Reno masks in the syscall layer -- kern/vfs_syscalls.c:559 for open, :1518 for mkdir -- and _Sys_ApplyCmask is that, in the bank the u-area lives in.\n\nWHAT EACH ARM DISCRIMINATES.  The four modes are FOUR DIFFERENT ARITHMETIC RESULTS, not four spellings of one:\n  `-rw-r--r--'  0666 &~ 022 -- the shell's `>' is creat(s,0666) (vendor/2.11BSD/usr/bin/sh/io.c:96) and 022 is the umask in force.\n  `drwxr-xr-x'  0777 &~ 022 -- mkdir keeps THREE octal digits where open keeps four, which is upstream's asymmetry (0777 at :1518, 07777 at :559) and not a slip.\n  `-rw-------'  0666 &~ 077 -- the same creat under a different mask, so a mask that were merely being IGNORED could not produce it.\n  `drwx------'  0777 &~ 077.\nThe two masks are what make this a measurement rather than a spot check: a kernel that hardcoded any single mode would satisfy at most one pair.\n\nMEASURED DISCRIMINATING: delete `STY _Sys_OpenMode' from _Sys_Open and both file arms go red (`----------' for each); delete the `JSR _Sys_ApplyCmask' from _Sys_Mkdir and both directory arms go red (`drwxrwxrwx' for each).  Neither mutation touches the other pair, which is what says the two causes are still independently covered.\n\nTHE NEEDLES CANNOT MATCH THE ECHOED COMMAND -- none of the four mode strings appears in it -- which is the trap `ufswrite's append arm was written on: `screen_contains ap1' matched the command line, not the output.\n\n/tmp AND NOT THE ROOT, because run.py copies the image per run (run.py:1274) and a test that leaves a directory behind would still be honest -- but /tmp is where a temporary belongs and `umask' is a shell builtin (msg.c:154), so the whole measurement is one line of Bourne shell with no helper on the image.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.",
+  "command": "cd /tmp; umask 022; echo hi > pa; mkdir da; umask 077; echo hi > pb; mkdir db; ls -ld pa da pb db; sync",
+  "boot_s": 45,
+  "timeout_s": 40,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "-rw-r--r--",
+      "drwxr-xr-x",
+      "-rw-------",
+      "drwx------"
+    ],
+    "screen_lacks": [
+      "----------",
+      "drwxrwxrwx"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

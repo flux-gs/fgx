@@ -1,0 +1,18 @@
+{
+ "name": "fsckpreen",
+ "description": "`fsck -p' REPAIRS WITHOUT ASKING, AND EXITS 0 -- which is what /etc/rc's case statement is built on.  apple/fgx#408.\n\nTHE QUESTION THIS ANSWERS.  apple/fgx#409 ended with a boot fsck CLEARING inode 95 on a provably intact volume, and the item left open behind it was whether a boot should be allowed to write repairs at all.  It should, and it is not FGX's call: /etc/rc is 2.11BSD's own block (usr/etc/rc), preen is what `-p' means, and the safety is the EXIT-CODE LADDER around it -- 0 carry on, 4 reboot, 8 give up -- not a prompt nobody is there to answer.  What was missing is any evidence that the numbers are real.\n\nSO THIS MEASURES THE `0' ARM.  disk/ufsbadspin.fs carries one planted fault (a real file whose directory entry was zeroed -- tools/ufscorrupt.py's `unref' case, confirmed broken by the host-side fsck before hand-off, which is what stops this fixture passing by finding nothing).  `fsck -p' must reconnect it into lost+found, mark the volume clean, and exit 0.\n\n`(RECONNECTED)' IS THE DISCRIMINATING NEEDLE.  A preen that found nothing would print the file counts and exit 0 all the same, so the counts prove nothing; the word says a repair was made, and made WITHOUT A PROMPT, which is the behaviour under question.  `Marking file system clean' is 2.11BSD update #456's stamp and says the repair was committed rather than merely reported.\n\nTHE SECOND RUN IS THE POSITIVE CONTROL ON THE FIRST.  `fsck -n' afterwards must answer `File system is clean; not checking' -- if the repair had not reached the platter, the same UNREF would still be there and the read-only pass would say so.\n\nTHE OTHER LADDER ARMS ARE NOT COVERED HERE and cannot be: 4 (`the ROOT was modified, reboot') and 8 (`unexpected inconsistency, help!') need a DIRTY ROOT at boot, and the harness has no way to hand the machine one -- disk/fgxroot.fs is built clean and copied to the scratch boot image.  Their code is upstream's verbatim; that is the whole of the claim about them.",
+ "command": "/sbin/fsck -p /dev/rsd1; echo p=$?; /sbin/fsck -n /dev/rsd1; echo after=$?",
+ "extra_hards": ["disk/ufsbadspin.fs"],
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "/dev/rsd1: UNREF FILE",
+   "(RECONNECTED)",
+   "/dev/rsd1: Marking file system clean",
+   "p=0",
+   "File system is clean; not checking",
+   "after=0"
+  ],
+  "screen_lacks": ["PANIC", "BRK", "UNEXPECTED INCONSISTENCY", "NO WRITE ACCESS"]
+ }
+}

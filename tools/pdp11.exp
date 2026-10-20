@@ -1,0 +1,79 @@
+#!/usr/bin/expect -f
+#==============================================================================
+# pdp11.exp -- run commands on the 2.11BSD oracle and print what they say.
+#
+# The UFS migration campaign's goal 2 is that an FGX volume mounts on a real
+# 2.11BSD PDP-11/70.  That is a claim about bytes, and this is how the bytes get
+# checked: a live 11/70 (kernel #18) at host `bsd`, reachable over telnet.
+#
+# Usage:
+#   tools/pdp11.exp 'df' 'ls -ai /'
+#   tools/pdp11.exp 'dd if=/dev/rra0a bs=1024 skip=1 count=1 | uuencode sb.bin'
+#
+# FOUR THINGS THAT DO NOT WORK, EACH FOUND THE HARD WAY:
+#
+# 1. Python's telnetlib is GONE -- removed in 3.13, and the host runs 3.13.
+#
+# 2. A HAND-ROLLED SOCKET TELNET DOES NOT WORK.  It reaches the `login:` prompt
+#    and then the server never sends another byte, whatever the option
+#    negotiation replies.  Do not spend time on it again; use the real telnet
+#    client under expect, which is what this file does.
+#
+# 3. THE LOGIN SHELL IS TCSH, SO SH REDIRECTION IS A SYNTAX ERROR.
+#    `cmd 2>/dev/null` fails with "Ambiguous output redirect" and the command
+#    never runs.  Use `>&` for combined output, or just let stderr through --
+#    dd's three-line summary is easy to ignore, and uuencode's payload sits
+#    between begin/end markers regardless.
+#
+# 4. macOS HAS NO `timeout(1)`.  Wrapping calls in it fails before connecting.
+#
+# MOVING BINARY DATA OFF THE MACHINE: `dd | uuencode` and decode on the host.
+# uuencode is present, the framing survives telnet, and the payload is exact.
+# Reading a raw device (/dev/rra0a) while it is mounted is safe and read-only.
+#
+#   tools/pdp11.exp 'dd if=/dev/rra0a bs=1024 skip=1 count=1 | uuencode sb.bin' \
+#       > dump.txt
+#   tr -d '\r' < dump.txt | uudecode -o sb.bin      # macOS HAS uudecode(1)
+#   chmod u+r sb.bin                                # uuencode emits mode 0000
+#
+# The `tr -d '\r'` is required -- telnet leaves CRs that uudecode will not eat.
+# Python's `uu` module is removed in 3.13 along with telnetlib, so uudecode(1)
+# is the path; a hand-written decoder was checked byte-for-byte against it.
+#
+# Filesystem block numbers are 1024 bytes (bs=1024), which is what every
+# daddr_t counts.  The DEVICE sector is 512 and fsbtodb(b) == b<<1; passing a
+# block number to a bs=512 dd silently reads the wrong half of the volume.
+#
+# THIS SCRIPT IS READ-ONLY BY CONVENTION.  It will happily run anything it is
+# given; the machine is somebody's working system, so validating a volume FGX
+# wrote means attaching a spare image, not writing to a live partition.
+#==============================================================================
+set timeout 300
+log_user 1
+match_max 400000
+
+if {[llength $argv] == 0} {
+    puts stderr "usage: pdp11.exp 'command' \['command' ...\]"
+    exit 2
+}
+
+spawn telnet bsd
+expect {
+    timeout { puts stderr "pdp11.exp: no login prompt from bsd"; exit 1 }
+    "login:"
+}
+send "root\r"
+# The prompt is like "[34] root@pdp11:/# " -- match the trailing sigil, not the
+# hostname, because the history number changes on every command.
+expect -re {[#$] $}
+
+foreach cmd $argv {
+    send "$cmd\r"
+    expect {
+        timeout { puts stderr "pdp11.exp: timed out running: $cmd"; exit 1 }
+        -re {[#$] $}
+    }
+}
+
+send "exit\r"
+expect eof

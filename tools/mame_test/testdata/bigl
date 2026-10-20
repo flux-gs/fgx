@@ -1,0 +1,516 @@
+------+----------------------------------------------------+-------------+----+---------+------+-----------------------+----------------------------------------------------------------------
+ Line | # File                                        Line | Line Type   | MX |  Reloc  | Size | Address   Object Code |  Source Code
+------+----------------------------------------------------+-------------+----+---------+------+-----------------------+----------------------------------------------------------------------
+    1 |  1                                   main.s      1 | Comment     | 11 |         |    0 | 02/1000               | ;==============================================================================
+    2 |  1                                   main.s      2 | Comment     | 11 |         |    0 | 02/1000               | ;
+    3 |  1                                   main.s      3 | Comment     | 11 |         |    0 | 02/1000               | ; FGX - Flux GS uniX
+    4 |  1                                   main.s      4 | Comment     | 11 |         |    0 | 02/1000               | ;
+    5 |  1                                   main.s      5 | Comment     | 11 |         |    0 | 02/1000               | ; File:     main.s
+    6 |  1                                   main.s      6 | Comment     | 11 |         |    0 | 02/1000               | ; Purpose:  Kernel entry point and initialization
+    7 |  1                                   main.s      7 | Comment     | 11 |         |    0 | 02/1000               | ; Author:   FGX Development Team
+    8 |  1                                   main.s      8 | Comment     | 11 |         |    0 | 02/1000               | ; Created:  2025-02-01
+    9 |  1                                   main.s      9 | Comment     | 11 |         |    0 | 02/1000               | ;
+   10 |  1                                   main.s     10 | Comment     | 11 |         |    0 | 02/1000               | ; This is the main kernel module for FGX v0.1.0.
+   11 |  1                                   main.s     11 | Comment     | 11 |         |    0 | 02/1000               | ;
+   12 |  1                                   main.s     12 | Comment     | 11 |         |    0 | 02/1000               | ; v0.1.0 Target:
+   13 |  1                                   main.s     13 | Comment     | 11 |         |    0 | 02/1000               | ;   - Initialize SHR 640x200 with dark grey background
+   14 |  1                                   main.s     14 | Comment     | 11 |         |    0 | 02/1000               | ;   - Display FGX logo (Sun-style, colorful)
+   15 |  1                                   main.s     15 | Comment     | 11 |         |    0 | 02/1000               | ;   - Detect and display hardware info
+   16 |  1                                   main.s     16 | Comment     | 11 |         |    0 | 02/1000               | ;   - Halt
+   17 |  1                                   main.s     17 | Comment     | 11 |         |    0 | 02/1000               | ;
+   18 |  1                                   main.s     18 | Comment     | 11 |         |    0 | 02/1000               | ;==============================================================================
+   19 |  1                                   main.s     19 | Empty       | 11 |         |    0 | 02/1000               |                                                                             
+   20 |  1                                   main.s     20 | Directive   | 00 |         |    0 | 02/1000               |                                       MX               %00                  ; 16-bit A, X, Y (native mode default)
+   21 |  1                                   main.s     21 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   22 |  1                                   main.s     22 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   23 |  1                                   main.s     23 | Comment     | 00 |         |    0 | 02/1000               | ; INCLUDES
+   24 |  1                                   main.s     24 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   25 |  1                                   main.s     25 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   26 |  1                                   main.s     26 | Directive   | 00 |         |    0 | 02/1000               |                                       PUT              ../../include/config.s
+   27 |  2                   ../../include/config.s      1 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   28 |  2                   ../../include/config.s      2 | Comment     | 00 |         |    0 | 02/1000               | ; FGX Configuration (AUTO-GENERATED from cfg/system.cfg)
+   29 |  2                   ../../include/config.s      3 | Comment     | 00 |         |    0 | 02/1000               | ; DO NOT EDIT - modify cfg/system.cfg and rebuild
+   30 |  2                   ../../include/config.s      4 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   31 |  2                   ../../include/config.s      5 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   32 |  2                   ../../include/config.s      6 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_BG_COLOR                    EQU              $0333                
+   33 |  2                   ../../include/config.s      7 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_BG_COLOR_LO                 EQU              $33                  
+   34 |  2                   ../../include/config.s      8 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_BG_COLOR_HI                 EQU              $03                  
+   35 |  2                   ../../include/config.s      9 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_FG_COLOR                    EQU              $0FFF                
+   36 |  2                   ../../include/config.s     10 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_FG_COLOR_LO                 EQU              $FF                  
+   37 |  2                   ../../include/config.s     11 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_FG_COLOR_HI                 EQU              $0F                  
+   38 |  2                   ../../include/config.s     12 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_ACCENT_COLOR                EQU              $0AAA                
+   39 |  2                   ../../include/config.s     13 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_ACCENT_COLOR_LO             EQU              $AA                  
+   40 |  2                   ../../include/config.s     14 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_ACCENT_COLOR_HI             EQU              $0A                  
+   41 |  2                   ../../include/config.s     15 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_SECONDARY_COLOR             EQU              $0000                
+   42 |  2                   ../../include/config.s     16 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_SECONDARY_COLOR_LO          EQU              $00                  
+   43 |  2                   ../../include/config.s     17 | Equivalence | 00 |         |    0 | 02/1000               | CFG_VIDEO_SECONDARY_COLOR_HI          EQU              $00                  
+   44 |  2                   ../../include/config.s     18 | Equivalence | 00 |         |    0 | 02/1000               | CFG_KERNEL_NPROC                      EQU              8                    
+   45 |  2                   ../../include/config.s     19 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   46 |  2                   ../../include/config.s     20 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   47 |  2                   ../../include/config.s     21 | Comment     | 00 |         |    0 | 02/1000               | ; END OF AUTO-GENERATED CONFIG
+   48 |  2                   ../../include/config.s     22 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   49 |  2                   ../../include/config.s     23 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   50 |  1                                   main.s     27 | Directive   | 00 |         |    0 | 02/1000               |                                       PUT              ../../include/hardware.s
+   51 |  3                 ../../include/hardware.s      1 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   52 |  3                 ../../include/hardware.s      2 | Comment     | 00 |         |    0 | 02/1000               | ;
+   53 |  3                 ../../include/hardware.s      3 | Comment     | 00 |         |    0 | 02/1000               | ; FGX - Flux GS uniX
+   54 |  3                 ../../include/hardware.s      4 | Comment     | 00 |         |    0 | 02/1000               | ;
+   55 |  3                 ../../include/hardware.s      5 | Comment     | 00 |         |    0 | 02/1000               | ; File:     hardware.s
+   56 |  3                 ../../include/hardware.s      6 | Comment     | 00 |         |    0 | 02/1000               | ; Purpose:  Apple IIgs hardware equates and constants
+   57 |  3                 ../../include/hardware.s      7 | Comment     | 00 |         |    0 | 02/1000               | ; Author:   FGX Development Team
+   58 |  3                 ../../include/hardware.s      8 | Comment     | 00 |         |    0 | 02/1000               | ; Created:  2025-02-01
+   59 |  3                 ../../include/hardware.s      9 | Comment     | 00 |         |    0 | 02/1000               | ;
+   60 |  3                 ../../include/hardware.s     10 | Comment     | 00 |         |    0 | 02/1000               | ; This file contains all hardware-related equates for the Apple IIgs,
+   61 |  3                 ../../include/hardware.s     11 | Comment     | 00 |         |    0 | 02/1000               | ; including memory-mapped I/O addresses, soft switches, and hardware
+   62 |  3                 ../../include/hardware.s     12 | Comment     | 00 |         |    0 | 02/1000               | ; constants. Organized by subsystem for easy reference.
+   63 |  3                 ../../include/hardware.s     13 | Comment     | 00 |         |    0 | 02/1000               | ;
+   64 |  3                 ../../include/hardware.s     14 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   65 |  3                 ../../include/hardware.s     15 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   66 |  3                 ../../include/hardware.s     16 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   67 |  3                 ../../include/hardware.s     17 | Comment     | 00 |         |    0 | 02/1000               | ; MEMORY MAP - GENERAL
+   68 |  3                 ../../include/hardware.s     18 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   69 |  3                 ../../include/hardware.s     19 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   70 |  3                 ../../include/hardware.s     20 | Comment     | 00 |         |    0 | 02/1000               | ; Bank boundaries
+   71 |  3                 ../../include/hardware.s     21 | Equivalence | 00 |         |    0 | 02/1000               | HW_BANK_ZERO                          EQU              $00                  ; System bank (DP, stacks)
+   72 |  3                 ../../include/hardware.s     22 | Equivalence | 00 |         |    0 | 02/1000               | HW_BANK_IO                            EQU              $E0                  ; I/O and SHR bank
+   73 |  3                 ../../include/hardware.s     23 | Equivalence | 00 |         |    0 | 02/1000               | HW_BANK_SHR                           EQU              $E1                  ; SHR graphics bank
+   74 |  3                 ../../include/hardware.s     24 | Equivalence | 00 |         |    0 | 02/1000               | HW_BANK_ROM                           EQU              $F0                  ; Start of ROM banks
+   75 |  3                 ../../include/hardware.s     25 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   76 |  3                 ../../include/hardware.s     26 | Comment     | 00 |         |    0 | 02/1000               | ; Key addresses in bank $00
+   77 |  3                 ../../include/hardware.s     27 | Equivalence | 00 |         |    0 | 02/1000               | HW_RESET_VEC                          EQU              $00FFFC              ; Reset vector
+   78 |  3                 ../../include/hardware.s     28 | Equivalence | 00 |         |    0 | 02/1000               | HW_IRQ_VEC                            EQU              $00FFFE              ; IRQ vector (emulation mode)
+   79 |  3                 ../../include/hardware.s     29 | Equivalence | 00 |         |    0 | 02/1000               | HW_NMI_VEC                            EQU              $00FFFA              ; NMI vector
+   80 |  3                 ../../include/hardware.s     30 | Equivalence | 00 |         |    0 | 02/1000               | HW_COP_VEC                            EQU              $00FFF4              ; COP vector (native mode)
+   81 |  3                 ../../include/hardware.s     31 | Equivalence | 00 |         |    0 | 02/1000               | HW_BRK_VEC                            EQU              $00FFF6              ; BRK vector (native mode)
+   82 |  3                 ../../include/hardware.s     32 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   83 |  3                 ../../include/hardware.s     33 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   84 |  3                 ../../include/hardware.s     34 | Comment     | 00 |         |    0 | 02/1000               | ; SOFT SWITCHES - MEMORY
+   85 |  3                 ../../include/hardware.s     35 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+   86 |  3                 ../../include/hardware.s     36 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   87 |  3                 ../../include/hardware.s     37 | Comment     | 00 |         |    0 | 02/1000               | ; Language card / bank switching
+   88 |  3                 ../../include/hardware.s     38 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK2_RD                         EQU              $C080                ; Read LC bank 2, write-protect
+   89 |  3                 ../../include/hardware.s     39 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK2_RW                         EQU              $C081                ; Read LC bank 2, write-enable
+   90 |  3                 ../../include/hardware.s     40 | Equivalence | 00 |         |    0 | 02/1000               | HW_ROMIN_RD                           EQU              $C082                ; Read ROM, write-protect LC
+   91 |  3                 ../../include/hardware.s     41 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK2_RWX                        EQU              $C083                ; Read LC bank 2, write-enable (x2)
+   92 |  3                 ../../include/hardware.s     42 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK1_RD                         EQU              $C088                ; Read LC bank 1, write-protect
+   93 |  3                 ../../include/hardware.s     43 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK1_RW                         EQU              $C089                ; Read LC bank 1, write-enable
+   94 |  3                 ../../include/hardware.s     44 | Equivalence | 00 |         |    0 | 02/1000               | HW_ROMIN_RW                           EQU              $C08A                ; Read ROM, write-protect LC
+   95 |  3                 ../../include/hardware.s     45 | Equivalence | 00 |         |    0 | 02/1000               | HW_LCBANK1_RWX                        EQU              $C08B                ; Read LC bank 1, write-enable (x2)
+   96 |  3                 ../../include/hardware.s     46 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+   97 |  3                 ../../include/hardware.s     47 | Comment     | 00 |         |    0 | 02/1000               | ; Auxiliary memory (IIe compatibility)
+   98 |  3                 ../../include/hardware.s     48 | Equivalence | 00 |         |    0 | 02/1000               | HW_80STORE_OFF                        EQU              $C000                ; Disable 80STORE
+   99 |  3                 ../../include/hardware.s     49 | Equivalence | 00 |         |    0 | 02/1000               | HW_80STORE_ON                         EQU              $C001                ; Enable 80STORE
+  100 |  3                 ../../include/hardware.s     50 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDMAINRAM                          EQU              $C002                ; Read main RAM
+  101 |  3                 ../../include/hardware.s     51 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDAUXRAM                           EQU              $C003                ; Read aux RAM
+  102 |  3                 ../../include/hardware.s     52 | Equivalence | 00 |         |    0 | 02/1000               | HW_WRMAINRAM                          EQU              $C004                ; Write main RAM
+  103 |  3                 ../../include/hardware.s     53 | Equivalence | 00 |         |    0 | 02/1000               | HW_WRAUXRAM                           EQU              $C005                ; Write aux RAM
+  104 |  3                 ../../include/hardware.s     54 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  105 |  3                 ../../include/hardware.s     55 | Comment     | 00 |         |    0 | 02/1000               | ; Memory state reads
+  106 |  3                 ../../include/hardware.s     56 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDLCBNK2                           EQU              $C011                ; Read: LC bank 2 selected?
+  107 |  3                 ../../include/hardware.s     57 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDLCRAM                            EQU              $C012                ; Read: LC RAM selected?
+  108 |  3                 ../../include/hardware.s     58 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDRAMRD                            EQU              $C013                ; Read: aux RAM read enabled?
+  109 |  3                 ../../include/hardware.s     59 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDRAMWRT                           EQU              $C014                ; Read: aux RAM write enabled?
+  110 |  3                 ../../include/hardware.s     60 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  111 |  3                 ../../include/hardware.s     61 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  112 |  3                 ../../include/hardware.s     62 | Comment     | 00 |         |    0 | 02/1000               | ; SOFT SWITCHES - VIDEO
+  113 |  3                 ../../include/hardware.s     63 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  114 |  3                 ../../include/hardware.s     64 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  115 |  3                 ../../include/hardware.s     65 | Comment     | 00 |         |    0 | 02/1000               | ; Video mode switches
+  116 |  3                 ../../include/hardware.s     66 | Equivalence | 00 |         |    0 | 02/1000               | HW_80COL_OFF                          EQU              $C00C                ; Disable 80-column mode
+  117 |  3                 ../../include/hardware.s     67 | Equivalence | 00 |         |    0 | 02/1000               | HW_80COL_ON                           EQU              $C00D                ; Enable 80-column mode
+  118 |  3                 ../../include/hardware.s     68 | Equivalence | 00 |         |    0 | 02/1000               | HW_ALTCHAR_OFF                        EQU              $C00E                ; Normal character set
+  119 |  3                 ../../include/hardware.s     69 | Equivalence | 00 |         |    0 | 02/1000               | HW_ALTCHAR_ON                         EQU              $C00F                ; Alternate character set
+  120 |  3                 ../../include/hardware.s     70 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  121 |  3                 ../../include/hardware.s     71 | Equivalence | 00 |         |    0 | 02/1000               | HW_TEXT_OFF                           EQU              $E0C050              ; Graphics mode
+  122 |  3                 ../../include/hardware.s     72 | Equivalence | 00 |         |    0 | 02/1000               | HW_TEXT_ON                            EQU              $E0C051              ; Text mode
+  123 |  3                 ../../include/hardware.s     73 | Equivalence | 00 |         |    0 | 02/1000               | HW_MIXED_OFF                          EQU              $E0C052              ; Full screen
+  124 |  3                 ../../include/hardware.s     74 | Equivalence | 00 |         |    0 | 02/1000               | HW_MIXED_ON                           EQU              $E0C053              ; Mixed text/graphics
+  125 |  3                 ../../include/hardware.s     75 | Equivalence | 00 |         |    0 | 02/1000               | HW_PAGE1                              EQU              $E0C054              ; Display page 1
+  126 |  3                 ../../include/hardware.s     76 | Equivalence | 00 |         |    0 | 02/1000               | HW_PAGE2                              EQU              $E0C055              ; Display page 2
+  127 |  3                 ../../include/hardware.s     77 | Equivalence | 00 |         |    0 | 02/1000               | HW_LORES                              EQU              $E0C056              ; Lo-res graphics
+  128 |  3                 ../../include/hardware.s     78 | Equivalence | 00 |         |    0 | 02/1000               | HW_HIRES                              EQU              $E0C057              ; Hi-res graphics
+  129 |  3                 ../../include/hardware.s     79 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  130 |  3                 ../../include/hardware.s     80 | Comment     | 00 |         |    0 | 02/1000               | ; IIgs-specific video (bank $E0 for reliable I/O access in native mode)
+  131 |  3                 ../../include/hardware.s     81 | Equivalence | 00 |         |    0 | 02/1000               | HW_NEWVIDEO                           EQU              $E0C029              ; New video register (IIgs)
+  132 |  3                 ../../include/hardware.s     82 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: SHR enable
+  133 |  3                 ../../include/hardware.s     83 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: Linearize SHR memory
+  134 |  3                 ../../include/hardware.s     84 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: SHR bank latch enable
+  135 |  3                 ../../include/hardware.s     85 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bits 0-4: Border color (0-15)
+  136 |  3                 ../../include/hardware.s     86 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  137 |  3                 ../../include/hardware.s     87 | Comment     | 00 |         |    0 | 02/1000               | ; Mega II video counters (Apple IIgs Tech Note #39). 16-bit beam-position
+  138 |  3                 ../../include/hardware.s     88 | Comment     | 00 |         |    0 | 02/1000               | ; counter = 7-bit horizontal + 9-bit vertical.  $C02E = vertical bits V1..V8
+  139 |  3                 ../../include/hardware.s     89 | Comment     | 00 |         |    0 | 02/1000               | ; (high 8 of 9); $C02F bit 7 = vertical LSB (VA/V0), bits 6-0 = horizontal.
+  140 |  3                 ../../include/hardware.s     90 | Comment     | 00 |         |    0 | 02/1000               | ; Vertical V ranges $FA..$1FF (NTSC, 262 lines); V=$100 is SHR scan line 0;
+  141 |  3                 ../../include/hardware.s     91 | Comment     | 00 |         |    0 | 02/1000               | ; V increments every 63.7 us (one scan line).  VBL IRQ fires at scan line 192
+  142 |  3                 ../../include/hardware.s     92 | Comment     | 00 |         |    0 | 02/1000               | ; (V=$1C0), the same instant _kSystemTicks ticks.  Used for the hi-res timer
+  143 |  3                 ../../include/hardware.s     93 | Comment     | 00 |         |    0 | 02/1000               | ; (frame*262 + intra-frame scanline).  Read low byte of V:  LDAL HW_HORIZCNT /
+  144 |  3                 ../../include/hardware.s     94 | Comment     | 00 |         |    0 | 02/1000               | ; asl a / LDAL HW_VERTCNT / rol a  (TN #39 example).  ★Use LDAL (long): these
+  145 |  3                 ../../include/hardware.s     95 | Comment     | 00 |         |    0 | 02/1000               | ; live in bank $E0, which is NOT the DBR (= live kernel bank) during kernel
+  146 |  3                 ../../include/hardware.s     96 | Comment     | 00 |         |    0 | 02/1000               | ; execution, so a plain LDA abs reads $<kbank>:C02E/F RAM and returns V=0.
+  147 |  3                 ../../include/hardware.s     97 | Equivalence | 00 |         |    0 | 02/1000               | HW_VERTCNT                            EQU              $E0C02E              ; vertical counter, bits V1..V8
+  148 |  3                 ../../include/hardware.s     98 | Equivalence | 00 |         |    0 | 02/1000               | HW_HORIZCNT                           EQU              $E0C02F              ; bit7 = vertical LSB (V0); bits6-0 = horizontal
+  149 |  3                 ../../include/hardware.s     99 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  150 |  3                 ../../include/hardware.s    100 | Comment     | 00 |         |    0 | 02/1000               | ; NEWVIDEO bit masks
+  151 |  3                 ../../include/hardware.s    101 | Equivalence | 00 |         |    0 | 02/1000               | NEWVID_SHR                            EQU              %10000000            ; Enable Super HiRes
+  152 |  3                 ../../include/hardware.s    102 | Equivalence | 00 |         |    0 | 02/1000               | NEWVID_LINEAR                         EQU              %01000000            ; Linearize SHR memory
+  153 |  3                 ../../include/hardware.s    103 | Equivalence | 00 |         |    0 | 02/1000               | NEWVID_BANKLATCH                      EQU              %00100000            ; Bank latch enable
+  154 |  3                 ../../include/hardware.s    104 | Equivalence | 00 |         |    0 | 02/1000               | NEWVID_BORDER                         EQU              %00011111            ; Border color mask
+  155 |  3                 ../../include/hardware.s    105 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  156 |  3                 ../../include/hardware.s    106 | Comment     | 00 |         |    0 | 02/1000               | ; FGX NEWVIDEO setting: SHR enabled, black border
+  157 |  3                 ../../include/hardware.s    107 | Equivalence | 00 |         |    0 | 02/1000               | FGX_NEWVIDEO                          EQU              %10000000            ; $80 - SHR on, border=0 (black)
+  158 |  3                 ../../include/hardware.s    108 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  159 |  3                 ../../include/hardware.s    109 | Equivalence | 00 |         |    0 | 02/1000               | HW_STATEREG                           EQU              $E0C068              ; State register
+  160 |  3                 ../../include/hardware.s    110 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 0: INTCXROM
+  161 |  3                 ../../include/hardware.s    111 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 1: ROMBANK
+  162 |  3                 ../../include/hardware.s    112 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 2: LCBNK2
+  163 |  3                 ../../include/hardware.s    113 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: RDROM
+  164 |  3                 ../../include/hardware.s    114 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: RAMWRT
+  165 |  3                 ../../include/hardware.s    115 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: RAMRD
+  166 |  3                 ../../include/hardware.s    116 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: PAGE2
+  167 |  3                 ../../include/hardware.s    117 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: ALTZP
+  168 |  3                 ../../include/hardware.s    118 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  169 |  3                 ../../include/hardware.s    119 | Equivalence | 00 |         |    0 | 02/1000               | HW_SHADOW                             EQU              $E0C035              ; Shadow register
+  170 |  3                 ../../include/hardware.s    120 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 0: Inhibit Text/LoRes shadowing
+  171 |  3                 ../../include/hardware.s    121 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 1: Inhibit HiRes Page 1 shadowing
+  172 |  3                 ../../include/hardware.s    122 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 2: Inhibit HiRes Page 2 shadowing
+  173 |  3                 ../../include/hardware.s    123 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: Inhibit Super HiRes shadowing
+  174 |  3                 ../../include/hardware.s    124 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Inhibit Aux HGR shadowing
+  175 |  3                 ../../include/hardware.s    125 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: Inhibit Alt Display Mode
+  176 |  3                 ../../include/hardware.s    126 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: Inhibit I/O/LC shadowing
+  177 |  3                 ../../include/hardware.s    127 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  178 |  3                 ../../include/hardware.s    128 | Comment     | 00 |         |    0 | 02/1000               | ; Shadow register bit masks
+  179 |  3                 ../../include/hardware.s    129 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_TEXT                           EQU              %00000001            ; Inhibit Text/LoRes
+  180 |  3                 ../../include/hardware.s    130 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_HIRES1                         EQU              %00000010            ; Inhibit HiRes Page 1
+  181 |  3                 ../../include/hardware.s    131 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_HIRES2                         EQU              %00000100            ; Inhibit HiRes Page 2
+  182 |  3                 ../../include/hardware.s    132 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_SHR                            EQU              %00001000            ; Inhibit Super HiRes
+  183 |  3                 ../../include/hardware.s    133 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_AUXHGR                         EQU              %00010000            ; Inhibit Aux HGR
+  184 |  3                 ../../include/hardware.s    134 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_ALTDISP                        EQU              %00100000            ; Inhibit Alt Display Mode
+  185 |  3                 ../../include/hardware.s    135 | Equivalence | 00 |         |    0 | 02/1000               | SHADOW_IOLC                           EQU              %01000000            ; Inhibit I/O/LC
+  186 |  3                 ../../include/hardware.s    136 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  187 |  3                 ../../include/hardware.s    137 | Comment     | 00 |         |    0 | 02/1000               | ; FGX shadow setting: inhibit IIe shadowing but KEEP SHR shadowing
+  188 |  3                 ../../include/hardware.s    138 | Comment     | 00 |         |    0 | 02/1000               | ; This allows writes to $01/2000 to shadow to $E1/2000
+  189 |  3                 ../../include/hardware.s    139 | Equivalence | 00 |         |    0 | 02/1000               | FGX_SHADOW                            EQU              %01110111            ; $77 - inhibit all EXCEPT SHR (bit 3=0)
+  190 |  3                 ../../include/hardware.s    140 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  191 |  3                 ../../include/hardware.s    141 | Equivalence | 00 |         |    0 | 02/1000               | HW_CYAREG                             EQU              $E0C036              ; CYA (system speed) register
+  192 |  3                 ../../include/hardware.s    142 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 0-3: Disk motor detect
+  193 |  3                 ../../include/hardware.s    143 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Shadow all banks
+  194 |  3                 ../../include/hardware.s    144 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: (reserved)
+  195 |  3                 ../../include/hardware.s    145 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: (reserved)
+  196 |  3                 ../../include/hardware.s    146 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: 1=fast (2.8MHz), 0=slow (1MHz)
+  197 |  3                 ../../include/hardware.s    147 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  198 |  3                 ../../include/hardware.s    148 | Comment     | 00 |         |    0 | 02/1000               | ; CYA register bit masks
+  199 |  3                 ../../include/hardware.s    149 | Equivalence | 00 |         |    0 | 02/1000               | CYA_SHADOWALL                         EQU              %00010000            ; Shadow all banks (dangerous!)
+  200 |  3                 ../../include/hardware.s    150 | Equivalence | 00 |         |    0 | 02/1000               | CYA_FAST                              EQU              %10000000            ; Fast mode (2.8+ MHz)
+  201 |  3                 ../../include/hardware.s    151 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  202 |  3                 ../../include/hardware.s    152 | Comment     | 00 |         |    0 | 02/1000               | ; FGX CYA setting: fast mode, no shadow-all
+  203 |  3                 ../../include/hardware.s    153 | Equivalence | 00 |         |    0 | 02/1000               | FGX_CYAREG                            EQU              %10000000            ; $80 - fast mode only
+  204 |  3                 ../../include/hardware.s    154 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  205 |  3                 ../../include/hardware.s    155 | Comment     | 00 |         |    0 | 02/1000               | ; Vertical blank
+  206 |  3                 ../../include/hardware.s    156 | Equivalence | 00 |         |    0 | 02/1000               | HW_VBL                                EQU              $E0C019              ; Vertical blank status
+  207 |  3                 ../../include/hardware.s    157 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: 1=VBL active
+  208 |  3                 ../../include/hardware.s    158 | Equivalence | 00 |         |    0 | 02/1000               | HW_RDVBLBAR                           EQU              $E0C019              ; Same as above
+  209 |  3                 ../../include/hardware.s    159 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  210 |  3                 ../../include/hardware.s    160 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  211 |  3                 ../../include/hardware.s    161 | Comment     | 00 |         |    0 | 02/1000               | ; SUPER HIGH RESOLUTION (SHR)
+  212 |  3                 ../../include/hardware.s    162 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  213 |  3                 ../../include/hardware.s    163 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  214 |  3                 ../../include/hardware.s    164 | Comment     | 00 |         |    0 | 02/1000               | ; SHR memory addresses (in bank $E1)
+  215 |  3                 ../../include/hardware.s    165 | Equivalence | 00 |         |    0 | 02/1000               | SHR_SCREEN                            EQU              $E12000              ; Start of SHR pixel data
+  216 |  3                 ../../include/hardware.s    166 | Equivalence | 00 |         |    0 | 02/1000               | SHR_SCB                               EQU              $E19D00              ; Scanline Control Bytes
+  217 |  3                 ../../include/hardware.s    167 | Equivalence | 00 |         |    0 | 02/1000               | SHR_PALETTES                          EQU              $E19E00              ; Color palettes
+  218 |  3                 ../../include/hardware.s    168 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  219 |  3                 ../../include/hardware.s    169 | Comment     | 00 |         |    0 | 02/1000               | ; SHR screen dimensions
+  220 |  3                 ../../include/hardware.s    170 | Equivalence | 00 |         |    0 | 02/1000               | SHR_WIDTH_640                         EQU              640                  ; Pixels wide in 640 mode
+  221 |  3                 ../../include/hardware.s    171 | Equivalence | 00 |         |    0 | 02/1000               | SHR_WIDTH_320                         EQU              320                  ; Pixels wide in 320 mode
+  222 |  3                 ../../include/hardware.s    172 | Equivalence | 00 |         |    0 | 02/1000               | SHR_HEIGHT                            EQU              200                  ; Scanlines
+  223 |  3                 ../../include/hardware.s    173 | Equivalence | 00 |         |    0 | 02/1000               | SHR_BPL_640                           EQU              160                  ; Bytes per line (640 mode)
+  224 |  3                 ../../include/hardware.s    174 | Equivalence | 00 |         |    0 | 02/1000               | SHR_BPL_320                           EQU              160                  ; Bytes per line (320 mode)
+  225 |  3                 ../../include/hardware.s    175 | Equivalence | 00 |         |    0 | 02/1000               | SHR_SCREEN_SIZE                       EQU              32000                ; Total screen bytes (200 * 160)
+  226 |  3                 ../../include/hardware.s    176 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  227 |  3                 ../../include/hardware.s    177 | Comment     | 00 |         |    0 | 02/1000               | ; SCB bit definitions
+  228 |  3                 ../../include/hardware.s    178 | Equivalence | 00 |         |    0 | 02/1000               | SCB_MODE_320                          EQU              %00000000            ; 320 mode (bit 7 = 0)
+  229 |  3                 ../../include/hardware.s    179 | Equivalence | 00 |         |    0 | 02/1000               | SCB_MODE_640                          EQU              %10000000            ; 640 mode (bit 7 = 1)
+  230 |  3                 ../../include/hardware.s    180 | Equivalence | 00 |         |    0 | 02/1000               | SCB_FILL                              EQU              %01000000            ; Fill mode enable (bit 6)
+  231 |  3                 ../../include/hardware.s    181 | Equivalence | 00 |         |    0 | 02/1000               | SCB_INTERRUPT                         EQU              %00100000            ; Interrupt on scanline (bit 5)
+  232 |  3                 ../../include/hardware.s    182 | Equivalence | 00 |         |    0 | 02/1000               | SCB_PAL_MASK                          EQU              %00001111            ; Palette number mask (bits 0-3)
+  233 |  3                 ../../include/hardware.s    183 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  234 |  3                 ../../include/hardware.s    184 | Comment     | 00 |         |    0 | 02/1000               | ; Palette structure
+  235 |  3                 ../../include/hardware.s    185 | Comment     | 00 |         |    0 | 02/1000               | ; Each palette has 16 colors, each color is 2 bytes (4 bits each: R, G, B)
+  236 |  3                 ../../include/hardware.s    186 | Comment     | 00 |         |    0 | 02/1000               | ; Palette byte format: xxxxRRRR GGGGBBBB (little-endian: low byte first)
+  237 |  3                 ../../include/hardware.s    187 | Equivalence | 00 |         |    0 | 02/1000               | SHR_PAL_SIZE                          EQU              32                   ; Bytes per palette (16 colors * 2)
+  238 |  3                 ../../include/hardware.s    188 | Equivalence | 00 |         |    0 | 02/1000               | SHR_NUM_PALS                          EQU              16                   ; Number of palettes
+  239 |  3                 ../../include/hardware.s    189 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  240 |  3                 ../../include/hardware.s    190 | Comment     | 00 |         |    0 | 02/1000               | ; Common colors (12-bit RGB, stored as $0RGB)
+  241 |  3                 ../../include/hardware.s    191 | Equivalence | 00 |         |    0 | 02/1000               | SHR_BLACK                             EQU              $0000                ; Black
+  242 |  3                 ../../include/hardware.s    192 | Equivalence | 00 |         |    0 | 02/1000               | SHR_WHITE                             EQU              $0FFF                ; White
+  243 |  3                 ../../include/hardware.s    193 | Equivalence | 00 |         |    0 | 02/1000               | SHR_RED                               EQU              $0F00                ; Red
+  244 |  3                 ../../include/hardware.s    194 | Equivalence | 00 |         |    0 | 02/1000               | SHR_GREEN                             EQU              $00F0                ; Green
+  245 |  3                 ../../include/hardware.s    195 | Equivalence | 00 |         |    0 | 02/1000               | SHR_BLUE                              EQU              $0009                ; Blue ($000099 — IIgs system blue)
+  246 |  3                 ../../include/hardware.s    196 | Equivalence | 00 |         |    0 | 02/1000               | SHR_YELLOW                            EQU              $0FF0                ; Yellow
+  247 |  3                 ../../include/hardware.s    197 | Equivalence | 00 |         |    0 | 02/1000               | SHR_CYAN                              EQU              $00FF                ; Cyan
+  248 |  3                 ../../include/hardware.s    198 | Equivalence | 00 |         |    0 | 02/1000               | SHR_MAGENTA                           EQU              $0F0F                ; Magenta
+  249 |  3                 ../../include/hardware.s    199 | Equivalence | 00 |         |    0 | 02/1000               | SHR_DGRAY                             EQU              $0555                ; Dark gray
+  250 |  3                 ../../include/hardware.s    200 | Equivalence | 00 |         |    0 | 02/1000               | SHR_LGRAY                             EQU              $0AAA                ; Light gray
+  251 |  3                 ../../include/hardware.s    201 | Equivalence | 00 |         |    0 | 02/1000               | SHR_DKGRAY                            EQU              $0333                ; Darker gray (for background)
+  252 |  3                 ../../include/hardware.s    202 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  253 |  3                 ../../include/hardware.s    203 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  254 |  3                 ../../include/hardware.s    204 | Comment     | 00 |         |    0 | 02/1000               | ; KEYBOARD
+  255 |  3                 ../../include/hardware.s    205 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  256 |  3                 ../../include/hardware.s    206 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  257 |  3                 ../../include/hardware.s    207 | Equivalence | 00 |         |    0 | 02/1000               | HW_KEYBOARD                           EQU              $C000                ; Keyboard data
+  258 |  3                 ../../include/hardware.s    208 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: Key pressed (strobe)
+  259 |  3                 ../../include/hardware.s    209 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bits 0-6: ASCII code
+  260 |  3                 ../../include/hardware.s    210 | Equivalence | 00 |         |    0 | 02/1000               | HW_KBDSTROBE                          EQU              $C010                ; Clear keyboard strobe
+  261 |  3                 ../../include/hardware.s    211 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  262 |  3                 ../../include/hardware.s    212 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANYKEY                             EQU              $C010                ; Any key down status
+  263 |  3                 ../../include/hardware.s    213 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  264 |  3                 ../../include/hardware.s    214 | Comment     | 00 |         |    0 | 02/1000               | ; Special key codes
+  265 |  3                 ../../include/hardware.s    215 | Equivalence | 00 |         |    0 | 02/1000               | KEY_RETURN                            EQU              $8D                  ; Return/Enter
+  266 |  3                 ../../include/hardware.s    216 | Equivalence | 00 |         |    0 | 02/1000               | KEY_ESC                               EQU              $9B                  ; Escape
+  267 |  3                 ../../include/hardware.s    217 | Equivalence | 00 |         |    0 | 02/1000               | KEY_LEFT                              EQU              $88                  ; Left arrow
+  268 |  3                 ../../include/hardware.s    218 | Equivalence | 00 |         |    0 | 02/1000               | KEY_RIGHT                             EQU              $95                  ; Right arrow
+  269 |  3                 ../../include/hardware.s    219 | Equivalence | 00 |         |    0 | 02/1000               | KEY_UP                                EQU              $8B                  ; Up arrow
+  270 |  3                 ../../include/hardware.s    220 | Equivalence | 00 |         |    0 | 02/1000               | KEY_DOWN                              EQU              $8A                  ; Down arrow
+  271 |  3                 ../../include/hardware.s    221 | Equivalence | 00 |         |    0 | 02/1000               | KEY_DELETE                            EQU              $FF                  ; Delete
+  272 |  3                 ../../include/hardware.s    222 | Equivalence | 00 |         |    0 | 02/1000               | KEY_TAB                               EQU              $89                  ; Tab
+  273 |  3                 ../../include/hardware.s    223 | Equivalence | 00 |         |    0 | 02/1000               | KEY_SPACE                             EQU              $A0                  ; Space
+  274 |  3                 ../../include/hardware.s    224 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  275 |  3                 ../../include/hardware.s    225 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  276 |  3                 ../../include/hardware.s    226 | Comment     | 00 |         |    0 | 02/1000               | ; APPLE DESKTOP BUS (ADB)
+  277 |  3                 ../../include/hardware.s    227 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  278 |  3                 ../../include/hardware.s    228 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  279 |  3                 ../../include/hardware.s    229 | Comment     | 00 |         |    0 | 02/1000               | ; ADB registers
+  280 |  3                 ../../include/hardware.s    230 | Equivalence | 00 |         |    0 | 02/1000               | ADB_DATA                              EQU              $C026                ; ADB data register
+  281 |  3                 ../../include/hardware.s    231 | Equivalence | 00 |         |    0 | 02/1000               | ADB_STATUS                            EQU              $C027                ; ADB status register
+  282 |  3                 ../../include/hardware.s    232 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: Mouse data pending
+  283 |  3                 ../../include/hardware.s    233 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: Interrupt pending
+  284 |  3                 ../../include/hardware.s    234 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: Data valid
+  285 |  3                 ../../include/hardware.s    235 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Mouse button
+  286 |  3                 ../../include/hardware.s    236 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: Command/data
+  287 |  3                 ../../include/hardware.s    237 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 2: ADB busy
+  288 |  3                 ../../include/hardware.s    238 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 1: Autoincrement
+  289 |  3                 ../../include/hardware.s    239 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 0: Command complete
+  290 |  3                 ../../include/hardware.s    240 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  291 |  3                 ../../include/hardware.s    241 | Comment     | 00 |         |    0 | 02/1000               | ; ADB commands
+  292 |  3                 ../../include/hardware.s    242 | Equivalence | 00 |         |    0 | 02/1000               | ADB_CMD_RESET                         EQU              $00                  ; Reset ADB bus
+  293 |  3                 ../../include/hardware.s    243 | Equivalence | 00 |         |    0 | 02/1000               | ADB_CMD_FLUSH                         EQU              $01                  ; Flush device
+  294 |  3                 ../../include/hardware.s    244 | Equivalence | 00 |         |    0 | 02/1000               | ADB_CMD_LISTEN                        EQU              $08                  ; Listen command base
+  295 |  3                 ../../include/hardware.s    245 | Equivalence | 00 |         |    0 | 02/1000               | ADB_CMD_TALK                          EQU              $0C                  ; Talk command base
+  296 |  3                 ../../include/hardware.s    246 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  297 |  3                 ../../include/hardware.s    247 | Comment     | 00 |         |    0 | 02/1000               | ; ADB device addresses
+  298 |  3                 ../../include/hardware.s    248 | Equivalence | 00 |         |    0 | 02/1000               | ADB_ADDR_KBD                          EQU              $02                  ; Keyboard
+  299 |  3                 ../../include/hardware.s    249 | Equivalence | 00 |         |    0 | 02/1000               | ADB_ADDR_MOUSE                        EQU              $03                  ; Mouse
+  300 |  3                 ../../include/hardware.s    250 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  301 |  3                 ../../include/hardware.s    251 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  302 |  3                 ../../include/hardware.s    252 | Comment     | 00 |         |    0 | 02/1000               | ; ENSONIQ DOC (SOUND)
+  303 |  3                 ../../include/hardware.s    253 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  304 |  3                 ../../include/hardware.s    254 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  305 |  3                 ../../include/hardware.s    255 | Comment     | 00 |         |    0 | 02/1000               | ; DOC registers (via GLU)
+  306 |  3                 ../../include/hardware.s    256 | Equivalence | 00 |         |    0 | 02/1000               | DOC_DATA                              EQU              $C03C                ; DOC data register
+  307 |  3                 ../../include/hardware.s    257 | Equivalence | 00 |         |    0 | 02/1000               | DOC_ADDR_LO                           EQU              $C03D                ; DOC address low
+  308 |  3                 ../../include/hardware.s    258 | Equivalence | 00 |         |    0 | 02/1000               | DOC_ADDR_HI                           EQU              $C03E                ; DOC address high
+  309 |  3                 ../../include/hardware.s    259 | Equivalence | 00 |         |    0 | 02/1000               | DOC_CTRL                              EQU              $C03F                ; DOC control
+  310 |  3                 ../../include/hardware.s    260 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: Read/write (1=read)
+  311 |  3                 ../../include/hardware.s    261 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: Auto-increment
+  312 |  3                 ../../include/hardware.s    262 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: Volume control
+  313 |  3                 ../../include/hardware.s    263 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bits 0-4: Reserved
+  314 |  3                 ../../include/hardware.s    264 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  315 |  3                 ../../include/hardware.s    265 | Comment     | 00 |         |    0 | 02/1000               | ; DOC internal registers (addressed via DOC_ADDR)
+  316 |  3                 ../../include/hardware.s    266 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_FREQ_LO                       EQU              $00                  ; Oscillator frequency low (per osc)
+  317 |  3                 ../../include/hardware.s    267 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_FREQ_HI                       EQU              $20                  ; Oscillator frequency high
+  318 |  3                 ../../include/hardware.s    268 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_VOL                           EQU              $40                  ; Oscillator volume
+  319 |  3                 ../../include/hardware.s    269 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_DATA                          EQU              $60                  ; Oscillator wavetable pointer
+  320 |  3                 ../../include/hardware.s    270 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_CTRL                          EQU              $80                  ; Oscillator control
+  321 |  3                 ../../include/hardware.s    271 | Equivalence | 00 |         |    0 | 02/1000               | DOC_OSC_SIZE                          EQU              $A0                  ; Oscillator wavetable size
+  322 |  3                 ../../include/hardware.s    272 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  323 |  3                 ../../include/hardware.s    273 | Comment     | 00 |         |    0 | 02/1000               | ; DOC control register bits
+  324 |  3                 ../../include/hardware.s    274 | Equivalence | 00 |         |    0 | 02/1000               | DOC_CTRL_FREE                         EQU              %00000001            ; Free-run mode
+  325 |  3                 ../../include/hardware.s    275 | Equivalence | 00 |         |    0 | 02/1000               | DOC_CTRL_ONESHOT                      EQU              %00000010            ; One-shot mode
+  326 |  3                 ../../include/hardware.s    276 | Equivalence | 00 |         |    0 | 02/1000               | DOC_CTRL_SYNC                         EQU              %00000100            ; Sync mode
+  327 |  3                 ../../include/hardware.s    277 | Equivalence | 00 |         |    0 | 02/1000               | DOC_CTRL_SWAP                         EQU              %00001000            ; Swap mode
+  328 |  3                 ../../include/hardware.s    278 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  329 |  3                 ../../include/hardware.s    279 | Comment     | 00 |         |    0 | 02/1000               | ; Sound RAM (64KB in bank $E1)
+  330 |  3                 ../../include/hardware.s    280 | Equivalence | 00 |         |    0 | 02/1000               | SOUND_RAM                             EQU              $E10000              ; Start of sound RAM
+  331 |  3                 ../../include/hardware.s    281 | Equivalence | 00 |         |    0 | 02/1000               | SOUND_RAM_SIZE                        EQU              $10000               ; 64KB
+  332 |  3                 ../../include/hardware.s    282 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  333 |  3                 ../../include/hardware.s    283 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  334 |  3                 ../../include/hardware.s    284 | Comment     | 00 |         |    0 | 02/1000               | ; DISK / SMARTPORT
+  335 |  3                 ../../include/hardware.s    285 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  336 |  3                 ../../include/hardware.s    286 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  337 |  3                 ../../include/hardware.s    287 | Comment     | 00 |         |    0 | 02/1000               | ; SmartPort entry (varies by slot, this is for slot 5)
+  338 |  3                 ../../include/hardware.s    288 | Comment     | 00 |         |    0 | 02/1000               | ; Actual entry point is at $Cn00 where n = slot number
+  339 |  3                 ../../include/hardware.s    289 | Equivalence | 00 |         |    0 | 02/1000               | SMARTPORT_SLOT5                       EQU              $C500                ; Slot 5 firmware
+  340 |  3                 ../../include/hardware.s    290 | Equivalence | 00 |         |    0 | 02/1000               | SMARTPORT_SLOT6                       EQU              $C600                ; Slot 6 firmware (typically disk)
+  341 |  3                 ../../include/hardware.s    291 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  342 |  3                 ../../include/hardware.s    292 | Comment     | 00 |         |    0 | 02/1000               | ; SmartPort command codes
+  343 |  3                 ../../include/hardware.s    293 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_STATUS                         EQU              $00                  ; Get device status
+  344 |  3                 ../../include/hardware.s    294 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_READBLK                        EQU              $01                  ; Read block
+  345 |  3                 ../../include/hardware.s    295 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_WRITEBLK                       EQU              $02                  ; Write block
+  346 |  3                 ../../include/hardware.s    296 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_FORMAT                         EQU              $03                  ; Format device
+  347 |  3                 ../../include/hardware.s    297 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_CONTROL                        EQU              $04                  ; Control command
+  348 |  3                 ../../include/hardware.s    298 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_INIT                           EQU              $05                  ; Initialize device
+  349 |  3                 ../../include/hardware.s    299 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_OPEN                           EQU              $06                  ; Open device
+  350 |  3                 ../../include/hardware.s    300 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_CLOSE                          EQU              $07                  ; Close device
+  351 |  3                 ../../include/hardware.s    301 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_READ                           EQU              $08                  ; Read bytes
+  352 |  3                 ../../include/hardware.s    302 | Equivalence | 00 |         |    0 | 02/1000               | SP_CMD_WRITE                          EQU              $09                  ; Write bytes
+  353 |  3                 ../../include/hardware.s    303 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  354 |  3                 ../../include/hardware.s    304 | Comment     | 00 |         |    0 | 02/1000               | ; SmartPort error codes
+  355 |  3                 ../../include/hardware.s    305 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_NONE                           EQU              $00                  ; No error
+  356 |  3                 ../../include/hardware.s    306 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_BADCMD                         EQU              $01                  ; Invalid command
+  357 |  3                 ../../include/hardware.s    307 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_BADPCNT                        EQU              $02                  ; Invalid parameter count
+  358 |  3                 ../../include/hardware.s    308 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_IOERR                          EQU              $27                  ; I/O error
+  359 |  3                 ../../include/hardware.s    309 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_NODRIVE                        EQU              $28                  ; No drive connected
+  360 |  3                 ../../include/hardware.s    310 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_WPROT                          EQU              $2B                  ; Write protected
+  361 |  3                 ../../include/hardware.s    311 | Equivalence | 00 |         |    0 | 02/1000               | SP_ERR_BADBLK                         EQU              $2D                  ; Invalid block number
+  362 |  3                 ../../include/hardware.s    312 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  363 |  3                 ../../include/hardware.s    313 | Comment     | 00 |         |    0 | 02/1000               | ; Disk constants
+  364 |  3                 ../../include/hardware.s    314 | Equivalence | 00 |         |    0 | 02/1000               | DISK_BLOCK_SIZE                       EQU              512                  ; Bytes per block
+  365 |  3                 ../../include/hardware.s    315 | Equivalence | 00 |         |    0 | 02/1000               | DISK_BLOCKS_800K                      EQU              1600                 ; Blocks on 800K floppy
+  366 |  3                 ../../include/hardware.s    316 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  367 |  3                 ../../include/hardware.s    317 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  368 |  3                 ../../include/hardware.s    318 | Comment     | 00 |         |    0 | 02/1000               | ; SLOTS AND EXPANSION
+  369 |  3                 ../../include/hardware.s    319 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  370 |  3                 ../../include/hardware.s    320 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  371 |  3                 ../../include/hardware.s    321 | Comment     | 00 |         |    0 | 02/1000               | ; Slot I/O space
+  372 |  3                 ../../include/hardware.s    322 | Equivalence | 00 |         |    0 | 02/1000               | HW_SLOT_IO                            EQU              $C080                ; Slot I/O base ($C0n0 for slot n)
+  373 |  3                 ../../include/hardware.s    323 | Equivalence | 00 |         |    0 | 02/1000               | HW_SLOT_ROM                           EQU              $C100                ; Slot ROM base ($Cn00 for slot n)
+  374 |  3                 ../../include/hardware.s    324 | Equivalence | 00 |         |    0 | 02/1000               | HW_SLOT_EXPROM                        EQU              $C800                ; Expansion ROM (shared)
+  375 |  3                 ../../include/hardware.s    325 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  376 |  3                 ../../include/hardware.s    326 | Comment     | 00 |         |    0 | 02/1000               | ; Slot number extraction
+  377 |  3                 ../../include/hardware.s    327 | Equivalence | 00 |         |    0 | 02/1000               | SLOT_SHIFT                            EQU              4                    ; Shift for slot number in address
+  378 |  3                 ../../include/hardware.s    328 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  379 |  3                 ../../include/hardware.s    329 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  380 |  3                 ../../include/hardware.s    330 | Comment     | 00 |         |    0 | 02/1000               | ; INTERRUPTS
+  381 |  3                 ../../include/hardware.s    331 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  382 |  3                 ../../include/hardware.s    332 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  383 |  3                 ../../include/hardware.s    333 | Comment     | 00 |         |    0 | 02/1000               | ; Interrupt status/control
+  384 |  3                 ../../include/hardware.s    334 | Equivalence | 00 |         |    0 | 02/1000               | HW_INTFLAG                            EQU              $C023                ; Interrupt flag register (IIgs)
+  385 |  3                 ../../include/hardware.s    335 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: Any interrupt pending
+  386 |  3                 ../../include/hardware.s    336 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 6: VBL interrupt
+  387 |  3                 ../../include/hardware.s    337 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: Quarter-second interrupt
+  388 |  3                 ../../include/hardware.s    338 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Keyboard interrupt
+  389 |  3                 ../../include/hardware.s    339 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: Scan-line interrupt
+  390 |  3                 ../../include/hardware.s    340 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 2: External VGC interrupt
+  391 |  3                 ../../include/hardware.s    341 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 1: ADB data interrupt
+  392 |  3                 ../../include/hardware.s    342 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 0: ADB service request
+  393 |  3                 ../../include/hardware.s    343 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  394 |  3                 ../../include/hardware.s    344 | Equivalence | 00 |         |    0 | 02/1000               | HW_INTENABLE                          EQU              $C041                ; Interrupt enable register (Mega II)
+  395 |  3                 ../../include/hardware.s    345 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: Enable 1-second interrupt
+  396 |  3                 ../../include/hardware.s    346 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Enable VBL interrupt
+  397 |  3                 ../../include/hardware.s    347 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  398 |  3                 ../../include/hardware.s    348 | Comment     | 00 |         |    0 | 02/1000               | ; VGC interrupt control
+  399 |  3                 ../../include/hardware.s    349 | Equivalence | 00 |         |    0 | 02/1000               | HW_VGCINT                             EQU              $C032                ; VGC interrupt control
+  400 |  3                 ../../include/hardware.s    350 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 3: Clear scan-line interrupt
+  401 |  3                 ../../include/hardware.s    351 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 4: Enable scan-line interrupt
+  402 |  3                 ../../include/hardware.s    352 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 5: Enable second interrupt
+  403 |  3                 ../../include/hardware.s    353 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  404 |  3                 ../../include/hardware.s    354 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  405 |  3                 ../../include/hardware.s    355 | Comment     | 00 |         |    0 | 02/1000               | ; SYSTEM SPEED
+  406 |  3                 ../../include/hardware.s    356 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  407 |  3                 ../../include/hardware.s    357 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  408 |  3                 ../../include/hardware.s    358 | Comment     | 00 |         |    0 | 02/1000               | ; Speed control
+  409 |  3                 ../../include/hardware.s    359 | Equivalence | 00 |         |    0 | 02/1000               | HW_SPEED                              EQU              $C036                ; System speed register
+  410 |  3                 ../../include/hardware.s    360 | Comment     | 00 |         |    0 | 02/1000               |                                         ; Bit 7: 1=fast, 0=slow
+  411 |  3                 ../../include/hardware.s    361 | Comment     | 00 |         |    0 | 02/1000               |                                         ; (HW_STATEREG defined above at $C068)
+  412 |  3                 ../../include/hardware.s    362 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  413 |  3                 ../../include/hardware.s    363 | Comment     | 00 |         |    0 | 02/1000               | ; Speed constants
+  414 |  3                 ../../include/hardware.s    364 | Equivalence | 00 |         |    0 | 02/1000               | SPEED_SLOW                            EQU              %00000000            ; 1 MHz (IIe compatibility)
+  415 |  3                 ../../include/hardware.s    365 | Equivalence | 00 |         |    0 | 02/1000               | SPEED_FAST                            EQU              %10000000            ; 2.8 MHz (native)
+  416 |  3                 ../../include/hardware.s    366 | Comment     | 00 |         |    0 | 02/1000               | ; Note: Accelerators (ZipGS, TransWarp) can run faster
+  417 |  3                 ../../include/hardware.s    367 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  418 |  3                 ../../include/hardware.s    368 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  419 |  3                 ../../include/hardware.s    369 | Comment     | 00 |         |    0 | 02/1000               | ; MISCELLANEOUS
+  420 |  3                 ../../include/hardware.s    370 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  421 |  3                 ../../include/hardware.s    371 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  422 |  3                 ../../include/hardware.s    372 | Comment     | 00 |         |    0 | 02/1000               | ; ROM identification
+  423 |  3                 ../../include/hardware.s    373 | Equivalence | 00 |         |    0 | 02/1000               | HW_ROMID                              EQU              $FBB3                ; ROM version byte
+  424 |  3                 ../../include/hardware.s    374 | Equivalence | 00 |         |    0 | 02/1000               | ROMID_01                              EQU              $FE                  ; ROM 01
+  425 |  3                 ../../include/hardware.s    375 | Equivalence | 00 |         |    0 | 02/1000               | ROMID_03                              EQU              $00                  ; ROM 03
+  426 |  3                 ../../include/hardware.s    376 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  427 |  3                 ../../include/hardware.s    377 | Comment     | 00 |         |    0 | 02/1000               | ; Battery RAM / Real-time clock
+  428 |  3                 ../../include/hardware.s    378 | Equivalence | 00 |         |    0 | 02/1000               | HW_BRAM                               EQU              $C033                ; Battery RAM data
+  429 |  3                 ../../include/hardware.s    379 | Equivalence | 00 |         |    0 | 02/1000               | HW_BREG                               EQU              $C034                ; Battery RAM address
+  430 |  3                 ../../include/hardware.s    380 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  431 |  3                 ../../include/hardware.s    381 | Comment     | 00 |         |    0 | 02/1000               | ; Paddle / Joystick
+  432 |  3                 ../../include/hardware.s    382 | Equivalence | 00 |         |    0 | 02/1000               | HW_PADDLE0                            EQU              $C064                ; Paddle 0 value
+  433 |  3                 ../../include/hardware.s    383 | Equivalence | 00 |         |    0 | 02/1000               | HW_PADDLE1                            EQU              $C065                ; Paddle 1 value
+  434 |  3                 ../../include/hardware.s    384 | Equivalence | 00 |         |    0 | 02/1000               | HW_PADDLE2                            EQU              $C066                ; Paddle 2 value
+  435 |  3                 ../../include/hardware.s    385 | Equivalence | 00 |         |    0 | 02/1000               | HW_PADDLE3                            EQU              $C067                ; Paddle 3 value
+  436 |  3                 ../../include/hardware.s    386 | Equivalence | 00 |         |    0 | 02/1000               | HW_PADDLETRIG                         EQU              $C070                ; Trigger paddle read
+  437 |  3                 ../../include/hardware.s    387 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  438 |  3                 ../../include/hardware.s    388 | Equivalence | 00 |         |    0 | 02/1000               | HW_BUTTON0                            EQU              $C061                ; Button 0 (open apple)
+  439 |  3                 ../../include/hardware.s    389 | Equivalence | 00 |         |    0 | 02/1000               | HW_BUTTON1                            EQU              $C062                ; Button 1 (closed apple)
+  440 |  3                 ../../include/hardware.s    390 | Equivalence | 00 |         |    0 | 02/1000               | HW_BUTTON2                            EQU              $C063                ; Button 2
+  441 |  3                 ../../include/hardware.s    391 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  442 |  3                 ../../include/hardware.s    392 | Comment     | 00 |         |    0 | 02/1000               | ; Speaker
+  443 |  3                 ../../include/hardware.s    393 | Equivalence | 00 |         |    0 | 02/1000               | HW_SPEAKER                            EQU              $C030                ; Toggle speaker
+  444 |  3                 ../../include/hardware.s    394 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  445 |  3                 ../../include/hardware.s    395 | Comment     | 00 |         |    0 | 02/1000               | ; Annunciators (active low)
+  446 |  3                 ../../include/hardware.s    396 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC0_OFF                        EQU              $C058                ; Annunciator 0 off
+  447 |  3                 ../../include/hardware.s    397 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC0_ON                         EQU              $C059                ; Annunciator 0 on
+  448 |  3                 ../../include/hardware.s    398 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC1_OFF                        EQU              $C05A                ; Annunciator 1 off
+  449 |  3                 ../../include/hardware.s    399 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC1_ON                         EQU              $C05B                ; Annunciator 1 on
+  450 |  3                 ../../include/hardware.s    400 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC2_OFF                        EQU              $C05C                ; Annunciator 2 off
+  451 |  3                 ../../include/hardware.s    401 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC2_ON                         EQU              $C05D                ; Annunciator 2 on
+  452 |  3                 ../../include/hardware.s    402 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC3_OFF                        EQU              $C05E                ; Annunciator 3 off
+  453 |  3                 ../../include/hardware.s    403 | Equivalence | 00 |         |    0 | 02/1000               | HW_ANNUNC3_ON                         EQU              $C05F                ; Annunciator 3 on
+  454 |  3                 ../../include/hardware.s    404 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  455 |  3                 ../../include/hardware.s    405 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  456 |  3                 ../../include/hardware.s    406 | Comment     | 00 |         |    0 | 02/1000               | ; END OF FILE
+  457 |  3                 ../../include/hardware.s    407 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  458 |  3                 ../../include/hardware.s    408 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  459 |  1                                   main.s     28 | Directive   | 00 |         |    0 | 02/1000               |                                       PUT              ../../include/kernel.s
+  460 |  4                   ../../include/kernel.s      1 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  461 |  4                   ../../include/kernel.s      2 | Comment     | 00 |         |    0 | 02/1000               | ;
+  462 |  4                   ../../include/kernel.s      3 | Comment     | 00 |         |    0 | 02/1000               | ; FGX - Flux GS uniX
+  463 |  4                   ../../include/kernel.s      4 | Comment     | 00 |         |    0 | 02/1000               | ;
+  464 |  4                   ../../include/kernel.s      5 | Comment     | 00 |         |    0 | 02/1000               | ; File:     kernel.s
+  465 |  4                   ../../include/kernel.s      6 | Comment     | 00 |         |    0 | 02/1000               | ; Purpose:  Kernel data structures, constants, and equates
+  466 |  4                   ../../include/kernel.s      7 | Comment     | 00 |         |    0 | 02/1000               | ; Author:   FGX Development Team
+  467 |  4                   ../../include/kernel.s      8 | Comment     | 00 |         |    0 | 02/1000               | ; Created:  2025-02-01
+  468 |  4                   ../../include/kernel.s      9 | Comment     | 00 |         |    0 | 02/1000               | ;
+  469 |  4                   ../../include/kernel.s     10 | Comment     | 00 |         |    0 | 02/1000               | ; This file defines all kernel data structures, system call numbers,
+  470 |  4                   ../../include/kernel.s     11 | Comment     | 00 |         |    0 | 02/1000               | ; error codes, and constants. These definitions form the kernel ABI.
+  471 |  4                   ../../include/kernel.s     12 | Comment     | 00 |         |    0 | 02/1000               | ;
+  472 |  4                   ../../include/kernel.s     13 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  473 |  4                   ../../include/kernel.s     14 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  474 |  4                   ../../include/kernel.s     15 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  475 |  4                   ../../include/kernel.s     16 | Comment     | 00 |         |    0 | 02/1000               | ; KERNEL MEMORY LAYOUT
+  476 |  4                   ../../include/kernel.s     17 | Comment     | 00 |         |    0 | 02/1000               | ;==============================================================================
+  477 |  4                   ../../include/kernel.s     18 | Empty       | 00 |         |    0 | 02/1000               |                                                                             
+  478 |  4                   ../../include/kernel.s     19 | Comment     | 00 |         |    0 | 02/1000               | ; Bank assignments
+  479 |  4                   ../../include/kernel.s     20 | Comment     | 00 |         |    0 | 02/1000               | ; Note: Banks $00/$01 have IIe compatibility issues ($C000-$FFFF is I/O/LC)
+  480 |  4                   ../../include/kernel.s     21 | Comment     | 00 |         |    0 | 02/1000               | ; FGX uses Bank $02 for kernel to avoid these complications.
+  481 |  4                   ../../include/kernel.s     22 | Comment     | 00 |         |    0 | 02/1000               | ;
+  482 |  4                   ../../include/kernel.s     23 | Comment     | 00 |         |    0 | 02/1000               | ; Bank layout policy: kernel-owned banks pack contiguously from $02.
+  483 |  4                   ../../include/kernel.s     24 | Comment     | 00 |         |    0 | 02/1000               | ; Userland starts at FGX_BANK_USER and grows upward.  No userland code
+  484 |  4                   ../../include/kernel.s     25 | Comment     | 00 |         |    0 | 02/1000               | ; should hardcode a bank number — go through the EQU here.  Any bump
+  485 |  4                   ../../include/kernel.s     26 | Comment     | 00 |         |    0 | 02/1000               | ; to FGX_BANK_USER should be a one-line change.
+  486 |  4                   ../../include/kernel.s     27 | Comment     | 00 |         |    0 | 02/1000               | ;
+  487 |  4                   ../../include/kernel.s     28 | Comment     | 00 |         |    0 | 02/1000               | ; Any change to this layout must be mirrored in:
+  488 |  4                   ../../include/kernel.s     29 | Comment     | 00 |         |    0 | 02/1000               | ;   - src/kernel/toolbox.s _ClaimTable (Memory Manager pre-claim table;
+  489 |  4                   ../../include/kernel.s     30 | Comment     | 00 |         |    0 | 02/1000               | ;     covers banks KMEM_HEAP_FIRST_BANK..+ArenaCount-1)
+  490 |  4                   ../../include/kernel.s     31 | Comment     | 00 |         |    0 | 02/1000               | ;   - src/kernel/libc/alloc_state.s KMEM_HEAP_FIRST_BANK
+  491 |  4                   ../../include/kernel.s     32 | Comment     | 00 |         |    0 | 02/1000               | ; Otherwise the Toolbox MM will allocate over kernel-owned RAM and
+  492 |  4                   ../../include/kernel.s     33 | Comment     | 00 |         |    0 | 02/1000               | ; produce hard-to-diagnose corruption.  See
+  493 |  4                   ../../include/kernel.s     34 | Comment     | 00 |         |    0 | 02/1000               | ; memory/reference_iigs_toolbox_bringup_from_raw_boot.md "Pre-claim
+  494 |  4                   ../../include/kernel.s     35 | Comment     | 00 |         |    0 | 02/1000               | ; validated" for the working pattern.
+  495 |  4                   ../../include/kernel.s     36 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_SYSTEM                       EQU              $00                  ; Direct page, stacks, system vars
+  496 |  4                   ../../include/kernel.s     37 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_AUX                          EQU              $01                  ; IIe aux RAM - reserved, not used
+  497 |  4                   ../../include/kernel.s     38 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_KERNEL                       EQU              $02                  ; Kernel code and data
+  498 |  4                   ../../include/kernel.s     39 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_CON_CHARBUF                  EQU              $03                  ; Console CharBuf/AttrBuf framebuffer
+  499 |  4                   ../../include/kernel.s     40 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_CON_FONTS                    EQU              $04                  ; Console PreExp font tables (reg+bold)
+  500 |  4                   ../../include/kernel.s     41 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_KMOD_FIRST                   EQU              $05                  ; Kernel modules.  One module per bank
+  501 |  4                   ../../include/kernel.s     42 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   today (see [[one-module-per-bank-tech-
+  502 |  4                   ../../include/kernel.s     43 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   debt]] memory note).  $05 = prodos.mod
+  503 |  4                   ../../include/kernel.s     44 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   today; $06 reserved for fat32.mod when
+  504 |  4                   ../../include/kernel.s     45 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   it lands.  Held empty in the interim
+  505 |  4                   ../../include/kernel.s     46 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   so heap layout doesn't shift again.
+  506 |  4                   ../../include/kernel.s     47 | Equivalence | 00 |         |    0 | 02/1000               | FGX_BANK_KMOD_LAST                    EQU              $06                  ; Update + bump KMEM_HEAP_FIRST_BANK in
+  507 |  4                   ../../include/kernel.s     48 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   alloc_state.s + KMEM_MAX_ARENAS in
+  508 |  4                   ../../include/kernel.s     49 | Comment     | 00 |         |    0 | 02/1000               |                                      ;   memmap.s in lockstep if extended.
+  509 |  4                   ../../include/kernel.s     50 | Comment     | 00 |         |    0 | 02/1000               |                                      ; $07          kernel heap (KMEM_HEAP_FIRST_BANK)
+  510 |  4                   ../../include/kernel.s     51 | Comment     | 00 |         |    0 | 02/1000               |                                      ; $08-$09      reserved for kernel expansion
+  511 |  4                   ../../include/kernel.s     52 | Comment     | 00 |         |    0 | 02/1000               |                                      ;              (future kernel modules /
+  512 |  4                   ../../include/kernel.s     53 | Comment     | 00 |         |    0 | 02/1000               |                                      ;              future M_IPC kernel-heap
+  513 |  4                   ../../include/kernel.s     54 | Comment     | 00 |         |    0 | 02/1000  

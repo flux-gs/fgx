@@ -1,0 +1,30 @@
+
+
+
+TOUCH(1)            UNIX Programmer's Manual               TOUCH(1)
+
+
+
+NAME
+     touch - update date last modified of a file
+
+SYNOPSIS
+     touch [ -c ] [ -f ] file ...
+
+DESCRIPTION
+     _T_o_u_c_h attempts to set the modified date of each _f_i_l_e.  If a
+     _f_i_l_e exists, this is done by reading a character from the
+     file and writing it back.  If a _f_i_l_e does not exist, an
+     attempt will be made to create it unless the -_c option is
+     specified.
+
+     This is the 2.11BSD _t_o_u_c_h adapted to FGX.  The -_f (force)
+     option is accepted but does nothing: a file that access(2)
+     does not report readable and writable is reported as
+     ``cannot touch'' instead of being made writable with
+     chmod(2) for the touch, as upstream does.
+
+SEE ALSO
+     date(1), stat(1)
+
+FGX                        2.11BSD port                          1

@@ -1,0 +1,65 @@
+{
+ "name": "pdmount",
+ "description": "A ProDOS VOLUME MOUNTS, AND WHAT IS ON IT READS BACK AS CADIUS WROTE IT.  /dev/sd1 is disk/pdscratch.po, a 2400 KB volume cadius built from tools/mkpdscratch.py's files, and /mnt an empty directory on the root.  pdmount drives the node layer through mount(2); the shell half then mounts through mount(8), which execs mount_prodos(8).\n\nWHAT EACH MARKER DISCRIMINATES:\n  PDRW      a writable mount(2) succeeds and unmounts: only mount_prodos keeps a mount read-only.\n  PDBUSYDEV the root's own device is refused with EBUSY before a byte of it is read.\n  PDMOUNT   a read-only mount succeeds.\n  PDSTAT    the exact line is asserted: type 10, 4800 blocks and 702 free are an INDEPENDENT count of the image's volume header and bitmap (Python over the raw bytes), so a statfs that reported the filesystem's own misreading would not match.\n  PDINO     the root's st_ino is its key block, 2, and is identical before and after the crossings: every walk into the mount reached the root's identity.\n  PDIDENT   two walks to one location reach ONE node, which PDINO cannot show (the number is read from the volume).  With the root held as cwd, mount(2) over /mnt must see a use count of 2 and answer EBUSY before its type lookup; a hash that built a second node would see 1 and answer MOUNT_NONE's ENODEV.  The same call from / is the positive control and must answer ENODEV.\n  PDHOLD    after forty crossings in and out of /mnt -- more than the 32-vnode pool -- a working directory inside keeps the mount busy: the root node's reference is real and none leaked on the way.\n  PDREL     leaving releases it and the unmount succeeds.\n  PDCYCLE   twenty mount/cross/unmount cycles, more than the fourteen-slot mount pool: a slot, device reference or hashed node an unmount failed to give back runs out here.\n  mounted read-only / mt=0   mount -t prodos, with neither -r nor -o write, reached mount_prodos(8), which mounted it read-only and said so.\n  Hello TREE f09 zlast   ls lists the volume directory's key block AND its continuation block, each name in the case GS/OS recorded for it (GS/OS Technical Note #8's mask at +$1C): Hello mixed, TREE a valid mask of all uppercase, and the rest, with no mask, lowercase -- the uppercase needles in `lacks' prove it.\n  PWD=/mnt/sub/inner   getwd walked `..' up out of INNER (parent_pointer a key block, and its own key block 4096, so an inode number built as (block<<4)|index truncates to 0, readdir's consumers skip the entry and getwd cannot find it) and SUB (parent_pointer a continuation block), matching each level by the d_ino readdir reported against the st_ino stat reported -- so `..', readdir numbering and getattr agree, and the walk crossed back out of the mount.  The cd was typed as /mnt/Sub/INNER: lookup folds.\n  deep file  a relative lookup from that directory.\n  PDSUM     size and 2.11BSD sum(1) of each file read in 700-byte pieces, and its st_mtime, against tools/mkpdscratch.py --sums (the bytes cadius was handed and the stamps the generator wrote): hello a seedling stamped 1990, f01 stamped 2019 as the year 119 GS/OS's ProDOS FST reads as 1900+119, sap a sapling with four HOLES, tree a tree past one index block.  `sub' is a directory whose stamp is only in its entry in a continuation block, and `.' the volume directory, stamped with its header's creation time; both answer EISDIR to a read.\n  .x errno=22  a name no ProDOS volume can hold is EINVAL.\n  m=        each PDSUM's permission bits are the access byte's: $E3 is 644, SAP's $01 is 444, a directory header's $C3 is 755.\n  PDUSUM    the same reads as uid 1: F02, whose access byte is $00, is EACCES (13) from open, and SAP, readable by all, reads.  Root reads both, which is ufs_access's super-user rule.\n  ext / ._ext  a GS/OS extended file: `ext' reads its data fork, and `._ext' is the AppleDouble file of its Finder info and resource fork, against tools/mkpdscratch.py --sums, whose header is built from RFC 1740 and whose Finder info is what GS/OS's HFS FST makes of type $B3 aux $DB07.  `._hello' is ENOENT: an ordinary file has no resource fork.\n  PDWALK    pdmount -w walks the volume: 2 directories, 17 files counting `._ext', their sizes, and every d_ino readdir reports equal to the st_ino stat reports -- `._ext' included -- with no inode number twice.\n  um=0      the unmount after all of it: nothing the reads took was leaked.\n\nThe `lacks' arms are the failure markers the program prints instead.",
+ "command": "sh /testdata/pdmount",
+ "boot_s": 45,
+ "timeout_s": 240,
+ "extra_hards": [
+  "disk/pdscratch.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "PDSTART",
+   "PDRW",
+   "PDBUSYDEV",
+   "PDMOUNT",
+   "PDSTAT type=10 blocks=4800 free=702 from=/dev/sd1",
+   "PDINO 2",
+   "PDIDENT",
+   "PDHOLD",
+   "PDREL",
+   "PDCYCLE",
+   "PDDONE",
+   "pd=0",
+   "writing needs -o write, mounted read-only",
+   "mt=0",
+   "Hello",
+   "TREE",
+   "f09",
+   "zlast",
+   "PWD=/mnt/sub/inner",
+   "deep file",
+   "PDSUM hello 27 47808 t=645457500 m=644",
+   "PDSUM sap 20000 1568 t=788918400 m=444",
+   "PDSUM tree 140000 35180 t=788918400 m=644",
+   "PDSUM .x errno=22",
+   "PDSUM ext 1500 61550 t=1107403500 m=644",
+   "PDSUM ._ext 782 17281 t=1107403500 m=644",
+   "PDSUM ._hello errno=2",
+   "PDSUM sub read errno=21 t=565315140 m=755",
+   "PDSUM . read errno=21 t=525960000 m=755",
+   "PDSUM f01 4 16443 t=1567359420 m=644",
+   "PDUSUM f02 errno=13",
+   "PDUSUM sap 20000 1568 t=788918400 m=444",
+   "PDWALK d=2 f=17 b=2076217 dup=0 bad=0 ns=0 sh=0 s=0",
+   "um=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "PDNO",
+   "not found",
+   "F09",
+   "ZLAST",
+   "getwd",
+   "PDWBAD",
+   "PDWDUP",
+   "HELLO",
+   "PDUSUM setuid"
+  ]
+ }
+}

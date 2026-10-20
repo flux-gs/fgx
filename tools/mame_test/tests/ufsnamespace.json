@@ -1,0 +1,20 @@
+{
+ "name": "ufsnamespace",
+ "description": "unlink(2), mkdir(2) and rmdir(2) AGAINST A MOUNTED UFS ROOT -- apple/fgx#318's second half, and the operations the legacy ProDOS resolver used to own.  All three answered `Input/output error' before this: the syscall layer had root hooks for stat and listdir only, and vfs_syscalls.c had no unlink, mkdir or rmdir at all -- the vnops existed (ufs_remove, ufs_mkdir, ufs_rmdir) with nothing above them.  THE ASSERTION IS THE DIRECTORY LISTING BEFORE AND AFTER, not an exit status, because every one of these failed SILENTLY at the shell in at least one intermediate state and a listing is the only thing that distinguishes `it worked' from `it said nothing'.  The needles are built by expansion for ufscwd's reason: screen_contains searches a ring that still holds the shell's echo of the command, so a literal name in the command line matches whether or not the operation ran.  THE HANG THIS CATCHES IS WORTH NAMING: the first cut of vfs_mkdir was a faithful port of Reno's, which lets VOP_MKDIR put the parent directory down.  THIS TREE'S ufs_mkdir, ufs_remove and ufs_rmdir all read ni_dvp and never touch its reference or its LOCKPARENT lock -- the caller owns it, exactly as vn_open records for ufs_maknode -- so the port held a lock it never released and the next lookup into that directory waited on it.  `mkdir /tmp/d1; ls /tmp' produced NO OUTPUT AT ALL, which is why this manifest asserts a listing rather than the absence of an error string: there was no error string.",
+ "command": "D=n1; mkdir /tmp/d$D; ls /tmp; rmdir /tmp/d$D; echo M=$D done",
+ "boot_s": 45,
+ "timeout_s": 40,
+ "exit_on_prompt": false,
+ "expect": {
+  "screen_contains": [
+   "dn1",
+   "M=n1 done"
+  ],
+  "screen_lacks": [
+   "Input/output error",
+   "not found",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

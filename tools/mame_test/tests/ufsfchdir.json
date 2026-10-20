@@ -1,0 +1,24 @@
+{
+  "name": "ufsfchdir",
+  "description": "fchdir(2) TAKES THE PROCESS BACK TO A DIRECTORY IT HELD OPEN, and until UFS 2.7 it answered ENOSYS from libc.  The stub said what would unblock it -- \"it needs the file table's vnode handed to vfs.mod's cwd table, which is a KFAR slot and a seam entry of its own.  The far bank has 86 bytes free, which is the whole reason this is a stub today\" -- and that figure was three campaigns old.  Ported from 4.3BSD-Reno kern/vfs_syscalls.c:433, split the way chdir(2) is: root_fchdir holds the descriptor in the far bank, vfs_fchdir installs the vnode in the module that owns the cwd table and vref/vrele.\n\nTHE DRIVER IS chmod(1) -R, WHICH IS THE REAL CALLER.  Its recursive walk saves the starting directory with open(\".\") and comes back to it with fchdir; a verbatim port carries that whether the system has the call or not, so before this it printed \"Can't fchdir() back to starting directory\" and the walk stopped where it stood.\n\nTHREE ARMS, AND THE CWD ONE IS THE SUBJECT.  `MODEOK' proves chmod did its own job on a file one level down, which needs the descent.  `CWDOK' is the return, and it comes OUT OF A FILE: it is written into fd1/m before chmod runs and read back afterwards through the RELATIVE path `cat fd1/m', which resolves only if the process is standing in /tmp again.  Asserting `pwd' would not do -- the command line contains `cd /tmp' and the harness echoes it, so the needle would match its own invocation -- and the marker is assembled from shell variables so the typed line cannot contain it either.  There is no test(1) on this image, which is what the first cut of this manifest tried.  The absent arm is chmod's own complaint, which is what the ENOSYS stub produced.\n\nMEASURED DISCRIMINATING: before the port, cr=1 and the fchdir message appeared.",
+  "command": "A=CWD; B=OK; cd /tmp; mkdir fd1; echo x > fd1/a; echo $A$B > fd1/m; /bin/chmod -R 640 fd1; echo cr=$?; ls -l fd1/a; cat fd1/m",
+  "boot_s": 45,
+  "timeout_s": 150,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 9
+  },
+  "expect": {
+    "screen_contains": [
+      "cr=0",
+      "-rw-r-----",
+      "CWDOK"
+    ],
+    "screen_lacks": [
+      "fchdir",
+      "Function not implemented",
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

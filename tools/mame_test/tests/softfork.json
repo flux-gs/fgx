@@ -1,0 +1,26 @@
+{
+ "name": "softfork",
+ "description": "Fork ACROSS a soft-frame recursion: recurse 8 deep in a function whose locals live in the dedicated soft bank (campaign 1.3), fork at the BOTTOM, have the child recurse 6 more levels, reap it, then check every parent frame on the way out.  Asserts SFOK and the ABSENCE of SFBAD so a corrupted parent frame fails loudly; =SFDONE comes from the parent shell so a hung machine cannot read as a pass.  WHAT IT DOES NOT PROVE, measured rather than assumed: disabling snapshot-fork's pair-1 copy of SE_SoftBank does NOT make this fail.  The reason is that a fork child inherits _fcc_sfp at the fork point and its frames grow DOWNWARD into unused space below the parent's live ones -- the overlap the snapshot would protect against does not arise on this path.  So this covers 'fork across a soft recursion works at all', which is worth having and was previously untested, but it is NOT the regression net for pair 1.  Building that needs a child that moves sfp back UP over the parent's frames -- a longjmp to an outer setjmp, which is what bsh does on error.  Do not read a green here as pair-1 coverage.   '=SFDONE' sits inside `sh -c '/testbin/softfork; echo =SFDONE'`, and that command is typed and echoed whether or not softfork did anything, exactly like mid40st's old 'RC='. Tracked in apple/fgx#36; rework to an expansion-built marker.  MARKER REBUILT 2026-08-08 (apple/fgx#36): this asserted '=SFDONE', which sat INSIDE the typed command, so the shell's echo of that command satisfied it whether or not softfork produced anything. mid40st passed on exactly this shape for as long as it existed and only went red when unrelated output pushed the echoed line out of the ring. The marker is now built by SHELL EXPANSION -- the command contains `$A$B`, never the literal -- and it carries the child's EXIT STATUS, so it asserts more than it used to: a crashed or signalled child fails it.  The status is the MEASURED contract, not a presumed 0: softfork exits 42, softexec 0, and heapkill 136 = TASK_EXIT_HEAPFULL, the death this probe deliberately opts into -- so asserting 0 there would have demanded the opposite of the behaviour under test.",
+ "command": "A=SF; B=DONE; sh -c '/testbin/softfork'; echo $A$B=$?",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "SFSTART",
+   "SFOK",
+   "SFDONE=42"
+  ],
+  "screen_lacks": [
+   "SFBAD",
+   "PANIC",
+   "stack overflow",
+   "heap exhausted"
+  ]
+ }
+}

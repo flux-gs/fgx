@@ -1,0 +1,857 @@
+                FGX2_MODE 2
+;---------------------------------------
+; fcc 0.0 — generated from arrowdotchain.c
+;---------------------------------------
+
+                MX      %00
+                FGX2_EXPORT main
+main            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #main_FRAMESIZE
+                DO      main_STKGUARD
+                BCC     main_stkovf
+                CMP     _fcc_stkfloor
+                BCS     main_stkok
+main_stkovf       JMP     _fcc_stkoflow
+                FIN
+main_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_ob
+                STA     _fcc_fpr0
+                LDA     _fcc_fpr0+2
+                STA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_fpr0
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDA     #1911
+                STA     [_fcc_fpr0]
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #4369
+                STA     [_fcc_fpr0]
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     #8738
+                STA     [_fcc_fpr0]
+                LDA     #13107
+                STA     _arrowdotchain_detached+0
+                LDA     #17476
+                STA     _arrowdotchain_detached+2
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_detached
+                STA     _fcc_fpr1
+                LDY     #6
+                STA     [_fcc_fpr0],Y
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr1+2
+                LDY     #8
+                STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     #21845
+                STA     _arrowdotchain_md+0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #26208
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #26209
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #26210
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #3
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     #26211
+                STA     [_fcc_fpr0]
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                STA     _fcc_fpr1
+                LDY     #10
+                STA     [_fcc_fpr0],Y
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr1+2
+                LDY     #12
+                STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr1+2
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_ob
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                STA     _arrowdotchain_bx+0
+                TAY
+                LDA     _fcc_ptr+2
+                STA     _arrowdotchain_bx+2
+                TYA
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #8738
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L0
+                LDA     #50
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L0
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #4369
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L1
+                LDA     #51
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L1
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                TAX
+                LDA     #8738
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L2
+                LDA     #52
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L2
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #4369
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L3
+                LDA     #53
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L3
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_ob
+                STA     _fcc_fpr0
+                LDA     _fcc_fpr0+2
+                STA     _fcc_img3
+                LDA     _fcc_fpr0
+                STA     _fcc_img2
+                LDA     _fcc_img3
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img2
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                TAX
+                LDA     #8738
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L4
+                LDA     #54
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L4
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_bx
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                TAX
+                LDA     #8738
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L5
+                LDA     #55
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L5
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_bx
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #1911
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L6
+                LDA     #56
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L6
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #6
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                TAX
+                LDA     #17476
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L7
+                LDA     #57
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L7
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #6
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #8
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #13107
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L8
+                LDA     #58
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L8
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #26210
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L9
+                LDA     #59
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L9
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #21845
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L10
+                LDA     #60
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L10
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     #2989
+                STA     [_fcc_fpr0]
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #2989
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L11
+                LDA     #61
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L11
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #4369
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L12
+                LDA     #62
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L12
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #1911
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L13
+                LDA     #63
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L13
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                LDA     #8738
+                STA     [_fcc_fpr0]
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     _fcc_fpr0+2
+                STA     _fcc_img1
+                LDA     _fcc_fpr0
+                STA     _fcc_img0
+                LDA     [_fcc_img0]
+                TAX
+                LDA     #26209
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L14
+                LDA     #64
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L14
+                LDA     _fcc_img1
+                STA     _fcc_ptr+2
+                LDA     _fcc_img0
+                PHA
+                LDA     #1
+                ASL
+                CLC
+                ADC     1,S
+                STA     _fcc_ptr
+                PLA
+                LDA     [_fcc_ptr]
+                TAX
+                LDA     #26210
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L15
+                LDA     #65
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L15
+                LDA     _fcc_img1
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img0
+                STA     _fcc_fpr0
+                LDA     #2748
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #2748
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L16
+                LDA     #66
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L16
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #0
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #26208
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L17
+                LDA     #67
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L17
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #_arrowdotchain_md
+                INC
+                INC
+                STA     _fcc_fpr0
+                LDA     #2
+                ASL
+                CLC
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                TAX
+                LDA     #26210
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _arrowdotchain_L18
+                LDA     #68
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_arrowdotchain_L18
+                LDA     #42
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+main_FRAMESIZE   EQU     12
+main_STKGUARD    EQU     0
+                FGX2_RELOC_COUNT 2

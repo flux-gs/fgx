@@ -1,0 +1,17 @@
+{
+ "name": "spawnenv",
+ "description": "libfgx's spawnv passes the current environment (environ, as 2.11BSD's pdp/sys/execv.s does): FGXENV is set with setenv(3) after exec, so it exists only in environ, and a spawnv'd sh must echo it; then spawnvp finds echo along PATH. Control: the old behaviour, spawnv passing libc's exec-time env block, prints 'child FGXENV=' with nothing after it, which this test calls red -- it discriminates because the variable is absent from the exec-time block by construction.",
+ "command": "/testbin/spawnenv",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "child FGXENV=ok",
+   "vp found",
+   "SPAWNENV done"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

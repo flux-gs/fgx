@@ -1,0 +1,20 @@
+{
+ "name": "gcprobe",
+ "description": "The paths into libc that go through a function pointer, where a link that drops unreachable library code (toolchain/src/ld/fgx_gc.py) could drop too much.  GC Q: qsort calls the program's comparator, which calls strcmp.  GC H: SIGALRM runs a handler installed with signal(3).  GC F: the first run writes /tmp/gc.out without closing it and exits; exit(3) flushes stdio through libc's _lc_flush_hook, and the second run (-r) reads the bytes back.",
+ "command": "/testbin/gcprobe; /testbin/gcprobe -r",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "GC Q apple banana cherry ok",
+   "GC H ok",
+   "GC F ok",
+   "GC VERDICT PASS"
+  ],
+  "screen_lacks": [
+   "GC VERDICT FAIL",
+   "FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

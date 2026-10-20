@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_three",
+ "description": "Concurrent fork (apple/fgx#494): a three-member image group: parent, child and grandchild each keep their own bytes across alternating sleeps.  The grandchild's last check needs a marker the parent writes after its own sleeps, so on a deferred-parent fork it prints FP THREE FAIL.",
+ "command": "/testbin/forkpair three",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "FP THREE ok"
+  ],
+  "screen_lacks": [
+   "FP THREE FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

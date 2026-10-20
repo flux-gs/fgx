@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_hwm",
+ "description": "Concurrent fork (apple/fgx#494): ps's heap high-water mark for a parked member is its own.  The child sleeps (parked); the parent raises its break by 8 KB and reads both marks through procs(2): they must differ.  On a deferred-parent fork the parent runs only after the child has exited, so the child has no record and FP HWM FAIL.",
+ "command": "/testbin/forkpair hwm",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "FP HWM ok"
+  ],
+  "screen_lacks": [
+   "FP HWM FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

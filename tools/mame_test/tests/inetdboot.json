@@ -1,0 +1,21 @@
+{
+ "name": "inetdboot",
+ "description": "inetd(8) comes up from /etc/rc at BOOT and serves without anyone starting it.  The command is `true' and the only typed line is `telnet localhost' -- no `inetd &' anywhere -- so reaching a login prompt inside the session proves the boot path armed the listener, selected on it, accepted, and spawned telnetd -i.  inetd prints nothing of its own to the console: it detaches through daemon(3) as upstream does, and `inetd: armed' is a -d line.  Neither needle can come from the typed line -- `Connected to localhost.' is telnet's answer to a listener that accepted, and `login:' is telnetd's, spawned by inetd.  It no longer stages a release-flavour rc: the test image ships the same /etc/rc as the release image now that the harness's boot estimate covers the longer rc (run.py BOOT_FRAMES_FRESH).  The shipped /etc/inetd.conf has ONE telnet line, bound to the wildcard, and this harness has no Ethernet card: so the session reaching login proves the wildcard listener serves loopback on its own, with no 127.0.0.1 line to answer for it (apple/fgx#363).",
+ "command": "true",
+ "exit_on_prompt": false,
+ "timeout_s": 180,
+ "post_gap_frames": 600,
+ "expect": {
+  "screen_contains": [
+   "Connected to localhost.",
+   "login:"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ },
+ "post_commands": [
+  "telnet localhost"
+ ]
+}

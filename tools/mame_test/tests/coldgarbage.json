@@ -1,0 +1,23 @@
+{
+  "name": "coldgarbage",
+  "description": "FGX boots on a machine whose RAM holds GARBAGE, not zeroes.  MAME zero-fills RAM at power-on and a real IIgs does not, so every cell the kernel reads before it writes reads 0 in the harness and garbage on hardware.  That difference has already shipped two defects -- _KZeroRegion's MVN into a dead bank $02 (dead keyboard, chardev registration failed) and apple/fgx#225's _fcc_stkfloor read before written (blank screen, layout lottery) -- and BOTH were found on hardware because nothing here could see them.  ram_poison_seed fills banks $00..$7F with a seeded LCG before the first instruction, which is what a cold power-on leaves.  IT COVERS THE BANK-0 LANGUAGE CARD TOO, both $D000 banks, by banking RAM in first: FGX_DP_KERNELC_IRQ ($00FA00) and FGX_STK_KIRQ ($00FB00..$00FCFF) live there, they are the newest boot-path state in the kernel, and a fill that skipped them would be green about the one region it had not tested.  Only the $C0xx soft switches are left alone, because writing those is not memory holding garbage.  The needle is built by shell expansion (A=ok; echo COLD=$A) so the typed command cannot contain it.",
+  "command": "sh",
+  "ram_poison_seed": 20260829,
+  "post_commands": [
+    "A=ok",
+    "echo COLD=$A"
+  ],
+  "post_gap_frames": 300,
+  "timeout_s": 400,
+  "exit_on_prompt": false,
+  "use_state": false,
+  "expect": {
+    "screen_contains": [
+      "COLD=ok"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

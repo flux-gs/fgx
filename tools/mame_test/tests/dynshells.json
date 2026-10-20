@@ -1,0 +1,10 @@
+{
+ "name": "dynshells",
+ "description": "THE SHELLS LINKED DYNAMICALLY (shared libc SP5 step 3).  ldd runs each shell's binder in full and shows it resolved against libc.so and libtermlib.so.  Neither shell references a libfgx export, so the dynamic link drops libfgx.so and no `-lfgx.1' line may appear.  Control: a pile or static binary makes ldd say `statically linked', which is what vi and tcsh answered before they were linked by fgx_dyn.  ldd prints a shell's name before it runs the binder, so a failed bind shows in what follows it: a library the binder cannot find prints `not found' (and exits 0), and an image that does not load makes ldd print `execution failed'.",
+ "command": "/bin/ldd /bin/vi /bin/tcsh",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": ["/bin/vi:", "/bin/tcsh:", "-lc.1 => /lib/libc.so.1.0", "-ltermlib.1 => /lib/libtermlib.so.1.0"],
+  "screen_lacks": ["statically linked", "execution failed", "not found", "-lfgx.1", "PANIC", "BRK"]
+ }
+}

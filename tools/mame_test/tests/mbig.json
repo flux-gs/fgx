@@ -1,0 +1,4 @@
+{"name":"mbig",
+ "description":"train-2 M-4 EXIT CRITERION: malloc(80000L) succeeds as a dedicated MM block and is usable across its bank crossing; free() routes the offset-0 big-block shape and the tombstoned row is reused. Gated since 2026-08-02 -- it was in NO gate, which is how issue #11 (heap 512 KB -> 19.7 KB, big malloc broken) landed green.",
+ "command":"/testbin/mbig","timeout_s":120,
+ "expect":{"screen_contains":["MB=P"]}}

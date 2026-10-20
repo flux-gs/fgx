@@ -1,0 +1,62 @@
+
+
+GETSOCKNAME(2)      UNIX Programmer's Manual      GETSOCKNAME(2)
+
+
+
+NAME
+     getsockname - get the local name of a socket
+
+SYNOPSIS
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+
+     int getsockname(s, name, namelen)
+     int s;
+     struct sockaddr *name;
+     int *namelen;
+
+DESCRIPTION
+     Getsockname returns the local address bound to socket s.  On
+     entry *namelen must give the size of the buffer name points
+     at; on return it holds the number of bytes written, which is
+     always sizeof(struct sockaddr_in).
+
+     Unlike getpeername(2) this does not require a connection.  A
+     socket that has not been named yet reports the wildcard --
+     port 0, and the interface address the machine happens to have
+     -- because a program that calls this to discover the port the
+     kernel picked has to be able to call it before there is a
+     peer.
+
+     The address is 127.0.0.1 for a loopback descriptor and the
+     machine's address on its s1 interface otherwise.  The port is
+     the socket's own local port: what bind(2) or listen(2) set, or
+     for a socket returned by accept(2), the port it was accepted
+     ON, which is what BSD reports and what an inetd child expects
+     to see.
+
+RETURN VALUE
+     0 on success.  On failure -1 is returned and errno is set.
+
+ERRORS
+     [EBADF]        s is not a valid descriptor.
+     [ENOTSOCK]     s is a file, not a socket.
+     [EINVAL]       *namelen is smaller than a sockaddr_in, or
+                    namelen is a null pointer.
+
+SEE ALSO
+     accept(2), bind(2), getpeername(2), ifconfig(8), socket(2)
+
+BUGS
+     The address reported for a wire socket is the interface's
+     current address, read when the call is made rather than
+     recorded when the socket was bound.  A machine whose lease
+     changes under a live connection therefore reports the new
+     address for a socket that is still carrying the old one.
+     FGX has one interface and static or long-lease addresses, so
+     this has not been worth a per-socket copy.
+
+
+
+Printed 8/18/26                                                 2

@@ -1,0 +1,10 @@
+{
+ "name": "ldctl_basic",
+ "description": "Shared libc SP4: SYS_LDCTL (syscall 8) with ld.mod loaded: acquire, grant, commit, the core arena, majors, lookup, the hook selector refused, the grant cap.",
+ "command": "/testbin/ldctl basic",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": ["LDC basic ok"],
+  "screen_lacks": ["LDC FAIL", "PANIC", "BRK"]
+ }
+}

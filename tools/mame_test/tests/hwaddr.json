@@ -1,0 +1,15 @@
+{
+  "name": "hwaddr",
+  "description": "/etc/hwaddr.conf IS READ, which it had not been since prodos.mod left the build (apple/fgx#356).  `_Ifnet_LoadHwaddr' read the file with the `Fs_Open'/`Fs_Read'/`Fs_Close' idiom its own header names -- and `Fs_Read' gates on FCB_StorageType, whose only writer went with the module, so it answered EBADF for every descriptor.  The caller reads a C=0 as END OF FILE, so the open succeeded, no bytes arrived, no override was applied, and NOTHING WAS PRINTED.  That is the shape worth a fixture: not a crash, a config file that silently does not exist.  THE NEEDLE IS THE MAC ITSELF.  `_Net_RegPrimary' logs `net: u2sN mac=...' by reading the record BACK after the override runs, so the address on screen is whatever won; 02:11:BD:00:00:07 is not derivable (the log formats the hex UPPERCASE, whatever the file spelled) from the slot or the card, so it can only come from the staged file.  MEASURED DISCRIMINATING: without the stage_files entry the same boot prints a derived MAC and this arm reports the needle missing.  THE CARD HAS TO BE FITTED -- `mame_slots' names uthernet2 -- because `_Ifnet_LoadHwaddr' is called from `_ProbeUthernet2' on detect, so a harness with no NIC never reaches the code this is about.  The command is a bare `true': every assertion is about what BOOT printed.",
+  "command": "true",
+  "boot_s": 45,
+  "timeout_s": 60,
+  "mame_slots": ["-sl1", "uthernet2"],
+  "stage_files": [
+    {"host": "tools/mame_test/fixtures/hwaddr.conf", "prodos_dir": "/FGX/etc", "name": "hwaddr.conf", "replace": true}
+  ],
+  "expect": {
+    "screen_contains": ["mac=02:11:BD:00:00:07"],
+    "screen_lacks": ["PANIC", "BRK"]
+  }
+}

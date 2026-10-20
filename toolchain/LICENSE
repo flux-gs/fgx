@@ -1,0 +1,42 @@
+BSD 2-Clause License
+
+Copyright (c) 2026 flux and the FGX contributors
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---
+
+This is the FGX C toolchain (fcc / fas / fgx_ld + the language runtime and
+libc). It is original work; it includes no third-party source.
+
+Some of fcc's design — notably the multibank far-pointer model and the
+linker's bank-consistency behavior — was informed by studying the ORCA
+development tools' source ("Opus ][: The Source", the ORCA/C compiler and
+linker, Copyright (c) Byte Works, Inc. / Mike Westerfield). That source is
+copyrighted and is NOT included or redistributed here: fcc ships independent
+implementations of the *concepts*, never ORCA code. See
+docs/decisions/orca-informed-decisions.md for the specific decisions and cites.
+
+Should any third-party (e.g. 2.11BSD) source ever be ported into this tree, it
+must carry an SPDX/FGX-Provenance header retaining the upstream copyright and be
+listed in docs/PROVENANCE.md — same rule as the parent FGX repo. fcc's own code
+is offered under the BSD-2-Clause license above.

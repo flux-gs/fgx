@@ -1,0 +1,3213 @@
+                FGX2_MODE 2
+;---------------------------------------
+; fcc 0.0 — generated from vfslayout.c
+;---------------------------------------
+
+                MX      %00
+                FGX2_EXPORT main
+main            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #main_FRAMESIZE
+                DO      main_STKGUARD
+                BCC     main_stkovf
+                CMP     _fcc_stkfloor
+                BCS     main_stkok
+main_stkovf       JMP     _fcc_stkoflow
+                FIN
+main_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     #64
+                TAX
+                LDA     #64
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L0
+                LDA     #1
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gdi
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gdi
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #12
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L1
+                LDA     #2
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L1
+                LDA     #100
+                TAX
+                LDA     #104
+                STA     _fcc_tmp_b
+                TXA
+                LDX     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L3
+                EOR     #$8000
+_vfslayout_L3
+                BMI     *+5
+                BRL     _vfslayout_L2
+                LDA     #3
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L2
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L4
+                LDA     #4
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L4
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #36
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #64
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                PHA
+                LDA     #100
+                STA     _fcc_tmp_b
+                PLA
+                LDX     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L6
+                EOR     #$8000
+_vfslayout_L6
+                BMI     *+5
+                BRL     _vfslayout_L5
+                LDA     #5
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L5
+                LDA     #100
+                TAX
+                LDA     #100
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L7
+                LDA     #6
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L7
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #8
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #8
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L8
+                LDA     #7
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L8
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #12
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L9
+                LDA     #8
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L9
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #16
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #16
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L10
+                LDA     #9
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L10
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #18
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L11
+                LDA     #43
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L11
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #20
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #20
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L12
+                LDA     #10
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L12
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #22
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #22
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L13
+                LDA     #11
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L13
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #24
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #24
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L14
+                LDA     #12
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L14
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #28
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #28
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L15
+                LDA     #13
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L15
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #32
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #32
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L16
+                LDA     #14
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L16
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                CLC
+                ADC     #36
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gin
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #36
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L17
+                LDA     #15
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L17
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L18
+                LDA     #16
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L18
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                INC
+                INC
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L19
+                LDA     #17
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L19
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #10
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #10
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L20
+                LDA     #18
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L20
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #14
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L21
+                LDA     #19
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L21
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #18
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #18
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L22
+                LDA     #20
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L22
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #22
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #22
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L23
+                LDA     #21
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L23
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #60
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #60
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L24
+                LDA     #22
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L24
+                LDA     #164
+                PHA
+                LDA     #60
+                TAX
+                LDA     #104
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L25
+                LDA     #23
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L25
+                LDA     #164
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                CLC
+                ADC     #60
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gvn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                STA     _fcc_tmp_b
+                PLA
+                SEC
+                SBC     _fcc_tmp_b
+                STA     1,S   ; fccstk d=0 b=1
+                TAX
+                LDA     #104
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L26
+                LDA     #24
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L26
+                LDA     #100
+                TAX
+                LDA     #100
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L27
+                LDA     #25
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L27
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L28
+                LDA     #26
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L28
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                CLC
+                ADC     #36
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #36
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L29
+                LDA     #27
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L29
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                CLC
+                ADC     #68
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #68
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L30
+                LDA     #28
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L30
+                LDA     #130
+                TAX
+                LDA     #130
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L31
+                LDA     #29
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L31
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gmn
+                CLC
+                ADC     #26
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gmn
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #26
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L32
+                LDA     #30
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L32
+                LDA     #2048
+                STA     gvn+0
+                TAX
+                LDA     #2048
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L33
+                LDA     #52
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L33
+                LDA     #8192
+                STA     gbf+0
+                TAX
+                LDA     #8192
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L34
+                LDA     #53
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L34
+                LDA     #$0100
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     gmn+20
+                TAY
+                LDA     _fcc_long_hi
+                STA     gmn+22
+                TYA
+                LDA     gmn+22
+                STA     _fcc_long_hi
+                LDA     gmn+20
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0100
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_ne
+                CMP     #0
+                BNE     *+5
+                BRL     _vfslayout_L35
+                LDA     #54
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L35
+                LDA     #1
+                STA     gsi+8
+                TAY
+                JSR     _fcc_long_from_int
+                LDA     _fcc_long_hi
+                STA     gsi+10
+                TYA
+                LDA     gsi+10
+                STA     _fcc_long_hi
+                LDA     gsi+8
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #1
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_ne
+                CMP     #0
+                BNE     *+5
+                BRL     _vfslayout_L36
+                LDA     #55
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L36
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L37
+                LDA     #48
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L37
+                LDA     #1024
+                TAX
+                LDA     #2048
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _vfslayout_L38
+                LDA     #49
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L38
+                LDA     #256
+                TAX
+                LDA     #512
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
+                BRL     _vfslayout_L39
+                LDA     #50
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L39
+                LDA     #1
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #256
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #512
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #1024
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #2048
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                TAX
+                LDA     #1
+                TAY
+                LDA     #2
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                TAY
+                LDA     #4
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                TAY
+                LDA     #256
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                TAY
+                LDA     #512
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                TAY
+                LDA     #1024
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                TAY
+                LDA     #2048
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L40
+                LDA     #51
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L40
+                LDA     #14
+                TAX
+                LDA     #14
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L41
+                LDA     #56
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L41
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L42
+                LDA     #57
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L42
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L43
+                LDA     #58
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L43
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                CLC
+                ADC     #8
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #8
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L44
+                LDA     #59
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L44
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gsi
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #12
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L45
+                LDA     #60
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L45
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L46
+                LDA     #61
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L46
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L47
+                LDA     #62
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L47
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L48
+                LDA     #63
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L48
+                LDA     #8
+                TAX
+                LDA     #8
+                TAY
+                LDA     #1
+                STA     _fcc_tmp_b
+                TYA
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L49
+                LDA     #64
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L49
+                LDA     #64
+                TAX
+                LDA     #64
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L50
+                LDA     #65
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L50
+                LDA     #16
+                TAX
+                LDA     #16
+                TAY
+                LDA     #1
+                STA     _fcc_tmp_b
+                TYA
+                SEC
+                SBC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L51
+                LDA     #66
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L51
+                LDA     #158
+                TAX
+                LDA     #158
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L52
+                LDA     #70
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L52
+                LDA     #128
+                TAX
+                LDA     #128
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L53
+                LDA     #71
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L53
+                LDA     #2
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L55
+                EOR     #$8000
+_vfslayout_L55
+                BMI     *+5
+                BRL     _vfslayout_L54
+                LDA     #72
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L54
+                LDA     #24
+                TAX
+                LDA     #24
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L56
+                LDA     #73
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L56
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L57
+                LDA     #74
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L57
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L58
+                LDA     #77
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L58
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                INC
+                INC
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L59
+                LDA     #78
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L59
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L60
+                LDA     #79
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L60
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L61
+                LDA     #80
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L61
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #8
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #8
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L62
+                LDA     #81
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L62
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #12
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L63
+                LDA     #82
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L63
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #16
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #16
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L64
+                LDA     #83
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L64
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                CLC
+                ADC     #20
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gfl
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #20
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L65
+                LDA     #84
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L65
+                LDA     #64
+                TAX
+                LDA     #3
+                TAY
+                LDA     #32
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L67
+                EOR     #$8000
+_vfslayout_L67
+                BMI     *+5
+                BRL     _vfslayout_L66
+                LDA     #75
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L66
+                LDA     #32
+                STA     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                TAX
+                LDA     #64
+                STA     _fcc_tmp_b
+                TXA
+                LDX     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L69
+                EOR     #$8000
+_vfslayout_L69
+                BPL     *+5
+                BRL     _vfslayout_L68
+                LDA     #76
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L68
+                LDA     #50
+                TAX
+                LDA     #50
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L70
+                LDA     #31
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L70
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                INC
+                INC
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L71
+                LDA     #32
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L71
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #22
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #22
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L72
+                LDA     #33
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L72
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #24
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #24
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L73
+                LDA     #34
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L73
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #28
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #28
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L74
+                LDA     #35
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L74
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #32
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #32
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L75
+                LDA     #44
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L75
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #38
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #38
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L76
+                LDA     #36
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L76
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #42
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #42
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L77
+                LDA     #45
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L77
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                CLC
+                ADC     #46
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gbf
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #46
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L78
+                LDA     #46
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L78
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L79
+                LDA     #47
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L79
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L80
+                LDA     #37
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L80
+                LDA     #4
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L81
+                LDA     #43
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L81
+                LDA     #64
+                TAX
+                LDA     #32
+                TAY
+                LDA     #14
+                STA     _fcc_tmp_b
+                TYA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _vfslayout_L83
+                EOR     #$8000
+_vfslayout_L83
+                BMI     *+5
+                BRL     _vfslayout_L82
+                LDA     #38
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L82
+                LDA     #64
+                JSR     _fcc_long_from_int
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #164
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_mul
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #14
+                JSR     _fcc_long_from_int
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #130
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_mul
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_add
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #16
+                JSR     _fcc_long_from_int
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #50
+                JSR     _fcc_long_from_int
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_mul
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_add
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$8000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_gts
+                CMP     #0
+                BNE     *+5
+                BRL     _vfslayout_L84
+                LDA     #39
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L84
+                LDA     #16
+                JSR     _fcc_long_from_int
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                ASL
+                ROL     _fcc_long_hi
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                TYA
+                JSR     _fcc_long_gts
+                CMP     #0
+                BNE     *+5
+                BRL     _vfslayout_L85
+                LDA     #40
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L85
+                LDA     #1024
+                TAX
+                LDA     #1024
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L86
+                LDA     #41
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L86
+                LDA     #16
+                TAX
+                LDA     #16
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L87
+                LDA     #77
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L87
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L88
+                LDA     #78
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L88
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                CLC
+                ADC     #4
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L89
+                LDA     #79
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L89
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L90
+                LDA     #80
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L90
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                CLC
+                ADC     #10
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #10
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L91
+                LDA     #81
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L91
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                CLC
+                ADC     #12
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #12
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L92
+                LDA     #82
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L92
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                CLC
+                ADC     #14
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #14
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L93
+                LDA     #83
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L93
+                LDA     #6
+                TAX
+                LDA     #6
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L94
+                LDA     #84
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L94
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gui
+                STA     _fcc_fpr1
+                LDA     _fcc_fpr0
+                SEC
+                SBC     _fcc_fpr1
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                CMP     _fcc_tmp_b
+                BNE     *+5
+                BRL     _vfslayout_L95
+                LDA     #85
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vfslayout_L95
+                LDA     #42
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+main_FRAMESIZE   EQU     2
+main_STKGUARD    EQU     0
+                FGX2_RELOC_COUNT 2

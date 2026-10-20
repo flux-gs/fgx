@@ -1,0 +1,13 @@
+{
+  "name": "tarlinks",
+  "description": "tar(1) carries links and modes, as 2.11BSD's does (apple/fgx#530).  A directory holding a mode-600 file, a hard link to it and a symbolic link is archived, removed and extracted with `p'.  CREATE: lstat(2) sees the symlink, readlink(2) stores its target (`symbolic link to f'), and the st_nlink table stores the second name of the file as a link to the first (`link to t/').  EXTRACT: symlink(2) and link(2) remake them (`symbolic link to f', `linked to t/'), and `p' chmods the file back to 600, so ls shows `-rw-------' with a link count of 2 and the link pointing at f; cat through the symlink reads the file.  Before the re-port every name was stat(2)ed, so the archive held two copies of the file and a third through the symlink, extract skipped link members with a warning, and `p' was parsed and never read.  A probe, not a gate test.",
+  "command": "cd /tmp; mkdir t; P=tar; X=ok; echo $P$X > t/f; ln t/f t/h; ln -s f t/s; chmod 600 t/f; tar cvf a.tar t; rm -r t; tar xpvf a.tar; ls -l t; cat t/s; rm -r t; rm a.tar; sync",
+  "boot_s": 45,
+  "timeout_s": 120,
+  "exit_on_prompt": {"sentinel": "fgx#", "count_delta": 14},
+  "expect": {
+    "screen_contains": ["a t/s symbolic link to f", "link to t/", "x t/s symbolic link to f", "linked to t/", "-rw-------  2", "s -> f", "tarok"],
+    "screen_lacks": ["skipped", "PANIC", "BRK", "not found", "can't"],
+    "check_script": "ufsfsck_check.py"
+  }
+}

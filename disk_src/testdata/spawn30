@@ -1,0 +1,47 @@
+# 30 SPAWNS, ONE LINE OF OUTPUT.  apple/fgx#260.
+#
+# Every `echo' here is a real spawn -- echo is not a Bourne builtin -- and the
+# thirty spawns ARE the churn these tests exist to create.  The thirty LINES
+# are not: b3park reads two `ps' tables out of the 100-row console ring and
+# these pushed the first one out of it, which the checker then reported as
+# `sleep is missing from a ps table' -- a stack-ownership failure for a buffer
+# that overflowed.
+#
+# So the spawns stay and the output goes.  All three users of this file
+# (b3park, spawn30dot, spawn30sh) assert `=S30' and nothing else, so the last
+# line still says the storm completed -- and it says it from the THIRTIETH
+# spawn, so a storm that died at twenty still cannot pass.
+#
+# The redirection adds an open/close per spawn.  That is more syscall traffic
+# during the churn, not less, which is the safe direction for a test about
+# what happens to a parked task while the machine is busy.
+echo =S01 > /dev/null
+echo =S02 > /dev/null
+echo =S03 > /dev/null
+echo =S04 > /dev/null
+echo =S05 > /dev/null
+echo =S06 > /dev/null
+echo =S07 > /dev/null
+echo =S08 > /dev/null
+echo =S09 > /dev/null
+echo =S10 > /dev/null
+echo =S11 > /dev/null
+echo =S12 > /dev/null
+echo =S13 > /dev/null
+echo =S14 > /dev/null
+echo =S15 > /dev/null
+echo =S16 > /dev/null
+echo =S17 > /dev/null
+echo =S18 > /dev/null
+echo =S19 > /dev/null
+echo =S20 > /dev/null
+echo =S21 > /dev/null
+echo =S22 > /dev/null
+echo =S23 > /dev/null
+echo =S24 > /dev/null
+echo =S25 > /dev/null
+echo =S26 > /dev/null
+echo =S27 > /dev/null
+echo =S28 > /dev/null
+echo =S29 > /dev/null
+echo =S30

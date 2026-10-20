@@ -1,0 +1,7 @@
+# ntpd(8) translation units, upstream NTPDOBJ less ntpd.o, the entry point.
+src/userland/ntp/ntpsubs.c
+src/userland/ntp/ntp_proto.c
+src/userland/ntp/ntp_sock.c
+src/userland/ntp/ntp_adjust.c
+src/userland/ntp/read_local.c
+src/userland/ntp/read_psti.c

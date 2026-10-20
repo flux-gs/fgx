@@ -1,0 +1,59 @@
+{
+  "metric": "us_per_call (emulated; fast-mode; delta is authoritative)",
+  "results": {
+    "bsearch": {
+      "us_per_call": 1918.892,
+      "iters": 2000
+    },
+    "djb2Hash": {
+      "us_per_call": 9410.56,
+      "iters": 2000
+    },
+    "dotProduct": {
+      "us_per_call": 5902.456,
+      "iters": 2000
+    },
+    "fib": {
+      "us_per_call": 11060.229,
+      "iters": 2000
+    },
+    "memcmp": {
+      "us_per_call": 3388.87,
+      "iters": 2000
+    },
+    "popcount": {
+      "us_per_call": 2387.911,
+      "iters": 2000
+    },
+    "strLen": {
+      "us_per_call": 1428.788,
+      "iters": 2000
+    },
+    "strcpy": {
+      "us_per_call": 3346.817,
+      "iters": 2000
+    },
+    "sumOfSquares": {
+      "us_per_call": 11189.274,
+      "iters": 2000
+    },
+    "t12_divmod": {
+      "us_per_call": 676.417,
+      "iters": 2000
+    },
+    "t12_mul": {
+      "us_per_call": 246.325,
+      "iters": 2000
+    },
+    "t12_shift": {
+      "us_per_call": 115.99,
+      "iters": 2000
+    }
+  },
+  "skipped": [
+    {
+      "stem": "bubbleSort",
+      "why": "no marker / timeout"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "ufsmodules",
+  "description": "EVERY MODULE /etc/modload.conf NAMES IS UP ON A UFS ROOT, which is the half of Phase 2's gate that says 'no ProDOS module loaded at all'.  The kernel announces `mod: <name> loaded' from Mod_RegisterStreamed for every module however it arrived, so these five needles are the same evidence whether the KERNEL read modload.conf or userland ran modload(8) -- which is the point, because that is exactly the transition this test is here to survive.  THE NEEDLES CANNOT COME FROM THE COMMAND: they are kernel announces printed during boot, before anything is typed, and the manifest's command is a bare prompt-reacher.  WHAT IT DISCRIMINATES, measured 2026-09-03: on disk/fgxroot.fs only vfs, ufs and ufsdir appear -- they are segments of /fgxunix and delivered by the boot program -- and all five of these are ABSENT, because Mod_LoadConf runs in the kernel (main.s:692) and reads through Fs_ReadN, which answers EBADF for a root descriptor.  The consequence is visible two lines further down the same boot log as `dhclient: no network interface' and `inetd: telnet/tcp: socket: Function not implemented'.  On disk/fgx.po the same five are present, so the assertion is not merely absent-on-both.  apple/fgx#309 made SYS_MODLOAD able to install them from userland; this test is what says whether anything does.\n\nTHE MODULE LINE IS `module: <name> loaded' SINCE 2026-09-06, and it is the KERNEL's -- printed only after mod_init returned success.  modload(8) used to print a second line about the same event, in the conf file's spelling (SERIAL) rather than the module's own (serial); it is silent on success now, as every other tool on this volume is.",
+  "command": "echo M=$?",
+  "boot_s": 45,
+  "timeout_s": 60,
+  "expect": {
+    "screen_contains": [
+      "module: serial loaded",
+      "module: bpf loaded",
+      "module: net loaded",
+      "module: ramdisk loaded",
+      "module: pty loaded",
+      "M=0"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

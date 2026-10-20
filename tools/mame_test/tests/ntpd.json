@@ -1,0 +1,18 @@
+{
+ "name": "ntpd",
+ "description": "ntpd(8) detaches, reads /etc/ntp.conf and stays up: ps lists a process named ntpd (the marker is built only then, since its log lines also carry the name), and its log shows it resolving each configured server.  /etc/rc starts it only when /etc/netstart brought the network up, and the harness has no network card, so the command starts it; the servers are unknown here.  ntpdc(8) cannot reach it over lo0: the loopback transport carries TCP only.",
+ "command": "/sbin/ntpd; sleep 5; ps ax | grep 'ntp[d]$' > /tmp/p; test -s /tmp/p && echo NTPD''UP",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "NTPDUP",
+   "time.apple.com: unknown host"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "can't open",
+   "bind() fails"
+  ]
+ }
+}

@@ -1,0 +1,63 @@
+
+
+W(1)                UNIX Programmer's Manual                   W(1)
+
+
+
+NAME
+     w - who is on and what they are doing
+
+SYNOPSIS
+     w [ -hlsuw ] [ user ]
+
+DESCRIPTION
+     _W prints a summary of the current activity on the system,
+     beginning with a header line showing the current time, how
+     long the system has been up, and the number of users logged
+     in.  The following entries are then printed for each user:
+     login name, the terminal name, the time the user logged on,
+     and the command line of the most recent process on that
+     terminal.
+
+     _U_p_t_i_m_e is the same program under another name: invoked as
+     _u_p_t_i_m_e (or with -u) it prints the header line and stops.
+
+     The following options may be used:
+
+     -h   Suppress the heading.
+
+     -l   Give the long form output.  This is the default.
+
+     -s   Give a short form output.  The terminal name is
+          abbreviated and the login time is omitted.
+
+     -u   Print the heading line only, as _u_p_t_i_m_e does.
+
+     -w   Print the full listing, as _w does.
+
+     If a _u_s_e_r name is given, output is restricted to that user.
+
+FILES
+     /etc/utmp     the login accounting file
+
+SEE ALSO
+     who(1), ps(1), utmp(5)
+
+BUGS
+     There are no idle, JCPU or PCPU columns, and the heading
+     carries no load average, because this system measures none
+     of those.  A terminal's last-input time is not recorded, no
+     per-process CPU time is kept, and the scheduler holds no
+     run-queue average.  Columns of zeroes would read as real
+     measurements, so they are omitted rather than filled in.
+
+     The most recent process on a terminal is chosen by process
+     number alone.  Upstream prefers a process that is not
+     ignoring interrupts, which needs a signal-state field the
+     process record does not carry, so a backgrounded job can be
+     reported where its shell would be more useful.
+
+     A login name longer than eight characters is truncated in
+     the accounting record and therefore here; see utmp(5).
+
+FGX                            2.11BSD                           1

@@ -1,0 +1,39 @@
+
+
+HWADDR.CONF(5)       UNIX Programmer's Manual      HWADDR.CONF(5)
+
+
+
+NAME
+     hwaddr.conf - per-slot Ethernet address overrides
+
+DESCRIPTION
+     The file /etc/hwaddr.conf assigns a MAC address to a card
+     slot.  The kernel reads it at device initialisation, after the
+     interface is registered.  Each line is:
+
+          slot   aa:bb:cc:dd:ee:ff
+
+     as in
+
+          1      00:08:DC:F6:00:05
+
+     Fields are separated by spaces or tabs.  Blank lines, lines
+     beginning with `#', and malformed lines are silently ignored,
+     leaving the derived default in place.  A missing file is not
+     an error.
+
+     A slot with no entry gets a derived default of
+     00:08:DC:F6:00:<slot>.  That is stable for one machine but
+     IDENTICAL ACROSS MACHINES, so two FGX systems on the same
+     network segment collide.  Pin a unique address here on each.
+
+FILES
+     /etc/hwaddr.conf
+
+SEE ALSO
+     ifconfig(8)
+
+
+
+Printed 8/8/26                                                 5

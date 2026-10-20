@@ -1,0 +1,106 @@
+INIT(8)             UNIX Programmer's Manual             INIT(8)
+
+
+
+NAME
+     init - process control initialization
+
+SYNOPSIS
+     init
+
+DESCRIPTION
+     Init is the first userland process, pid 1.  The kernel starts
+     it at boot; nothing starts it afterwards.
+
+     Init first changes directory to /root, then runs
+
+          sh /etc/rc
+
+     and waits for it to finish.  The whole of system startup
+     happens there -- notably /etc/netstart, where dhclient
+     acquires a lease -- so no terminal is offered until it is
+     done.  A missing or failing /etc/rc is not fatal; init
+     carries on.
+
+     Init then reads /etc/ttys (see ttys(5)) and builds a table of
+     every line marked "on".  For each it runs that line's getty
+     command and remembers the pid.  Thereafter init waits for
+     children to exit.  When a reaped pid matches a line, that
+     line's command is started again; a pid that matches no line
+     is an orphan reparented to init and is simply reaped.
+
+     The console line is started with init's own file descriptors,
+     which already are the console.  Every other line is opened as
+     /dev/<name> onto the child's descriptors 0, 1 and 2 before
+     the command runs, so getty(8) opens nothing itself.
+
+     A line whose command is a bare shell -- which is what the
+     console line ships as -- is given PATH, HOME and TERM, since
+     no login(1) runs in between to build them.  A line that runs
+     getty(8) gets its environment from login(1) instead.
+
+     Init exits when no line is left to keep alive.  Since init
+     has no parent, the kernel halts the machine.
+
+RESPAWN THROTTLE
+     A command that exits immediately would otherwise be started
+     forever.  If a line is started more than five times inside
+     sixty seconds, init disables it and reports
+
+          init: <line>: '<cmd>' respawning too fast -- line disabled
+
+     A disabled line is never started again.  If that leaves no
+     line running, init exits and the machine halts, rather than
+     spinning invisibly.
+
+SIGNALS
+     SIGTERM shuts the system down in an orderly way.  Init reports
+
+          init: shutting down
+
+     stops respawning, hangs up every line still running, calls
+     sync(2), and exits -- and since init has no parent, that
+     exit is what halts the machine.  Nothing else needs to sync(2)
+     before signalling init.
+
+     SIGHUP re-reads /etc/ttys and merges it into the running set
+     rather than rebuilding it:
+
+     o   a line that is unchanged is left strictly alone, session
+         and all;
+
+     o   a line that is new, or whose command changed, is started
+         (the old command's child is hung up first);
+
+     o   a line that has left the file, or that flipped to "off",
+         has its child hung up and is retired, with
+
+              init: <line>: no longer enabled
+
+     A SIGHUP also clears the respawn throttle on every line still
+     listed "on", so a line disabled by the throttle can be brought
+     back by fixing its command and signalling init -- no reboot.
+
+     Lines are hung up with SIGHUP, not SIGTERM.  An interactive
+     Bourne shell ignores SIGTERM deliberately (sh(1) treats signal
+     15 as uncatchable-by-accident for a login shell), so SIGTERM
+     against a shell line does nothing at all; SIGHUP is both the
+     signal it honours and the correct meaning, since the line is
+     going away.
+
+     A signal arriving while /etc/rc is still running is not caught;
+     SIGTERM there keeps its default action of terminating init.
+
+FILES
+     /etc/rc               system startup script
+     /etc/ttys             lines and the programs to run on them
+
+SEE ALSO
+     getty(8), login(1), sh(1), ttys(5), signal(2)
+
+BUGS
+     There is no single-user mode.
+
+
+
+Printed 8/4/26                                                 8

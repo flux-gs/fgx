@@ -1,0 +1,465 @@
+{
+ "milestones": [
+  {
+   "label": "0.0 pre-campaign",
+   "date": "2026-08-02",
+   "commit": "2d69b24ca",
+   "workloads": {
+    "tools": {
+     "768": 272,
+     "1024": 540,
+     "8192": 558
+    },
+    "shdot": {
+     "768": 168,
+     "8192": 7150
+    },
+    "tcsh": {
+     "768": 140,
+     "8192": 368,
+     "14592": 2942
+    },
+    "pipe": {
+     "768": 260,
+     "1024": 540,
+     "8192": 368
+    },
+    "tar": {
+     "768": 140,
+     "4608": 1204,
+     "8192": 368
+    }
+   },
+   "attribution": {
+    "14592": "tcsh",
+    "8192": "?",
+    "4608": "tar",
+    "1024": "grep, ls, wc",
+    "768": "echo, grep, ls, wc"
+   }
+  },
+  {
+   "label": "0.3 real call-site arg bytes",
+   "date": "2026-08-02",
+   "commit": "fddcf786b",
+   "workloads": {
+    "tools": {
+     "768": 272,
+     "1024": 540,
+     "8192": 558
+    },
+    "shdot": {
+     "768": 168,
+     "8192": 7150
+    },
+    "tcsh": {
+     "768": 140,
+     "8192": 368,
+     "14336": 2942
+    },
+    "pipe": {
+     "768": 272,
+     "1024": 540,
+     "8192": 368
+    },
+    "tar": {
+     "768": 140,
+     "4608": 1202,
+     "8192": 368
+    }
+   },
+   "attribution": {
+    "14336": "tcsh",
+    "8192": "?",
+    "4608": "tar",
+    "1024": "grep, ls, wc",
+    "768": "echo, grep, ls, wc"
+   }
+  },
+  {
+   "label": "1.3 ON (bsh, dedicated bank)",
+   "date": "2026-08-03",
+   "commit": "279cd85d5",
+   "workloads": {
+    "tools": {
+     "768": 272,
+     "1024": 540,
+     "6912": 310
+    },
+    "shdot": {
+     "768": 168,
+     "6912": 1308
+    },
+    "tcsh": {
+     "768": 140,
+     "6912": 220,
+     "14336": 2944
+    },
+    "pipe": {
+     "768": 260,
+     "1024": 540,
+     "6912": 220
+    },
+    "tar": {
+     "768": 140,
+     "4608": 1200,
+     "6912": 220
+    }
+   },
+   "attribution": {
+    "14336": "tcsh",
+    "6912": "?",
+    "4608": "tar",
+    "1024": "grep, ls, wc",
+    "768": "echo, grep, ls, wc"
+   }
+  },
+  {
+   "label": "1.3 ON (bsh, dedicated bank)",
+   "date": "2026-08-03",
+   "commit": "279cd85d5",
+   "workloads": {
+    "tools": {
+     "768": 276,
+     "1024": 540,
+     "6912": 310
+    },
+    "shdot": {
+     "768": 168,
+     "6912": 1308
+    },
+    "tcsh": {
+     "768": 140,
+     "6912": 220,
+     "14336": 2944
+    },
+    "pipe": {
+     "768": 260,
+     "1024": 542,
+     "6912": 220
+    },
+    "tar": {
+     "768": 140,
+     "4608": 1204,
+     "6912": 220
+    }
+   },
+   "attribution": {
+    "14336": "tcsh",
+    "6912": "?",
+    "4608": "tar",
+    "1024": "grep, ls, wc",
+    "768": "echo, grep, ls, wc"
+   }
+  },
+  {
+   "label": "#412 arena 165, stacklet S0 workloads",
+   "date": "2026-09-13",
+   "commit": "b8ba9f18d",
+   "workloads": {
+    "tools": {
+     "768": 298,
+     "1280": 230,
+     "2048": 934,
+     "3328": 1470,
+     "4608": 344,
+     "20480": 678
+    },
+    "shdot": {
+     "768": 252,
+     "1280": 230,
+     "2048": 934,
+     "4608": 1342,
+     "20480": 678
+    },
+    "tcsh": {
+     "768": 226,
+     "1280": 230,
+     "2048": 934,
+     "4608": 338,
+     "20480": 2568
+    },
+    "pipe": {
+     "768": 286,
+     "1024": 284,
+     "1280": 230,
+     "2048": 934,
+     "3328": 1470,
+     "4608": 338,
+     "20480": 678
+    },
+    "tar": {
+     "768": 226,
+     "1280": 230,
+     "2048": 934,
+     "4608": 338,
+     "6656": 1312,
+     "20480": 678
+    },
+    "tcshwork": {
+     "768": 226,
+     "1280": 230,
+     "2048": 934,
+     "4608": 338,
+     "20480": 3254
+    },
+    "tcshi": {
+     "768": 226,
+     "1280": 230,
+     "2048": 934,
+     "3328": 1394,
+     "4608": 338,
+     "20480": 3346
+    },
+    "vi": {
+     "768": 226,
+     "1280": 230,
+     "2048": 934,
+     "4608": 338,
+     "6144": 624,
+     "20480": 678
+    }
+   },
+   "attribution": {
+    "1024": "cat, grep, modload, wc",
+    "1280": "cat, dhclient, echo, grep, modload, wc",
+    "2048": "mount",
+    "20480": "fsck, tcsh",
+    "3328": "ls",
+    "4608": "sh",
+    "6144": "vi",
+    "6656": "tar",
+    "768": "cat, echo, modload, wc"
+   }
+  }
+ ],
+ "depth_scans": [
+  {
+   "label": "0.3 (pre-phase-1)",
+   "date": "2026-08-02",
+   "commit": "a610ebb48",
+   "points": {
+    "10": 1716,
+    "20": 2914,
+    "35": 4730,
+    "55": 7150
+   },
+   "bytes_per_command": 120.8,
+   "intercept": 508
+  },
+  {
+   "label": "1.1 (plumbing, predicate off)",
+   "date": "2026-08-02",
+   "commit": "2d51ea910",
+   "points": {
+    "10": 1704,
+    "20": 2914,
+    "35": 4730,
+    "55": 7150
+   },
+   "bytes_per_command": 121.0,
+   "intercept": 494
+  },
+  {
+   "label": "1.3 soft frames ON (bsh, all 52)",
+   "date": "2026-08-02",
+   "commit": "70879da9a",
+   "points": {
+    "10": 452,
+    "20": 642,
+    "35": 926,
+    "55": 1306
+   },
+   "bytes_per_command": 19.0,
+   "intercept": 262
+  }
+ ],
+ "reach_scans": [
+  {
+   "label": "0.3 (pre-phase-1)",
+   "date": "2026-08-02",
+   "commit": "62e5187ab",
+   "programs": {
+    "sh": {
+     "functions": 127,
+     "max_frame": 104,
+     "own": 109,
+     "args": 20,
+     "mints": 26,
+     "excess": 7,
+     "worst_excess": "_name_namwalk(0) reaches 7",
+     "window": 257,
+     "unexpected_fb": []
+    },
+    "tcsh": {
+     "functions": 569,
+     "max_frame": 2068,
+     "own": 207,
+     "args": 28,
+     "mints": 638,
+     "excess": 9,
+     "worst_excess": "func(2) reaches 11",
+     "window": 2229,
+     "unexpected_fb": []
+    },
+    "tar": {
+     "functions": 36,
+     "max_frame": 512,
+     "own": 141,
+     "args": 20,
+     "mints": 21,
+     "excess": 5,
+     "worst_excess": "readtape(4) reaches 9",
+     "window": 665,
+     "unexpected_fb": []
+    },
+    "grep": {
+     "functions": 15,
+     "max_frame": 28,
+     "own": 19,
+     "args": 16,
+     "mints": 3,
+     "excess": 3,
+     "worst_excess": "execute(6) reaches 9",
+     "window": 177,
+     "unexpected_fb": []
+    },
+    "ls": {
+     "functions": 15,
+     "max_frame": 148,
+     "own": 157,
+     "args": 24,
+     "mints": 15,
+     "excess": 9,
+     "worst_excess": "fmtlstuff(148) reaches 157",
+     "window": 305,
+     "unexpected_fb": []
+    }
+   }
+  },
+  {
+   "label": "1.1 + libc pile (corrected scan)",
+   "date": "2026-08-02",
+   "commit": "721b0c26c",
+   "programs": {
+    "sh": {
+     "functions": 331,
+     "max_frame": 138,
+     "own": 139,
+     "args": 26,
+     "mints": 57,
+     "excess": 7,
+     "worst_excess": "_name_namwalk(0) reaches 7",
+     "window": 297,
+     "unexpected_fb": []
+    },
+    "tcsh": {
+     "functions": 783,
+     "max_frame": 2068,
+     "own": 207,
+     "args": 28,
+     "mints": 669,
+     "excess": 9,
+     "worst_excess": "_glob_glob3(20) reaches 29",
+     "window": 2229,
+     "unexpected_fb": []
+    },
+    "tar": {
+     "functions": 243,
+     "max_frame": 512,
+     "own": 141,
+     "args": 26,
+     "mints": 52,
+     "excess": 6,
+     "worst_excess": "utimes(20) reaches 26",
+     "window": 671,
+     "unexpected_fb": []
+    },
+    "grep": {
+     "functions": 222,
+     "max_frame": 138,
+     "own": 139,
+     "args": 26,
+     "mints": 34,
+     "excess": 6,
+     "worst_excess": "utimes(20) reaches 26",
+     "window": 297,
+     "unexpected_fb": []
+    },
+    "ls": {
+     "functions": 222,
+     "max_frame": 148,
+     "own": 157,
+     "args": 26,
+     "mints": 46,
+     "excess": 9,
+     "worst_excess": "fmtlstuff(148) reaches 157",
+     "window": 307,
+     "unexpected_fb": []
+    }
+   }
+  },
+  {
+   "label": "1.3 enabled for bsh (post-merge)",
+   "date": "2026-08-03",
+   "commit": "7d0905833",
+   "programs": {
+    "sh": {
+     "functions": 332,
+     "max_frame": 138,
+     "own": 139,
+     "args": 26,
+     "mints": 34,
+     "excess": 7,
+     "worst_excess": "_name_namwalk(0) reaches 7",
+     "window": 297,
+     "unexpected_fb": []
+    },
+    "tcsh": {
+     "functions": 784,
+     "max_frame": 2068,
+     "own": 207,
+     "args": 28,
+     "mints": 669,
+     "excess": 9,
+     "worst_excess": "_glob_glob3(20) reaches 29",
+     "window": 2229,
+     "unexpected_fb": []
+    },
+    "tar": {
+     "functions": 244,
+     "max_frame": 512,
+     "own": 141,
+     "args": 26,
+     "mints": 52,
+     "excess": 6,
+     "worst_excess": "utimes(20) reaches 26",
+     "window": 671,
+     "unexpected_fb": []
+    },
+    "grep": {
+     "functions": 223,
+     "max_frame": 138,
+     "own": 139,
+     "args": 26,
+     "mints": 34,
+     "excess": 6,
+     "worst_excess": "utimes(20) reaches 26",
+     "window": 297,
+     "unexpected_fb": []
+    },
+    "ls": {
+     "functions": 223,
+     "max_frame": 148,
+     "own": 157,
+     "args": 26,
+     "mints": 46,
+     "excess": 9,
+     "worst_excess": "fmtlstuff(148) reaches 157",
+     "window": 307,
+     "unexpected_fb": []
+    }
+   }
+  }
+ ]
+}

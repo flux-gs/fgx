@@ -1,0 +1,16 @@
+# Small programs packed; one goes; twenty-five more texts overflow the
+# sixteen-entry table, so unused placed texts are reclaimed around the
+# running one, which keeps running; then a fresh exec.
+/sbin/update &
+/bin/sleep 600 &
+S=$!
+/testbin/dyntrue && echo DYN''OK
+echo PACK''ED
+kill $S
+/bin/true; /bin/false; /bin/echo x; /bin/pwd; /bin/date; /bin/hostname
+/bin/uname; /bin/id; /bin/basename x; /bin/dirname x/y; /bin/printenv HOME
+/bin/sync; /bin/expr 1; /bin/test 1; /bin/cal 1 2000; /bin/df; /bin/who
+/bin/ls /; /bin/wc </dev/null; /bin/od </dev/null; /bin/head </dev/null
+/bin/tr a b </dev/null; /bin/uniq </dev/null; /bin/stat /; /bin/arch
+ps | /bin/grep update
+/bin/sleep 1 && echo SLE''PT

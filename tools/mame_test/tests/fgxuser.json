@@ -1,0 +1,61 @@
+{
+ "name": "fgxuser",
+ "description": "THE UNPRIVILEGED TEST ACCOUNT LOGS IN, OWNS WHAT IT WRITES, AND CANNOT GIVE ITSELF ROOT.  apple/fgx#413, #414, #415.\n\n/etc/passwd carries `fgx' (uid 100, group staff, member of wheel, /bin/tcsh, password `fgx', home /home/fgx) so that there is a way to BE somebody other than root on this machine.  idsu already reaches a non-privileged shell through `su nobody', but nobody has no password, no home and no group of its own -- it cannot test a login, and it cannot test a file.\n\nIT LOGS IN ON A VIRTUAL CONSOLE because that is the only place a login(1) runs: the primary console gets init's shell directly, with no login in front of it (init.c says so).  So this is also the only assertion in the suite that a PASSWORD works -- getty prompts, login(1) reads it with echo off, crypt(3) hashes it against the stored `$f$fg$...' and the comparison succeeds.  A wrong hash, a broken getpass or a crypt whose algorithm drifted all show up here as `Login incorrect'.\n\n`-rw-r--r--  1 fgx' IS THE LOAD-BEARING NEEDLE for apple/fgx#413.  ufs_maknode and ufs_mkdir hardcoded uid 0, so a file created by uid 100 belonged to root: MEASURED as `-rw-r--r--  1 root' on the build before the fix, with the id and pwd lines above it already correct.  Every process ran as root until this account existed, so the wrong answer was right by coincidence at every call site and no test could see it.  4.3BSD-Reno takes the uid from the credential and the GROUP FROM THE PARENT DIRECTORY (ufs/ufs_vnops.c:1679), which is why `staff' is asserted too: a port that copied the process gid instead would still print `fgx' here and be wrong about the group.\n\nTHE TWO su ARMS ARE BOTH ABSENCES, and they fail for different reasons so both are named.  `You do not have permission to su root' is the wheel check (su.c:106, getgrgid(0) and a strcmp against gr_mem[]) -- fgx IS in the wheel line, so seeing that string means /etc/group was misread.  `Sorry' is the PASSWORD check, which could never succeed before apple/fgx#414: su passed the whole stored hash to crypt() as the salt, so crypt folded `$f' where `rt' belongs and returned a string no stored hash can equal.  Neither arm is reachable from idsu, whose two cases skip the password (caller is root) and stop at the wheel check (caller is not in wheel).\n\nWHAT IS NOT ASSERTED, deliberately: that the shell after `su root' is root's.  It is not -- su exits 0 having exec'd a shell still running as uid 100 (apple/fgx#415).  Asserting the bug would freeze it; asserting the fix would leave this fixture red for a defect it is not about.\n\n/testbin/credtest IS THE SECURITY ARM.  It calls setgid(0) and setuid(0) from uid 100 and prints what happened, so `CRED REFUSED' says the kernel's own rule holds -- both answer EPERM and leave the ids unchanged.  That is what makes `su' failing to elevate a su(1) defect rather than a hole: measured r=-1 errno=1 with uid and gid unmoved.  `CRED ESCALATED' is the string this exists to catch.\n\nTHE HOME DIRECTORY IS ITS OWN ASSERTION.  `pwd' printing /home/fgx says login(1) chdir'd into a directory that exists, and `echo hi > note' succeeding says it is WRITABLE by its user -- which it is only because the image build chowns it (tools/fgxfs.py chown, driven from build/dev_nodes.list).  Everything else on the volume is root-owned, and a home its user cannot write in is not a home.\n\nsu ELEVATES NOW, AND `uid=0(root)' FROM THE SECOND `id' IS THE WHOLE CLAIM -- the first `id' three commands earlier prints uid=100(fgx), so the two together say the shell changed hands.  Getting there took three independent fixes and each one hid the next.  FIRST, su could not authenticate anybody (apple/fgx#414).  SECOND, with that fixed it exited 0 having exec'd a shell still running as uid 100 (apple/fgx#415), and that cause was in libc rather than in su: getlogin(3) answered the passwd name of the real uid by calling getpwuid, which reuses the one static getpwnam had just filled.  su's audit line calls it BETWEEN the test on `pwd->pw_uid' and `setgid(pwd->pw_gid)', so `pwd' described root at the test and the CALLER three lines later -- making setgid(10) and setuid(100), the caller's own ids, both legal and both no-ops.  Upstream cannot reach this, and not because it reads /etc/utmp: BOTH 2.11BSD and 4.3BSD-Reno answer getlogin from a SYSCALL over `u_login' in the u-area (h/user.h:143, kern_prot.c:165-213), which is a place no getpw* call can disturb.  The audit line naming `fgx' where it should name the target was the clue and had been written off as a documented divergence.\n\n`su: fgx on /dev/ttyv1' IS NOW A LOAD-BEARING ARM AND SAYS SOMETHING ELSE ENTIRELY.  FGX has setlogin(2)/getlogin(2) now, ported from 2.11BSD, with login(1) calling setlogin before it drops privilege.  So this line names the SESSION's login name -- read one line after `uid=0(root)', from a process that is already root.  That is exactly what getlogin(2) promises: \"inherited by all processes descended from the login shell (this is true even if some of those processes assume another user ID, for example when su(1) is used)\".  A name derived from the uid would read `root' here, and a name read from /etc/utmp would be unavailable to any process without a controlling terminal among its first three descriptors.  Only the u-area survives the setuid, which is why upstream puts it there.\n\nTHIRD, /bin/su was not setuid and could not have worked however correct its own code was: nothing on the volume was executable, let alone set-id, and Load_Binary read no mode at all (apple/fgx#416).  `su: setgid: Operation not permitted' is asserted ABSENT because it is what the middle state printed -- an HONEST refusal, and the right answer right up until exec learned to hand over the file's owner.\n\nA FOURTH defect sat behind the diagnostic itself: the strerror table began at errno 2, so EPERM and EACCES -- every permission refusal this kernel makes -- both printed `Unknown error'.  su reported `setgid: Unknown error' for the EPERM it was correctly given.  `Unknown error' is asserted ABSENT screen-wide for that reason, and it discriminates for the whole errno range rather than this one call.\n\n`CRED REFUSED' STILL HOLDS AND MUST.  /testbin/credtest is not set-id, so it runs as uid 100 and setgid(0)/setuid(0) still answer EPERM with the ids unmoved.  That is the arm that says setuid-on-exec did not become a hole: the privilege comes from a MODE BIT on a root-owned file, not from asking. `CRED ESCALATED' is the string this exists to catch, and it is still absent.\n\n`CRED start uid=100 euid=100' IS THE CONTROL FOR setuid-on-exec AND IS LOAD-BEARING.  /testbin/credtest is owned by root and mode 0755 -- readable, executable, NOT set-id -- so the effective uid it reports must still be the caller's.  An exec that adopted the file's owner unconditionally rather than only on VSUID would hand every root-owned binary in /bin an effective uid of 0, which is every binary on the volume, and this line is where that shows: it would read `euid=0' and the two CRED arms below it would flip to ESCALATED.  The privilege has to come from a mode bit on the file and from nothing else.\n\nTHE getlogin(2) ARM IS BACK, THROUGH A DIFFERENT WITNESS. It read `su: fgx on /dev/ttyv1' -- su's audit line, which syslog(3) used to put on the invoking terminal. syslog now sends it to /dev/log as an AF_UNIX datagram and nothing binds that name until there is a syslogd, so the line is dropped and no fixture can see it. What it proved is still true and still untested: getlogin(2) reads the SESSION's login name out of the u-area, so a process that is already root answers `fgx' where a name derived from the uid would answer `root'. /etc/utmp is not a substitute -- `who am i' reads utmp, which is a different mechanism, and the paragraph above says why. The assertion comes back stronger once syslogd lands and the line is readable from the log file. Tracked as lost coverage rather than left to be noticed.\n\nRESTORED 2026-09-20: the arm above did not have to be lost. `su: fgx on /dev/ttyv1' is unreachable -- su calls openlog with neither LOG_CONS nor LOG_PERROR, so with nothing bound to /dev/log the line is formed and dropped -- but /testbin/slogprobe already prints `SP getlogin=' and binds /dev/log itself, so running it as the LAST post_command, after `su root', makes the same claim from a process that is already root: the answer must be `fgx', the session's login name out of the u-area, where a name derived from the uid would read `root'. No new code, and it reads the line back besides.",
+ "command": "pwd",
+ "raw_inject": [
+  [
+   300,
+   50,
+   2
+  ]
+ ],
+ "post_commands": [
+  "fgx",
+  "fgx",
+  "id; pwd; echo hi > note; ls -l note",
+  "/testbin/credtest",
+  "su root",
+  "fgx",
+  "id",
+  "/testbin/slogprobe"
+ ],
+ "post_gap_frames": 900,
+ "exit_on_prompt": false,
+ "timeout_s": 360,
+ "memory_regions": [
+  {
+   "name": "vc1char",
+   "addr_hex": "030000",
+   "len": 2000,
+   "vcbank": 1
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "klog_region": "vc1char",
+  "klog_contains": [
+   "uid=100(fgx) gid=10(staff)",
+   "/home/fgx",
+   "-rw-r--r--  1 fgx",
+   "CRED setuid(0) r=-1",
+   "CRED REFUSED",
+   "uid=0(root)",
+   "CRED start uid=100 euid=100",
+   "SP getlogin=fgx"
+  ],
+  "klog_lacks": [
+   "Login incorrect",
+   "You do not have permission to su root",
+   "Sorry",
+   "BAD SU",
+   "CRED ESCALATED",
+   "1 root ",
+   "stk ENOMEM",
+   "Unknown error",
+   "su: setgid: Operation not permitted"
+  ]
+ }
+}

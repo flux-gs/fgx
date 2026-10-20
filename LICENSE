@@ -1,0 +1,60 @@
+BSD 2-Clause License
+
+Copyright (c) 2026 flux and the FGX contributors
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---
+
+Portions of FGX's userland are derived from 2.11BSD and remain subject to the
+copyright of The Regents of the University of California under the original BSD
+license. Those files carry an SPDX/FGX-Provenance header retaining the UCB
+copyright notice, and every such file is listed in docs/PROVENANCE.md. The
+notice-retention requirement of the BSD license is satisfied by those headers;
+FGX's own changes are offered under the BSD-2-Clause license above.
+
+---
+
+Third-party components.  Some programs and libraries in this tree are not
+under the BSD-2-Clause licence above, and each file says which licence it is
+under in its SPDX-License-Identifier header; docs/PROVENANCE.md lists every
+one with its upstream:
+
+- frotz (src/userland/frotz): GPL-2.0-or-later.  The Z-machine interpreter,
+  a separate program; a binary distribution that ships it must offer its
+  source, as the GPL requires.
+- The soft double (toolchain/lib/libdouble/softdouble.c): Apache-2.0, from
+  the W65816 fork of llvm-mos; the licence text is
+  vendor/65816-llvm-mos/LICENSE.TXT (Apache License v2.0 with LLVM
+  Exceptions).
+- cron and crontab: LicenseRef-Vixie-Cron, Paul Vixie's terms, reproduced in
+  each file.
+- ntp: LicenseRef-UMD-NTP, the University of Maryland NTP 3.4 sources as
+  2.11BSD ships them; their headers state no licence.
+- Four files of elvis (src/userland/elvis): LicenseRef-Elvis, Steve
+  Kirkendall's terms: "Elvis is freely redistributable, in either source form
+  or executable form.  There are no restrictions on how you may use it."
+- The console fonts disk_src/lib/fonts/default.fnt and bold.fnt: MIT, as
+  each file's header states.
+- The time zone code and data under vendor/tzcode-* and vendor/tzdata-*:
+  public domain, except date.c, newstrftime.3 and strftime.c, which are
+  BSD-3-Clause, as their LICENSE files state.

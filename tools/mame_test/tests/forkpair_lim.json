@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_lim",
+ "description": "Shared libc sub-project 1: the break stops at the HEAP_LIM cell ($FFF8), whatever the cell holds up to its seed; garbage above the seed reads as the seed; an exec'd program starts with the cell at $FFF8; and both fork paths keep parent and child bytes above the limit separate.  On a kernel with the constant $FFF9 ceiling it prints FP LIM FAIL ceiling.",
+ "command": "/testbin/forkpair lim",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": [
+   "FP LIM ok"
+  ],
+  "screen_lacks": [
+   "FP LIM FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

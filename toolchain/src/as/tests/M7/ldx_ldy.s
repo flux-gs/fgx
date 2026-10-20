@@ -1,0 +1,29 @@
+; M7: LDX/LDY/STX/STY/CPX/CPY/STZ — index-register and store ops.
+                MX      %00
+                LDX     #$1234
+                LDX     $10
+                LDX     $1234
+                LDX     $20,Y
+                LDX     $1234,Y
+                LDY     #$5678
+                LDY     $30
+                LDY     $1234
+                LDY     $40,X
+                LDY     $1234,X
+                STX     $10
+                STX     $1234
+                STX     $20,Y
+                STY     $30
+                STY     $1234
+                STY     $40,X
+                STZ     $50
+                STZ     $1234
+                STZ     $60,X
+                STZ     $5678,X
+                CPX     #$0042
+                CPX     $10
+                CPX     $1234
+                CPY     #$0042
+                CPY     $10
+                CPY     $1234
+                RTS

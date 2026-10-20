@@ -1,0 +1,26 @@
+{
+ "name": "ufswrbig",
+ "description": "A WHOLE-BLOCK write(2) onto a UFS root -- what vi does and what a 7-byte shell redirection does not.  See src/userland/wrbig/wrbig.c for the sequence, which is elvis tmpstart()'s verbatim.  CASE G IS THE resolv.conf SHAPE: dhclient rewrote /etc/resolv.conf with 41 bytes and the last 42 bytes of the shipped 83-byte comment survived as a third line on screen.  fopen(,\"w\") was passing O_WRONLY|O_CREAT with NO O_TRUNC and relying on an unlink whose result it ignores -- and unlink answers EIO on a UFS root.  The assertion is the LENGTH, because the front of the file looked right in the bug report and only the tail gave it away.  Control: with the flags put back to 0x0201 it reads len=83 NOT TRUNCATED, which is the reported file exactly.",
+ "command": "sh",
+ "post_commands": [
+  "/testbin/wrbig"
+ ],
+ "boot_s": 45,
+ "timeout_s": 30,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 2
+ },
+ "expect": {
+  "screen_contains": [
+   "wrbig: done",
+   "G_fopen_w len=5 ok"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "NOT TRUNCATED",
+   "SHORT",
+   "BAD"
+  ]
+ }
+}

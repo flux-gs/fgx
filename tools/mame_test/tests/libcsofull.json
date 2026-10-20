@@ -1,0 +1,10 @@
+{
+ "name": "libcsofull",
+ "description": "Shared libc SP2: a static program whose data leaves too little room for its libc blocks; _lib_init must say so on fd 2 and exit 1 before main runs.",
+ "command": "/testbin/libcsofull; echo status=$?",
+ "timeout_s": 90,
+ "expect": {
+  "screen_contains": ["libc: no room for its data", "status=1"],
+  "screen_lacks": ["CSO ", "PANIC", "BRK"]
+ }
+}

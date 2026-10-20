@@ -1,0 +1,23 @@
+{
+ "name": "ptypkt",
+ "description": "THE PACKET-MODE STATUS BYTES, AND WHETHER THE EVENTS BEHIND THEM HAPPENED.  TTY campaign T4 increment 5, written BEFORE the increment.  A pty master in TIOCPKT mode gets a status byte at the head of every read; 2.11BSD keeps the pending bits in `pt_send' and `ptcread' delivers them AHEAD of any data, one read to a byte (tty_pty.c:252-257).  `pt_send' has exactly two producers and FGX has NEITHER.  `ptsstop' (:297-318) is d_stop: flush == 0 means the line was STOPPED, so PF_STOPPED goes on and TIOCPKT_STOP is armed, and otherwise `flush' IS the FREAD/FWRITE mask, whose bit values ARE TIOCPKT_FLUSHREAD/FLUSHWRITE -- upstream's own comment is \"note: FLUSHREAD and FLUSHWRITE already ok\".  `ptsstart' (:163-175) is t_oproc: a line that had been stopped is running again, so PF_STOPPED comes off and TIOCPKT_START is armed.  THE PTY SLAVE'S d_stop SLOT IS ZERO IN FGX and the comment beside it says why -- \"a pty ring is not in flight\" -- which was true while tty_oproc drained t_outq into the pty's ring on every ttstart.  INCREMENT 4 ENDED THAT: t_oproc for a pty slave is ptsstart now, it moves no data, and the line has output in flight exactly as a serial line does.  FOUR QUESTIONS, THE FIRST BEING THE POSITIVE CONTROL.  1 DATA: five bytes from the slave read back as six with a leading TIOCPKT_DATA, which proves packet mode is alive at all -- without it every -1 below would be a report about TIOCPKT rather than about pt_send, and the fixture stops at DEAD.  2 FLUSH: five more bytes then TIOCFLUSH(FWRITE) from the slave, and TWO things must hold where FGX's hand-rolled flag asserts only the first -- the master is TOLD (b0=2) and the bytes are GONE (the very next read has nothing).  A status byte announcing a flush that discarded nothing is worse than no status byte, because the master acts on it.  3 STOP: TIOCSTOP reaches ttioctl, which sets TS_TTSTOP and calls d_stop with rw == 0, so b0=4.  4 START: TIOCSTART reaches ttstart, which calls t_oproc -- ptsstart, whose whole remaining job is this byte, b0=8.  THE MASTER IS NON-BLOCKING ON PURPOSE: a missing status byte leaves the queue empty and a blocking master would hang, which names nothing and is the poor-mutation shape this campaign has already recorded.  With FIONBIO the same absence reads back as n=-1 against an expected n=1 and the line says WHICH of the four is missing.  NO NEWLINE IN THE PAYLOAD, for ptyrec's and ptyoutq's reason: _PtyS_Write applies the slave tty's CRMOD, so an LF would arrive as CR+LF and the counts would be off by one for an unrelated reason.",
+ "command": "/testbin/ptypkt",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "PTYPKT data n=6 b0=0 b1=65",
+   "PTYPKT flush n=1 b0=2",
+   "PTYPKT flushed n=-1",
+   "PTYPKT stop n=1 b0=4",
+   "PTYPKT start n=1 b0=8",
+   "PTYPKT BSD"
+  ],
+  "screen_lacks": [
+   "PTYPKT FAIL",
+   "PTYPKT DEAD",
+   "PTYPKT MISSING",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

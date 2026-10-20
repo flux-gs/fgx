@@ -1,0 +1,27 @@
+# frotz(6) translation units.  The main TU is frotz.c (upstream
+# common/main.c).  Core (vendor/frotz-2.44/src/common) then the dumb
+# stdio interface (src/dumb).  Named by tools/ninja/manifest.json's
+# tu_list.
+src/userland/frotz/buffer.c
+src/userland/frotz/err.c
+src/userland/frotz/fastmem.c
+src/userland/frotz/fgxmem.c
+src/userland/frotz/files.c
+src/userland/frotz/hotkey.c
+src/userland/frotz/input.c
+src/userland/frotz/math.c
+src/userland/frotz/object.c
+src/userland/frotz/process.c
+src/userland/frotz/quetzal.c
+src/userland/frotz/random.c
+src/userland/frotz/redirect.c
+src/userland/frotz/screen.c
+src/userland/frotz/sound.c
+src/userland/frotz/stream.c
+src/userland/frotz/table.c
+src/userland/frotz/text.c
+src/userland/frotz/variable.c
+src/userland/frotz/dumb_init.c
+src/userland/frotz/dumb_input.c
+src/userland/frotz/dumb_output.c
+src/userland/frotz/dumb_pic.c

@@ -1,0 +1,22 @@
+{
+  "name": "statfmt",
+  "description": "stat(1) ON A FILE THAT EXISTS PRINTS ITS TYPE, and it did not: the Size/Blocks line read `Blocks: %-6d' while struct stat's st_blocks is a long (toolchain/include/sys/stat.h:58). K&R 2nd ed Table B.1 (p.202) gives `d,i -- int', and the same page's length-modifier paragraph says `l' is what names `a long or unsigned long' -- so %d consumed two bytes of a four-byte argument and every later conversion read the va_arg stream two bytes short. The %s that follows then got a wild pointer. THE ASSERTION IS `regular file' AND NOT THE Size OR Blocks NUMBERS, because those two conversions are the ones BEFORE the damage and print correctly on the broken build -- a test on them passes either way. The type string is the first thing downstream of the desync. THE SYMPTOM CHANGED WITHOUT THE BUG CHANGING, which is why this went unnoticed for so long: before buffered stdio landed the wild pointer happened to address a zero byte, so the type silently printed as nothing and stat looked merely terse; after it, the pointer addressed a run with no terminator and __lc_vpf's `while (s[len] != 0) len++' scan ran with a 16-bit len that wraps negative, so stat never returned. Measured 2026-09-09: `stat /etc/issue' reached no prompt in 240 s, and the PC sampler put 80,000 of 89,180 samples in the tool's pile bank inside __lc_vpf. `Modify:' is asserted too, as the control that the run got all the way to the last of the four printfs rather than stalling in the middle.  THE MODE STRING IS strmode(3)'s, as ls -l prints it (apple/fgx#531): a file chmodded 4751 shows -rwsr-x--x -- owner, group and other, and the setuid bit as s -- where the earlier string carried only the owner's r and w.",
+  "command": "stat /etc/issue; cd /tmp; P=s; echo $P > f; chmod 4751 f; stat f; rm f",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "regular file",
+      "Modify:",
+      "Mode: -rwsr-x--x"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

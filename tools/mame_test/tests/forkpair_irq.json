@@ -1,0 +1,17 @@
+{
+ "name": "forkpair_irq",
+ "description": "A fork child and a vfork child each resume in user mode with interrupts enabled (apple/fgx#502).  Each child reads its processor status and exits 1 if I is set.  A child resumed masked runs its syscalls masked until one returns normally -- an execve then runs whole with the heartbeat off, and the system clock loses those ticks.",
+ "command": "/testbin/forkpair irq",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "FP IRQ ok"
+  ],
+  "screen_lacks": [
+   "FP IRQ FAIL",
+   "FP FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

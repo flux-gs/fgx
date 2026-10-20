@@ -1,0 +1,14 @@
+{
+ "name": "dbgbank",
+ "description": "A FRAME-SAMPLED memory_region RESOLVES THE BANK IT NAMED.  apple/fgx#236, and this is a test of the HARNESS rather than of the kernel.  The fgxdebug plugin carried two copies of the bank resolution: the end-of-run dump handled all seven region shapes, and the frame-scheduled sampler handled `ptr' and `kbank' and nothing else -- so a region with both a bank flag and a \"frame\" was read from a bare 16-bit offset, which is bank 0, and reported an address and a plausible body with no warning.  It was found while sizing NCLIST: six samples of the tty bank's clist pool all read `a5a5a5a5', which is STK_PAINT in the bank-0 user-stack arena, and decoded to a confident and completely false `0 of 32 blocks free'.  That is apple/fgx#74's wrong-bank read on the frame axis, and the same $A5 tell that cost #234 most of a session.  THE ASSERTION IS AN INVARIANT, NOT A CONSTANT: the same symbol sampled with and without a frame must land in the same bank, which stays true when the kernel bank moves under relocation, and cannot be satisfied by a wrong answer that merely looks reasonable.  The check also refuses bank 0 outright, because a build where both samples read bank 0 would satisfy the equality on its own.  MEASURED DISCRIMINATING against the plugin as it stood: framed $003280 versus unframed $7E3280.  THE COMMAND OUTLIVES THE SAMPLE: the framed region is read 120 frames after the paste, and a bare `echo' let the run end a few frames either side of that, so the verdict was INCONCLUSIVE or not on a few frames of boot timing (apple/fgx#387).  `sleep 2' keeps the machine running 120 frames past the prompt.",
+ "command": "echo dbgbank; sleep 2",
+ "timeout_s": 120,
+ "memory_regions": [
+  {"name": "bank_live", "symbol": "cfreelist", "len": 4, "ttybank": true},
+  {"name": "bank_framed", "symbol": "cfreelist", "len": 4, "ttybank": true, "frame": 120}
+ ],
+ "expect": {
+  "screen_lacks": ["PANIC", "BRK"],
+  "check_script": "dbgbank_check.py"
+ }
+}

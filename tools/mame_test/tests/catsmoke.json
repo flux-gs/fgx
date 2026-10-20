@@ -1,0 +1,20 @@
+{
+ "name": "catsmoke",
+ "description": "cat(1) end-to-end over the dead-stripped libc (libc-breakup task 4). cat is the anchor tool for the libc archive conversion -- it selects 7 of the archive's 42 members -- and nothing else in the corpus reads a file through it. Asserts the CONTENT of /etc/hosts reaches the screen, so a mis-selected stdio/string member shows up as wrong or missing output rather than as a silent exit 0.",
+ "command": "cat /etc/hosts",
+ "timeout_s": 30,
+ "expect": {
+  "screen_contains": [
+   "127.0.0.1",
+   "localhost",
+   "gateway",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm"
+  ]
+ }
+}

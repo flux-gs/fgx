@@ -1,0 +1,29 @@
+{
+ "name": "klogprobe",
+ "description": "/dev/klog, the cursored read-only view of the kernel log ring that syslogd reads kernel messages from.  klog.mod ports 2.11BSD subr_log.c's logopen/logclose/logread/logselect/logioctl; FGX's ring has a write index and a wrapped flag and NO read pointer, so the cursor belongs to the module and this probe proves it behaves.\n\nTHE CURSOR SURVIVES A CLOSE (apple/fgx#484): upstream's logopen never touches msg_bufr, so after a drain, a close and a reopen there is nothing to read -- a reseeding open would hand over the boot log again, which is what a restarted syslogd used to replay onto root's console.\n\nFRESH BYTES ARE DELIVERED ONCE AND IN ORDER.  syslogd has already drained the boot log, so the probe makes its own line: a second `modload pty' is refused and the refusal is logged.  What /dev/klog hands over must contain that line and must appear as one unbroken run of dmesg(2)'s copy of the same ring -- dmesg is the independent reader.\n\nA DRAINED READ WOULD BLOCK, proven with select(2) as a pair: ready with the fresh line unread, then not ready once drained and only after spending the whole timeout.  Also asserted: FIONBIO is honoured; a write fails; a second open is refused EBUSY; and the device reopens after that refusal (apple/fgx#462).\n\nSYSLOGD IS STOPPED FIRST, the way syslogd(8) says to bring it down, because /dev/klog has ONE reader and /etc/rc starts syslogd as that reader.",
+ "command": "kill `cat /var/run/syslog.pid`; sleep 1; /testbin/klogprobe",
+ "boot_s": 45,
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "KPSTART",
+   "KP ok   open",
+   "KP ok   reopen after close",
+   "KP ok   a reopen resumes where the last reader stopped",
+   "KP ok   select says READY with a line unread",
+   "KP ok   the fresh kernel line was delivered",
+   "KP ok   klog bytes are one run of dmesg",
+   "KP ok   a write to the read-only device fails",
+   "KP ok   a drained read WOULD BLOCK: select waits and reports not ready",
+   "KP ok   second open refused EBUSY",
+   "KP ok   reopen after a refused open",
+   "KPDONE 0 failed"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "NOT FOUND",
+   "KP FAIL"
+  ]
+ }
+}

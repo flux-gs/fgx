@@ -1,0 +1,21 @@
+{
+ "name": "curssokill",
+ "description": "Shared libc SP4: the first user of curses, stopped inside its load, is SIGKILLed while a second waits: the row is aborted with its banks kept, the waiter takes it over and runs, and the row ends READY holding the same banks.",
+ "command": "sh /testdata/curssokill",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": [
+   "LDC loading libcurses",
+   "LDC row state=2 users=0",
+   "KIL b=0",
+   "LDC row state=3 users=0",
+   "KIL same banks"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

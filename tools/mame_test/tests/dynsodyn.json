@@ -1,0 +1,10 @@
+{
+ "name": "dynsodyn",
+ "description": "Shared libc SP4: dynso linked dynamically and bound on the machine (crt0_dyn, libc's binder): libcso's checks, a pointer cell, &errno, a far helper, the carve below the copied core, an environment variable, libc's resident banks under the patched pointer cell, an exec of a dynamic dyntrue; then libc's user count back to what it was before, which counts the dynamic daemons the boot started.  The marker is built by expansion, and the first look's own line, `LDC look users=', is shown so the probe cannot pass on two identical ldctl failures.",
+ "command": "L=LDC; /testbin/ldctl look libc > /tmp/u0; DSO_ENV=yes /testbin/dynsodyn; /testbin/ldctl look libc > /tmp/u1; cmp /tmp/u0 /tmp/u1 && echo $L-users-same; cat /tmp/u0",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["DSO ok", "LDC-users-same", "LDC look users="],
+  "screen_lacks": ["DSO FAIL", "differ", "ld.so:", "libc: no room", "PANIC", "BRK"]
+ }
+}

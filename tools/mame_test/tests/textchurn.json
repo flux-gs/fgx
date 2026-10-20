@@ -1,0 +1,35 @@
+{
+ "name": "textchurn",
+ "description": "SHARED-TEXT REFERENCES BALANCE ON EVERY PATH: spawn and exit (ten /bin/true), a background child outliving a foreground one, a fork child that execs (sh -c), an exec that fails, and a subshell that runs on in its parent's text without exec.  textchurn_check.py then requires each text's count to equal the number of processes recorded as running it, every task running a text's code to be recorded as running it (a fork child that took no reference would let its parent's text go while it runs), and no bank to have two owners among the task lists, the soft-frame banks and the texts: a reference taken and never dropped, or dropped twice, or a bank both a text's and a process's, fails it.",
+ "command": "sh /testdata/textchurn",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "tcbs",
+   "addr_equ": "FGX_TASK_TBL",
+   "kbank": true,
+   "len": 2048
+  },
+  {
+   "name": "texttab",
+   "symbol": "_kTextTab",
+   "ttybank": true,
+   "len": 608
+  },
+  {
+   "name": "setab",
+   "ptr_addr_hex": "CFG_DP_KKERN+A4",
+   "len": 1024
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "TC DONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "textchurn_check.py"
+ }
+}

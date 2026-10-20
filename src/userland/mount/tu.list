@@ -1,0 +1,18 @@
+# mount(8) translation units.  mount.c is the entry point and so is NOT listed
+# here (the generator takes src/userland/<tool>/<tool>.c); this names the rest.
+#
+# THEY ARE UPSTREAM'S OWN FILES AND UPSTREAM'S OWN LINK.  2.11BSD's Makefile is
+# `SRCS= mount.c getmntopts.c mount_ufs.c' building ONE binary, and mount.c
+# calls the back end directly rather than exec'ing it:
+#
+#     case 0:                             /* Child. */
+#             if (strcmp(vfstype, "ufs") == 0)
+#                     _exit(mount_ufs(argc, (char **) argv));
+#             /* Go find an executable. */
+#
+# The execv loop below that line is for OTHER filesystem types -- it builds
+# `/sbin/mount_<vfstype>' -- and reaching it here means a `-t' this system has
+# no filesystem for, which fails with ENOENT and says so.  So there is no
+# divergence to record: linking mount_ufs.c in IS the port.
+src/userland/mount/mount_ufs.c
+src/userland/mount/getmntopts.c

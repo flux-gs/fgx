@@ -1,0 +1,22 @@
+{
+ "name": "nodrive",
+ "description": "A DEVICE NODE FOR A UNIT WITH NO DRIVE ANSWERS EIO.  apple/fgx#334.\n\nThe root's /dev carries a node per unit the bus can carry, attached or not -- MAKEDEV's model, and 2.11BSD's own /dev on a real 11/70 has ra0 through ra6 while /etc/fstab names two.  So the node existing is correct; the question is what touching it says.  Upstream answers `mount /dev/ra5a /mnt: Input/output error'.\n\nWHY THE STRING IS THE TEST AND NOT THE FAILURE.  Every arm here failed before this fixture existed -- what was wrong was WHICH failure.  The block driver returned ERR_NODEV, an FGX error number that is $0A, and it crosses to C through kc_blkio into `b_error' where biowait hands it back as an errno: so userland was told `No child processes' (ECHILD, 10) about a drive that is not there.  Earlier still the read SUCCEEDED and mount reported `Incorrect super block', which is a claim about the VOLUME and sends a reader to look at the filesystem, the image and the superblock decoder -- everything except the missing drive.  Both of those are named in screen_lacks, because either one is a pass on `the call failed' alone.\n\nTHE RAW FACE IS ASSERTED TOO.  /dev/rsd3 refuses at OPEN (_Rsd_UnitOk tests DEV_CLASS_DISK and DEV_FLAG_ONLINE), which is a different code path from the block read and has always been right; it is here so that a change which fixed one and broke the other cannot pass.\n\nUNIT 3 because the harness attaches the boot disk at unit 0 and at most one extra spindle; units 2 upward have nothing behind them on every fixture that does not ask for more.",
+ "command": "/sbin/mount /dev/sd3 /mnt; echo m=$?; cat /dev/sd3; echo c=$?; cat /dev/rsd3; echo r=$?",
+ "timeout_s": 250,
+ "expect": {
+  "screen_contains": [
+   "/dev/sd3 on /mnt: Input/output error",
+   "m=1",
+   "cat: read error",
+   "c=1",
+   "cat: cannot open /dev/rsd3",
+   "r=1"
+  ],
+  "screen_lacks": [
+   "Incorrect super block",
+   "No child processes",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

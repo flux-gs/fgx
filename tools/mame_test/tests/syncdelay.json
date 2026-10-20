@@ -1,0 +1,21 @@
+{
+ "name": "syncdelay",
+ "description": "sync(2) PUSHES A DELAYED WRITE OUT TO THE PLATTER.  apple/fgx#398.\n\nThe only thing in the tree that makes a delayed write is spec_write's partial-block arm: a write to a BLOCK DEVICE NODE that does not fill a whole FS_BLKSIZE buffer takes `bdwrite' and leaves the buffer dirty, where every other writer -- ufs_write, ufs_bmapx, fsck -- writes whole blocks and takes `bawrite'.  So this fixture cannot be built out of fsck or ordinary file I/O, and one that tried would be green whatever sync(2) did.  /testbin/syncdelay manufactures the condition and its header says why each step is shaped the way it is.\n\nTHE SECOND OPINION IS THE RAW FACE OF THE SAME SPINDLE.  Reading the block back through the node that wrote it is answered from the dirty buffer -- the cache is keyed by (vnode, logical block) -- so it returns the new bytes whether or not they reached the disk.  /dev/rsd1 goes through the block driver directly and never consults the vnode cache, so what it returns is what is ON the platter.\n\nTHE BLOCK DESCRIPTOR STAYS OPEN ACROSS THE sync().  spec_close's VBLK arm flushes (vflushbuf then vinvalbuf), so a close would push the write out by itself and the fixture would pass on a kernel with no sync at all.\n\nMEASURED DISCRIMINATING, TWICE.  With vfs_sync's `bflush((dev_t)NODEV)' deleted and the kernel rebuilt, the raw read returns the volume's original bytes and the tool prints SYNCDELAY STILL DIRTY and exits 1.  It was ALSO red with the flush present but called from ufs_sync, which is where 4.3BSD-Reno's equivalent line sits: the mount-list walk never reaches an UNMOUNTED spindle, so the flush ran for the root and never for the device under test.  That second red is the reason the call is where it is.\n\nIT WRITES AT BLOCK 1000 of an 8,192-block unit whose filesystem is about 4,000 blocks, so the mutation lands past the end of the filesystem and the spindle is a per-run scratch copy either way.",
+ "command": "/testbin/syncdelay /dev/sd1 /dev/rsd1; echo rc=$?",
+ "extra_hards": [
+  "disk/ufsbadspin.fs"
+ ],
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": [
+   "SYNCDELAY ON PLATTER",
+   "rc=0"
+  ],
+  "screen_lacks": [
+   "STILL DIRTY",
+   "SYNCDELAY FAILED",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

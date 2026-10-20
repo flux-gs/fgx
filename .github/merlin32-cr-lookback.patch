@@ -1,0 +1,20 @@
+diff --git a/Source/a65816_File.c b/Source/a65816_File.c
+index 7728fb4..70e106c 100644
+--- a/Source/a65816_File.c
++++ b/Source/a65816_File.c
+@@ -217,7 +217,14 @@ struct source_file *LoadOneSourceFile(char *file_path, char *file_name, int file
+         if(end_line != NULL)
+         {
+             begin_line = end_line+1;
+-            if( *(end_line-1) == 0x0D )
++            /* Strip a CR before the LF -- but only if there IS a byte before
++               it.  A file whose FIRST byte is the LF puts end_line at the very
++               start of the buffer, and the unguarded look-back then reads one
++               byte in front of the allocation.  It is out of bounds on every
++               such file and faults only when the byte before the block happens
++               to be unmapped, which is why it presented as a rare, retry-clean
++               SIGBUS rather than as a bug. */
++            if( end_line > (char *)current_file->data && *(end_line-1) == 0x0D )
+                 --end_line;
+             *end_line = '\0';
+         }

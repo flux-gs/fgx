@@ -1,0 +1,18 @@
+{
+ "name": "flockt",
+ "description": "flock(2): an exclusive lock refuses a second open's LOCK_NB tries, shared locks coexist, an upgrade against another shared holder is refused and close drops a lock; a child blocked in LOCK_EX runs only after its parent unlocks; a pipe is EOPNOTSUPP.",
+ "command": "/testbin/flockt",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "FL NB ok",
+   "FL WAIT ok",
+   "FL PIPE ok"
+  ],
+  "screen_lacks": [
+   "FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,61 @@
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ *
+ * FGX-Provenance: 2.11BSD libcurses (delwin.c, Berkeley 6/7/85 era)
+ *   Ported from usr.lib/libcurses (4.3BSD curses as shipped in 2.11BSD).
+ *   Original work: Copyright (c) 1980 Regents of the University of
+ *   California.  All rights reserved.  UCB notice retained per the BSD
+ *   license; FGX changes are BSD-2-Clause (see LICENSE / docs/PROVENANCE.md).
+ */
+/*
+ * Copyright (c) 1980 Regents of the University of California.
+ * All rights reserved.  The Berkeley software License Agreement
+ * specifies the terms and conditions for redistribution.
+ */
+
+#if !defined(lint) && !defined(NOSCCS)
+static char sccsid[] = "@(#)delwin.c	5.1 (Berkeley) 6/7/85";
+#endif
+
+# include	"curses.ext"
+
+/*
+ *	This routine deletes a window and releases it back to the system.
+ *
+ */
+delwin(win)
+reg WINDOW	*win; {
+
+	reg int		i;
+	reg WINDOW	*wp, *np;
+
+	if (win->_orig == NULL) {
+		/*
+		 * If we are the original window, delete the space for
+		 * all the subwindows, and the array of space as well.
+		 */
+		for (i = 0; i < win->_maxy && win->_y[i]; i++)
+			free(win->_y[i]);
+		free(win->_firstch);
+		free(win->_lastch);
+		wp = win->_nextp;
+		while (wp != win) {
+			np = wp->_nextp;
+			delwin(wp);
+			wp = np;
+		}
+	}
+	else {
+		/*
+		 * If we are a subwindow, take ourselves out of the
+		 * list.  NOTE: if we are a subwindow, the minimum list
+		 * is orig followed by this subwindow, so there are
+		 * always at least two windows in the list.
+		 */
+		for (wp = win->_nextp; wp->_nextp != win; wp = wp->_nextp)
+			continue;
+		wp->_nextp = win->_nextp;
+	}
+	free(win->_y);
+	free(win);
+}

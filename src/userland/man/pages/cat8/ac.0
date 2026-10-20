@@ -1,0 +1,49 @@
+
+
+AC(8)                UNIX Programmer's Manual                AC(8)
+
+
+
+NAME
+     ac - connect-time accounting
+
+SYNOPSIS
+     ac [ -w wtmp ] [ -p ] [ -d ] [ people ... ]
+
+DESCRIPTION
+     Ac prints the total connect time of each user who has logged
+     in during the life of the current /etc/wtmp file, computed
+     from the login and logout records it holds.  A grand total is
+     printed as well.
+
+     -w wtmp      Read the accounting records from wtmp rather than
+                  from /etc/wtmp.
+
+     -p           Print a total for each user (a "per person"
+                  report); without it only the grand total is
+                  printed.
+
+     -d           Break the report into one midnight-to-midnight
+                  period per line.
+
+     Any people arguments restrict the report to the named login
+     accounts.
+
+FILES
+     /etc/wtmp     the login and logout accounting log
+
+SEE ALSO
+     last(1), who(1), w(1), login(1), init(8), utmp(5)
+
+NOTES
+     The log /etc/wtmp is written by init(8) and login(3).  Neither
+     creates it, so accounting runs only while the file exists;
+     that is the switch that turns it on and off.  FGX ships the
+     file empty, so accounting is on by default.  Left alone the
+     log grows without bound -- there is no cron to roll it over --
+     so a site that wants it short collects what it needs and
+     truncates or recreates the file.
+
+     Connect time is reported in hours to two decimal places.
+
+FGX                            2.11BSD                           1

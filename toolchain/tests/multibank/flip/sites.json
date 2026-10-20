@@ -1,0 +1,135 @@
+[
+  {
+    "file": "src/cc/emit.c",
+    "line": 525,
+    "kind": "PTRBANK_ST",
+    "orig": "    ir_emitf(\"                STA     _fcc_ptr+2\\n\");",
+    "flipped": "    ir_emitf(\"                STZ     _fcc_ptr+2\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 541,
+    "kind": "PTRBANK_LD",
+    "orig": "        ir_emitf(\"                LDA     _fcc_ptr+2\\n\");",
+    "flipped": "        ir_emitf(\"                LDA     #$00\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 571,
+    "kind": "PTRBANK_ST",
+    "orig": "    ir_emitf(\"                STA     _fcc_ptr+2\\n\");",
+    "flipped": "    ir_emitf(\"                STZ     _fcc_ptr+2\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 652,
+    "kind": "PTRBANK_LD",
+    "orig": "        ir_emitf(\"                LDA     _fcc_ptr+2\\n\");",
+    "flipped": "        ir_emitf(\"                LDA     #$00\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 1007,
+    "kind": "PHB",
+    "orig": "    ir_emitf(\"                PHB\\n\");",
+    "flipped": "    ir_emitf(\"                PHK\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 1423,
+    "kind": "PTRBANK_ST",
+    "orig": "        ir_emitf(\"                STX     _fcc_ptr+2\\n\");     /* commit bank AFTER both reads */",
+    "flipped": "        ir_emitf(\"                STZ     _fcc_ptr+2\\n\");     /* commit bank AFTER both reads */"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 1439,
+    "kind": "PHK",
+    "orig": "            ir_emitf(\"                PHK\\n\");",
+    "flipped": "            ir_emitf(\"                PHB\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 1681,
+    "kind": "PTRBANK_LD",
+    "orig": "    ir_emitf(\"                LDA     _fcc_ptr+2\\n\");",
+    "flipped": "    ir_emitf(\"                LDA     #$00\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 2058,
+    "kind": "PHK",
+    "orig": "    ir_emitf(\"                PHK\\n\");",
+    "flipped": "    ir_emitf(\"                PHB\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 2060,
+    "kind": "PHK",
+    "orig": "    ir_emitf(\"                PHK\\n\");",
+    "flipped": "    ir_emitf(\"                PHB\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 2133,
+    "kind": "PHK",
+    "orig": "        ir_emitf(\"                PHK\\n\");                     /* return bank = this code bank */",
+    "flipped": "        ir_emitf(\"                PHB\\n\");                     /* return bank = this code bank */"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 2331,
+    "kind": "PTRBANK_ST",
+    "orig": "    ir_emitf(\"                STA     _fcc_ptr+2\\n\");",
+    "flipped": "    ir_emitf(\"                STZ     _fcc_ptr+2\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 2757,
+    "kind": "PHB",
+    "orig": "        ir_emitf(\"                PHB\\n\");",
+    "flipped": "        ir_emitf(\"                PHK\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 4080,
+    "kind": "PHB",
+    "orig": "    ir_emitf(\"                PHB\\n\");",
+    "flipped": "    ir_emitf(\"                PHK\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 4090,
+    "kind": "PHK",
+    "orig": "    ir_emitf(\"                PHK\\n\");",
+    "flipped": "    ir_emitf(\"                PHB\\n\");"
+  },
+  {
+    "file": "src/cc/emit.c",
+    "line": 4318,
+    "kind": "PHK",
+    "orig": "            ir_emitf(\"                PHK\\n\");",
+    "flipped": "            ir_emitf(\"                PHB\\n\");"
+  },
+  {
+    "file": "src/cc/parse_expr.c",
+    "line": 3819,
+    "kind": "PHB",
+    "orig": "            ir_emitf(\"                PHB\\n\");",
+    "flipped": "            ir_emitf(\"                PHK\\n\");"
+  },
+  {
+    "file": "src/cc/parse_stmt.c",
+    "line": 1260,
+    "kind": "PHB",
+    "orig": "                ir_emitf(\"                PHB\\n\");",
+    "flipped": "                ir_emitf(\"                PHK\\n\");"
+  },
+  {
+    "file": "src/cc/parse_stmt.c",
+    "line": 4749,
+    "kind": "PHB",
+    "orig": "        ir_emitf(\"                PHB\\n\");",
+    "flipped": "        ir_emitf(\"                PHK\\n\");"
+  }
+]

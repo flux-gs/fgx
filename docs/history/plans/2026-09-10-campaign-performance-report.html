@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frames Saved</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --paper:#f7f9fb; --raise:#ffffff; --ink:#14181d; --ink-2:#39424d;
+  --ink-3:#68737f; --rule:#dbe2e9; --rule-2:#eef2f6;
+  --gain:#0f7d6b; --gain-soft:#d3e9e3; --cost:#a8503a; --cost-soft:#f0dcd5;
+  --flat:#8a94a0; --accent:#0f7d6b;
+  --shadow:0 1px 2px rgba(20,24,29,.05),0 8px 24px -12px rgba(20,24,29,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101418; --raise:#171c22; --ink:#e7edf3; --ink-2:#b3bec9;
+    --ink-3:#7f8b98; --rule:#28313a; --rule-2:#1e252c;
+    --gain:#4fc4ac; --gain-soft:#123b34; --cost:#e0866c; --cost-soft:#3b201a;
+    --flat:#6f7a86; --accent:#4fc4ac;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101418; --raise:#171c22; --ink:#e7edf3; --ink-2:#b3bec9;
+  --ink-3:#7f8b98; --rule:#28313a; --rule-2:#1e252c;
+  --gain:#4fc4ac; --gain-soft:#123b34; --cost:#e0866c; --cost-soft:#3b201a;
+  --flat:#6f7a86; --accent:#4fc4ac;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif; font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px 96px}
+.col{max-width:66ch}
+h1,h2,h3,.lbl,th,.fig,.num{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+.num,code,.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* ---- masthead ---- */
+header{padding:64px 0 36px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 18px}
+h1{font-size:clamp(38px,6vw,62px);font-weight:700;letter-spacing:-.025em;line-height:1.02;
+  margin:0 0 16px;text-wrap:balance}
+.standfirst{font-size:19px;color:var(--ink-2);margin:0;max-width:60ch}
+.range{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px 26px;
+  font-size:12.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace}
+.range b{color:var(--ink-2);font-weight:500}
+
+/* ---- headline pair ---- */
+.heads{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0;
+  margin:0 0 8px;border-bottom:1px solid var(--rule)}
+.head{padding:34px 30px 32px}
+.head+.head{border-left:1px solid var(--rule)}
+.head .lbl{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px}
+.head .fig{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:clamp(40px,6vw,58px);font-weight:700;letter-spacing:-.04em;line-height:1;
+  color:var(--gain)}
+.head .mult{font-size:15px;color:var(--ink-2);margin-top:10px;font-family:"JetBrains Mono",monospace}
+.head .note{font-size:14px;color:var(--ink-3);margin-top:14px;line-height:1.5}
+
+/* ---- bars ---- */
+.bars{margin:40px 0 8px;display:grid;gap:26px}
+.bar-row{display:grid;gap:9px}
+.bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.bar-name{font-family:Archivo,sans-serif;font-size:14px;font-weight:600;letter-spacing:.01em}
+.bar-delta{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--gain);font-weight:500}
+.track{display:grid;grid-template-columns:104px 1fr;align-items:center;gap:12px;
+  font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3)}
+.fill{height:22px;border-radius:2px;display:flex;align-items:center;padding:0 9px;
+  font-size:11.5px;font-weight:500;color:var(--ink);white-space:nowrap}
+.fill.b{background:var(--cost-soft);border-left:3px solid var(--cost)}
+.fill.a{background:var(--gain-soft);border-left:3px solid var(--gain)}
+.scale-note{font-size:12px;color:var(--ink-3);margin:14px 0 0;font-family:"JetBrains Mono",monospace}
+
+/* ---- sections ---- */
+section{padding-top:56px}
+h2{font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 8px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+h2 span{color:var(--accent)}
+h3{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:34px 0 10px;text-wrap:balance}
+p{margin:0 0 16px}
+.col p:last-child{margin-bottom:0}
+strong{font-weight:600}
+code{font-size:.88em;background:var(--rule-2);padding:1px 5px;border-radius:3px;color:var(--ink-2)}
+
+/* ---- table ---- */
+.tw{overflow-x:auto;margin:24px 0 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:0 16px 9px 0;border-bottom:1px solid var(--ink)}
+td{padding:13px 16px 13px 0;border-bottom:1px solid var(--rule-2);vertical-align:top;
+  font-family:"Source Serif 4",serif}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
+  white-space:nowrap;padding-right:0}
+td.item{font-family:Archivo,sans-serif;font-weight:600;font-size:13.5px;white-space:nowrap}
+td.wl{color:var(--ink-3);font-size:13px}
+.d-gain{color:var(--gain);font-weight:500}
+.d-flat{color:var(--flat)}
+tr.big td{border-bottom-color:var(--rule)}
+
+/* ---- verdict list ---- */
+.verdicts{display:grid;gap:0;margin-top:24px;border-top:1px solid var(--rule)}
+.v{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:16px 0;
+  border-bottom:1px solid var(--rule-2);align-items:start}
+.v .tag{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding-top:4px}
+.v .tag.dead{color:var(--cost)}
+.v .tag.open{color:var(--accent)}
+.v .body{font-size:15px;line-height:1.55}
+.v .body b{font-family:Archivo,sans-serif;font-size:14px;font-weight:600;display:block;margin-bottom:3px}
+.v .body span{color:var(--ink-2)}
+
+/* ---- traps ---- */
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-top:24px;border-radius:3px;overflow:hidden}
+.trap{background:var(--raise);padding:20px 22px}
+.trap h4{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:600;margin:0 0 7px;color:var(--ink)}
+.trap p{font-size:14px;line-height:1.5;color:var(--ink-2);margin:0}
+.trap .u{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--accent);
+  display:block;margin-bottom:9px;letter-spacing:.03em}
+
+footer{margin-top:64px;padding-top:22px;border-top:2px solid var(--ink);
+  font-size:12.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace;line-height:1.7}
+@media (max-width:640px){
+  .head+.head{border-left:none;border-top:1px solid var(--rule)}
+  .v{grid-template-columns:1fr;gap:6px}
+  .track{grid-template-columns:88px 1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .fill{transition:none}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">FGX &middot; Apple IIgs &middot; performance campaign</p>
+  <h1>Frames Saved</h1>
+  <p class="standfirst">What twelve changes actually bought, measured end&#8209;to&#8209;end against the pre&#8209;campaign tree on the same harness &mdash; and why the campaign is being set down rather than finished.</p>
+  <div class="range">
+    <span><b>baseline</b> 007c38717 &middot; 2026&#8209;09&#8209;09</span>
+    <span><b>head</b> +2 open MRs &middot; 2026&#8209;09&#8209;10</span>
+    <span><b>unit</b> frames @ 60 fps</span>
+    <span><b>paste_frame</b> 2700, both trees</span>
+  </div>
+</header>
+
+<div class="heads">
+  <div class="head">
+    <p class="lbl">Mixed load &middot; five execs</p>
+    <div class="fig">&minus;29.8%</div>
+    <div class="mult">1573 &rarr; 1104 frames &middot; 1.43&times;</div>
+    <p class="note"><code>ls&nbsp;-l</code>, <code>wc</code>, <code>grep</code>, <code>od&nbsp;-c</code>, <code>cmp</code>, all redirected. Process creation dominates; the cost is spread thin across eight changes.</p>
+  </div>
+  <div class="head">
+    <p class="lbl">Sequential read &middot; 49 KB</p>
+    <div class="fig">&minus;85.9%</div>
+    <div class="mult">7009 &rarr; 985 frames &middot; 7.12&times;</div>
+    <p class="note">One <code>grep</code> over a 49,152-byte file. Nearly all of it is a single change: stdin buffering, <span class="mono">#313</span>.</p>
+  </div>
+</div>
+
+<div class="bars">
+  <div class="bar-row">
+    <div class="bar-head">
+      <span class="bar-name">Mixed load, five execs</span>
+      <span class="bar-delta">&minus;444 frames &middot; 7.4 s</span>
+    </div>
+    <div class="track"><span>baseline</span><div class="fill b" style="width:100%">1573</div></div>
+    <div class="track"><span>head</span><div class="fill a" style="width:70.2%">1104</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-head">
+      <span class="bar-name">Sequential read, 49,152 bytes</span>
+      <span class="bar-delta">&minus;6024 frames &middot; 100.4 s</span>
+    </div>
+    <div class="track"><span>baseline</span><div class="fill b" style="width:100%">7009</div></div>
+    <div class="track"><span>head</span><div class="fill a" style="width:14.1%">985</div></div>
+  </div>
+</div>
+<p class="scale-note">Each row is drawn to its own scale &mdash; the two workloads are different shapes and are not comparable to one another.</p>
+
+<section>
+  <h2>The headline is a <span>range</span>, not a number</h2>
+  <div class="col">
+    <p>There is no single figure for "what the campaign delivered", and reporting one would be the more misleading answer. The eight changes attack different costs: pile loading, process creation, per-digit division, loop overhead, the read path, directory scanning. Which of them a workload touches decides what it gets.</p>
+    <p>A read-bound job sees <strong>7&times;</strong>. A mixed exec-bound job sees <strong>1.26&times;</strong>. The campaign's own reference workloads, measured through the fork work in Part&nbsp;9, saw <strong>&minus;49.4%</strong> and <strong>&minus;38.9%</strong> &mdash; higher than the five-exec figure above because they run fifteen and thirty-three execs over eight and thirteen distinct binary classes, which is what the resident-pile cache exists to serve.</p>
+  </div>
+</section>
+
+<section>
+  <h2>What landed</h2>
+  <div class="col">
+    <p>Each row was measured on the workload that exercises it, so the deltas are not additive. The two end-to-end figures above are the only numbers that compose.</p>
+  </div>
+  <div class="tw">
+  <table>
+    <thead>
+      <tr>
+        <th>Change</th><th>Workload measured on</th>
+        <th class="n">Before</th><th class="n">After</th><th class="n">Delta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="big">
+        <td class="item">Pile slots 4&rarr;16</td>
+        <td class="wl">15 execs / 8 classes</td>
+        <td class="n">1165</td><td class="n">745</td><td class="n d-gain">&minus;36.1%</td>
+      </tr>
+      <tr>
+        <td class="item"></td>
+        <td class="wl">33 execs / 13 classes</td>
+        <td class="n">2869</td><td class="n">2101</td><td class="n d-gain">&minus;26.8%</td>
+      </tr>
+      <tr>
+        <td class="item">Fork: byte loops &rarr; MVN</td>
+        <td class="wl">15 execs &middot; ~40 ms/fork</td>
+        <td class="n">745</td><td class="n">709</td><td class="n d-gain">&minus;4.8%</td>
+      </tr>
+      <tr class="big">
+        <td class="item">Fork: soft-frame bound</td>
+        <td class="wl">15 execs &middot; ~133 ms/fork</td>
+        <td class="n">709</td><td class="n">589</td><td class="n d-gain">&minus;16.9%</td>
+      </tr>
+      <tr class="big">
+        <td class="item">&#8627; through fork, cumulative</td>
+        <td class="wl">15 execs / 33 execs</td>
+        <td class="n">1165 / 2869</td><td class="n">589 / 1753</td>
+        <td class="n d-gain">&minus;49.4% / &minus;38.9%</td>
+      </tr>
+      <tr>
+        <td class="item">printf 32-bit division</td>
+        <td class="wl">4&times; <span class="mono">ls -l</span>, 2&times; <span class="mono">od -c</span></td>
+        <td class="n">3157</td><td class="n">3001</td><td class="n d-gain">&minus;4.9%</td>
+      </tr>
+      <tr>
+        <td class="item">Loop safepoint</td>
+        <td class="wl"><span class="mono">cmp</span>, 8 reps &middot; projected 10%</td>
+        <td class="n">3589</td><td class="n">3517</td><td class="n d-gain">&minus;2.0%</td>
+      </tr>
+      <tr class="big">
+        <td class="item">stdin read buffering</td>
+        <td class="wl">read of 49,152 B</td>
+        <td class="n">6840</td><td class="n">852</td><td class="n d-gain">&minus;87.5%</td>
+      </tr>
+      <tr>
+        <td class="item">Name cache wired</td>
+        <td class="wl">5 execs &middot; 67.7% hit rate</td>
+        <td class="n">1321</td><td class="n">1249</td><td class="n d-gain">&minus;5.4%</td>
+      </tr>
+      <tr>
+        <td class="item">Signed <code>/2^k</code> inlined</td>
+        <td class="wl">5 execs &middot; fcc codegen</td>
+        <td class="n">1249</td><td class="n">1225</td><td class="n d-gain">&minus;1.9%</td>
+      </tr>
+      <tr class="big">
+        <td class="item">Compare fused with its branch</td>
+        <td class="wl">5 execs &middot; fcc codegen</td>
+        <td class="n">1225</td><td class="n">1129</td><td class="n d-gain">&minus;7.8%</td>
+      </tr>
+      <tr>
+        <td class="item">32&#8209;bit constant shifts inlined</td>
+        <td class="wl">5 execs &middot; fcc codegen</td>
+        <td class="n">1128</td><td class="n">1104</td><td class="n d-gain">&minus;2.1%</td>
+      </tr>
+      <tr class="big">
+        <td class="item"><code>clrbuf</code> clears by the word</td>
+        <td class="wl"><code>cat</code> of 49 KB &rarr; a file</td>
+        <td class="n">288</td><td class="n">228</td><td class="n d-gain">&minus;20.8%</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>The two that reframed everything else</h2>
+  <div class="col">
+    <h3>Pile slots turned a disk-bound machine into a compute-bound one</h3>
+    <p>Idle time in the post-<code>WAI</code> scheduler was <strong>47.8%</strong> of the original profile and is <strong>7.0%</strong> now. That is the whole of what a resident pile buys. Every ranking taken before it was a ranking of a machine waiting on a disk, which is why the campaign re-profiled rather than working down the original list.</p>
+    <h3>Read buffering was found by accident and is the largest single win</h3>
+    <p>A 49 KB sequential read went from 114 seconds to 14. The path was doing one <code>read(2)</code> per byte &mdash; <code>freopen</code> onto stdin plus <code>getchar</code>, original design rather than a regression. It also invalidated the ranking underneath option 7.8, which had been sized against a profile where reading was ruinous per byte.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Killed by measurement</h2>
+  <div class="col">
+    <p>Six candidates died on evidence rather than on effort. Recording them is the point: each was plausible enough to have been built.</p>
+  </div>
+  <div class="verdicts">
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>Profile-directed bank layout</b>
+      <span>Every cross-bank shim in the system, measured together, is <strong>0.69%</strong> of a run. Shim entry labels draw zero samples; only the return trampolines register. Not worth a five-consumer ABI change.</span></div></div>
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>Indexed block-cache lookup</b>
+      <span><code>_BlkCache_Lookup</code> is the legacy cache. The VFS path uses <code>getblk</code>/<code>brelse</code>, at 1.4%.</span></div></div>
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>Raise NBUF</b>
+      <span>Already disproven in the tree before the campaign opened.</span></div></div>
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>PATH search cost</b>
+      <span>Measured, and it is not a cost.</span></div></div>
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>PackBytes code compression</b>
+      <span>The premise is wrong &mdash; it cannot compress code.</span></div></div>
+    <div class="v"><span class="tag dead">Dead</span><div class="body">
+      <b>Bounding the fork stack copy</b>
+      <span>Its ~30 ms was measured against the byte loops. With MVN in, the same work is ~7 ms, and the bound would need a trustworthy user SP at snapshot time.</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Where the time is now</h2>
+  <div class="col">
+    <p>Profiled after the name cache landed, module banks resolved through <code>_modBankTab</code>, attributed by the listing&rsquo;s source column rather than by label &mdash; a label walk lands on whatever <code>DS</code> cell precedes the code, which put 13% of a run in a data cell before it was caught.</p>
+  </div>
+  <div class="tw">
+  <table>
+    <thead><tr><th>Bucket</th><th>Share</th><th>What it is</th></tr></thead>
+    <tbody>
+      <tr><td class="item">Tools&rsquo; own code</td><td class="n">32.6%</td><td class="wl">Flat; no hot spot left</td></tr>
+      <tr><td class="item">Filesystem modules</td><td class="n">29.4%</td><td class="wl">vfs 15.1, ufsdir 9.4, ufs 4.9</td></tr>
+      <tr><td class="item">Kernel bank</td><td class="n">19.3%</td><td class="wl">Idle 8.5, <code>_fcb_mvn</code> 3.2</td></tr>
+      <tr class="big"><td class="item">Bank 0</td><td class="n">12.2%</td><td class="wl">12.1 of it the <strong>card&rsquo;s own firmware</strong> &mdash; not FGX&rsquo;s code</td></tr>
+      <tr><td class="item">Far + tty banks</td><td class="n">5.4%</td><td class="wl"></td></tr>
+      <tr class="big"><td class="item">&#8627; <code>fcc_rt.s</code>, all three modules</td><td class="n">8.70%</td><td class="wl"><strong>Was the largest single item.</strong> Two of its routines are now inlined &mdash; see below</td></tr>
+      <tr><td class="item">&#8627; <code>vfs_cache.s</code></td><td class="n">0.89%</td><td class="wl">What the name cache costs, against 5.4% bought</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>The compiler was the biggest bucket</h2>
+  <div class="col">
+    <p>Once the module banks were attributed, the largest single item in the profile was not kernel code at all &mdash; it was <code>fcc_rt.s</code>, the compiler&rsquo;s own runtime, carried once per module because its helpers are reached DBR&#8209;relatively. Two changes came out of that, and the second is the campaign&rsquo;s biggest.</p>
+    <h3>One missing emitter explained a whole class</h3>
+    <p>fcc had no arithmetic&#8209;shift&#8209;right, so it declined to inline <em>anything</em> signed that needed one &mdash; <code>&gt;&gt;</code>, <code>/2^k</code> and <code>%2^k</code> alike. Inlining signed division by a power of two took <strong>&minus;1.9%</strong>, and up to 4.6% on directory&#8209;heavy work. Signed <code>&gt;&gt;</code> is still open, same cause.</p>
+    <h3>And a helper&rsquo;s share is a floor, not an estimate</h3>
+    <p>The four 16&#8209;bit comparison helpers sampled at <strong>2.04%</strong>. Fusing the compare with its branch was worth <strong>&minus;7.8%</strong> &mdash; nearly four times that, because the <code>JSR</code>/<code>RTS</code>, the 0/1 the helper built and the <code>CMP #0</code> that tested it were all billed to the <em>caller</em>. That ratio is the thing to carry to the next candidate, not the sampled number.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Where the run <span>actually goes</span></h2>
+  <div class="col">
+    <p>Taken after the fusion, on the five&#8209;exec workload the timings use and matching it to the frame &mdash; 1128 &mdash; so a share here is a share of the number at the top of the page. Every earlier profile in this campaign was taken on a <code>/dev/null</code> variant, which is a different machine: it reported the kernel bank at 19.4% against the 22.2% below, and <code>fcc_rt.s</code> at 8.70% against 5.26%.</p>
+  </div>
+  <div class="bars">
+    <div class="track"><span>tool code</span><div class="fill b" style="width:100%">26.8%</div></div>
+    <div class="track"><span>VFS stack</span><div class="fill b" style="width:100%">27.6%</div></div>
+    <div class="track"><span>kernel</span><div class="fill b" style="width:100%">27.7%</div></div>
+    <div class="track"><span>bank 0</span><div class="fill b" style="width:50%">13.4%</div></div>
+    <div class="track"><span>idle</span><div class="fill a" style="width:38%">10.3%</div></div>
+  </div>
+  <p class="scale-note">The VFS stack is <code>vfs</code> 14.7% + <code>ufsdir</code> 7.7% + <code>ufs</code> 5.2%, split across three module banks that only resolve once <code>_modBankTab</code> is read at runtime. Bank 0 is mostly the SmartPort card&rsquo;s own firmware, which FGX does not own.</p>
+  <div class="col">
+    <h3>The hottest single things</h3>
+    <p><code>_fcb_mvn</code> <strong>3.49%</strong>, the fork/exec image copy &middot; <code>ufs_dirscan</code> <strong>3.00%</strong>, still, with the name cache in and answering about half of lookups &middot; <code>uio_copy</code> <strong>2.29%</strong> &middot; <code>ndslot</code> <strong>1.99%</strong> &middot; <code>_fcc_long_mul</code> <strong>1.92%</strong> &middot; <code>clrbuf</code> <strong>1.48%</strong>.</p>
+    <p>Nothing left is large. The campaign began with a profile that had a 47.8% item in it; this one&rsquo;s biggest non&#8209;idle entry is 3.5%, and the remaining work is arithmetic spread thin across the filesystem rather than a hot spot to remove. That is the shape of a tree that has been optimised, and it is why the next candidates are compiler changes rather than kernel ones.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Why it is being <span>set down</span></h2>
+  <div class="col">
+    <p>Not finished &mdash; exhausted. The biggest non&#8209;idle item in the profile is now <strong>3.6%</strong>, and roughly a quarter of the run is outside FGX entirely: idle at 10.4% and the SmartPort card&rsquo;s own firmware at 14.0%. The last three compiler&#8209;side changes measured <em>zero</em>.</p>
+    <p>The clearest sign of where the ceiling is: the <strong>card class is worth more than any remaining software item</strong>. The same workload runs 1104 frames on the harness&rsquo;s default <code>retronet</code> and <strong>1020 on <code>microdrive</code></strong>, the extended&#8209;SmartPort card &mdash; 7.6% for no code change at all. FGX already picks the multi&#8209;block path when a card offers it; there is nothing there to fix.</p>
+  </div>
+  <div class="verdicts">
+    <div class="v"><span class="tag open">7.3 &middot; #372</span><div class="body">
+      <b>Fork &mdash; the last item worth hundreds of milliseconds</b>
+      <span>~130 ms from bounding the soft&#8209;frame bank by <code>_fcc_sfp</code>, ~37 ms from turning the stack/DP byte loops into MVN, ~30 ms from bounding the stack copy. <strong>Only pair 0 is blocked</strong> on #361; the rest is available now. <code>_fcb_mvn</code> is 3.61% and the largest non&#8209;idle item. Note the shape &mdash; &ldquo;turn the byte loops into MVN&rdquo; is the same defect <code>clrbuf</code> was, one subsystem over, and that one paid 20.8% on a copy.</span></div></div>
+    <div class="v"><span class="tag open">7.8</span><div class="body">
+      <b>Zero-init into bss &mdash; still the only untried lever</b>
+      <span>The loader runs at <strong>1,094 bytes/frame</strong>, taken from the slope of two tools at four and eight repetitions so per&#8209;exec cost separates from fixed overhead. Worth <strong>1.95% of a mixed run</strong>. Still a linker change: every generator hardcodes <code>&quot;bss&quot;: 0</code>.</span></div></div>
+    <div class="v"><span class="tag open">dirs</span><div class="body">
+      <b>Directory work is still ~4.9%, with the cache in</b>
+      <span><code>dirscan</code> 2.92 + <code>dirloop</code> 1.06 + <code>dirmatch</code> 0.47 + <code>lookup</code> 0.46. The name cache answers about half of lookups and <em>plateaus</em> there &mdash; the rest are first&#8209;time names no cache can answer &mdash; so what is left is a cheaper scan, not more caching.</span></div></div>
+    <div class="v"><span class="tag open">#381</span><div class="body">
+      <b>uio copy &mdash; 2.4%, not 4.16%</b>
+      <span><code>uio_copy</code> 2.41% plus <code>uiomove</code>&rsquo;s own C. It did not get faster; the run got shorter, so its share rose. That is the ceiling for anything done to this path.</span></div></div>
+    <div class="v"><span class="tag open">#386</span><div class="body">
+      <b><code>/dev/null</code> is slower than a real disk</b>
+      <span>It declares no <code>d_write</code>, so <code>spec_chwrite</code> falls back to <strong>one <code>uiomove</code> and one seam crossing per byte</strong>. Discarding 170 KB costs 7656 frames where writing it to a file costs 4812 &mdash; <strong>~781 cycles per byte thrown away</strong>. 2.11BSD consumes the whole iovec in one step and never calls <code>uiomove</code>. Root cause found, fix scoped at ~15 lines, not built.</span></div></div>
+    <div class="v"><span class="tag open">#384</span><div class="body">
+      <b><code>ufsprobe</code> is red on main</b>
+      <span>A block on the free list <em>and</em> owned by inode 500. It is the only instrument aimed at the write path, it is disabled by default, and its skip message reads as a configuration note rather than a known failure. Worth clearing before more UFS write work.</span></div></div>
+    <div class="v"><span class="tag open">#383</span><div class="body">
+      <b>Four fixtures main carries unseen</b>
+      <span><code>lc_stat_local</code> hangs; <code>ftrunc</code>, <code>renameover</code> and <code>sysc</code> return partial scores. Each proven pre&#8209;existing by recompiling with main&rsquo;s own compiler. They stay hidden because the oracle <strong>samples</strong> ~240 of ~627 fixtures, so a fixture is only looked at when sampled or when its own golden moves. The harness half &mdash; a hung chunk scoring its forty neighbours as regressions &mdash; is fixed.</span></div></div>
+    <div class="v"><span class="tag dead">7.6</span><div class="body">
+      <b><code>bdwrite</code> &mdash; dead, and the measurement is why</b>
+      <span>The doc gated it on &ldquo;fix 7.1 first and re&#8209;measure&rdquo;. 7.1 landed, and the stdio write buffer is <em>already</em> one full UFS block &mdash; so every block is written exactly once and there is nothing for a delayed write to coalesce. Even on a pure copy the buffer layer is ~5%, while 28% is firmware doing transfers <code>bdwrite</code> cannot remove.</span></div></div>
+    <div class="v"><span class="tag open">#361</span><div class="body">
+      <b><code>_fcb_mvn</code> pair 0 &mdash; blocks only its own half</b>
+      <span>The sbrk heap sits at the tail of that bank. It gates pair 0 of 7.3 and nothing else, which is the correction to an earlier reading that treated it as blocking the whole item.</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Method &mdash; the traps that cost real time</h2>
+  <div class="col">
+    <p>Every one of these produced a wrong number that looked like a finding before it was caught.</p>
+  </div>
+  <div class="traps">
+    <div class="trap">
+      <span class="u">absolute frames</span>
+      <h4>A harness frame number is not elapsed time</h4>
+      <p>Frames count from reset; the paste happens at 2700. A run "stopping at 2731" is five keystrokes in, not a slow command. This cost issue #377 twelve passes and several days.</p>
+    </div>
+    <div class="trap">
+      <span class="u">_modBankTab</span>
+      <h4>A bucket called "user code" is a lie until banks resolve</h4>
+      <p>Module banks are allocated at load time, so no static table can attribute them. One profile read "tools' own code 64.3%, flat, campaign stops"; 34.7% of that was the filesystem modules, hiding two live levers.</p>
+    </div>
+    <div class="trap">
+      <span class="u">PRIMARY=inject</span>
+      <h4>The profile measured the harness typing</h4>
+      <p>Autoboot types at <strong>6.24 frames a character</strong> &mdash; padding one <code>/bin/true</code> with 100 spaces of nothing took it from 108 to 732 frames. On the 146&#8209;char workload that is a flat <strong>+755 frames</strong>, identical on every tree, and 42% of a profile parked on the idle <code>WAI</code> against 10%. The <em>deltas</em> survive it, so an A/B gives the right saving and the wrong percentage. Caught twice: it was on this page already, and a later session still spent an hour &ldquo;disproving&rdquo; the campaign with it.</p>
+    </div>
+    <div class="trap">
+      <span class="u">&gt; /dev/null</span>
+      <h4>The control was more expensive than the thing it removed</h4>
+      <p>Redirecting to <code>/dev/null</code> does not take the I/O out &mdash; it swaps disk I/O for a per-byte chardev path that is <strong>59% slower than writing a real file</strong>. Part&nbsp;15 profiled a <code>/dev/null</code> variant and read the kernel bank at 19.4% against the real workload&rsquo;s 22.2%.</p>
+    </div>
+    <div class="trap">
+      <span class="u">positive control</span>
+      <h4>An A/B needs proof of which arm ran</h4>
+      <p>Switching arms with <code>sed -i.bak</code> and <code>mv</code> restores the original mtime, so ninja skipped the rebuild and both arms were the same image. Only a counter read out of the module bank caught it.</p>
+    </div>
+    <div class="trap">
+      <span class="u">scaling runs</span>
+      <h4>One before/after pair cannot price a per-iteration saving</h4>
+      <p>Two workloads both improved by exactly 12 frames, which reads as a fixed cost. Only running 1, 4 and 8 repetitions &mdash; 12, 36, 72 &mdash; proved it scaled with the work.</p>
+    </div>
+    <div class="trap">
+      <span class="u">TTYHOG 255</span>
+      <h4>A long pasted command line is silently truncated</h4>
+      <p>2.11BSD's own canonical-queue limit, ported verbatim. The run then hits the frame cap and reads as "slow". Conformant, not a defect.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Measured on MAME, deterministic; two runs per arm, identical to the frame.<br>
+  Harness time runs ~2.5&times; stock IIgs hardware &mdash; these are relative figures, not wall-clock claims for real silicon.<br>
+  Shares are from a profile taken on the same five&#8209;exec workload the timings use, matching it to the frame (1092), under <span class="mono">FGX_MAME_PRIMARY=inject</span> &mdash; which is not the harness default, and is the difference between a 10% idle share and a 42% one.<br>Sources: <span class="mono">docs/history/plans/2026-09-09-performance-dive-results.md</span>, Parts 8&ndash;16.
+</footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+ "name": "shwait",
+ "description": "wait(2) answers ECHILD once every child is reaped, so sh's `wait' returns: a background child reaped during a foreground command leaves its TCB slot's pid and parent behind, which wait's scan counted as a live child, and wait slept forever.",
+ "command": "sh -c 'sleep 1 & sleep 3; wait; echo W\"\"DONE'",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["WDONE"],
+  "screen_lacks": ["PANIC", "BRK"]
+ }
+}

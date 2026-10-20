@@ -1,0 +1,34 @@
+
+
+HOSTS(5)             UNIX Programmer's Manual             HOSTS(5)
+
+
+
+NAME
+     hosts - static host name database
+
+DESCRIPTION
+     The file /etc/hosts maps host names to Internet addresses; it
+     is consulted by gethostbyname(3) before DNS.  Each line gives
+     one address followed by one or more names for it:
+
+          a.b.c.d   official-name   [alias ...]
+
+     Fields are separated by spaces or tabs.  Blank lines and text
+     from a `#' to the end of line are ignored.  For example:
+
+          127.0.0.1     localhost
+          192.168.2.1   gateway gw router
+
+     A reverse lookup (address to name) returns the first name on
+     the matching line.
+
+FILES
+     /etc/hosts
+
+SEE ALSO
+     host(1), gethostbyname(3), resolv.conf(5)
+
+
+
+Printed 7/20/86                                                5

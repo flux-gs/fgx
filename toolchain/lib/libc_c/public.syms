@@ -1,0 +1,27 @@
+# Globals libc exports that no libc MEMBER references, so the archive's
+# dead-strip would drop them, but something outside the archive does.
+#
+# fgx_ar's `index` decides a data global is live if another MEMBER imports it.
+# A reference from a ROOT -- the tool's own .s, or libfgx.s, both of which the
+# selector is given with --root -- does not count, because the index is built
+# before any root is known.  --public is the declared answer for that case:
+# "globals no member references but a tool might" (fgx_ar.py, the help text of
+# `index --public').
+#
+# sys_siglist -- 2.11BSD's signal-name table (libc_c/siglist.c).  A DATA-ONLY
+# member: it has no function to FGX2_EXPORT, and nothing inside libc reads it,
+# so the index has neither of the two reasons it keeps a global.  Every reader
+# is a TOOL -- mount(8) reports a mount_ufs child that died on a signal --
+# which is exactly the case this file's header describes.
+sys_siglist
+#
+# _ctype_ -- <ctype.h>'s class table (libc_c/ctype_.c).  A DATA-ONLY member
+# like sys_siglist, read by the classifier macros in whatever includes
+# <ctype.h>, which is mostly tools.
+_ctype_
+#
+# __lc_fltused -- the name fcc's `]__lc_fltused' marker gives a program that
+# generated floating point code (libc_c/fltpr.c).  No member references it; a
+# PROGRAM does, and that reference is what selects fltpr, as `fltused' selects
+# fltpr.s in 2.11BSD.
+__lc_fltused

@@ -1,0 +1,10 @@
+{
+ "name": "dynmulti",
+ "description": "A DYNAMIC PROGRAM OF SEVERAL CODE SEGMENTS, AND ONE WHOSE TABLES NEED AN ADDED SEGMENT (shared libc SP5 spec 4, 4.1).  dynmulti's main in code segment 0 calls functions in code segments 2 and 3, each reaching libc code and data through its own import sites, so a wrong segment bank in the tables or a site left unpatched in a later segment prints DMU FAIL.  dyntabseg's one code segment is padded to 64 bytes short of full, so the binder's tables are in an added code segment and crt0 finds them only through _dyn_tab.  Each runs twice, the second from the shared-text table.  Markers by expansion.",
+ "command": "A=OK; /testbin/dynmulti; echo M1${A}=$?; /testbin/dynmulti; echo M2${A}=$?; /testbin/dyntabseg; /testbin/dyntabseg; echo T${A}=$?",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": ["DMU ok", "M1OK=0", "M2OK=0", "TAB ok", "TOK=0"],
+  "screen_lacks": ["DMU FAIL", "ld.so:", "PANIC", "BRK"]
+ }
+}

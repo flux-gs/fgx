@@ -1,0 +1,107 @@
+
+
+PTY(4)               UNIX Programmer's Manual                PTY(4)
+
+
+
+NAME
+     pty - pseudo terminal driver
+
+SYNOPSIS
+     /dev/ptyp0, /dev/ptyp1        pseudo-terminal masters
+     /dev/ttyp0, /dev/ttyp1        pseudo-terminal slaves
+
+DESCRIPTION
+     The pty driver provides support for a device-pair termed a
+     pseudo terminal.  A pseudo terminal is a pair of character
+     devices, a master and a slave.  The slave device provides an
+     interface identical to that described in tty(4); anything
+     written on the master appears as input to the slave, and
+     anything written on the slave is presented as input on the
+     master.
+
+     The slave is a terminal in every respect that matters: it has
+     a line discipline, an erase and kill character, a foreground
+     process group, and a window size.  A program reading it
+     cannot tell it from a real line, which is the point --
+     telnetd(8) and script-like tools put a shell on one and read
+     the other end.
+
+     The master's presence IS carrier.  A slave whose master is
+     not open reads end-of-file; when the master closes, the
+     slave's session is hung up (SIGHUP followed by SIGCONT) and
+     both queues are flushed.  Opening a master that is already
+     open fails with EBUSY: a pty pair has one controller.
+
+     FGX provides TWO pairs, numbered 0 and 1.
+
+IOCTLS
+     The standard tty(4) ioctls are answered on the SLAVE, which
+     is the terminal.  In addition:
+
+     TIOCPKT  Set or clear "packet mode" on the MASTER.  With
+              packet mode enabled, each read from the master
+              returns a status byte first.  A read that returns
+              data has TIOCPKT_DATA (zero) at the head; a read
+              that returns a status alone returns exactly one
+              byte, which is one of
+
+                   TIOCPKT_FLUSHREAD    input was flushed
+                   TIOCPKT_FLUSHWRITE   output was flushed
+                   TIOCPKT_STOP         output was stopped
+                   TIOCPKT_START        output was restarted
+
+              A status byte is never followed by data in the same
+              read.  telnetd(8) uses this to relay the session's
+              flow control to the far end.
+
+     TIOCSTOP, TIOCSTART
+              Stop and restart the slave's output, as if the user
+              had typed the stop and start characters.  Issued on
+              the slave.
+
+     TIOCOUTQ Answers the number of characters queued for output
+              on the slave and not yet read by the master.
+
+DIAGNOSTICS
+     None; the driver reports failures through the usual errno
+     values.  EIO from a slave write means the master has gone;
+     EBUSY from a master open means one is already there.
+
+SEE ALSO
+     tty(4), telnetd(8), stty(1)
+
+BUGS
+     REMOTE MODE IS NOT IMPLEMENTED.  4.2BSD and later provide a
+     TIOCREMOTE ioctl on the master which puts the pair into
+     "remote and flow controlled input" mode: the master writes
+     whole lines directly into the slave's canonical queue,
+     bypassing the line discipline, and each write(2) becomes one
+     record.  It exists so that a master which does its own line
+     editing -- a login daemon in LINEMODE, classically -- is not
+     edited a second time locally.
+
+     FGX refuses TIOCREMOTE with ENOTTY rather than accepting it
+     and doing nothing, which would leave a caller believing its
+     next write had gone in as a record while the bytes were
+     edited by the very discipline remote mode exists to bypass.
+
+     The obstacle is not effort.  Upstream marks the end of each
+     remote write with a NUL sentinel appended after the last
+     byte, and the slave's read drains up to it -- so a record
+     boundary is required.  FGX's character-device write is a
+     per-byte loop, and no byte in such a loop knows that it is
+     the last one.  Giving the master a bulk write entry would not
+     settle it either: that entry serves the /dev vnode route,
+     while the system-call route a pty master actually uses stays
+     per-byte.  Remote mode therefore waits on a record boundary
+     that the write path does not have for ANY character device.
+
+     Nothing in FGX asks for it today.  telnetd(8) runs the
+     session a character at a time and lets the slave's own
+     discipline do the editing.
+
+     The pairs are fixed at two and their names are fixed with
+     them; there is no pty allocation service, so a program that
+     wants a pty opens the masters in turn until one does not
+     answer EBUSY.

@@ -1,0 +1,24 @@
+[97mFGX 320-MODE COLOR SHOWCASE
+[97m===========================
+
+[97mNORMAL (0-7)         BRIGHT (8-15)
+[97m-------------        --------------
+  [97m 0 [30mBLACK         [97m 8 [90mGREY          [0m
+  [97m 1 [31mRED           [97m 9 [91mRED+          [0m
+  [97m 2 [32mGREEN         [97m10 [92mGREEN+        [0m
+  [97m 3 [33mYELLOW        [97m11 [93mYELLOW+       [0m
+  [97m 4 [34mBLUE          [97m12 [94mBLUE+         [0m
+  [97m 5 [35mMAGENTA       [97m13 [95mMAGENTA+      [0m
+  [97m 6 [36mCYAN          [97m14 [96mCYAN+         [0m
+  [97m 7 [37mWHITE         [97m15 [97mWHITE+        [0m
+
+[97mPER-CELL COLOR (each char a different hue):
+  [97m 0 [97m 1 [97m 2 [97m 3 [97m 4 [97m 5 [97m 6 [97m 7 [97m 8 [97m 9 [97m10 [97m11 [97m12 [97m13 [97m14 [97m15 [0m
+  [30m## [31m## [32m## [33m## [34m## [35m## [36m## [37m## [90m## [91m## [92m## [93m## [94m## [95m## [96m## [97m## [0m
+
+[97mMIXED-COLOR TEXT (one color per char, cycling 0..15):
+  [30mT[31mH[32mE [33mQ[34mU[35mI[36mC[37mK [90mB[91mR[92mO[93mW[94mN [95mF[96mO[97mX [30mJ[31mU[32mM[33mP[34mS [35mO[36mV[37mE[90mR [91mT[92mH[93mE [94mL[95mA[96mZ[97mY [30mD[31mO[32mG[33m.[0m
+
+[97mIN 320 MODE EACH CELL HOLDS A DIFFERENT COLOR.
+[97mIN 640 MODE THESE COLLAPSE TO 3 FG SLOTS PER ROW.
+

@@ -1,0 +1,42 @@
+set files = (/etc/* /bin/*sh*)
+alias ll 'ls -l'
+foreach f ($files)
+    set base = $f:t
+    if (-d $f) then
+        set kind = dir
+    else if (-f $f) then
+        set kind = file
+    else
+        set kind = other
+    endif
+end
+@ i = 0
+while ($i < 20)
+    @ i++
+    switch ($i)
+    case 1:
+        set x = one
+        breaksw
+    case 2:
+        set x = `echo two`
+        breaksw
+    default:
+        set x = $i
+        breaksw
+    endsw
+end
+set words = `head -40 /etc/services`
+ll /bin > /dev/null
+echo /bin/*sh* /etc/* > /dev/null
+if ($#files > 0) then
+    if ($i == 20) then
+        if ($x == 20) then
+            foreach w ($words)
+                if ("$w" =~ *tcp*) then
+                    set last = $w
+                endif
+            end
+        endif
+    endif
+endif
+source /testdata/hwmcsh

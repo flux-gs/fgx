@@ -1,0 +1,17 @@
+{
+  "name": "conpaint",
+  "description": "THE CONSOLE SHOWS WHAT ITS BUFFER HOLDS, asserted against the PIXELS.  Every other screen assertion in this suite reads the kernel CharBuf -- run.py decodes the `charbuf' region into screen_text -- so a console that stops painting passes all of them while the machine sits in front of the user with a frozen screen.  Sixteen terminal-adjacent tests were green throughout the defect this test is for.  It boots, types NOTHING, and compares the SHR framebuffer with the CharBuf cell by cell at one idle instant (conpaint_check.py).  THE UTHERNET II IS FITTED AND IS LOAD-BEARING, not decoration: without a NIC the boot prints 21 rows and never scrolls, and scrolling is what this holds to the pixels.  With DHCP binding, three more lines print and the last writes scroll the screen; every one of those scrolls must reach the framebuffer as it happens.  The test was written against a deferred scroll repaint that a console read paid off -- with ttyv.s's read-op flushes reverted it reported the prompt row unpainted -- and that deferral has since been removed (apple/fgx#534), so nothing is now owed to a read.  The command is omitted deliberately -- typing would be a console read, and no console read must be needed for the screen to be current.",
+  "timeout_s": 75,
+  "boot_device": "microdrive",
+  "mame_slots": ["-sl1", "uthernet2"],
+  "memory_regions": [
+    {"name": "shr", "addr_hex": "012000", "len": 32000, "boot_frame": 3000},
+    {"name": "vc0char", "addr_hex": "030000", "len": 8000, "conbank": true, "boot_frame": 3000},
+    {"name": "toprow", "addr_equ": "KFAR_VT_STATE+VT_TOP_ROW", "len": 2, "farbank": true, "boot_frame": 3000},
+    {"name": "rstate", "addr_equ": "KFAR_VT_STATE+VT_RENDER_STATE", "len": 1, "farbank": true, "boot_frame": 3000}
+  ],
+  "expect": {
+    "screen_lacks": ["PANIC", "BRK"],
+    "check_script": "conpaint_check.py"
+  }
+}

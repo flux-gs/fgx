@@ -1,0 +1,17 @@
+{
+  "name": "coninv",
+  "description": "Console per-cell colour buffers survive a scroll.  `ls -l /` overflows the 25-row screen, so Con_ScrollRegionUp runs ~9 times; each scroll clears and refills the revealed bottom row through _Con_ClearRingRow + _Vt_FillAttrRow_At, and each of those routines reads its MVN byte count with `LDA _Con_RowBytesM2` -- an ABSOLUTE, i.e. DBR-relative, read. MVN leaves DBR pointing at the destination bank (the console bank), so without a _DBRK between the blocks that count came back as whatever CHARBUF held at the same offset -- $2020 (two spaces) = 8224 -- and each 79-byte fill smeared its byte across FGBUF, BGBUF and the alt-screen snapshots instead. On screen that read as the whole text area except the bottom row going inverse video on the first scroll and staying that way until `clear`. Nothing in the suite noticed, because the harness asserts on CHARBUF text and CHARBUF was never the buffer that got hit. The goldens below are the untouched defaults, the console's default pair as ANSI colour indexes: FGBUF = 8000 x $07 (white, which the SHR draws in its grey slot), BGBUF = 8000 x $00 (black, drawn in its blue slot). Any smear moves both.",
+  "command": "ls -l /",
+  "timeout_s": 90,
+  "memory_regions": [
+    {"name": "fgbuf", "addr_hex": "034000", "len": 8000, "conbank": true},
+    {"name": "bgbuf", "addr_hex": "036000", "len": 8000, "conbank": true}
+  ],
+  "expect": {
+    "screen_contains": ["total", "fgx#"],
+    "memory": [
+      {"name": "fgbuf", "sha256": "40bd4474a301f59ef58c4e7d5c128e09154251d9f65a3816b728a9fe8987a0f7"},
+      {"name": "bgbuf", "sha256": "668946bab9868b28489bb906205ee1026045c8bcd3ca62a1bdf733c65491351b"}
+    ]
+  }
+}

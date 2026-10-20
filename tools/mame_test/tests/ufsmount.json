@@ -1,0 +1,29 @@
+{
+  "name": "ufsmount",
+  "description": "mount(2) AND umount(2) FROM A SHELL, ON A SECOND SPINDLE.  UFS 2.6, and it is the functionality test the campaign's goal 2 needs: attach an image, mount it, read it, unmount it.  disk/ufsscratch.fs comes in through `extra_hards' as unit 1, /dev/sd1 being the node for that unit, and /mnt is an empty directory on the boot volume.\n\nWHAT EACH ARM DISCRIMINATES:\n  `big' and `lost+found' after the mount are FILES THAT EXIST ONLY ON THE SCRATCH VOLUME -- the boot volume's /mnt is empty and staged empty.  So the listing is not `mount said 0', it is the second filesystem's own directory read through the mount point.  A mount(2) that returned success without covering the directory prints nothing here.\n  `/dev/sd1 on /mnt' is mount(8) reading the kernel's mount LIST back through getmntinfo(3)/getfsstat(2) -- a second, independent statement that the mount is in the table and not merely that namei found something.\n  The `lacks' arms are the unmount: after `umount /dev/sd1' the listing of /mnt must be EMPTY again and the table must not name sd1.  An unmount that unlinked the mount from the list but left the directory covered would pass the table arm and fail the listing one; the reverse fails the other.  Both are asserted because vfs_dounmount does both jobs.\n\nTHE EXIT STATUSES ARE ASSERTED NOW, AND COULD NOT BE UNTIL 2026-09-05.  Both tools reported failure on runs where the operation demonstrably succeeded -- apple/fgx#333, two separate faults with one symptom.  mount(8) printed `mount: /mnt: Signal 0' because its WIFEXITED test was applied to a `union wait', which fcc silently compiled as the union's ADDRESS; umount(8) returned 1 on success because 2.11BSD's main tests `umountfs(*argv) == 0' while its own umountfs returns 0 for success.  Both are fixed, so `m=0' and `u=0' are load-bearing arms rather than a bug frozen in place: they are what goes red if either decode regresses, and the needles are built with $? so neither can be matched by the command line echoed above them.\n\nMEASURED DISCRIMINATING: make vfs_mountat return ENODEV before ufs_mount and the two content arms go red while the `lacks' arms stay green -- the mount point is never covered, so removing the cover changes nothing.",
+  "command": "/sbin/mount /dev/sd1 /mnt; echo m=$?; ls /mnt; /sbin/mount; /sbin/umount /dev/sd1; echo u=$?; ls /mnt; /sbin/mount; sync",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "extra_hards": [
+    "disk/ufsscratch.fs"
+  ],
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "m=0",
+      "u=0",
+      "big",
+      "lost+found",
+      "/dev/sd1 on /mnt",
+      "/dev/sd0 on /"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK",
+      "not found"
+    ]
+  }
+}

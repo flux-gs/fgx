@@ -1,0 +1,9 @@
+# libtermlib.so's data exports: the four objects 2.11BSD's libtermlib
+# defines (tgoto.c: UP, BC; tputs.c: ospeed, PC).  fgx_ld's library link
+# exports exactly these, each from the core.
+UP
+BC
+PC
+ospeed
+# The block table crt0's _crt0_inits passes to _lib_init.
+_libtermlib_blktab

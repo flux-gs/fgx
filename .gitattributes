@@ -1,0 +1,31 @@
+# The three bank-patch tables are GENERATED but TRACKED, and unlike
+# kernel_exports.s they cannot simply be ignored: each is an INPUT to the very
+# assembly whose listing generates it, so there is no clean-checkout state in
+# which the build could produce them from nothing.
+#
+# `-merge` stops git from attempting a line-by-line merge of two address lists.
+# That merge is never meaningful -- both sides are stale the moment the kernel's
+# size changes, and neither is correct for the merged result -- but it SUCCEEDS
+# often enough to be dangerous, silently producing a table that matches no
+# build.  With this, git leaves the conflict for a human, which for these files
+# means one thing: take either side, rebuild, and regenerate.
+#
+# THE REBUILD IS WHAT MAKES THIS SAFE, and it is not a matter of remembering.
+# All three are --check'd by the `kchecks` ninja rule, so a table that does not
+# match the listing FAILS THE BUILD; and the two bank-patch tables carry
+# SYMBOLIC entries (`DA _kfp342+3`), which the assembler refuses outright when
+# the site named has been compiled out.  A stale table cannot reach a booting
+# image (apple/fgx#79).
+#
+#     python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt \
+#         src/kernel/far_patchsites.s core
+#     python3 tools/gen_w5100_patchsites.py build/fgx_S01_KernelMain_Output.txt \
+#         src/kernel/w5100_patchsites.s
+#     python3 tools/gen_far_bankpatch.py build/fgxfar_Output.txt \
+#         src/kernel/far/core_patchsites.s far
+#
+# If the first build after a merge fails with "Impossible to evaluate DA Data",
+# that is this working: delete the offending DA line, build, regenerate, build.
+src/kernel/far_patchsites.s        -merge
+src/kernel/far/core_patchsites.s   -merge
+src/kernel/w5100_patchsites.s      -merge

@@ -1,0 +1,48 @@
+{
+ "name": "ssansi",
+ "description": "THE CARD SHOWS ANSI ART AS DRAWN: SIXTEEN COLOURS ON SIXTEEN BACKGROUNDS, AND CODE PAGE 437.  With the Second Sight card in slot 3 and sscon up as ttyv3's display, the console shell runs ansicat -b 9600 on a six-row fixture (disk_src/testdata/ansi.ans) into /dev/ttyv3.  Each row is built to land one VGA attribute byte on the card, bg<<4|fg under the palette in ANSI order: bold yellow on blue $4B (bold is the bright foreground), blink on red $97 (iCE colour: the bright background), code page 437 bytes $DB $B0 $B1 $B2 $80 at 7 on 0, a 256-colour 196 folded to bright red $09 as Linux vt.c folds it, a 24-bit blue background $47, and yellow on green made the default by CSI 8 ] and returned to by ESC[0m, $23.  A ^Z and a SAUCE record follow the art, and ansicat must stop at the ^Z.  ssansi_check.py reads the card's mirror in bank $E0 at the address the module logged, row v being mirror row start_line+v, and asserts each row's bytes and attribute; it is inconclusive if ttyv3's ring never received the file.  DISCRIMINATES: with _Vt_ApplySgr folding colours to the SHR's four slots again the attributes are wrong on every row, and with Con_PutChar masking to seven bits row 2 carries ASCII letters.",
+ "command": "sh",
+ "post_commands": [
+  "ansicat -b 9600 /testdata/ansi.ans > /dev/ttyv3"
+ ],
+ "post_gap_frames": 400,
+ "timeout_s": 30,
+ "exit_on_prompt": false,
+ "mame_slots": [
+  "-sl3",
+  "secondsight"
+ ],
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  },
+  {
+   "name": "mirror",
+   "addr_hex": "E06000",
+   "len": 16032
+  },
+  {
+   "name": "vc3chars",
+   "vcbank": 3,
+   "addr_hex": "0000",
+   "len": 8000
+  }
+ ],
+ "expect": {
+  "klog_contains": [
+   "sscon: 80x25 in slot 3, cells at $E0:"
+  ],
+  "screen_contains": [
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "ansicat:"
+  ],
+  "card_screen_min": 10,
+  "check_script": "ssansi_check.py"
+ }
+}

@@ -1,0 +1,278 @@
+{
+ "name": "smoke",
+ "description": "THE development gate. Boots the OS from the suite's boot image -- disk/fgxroot.fs since 2026-09-04, NOT the disk/fgx.po this sentence named until 2026-09-05 -- waits for the shell prompt, runs `ls /`, and checks the listing came back. That is the whole contract: the kernel starts, init runs, a login shell reaches a prompt, it can execute a binary, and the binary produces correct output and returns to the prompt. Nothing else. Everything the 310-test suite used to assert is either a build-time source check (which runs in seconds and stays) or a behavioural claim that belongs to a future acceptance-gate design, not to the loop that says 'this tree is not broken'. The one addition is 'GUARD stkhwm': the stack high-water-mark report (bank-0 campaign 0.1) is normally ring-only and invisible, and reaches the console ONLY when a task's deepest touched address landed inside its guard page -- one page from scribbling on a neighbour's stack. That is the failure class that presents as someone else's bug, so its absence is asserted here rather than left to a human reading a table. Two tty-bank lines join it for the same reason: THE TWO TTY-BANK LINES MOVED OUT on 2026-08-24, to tests/THE TTY BANK'S PROBES ARE GONE (2026-09-07) and so are the two `lacks' that watched for their failure strings: `CLIST PROBE FAILED' and `TTY PROBE FAILED' can no longer be printed by any kernel, and an assertion that cannot fail is not coverage. What this costs is stated rather than hidden -- the tty bank's ported routines had no other witness, and nothing replaced it. A third boot line joins them and is asserted BOTH ways: `lbolt ok' present and `LBOLT PROBE FAILED' absent. _LboltProbe (main.s) checks that the once-a-second lbolt wake is armed with a baked countdown rather than a DS-zero one, that the heartbeat has actually decremented it, and that _Lbolt_Wake drains a due flag and only a due flag. It is UNCONDITIONAL -- unlike the tty probes it waits for nothing and costs a few dozen bytes -- so unlike them the CONTAINS can stay here, and it is the load-bearing half for exactly the reason this description gives about the tty lines: a `lacks' on its own passes when the probe never ran.  A check_script joins them on 2026-08-25: the per-pid kernel stacks are PAINTED now rather than zero-filled, so every dump already carries the high-water mark of each 512-byte slice, and kstkhwm_check reads it here because smoke is the run that boots and reaches a shell with no test workload on top -- the baseline depth, on the test the gate always runs, for free.  It is a RATCHET and not a health assertion: the deepest slice already sits 30 bytes off its bottom on a plain `ls /' (apple/fgx#230), so what it can enforce is that the number does not get worse.  The $C5C5 canary the dispatcher checks cannot do this job -- it is one word at the very bottom, so it reports only a COMPLETE overrun and stays green at 30 bytes spare, which is why its silence was never evidence of headroom.  AND THE KERNEL-C IRQ PROBE'S VERDICT IS ASSERTED HERE FROM 2026-08-27, BOTH WAYS, having been printed and read by nothing since T6 increment 1 landed it three increments ago.  `_KcIrqProbe' (main.s) proves the interrupt-time kernel-C context is a SECOND register file, that the spl bracket is real rather than the empty macros it replaced, and -- from increment 4b -- that the receive-interrupt slot dispatches.  It could print `KC IRQ PROBE FAILED case N' on every boot and no manifest in the tree looked for it; the string was found by MUTATING the probe and watching this test stay green with the failure on screen.  BOTH HALVES, for the reason the lbolt lines one row up give: the `lacks' alone passes when the probe never ran at all, which is what a halt or a zero `_kTtyReady' looks like from outside, so the CONTAINS is the load-bearing one.  The contains string carries the probe's full message on purpose -- when the probe grows a case the message changes and this assertion has to be updated with it, which is the coupling that keeps it honest.  THE rootstatus ASSERTION IS 0100 AND WAS FEFF, which is the campaign arriving rather than a tolerance being widened.  root_mount records why it did not mount in a value 0/1/-1/-2/-3 because a boolean cannot say: FEFF is -2, \"ufs_mountfs refused the volume -- the ordinary ProDOS case\", and it was the right answer for as long as the suite booted disk/fgx.po.  The suite boots the 2.11BSD image now, so 1 is the only correct value: mounted, AND vfs_setroot took its root, which is a stronger claim than root_mounted alone.  It is asserted rather than dropped because 0 is what this address reads when root_mount NEVER RAN -- the far bank's statics are not zeroed at load -- so an unasserted rootstatus cannot tell a mounted root from a boot that skipped the mount entirely.\n\nTHE PASS VERDICT IS GONE FROM THE LOG (2026-09-06) AND THIS TEST IS WEAKER FOR IT.  The probe still runs and still prints its FAILURE, but it no longer announces success -- a boot log carries what the machine detected, not a developer's checkmarks -- so what is left here is a `lacks' arm, and this tree's own rule is that a `lacks' alone passes when the probe never ran at all.  apple/fgx#336 carries the fix: the probes should record a verdict BYTE, as _ttyVerdict already does and as smoke reads `rootstatus', and this test should assert that byte through memory_regions.  Kept rather than deleted because the probe is real and its failure arm still discriminates. KSTKHWM_CHECK WAS DETACHED FROM THIS TEST 2026-09-07 (apple/fgx#337). It ratchets the deepest per-pid kernel stack, and it cannot tell a deeper call chain from a build that shifted which task an interrupt excursion landed on. Removing the tty-bank probes -- code that was COMPILED OUT and never executed -- took it red: eleven of thirteen slices stayed at exactly 460 bytes, the figure #337 records as constant across builds, while the two outliers moved to 472 and 466. A ratchet that a no-op change can trip is a tripwire on unrelated work, and it had already produced one wrong conclusion. Real stack coverage stays in `bootstk', `stkhwm', `mutstk' and `mutstk_deep'. EVERY KERNEL CANARY READS $A5 AT THE END (apple/fgx#464): each KMem_*_canary guard byte is a region here, so an overrun of any guarded region turns the gate red; tools/check_canaries.py fails the build if a declared canary is not stamped or not read here.",
+ "command": "ls /",
+ "timeout_s": 25,
+ "expect": {
+  "screen_contains": [
+   "etc",
+   "sbin",
+   "usr",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm",
+   "kernel C: WRONG ANSWER",
+   "LBOLT PROBE FAILED",
+   "KC IRQ PROBE FAILED"
+  ],
+  "memory": [
+   {
+    "name": "rootstatus",
+    "hex_starts_with": "0100"
+   },
+   {
+    "name": "cn_AlarmReload",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_AlarmTicks",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_Arenas",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_Coremap",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_ConAltSave",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_ConExpand",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_ConMode",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_ConVcState",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_ConVtState",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_CurFontName",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_FontHdrBuf",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_KGlobals",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_NetOps",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_PfArgs",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_PfNumBuf",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_TypeStats",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_busTable",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_diskStates",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fls",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_frn",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fsCwd",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fsDirBuf",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fsLastDirInfo",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fsStatBuf",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_fw",
+    "hex_starts_with": "a5"
+   },
+   {
+    "name": "cn_kernLog",
+    "hex_starts_with": "a5"
+   }
+  ]
+ },
+ "memory_regions": [
+  {
+   "name": "rootstatus",
+   "symbol": "root_status",
+   "farbank": true,
+   "len": 2,
+   "boot_frame": 900
+  },
+  {
+   "name": "cn_AlarmReload",
+   "symbol": "KMem_AlarmReload_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_AlarmTicks",
+   "symbol": "KMem_AlarmTicks_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_Arenas",
+   "symbol": "KMem_Arenas_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_Coremap",
+   "symbol": "KMem_Coremap_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_ConAltSave",
+   "symbol": "KMem_ConAltSave_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_ConExpand",
+   "symbol": "KMem_ConExpand_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_ConMode",
+   "symbol": "KMem_ConMode_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_ConVcState",
+   "symbol": "KMem_ConVcState_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_ConVtState",
+   "symbol": "KMem_ConVtState_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_CurFontName",
+   "symbol": "KMem_CurFontName_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_FontHdrBuf",
+   "symbol": "KMem_FontHdrBuf_canary",
+   "len": 1,
+   "farbank": true
+  },
+  {
+   "name": "cn_KGlobals",
+   "symbol": "KMem_KGlobals_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_NetOps",
+   "symbol": "KMem_NetOps_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_PfArgs",
+   "symbol": "KMem_PfArgs_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_PfNumBuf",
+   "symbol": "KMem_PfNumBuf_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_TypeStats",
+   "symbol": "KMem_TypeStats_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_busTable",
+   "symbol": "KMem_busTable_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_diskStates",
+   "symbol": "KMem_diskStates_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fls",
+   "symbol": "KMem_fls_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_frn",
+   "symbol": "KMem_frn_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fsCwd",
+   "symbol": "KMem_fsCwd_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fsDirBuf",
+   "symbol": "KMem_fsDirBuf_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fsLastDirInfo",
+   "symbol": "KMem_fsLastDirInfo_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fsStatBuf",
+   "symbol": "KMem_fsStatBuf_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_fw",
+   "symbol": "KMem_fw_canary",
+   "len": 1
+  },
+  {
+   "name": "cn_kernLog",
+   "symbol": "KMem_kernLog_canary",
+   "len": 1
+  }
+ ]
+}

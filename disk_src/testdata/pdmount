@@ -1,0 +1,19 @@
+# The node layer, driven through mount(2) directly: the ProDOS modules
+# are loaded here, since pdmount bypasses mount_prodos, which loads them.
+/sbin/modload prodos prodosw
+P=/testbin/pdmount
+$P
+echo pd=$?
+mount -t prodos /dev/sd1 /mnt
+echo mt=$?
+ls /mnt
+cd /mnt/Sub/INNER
+echo PWD=`pwd`
+cat deep
+cd /mnt
+$P -s hello sap tree .x ext ._ext ._hello sub . f01
+$P -U f02 sap
+$P -w .
+cd /
+umount /dev/sd1
+echo um=$?

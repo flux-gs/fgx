@@ -1,0 +1,80 @@
+
+
+
+FRACTAL(1)          FGX Programmer's Manual            FRACTAL(1)
+
+
+
+NAME
+     fractal - interactive fractal explorer (SHR 320x200x16)
+
+SYNOPSIS
+     fractal [ --draw | --rainbow | --sum ]
+
+DESCRIPTION
+     Fractal renders escape-time fractals on the Super Hi-Res
+     320x200 16-color screen and lets you explore them with a
+     crosshair.  Rendering is progressive: a chunky preview of
+     the whole image appears almost immediately and sharpens in
+     place.  All keys work while a render is still painting.
+
+     The compute engine is Q9 fixed point driven by a quarter-
+     square multiply table (no hardware multiply), with interior
+     shortcuts (cardioid/bulb tests, Brent cycle detection) that
+     are bit-exact against a host reference oracle.
+
+KEYS
+     arrows       move the crosshair 1 pixel (summons it if
+                  hidden; works during rendering)
+     ctrl-arrows  move 8 pixels (HJKL also work)
+     enter        zoom 2x centered on the crosshair.  Zoom is
+                  capped at two steps by the Q9 step size.
+     f            cycle fractal type: Mandelbrot, Tricorn,
+                  Burning Ship, cubic Multibrot
+     j            render the Julia set of the point under the
+                  crosshair (Mandelbrot only); esc returns to
+                  the saved Mandelbrot view
+     p            cycle palettes: grey-red, grey, rainbow, fire,
+                  ice, and the user palette when present.  The
+                  finished image recolors instantly.
+     h, ?         pop up the key summary
+     esc          back out of a Julia set, otherwise exit
+     q            quit from anywhere
+
+OPTIONS
+     --draw       explorer mode (the default)
+     --rainbow    start with the rainbow palette and classic
+                  mod-15 color cycling
+     --sum        print the compute oracle checksum (testing)
+
+FILES
+     /etc/fractal.pal    optional user palette: 16 whitespace-
+                         separated hex RGB12 values, e.g.
+                         000 111 222 ... F00.  Entry 0 is the
+                         set interior (usually black).  Joins
+                         the p cycle when valid.
+     /lib/fonts/default.fnt   console font, used by the help box
+
+NOTES
+     Fractal runs only on the physical console.  The Super
+     Hi-Res screen is the machine and there is exactly one of
+     it, so there is no per-terminal framebuffer to follow a
+     session onto; started from a pty or a virtual console it
+     prints a diagnostic and exits rather than paint over a
+     display its user cannot see.  It asks /dev/tty which line
+     it is on, so redirecting its input or output does not
+     change the answer.  The checksum options below are exempt:
+     they touch no screen.
+
+     Deeper zoom awaits a wider multiply engine; two zoom steps
+     exhaust the Q9 pixel step.  Julia sets, the Burning Ship,
+     and off-axis zooms compute all 200 rows; axis-symmetric
+     views mirror and render nearly twice as fast.
+
+BUGS
+     The 16-palette-per-scanline hardware caps on-screen colors
+     at 16; the parked 3200-color engine may return someday.
+
+
+
+Printed 7/21/26            July 21, 2026                        1

@@ -1,0 +1,30 @@
+{
+ "name": "fsckprobe",
+ "description": "UFS 2.1: 2.11BSD's own fsck(8) RUNNING ON THE 65816, checking a UFS filesystem end to end.  Phase 1's gate arm 3 ran this same source on the live PDP-11 against a volume FGX wrote; this is the other direction -- FGX's own build of it, against a filesystem tools/fgxfs.py made and calls clean.\n\nIT CHECKS A REGULAR FILE, AND THAT IS UPSTREAM'S OWN PATH RATHER THAN A DODGE: setup.c asks \"file is not a block or character device; OK\" and -y answers it, which is exactly how arm 3 ran fsck on the PDP-11 (no spare partition needed).  A BLOCK DEVICE is not reachable here yet and the reason is recorded rather than incidental -- /dev path resolution is the synthesized CHARDEV registry (_Chardev_LookupSuffix), so `stat(\"/dev/sd2\")' falls through to ProDOS and misses, and stat(2) on a /dev node is one of the three syscalls UFS 1.7d I4 reassigned to the root swap precisely to avoid hooking a tenth path-taking syscall onto the /dev mount.  Measured, not assumed: `stat /dev/null' answers (a registered chardev) and `stat /dev/sd2' says \"No such file or directory\".\n\nTHE COUNTS ARE THE ASSERTION.  fgxfs calls this image `256 blocks (2 used, 248 free)' and fsck answers `2 files, 2 used, 248 free' -- asserted as the WHOLE LINE, because reaching phase 5 proves the walk ran and only the numbers prove it walked the right bytes.  That is where two independent implementations of the format meet, which is the claim goal 2 of the campaign rests on.  The five phase banners are asserted individually because a checker that dies in phase 3 still prints phases 1 and 2.  screen_lacks carries fsck's own complaint vocabulary: on a clean filesystem every one of those words is a failure, and `Can't' is the positive control that the file was actually staged and opened.",
+ "command": "/sbin/fsck -y /testdata/ufstiny.img",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "** Phase 1 - Check Blocks and Sizes",
+   "** Phase 2 - Check Pathnames",
+   "** Phase 3 - Check Connectivity",
+   "** Phase 4 - Check Reference Counts",
+   "** Phase 5 - Check Free List",
+   "fgx#",
+   "2 files, 2 used, 248 free"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm",
+   "Can't",
+   "CANNOT",
+   "UNREF",
+   "PARTIALLY",
+   "BAD",
+   "DUP",
+   "MISSING",
+   "SORRY"
+  ]
+ }
+}

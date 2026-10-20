@@ -1,0 +1,22 @@
+{
+ "name": "ac",
+ "description": "ac(8) connect-time accounting over /etc/wtmp. At the boot prompt the log holds the `~'/reboot record and the root/console login that is still open; ac closes the open session at `now' (its synthetic trailing `~' record) and credits root the boot-to-now interval. `ac -p' prints a per-user line for root and a grand total, both in hours to two decimals. Exercises the port's one FGX delta (ac.c:19, ctime() prototyped against its 24-bit far return) and upstream's own tbuf tty hashing, unchanged, over FGX's line names (ttyp0/ttyp1 at 5,056/5,057, ttyv1-3 at 5,531-5,533, console at TSIZE-1 = 6,241).",
+ "command": "ac -p",
+ "timeout_s": 60,
+ "exit_on_prompt": true,
+ "expect": {
+  "screen_contains": [
+   "root",
+   "total",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "No /etc/wtmp",
+   "Bad tty name",
+   "cannot",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ]
+ }
+}

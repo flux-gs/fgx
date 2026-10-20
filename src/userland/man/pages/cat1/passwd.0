@@ -1,0 +1,138 @@
+
+
+PASSWD(1)           UNIX Programmer's Manual           PASSWD(1)
+
+
+
+NAME
+     passwd - change a login password
+
+SYNOPSIS
+     passwd [ user ]
+
+DESCRIPTION
+     Passwd changes a password in /etc/passwd.  With no
+     argument it changes the password of the account running it;
+     with a user argument it changes that account's.
+
+     The new password is asked for twice, with echo off:
+
+          New password:
+          Retype new password:
+
+     and nothing is written until the two agree.  An empty
+     answer to either prompt -- including the empty string an
+     end-of-file produces -- prints
+
+          Password unchanged.
+
+     and exits without touching the file, so a control-D is
+     always a safe way out.  SIGHUP, SIGINT, SIGQUIT and SIGTSTP
+     are ignored for the whole run, so control-D is also the only
+     way out: a signal arriving between the two renames below
+     would leave /etc/passwd missing rather than merely stale.
+
+     A user who is not root must supply the current password
+     before being asked for a new one, and may only name their
+     own account.  An account whose password field is EMPTY is
+     locked -- login(1) fails closed on it -- so a non-root user
+     cannot change one: there is no current password to prove,
+     and treating that as "nothing to prove" would let the owner
+     of a locked account unlock it.  Root is asked for neither.
+     Every FGX process
+     currently runs as uid 0 -- the kernel answers getuid(2) from
+     a single global -- so nothing reaches that arm yet; it is
+     written for the day credentials become per-process rather
+     than deleted and reinvented then.
+
+     A non-root password must be at least six characters and must
+     not be entirely lower case.  Root is exempt: root must be
+     able to set a password the rules forbid, to recover an
+     account or to bring up a machine that is on no network at
+     all, and can edit /etc/passwd directly in any case.
+
+HOW THE FILE IS REPLACED
+     The live /etc/passwd is never opened for writing.  The new
+     database is built in /etc/ptmp -- claimed with O_EXCL, so a
+     second passwd already in the middle of a rewrite is told the
+     password file is busy -- and only then swapped in:
+
+          unlink /etc/opasswd
+          rename /etc/passwd -> /etc/opasswd
+          rename /etc/ptmp   -> /etc/passwd
+
+     Two renames, not one, because FGX's rename(2) renames in
+     place only when the target does NOT exist; renaming over a
+     live /etc/passwd returns EXDEV (see mv(1)).  The cost is a
+     two-syscall window in which /etc/passwd is absent and a
+     login started inside it fails.  The benefit is that no
+     failure can leave a truncated or half-written passwd file,
+     which is the one outcome nobody can log in to repair, and
+     that /etc/opasswd holds the previous database afterwards.
+     If the second rename fails the first is undone.
+
+     Lines other than the one being changed are copied through
+     byte for byte, including the file's leading comment: only
+     the second colon-separated field of the matching line is
+     replaced.  If the entry is not found, or a line is longer
+     than 255 characters, nothing is renamed and /etc/passwd is
+     left exactly as it was.
+
+SECURITY
+     THE THREAT MODEL IS DELIBERATELY LIMITED.  The stored hash
+     is not DES.  It is the tagged form
+
+          $f$xy$hhhhhhhh
+
+     where xy is a two-character salt and hhhhhhhh is eight hex
+     digits -- see crypt(3).  It stops a shoulder-surfer and a
+     casual reader of /etc/passwd.  It is not a defence against
+     an attacker who has the file and wants the password.
+     Choosing a longer password does not change that: the hash is
+     eight hex digits wide whatever you type.
+
+     The salt is taken from the clock, not fixed, so two accounts
+     that choose the same password do not get the same hash and
+     /etc/passwd does not advertise the fact.
+
+     /etc/opasswd is left behind holding the PREVIOUS database,
+     including the previous hash for the account just changed.
+     It is not read by anything; it exists so a failed swap is
+     recoverable.  Remove it if that bothers you.
+
+FILES
+     /etc/passwd           user database
+     /etc/ptmp             the new database, while it is written
+     /etc/opasswd          the previous database
+
+SEE ALSO
+     login(1), crypt(3), passwd(5)
+
+DIAGNOSTICS
+     passwd: password file busy -- try again later.
+          /etc/ptmp exists, so another passwd is partway through
+          a rewrite.  If none is, it was interrupted; the live
+          file is intact and removing /etc/ptmp clears this.
+
+     passwd: /etc/passwd: no entry for name
+          The account was in the database when it was looked up
+          and not when it was copied.  Nothing is renamed.
+
+     passwd: /etc/passwd is MISSING -- recover with: mv
+     /etc/opasswd /etc/passwd
+          The swap failed partway AND the rollback failed too, so
+          the database is on disk only under its backup name.
+          Nothing else on the machine can log a user in until
+          that mv is run.  Do it from the shell that printed
+          this, before logging out.
+
+BUGS
+     There is no password ageing, no login class, and no way to
+     lock an account other than emptying its password field --
+     which login(1) treats as "cannot log in", not as "no
+     password required".  Neither vipw(8) nor chpass(1) exists,
+     so /etc/ptmp is contended for by passwd alone.
+
+
+
+Printed 7/20/86                                                1

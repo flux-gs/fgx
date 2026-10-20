@@ -1,0 +1,29 @@
+{
+ "name": "pipeheap",
+ "description": "A PIPELINE MUST NOT WARN ABOUT THE HEAP.  Every pipeline used to print '!! HEAP: double-free detected' at teardown (apple/fgx#113), and the suite ran pipelines in test after test without noticing, because assertions were on command OUTPUT and on screen_lacks [PANIC, BRK] -- the pipeline's answer was always correct and the shell always continued, so a warning on every pipe in every run was invisible.  This asserts the absence directly.\n\nFour shapes, because the fault was in pipe TEARDOWN and not in any one tool: a filter that reads to EOF (cat), one that counts (wc), one that exits EARLY and closes the read end first (head), and a builtin-fed pipe with no fork on the left (echo).  The non-piped control is deliberate -- 'head -3' on a file was always clean, and a test that only ran pipes could not have told the difference between 'pipes are fixed' and 'the heap warning is gone everywhere'.\n\nIt was NOT a double-free.  The message was a misdiagnosis: Kfree read CH_TYPE before checking arena membership, so a pointer from no arena at all had its 'type' read out of whatever it addressed, and a zero there printed as a double-free.  The real fault was _NlKC_Kfree forwarding uninitialised A/Y.  Both are fixed; the strings for all three heap warnings are listed here so any of them fails this test.\n\nThe echo needle is 'PIP=ok', which only EXPANSION can produce: the typed line is `P=PIP; echo $P=ok`, so 'PIP' and '=ok' both appear but the joined string never does.  Two cuts were caught by the gate's vacuous-assertion checker before this -- a literal 'hi', then a bare 'PIP' that the assignment itself contained.  'bin' comes from ls, 'secure' from the ttys file: both are output only.",
+ "command": "sh",
+ "post_commands": [
+  "ls / | cat",
+  "ls / | wc -l",
+  "ls / | head -3",
+  "P=PIP; echo $P=ok | head -1",
+  "head -3 /etc/ttys"
+ ],
+ "post_gap_frames": 400,
+ "timeout_s": 200,
+ "exit_on_prompt": false,
+ "expect": {
+  "screen_contains": [
+   "bin",
+   "PIP=ok",
+   "secure"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "double-free",
+   "non-heap pointer",
+   "HEAP CORRUPT"
+  ]
+ }
+}

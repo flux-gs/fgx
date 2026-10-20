@@ -1,0 +1,3 @@
+# Keeps /tmp present on the disk image (make_disk.sh _populate CREATEFOLDERs
+# every disk_src/ subdir).  ed(1) and other tools create scratch files in /tmp.
+# This dotfile is not staged onto the disk (cadius _populate skips dotfiles).

@@ -1,0 +1,71 @@
+FGXUNIX(5)           UNIX Programmer's Manual          FGXUNIX(5)
+
+
+
+NAME
+     fgxunix - the kernel image, and the segments inside it
+
+DESCRIPTION
+     /fgxunix is the whole kernel: the core bank, the far bank,
+     the tty bank and the boot-essential modules, in one file.
+     Stage 2 reads it, places each segment in a bank of its own,
+     and jumps to the core.  This is 2.11BSD's arrangement -- a
+     single /unix whose overlays live inside it, sized by
+     ov_siz[NOVL] in the header -- rather than a set of files
+     named by a manifest, which is what FGX shipped until
+     2026-09-05 as /KERNEL, /KERNELFAR, /KERNELTTY and three
+     entries under /lib/modules driven by /etc/preload.conf.
+
+     THE FIRST BLOCK IS THE SEGMENT TABLE.  It begins with the
+     eight bytes `FGXUNIX1', a segment count, one reserved byte,
+     and then five bytes per segment: a base selector, a bank
+     offset from that base, the destination offset's high byte,
+     and a 16-bit count of 512-byte blocks.  The payloads follow
+     in table order, each padded to a block boundary.
+
+     SIZES ONLY, AND NO FILE OFFSETS.  A segment's position in
+     the file is the sum of the block counts before it, which is
+     how 2.11BSD's boot program places an overlay.  An offset
+     stored beside a size is one more number that can disagree
+     with it.
+
+     THE TABLE NAMES A BASE, NOT A BANK, because no bank is known
+     until the Memory Manager has answered.  Selector 0 is the
+     kernel handle and selector 1 the module window in the
+     rest-of-OS claim (REST_KMOD_FIRST_OFF in include/kernel.s).
+
+     FOUR MODULE SEGMENTS IS THE LIMIT, and it is a real one:
+     that window is four banks and stage 2 does not bound its
+     cursor, so a fifth would land on the kernel heap before a
+     console existed to say so.  tools/mkfgxunix.py refuses such
+     a table, and refuses a segment that runs past the end of its
+     bank, so both are build errors rather than black screens.
+
+     A SEGMENT IN HERE IS NOT AN ALTERNATIVE TO modload.conf(5).
+     A module belongs in the image only if it must be live before
+     the kernel can dispatch a file operation.  That is a cycle
+     and not a preference: a module named in modload.conf(5) is
+     read THROUGH a filesystem, so the filesystem can never be
+     one of them.  Putting it in the image dissolves the cycle --
+     an image segment is read through nothing.
+
+     Order matters, as it does in modload.conf(5): ufs resolves
+     vfs's vtable in its own mod_init and ufsdir resolves both.
+     Stage 2 records the module segments' banks in table order
+     and the kernel registers them down that list.
+
+     A file whose first eight bytes are not the magic is refused
+     with a message on the boot console, before any bank is
+     written.  A missing /fgxunix is fatal: there is nothing left
+     to report it with.
+
+FILES
+     /fgxunix
+     /etc/boot.conf         names it; the default is /fgxunix
+
+SEE ALSO
+     boot.conf(5), modload.conf(5)
+
+
+
+Printed 9/5/26                                                 5

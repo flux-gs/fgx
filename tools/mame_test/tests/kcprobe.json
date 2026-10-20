@@ -1,0 +1,18 @@
+{
+  "name": "kcprobe",
+  "description": "THE kernel-C seam's acceptance test, and it only means anything on a DEBUG kernel. Requires kernel.kcprobe = 1 in cfg/system.cfg and a rebuild; against a production kernel the line it looks for cannot appear and this test SHOULD fail, which is why it is not in the default set. What it proves: the core kernel switches data bank and direct page (KC_ENTER), crosses into the far bank through export slot 27, runs fcc-generated code that calls an fcc runtime helper, and gets the right answer back -- boot checks the value rather than printing it, so a wrong result reports WRONG ANSWER instead of a number nobody reads. What it does NOT prove is that the direct page is the RIGHT one: kc_probe writes every DP slot it later reads, so it is self-consistent on any page (measured -- pointing KC_ENTER at FGX_DP_KTASKS still returns 42). See docs/history/audits/2026-08-09-kernel-c-01-gate/README.md.  SCOPE NARROWED 2026-08-12: this used to assert 'vfs: buffer cache ready' and the absence of two vfs failure lines.  Those belonged here only while the buffer cache WAS the far bank's kernel C -- the same KC_ENTER, the same export table, one slot along.  The VFS is vfs.mod now, in a module bank, reached through the bank-0 gateway instead, so a vfs assertion here would test a seam this test does not exercise and would go red for a reason that has nothing to do with slot 27.  vfsmod.json covers the module's bring-up; this covers the far bank's own C, which is what its name says.\n\nTHE PASS VERDICT IS GONE FROM THE LOG (2026-09-06) AND THIS TEST IS WEAKER FOR IT.  The probe still runs and still prints its FAILURE, but it no longer announces success -- a boot log carries what the machine detected, not a developer's checkmarks -- so what is left here is a `lacks' arm, and this tree's own rule is that a `lacks' alone passes when the probe never ran at all.  apple/fgx#336 carries the fix: the probes should record a verdict BYTE, as _ttyVerdict already does and as smoke reads `rootstatus', and this test should assert that byte through memory_regions.  Kept rather than deleted because the probe is real and its failure arm still discriminates.",
+  "command": "ls /",
+  "timeout_s": 25,
+  "expect": {
+    "screen_contains": [
+      "fgx#"
+    ],
+    "screen_lacks": [
+      "kernel C: WRONG ANSWER",
+      "kernel C: DP SAVE BROKEN",
+      "BRK",
+      "PANIC",
+      "GUARD stkhwm"
+    ]
+  }
+}

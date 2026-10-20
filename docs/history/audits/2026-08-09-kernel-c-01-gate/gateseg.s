@@ -1,0 +1,13 @@
+                MX      %00
+                PUT     ../../../../include/config.s
+                PUT     ../../../../include/hardware.s
+                PUT     ../../../../include/kernel.s
+                PUT     ../../../../include/macros.s
+                PUT     ../../../../include/dpmap.s
+                PUT     ../../../../src/kernel/far/fcc_dp.s
+                ORG     $050000
+                PUT     bmap.s
+                PUT     ../../../../src/kernel/far/fcc_rt.s
+                PUT     ../../../../src/kernel/far/fcc_ktrap.s
+                PUT     stubs.s
+                PUT     ../../../../toolchain/lib/fcc_runtime_data.s

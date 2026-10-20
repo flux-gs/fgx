@@ -1,0 +1,23 @@
+{
+  "name": "trunctree",
+  "description": "ftruncate(2) ON A DOUBLE-INDIRECT FILE GIVES THE WHOLE TREE BACK -- the recursion level no case in the corpus had ever reached.  apple/fgx#159, the half of apple/fgx#68 trunkfree cannot see, and the gap apple/fgx#193 filed in as many words: \"no UFS probe case reaches ufs_indirtrunc at recursion level 1 or 2 -- the double- and triple-indirect truncate path.  Every existing case uses files small enough to stay at level 0, which is exactly where a wrong row stride multiplies to zero.\"\n\nTHE GEOMETRY IS THE TEST.  NDADDR is 4 and NINDIR is 256, so the single indirect covers blocks 4..259 and block 260 is the FIRST the double indirect addresses.  /root/big300 is 300 blocks and therefore owns 303: 300 data, one single indirect, one double, and one sub-index under the double.  The probe recomputes that boundary from statfs's own f_bsize and REFUSES to run if the file no longer reaches it -- a volume built with a different FS_BLKSIZE would move it, and a probe that carried on regardless would be a level-0 test wearing this one's name.\n\nTHE FILE IS STAGED BY mkfile, NOT WRITTEN ON TARGET, and that is not a shortcut: 300 KB of writes through the vnode path is minutes of guest time (bigread greps 48 KB in 127 guest seconds) and the subject here is the TRUNCATE.  tools/make_ufsboot.sh builds it, and its content is a function of the logical block number so a reader returning the right bytes from the wrong block is still caught.\n\nTHE ORACLE IS THE VOLUME'S FREE COUNT through getfsstat(2) -- the number df(1) prints -- because nothing else can see this.  The file's LENGTH is correct either way: read(2) and stat(2) agree on a truncated file whether or not its blocks came back, which is why apple/fgx#68 needed the same oracle and why the M37/ftrunc fixture says reclamation is deliberately not asserted.\n\nMEASURED DISCRIMINATING 2026-09-06: stopping ufs_itrunc's level loop at SINGLE -- `for (level = SINGLE; level >= SINGLE; level--)' -- gives \"returned 261 of 303\" and FAILs.  That is the exact shape the test exists for: the direct and single-indirect blocks come back and the whole double-indirect subtree, 42 blocks, stays attached to a file that no longer names it.  It passes at 303 of 303 unmutated.",
+  "command": "/testbin/trunctree; echo tt=$?",
+  "boot_s": 45,
+  "timeout_s": 150,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 2
+  },
+  "expect": {
+    "screen_contains": [
+      "trunctree: OK a double-indirect file gives its whole tree back",
+      "tt=0"
+    ],
+    "screen_lacks": [
+      "trunctree: FAIL",
+      "PANIC",
+      "BRK"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

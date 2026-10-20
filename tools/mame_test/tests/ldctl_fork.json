@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_fork",
+ "description": "Shared libc SP4: a fork child uses its parent's libraries; its exit releases them.",
+ "command": "/testbin/ldctl fork",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC fork ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,9 @@
+# curssodyn on a fresh boot: the first trace loads curses, the program
+# runs, a second trace finds it resident, ldd lists the libraries.  The
+# counts are echoed last: curses clears the screen when it starts.
+LD_TRACE_LOADED_OBJECTS=1 /testbin/curssodyn > /tmp/t1
+/testbin/curssodyn
+LD_TRACE_LOADED_OBJECTS=1 /testbin/curssodyn > /tmp/t2
+ldd /testbin/curssodyn
+echo CTR first=`grep -c "lcurses.1 => .*loaded)" /tmp/t1`
+echo CTR second=`grep -c "lcurses.1 => .*resident)" /tmp/t2`

@@ -1,0 +1,12 @@
+{
+  "name": "prof_sed",
+  "description": "Phase-0 profiler: sed -f heavy.sed over a staged big.txt, output redirected to a file (no console scroll). pc_sample enabled.",
+  "command": "sed -f /docs/heavy.sed /docs/big.txt > /root/profout",
+  "timeout_s": 120,
+  "pc_sample": true,
+  "stage_files": [
+    {"host": "tools/profile/workloads/big.txt", "prodos_dir": "/FGX/DOCS", "name": "BIG.TXT"},
+    {"host": "tools/profile/workloads/heavy.sed", "prodos_dir": "/FGX/DOCS", "name": "HEAVY.SED"}
+  ],
+  "expect": {"screen_lacks": ["BRK", "PANIC", "Cannot", "not found"]}
+}

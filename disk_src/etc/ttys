@@ -1,0 +1,7 @@
+# name  getty              type    status
+console /bin/sh            vt100   on secure
+ttyv1   /bin/getty         vt100   on secure
+ttyv2   /bin/getty         vt100   on secure
+ttyv3   /bin/getty         vt100   on secure
+ttyp0   none               fgxpty  off secure
+ttyp1   none               fgxpty  off secure

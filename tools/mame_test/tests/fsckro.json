@@ -1,0 +1,26 @@
+{
+  "name": "fsckro",
+  "description": "DISCRIMINATOR: fsck -n on a BROKEN volume finds the fault and writes NOTHING.  Pairs with fsckfix_unref, which writes the repair; if the volume survives this and not that, the damage is in the WRITE path.\n\nIT RUNS AGAINST A BLOCK DEVICE NOW, AND IT HAS TO (2026-09-06, apple/fgx#335).  It used to say `/sbin/fsck -n /testdata/ufsbadunref.img' -- a REGULAR FILE -- and that combination cannot check anything at all in 2.11BSD: setup() asks `file is not a block or character device; OK' and reply() returns 0 whenever nflag is set (usr/sbin/fsck/utilities.c:49, usr/sbin/fsck/setup.c:46), so fsck prints ` no' and returns before it opens the filesystem.  The screen then carries no complaint, which reads as fsck having failed to find the fault and is really fsck declining to look.  -y answers the same question yes, which is why fsckfix_* and fsckprobe work on files and this one never could.\n\nSO THE FAULT ARRIVES ON ITS OWN SPINDLE.  disk/ufsbadspin.fs is a 4096-block filesystem carrying exactly one unreferenced inode, built by tools/ufscorrupt.py --one, which ASSERTS AT BUILD TIME that the host fsck calls it broken -- so a case that stopped being a real fault fails loudly instead of passing quietly.  It comes in through extra_hards as unit 1, and /dev/sd1 is the node for that unit.  MEASURED 2026-09-06: fsck reaches a block device node and walks all five phases through it, which no test in the corpus did before this one -- fsckprobe's description still says a block device `is not reachable here yet', written before /dev carried sd0..sd7.\n\nTHE READ-ONLY CLAIM IS CHECKED ON THE PLATTER, NOT ON THE SCREEN.  fsck prints `(NO WRITE)' because -n was PASSED, not because it then refrained: a build whose write path ignored nflag would print the same banner, name the same fault, and repair the volume.  fsckro_check.py compares the spindle the machine had against the one the build made, byte for byte, and requires it to be unchanged AND still broken -- the second half because a volume that is identical but clean means the fault was never there, which would make the screen assertion vacuous rather than the write check green.  The two fail differently and the checker says which.",
+  "command": "/sbin/fsck -n /dev/sd1; echo ro=$?",
+  "timeout_s": 150,
+  "expect": {
+    "screen_contains": [
+      "UNREF FILE",
+      "(NO WRITE)",
+      "fgx#"
+    ],
+    "screen_lacks": [
+      "BRK",
+      "PANIC"
+    ],
+    "check_script": "fsckro_check.py"
+  },
+  "boot_s": 45,
+  "extra_hards": [
+    "disk/ufsbadspin.fs"
+  ],
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 2
+  }
+}

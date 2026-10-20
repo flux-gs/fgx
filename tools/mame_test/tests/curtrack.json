@@ -1,0 +1,87 @@
+{
+ "name": "curtrack",
+ "description": "THE BLOCK CURSOR IS WHERE THE CARET IS, in the buffer AND on the screen.  Two defects measured 2026-09-01 on a cooked /bin/sh console, both invisible to every terminal test in the gate.  apple/fgx#287.\n\n(1) THE STUCK CURSOR.  The line discipline's echo leaves through `kc_cdwrite' (_FarSh_CdWrite, far_shims.s), which took the cursor down for nobody: it relied on `_Con_WriteCharAtCursor' retiring the cursor record when a byte lands ON the drawn cell.  BS, CR, LF and TAB move the caret and write no cell, so the record stayed live at the old cell and `Con_ShowCursor' -- idempotent on VT_CURS_RENDERED -- then refused to draw the cursor where the caret had gone.  Measured: `ls foo' erased back to `ls ' with three DELs left the caret at column 8 and the one inverse AttrBuf cell at column 11.\n\n(2) THE GHOST.  `Con_HideCursor' restored the AttrBuf byte at the saved RING row and repainted the screen at the saved VIEWPORT row, so a scroll between the show and the hide sent the two at different cells: the buffer came out right and the pixels kept an inverse block for good.  Measured: with _conTopRow at 20 the restore corrected ring row 42 and the repaint went to screen row 23, leaving a block on screen row 22 that no AttrBuf byte explains.\n\nBOTH ARE /bin/sh SYMPTOMS AND NEITHER IS A tcsh ONE, which is the discriminator that named the rail: tcsh takes the line in raw mode and echoes through write(2), and both write(2) arms have hidden the cursor since apple/fgx#129.  The discipline's own echo was the only output rail with no hide.\n\nWHY `vccursor' CANNOT SEE EITHER.  It counts inverse AttrBuf cells and asserts there is exactly one, on screen.  Defect 1 leaves exactly one, three columns from the caret; defect 2 leaves AttrBuf perfect and lies only in pixels.  This check reads the SHR framebuffer as well as AttrBuf, and asserts POSITION rather than count -- which is the claim `the cursor is in the wrong place' actually makes.\n\nTHE SEQUENCE DRIVES BOTH.  `sh' is typed and RETURNED on a console the boot log has already scrolled, which is defect 2's window; then `ls foo' is typed and erased back with three DELs and NO return, which leaves defect 1's record stranded and readable.  DEL is 127 through raw_inject, the same key delkill drives the discipline's erase with.",
+ "command": "sh",
+ "timeout_s": 300,
+ "post_gap_frames": 900,
+ "raw_inject": [
+  [
+   1400,
+   108,
+   0
+  ],
+  [
+   1406,
+   115,
+   0
+  ],
+  [
+   1412,
+   32,
+   0
+  ],
+  [
+   1418,
+   102,
+   0
+  ],
+  [
+   1424,
+   111,
+   0
+  ],
+  [
+   1430,
+   111,
+   0
+  ],
+  [
+   1500,
+   127,
+   0
+  ],
+  [
+   1520,
+   127,
+   0
+  ],
+  [
+   1540,
+   127,
+   0
+  ]
+ ],
+ "memory_regions": [
+  {
+   "name": "vc0char",
+   "addr_hex": "030000",
+   "len": 8000,
+   "conbank": true
+  },
+  {
+   "name": "vc0attr",
+   "addr_hex": "032000",
+   "len": 8000,
+   "conbank": true
+  },
+  {
+   "name": "curst",
+   "len": 32,
+   "farbank": true,
+   "addr_equ": "KFAR_VT_STATE+VT_CURS_RENDERED"
+  },
+  {
+   "name": "shr",
+   "addr_hex": "012000",
+   "len": 32000
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "curtrack_check.py"
+ },
+ "exit_on_prompt": false
+}

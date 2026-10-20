@@ -1,0 +1,16 @@
+P=/testbin/pdmount
+mount -t prodos -o write /dev/sd1 /mnt
+echo mw=$?
+cd /mnt
+$P -O f03
+$P -r ._ext sap f02 nosuch
+$P -J hello
+$P -r hello tree ext f01
+$P -D sub/inner sub/inner/deep
+$P -r sub/inner/deep sub
+$P -D sub/inner
+$P -c big
+$P -p big 0 20000 21
+cd /
+umount /dev/sd1
+echo um=$?

@@ -1,0 +1,8 @@
+#!/bin/jsh
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+# hd -- hex + char dump, a shell-script wrapper around od(1).  FGX-original
+# (2.11BSD has no hd, od is the BSD dump tool).  od takes combined flags, so
+# -hc gives hex shorts interleaved with the char interpretation.  Forwards all
+# operands (file, offset, label) to od via "$@".
+od -hc "$@"

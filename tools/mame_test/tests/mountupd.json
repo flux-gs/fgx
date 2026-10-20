@@ -1,0 +1,37 @@
+{
+ "name": "mountupd",
+ "description": "mount(2)'s MNT_UPDATE ARM: read-only to read-write in place, which is what `mount -u' is and what a root fsck'd read-only at boot needs to become writable again.  /dev/sd1 is the scratch spindle (disk/ufsscratch.fs via extra_hards) and /mnt an empty directory on the boot volume; ufsmount covers the plain mount and unmount on the same pair.\n\nWHAT EACH MARKER DISCRIMINATES, and every one of them can go red alone:\n  MUTYPE   mount(2) with a type that has no vfssw[] row -- MOUNT_NONE's null row, and MOUNT_MAXTYPE+1 past the table -- answered ENODEV, and the refusal left /mnt free: the UFS mount straight after it is the positive control, being the one row the table has.\n  MUCREAT  a read-only mount REFUSED a create with EROFS.  This is the positive control: without it a mount that was writable all along would 'become' writable and every marker below would be vacuous.\n  MUUPD    mount(2) with MNT_UPDATE returned 0.\n  MUWROTE  a create SUCCEEDED afterwards.\n  MUPERSIST the file and its bytes SURVIVED an unmount and a fresh mount.  This is the assertion and MUWROTE is not: reading back through the mount that created it answers from the in-core inode, so a write that never reached the platter reads correctly and corrupts nothing.  Measured -- without the round trip, deleting the update arm's sb_ronly line left this probe GREEN.\n  MURO     read-write to read-only was REFUSED with ENOTSUP.  Both trees refuse that direction; allowing it would be inventing an interface.\n  MUDONE   the unmount afterwards still works.\n\nThe `lacks' arms name the failure markers the probe prints instead: MUNOTRO (writable while read-only, the vacuity case), MUNORO (the refusal did not happen) and MUNOWRITE (the update did not actually make it writable).",
+ "command": "/testbin/mountupd; echo mu=$?",
+ "boot_s": 45,
+ "timeout_s": 90,
+ "extra_hards": [
+  "disk/ufsscratch.fs"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "MUSTART",
+   "MUTYPE",
+   "MUCREAT",
+   "MUUPD",
+   "MUWROTE",
+   "MURO",
+   "MUPERSIST",
+   "MUDONE",
+   "mu=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "MUNOTRO",
+   "MUNORO",
+   "MUNOWRITE",
+   "MUNOPERSIST",
+   "not found",
+   "MUNOTYPE"
+  ]
+ }
+}

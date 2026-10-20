@@ -1,0 +1,13 @@
+{
+  "_note": "reference harness numbers — INDICATIVE ONLY, not a controlled comparison (different ORG/ITERS/inputs/calling-convention; both frame-quantized). Authoritative metric is fcc baseline-vs-current delta.",
+  "dotProduct":   {"calypsi": 5712,  "llvm_mos": 1534},
+  "bsearch":      {"calypsi": 2387,  "llvm_mos": 682},
+  "sumOfSquares": {"calypsi": 16368, "llvm_mos": 6820},
+  "bubbleSort":   {"calypsi": 17050, "llvm_mos": 11594},
+  "strLen":       {"calypsi": 1023,  "llvm_mos": 767},
+  "djb2Hash":     {"calypsi": 2643,  "llvm_mos": 2046},
+  "popcount":     {"calypsi": 1534,  "llvm_mos": 1194},
+  "strcpy":       {"calypsi": 1194,  "llvm_mos": 1108},
+  "memcmp":       {"calypsi": 716,   "llvm_mos": 682},
+  "fib":          {"calypsi": 10912, "llvm_mos": 11594}
+}

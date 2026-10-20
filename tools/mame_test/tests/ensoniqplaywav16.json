@@ -1,0 +1,20 @@
+{
+ "name": "ensoniqplaywav16",
+ "description": "ensoniqplay(1) M3 16-bit + decimation: a 16-bit signed WAV at 44100 Hz mono (0.5 s) exceeds the DOC's 26320 Hz ceiling, so the tool decimates by 2 to 22050 Hz and downconverts 16-bit signed to 8-bit unsigned.  22050 input frames / 2 = 11025 output samples, played placed.  'decimated 44100 -> 22050 Hz (/2)' proves the rate fit, 'wav 16-bit signed' proves the header path, and the ~30-tick halt proves the converted sample plays at the right rate.",
+ "command": "ensoniqplay /etc/tone440_s16.wav",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "stage_files": [
+  { "host": "tools/mame_test/fixtures/tone440_s16.wav", "prodos_dir": "/FGX/etc", "name": "tone440_s16.wav", "replace": false }
+ ],
+ "expect": {
+  "screen_contains": [
+   "wav 16-bit signed mono 44100 Hz",
+   "decimated 44100 -> 22050 Hz (/2)",
+   "11025 bytes @ 22050 Hz (freq 429), playing",
+   "halted after 3",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "cannot open", "timed out", "Fatal" ]
+ }
+}

@@ -1,0 +1,229 @@
+                FGX2_MODE 2
+;---------------------------------------
+; fcc 0.0 — generated from m10_flags_test.c
+;---------------------------------------
+
+                MX      %00
+                FGX2_EXPORT score
+score            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #score_FRAMESIZE
+                DO      score_STKGUARD
+                BCC     score_stkovf
+                CMP     _fcc_stkfloor
+                BCS     score_stkok
+score_stkovf       JMP     _fcc_stkoflow
+                FIN
+score_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     #0
+                STA     _fcc_img0
+                DO      6+score_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+score_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                CMP     #0
+                BNE     *+5
+                BRL     _m10_flags_test_L0
+                LDA     _fcc_img0
+                TAX
+                LDA     #7
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     _fcc_img0
+_m10_flags_test_L0
+                DO      6+score_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+score_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                LDA     #2
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                CMP     #0
+                BNE     *+5
+                BRL     _m10_flags_test_L1
+                LDA     _fcc_img0
+                TAX
+                LDA     #14
+                STA     _fcc_tmp_b
+                TXA
+                ORA     _fcc_tmp_b
+                STA     _fcc_img0
+_m10_flags_test_L1
+                DO      6+score_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+score_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                CMP     #0
+                BNE     *+5
+                BRL     _m10_flags_test_L3
+                DO      6+score_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+score_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                LDA     #8
+                STA     _fcc_tmp_b
+                TXA
+                AND     _fcc_tmp_b
+                CMP     #0
+                BEQ     _m10_flags_test_L5
+                LDA     #0
+                BRA     _m10_flags_test_L6
+_m10_flags_test_L5
+                LDA     #1
+_m10_flags_test_L6
+                CMP     #0
+                BNE     *+5
+                BRL     _m10_flags_test_L3
+                LDA     #1
+                BRL     _m10_flags_test_L4
+_m10_flags_test_L3
+                LDA     #0
+_m10_flags_test_L4
+                CMP     #0
+                BNE     *+5
+                BRL     _m10_flags_test_L2
+                LDA     _fcc_img0
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                JSR     _fcc_shl16
+                STA     _fcc_img0
+_m10_flags_test_L2
+                LDA     _fcc_img0
+                TAY
+                TSC
+                CLC
+                ADC     #score_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+score_FRAMESIZE   EQU     2
+score_STKGUARD    EQU     0
+                FGX2_EXPORT main
+main            ENT
+                PEI     _fcc_fb
+                TSC
+                SEC
+                SBC     #main_FRAMESIZE
+                DO      main_STKGUARD
+                BCC     main_stkovf
+                CMP     _fcc_stkfloor
+                BCS     main_stkok
+main_stkovf       JMP     _fcc_stkoflow
+                FIN
+main_stkok        TCS
+                STA     _fcc_fb
+                INC     _fcc_fb
+                LDA     #0
+                STA     1,S   ; fccstk d=0 b=1
+                LDA     #0
+                EOR     #$FFFF
+                STA     5,S   ; fccstk d=0 b=5
+                LDA     #0
+                STA     3,S   ; fccstk d=0 b=3
+_m10_flags_test_L7
+                LDAL    KFGX_YIELD_MIRROR
+                BEQ     *+5
+                JSR     _fcc_safepoint
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #4
+                STA     _fcc_tmp_b
+                TXA
+                SEC
+                SBC     _fcc_tmp_b
+                BVC     _m10_flags_test_L10
+                EOR     #$8000
+_m10_flags_test_L10
+                BMI     *+5
+                BRL     _m10_flags_test_L9
+                LDA     1,S   ; fccstk d=0 b=1
+                PHA
+                LDA     #1
+                PHA
+                LDA     7,S   ; fccstk d=4 b=3
+                STA     _fcc_tmp_b
+                PLA
+                JSR     _fcc_shl16
+                AND     7,S   ; fccstk d=2 b=5
+                PHA
+                FGX2_FARCALL score
+                TAY
+                PLA
+                TYA
+                STA     _fcc_tmp_b
+                PLA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     1,S   ; fccstk d=0 b=1
+_m10_flags_test_L8
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                LDA     #1
+                STA     _fcc_tmp_b
+                TXA
+                CLC
+                ADC     _fcc_tmp_b
+                STA     3,S   ; fccstk d=0 b=3
+                BRL     _m10_flags_test_L7
+_m10_flags_test_L9
+                LDA     1,S   ; fccstk d=0 b=1
+                ASL
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+main_FRAMESIZE   EQU     6
+main_STKGUARD    EQU     0
+                FGX2_RELOC_COUNT 4

@@ -1,0 +1,8 @@
+{
+ "name": "textshare",
+ "description": "SHARED TEXT: two spawned instances of /bin/sleep run from ONE code bank, and the shell, a different program, from another.  A fork child shares its parent's code bank already, so the instances are SPAWNED (sh runs each with its own fork+exec); the checker reads TCB_CodeBank for the two pids the script prints and for the shell.  RED before the text table: each spawn loads its own code bank.",
+ "command": "sh /testdata/textshare",
+ "timeout_s": 90,
+ "memory_regions": [{"name": "tcbs", "addr_equ": "FGX_TASK_TBL", "kbank": true, "len": 2048}],
+ "expect": {"screen_contains": ["TS A=", "TS SH="], "screen_lacks": ["PANIC", "BRK"], "check_script": "textshare_check.py"}
+}

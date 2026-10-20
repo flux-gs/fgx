@@ -1,0 +1,16 @@
+{
+ "name": "shadowbits",
+ "description": "The $C035 shadow inhibits must SURVIVE a booted session, not merely be set at boot: the IRQ dispatcher masks the register on every interrupt per ROM convention and that mask clears bit 0. Asserts bits 0-2 (text page 1, hi-res 1 and 2) inhibited so stores into those ranges run full speed -- 64 of the user-stack arena's 153 pages sit under the hi-res addresses -- and bit 3 (super hi-res) still SHADOWED, because the framebuffer reaches the screen by being shadowed from bank $01 and inhibiting it would blank the machine.",
+ "command": "S=SHDW; echo $S=live",
+ "timeout_s": 40,
+ "expect": {
+  "screen_contains": [
+   "SHDW=live"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "shadowbits_check.py"
+ }
+}

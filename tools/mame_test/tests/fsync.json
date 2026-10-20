@@ -1,0 +1,28 @@
+{
+ "name": "fsync",
+ "description": "fsync(2) FORCES THE INODE OUT, which it never did (apple/fgx#355).  `Fs_Fsync' dispatched FOP_Flush into the ProDOS FST and that answers EIO on a 2.11BSD volume, so every fsync of a regular file failed -- while `ufs_fsync' sat ported and unreachable since 1.12, VOP_FSYNC having exactly two callers, both inside a probe.  Nothing on the image called fsync(2), which is why a syscall that could not work was not noticed.  THE RETURN VALUE IS NOT THE ASSERTION, AND THAT IS MEASURED.  The first cut of this test checked `fsync=0' and passed on a mutated kernel with the seam call branched away -- a kernel that returns 0 and forces nothing looks identical from userland, because a reader here finds the IN-CORE inode either way.  So the assertion is the on-disk SIZE: the tool writes 64 bytes, fsyncs, and then HOLDS THE DESCRIPTOR OPEN and sleeps, because close(2) and exit(2) both reach the last vrele and iupdat would write the inode back for a different reason.  The machine is stopped with the file still open and `disk_files' reads /root/fsy out of the image: 64 if fsync forced it, 0 if it did not.  The DATA is on disk either way -- ufs_write bwrites every buffer before it returns -- so the size in the inode is the only thing at stake.  `badfd=-1 errno=9' is the second arm and the control for a kernel that answers 0 to everything: fsync of a descriptor never opened must still be EBADF.  NO TRAILING `sync' AND NO fsck ARM, deliberately: a sync would write the inode back by itself and destroy the discrimination this test is built on, and the volume is then inconsistent by design (ufs_alloc's batch leaves sb_fmod set).  ufswrite and ufssync carry the fsck oracle.",
+ "command": "/testbin/fsynctest &",
+ "boot_s": 45,
+ "timeout_s": 40,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 2
+ },
+ "expect": {
+  "screen_contains": [
+   "fsync=0 errno=0",
+   "badfd=-1 errno=9",
+   "holding"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "disk_files": [
+   {
+    "path": "/root/fsy",
+    "size": 64
+   }
+  ]
+ }
+}

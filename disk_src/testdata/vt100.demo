@@ -1,0 +1,35 @@
+[1mFGX VT100 Demo[0m
+
+[4mText Formatting[0m
+
+  regular
+  [1mbold[0m
+  [4munderline[0m
+  [7minverse[0m
+  [1;4mbold + underline[0m
+  [1;7mbold + inverse[0m
+  [4;7munderline + inverse[0m
+
+[4mBox Drawing[0m
+
+  (0lqqqqqqqqqqqqqqqqqqqqqqqqqqk(B
+  (0x(B [1mA framed box[0m             (0x(B
+  (0tqqqqqqqqqqqqqqqqqqqqqqqqqqu(B
+  (0x(B with a divider           (0x(B
+  (0x(B and [7minverted[0m text inside (0x(B
+  (0mqqqqqqqqqqqqqqqqqqqqqqqqqqj(B
+
+[4mDEC Special Graphics[0m
+
+  (0` a b c d e f g h i(B   diamond, stipple, ctrl
+  (0j k l m n(B              corners and cross
+  (0o p q r s(B              horizontal scan lines
+  (0t u v w x(B              tees and vertical
+  (0y z { | } ~(B            symbols
+
+[4mTry It[0m
+
+  font bold     - switch to bold glyphs
+  font vga      - switch to 7x8 VGA glyphs
+  font default  - back to default
+

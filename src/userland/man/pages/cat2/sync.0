@@ -1,0 +1,60 @@
+SYNC(2)             UNIX Programmer's Manual              SYNC(2)
+
+
+
+NAME
+     sync - update super-block
+
+SYNOPSIS
+     sync()
+
+DESCRIPTION
+     _S_y_n_c causes all information in core memory that should be on
+     disk to be written out.  This includes modified super blocks,
+     modified i-nodes, and delayed block I/O.
+
+     _S_y_n_c should be used by programs that examine a file system,
+     for example _f_s_c_k, _d_f, etc.  _S_y_n_c is mandatory before a boot.
+
+     On FGX it walks the mount list, and on each mounted filesystem
+     writes back the inodes the write path left dirty and the super
+     block that block allocation left ahead of the disk.  It also
+     fsyncs every open descriptor of every task, which upstream's
+     does not; the mount walk is the half that matters and the half
+     that was missing until apple/fgx#332.
+
+     _S_y_n_c returns nothing and cannot fail.  A filesystem that will
+     not accept a write is not a condition the caller can act on,
+     and BSD's _s_y_n_c has no error return to report it in.
+
+SEE ALSO
+     fsync(2), sync(1), update(8)
+
+BUGS
+     The writing, although scheduled, is not necessarily complete
+     upon return from _s_y_n_c.
+
+     That is upstream's warning and on FGX it is not true at all.
+     The UFS write path is synchronous -- every buffer it fills is
+     written before the call returns -- so no file's data is ever
+     merely scheduled, and since apple/fgx#398 the one thing that
+     was scheduled is not either: a block left dirty by a partial-
+     block write to a block device node is flushed by the walk
+     _s_y_n_c now makes over the buffer pool, which is 2.11BSD's
+     _b_f_l_u_s_h (usr/sys/sys/ufs_bio.c:426).  Nothing this call
+     returns from is left owed to a disk.
+
+     The pool walk is keyed on the DEVICE and made once, rather
+     than per mount where 4.3BSD-Reno puts its equivalent
+     (vflushbuf on each mount's device vnode, ufs/ufs_vfsops.c:580).
+     A mounted filesystem's block device cannot be opened here at
+     all, so the delayed writes that exist are on unmounted
+     spindles, which no mount-list walk visits.
+
+     A program that needs the guarantee for ONE open file should
+     call _f_s_y_n_c(_2) on its descriptor instead, which does report an
+     error.
+
+
+
+Printed 9/12/26          FGX (2.11BSD port)                      2

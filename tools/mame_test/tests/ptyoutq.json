@@ -1,0 +1,22 @@
+{
+ "name": "ptyoutq",
+ "description": "HOW MUCH OUTPUT IS PENDING ON A PTY, AND WHO IS ENTITLED TO KNOW.  TTY campaign T4, the measurement behind the increment 4 design question -- a DIVERGENCE, not a defect, and this fixture is written so the number reaches the screen whichever way the design goes.  2.11BSD's pty has exactly ONE output buffer and it is the discipline's: ptcopen sets t_oproc = ptsstart, ptsstart MOVES NO DATA (it is `ptcwakeup(tp, FREAD)'), and ptcread does the dequeue itself with `q_to_b(&tp->t_outq, ...)'.  So the slave's bytes sit in t_outq until the master reads, and TIOCOUTQ -- which answers tp->t_outq.c_cc -- is the true count of what is waiting.  FGX binds the generic tty_oproc to every line and it DRAINS: each ttstart empties t_outq through kc_cdwrite into the pty's own 128-byte ring.  Right for a console, where the bytes are on the screen when the call returns; a second buffer on a pty, where the far end's read IS the device.  THE ASSERTION IS THE NUMBER: five bytes written by the slave and unread by the master, and the fixture prints `outq=' plus BSD (5), RING (0) or OTHER.  The same zero is what ttycheckoutq waits on, what ttywait drains and what ttyflush(FWRITE) discards at a hangup, so it is four other mechanisms measuring an empty queue on a line with output pending.  TWO POSITIVE CONTROLS, AND THE FIXTURE IS WORTHLESS WITHOUT EITHER.  The master read: zero from TIOCOUTQ could otherwise mean the write was lost, and reading the five bytes back proves they were there all along and only the discipline could not see them.  TIOCSTOP: a DEAD ioctl arm and an EMPTY queue give the same zero, so the line is then stopped -- tty_oproc returns at once on TS_TTSTOP without draining -- and five more bytes are written, which have nowhere to go but t_outq, so a live arm MUST answer five.  That is what makes the first zero exact: not `TIOCOUTQ does not work here' but `TIOCOUTQ works, and the queue really is empty, because tty_oproc already moved the bytes to the ring'.  The verdict is DEAD if that control fails.  NO NEWLINE IN THE PAYLOAD, for ptyrec's reason: CRMOD would make an LF into CR+LF and the count six for an unrelated reason.  THE EXPECTATION WAS PINNED TO RING AND INCREMENT 4 EARNED THE FLIP (2026-08-26): `t_oproc' for a pty slave line is `ptsstart', which moves no data, so the slave's bytes stay in t_outq until the master's read takes them and TIOCOUTQ reports what is actually pending.  RING is now in screen_lacks -- a regression to the old shape must go red rather than quietly passing the other half of the fixture.",
+ "command": "/testbin/ptyoutq",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": [
+   "PTYOUTQ outq=5",
+   "PTYOUTQ read n=5 b0=65 b4=69",
+   "PTYOUTQ stopped outq=5",
+   "PTYOUTQ BSD"
+  ],
+  "screen_lacks": [
+   "PTYOUTQ FAIL",
+   "PTYOUTQ OTHER",
+   "PTYOUTQ DEAD",
+   "PTYOUTQ RING",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

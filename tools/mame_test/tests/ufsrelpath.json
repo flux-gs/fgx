@@ -1,0 +1,21 @@
+{
+  "name": "ufsrelpath",
+  "description": "A RELATIVE NAME REACHES THE MOUNTED ROOT, which apple/fgx#295 was: `_Fs_RootStat' and the listdir hook both tested for a leading '/' and fell through to the LEGACY resolver without one, so on a 2.11BSD volume every relative form answered \"not found\" while the absolute form beside it worked.  stat gates every directory operation (2.11BSD ls.c:326), which is how one test in one hook reached as far as a bare `ls'.  THE DISCRIMINATOR IS WHAT IS ABSENT.  A bare `ls' in /etc listing /etc's files is not by itself evidence -- the failure mode this replaces was not an empty listing but a CONFIDENT WRONG ONE: a null starting directory makes namei resolve a relative name against the ROOT, which is why the hook's own note recorded `pwd' coming back `/etc/modload.conf'.  So `lost+found' and `KERNELFAR' are asserted ABSENT: both are at / and neither is in /etc, so a walk that started at the root prints them and a walk that started at the cwd cannot.  `ls ../root' is the second case and a different mechanism -- it leaves the directory through `..' rather than merely starting somewhere -- and its needles are dotfiles, which only /root has.  `pwd' is asserted too, since getwd(3) walks UP with `.' and `..' and was the measurement that originally justified the test being there at all.  THE PATH IS BUILT BY EXPANSION -- `E=/e; T=tc' -- so '/etc' on screen comes from pwd and not from the shell's echo of the typed line, which screen_contains would otherwise match.  The RELATIVE half of this test is the bare `ls' and `ls ../root' that follow, not the cd.  THE /etc NEEDLE WAS `preload.conf' AND IS `modload.conf' (2026-09-05): the kernel image carries its own module list now, so that file no longer exists.  Any third name in the listing serves; this one is from the same family and is still shipped.  AND THE `lacks KERNELFAR' ARM BECAME `lacks fgxunix' IN THE SAME BREATH, because KERNELFAR stopped existing with it: a needle for a file that is nowhere on the volume passes on a listing that DOES leak the root's entries, which is exactly what this arm is here to catch.  /fgxunix is the same claim against a file that is really there, and it was MEASURED discriminating -- point the command at `ls /' and this arm reports `screen unexpectedly contains fgxunix'.",
+  "command": "E=/e; T=tc; cd $E$T; pwd; ls; ls ../root",
+  "boot_s": 45,
+  "timeout_s": 16,
+  "expect": {
+    "screen_contains": [
+      "/etc",
+      "modload.conf",
+      "resolv.conf",
+      ".profile",
+      ".cshrc"
+    ],
+    "screen_lacks": [
+      "lost+found",
+      "fgxunix",
+      "not found"
+    ]
+  }
+}

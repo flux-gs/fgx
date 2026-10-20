@@ -1,0 +1,105 @@
+diff --git a/src/drivers/fs/fs.s b/src/drivers/fs/fs.s
+index bf4157e48..8b8d8253e 100644
+--- a/src/drivers/fs/fs.s
++++ b/src/drivers/fs/fs.s
+@@ -2648,6 +2648,45 @@ Fs_ReadN        ENT
+                 LDY     #FCB_StorageType        ; P3.2: InUse retired
+                 LDA     [_fcbPtr],Y
+                 BNE     @frnN_inUse
++                ; A TYPELESS FCB IS NO LONGER AN ERROR BY ITSELF -- UFS 2.4.
++                ; FCB_StorageType is written only by prodos.mod, and _Fcb_Alloc
++                ; zero-fills, so a descriptor opened through vfs_openat reaches
++                ; here with a zero in it.  That is not a broken fd; it is a fd
++                ; whose ops live in the other bank, and the syscall read site
++                ; has routed exactly this case since UFS 1.7d I3.  The test
++                ; stays where it is because the LEGACY path then pays nothing:
++                ; a ProDOS descriptor never reaches this branch at all.
++                REP     #$30
++                MX      %00
++                LDA    |_frnFd
++                AND     #$00FF
++                LDX     #FO_READ
++                JSR     _Fcb_OpEntry            ; C is not the question here --
++                LDA     _fdOpsFar               ;   only whether the ops are far
++                BEQ     @frnN_ebadf
++                ; THE BUFFER IS OURS, so the bank is _frnDstBank and not the
++                ; caller's; _Sys_DevReadAt is the entry that says so.
++                SEP     #$20
++                MX      %10
++                LDA     _frnDstBank
++                STA     _sysDevBank
++                REP     #$30
++                MX      %00
++                LDA    |_frnFd
++                AND     #$00FF
++                LDX     _frnDstOff
++                LDY     _frnRemaining
++                JSR     _Sys_DevReadAt          ; C=1 + A = bytes moved
++                BCC     @frnN_farErr
++                TAY                             ; Y IS THE ANSWER here, where A
++                PLP                             ;   is at the site that routes
++                SEC                             ;   the syscall
++                RTS
++@frnN_farErr    PLP
++                CLC
++                RTS
++@frnN_ebadf     SEP     #$20
++                MX      %10
+                 LDA     #EBADF
+                 STA     _shTmp0
+                 REP     #$20
+diff --git a/src/kernel/syscall.s b/src/kernel/syscall.s
+index 24263329d..b27721aff 100644
+--- a/src/kernel/syscall.s
++++ b/src/kernel/syscall.s
+@@ -851,6 +851,11 @@ _Sys_WrErrno   DS  2                   ; SYS_WRITE: the errno a failing per-byte
+ _sysDevOpFd    DS  2                   ; _Sys_DevOpen's descriptor, parked while
+                                        ;   the far call's arguments are built.
+                                        ;   UFS 1.7d I3.
++_sysDevBank    DS  2                   ; _Sys_DevRead/_Sys_DevWrite: the bank of the
++                                       ; buffer that crosses.  A cell and not
++                                       ; _Sys_CallerBank directly, because the
++                                       ; kernel's own readers cross with a buffer
++                                       ; that is theirs and not any caller's.
+ _sysDevFd      DS  2                   ; _Sys_DevRead/_Sys_DevWrite: fd and buffer
+ _sysDevOff     DS  2                   ;   offset, parked across the argument
+                                        ;   build because A and X are both needed
+@@ -4728,11 +4733,28 @@ _kfp918         JSL     KFAR_VFS_DEVOPEN        ; bank byte patched by Far_Init
+ ;      jump here.
+ ; MX:  %00 in and out.  Clobbers A, X, Y, _sysDevFd, _sysDevOff, _errno.
+ ;------------------------------------------------------------------------------
++; THREE ENTRY POINTS NOW, AND THE THIRD IS WHOSE BUFFER IT IS.  Read and write
++; complete the pointer with _Sys_CallerBank, which is right for a descriptor a
++; PROCESS is reading into its own bank.  Fs_ReadN's destination is the KERNEL's
++; -- a user bank being filled by Load_Binary, or a module bank by Mod_Load --
++; and it is already held in _frnDstBank.  So the bank is a cell the entry point
++; fills, and _Sys_DevReadAt is the entry that leaves the caller's answer alone.
++_Sys_DevReadAt  MX      %00                     ; bank ALREADY in _sysDevBank
++                PEA     $0000                   ; iswrite = 0
++                BRA     @dv_args
+ _Sys_DevRead    MX      %00
+                 PEA     $0000                   ; iswrite = 0.  Pushed FIRST:
+-                BRA     @dv_args                ;   fcc reads right to left, so
++                BRA     @dv_caller              ;   fcc reads right to left, so
+ _Sys_DevWrite   MX      %00                     ;   the last argument is the
+                 PEA     $0001                   ;   deepest.
++@dv_caller      PHA                             ; the fd, across the bank fetch
++                SEP     #$20
++                MX      %10
++                LDA     _Sys_CallerBank
++                STA     _sysDevBank
++                REP     #$30
++                MX      %00
++                PLA
+ @dv_args        STA     _sysDevFd
+                 STX     _sysDevOff
+                 PHY                             ; len
+@@ -4743,7 +4765,7 @@ _Sys_DevWrite   MX      %00                     ;   the last argument is the
+                 MX      %10
+                 LDA     #0
+                 PHA                             ;      pad
+-                LDA     _Sys_CallerBank
++                LDA     _sysDevBank
+                 PHA                             ;      bank
+                 REP     #$30
+                 MX      %00

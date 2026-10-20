@@ -1,0 +1,28 @@
+{
+ "name": "codepack",
+ "description": "CODE IS PLACED BY SIZE IN SHARED BANKS (coremap B3).  A flagged code segment of a newly claimed text takes the pages its bytes need from the pool's page map (src/kernel/far/loader.s, src/kernel/bank.s) instead of a whole bank.  The script runs update and a sleep in the background and the dynamic dyntrue (its binder tables carry the segment's offset), kills the sleep, runs twenty-five distinct programs -- more texts than the sixteen-entry table holds, so unused placed texts are reclaimed and their pages freed inside banks other texts still use -- and runs sleep once more.  codepack_check.py reads the text table: at least one bank holds two texts' segments, the page ranges inside every bank are disjoint, and the positive control -- a segment too big to place (sh's 64 KB segment 0) -- holds a whole bank.  The screen shows dyntrue ran (a placed dynamic program bound), update survived the reclaims, and a fresh exec ran.  RED with placement disabled: every page count is 0.",
+ "command": "sh /testdata/codepack",
+ "timeout_s": 240,
+ "exit_on_prompt": false,
+ "memory_regions": [
+  {
+   "name": "texttab",
+   "symbol": "_kTextTab",
+   "ttybank": true,
+   "len": 608
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "DYNOK",
+   "PACKED",
+   "update",
+   "SLEPT"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "codepack_check.py"
+ }
+}

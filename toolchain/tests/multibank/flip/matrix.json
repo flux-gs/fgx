@@ -1,0 +1,667 @@
+{
+  "emit.c:625[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:749[default]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      11,
+      14,
+      19,
+      22,
+      23,
+      25,
+      26
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:751[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:798[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:914[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1228[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1422[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1827[default]": {
+    "result": "red",
+    "reds": [
+      16,
+      17,
+      18,
+      19
+    ],
+    "kind": "PHK"
+  },
+  "emit.c:2003[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2579[default]": {
+    "result": "red",
+    "reds": [
+      3
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:2581[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2623[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:386[default]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "kind": "PHB"
+  },
+  "parse_expr.c:388[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:1469[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2576[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:2579[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2815[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:3403[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:4184[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:4186[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:625[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:749[noregalloc]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      11,
+      14,
+      19,
+      22,
+      23,
+      25,
+      26
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:751[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:798[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:914[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1228[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1422[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1827[noregalloc]": {
+    "result": "red",
+    "reds": [
+      16,
+      17,
+      18,
+      19
+    ],
+    "kind": "PHK"
+  },
+  "emit.c:2003[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2579[noregalloc]": {
+    "result": "red",
+    "reds": [
+      3
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:2581[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2623[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:386[noregalloc]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "kind": "PHB"
+  },
+  "parse_expr.c:388[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:1469[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2576[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:2579[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2815[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:3403[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:4184[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:4186[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2580[default]": {
+    "result": "red",
+    "reds": [
+      23
+    ],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:2583[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2819[default]": {
+    "result": "red",
+    "reds": [
+      24
+    ],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:3410[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1861[default]": {
+    "result": "red",
+    "reds": [
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "kind": "PHK"
+  },
+  "emit.c:2037[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2613[default]": {
+    "result": "red",
+    "reds": [
+      3
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:2615[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2657[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:1448[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1861[noregalloc]": {
+    "result": "red",
+    "reds": [
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "kind": "PHK"
+  },
+  "emit.c:2037[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2613[noregalloc]": {
+    "result": "red",
+    "reds": [
+      3
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:2615[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2657[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:1448[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2580[noregalloc]": {
+    "result": "red",
+    "reds": [
+      23
+    ],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:2583[noregalloc]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_stmt.c:2819[noregalloc]": {
+    "result": "red",
+    "reds": [
+      24
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:525[default]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "kind": "PTRBANK_ST"
+  },
+  "emit.c:541[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PTRBANK_LD"
+  },
+  "emit.c:571[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PTRBANK_ST"
+  },
+  "emit.c:652[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PTRBANK_LD"
+  },
+  "emit.c:1007[default]": {
+    "result": "red",
+    "reds": [
+      11,
+      25,
+      26
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:1423[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PTRBANK_ST"
+  },
+  "emit.c:1439[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:1681[default]": {
+    "result": "red",
+    "reds": [
+      10,
+      41
+    ],
+    "kind": "PTRBANK_LD"
+  },
+  "emit.c:2058[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2060[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:2133[default]": {
+    "result": "red",
+    "reds": [
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "kind": "PHK"
+  },
+  "emit.c:2175[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PTRBANK_ST"
+  },
+  "emit.c:2331[default]": {
+    "result": "red",
+    "reds": [
+      36,
+      38,
+      39,
+      42
+    ],
+    "kind": "PTRBANK_ST"
+  },
+  "emit.c:2757[default]": {
+    "result": "red",
+    "reds": [
+      3
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:4080[default]": {
+    "result": "red",
+    "reds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "kind": "PHB"
+  },
+  "emit.c:4090[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "emit.c:4318[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHK"
+  },
+  "parse_expr.c:3819[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:1260[default]": {
+    "result": "red",
+    "reds": [
+      24
+    ],
+    "kind": "PHB"
+  },
+  "parse_stmt.c:4749[default]": {
+    "result": "green",
+    "reds": [],
+    "kind": "PHB"
+  }
+}

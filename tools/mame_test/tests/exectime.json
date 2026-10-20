@@ -1,0 +1,10 @@
+{
+ "name": "exectime",
+ "description": "Shared libc SP4: the exec budget -- the mean fork+exec+exit of /bin/echo (static, no libc.so at exec) and /testbin/dyntrue (dynamic, bound on the machine), 200 each so the first exec's cold read of the binary is a small share of the mean, and /testbin/dyntruebound (the same bound on the host, 20: it reads libc's four banks every exec).",
+ "command": "/testbin/exectime /bin/echo 200; /testbin/exectime /testbin/dyntrue 200; /testbin/exectime /testbin/dyntruebound 20",
+ "timeout_s": 300,
+ "expect": {
+  "screen_contains": ["EXT /bin/echo ", "EXT /testbin/dyntrue ", "EXT /testbin/dyntruebound "],
+  "screen_lacks": ["failed", "ld.so:", "PANIC", "BRK"]
+ }
+}

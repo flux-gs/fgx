@@ -1,0 +1,41 @@
+{
+ "name": "frotzsave",
+ "description": "frotz(6) Quetzal save/restore ROUND-TRIPS THROUGH THE FILESYSTEM: two game sessions in one boot.  Session 1 begins Book and Volume, drops the key, saves to an explicit file (bv.sav in the shell's cwd) and quits; session 2 relaunches frotz, restores the same file from the title menu (R) and asks for the inventory.  THE DISCRIMINATOR is the key: a restored game carries only the pager, a fresh one 'your pager and your key', so a save that wrote nothing or a restore that read nothing leaves the key in the inventory and the test red.",
+ "command": "frotz -m /usr/games/frotz/bookvol.z5",
+ "timeout_s": 240,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 2
+ },
+ "post_commands": [
+  "B",
+  "drop key",
+  "save",
+  "bv.sav",
+  "quit",
+  "y",
+  "frotz -m /usr/games/frotz/bookvol.z5",
+  "R",
+  "bv.sav",
+  "inventory",
+  "quit",
+  "y"
+ ],
+ "post_gap_frames": 600,
+ "expect": {
+  "screen_contains": [
+   "You are carrying your pager.",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "not found",
+   "GUARD stkhwm",
+   "Fatal",
+   "Failed",
+   "pager and your key",
+   "@move_obj"
+  ]
+ }
+}

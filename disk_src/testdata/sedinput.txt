@@ -1,0 +1,3 @@
+FGX uses a read-only view of the ProDOS volume.
+The ProDOS filesystem driver supports seedling and sapling files.
+All filenames are stored upper-case on the ProDOS volume.

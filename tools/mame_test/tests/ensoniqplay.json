@@ -1,0 +1,30 @@
+{
+ "name": "ensoniqplay",
+ "description": "ensoniqplay(1) M1 placed playback: upload a raw 8-bit PCM sample into the Ensoniq 5503 DOC wave RAM and play it once through a single one-shot oscillator (no streaming, no sound IRQ).  The fixture tone440.pcm is a 0.5 s, 440 Hz sine at 22050 Hz (11025 bytes, 8-bit unsigned).  The player prints its setup line -- byte count, requested rate, and the DOC frequency word it computed (freq 429 = round(22050*512/26320)) -- which proves the upload path and the sample-rate->DOC-freq math.  It then waits on the oscillator's control-register halt bit and reports how many 60 Hz ticks the one-shot took to finish; a placed sample of 11025 bytes at 22050 Hz should halt after ~30 ticks, so 'halted' proves the DOC actually clocked through the whole sample at the programmed rate.  The story stages at test time.",
+ "command": "ensoniqplay /etc/tone440.pcm",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/tone440.pcm",
+   "prodos_dir": "/FGX/etc",
+   "name": "tone440.pcm",
+   "replace": false
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "11025 bytes @ 22050 Hz (freq 429), playing",
+   "halted after 3",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "cannot open",
+   "empty file",
+   "timed out",
+   "Fatal"
+  ]
+ }
+}

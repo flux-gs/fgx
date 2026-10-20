@@ -1,0 +1,24 @@
+{
+ "name": "haltcmd",
+ "description": "halt(8) -- which IS reboot(8) staged under another name, upstream's arrangement (`if (strcmp(myname, \"halt\") == 0) howto = RB_HALT') -- runs the whole shutdown and stops the machine.  Three assertions, each covering something the others cannot.  HALTGO shows the command line ran at all.  `halt: -; halted by root' is the program's own log line and proves the binary read ITS OWN argv[0]: the same file staged as /sbin/reboot writes `rebooted' there, so this is what says the name chose RB_HALT rather than the default restart.  `[ system halted ]' is the kernel's banner from _Kern_Halt, so it proves the program reached reboot(2) -- the teardown before it (SIGTSTP to init, SIGTERM to everything, then SIGKILL in rounds) ran to completion instead of stalling.  It is also the only assertion in the tree that reads a CORE-bank kernel string on screen: the banner is core-bank text, and printing it through a far-bank pointer yields that offset's bytes out of the far bank -- a garbage line whose $0D also eats the start of the line above it (apple/fgx#405).  `wouldn't die' is the failure string of the SIGKILL loop running out its five rounds (apple/fgx#401); its absence is what says kill(-1) drained.  ECHO_OK: 'HALTGO' also appears in the typed command -- a liveness marker, not the discriminating assertion.\n\nTHE LOG-LINE ARM IS GONE, AND `[ system halted ]' ALREADY CARRIES WHAT IT PROVED. It read `halt: -; halted by root', which syslog(3) used to put on the terminal; the line now goes to /dev/log and is dropped while nothing binds that name. It was the second witness that the binary read its OWN argv[0], and the first one still holds and is better: `[ system halted ]' is _Kern_Halt's banner, which only a RB_HALT reaches -- a run that had taken the default restart would reboot instead of printing it. So the name still chooses the howto here, proved by the kernel rather than by the program's own claim about itself.",
+ "command": "echo HALTGO; /sbin/halt",
+ "post_commands": [],
+ "exit_on_prompt": false,
+ "timeout_s": 90,
+ "expect": {
+  "exit_clean": true,
+  "screen_contains": [
+   "HALTGO",
+   "[ system halted ]"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "respawning too fast",
+   "wouldn't die"
+  ],
+  "echo_ok": [
+   "HALTGO"
+  ]
+ }
+}

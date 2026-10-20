@@ -1,0 +1,48 @@
+
+
+PING(8)             UNIX Programmer's Manual              PING(8)
+
+
+
+NAME
+     ping - send ICMP ECHO_REQUEST packets to network hosts
+
+SYNOPSIS
+     ping host [count]
+
+DESCRIPTION
+     Ping sends ICMP ECHO_REQUEST packets to host and prints each
+     ECHO_REPLY, one line per probe, with the sequence number and
+     round-trip time.  The host may be a dotted-quad address or a
+     name resolved through /etc/hosts and DNS (see gethostbyname(3)).
+
+     With no count, ping probes once per second until interrupted
+     with ^C, then prints a summary.  A count limits ping to that
+     many probes before summarizing (useful in scripts).
+
+     Each reply is verified end-to-end: the identifier, sequence
+     number, AND the 56-byte payload must be echoed back byte-for-
+     byte, so a reply counts only if the remote copied the request
+     data verbatim.  The summary reports packets sent and received,
+     percent loss, and min/avg/max round-trip time.
+
+     Ping uses a raw socket with the W5100 IPRAW offload; the
+     Ethernet chip computes the IP and ICMP checksums.
+
+LIMITATIONS
+     Round-trip time is measured with the 60 Hz system tick (16.67
+     ms resolution), so a sub-tick reply reads 0 ms; under emulation
+     the timing reflects emulated, not physical, network delay.  TTL
+     is not reported: the IPRAW receive delivers the ICMP message
+     with the IP header (and its TTL) already stripped.
+
+EXAMPLES
+     ping www                  probe until ^C (search-domain applied)
+     ping 192.168.2.1 4        four probes, then a summary
+
+SEE ALSO
+     host(1), ifconfig(8)
+
+
+
+Printed 7/20/86                                                8

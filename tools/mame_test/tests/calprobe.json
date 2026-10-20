@@ -1,0 +1,13 @@
+{
+ "name": "calprobe",
+ "description": "cal(1) is 2.11BSD usr.bin/cal.c: with no argument it prints upstream's usage line (it never reads the clock); `cal 9 2026' prints September 2026, which starts on a Tuesday.",
+ "command": "cal; cal 9 2026",
+ "boot_s": 45,
+ "timeout_s": 60,
+ "exit_on_prompt": {"sentinel": "fgx#", "count_delta": 1},
+ "expect": {
+  "screen_contains": ["usage: cal [month] year", "September 2026",
+                      " S  M Tu  W Th  F  S", "       1  2  3  4  5"],
+  "screen_lacks": ["PANIC", "BRK"]
+ }
+}

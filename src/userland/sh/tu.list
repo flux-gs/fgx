@@ -1,0 +1,22 @@
+# sh(1) translation units: 2.11BSD's Bourne shell, compiled verbatim from
+# vendor/2.11BSD/usr/bin/sh.  main.c is the entry (manifest "main"); these are
+# the rest: the other objects of upstream's Makefile.
+vendor/2.11BSD/usr/bin/sh/args.c
+vendor/2.11BSD/usr/bin/sh/blok.c
+vendor/2.11BSD/usr/bin/sh/builtin.c
+vendor/2.11BSD/usr/bin/sh/cmd.c
+vendor/2.11BSD/usr/bin/sh/ctype.c
+vendor/2.11BSD/usr/bin/sh/error.c
+vendor/2.11BSD/usr/bin/sh/expand.c
+vendor/2.11BSD/usr/bin/sh/fault.c
+vendor/2.11BSD/usr/bin/sh/io.c
+vendor/2.11BSD/usr/bin/sh/macro.c
+vendor/2.11BSD/usr/bin/sh/msg.c
+vendor/2.11BSD/usr/bin/sh/name.c
+vendor/2.11BSD/usr/bin/sh/print.c
+vendor/2.11BSD/usr/bin/sh/service.c
+vendor/2.11BSD/usr/bin/sh/setbrk.c
+vendor/2.11BSD/usr/bin/sh/stak.c
+vendor/2.11BSD/usr/bin/sh/string.c
+vendor/2.11BSD/usr/bin/sh/word.c
+vendor/2.11BSD/usr/bin/sh/xec.c

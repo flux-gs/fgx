@@ -1,0 +1,103 @@
+ADJKERNTZ(8)                System Manager's Manual               ADJKERNTZ(8)
+
+NNAAMMEE
+     aaddjjkkeerrnnttzz - adjust local time CMOS clock to reflect time zone changes and
+     keep current timezone offset for the kernel
+
+SSYYNNOOPPSSIISS
+     aaddjjkkeerrnnttzz --ii
+     aaddjjkkeerrnnttzz --aa [--ss]
+
+DDEESSCCRRIIPPTTIIOONN
+     AAddjjkkeerrnnttzz maintains the proper relationship between the kernel clock,
+     which is always set to UTC, and the CMOS clock, which may be set to local
+     time.  AAddjjkkeerrnnttzz also informs the kernel about machine timezone shifts to
+     maintain proper timestamps for local time file systems such as the MS-DOS
+     file system. The main purpose of this thing is not general fixing of
+     initially broken MS-DOS file timestamp idea but keeping the same
+     timestamps between FreeBSD MS-DOS file system and MS-DOS operating system
+     installed on the same machine.  If the file _/_e_t_c_/_w_a_l_l___c_m_o_s___c_l_o_c_k exists,
+     it means that CMOS clock keeps local time (MS-DOS and MS-Windows
+     compatible mode).  If that file does not exist, it means that the CMOS
+     clock keeps UTC time.  AAddjjkkeerrnnttzz passes this state to the
+     _m_a_c_h_d_e_p_._w_a_l_l___c_m_o_s___c_l_o_c_k kernel variable.
+
+     Adjustments may be needed at system startup and shutdown, and whenever a
+     time zone change occurs.  To handle these different situations, aaddjjkkeerrnnttzz
+     is invoked in two ways:
+
+     --ii    This form handles system startups and shutdowns.  AAddjjkkeerrnnttzz is
+           invoked with this option from _/_e_t_c_/_r_c on entry to multi-user mode,
+           before any other daemons have been started.  AAddjjkkeerrnnttzz puts itself
+           into the background.  Then, for a local time CMOS clock, aaddjjkkeerrnnttzz
+           reads the local time from it and sets the kernel clock to the
+           corresponding UTC time.  AAddjjkkeerrnnttzz also stores the local time zone
+           offset into the _m_a_c_h_d_e_p_._a_d_j_k_e_r_n_t_z kernel variable, for use by
+           subsequent invocations of _'_a_d_j_k_e_r_n_t_z _-_a_' and by local time file
+           systems.
+
+           For a local time CMOS clock _'_a_d_j_k_e_r_n_t_z _-_i_' pauses, and remains
+           inactive as a background daemon until it receives a SIGTERM.  The
+           SIGTERM will normally be sent by init(8) when the system leaves
+           multi-user mode (usually, because the system is being shut down).
+           After receiving the SIGTERM, aaddjjkkeerrnnttzz reads the UTC kernel clock
+           and updates the CMOS clock, if necessary, to ensure that it
+           reflects the current local time zone.  Then aaddjjkkeerrnnttzz exits.
+
+     --aa [--ss]
+           This form is used to update the local time CMOS clock and kernel
+           _m_a_c_h_d_e_p_._a_d_j_k_e_r_n_t_z variable when time zone changes occur, e.g., when
+           entering or leaving daylight savings time.  AAddjjkkeerrnnttzz uses the
+           kernel clock's UTC time, the previously stored time zone offset,
+           and the changed time zone rule to calculate a new time zone offset.
+           It stores the new offset into the _m_a_c_h_d_e_p_._a_d_j_k_e_r_n_t_z kernel
+           variable, and updates the wall CMOS clock to the new local time.
+           If _'_a_d_j_k_e_r_n_t_z _-_a_' was started at a nonexistent time (during a
+           timezone change), it exits with a warning diagnostic unless the --ss
+           option was used, in which case aaddjjkkeerrnnttzz sleeps 30 minutes and
+           tries again.
+
+           This form should be invoked from root's crontab(5) every half hour
+           between midnight and 5am, when most modern time zone changes occur.
+           Warning: don't use the --ss option in a crontab(5) command line, or
+           multiple _'_a_d_j_k_e_r_n_t_z _-_a_' instances could conflict with each other.
+
+     AAddjjkkeerrnnttzz clears the kernel timezone structure and makes the kernel clock
+     run in the UTC time zone.  Super-user privileges are required for all
+     operations.
+
+EENNVVIIRROONNMMEENNTT
+     TZ          Time zone change rule, see tzset(3); not needed when
+                 tzsetup(8) or zic(8) is used.
+
+FFIILLEESS
+     _/_e_t_c_/_l_o_c_a_l_t_i_m_e        Current zoneinfo file, see tzsetup(8) and zic(8).
+     _/_e_t_c_/_w_a_l_l___c_m_o_s___c_l_o_c_k  Empty file.  Its presence indicates that the
+                           machine's CMOS clock is set to local time, while
+                           its absence indicates a UTC CMOS clock.
+
+SSEEEE AALLSSOO
+     tzset(3), crontab(5), mount_msdos(8), rc(8), sysctl(8), tzsetup(8),
+     zic(8)
+
+DDIIAAGGNNOOSSTTIICCSS
+     No diagnostics.  If an error occurs, aaddjjkkeerrnnttzz logs an error message via
+     syslog(3) and exits with a nonzero return code.
+
+BBUUGGSS
+     On FGX, `adjkerntz -i' exits once it has adjusted the kernel at startup.
+     It does not remain as a background daemon waiting for SIGTERM, which
+     would hold a process slot and memory for the whole uptime; a time zone
+     change the machine is up across is left to `adjkerntz -a' from
+     crontab(5), as above.
+
+     _m_a_c_h_d_e_p_._a_d_j_k_e_r_n_t_z is a _l_o_n_g on FGX, where _i_n_t is 16 bits and could not
+     hold a zone more than nine hours from UTC.
+
+AAUUTTHHOORRSS
+     Andrey A. Chernov <ache@astral.msk.su>
+
+HHIISSTTOORRYY
+     The aaddjjkkeerrnnttzz command appeared in FreeBSD 1.0.
+
+FreeBSD                          April 4, 1996                         FreeBSD

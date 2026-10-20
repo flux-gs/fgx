@@ -1,0 +1,19 @@
+{
+ "name": "ptysrsel",
+ "description": "select() on a pty must agree with the read and the write it predicts, in BOTH directions.  THIS IS THE THIRD TIME a pty poll op was left reading a ring the increment underneath it had stopped feeding -- T4 increment 4 caught _PtyM_Poll's POLLIN before it shipped, T4 increment 7 caught _PtyS_Poll's POLLOUT (ptyswsel is that fixture), and T6 increment 4a broke BOTH remaining arms at once, in opposite directions, which is why one fixture covers both.  CASE 1: _PtyS_Poll answered POLLIN from PTYR_InCount, and the master's write feeds the discipline directly now, so that count is pinned at 0 -- select said 'not readable' forever while the bytes sat in t_rawq and a read(2) would have returned them at once.  A select-driven reader on /dev/ttypN went deaf, which is the exact defect _Ttyv_Poll was written to cure one device over.  CASE 2: _PtyM_Poll answered POLLOUT from 'PTYR_InCount < PTY_RING_SZ', which for a pinned-at-zero count means ALWAYS writable -- while _PtyM_Write refuses at TTYHOG with EAGAIN.  A select that promises a write which then fails is the one answer select exists to prevent.  BOTH ARMS ARE ASSERTED IN THEIR NEGATIVE STATE FIRST (the slave NOT readable before the write, the master writable before the queue fills), because an assertion that only ever looks for 'ready' is satisfied by the very driver it is meant to catch.  RAW WITH ECHO OFF on the slave for ptyhog's reason: RAW does not disable echo, and a master write with echo on fills the slave's t_outq too, which is a different queue from the one under test.",
+ "command": "/testbin/ptysrsel",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "PTYSRSEL slave readable",
+   "PTYSRSEL BOTH",
+   "fgx#",
+   "PTYSRSEL master flush"
+  ],
+  "screen_lacks": [
+   "PTYSRSEL FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

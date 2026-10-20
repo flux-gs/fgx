@@ -1,0 +1,9 @@
+{
+ "name": "bytecat",
+ "description": "Shared libc SP2 byte loop: /bin/sh copied through getc/putc by bytecat as every program links libc today.  Timing: frame - paste_frame in dump.json, primary_input inject; compare with bytecatso.  Not in the gate.",
+ "command": "/testbin/bytecat < /bin/sh > /tmp/bc; B=BC; cmp /bin/sh /tmp/bc && echo $B same",
+ "primary_input": "inject",
+ "serial": true,
+ "timeout_s": 300,
+ "expect": {"screen_contains": ["BC same"], "screen_lacks": ["PANIC", "BRK"]}
+}

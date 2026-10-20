@@ -1,0 +1,16 @@
+# The first user of curses is stopped inside its load and SIGKILLed
+# while a second waits: the row is aborted with its banks, the waiter
+# takes it over and runs, and the row ends READY with the same banks.
+/testbin/curssodyn > /dev/null &
+A=$!
+/testbin/ldctl waitload libcurses $A
+/testbin/ldctl row libcurses
+/testbin/ldctl row libcurses | grep "LDC banks" > /tmp/k1
+(/testbin/curssodyn > /dev/null; echo KIL b=$? > /tmp/sb) &
+sleep 2
+kill -9 $A
+wait
+cat /tmp/sb
+/testbin/ldctl row libcurses
+/testbin/ldctl row libcurses | grep "LDC banks" > /tmp/k2
+cmp /tmp/k1 /tmp/k2 && echo KIL same banks

@@ -1,0 +1,1604 @@
+{
+ "_comment": [
+  "GENERATED ONCE from build.sh (2026-07-28), then hand-maintained.",
+  "This is the build's SOURCE OF TRUTH for what userland exists and what",
+  "gets staged onto the disk.  It was parsed out of build.sh rather than",
+  "retyped, so the ninja graph started from exactly what build.sh built --",
+  "131 byte-identical binaries and identical disk catalogs.",
+  "Adding a tool: add an entry here, re-run tools/ninja/gen.py.",
+  "disk_src/etc/rc is deliberately ABSENT: it is generated from rc.in by tools/make_ufsboot.sh. Staging it here made the image depend on a file its own build rewrites.",
+  "jsh REMOVED 2026-07-29: bsh (2.11BSD Bourne) is /bin/sh and tcsh is the interactive shell, so jsh had no remaining role. Its /bin/sh FALLBACK is gone too -- vendor/ guarantees bsh builds, and that fallback is what silently staged the wrong shell on any tree without examples/."
+ ],
+ "tools": [
+  {
+   "name": "addtest",
+   "flags": "-DBSD=1 -DTINYSTACK=1 -DNEWSTYLE=0 -I../../vendor/netbsd-0-9/usr.bin/elvis"
+  },
+  {
+   "name": "ansicat"
+  },
+  {
+   "name": "arch"
+  },
+  {
+   "name": "basename"
+  },
+  {
+   "name": "bigfork"
+  },
+  {
+   "name": "bigforkx"
+  },
+  {
+   "name": "cal"
+  },
+  {
+   "name": "cat"
+  },
+  {
+   "name": "cdtwo"
+  },
+  {
+   "name": "clear",
+   "libs": "termlib"
+  },
+  {
+   "name": "cmp"
+  },
+  {
+   "name": "color"
+  },
+  {
+   "name": "colortest"
+  },
+  {
+   "name": "compress"
+  },
+  {
+   "name": "cp"
+  },
+  {
+   "name": "credprobe"
+  },
+  {
+   "name": "date"
+  },
+  {
+   "name": "devpty"
+  },
+  {
+   "name": "df"
+  },
+  {
+   "name": "dhclient"
+  },
+  {
+   "name": "dirname"
+  },
+  {
+   "name": "dmesg"
+  },
+  {
+   "name": "dstest"
+  },
+  {
+   "name": "echo",
+   "static": true
+  },
+  {
+   "name": "echod"
+  },
+  {
+   "name": "ed"
+  },
+  {
+   "name": "expr",
+   "yacc": true
+  },
+  {
+   "name": "false"
+  },
+  {
+   "name": "fkbadex"
+  },
+  {
+   "name": "fkbg"
+  },
+  {
+   "name": "fkiso"
+  },
+  {
+   "name": "fknest"
+  },
+  {
+   "name": "fold"
+  },
+  {
+   "name": "font"
+  },
+  {
+   "name": "fractal"
+  },
+  {
+   "name": "frotz",
+   "tu_list": "src/userland/frotz/tu.list",
+   "flags": "-I src/userland/frotz",
+   "seg3_tus": ["quetzal", "screen", "dumb_pic"],
+   "seg4_tus": ["fastmem", "dumb_output", "text", "dumb_input"]
+  },
+  {
+   "name": "fsck",
+   "static": true,
+   "tu_list": "src/userland/fsck/tu.list",
+   "flags": "-I src/kernel/vfs -I src/userland/fsck",
+   "seg3_tus": [
+    "dir",
+    "utilities",
+    "ufs_sb",
+    "ufs_dinode"
+   ]
+  },
+  {
+   "name": "getty",
+   "static": true
+  },
+  {
+   "name": "grep"
+  },
+  {
+   "name": "head"
+  },
+  {
+   "name": "heapcap"
+  },
+  {
+   "name": "heapkill"
+  },
+  {
+   "name": "host"
+  },
+  {
+   "name": "hostname",
+   "static": true
+  },
+  {
+   "name": "ifconfig",
+   "static": true
+  },
+  {
+   "name": "inetd"
+  },
+  {
+   "name": "init",
+   "static": true,
+   "libs": "util"
+  },
+  {
+   "name": "kill"
+  },
+  {
+   "name": "killtest"
+  },
+  {
+   "name": "login",
+   "static": true,
+   "libs": "util"
+  },
+  {
+   "name": "logintest"
+  },
+  {
+   "name": "loopprobe"
+  },
+  {
+   "name": "unixprobe"
+  },
+  {
+   "name": "chmod"
+  },
+  {
+   "name": "chown"
+  },
+  {
+   "name": "ln",
+   "static": true
+  },
+  {
+   "name": "ls",
+   "tu_list": "src/userland/ls/tu.list"
+  },
+  {
+   "name": "mallocmax"
+  },
+  {
+   "name": "malloctest"
+  },
+  {
+   "name": "man"
+  },
+  {
+   "name": "mbig"
+  },
+  {
+   "name": "membench"
+  },
+  {
+   "name": "modload",
+   "static": true
+  },
+  {
+   "name": "loadcda"
+  },
+  {
+   "name": "mkdir"
+  },
+  {
+   "name": "more",
+   "libs": "termlib"
+  },
+  {
+   "name": "mutstk"
+  },
+  {
+   "name": "mount",
+   "static": true,
+   "tu_list": "src/userland/mount/tu.list"
+  },
+  {
+   "name": "mount_prodos",
+   "tu_list": "src/userland/mount_prodos/tu.list"
+  },
+  {
+   "name": "mv",
+   "static": true
+  },
+  {
+   "name": "nc"
+  },
+  {
+   "name": "netdump"
+  },
+  {
+   "name": "ensoniqplay"
+  },
+  {
+   "name": "ntpinfo"
+  },
+  {
+   "name": "ntpplay"
+  },
+  {
+   "name": "od"
+  },
+  {
+   "name": "passwd"
+  },
+  {
+   "name": "ping"
+  },
+  {
+   "name": "pipegrow"
+  },
+  {
+   "name": "printenv"
+  },
+  {
+   "name": "ps"
+  },
+  {
+   "name": "ptyflush"
+  },
+  {
+   "name": "ptyhog"
+  },
+  {
+   "name": "ptyhup"
+  },
+  {
+   "name": "ptyintr"
+  },
+  {
+   "name": "ptykey"
+  },
+  {
+   "name": "ptyoutq"
+  },
+  {
+   "name": "ptypkt"
+  },
+  {
+   "name": "ptyrec"
+  },
+  {
+   "name": "ptyremote"
+  },
+  {
+   "name": "ptyshell"
+  },
+  {
+   "name": "ptysrsel"
+  },
+  {
+   "name": "ptyswsel"
+  },
+  {
+   "name": "ptytest"
+  },
+  {
+   "name": "pwd"
+  },
+  {
+   "name": "rm"
+  },
+  {
+   "name": "rmdir"
+  },
+  {
+   "name": "rnprobe"
+  },
+  {
+   "name": "robots",
+   "flags": "-DNOSCCS",
+   "tu_list": "src/userland/robots/tu.list",
+   "libs": "termlib,curses"
+  },
+  {
+   "name": "route"
+  },
+  {
+   "name": "sbrktest"
+  },
+  {
+   "name": "reboot"
+  },
+  {
+   "name": "adjkerntz"
+  },
+  {
+   "name": "mountupd"
+  },
+  {
+   "name": "pdmount"
+  },
+  {
+   "name": "killprobe"
+  },
+  {
+   "name": "slogprobe"
+  },
+  {
+   "name": "klogprobe"
+  },
+  {
+   "name": "vnprobe"
+  },
+  {
+   "name": "itimprobe"
+  },
+  {
+   "name": "sed"
+  },
+  {
+   "name": "sgtty"
+  },
+  {
+   "name": "ldctl"
+  },
+  {
+   "name": "lddig"
+  },
+  {
+   "name": "ldd"
+  },
+  {
+   "name": "exectime"
+  },
+  {
+   "name": "sigexec"
+  },
+  {
+   "name": "sleep"
+  },
+  {
+   "name": "slotscan"
+  },
+  {
+   "name": "softexec"
+  },
+  {
+   "name": "softfork"
+  },
+  {
+   "name": "softjmp"
+  },
+  {
+   "name": "spin"
+  },
+  {
+   "name": "spinner"
+  },
+  {
+   "name": "stat"
+  },
+  {
+   "name": "stattest"
+  },
+  {
+   "name": "strings"
+  },
+  {
+   "name": "stty"
+  },
+  {
+   "name": "sync"
+  },
+  {
+   "name": "synctest"
+  },
+  {
+   "name": "tar",
+   "static": true
+  },
+  {
+   "name": "tctest",
+   "libs": "termlib"
+  },
+  {
+   "name": "telnet"
+  },
+  {
+   "name": "telnetd",
+   "libs": "util"
+  },
+  {
+   "name": "test",
+   "static": true,
+   "tu_list": "src/userland/test/tu.list"
+  },
+  {
+   "name": "time"
+  },
+  {
+   "name": "tip"
+  },
+  {
+   "name": "touch"
+  },
+  {
+   "name": "tput",
+   "libs": "termlib"
+  },
+  {
+   "name": "tr"
+  },
+  {
+   "name": "true"
+  },
+  {
+   "name": "trunkfree"
+  },
+  {
+   "name": "trunctree"
+  },
+  {
+   "name": "ttysprobe"
+  },
+  {
+   "name": "ul",
+   "libs": "termlib"
+  },
+  {
+   "name": "umount"
+  },
+  {
+   "name": "uname"
+  },
+  {
+   "name": "uniq"
+  },
+  {
+   "name": "syslogd"
+  },
+  {
+   "name": "update"
+  },
+  {
+   "name": "cron",
+   "flags": "-I src/userland/cron",
+   "tu_list": "src/userland/cron/tu.list"
+  },
+  {
+   "name": "ifcprobe"
+  },
+  {
+   "name": "clkprobe"
+  },
+  {
+   "name": "ntp",
+   "flags": "-DDEBUG -DLOG_NTP=LOG_LOCAL3 -DGENERIC_UNS_BUG -DSUN_FLT_BUG -I src/userland/ntp",
+   "tu_list": "src/userland/ntp/tu.list"
+  },
+  {
+   "name": "ntpd",
+   "flags": "-DDEBUG -DLOG_NTP=LOG_LOCAL3 -DGENERIC_UNS_BUG -DSUN_FLT_BUG -I src/userland/ntp",
+   "tu_list": "src/userland/ntpd/tu.list",
+   "seg3_tus": ["ntp_proto"]
+  },
+  {
+   "name": "ntpdc",
+   "flags": "-DDEBUG -DLOG_NTP=LOG_LOCAL3 -DGENERIC_UNS_BUG -DSUN_FLT_BUG -I src/userland/ntp"
+  },
+  {
+   "name": "ntest",
+   "flags": "-DDEBUG -DLOG_NTP=LOG_LOCAL3 -DGENERIC_UNS_BUG -DSUN_FLT_BUG -I src/userland/ntp",
+   "tu_list": "src/userland/ntest/tu.list"
+  },
+  {
+   "name": "crontab",
+   "flags": "-I src/userland/cron",
+   "tu_list": "src/userland/crontab/tu.list"
+  },
+  {
+   "name": "logger"
+  },
+  {
+   "name": "utimetest"
+  },
+  {
+   "name": "vfexec"
+  },
+  {
+   "name": "vfexit"
+  },
+  {
+   "name": "w"
+  },
+  {
+   "name": "who"
+  },
+  {
+   "name": "last"
+  },
+  {
+   "name": "ac"
+  },
+  {
+   "name": "vmstat"
+  },
+  {
+   "name": "wc"
+  },
+  {
+   "name": "worm",
+   "flags": "-DNOSCCS",
+   "libs": "termlib,curses"
+  },
+  {
+   "name": "wstest"
+  },
+  {
+   "name": "yes"
+  },
+  {
+   "name": "wrbig"
+  },
+  {
+   "name": "dblind"
+  },
+  {
+   "name": "statid"
+  },
+  {
+   "name": "permtest"
+  },
+  {
+   "name": "clkrate"
+  },
+  {
+   "name": "timetest"
+  },
+  {
+   "name": "gcprobe"
+  },
+  {
+   "name": "tztest"
+  },
+  {
+   "name": "forkpair"
+  },
+  {
+   "name": "bytecat"
+  },
+  {
+   "name": "strerrprobe"
+  },
+  {
+   "name": "cloexec"
+  },
+  {
+   "name": "spawnenv"
+  },
+  {
+   "name": "flockt"
+  },
+  {
+   "name": "daemontest"
+  },
+  {
+   "name": "id"
+  },
+  {
+   "name": "su"
+  },
+  {
+   "name": "fsynctest"
+  },
+  {
+   "name": "sysctltest"
+  },
+  {
+   "name": "syncdelay"
+  },
+  {
+   "name": "credtest"
+  },
+  {
+   "name": "sh",
+   "static": true,
+   "main": "vendor/2.11BSD/usr/bin/sh/main.c",
+   "tu_list": "src/userland/sh/tu.list",
+   "flags": "-I src/userland/sh -I vendor/2.11BSD/usr/bin/sh",
+   "commons": true,
+   "pack": true,
+   "stack_pad": 2304
+  },
+  {
+   "name": "elvis",
+   "main": "vendor/netbsd-0-9/usr.bin/elvis/main.c",
+   "tu_list": "src/userland/elvis/tu.list",
+   "flags": "-I vendor/netbsd-0-9/usr.bin/elvis -I src/userland/elvis -DBSD=1 -DTINYSTACK=1 -DNEWSTYLE=0 -DCRUNCH=1 -include stdlib.h",
+   "libs": "termlib",
+   "commons": true,
+   "pack": true
+  },
+  {
+   "name": "tcsh",
+   "main": "vendor/2.11BSD/usr/bin/tcsh/sh.c",
+   "tu_list": "src/userland/tcsh/tu.list",
+   "flags": "-I tools/tcsh-fgx2/gen -I src/userland/tcsh -I vendor/2.11BSD/usr/bin/tcsh -Dpdp11 -DTC_BUFSIZ=256",
+   "libs": "termlib",
+   "commons": true,
+   "pack": true,
+   "gen_script": "src/userland/tcsh/mkheaders.sh",
+   "gen": ["tools/tcsh-fgx2/gen/ed.defns.h", "tools/tcsh-fgx2/gen/sh.err.h", "tools/tcsh-fgx2/gen/tc.const.h"],
+   "gen_deps": ["vendor/2.11BSD/usr/bin/tcsh/ed.defns.c", "vendor/2.11BSD/usr/bin/tcsh/sh.err.c", "vendor/2.11BSD/usr/bin/tcsh/tc.const.c", "vendor/2.11BSD/usr/bin/tcsh/*.h", "src/userland/tcsh/*.h", "src/userland/tcsh/sys/*.h"]
+  }
+ ],
+ "staging": [
+  {
+   "src": "bin/arch.bin",
+   "dst": "disk_src/bin/arch"
+  },
+  {
+   "src": "bin/basename.bin",
+   "dst": "disk_src/bin/basename"
+  },
+  {
+   "src": "bin/cal.bin",
+   "dst": "disk_src/bin/cal"
+  },
+  {
+   "src": "bin/cat.bin",
+   "dst": "disk_src/bin/cat"
+  },
+  {
+   "src": "bin/chmod.bin",
+   "dst": "disk_src/bin/chmod"
+  },
+  {
+   "src": "bin/chown.bin",
+   "dst": "disk_src/sbin/chown"
+  },
+  {
+   "src": "bin/clear.bin",
+   "dst": "disk_src/bin/clear"
+  },
+  {
+   "src": "bin/cmp.bin",
+   "dst": "disk_src/bin/cmp"
+  },
+  {
+   "src": "bin/compress.bin",
+   "dst": "disk_src/bin/compress"
+  },
+  {
+   "src": "bin/cp.bin",
+   "dst": "disk_src/bin/cp"
+  },
+  {
+   "src": "bin/tip.bin",
+   "dst": "disk_src/bin/cu"
+  },
+  {
+   "src": "bin/date.bin",
+   "dst": "disk_src/bin/date"
+  },
+  {
+   "src": "bin/df.bin",
+   "dst": "disk_src/bin/df"
+  },
+  {
+   "src": "bin/dirname.bin",
+   "dst": "disk_src/bin/dirname"
+  },
+  {
+   "src": "bin/echo.bin",
+   "dst": "disk_src/bin/echo"
+  },
+  {
+   "src": "bin/ed.bin",
+   "dst": "disk_src/bin/ed"
+  },
+  {
+   "src": "bin/expr.bin",
+   "dst": "disk_src/bin/expr"
+  },
+  {
+   "src": "bin/false.bin",
+   "dst": "disk_src/bin/false"
+  },
+  {
+   "src": "bin/fold.bin",
+   "dst": "disk_src/bin/fold"
+  },
+  {
+   "src": "bin/getty.bin",
+   "dst": "disk_src/bin/getty"
+  },
+  {
+   "src": "bin/grep.bin",
+   "dst": "disk_src/bin/grep"
+  },
+  {
+   "src": "src/userland/hd/hd",
+   "dst": "disk_src/bin/hd"
+  },
+  {
+   "src": "bin/head.bin",
+   "dst": "disk_src/bin/head"
+  },
+  {
+   "src": "bin/host.bin",
+   "dst": "disk_src/bin/host"
+  },
+  {
+   "src": "bin/hostname.bin",
+   "dst": "disk_src/bin/hostname"
+  },
+  {
+   "src": "bin/kill.bin",
+   "dst": "disk_src/bin/kill"
+  },
+  {
+   "src": "bin/login.bin",
+   "dst": "disk_src/bin/login"
+  },
+  {
+   "src": "bin/ln.bin",
+   "dst": "disk_src/bin/ln"
+  },
+  {
+   "src": "bin/ls.bin",
+   "dst": "disk_src/bin/ls"
+  },
+  {
+   "src": "bin/man.bin",
+   "dst": "disk_src/bin/man"
+  },
+  {
+   "src": "bin/modload.bin",
+   "dst": "disk_src/sbin/modload"
+  },
+  {
+   "src": "bin/adjkerntz.bin",
+   "dst": "disk_src/sbin/adjkerntz"
+  },
+  {
+   "src": "bin/loadcda.bin",
+   "dst": "disk_src/sbin/loadcda"
+  },
+  {
+   "src": "bin/mkdir.bin",
+   "dst": "disk_src/bin/mkdir"
+  },
+  {
+   "src": "bin/more.bin",
+   "dst": "disk_src/bin/more"
+  },
+  {
+   "src": "bin/mount.bin",
+   "dst": "disk_src/sbin/mount"
+  },
+  {
+   "src": "bin/mount_prodos.bin",
+   "dst": "disk_src/sbin/mount_prodos"
+  },
+  {
+   "src": "bin/umount.bin",
+   "dst": "disk_src/sbin/umount"
+  },
+  {
+   "src": "bin/syslogd.bin",
+   "dst": "disk_src/sbin/syslogd"
+  },
+  {
+   "src": "bin/update.bin",
+   "dst": "disk_src/sbin/update"
+  },
+  {
+   "src": "bin/cron.bin",
+   "dst": "disk_src/sbin/cron"
+  },
+  {
+   "src": "bin/clkprobe.bin",
+   "dst": "disk_src/testbin/clkprobe"
+  },
+  {
+   "src": "bin/ifcprobe.bin",
+   "dst": "disk_src/testbin/ifcprobe"
+  },
+  {
+   "src": "bin/ntp.bin",
+   "dst": "disk_src/sbin/ntp"
+  },
+  {
+   "src": "bin/ntpd.bin",
+   "dst": "disk_src/sbin/ntpd"
+  },
+  {
+   "src": "bin/ntpdc.bin",
+   "dst": "disk_src/sbin/ntpdc"
+  },
+  {
+   "src": "bin/ntest.bin",
+   "dst": "disk_src/testbin/ntest"
+  },
+  {
+   "src": "bin/crontab.bin",
+   "dst": "disk_src/bin/crontab"
+  },
+  {
+   "src": "bin/logger.bin",
+   "dst": "disk_src/bin/logger"
+  },
+  {
+   "src": "bin/mv.bin",
+   "dst": "disk_src/bin/mv"
+  },
+  {
+   "src": "bin/nc.bin",
+   "dst": "disk_src/bin/nc"
+  },
+  {
+   "src": "bin/od.bin",
+   "dst": "disk_src/bin/od"
+  },
+  {
+   "src": "bin/passwd.bin",
+   "dst": "disk_src/bin/passwd"
+  },
+  {
+   "src": "bin/ping.bin",
+   "dst": "disk_src/bin/ping"
+  },
+  {
+   "src": "bin/printenv.bin",
+   "dst": "disk_src/bin/printenv"
+  },
+  {
+   "src": "bin/ps.bin",
+   "dst": "disk_src/bin/ps"
+  },
+  {
+   "src": "bin/pwd.bin",
+   "dst": "disk_src/bin/pwd"
+  },
+  {
+   "src": "bin/rm.bin",
+   "dst": "disk_src/bin/rm"
+  },
+  {
+   "src": "bin/rmdir.bin",
+   "dst": "disk_src/bin/rmdir"
+  },
+  {
+   "src": "bin/robots.bin",
+   "dst": "disk_src/bin/robots"
+  },
+  {
+   "src": "bin/sed.bin",
+   "dst": "disk_src/bin/sed"
+  },
+  {
+   "src": "bin/sh.bin",
+   "dst": "disk_src/bin/sh"
+  },
+  {
+   "src": "tools/libcso-fgx2/libcso.bin",
+   "dst": "disk_src/testbin/libcso"
+  },
+  {
+   "src": "bin/ldctl.bin",
+   "dst": "disk_src/testbin/ldctl"
+  },
+  {
+   "src": "tools/ldload-fgx2/ldload.bin",
+   "dst": "disk_src/sbin/ldload"
+  },
+  {
+   "src": "bin/lddig.bin",
+   "dst": "disk_src/testbin/lddig"
+  },
+  {
+   "src": "bin/ldd.bin",
+   "dst": "disk_src/bin/ldd"
+  },
+  {
+   "src": "src/userland/lddig/ld.so.conf.t",
+   "dst": "disk_src/testbin/ld.so.conf.t"
+  },
+  {
+   "src": "src/userland/lddig/ld.so.conf.bad",
+   "dst": "disk_src/testbin/ld.so.conf.bad"
+  },
+  {
+   "src": "src/userland/lddig/ld.so.conf.cur",
+   "dst": "disk_src/testbin/ld.so.conf.cur"
+  },
+  {
+   "src": "toolchain/lib/libtermlib.so.1.0",
+   "dst": "disk_src/testbin/libtermlib.so"
+  },
+  {
+   "src": "build/ld.digest",
+   "dst": "disk_src/testbin/ld.digest"
+  },
+  {
+   "src": "build/ld.digest.pad",
+   "dst": "disk_src/testbin/ld.digest.pad"
+  },
+  {
+   "src": "toolchain/lib/libc.so.1.0",
+   "dst": "disk_src/lib/libc.so.1.0"
+  },
+  {
+   "src": "toolchain/lib/libtermlib.so.1.0",
+   "dst": "disk_src/lib/libtermlib.so.1.0"
+  },
+  {
+   "src": "toolchain/lib/libcurses.so.1.0",
+   "dst": "disk_src/lib/libcurses.so.1.0"
+  },
+  {
+   "src": "toolchain/lib/libfgx.so.1.0",
+   "dst": "disk_src/lib/libfgx.so.1.0"
+  },
+  {
+   "src": "toolchain/lib/libutil.so.1.0",
+   "dst": "disk_src/lib/libutil.so.1.0"
+  },
+  {
+   "src": "tools/libcso-fgx2/libcsofull.bin",
+   "dst": "disk_src/testbin/libcsofull"
+  },
+  {
+   "src": "tools/dynso-fgx2/dynso.bin",
+   "dst": "disk_src/testbin/dynso"
+  },
+  {
+   "src": "tools/dynso-fgx2/dynsodyn.bin",
+   "dst": "disk_src/testbin/dynsodyn"
+  },
+  {
+   "src": "tools/dynso-fgx2/dyntrue.bin",
+   "dst": "disk_src/testbin/dyntrue"
+  },
+  {
+   "src": "tools/dynso-fgx2/dynmulti.bin",
+   "dst": "disk_src/testbin/dynmulti"
+  },
+  {
+   "src": "tools/dynso-fgx2/dyntabseg.bin",
+   "dst": "disk_src/testbin/dyntabseg"
+  },
+  {
+   "src": "tools/dynso-fgx2/dynrebind.bin",
+   "dst": "disk_src/testbin/dynrebind"
+  },
+  {
+   "src": "tools/dynso-fgx2/dyntruebound.bin",
+   "dst": "disk_src/testbin/dyntruebound"
+  },
+  {
+   "src": "bin/exectime.bin",
+   "dst": "disk_src/testbin/exectime"
+  },
+  {
+   "src": "tools/dynso-fgx2/dynsomisdyn.bin",
+   "dst": "disk_src/testbin/dynsomisdyn"
+  },
+  {
+   "src": "build/dynsodyn.digest",
+   "dst": "disk_src/testbin/dynsodyn.digest"
+  },
+  {
+   "src": "build/dynsomisdyn.digest",
+   "dst": "disk_src/testbin/dynsomisdyn.digest"
+  },
+  {
+   "src": "tools/dynso-fgx2/cursso.bin",
+   "dst": "disk_src/testbin/cursso"
+  },
+  {
+   "src": "tools/dynso-fgx2/curssodyn.bin",
+   "dst": "disk_src/testbin/curssodyn"
+  },
+  {
+   "src": "tools/dynso-fgx2/fitover.bin",
+   "dst": "disk_src/testbin/fitover"
+  },
+  {
+   "src": "tools/dynso-fgx2/fitunder.bin",
+   "dst": "disk_src/testbin/fitunder"
+  },
+  {
+   "src": "build/curssodyn.digest",
+   "dst": "disk_src/testbin/curssodyn.digest"
+  },
+  {
+   "src": "bin/bytecat.bin",
+   "dst": "disk_src/testbin/bytecat"
+  },
+  {
+   "src": "tools/libcso-fgx2/bytecatso.bin",
+   "dst": "disk_src/testbin/bytecatso"
+  },
+  {
+   "src": "bin/sleep.bin",
+   "dst": "disk_src/bin/sleep"
+  },
+  {
+   "src": "bin/stat.bin",
+   "dst": "disk_src/bin/stat"
+  },
+  {
+   "src": "bin/strings.bin",
+   "dst": "disk_src/bin/strings"
+  },
+  {
+   "src": "bin/stty.bin",
+   "dst": "disk_src/bin/stty"
+  },
+  {
+   "src": "bin/sync.bin",
+   "dst": "disk_src/bin/sync"
+  },
+  {
+   "src": "bin/tar.bin",
+   "dst": "disk_src/bin/tar"
+  },
+  {
+   "src": "bin/tcsh.bin",
+   "dst": "disk_src/bin/tcsh"
+  },
+  {
+   "src": "bin/telnet.bin",
+   "dst": "disk_src/bin/telnet"
+  },
+  {
+   "src": "bin/test.bin",
+   "dst": "disk_src/bin/test"
+  },
+  {
+   "src": "bin/time.bin",
+   "dst": "disk_src/bin/time"
+  },
+  {
+   "src": "bin/tip.bin",
+   "dst": "disk_src/bin/tip"
+  },
+  {
+   "src": "bin/touch.bin",
+   "dst": "disk_src/bin/touch"
+  },
+  {
+   "src": "bin/tput.bin",
+   "dst": "disk_src/bin/tput"
+  },
+  {
+   "src": "bin/tr.bin",
+   "dst": "disk_src/bin/tr"
+  },
+  {
+   "src": "bin/true.bin",
+   "dst": "disk_src/bin/true"
+  },
+  {
+   "src": "bin/ul.bin",
+   "dst": "disk_src/bin/ul"
+  },
+  {
+   "src": "bin/uname.bin",
+   "dst": "disk_src/bin/uname"
+  },
+  {
+   "src": "bin/compress.bin",
+   "dst": "disk_src/bin/uncompress"
+  },
+  {
+   "src": "bin/uniq.bin",
+   "dst": "disk_src/bin/uniq"
+  },
+  {
+   "src": "bin/w.bin",
+   "dst": "disk_src/bin/w"
+  },
+  {
+   "src": "bin/who.bin",
+   "dst": "disk_src/bin/who"
+  },
+  {
+   "src": "bin/last.bin",
+   "dst": "disk_src/bin/last"
+  },
+  {
+   "src": "bin/ac.bin",
+   "dst": "disk_src/sbin/ac"
+  },
+  {
+   "src": "bin/elvis.bin",
+   "dst": "disk_src/bin/vi"
+  },
+  {
+   "src": "bin/wc.bin",
+   "dst": "disk_src/bin/wc"
+  },
+  {
+   "src": "bin/worm.bin",
+   "dst": "disk_src/bin/worm"
+  },
+  {
+   "src": "bin/yes.bin",
+   "dst": "disk_src/bin/yes"
+  },
+  {
+   "src": "bin/compress.bin",
+   "dst": "disk_src/bin/zcat"
+  },
+  {
+   "src": "build/stage2.bin",
+   "dst": "disk_src/boot"
+  },
+  {
+   "src": "build/stage2.bin",
+   "dst": "disk_src/boot"
+  },
+  {
+   "src": "bin/dhclient.bin",
+   "dst": "disk_src/sbin/dhclient"
+  },
+  {
+   "src": "bin/ifconfig.bin",
+   "dst": "disk_src/sbin/ifconfig"
+  },
+  {
+   "src": "bin/inetd.bin",
+   "dst": "disk_src/sbin/inetd"
+  },
+  {
+   "src": "bin/init.bin",
+   "dst": "disk_src/sbin/init"
+  },
+  {
+   "src": "bin/netdump.bin",
+   "dst": "disk_src/sbin/netdump"
+  },
+  {
+   "src": "bin/route.bin",
+   "dst": "disk_src/sbin/route"
+  },
+  {
+   "src": "bin/dblind.bin",
+   "dst": "disk_src/testbin/dblind"
+  },
+  {
+   "src": "bin/statid.bin",
+   "dst": "disk_src/testbin/statid"
+  },
+  {
+   "src": "bin/wrbig.bin",
+   "dst": "disk_src/testbin/wrbig"
+  },
+  {
+   "src": "bin/addtest.bin",
+   "dst": "disk_src/testbin/addtest"
+  },
+  {
+   "src": "bin/bigfork.bin",
+   "dst": "disk_src/testbin/bigfork"
+  },
+  {
+   "src": "bin/bigforkx.bin",
+   "dst": "disk_src/testbin/bigforkx"
+  },
+  {
+   "src": "bin/cdtwo.bin",
+   "dst": "disk_src/testbin/cdtwo"
+  },
+  {
+   "src": "bin/colortest.bin",
+   "dst": "disk_src/testbin/colortest"
+  },
+  {
+   "src": "bin/credprobe.bin",
+   "dst": "disk_src/testbin/credprobe"
+  },
+  {
+   "src": "bin/echod.bin",
+   "dst": "disk_src/testbin/echod"
+  },
+  {
+   "src": "bin/fkbadex.bin",
+   "dst": "disk_src/testbin/fkbadex"
+  },
+  {
+   "src": "bin/fkbg.bin",
+   "dst": "disk_src/testbin/fkbg"
+  },
+  {
+   "src": "bin/fkiso.bin",
+   "dst": "disk_src/testbin/fkiso"
+  },
+  {
+   "src": "bin/fknest.bin",
+   "dst": "disk_src/testbin/fknest"
+  },
+  {
+   "src": "bin/heapcap.bin",
+   "dst": "disk_src/testbin/heapcap"
+  },
+  {
+   "src": "bin/heapkill.bin",
+   "dst": "disk_src/testbin/heapkill"
+  },
+  {
+   "src": "bin/killtest.bin",
+   "dst": "disk_src/testbin/killtest"
+  },
+  {
+   "src": "bin/logintest.bin",
+   "dst": "disk_src/testbin/logintest"
+  },
+  {
+   "src": "bin/loopprobe.bin",
+   "dst": "disk_src/testbin/loopprobe"
+  },
+  {
+   "src": "bin/unixprobe.bin",
+   "dst": "disk_src/testbin/unixprobe"
+  },
+  {
+   "src": "bin/mallocmax.bin",
+   "dst": "disk_src/testbin/mallocmax"
+  },
+  {
+   "src": "bin/malloctest.bin",
+   "dst": "disk_src/testbin/malloctest"
+  },
+  {
+   "src": "bin/mbig.bin",
+   "dst": "disk_src/testbin/mbig"
+  },
+  {
+   "src": "bin/mutstk.bin",
+   "dst": "disk_src/testbin/mutstk"
+  },
+  {
+   "src": "bin/pipegrow.bin",
+   "dst": "disk_src/testbin/pipegrow"
+  },
+  {
+   "src": "bin/ptyflush.bin",
+   "dst": "disk_src/testbin/ptyflush"
+  },
+  {
+   "src": "bin/ptyoutq.bin",
+   "dst": "disk_src/testbin/ptyoutq"
+  },
+  {
+   "src": "bin/ptypkt.bin",
+   "dst": "disk_src/testbin/ptypkt"
+  },
+  {
+   "src": "bin/ptyremote.bin",
+   "dst": "disk_src/testbin/ptyremote"
+  },
+  {
+   "src": "bin/devpty.bin",
+   "dst": "disk_src/testbin/devpty"
+  },
+  {
+   "src": "bin/ptysrsel.bin",
+   "dst": "disk_src/testbin/ptysrsel"
+  },
+  {
+   "src": "bin/ptyswsel.bin",
+   "dst": "disk_src/testbin/ptyswsel"
+  },
+  {
+   "src": "bin/ptyhup.bin",
+   "dst": "disk_src/testbin/ptyhup"
+  },
+  {
+   "src": "bin/ptyintr.bin",
+   "dst": "disk_src/testbin/ptyintr"
+  },
+  {
+   "src": "bin/ptykey.bin",
+   "dst": "disk_src/testbin/ptykey"
+  },
+  {
+   "src": "bin/ptyshell.bin",
+   "dst": "disk_src/testbin/ptyshell"
+  },
+  {
+   "src": "bin/ptytest.bin",
+   "dst": "disk_src/testbin/ptytest"
+  },
+  {
+   "src": "bin/rnprobe.bin",
+   "dst": "disk_src/testbin/rnprobe"
+  },
+  {
+   "src": "bin/sbrktest.bin",
+   "dst": "disk_src/testbin/sbrktest"
+  },
+  {
+   "src": "bin/reboot.bin",
+   "dst": "disk_src/sbin/reboot"
+  },
+  {
+   "src": "bin/reboot.bin",
+   "dst": "disk_src/sbin/halt"
+  },
+  {
+   "src": "bin/mountupd.bin",
+   "dst": "disk_src/testbin/mountupd"
+  },
+  {
+   "src": "bin/pdmount.bin",
+   "dst": "disk_src/testbin/pdmount"
+  },
+  {
+   "src": "bin/killprobe.bin",
+   "dst": "disk_src/testbin/killprobe"
+  },
+  {
+   "src": "bin/itimprobe.bin",
+   "dst": "disk_src/testbin/itimprobe"
+  },
+  {
+   "src": "bin/slogprobe.bin",
+   "dst": "disk_src/testbin/slogprobe"
+  },
+  {
+   "src": "bin/klogprobe.bin",
+   "dst": "disk_src/testbin/klogprobe"
+  },
+  {
+   "src": "bin/vnprobe.bin",
+   "dst": "disk_src/testbin/vnprobe"
+  },
+  {
+   "src": "bin/sgtty.bin",
+   "dst": "disk_src/testbin/sgtty"
+  },
+  {
+   "src": "bin/sigexec.bin",
+   "dst": "disk_src/testbin/sigexec"
+  },
+  {
+   "src": "bin/softexec.bin",
+   "dst": "disk_src/testbin/softexec"
+  },
+  {
+   "src": "bin/softfork.bin",
+   "dst": "disk_src/testbin/softfork"
+  },
+  {
+   "src": "bin/softjmp.bin",
+   "dst": "disk_src/testbin/softjmp"
+  },
+  {
+   "src": "bin/spin.bin",
+   "dst": "disk_src/testbin/spin"
+  },
+  {
+   "src": "bin/spinner.bin",
+   "dst": "disk_src/testbin/spinner"
+  },
+  {
+   "src": "bin/synctest.bin",
+   "dst": "disk_src/testbin/synctest"
+  },
+  {
+   "src": "bin/tctest.bin",
+   "dst": "disk_src/testbin/tctest"
+  },
+  {
+   "src": "bin/telnetd.bin",
+   "dst": "disk_src/testbin/telnetd"
+  },
+  {
+   "src": "bin/trunkfree.bin",
+   "dst": "disk_src/testbin/trunkfree"
+  },
+  {
+   "src": "bin/trunctree.bin",
+   "dst": "disk_src/testbin/trunctree"
+  },
+  {
+   "src": "bin/ttysprobe.bin",
+   "dst": "disk_src/testbin/ttysprobe"
+  },
+  {
+   "src": "bin/utimetest.bin",
+   "dst": "disk_src/testbin/utimetest"
+  },
+  {
+   "src": "bin/vfexec.bin",
+   "dst": "disk_src/testbin/vfexec"
+  },
+  {
+   "src": "bin/vfexit.bin",
+   "dst": "disk_src/testbin/vfexit"
+  },
+  {
+   "src": "bin/color.bin",
+   "dst": "disk_src/usr/fgx/bin/color"
+  },
+  {
+   "src": "bin/ansicat.bin",
+   "dst": "disk_src/usr/fgx/bin/ansicat"
+  },
+  {
+   "src": "bin/dmesg.bin",
+   "dst": "disk_src/usr/fgx/bin/dmesg"
+  },
+  {
+   "src": "tools/fas/fas_fgx",
+   "dst": "disk_src/usr/fgx/bin/fas"
+  },
+  {
+   "src": "bin/font.bin",
+   "dst": "disk_src/usr/fgx/bin/font"
+  },
+  {
+   "src": "bin/fractal.bin",
+   "dst": "disk_src/usr/fgx/bin/fractal"
+  },
+  {
+   "src": "bin/frotz.bin",
+   "dst": "disk_src/bin/frotz"
+  },
+  {
+   "src": "bin/ensoniqplay.bin",
+   "dst": "disk_src/usr/fgx/bin/ensoniqplay"
+  },
+  {
+   "src": "bin/ntpinfo.bin",
+   "dst": "disk_src/usr/fgx/bin/ntpinfo"
+  },
+  {
+   "src": "bin/ntpplay.bin",
+   "dst": "disk_src/usr/fgx/bin/ntpplay"
+  },
+  {
+   "src": "bin/slotscan.bin",
+   "dst": "disk_src/usr/fgx/bin/slotscan"
+  },
+  {
+   "src": "bin/vmstat.bin",
+   "dst": "disk_src/usr/fgx/bin/vmstat"
+  },
+  {
+   "src": "bin/ptyrec.bin",
+   "dst": "disk_src/testbin/ptyrec"
+  },
+  {
+   "src": "bin/ptyhog.bin",
+   "dst": "disk_src/testbin/ptyhog"
+  },
+  {
+   "src": "bin/fsck.bin",
+   "dst": "disk_src/sbin/fsck"
+  },
+  {
+   "src": "bin/permtest.bin",
+   "dst": "disk_src/testbin/permtest"
+  },
+  {
+   "src": "bin/clkrate.bin",
+   "dst": "disk_src/testbin/clkrate"
+  },
+  {
+   "src": "bin/timetest.bin",
+   "dst": "disk_src/testbin/timetest"
+  },
+  {
+   "src": "bin/gcprobe.bin",
+   "dst": "disk_src/testbin/gcprobe"
+  },
+  {
+   "src": "bin/tztest.bin",
+   "dst": "disk_src/testbin/tztest"
+  },
+  {
+   "src": "bin/forkpair.bin",
+   "dst": "disk_src/testbin/forkpair"
+  },
+  {
+   "src": "bin/strerrprobe.bin",
+   "dst": "disk_src/testbin/strerrprobe"
+  },
+  {
+   "src": "bin/cloexec.bin",
+   "dst": "disk_src/testbin/cloexec"
+  },
+  {
+   "src": "bin/spawnenv.bin",
+   "dst": "disk_src/testbin/spawnenv"
+  },
+  {
+   "src": "bin/flockt.bin",
+   "dst": "disk_src/testbin/flockt"
+  },
+  {
+   "src": "bin/daemontest.bin",
+   "dst": "disk_src/testbin/daemontest"
+  },
+  {
+   "src": "bin/fsynctest.bin",
+   "dst": "disk_src/testbin/fsynctest"
+  },
+  {
+   "src": "bin/id.bin",
+   "dst": "disk_src/bin/id"
+  },
+  {
+   "src": "bin/su.bin",
+   "dst": "disk_src/bin/su"
+  },
+  {
+   "src": "bin/sysctltest.bin",
+   "dst": "disk_src/testbin/sysctltest"
+  },
+  {
+   "src": "bin/syncdelay.bin",
+   "dst": "disk_src/testbin/syncdelay"
+  },
+  {
+   "src": "bin/credtest.bin",
+   "dst": "disk_src/testbin/credtest"
+  },
+  {
+   "src": "vendor/docvu2/DOCVu.CDA",
+   "dst": "disk_src/usr/fgx/cda/docvu.cda"
+  },
+  {
+   "src": "vendor/docvu2/._DOCVu.CDA",
+   "dst": "disk_src/usr/fgx/cda/DOT._DOCVU.CDA"
+  }
+ ],
+ "derived": []
+}

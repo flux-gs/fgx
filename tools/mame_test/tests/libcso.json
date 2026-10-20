@@ -1,0 +1,10 @@
+{
+ "name": "libcso",
+ "description": "Shared libc SP2: a program statically linked against libc's library-mode compile, whose startup (crt0_lib.s: libc's _libc_start, then _lib_init) gave it its own libc blocks.  Its argv and __progname, _lib_init's bitmap (one row of a table of its own) and an empty table; core state, a zeroed and an initialised block static, a literal, strtok and asctime across calls with results in the process's own block, sbrk stopping at the lowered HEAP_LIM, fork (child's blocks its own) and vfork (child borrows the parent's), a signal handler calling libc, libc's code across several banks.",
+ "command": "/testbin/libcso",
+ "timeout_s": 120,
+ "expect": {
+  "screen_contains": ["CSO ok"],
+  "screen_lacks": ["CSO FAIL", "libc: no room", "PANIC", "BRK"]
+ }
+}

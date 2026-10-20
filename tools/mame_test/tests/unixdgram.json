@@ -1,0 +1,18 @@
+{
+ "name": "unixdgram",
+ "description": "AF_UNIX SOCK_DGRAM, end to end in one process with no hardware. Descriptor allocation that claims no W5100 socket -- the interleaved AF_INET open is what detects a borrowed slot, since three AF_UNIX sockets each taking one would exhaust the three usable exactly. SOCK_STREAM refused EPROTOTYPE, which the design scopes out because upstream's SOCK_STREAM AF_UNIX is what pipe(2) is built from and this kernel has real pipes. THREE RECORD BOUNDARIES from three different lengths: a byte-stream ring hands 1+4+9 back as one read, a framed one gives exactly three. THE 16-BIT WRAP: a length of -1 reaches the kernel as $FFFF and adding the 3-byte header wraps it to $0002, which passes any ceiling test written after the add -- the record would be accepted claiming 65535 bytes, the payload write would stop short, and the next recv would underflow PIPE_Count and leave that ring unable to frame a record again. From unp_bind on the ring is /dev/log, so it is an unprivileged machine-wide syslog DoS. The assertion is a round trip AFTER the refusal, because the errno alone does not show whether the ring survived. A datagram past the ring ceiling refused EMSGSIZE, which is what 2.11BSD's sosend answers before PRU_SEND is entered; ENOBUFS is for a receiver with no room right now. A ZERO-LENGTH datagram is a delivered datagram -- asking the ring for 0 payload bytes finds nothing resident, and a receiver that waits inside the payload read sleeps forever on a record that already arrived. NON-BLOCKING from both the call (MSG_DONTWAIT) and the descriptor (FIONBIO), because select() on an AF_UNIX fd reports never-ready and a blocking reader has no way out. TRUNCATION whose remainder is discarded rather than read as the next record's header. And TEN open/pair/close rounds against NPIPE 8: close() must free the receive ring, which only a bound socket owns and which the loopback teardown declines to release. ONE writev(2) IS ONE DATAGRAM: three entries of 1+4+9 bytes arrive as one 14-byte record and readv(2) scatters it over two entries, where a writev that looped write(2) sends three; 17 entries is EINVAL, and the same vector round-trips a pipe.",
+ "command": "/testbin/unixprobe",
+ "exit_on_prompt": false,
+ "timeout_s": 90,
+ "post_gap_frames": 800,
+ "expect": {
+  "screen_contains": [
+   "unixprobe: PASS"
+  ],
+  "screen_lacks": [
+   "unixprobe: FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

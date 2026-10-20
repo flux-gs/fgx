@@ -1,0 +1,61 @@
+{
+ "name": "ss4focus",
+ "description": "OPTION-4 GIVES THE KEYBOARD TO THE CARD'S CONSOLE AND LEAVES THE IIGS SCREEN WHERE IT WAS.  With a Second Sight card in slot 3 and sscon up as ttyv3's display, the console shell echoes a marker built by expansion (so the typed line cannot satisfy it), Option-4 is injected, and a login name is typed.  The name must reach ttyv3's getty: its ring (read through the vcbank registry, VC 3) holds 'login: qqfocus', and the card is still drawing.  The IIgs screen must NOT hold 'qqfocus' (a name no boot line carries; 'root' is in 'root on sd0'): had the focus stayed on the console the shell would have echoed the name as a command and complained about it, and had Option-4 switched the SHR screen the marker's console would be gone.  This is the one-keyboard contract on real hardware -- Option-1..3 bring the keyboard back and switch the screen, Option-4 moves only the keyboard.  Discriminates: make _Vc_DrainSwitch's card arm store _kVcActive as well and the screen shows ttyv3; drop the arm and the shell gets 'qqfocus'.  The border is the canary: after Option-4 the SHR border carries the card console's colour (border_check.py reads $C034's low nibble), the one visible sign on the IIgs screen that the keys go to the card.",
+ "command": "M=ss4; echo $M=marker",
+ "exit_on_prompt": false,
+ "timeout_s": 90,
+ "raw_inject": [
+  [
+   300,
+   52,
+   2
+  ]
+ ],
+ "post_commands": [
+  "qqfocus"
+ ],
+ "post_gap_frames": 700,
+ "mame_slots": [
+  "-sl3",
+  "secondsight"
+ ],
+ "memory_regions": [
+  {
+   "name": "vc3chars",
+   "vcbank": 3,
+   "addr_hex": "0000",
+   "len": 2000
+  },
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  },
+  {
+   "name": "border",
+   "addr_hex": "E0C034",
+   "len": 1
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "ss4=marker"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "qqfocus"
+  ],
+  "memory": [
+   {
+    "name": "vc3chars",
+    "ascii_contains": "login: qqfocus"
+   }
+  ],
+  "card_screen_min": 5,
+  "klog_contains": [
+   "sscon: 80x25 in slot 3, cells at $E0:"
+  ],
+  "check_script": "border_check.py"
+ }
+}

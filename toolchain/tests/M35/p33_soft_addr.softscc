@@ -1,0 +1,8 @@
+# Bank-0 stack campaign 1.3 -- functions compiled with SOFT (data-bank) frames.
+# One name per line; blank lines and #-comments ignored (symtab.c soft_scc_load).
+# main stays HARD deliberately: a soft callee returning into a hard caller is the
+# real shape, and it keeps the epilogue's soft release honest.
+addr_of
+elems
+rowsum
+crosspath

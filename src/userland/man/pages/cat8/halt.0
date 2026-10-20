@@ -1,0 +1,99 @@
+REBOOT(8)            UNIX Programmer's Manual            REBOOT(8)
+
+
+
+NAME
+     reboot, halt - stopping and restarting the system
+
+SYNOPSIS
+     /sbin/reboot [ -lqnhdarsfRD ]
+     /sbin/halt [ -lqndars ]
+
+DESCRIPTION
+     Reboot syncs the disks, marks every writable file system clean,
+     and cold-starts the machine.  Halt is the same binary under
+     another name: it runs the same shutdown and then stops the
+     processor instead of restarting it, which is what "reboot -h"
+     does.
+
+     The shutdown is upstream's.  Reboot logs what is about to
+     happen, syncs, sends init(8) a SIGTSTP so it stops respawning
+     lines, then SIGTERM to every process to let each one exit
+     cleanly.  What is still alive after that gets SIGKILL, in
+     rounds, until nothing is left.  Only then does it call
+     reboot(2).
+
+     Options are:
+
+     -l   Don't log what is about to happen.  Without it the line
+          goes to syslogd(8), and /etc/syslog.conf sends it to
+          /usr/adm/messages and the console.
+
+     -q   Reboot quickly and ungracefully, without shutting down
+          running processes first.
+
+     -n   Don't sync before rebooting.  This can be used if a disk
+          or the processor is on fire.
+
+     -h   Don't reboot, simply halt the processor.
+
+     -d   Dump memory onto the dump device before rebooting.
+
+     -a   Have the system booter ask for the name of the system to
+          be booted, rather than immediately booting the default.
+
+     -r   Mount the root file system read only when the system
+          reboots.
+
+     -s   Don't enter multi-user mode after the system has rebooted
+          - stay in single user mode.
+
+     -f   Fast reboot.  Omit the automatic file system consistency
+          check when the system reboots.
+
+     -R   Tell the kernel to use the compiled in root device rather
+          than the one it was booted from.
+
+     -D   Set the autoconfig(8) debug flag.
+
+     THE KERNEL READS TWO OF THEM.  reboot(2) acts on -n and -h; the
+     rest are parsed, collected for the log line and then ignored,
+     because the machinery each one names does not exist here.  A
+     IIgs has no dump device, the boot program takes no system name
+     and no flags from a rebooting kernel, there is no
+     single-user mode and no autoconfig(8), and the root is chosen
+     by the boot program rather than by a compiled in device.  The
+     boot fsck is skipped on a file system the kernel marked clean,
+     which is what -f asks for and gets without asking.
+
+     A restart is a cold start through the Apple IIgs firmware's
+     PWRUP entry, which reinitialises the hardware and scans for a
+     startup device.  The screen is repainted by the firmware, so
+     the banner reboot(2) prints is the last thing this system puts
+     there.
+
+     /etc/rc runs reboot when fsck(8) exits 4, which is fsck saying
+     it repaired the root and the system must restart before
+     anything reads it again.
+
+FILES
+     /usr/adm/wtmp          shutdown record
+
+SEE ALSO
+     fsck(8), init(8), rc(8), sync(1), sync(2), syslog(3)
+
+BUGS
+     Reboot writes its shutdown record by appending to
+     /usr/adm/wtmp if that file exists.  /usr/adm does exist
+     now -- syslog(3)'s socketless fallback appends to
+     /usr/adm/messages -- but no wtmp is kept there, so no
+     record is written and nothing reports its absence.
+
+     Reboot(2) enforces no privilege check, so any process can stop
+     the machine.  Upstream's is "if (suser()) boot(rootdev,
+     uap->howto)", and this waits on the credentials the rest of the
+     system is waiting on.
+
+
+
+Printed 9/12/26                                                8

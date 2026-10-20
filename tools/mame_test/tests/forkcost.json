@@ -1,0 +1,29 @@
+{
+ "name": "forkcost",
+ "description": "The shell's fork-then-exec hot path costs exactly two user-image copies (apple/fgx#494): the fork snapshot and the restore.  The kernel counts every copy in _kImgCopies; the poison zeroes it at the paste frame, after boot's own forks, and forkcost_check.py reads it after `/bin/true` completes.  A child that released its parent on an uninterruptible sleep (exec's disk reads) would swap the parent in and raise the count.  The poke's bank byte is the core kernel bank, $7C (the kimg region reads $7C96D3; FGX_DATA, which allocwarm pokes, is the next bank up).  A poke that missed leaves the boot's whole count (70 when this was written), which fails rather than passes.",
+ "command": "/bin/true",
+ "boot_s": 60,
+ "timeout_s": 90,
+ "poison": [
+  {
+   "symbol": "_kImgCopies",
+   "addr": 8126464,
+   "hex": "0000",
+   "frame": 3600
+  }
+ ],
+ "memory_regions": [
+  {
+   "name": "kimg",
+   "symbol": "_kImgCopies",
+   "len": 2
+  }
+ ],
+ "expect": {
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "forkcost_check.py"
+ }
+}

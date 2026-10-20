@@ -1,0 +1,19 @@
+{
+ "name": "ensoniqplaystdinpipe",
+ "description": "ensoniqplay(1) M4 stdin streaming: pipe a 44100-byte raw 8-bit PCM (2 s at 22050 Hz) into 'ensoniqplay -' via a real shell pipe (cat | ensoniqplay), so stdin is a non-seekable pipe.  The tool fills a 64 KB RAM ring from stdin (foreground producer) while the sound IRQ drains it to the DOC double-buffer (consumer).  'streaming from stdin' proves the pipe path; 'finished after 1' (100-199 ticks; 44100/22050 = 2.0 s = ~120 ticks) proves the ring engine clocked the whole stream at rate; '0 underruns' proves the producer stayed ahead of the consumer (the ring never starved).",
+ "command": "cat /etc/tone2s.pcm | ensoniqplay -",
+ "timeout_s": 180,
+ "exit_on_prompt": true,
+ "stage_files": [
+  { "host": "tools/mame_test/fixtures/tone2s.pcm", "prodos_dir": "/FGX/etc", "name": "tone2s.pcm", "replace": false }
+ ],
+ "expect": {
+  "screen_contains": [
+   "streaming from stdin @ 22050 Hz (freq 429)",
+   "finished after 1",
+   "0 underruns",
+   "fgx#"
+  ],
+  "screen_lacks": [ "BRK", "PANIC", "out of memory", "timed out", "Fatal" ]
+ }
+}

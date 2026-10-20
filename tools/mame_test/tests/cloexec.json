@@ -1,0 +1,18 @@
+{
+ "name": "cloexec",
+ "description": "fcntl(2) and close-on-exec: F_GETFD/F_SETFD, FIOCLEX/FIONCLEX, F_DUPFD (lowest at or above arg, flag clear), F_GETFL (O_WRONLY|O_APPEND), EBADF and EINVAL; then a descriptor marked close-on-exec is gone in a vfork+execv child and a spawnv child, and unmarked ones survive.",
+ "command": "/testbin/cloexec",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "CX FCNTL ok",
+   "CX EXEC ok",
+   "CX SPAWN ok"
+  ],
+  "screen_lacks": [
+   "FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,48 @@
+
+
+NTPINFO(1)          UNIX Programmer's Manual             NTPINFO(1)
+
+
+
+NAME
+     ntpinfo - print the structure of a NinjaTracker+ module
+
+SYNOPSIS
+     ntpinfo file
+
+DESCRIPTION
+     _N_t_p_i_n_f_o reads a NinjaTracker+ (.ntp) module and prints its
+     header, name, oscillator assignments, and instrument table in
+     hexadecimal.  It is an inspector for the modules that ntp-
+     play(1) performs; it does not open the sound hardware.
+
+     The screen is cleared, then the following are printed:
+
+     NTP vVV trk TT ins II pat PP ord OO
+            The format version and the counts of tracks, instru-
+            ments, patterns, and order-list entries.
+
+     name NAME
+            The module's embedded name.
+
+     osc XX XX ...
+            One byte per track: the oscillator that voice plays
+            on.
+
+     iNN tTT LLLL vVV
+            One entry per instrument, two per line: index, type,
+            sample length, and volume.  The instrument's own name
+            is read past but not shown.
+
+     All numeric fields are hexadecimal.
+
+DIAGNOSTICS
+     _N_t_p_i_n_f_o prints and exits nonzero on: a missing file argument
+     (usage), a file it cannot open (cannot open), a header whose
+     magic is not "nfc!" (bad magic), or a file that ends before
+     the structure is fully read (short read).
+
+SEE ALSO
+     ntpplay(1)
+
+FGX                          FGX-native                          1

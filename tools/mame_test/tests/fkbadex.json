@@ -1,0 +1,4 @@
+{"name":"fkbadex",
+ "description":"Failed exec in a fork child: every borrowed TCB field must be restored, repeatedly. This is where a pair-set or unwind bug shows up as a wild machine rather than a wrong value.",
+ "command":"/testbin/fkbadex","timeout_s":120,
+ "expect":{"screen_contains":["FKBADEX OK"]}}

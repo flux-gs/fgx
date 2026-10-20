@@ -1,0 +1,29 @@
+{
+ "name": "heapkill",
+ "description": "Both halves of sbrk(2)'s refusal contract, because a suite that proves only one looks exactly like a suite that proves both.  FIRST: sbrk() RETURNS (char *)-1 and the caller is alive to see it (HKRET), with errno ENOMEM (asserting the ABSENCE of HKERR).  It briefly did not return -- it _exit(136)ed instead, on the theory that 2.11BSD's unchecked `brkend = sbrk(incr) + incr` could not be taught to check.  It could: fault.c:30 already carried `IF setbrk(brkincr) == -1 THEN error(nospace)`, and FGX simply could not deliver the MEMF write-fault that reaches it, so #13 moved the same test to the reachable call site (stak.c locstak) and put POSIX sbrk back.  SECOND: TASK_EXIT_HEAPFULL (136) still names that death for a program that WANTS it -- the kernel logs 'heap exhausted: killed pid' -- but libc no longer chooses it for anyone, so this probe opts in explicitly and thereby keeps the kernel's reporting path from becoming a defined-but-never-set feature.  HKNOCEIL guards against the assertions going vacuous if the ceiling ever moves: 40 grows of 30000 must hit a 64 KB bank.  =HKDONE comes from the parent shell so a hung machine cannot read as a pass.  sbrktest covers the ordinary contract; srcexhaust covers what the SHELL now does with a refusal.  ECHO_OK PROVISIONAL -- THIS ONE IS GENUINELY VACUOUS, same shape as softfork: '=HKDONE' is inside the typed command. Tracked in apple/fgx#36; rework to an expansion-built marker.  MARKER REBUILT 2026-08-08 (apple/fgx#36): this asserted '=HKDONE', which sat INSIDE the typed command, so the shell's echo of that command satisfied it whether or not heapkill produced anything. mid40st passed on exactly this shape for as long as it existed and only went red when unrelated output pushed the echoed line out of the ring. The marker is now built by SHELL EXPANSION -- the command contains `$A$B`, never the literal -- and it carries the child's EXIT STATUS, so it asserts more than it used to: a crashed or signalled child fails it.  The status is the MEASURED contract, not a presumed 0: softfork exits 42, softexec 0, and heapkill 136 = TASK_EXIT_HEAPFULL, the death this probe deliberately opts into -- so asserting 0 there would have demanded the opposite of the behaviour under test.",
+ "command": "A=HK; B=DONE; sh -c '/testbin/heapkill'; echo $A$B=$?",
+ "timeout_s": 120,
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "HKSTART",
+   "HKRET",
+   "HKDONE=136"
+  ],
+  "screen_lacks": [
+   "HKNOCEIL",
+   "HKERR",
+   "HKALIVE",
+   "PANIC"
+  ],
+  "klog_contains": [
+   "heap exhausted: killed pid"
+  ]
+ }
+}

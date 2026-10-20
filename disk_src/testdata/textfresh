@@ -1,0 +1,10 @@
+# A program rewritten in place runs as its new self: cp keeps the inode, and
+# a text cached by inode alone would run echo again.
+mkdir /tmp/tfdir
+cp /bin/echo /tmp/tf
+chmod 755 /tmp/tf
+/tmp/tf TF FIRST
+cp /bin/pwd /tmp/tf
+cd /tmp/tfdir
+/tmp/tf
+echo TF DONE

@@ -1,0 +1,1279 @@
+{
+  "tag": "t1.2-const-arith",
+  "toolchain_git": "ce4b0552068296b1e962f9f1fdb94c8f4864d24d-dirty",
+  "fgx_git": "0ce801dfa4821760e019b18b870c0a53204d02c1",
+  "size": {
+    "goldens": {
+      "total_bytes": 1575948,
+      "total_asm_lines": 38338,
+      "per_fixture": {
+        "toolchain/tests/M0/return_0.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M0/return_1.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M0/return_127.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M0/return_255.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M0/return_42.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M0/return_65535.expected.bin": {
+          "bytes": 945,
+          "lines": 16
+        },
+        "toolchain/tests/M1/expr_add.expected.bin": {
+          "bytes": 4330,
+          "lines": 22
+        },
+        "toolchain/tests/M1/expr_div.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M1/expr_mul.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M1/expr_parens.expected.bin": {
+          "bytes": 4332,
+          "lines": 24
+        },
+        "toolchain/tests/M1/expr_prec.expected.bin": {
+          "bytes": 4332,
+          "lines": 24
+        },
+        "toolchain/tests/M1/expr_sub.expected.bin": {
+          "bytes": 4330,
+          "lines": 22
+        },
+        "toolchain/tests/M1/expr_unary.expected.bin": {
+          "bytes": 4334,
+          "lines": 24
+        },
+        "toolchain/tests/M1/local_arith.expected.bin": {
+          "bytes": 4337,
+          "lines": 25
+        },
+        "toolchain/tests/M1/local_assign.expected.bin": {
+          "bytes": 4320,
+          "lines": 17
+        },
+        "toolchain/tests/M1/local_init.expected.bin": {
+          "bytes": 4329,
+          "lines": 20
+        },
+        "toolchain/tests/M10/aud_cmpd_tgts.expected.bin": {
+          "bytes": 4608,
+          "lines": 200
+        },
+        "toolchain/tests/M10/aud_shr_or.expected.bin": {
+          "bytes": 4547,
+          "lines": 159
+        },
+        "toolchain/tests/M10/bit_and.expected.bin": {
+          "bytes": 4337,
+          "lines": 25
+        },
+        "toolchain/tests/M10/bit_not.expected.bin": {
+          "bytes": 4323,
+          "lines": 18
+        },
+        "toolchain/tests/M10/bit_or.expected.bin": {
+          "bytes": 4331,
+          "lines": 22
+        },
+        "toolchain/tests/M10/bit_xor.expected.bin": {
+          "bytes": 4337,
+          "lines": 25
+        },
+        "toolchain/tests/M10/compound_add.expected.bin": {
+          "bytes": 4334,
+          "lines": 24
+        },
+        "toolchain/tests/M10/compound_arr.expected.bin": {
+          "bytes": 4608,
+          "lines": 201
+        },
+        "toolchain/tests/M10/compound_bit.expected.bin": {
+          "bytes": 4359,
+          "lines": 35
+        },
+        "toolchain/tests/M10/compound_deref.expected.bin": {
+          "bytes": 4437,
+          "lines": 88
+        },
+        "toolchain/tests/M10/compound_field.expected.bin": {
+          "bytes": 4445,
+          "lines": 86
+        },
+        "toolchain/tests/M10/logic_and.expected.bin": {
+          "bytes": 4363,
+          "lines": 35
+        },
+        "toolchain/tests/M10/logic_not.expected.bin": {
+          "bytes": 4373,
+          "lines": 43
+        },
+        "toolchain/tests/M10/logic_or.expected.bin": {
+          "bytes": 4363,
+          "lines": 35
+        },
+        "toolchain/tests/M10/m10_flags_test.expected.bin": {
+          "bytes": 4601,
+          "lines": 196
+        },
+        "toolchain/tests/M10/octal_lit.expected.bin": {
+          "bytes": 4535,
+          "lines": 130
+        },
+        "toolchain/tests/M10/shift_left.expected.bin": {
+          "bytes": 4337,
+          "lines": 25
+        },
+        "toolchain/tests/M10/shift_right.expected.bin": {
+          "bytes": 4337,
+          "lines": 25
+        },
+        "toolchain/tests/M11/cpa_strlen.expected.bin": {
+          "bytes": 12809,
+          "lines": 116
+        },
+        "toolchain/tests/M11/for_long_init.expected.bin": {
+          "bytes": 12870,
+          "lines": 138
+        },
+        "toolchain/tests/M11/fseek_ftell.expected.bin": {
+          "bytes": 12853,
+          "lines": 136
+        },
+        "toolchain/tests/M11/instruct_chain.expected.bin": {
+          "bytes": 12874,
+          "lines": 148
+        },
+        "toolchain/tests/M11/lc_atol.expected.bin": {
+          "bytes": 13147,
+          "lines": 342
+        },
+        "toolchain/tests/M11/lc_fopen_fail.expected.bin": {
+          "bytes": 12701,
+          "lines": 51
+        },
+        "toolchain/tests/M11/lc_malloc.expected.bin": {
+          "bytes": 13463,
+          "lines": 464
+        },
+        "toolchain/tests/M11/lc_memcpy.expected.bin": {
+          "bytes": 12726,
+          "lines": 66
+        },
+        "toolchain/tests/M11/lc_printf_0.expected.bin": {
+          "bytes": 12683,
+          "lines": 35
+        },
+        "toolchain/tests/M11/lc_printf_1.expected.bin": {
+          "bytes": 12700,
+          "lines": 43
+        },
+        "toolchain/tests/M11/lc_printf_2.expected.bin": {
+          "bytes": 12727,
+          "lines": 59
+        },
+        "toolchain/tests/M11/lc_strcmp_eq.expected.bin": {
+          "bytes": 12697,
+          "lines": 50
+        },
+        "toolchain/tests/M11/lc_strlen.expected.bin": {
+          "bytes": 12680,
+          "lines": 36
+        },
+        "toolchain/tests/M11/m11_libc_test.expected.bin": {
+          "bytes": 12821,
+          "lines": 118
+        },
+        "toolchain/tests/M11/proto_decl.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M11/struct_arr_init.expected.bin": {
+          "bytes": 12894,
+          "lines": 156
+        },
+        "toolchain/tests/M11/sys_inc.expected.bin": {
+          "bytes": 12789,
+          "lines": 100
+        },
+        "toolchain/tests/M11/variadic_decl.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M13/assign_in_while.expected.bin": {
+          "bytes": 4462,
+          "lines": 93
+        },
+        "toolchain/tests/M14/ptr_chain_test.expected.bin": {
+          "bytes": 4749,
+          "lines": 455
+        },
+        "toolchain/tests/M15/lhs_chain_test.expected.bin": {
+          "bytes": 4776,
+          "lines": 310
+        },
+        "toolchain/tests/M16/init_list_test.expected.bin": {
+          "bytes": 4621,
+          "lines": 177
+        },
+        "toolchain/tests/M17/m17_drf_global.expected.bin": {
+          "bytes": 4547,
+          "lines": 182
+        },
+        "toolchain/tests/M18/fn_local.expected.bin": {
+          "bytes": 4375,
+          "lines": 67
+        },
+        "toolchain/tests/M18/fn_param.expected.bin": {
+          "bytes": 4410,
+          "lines": 118
+        },
+        "toolchain/tests/M18/fn_struct.expected.bin": {
+          "bytes": 4386,
+          "lines": 72
+        },
+        "toolchain/tests/M18/fn_typedef.expected.bin": {
+          "bytes": 4375,
+          "lines": 67
+        },
+        "toolchain/tests/M18/m18_fnptr.expected.bin": {
+          "bytes": 4608,
+          "lines": 269
+        },
+        "toolchain/tests/M19/m19_2d.expected.bin": {
+          "bytes": 4624,
+          "lines": 249
+        },
+        "toolchain/tests/M19/m2d_global.expected.bin": {
+          "bytes": 4534,
+          "lines": 124
+        },
+        "toolchain/tests/M19/m2d_init.expected.bin": {
+          "bytes": 4534,
+          "lines": 124
+        },
+        "toolchain/tests/M19/m2d_local.expected.bin": {
+          "bytes": 4978,
+          "lines": 400
+        },
+        "toolchain/tests/M19/m2d_param.expected.bin": {
+          "bytes": 4643,
+          "lines": 307
+        },
+        "toolchain/tests/M19/m2d_partial.expected.bin": {
+          "bytes": 4537,
+          "lines": 169
+        },
+        "toolchain/tests/M2/aud_cmp_all.expected.bin": {
+          "bytes": 4637,
+          "lines": 174
+        },
+        "toolchain/tests/M2/block_stmt.expected.bin": {
+          "bytes": 4336,
+          "lines": 26
+        },
+        "toolchain/tests/M2/cmp_eq.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M2/cmp_ge.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M2/cmp_gt.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M2/cmp_le.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M2/cmp_lt.expected.bin": {
+          "bytes": 4333,
+          "lines": 23
+        },
+        "toolchain/tests/M2/cmp_ne.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M2/cond_mul.expected.bin": {
+          "bytes": 4369,
+          "lines": 41
+        },
+        "toolchain/tests/M2/if_else.expected.bin": {
+          "bytes": 4341,
+          "lines": 27
+        },
+        "toolchain/tests/M2/if_true.expected.bin": {
+          "bytes": 4338,
+          "lines": 25
+        },
+        "toolchain/tests/M2/while_loop.expected.bin": {
+          "bytes": 4362,
+          "lines": 38
+        },
+        "toolchain/tests/M20/long_arith.expected.bin": {
+          "bytes": 4495,
+          "lines": 118
+        },
+        "toolchain/tests/M20/long_array.expected.bin": {
+          "bytes": 4468,
+          "lines": 103
+        },
+        "toolchain/tests/M20/long_cast.expected.bin": {
+          "bytes": 4430,
+          "lines": 79
+        },
+        "toolchain/tests/M20/long_global.expected.bin": {
+          "bytes": 4370,
+          "lines": 45
+        },
+        "toolchain/tests/M20/long_local.expected.bin": {
+          "bytes": 4437,
+          "lines": 84
+        },
+        "toolchain/tests/M20/long_param.expected.bin": {
+          "bytes": 4564,
+          "lines": 207
+        },
+        "toolchain/tests/M20/m20_long.expected.bin": {
+          "bytes": 4553,
+          "lines": 184
+        },
+        "toolchain/tests/M20/uns_long_cast.expected.bin": {
+          "bytes": 4422,
+          "lines": 76
+        },
+        "toolchain/tests/M21/argvtest.expected.bin": {
+          "bytes": 12786,
+          "lines": 114
+        },
+        "toolchain/tests/M21/arrdimexpr.expected.bin": {
+          "bytes": 4581,
+          "lines": 164
+        },
+        "toolchain/tests/M21/charinit.expected.bin": {
+          "bytes": 4335,
+          "lines": 29
+        },
+        "toolchain/tests/M21/dblstar.expected.bin": {
+          "bytes": 4344,
+          "lines": 39
+        },
+        "toolchain/tests/M21/escapes.expected.bin": {
+          "bytes": 4368,
+          "lines": 41
+        },
+        "toolchain/tests/M21/goto_test.expected.bin": {
+          "bytes": 4408,
+          "lines": 61
+        },
+        "toolchain/tests/M21/gstarinc.expected.bin": {
+          "bytes": 4387,
+          "lines": 91
+        },
+        "toolchain/tests/M21/long_global_inc.expected.bin": {
+          "bytes": 4474,
+          "lines": 83
+        },
+        "toolchain/tests/M21/modop.expected.bin": {
+          "bytes": 4404,
+          "lines": 57
+        },
+        "toolchain/tests/M21/parensubidx.expected.bin": {
+          "bytes": 4747,
+          "lines": 293
+        },
+        "toolchain/tests/M21/pp_funcmacro.expected.bin": {
+          "bytes": 4377,
+          "lines": 46
+        },
+        "toolchain/tests/M21/pp_macro_call.expected.bin": {
+          "bytes": 4388,
+          "lines": 67
+        },
+        "toolchain/tests/M21/pre_gincdec.expected.bin": {
+          "bytes": 4537,
+          "lines": 122
+        },
+        "toolchain/tests/M21/ptr_cmp.expected.bin": {
+          "bytes": 4851,
+          "lines": 349
+        },
+        "toolchain/tests/M21/strinit.expected.bin": {
+          "bytes": 4328,
+          "lines": 22
+        },
+        "toolchain/tests/M21/va_args.expected.bin": {
+          "bytes": 4374,
+          "lines": 80
+        },
+        "toolchain/tests/M22/arrow_arr_decay.expected.bin": {
+          "bytes": 4418,
+          "lines": 83
+        },
+        "toolchain/tests/M22/pf_long.expected.bin": {
+          "bytes": 13685,
+          "lines": 667
+        },
+        "toolchain/tests/M22/sprintf9.expected.bin": {
+          "bytes": 13161,
+          "lines": 256
+        },
+        "toolchain/tests/M22/sprintf_farbuf.expected.bin": {
+          "bytes": 12947,
+          "lines": 199
+        },
+        "toolchain/tests/M22/sprintf_global.expected.bin": {
+          "bytes": 12767,
+          "lines": 77
+        },
+        "toolchain/tests/M23/u_cmp.expected.bin": {
+          "bytes": 4345,
+          "lines": 27
+        },
+        "toolchain/tests/M23/u_div.expected.bin": {
+          "bytes": 4332,
+          "lines": 21
+        },
+        "toolchain/tests/M23/u_param.expected.bin": {
+          "bytes": 4353,
+          "lines": 49
+        },
+        "toolchain/tests/M24/chain_arrow.expected.bin": {
+          "bytes": 4468,
+          "lines": 108
+        },
+        "toolchain/tests/M24/chain_elem.expected.bin": {
+          "bytes": 4552,
+          "lines": 146
+        },
+        "toolchain/tests/M24/chain_member.expected.bin": {
+          "bytes": 4421,
+          "lines": 61
+        },
+        "toolchain/tests/M24/comma_for.expected.bin": {
+          "bytes": 4403,
+          "lines": 59
+        },
+        "toolchain/tests/M24/comma_paren.expected.bin": {
+          "bytes": 4329,
+          "lines": 21
+        },
+        "toolchain/tests/M24/comma_side.expected.bin": {
+          "bytes": 4339,
+          "lines": 26
+        },
+        "toolchain/tests/M24/d1_chararr.expected.bin": {
+          "bytes": 4368,
+          "lines": 49
+        },
+        "toolchain/tests/M24/d1_intarr.expected.bin": {
+          "bytes": 4395,
+          "lines": 61
+        },
+        "toolchain/tests/M24/d1_longarr.expected.bin": {
+          "bytes": 4378,
+          "lines": 50
+        },
+        "toolchain/tests/M24/d1_partial.expected.bin": {
+          "bytes": 4467,
+          "lines": 105
+        },
+        "toolchain/tests/M24/d1_struct.expected.bin": {
+          "bytes": 4338,
+          "lines": 26
+        },
+        "toolchain/tests/M24/dowhile.expected.bin": {
+          "bytes": 4382,
+          "lines": 49
+        },
+        "toolchain/tests/M24/dowhile_brk.expected.bin": {
+          "bytes": 4384,
+          "lines": 49
+        },
+        "toolchain/tests/M24/dowhile_cont.expected.bin": {
+          "bytes": 4404,
+          "lines": 59
+        },
+        "toolchain/tests/M24/dowhile_once.expected.bin": {
+          "bytes": 4362,
+          "lines": 39
+        },
+        "toolchain/tests/M24/global_ptr_init.expected.bin": {
+          "bytes": 4563,
+          "lines": 169
+        },
+        "toolchain/tests/M24/if_basic.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M24/if_defined.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M24/if_elif.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M24/if_expr.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M24/lsf_global.expected.bin": {
+          "bytes": 4394,
+          "lines": 52
+        },
+        "toolchain/tests/M24/lsf_local.expected.bin": {
+          "bytes": 4342,
+          "lines": 28
+        },
+        "toolchain/tests/M24/lsf_ptr.expected.bin": {
+          "bytes": 4418,
+          "lines": 97
+        },
+        "toolchain/tests/M24/member_ops.expected.bin": {
+          "bytes": 4729,
+          "lines": 364
+        },
+        "toolchain/tests/M24/sed_addrof.expected.bin": {
+          "bytes": 4687,
+          "lines": 206
+        },
+        "toolchain/tests/M24/sed_lvalues.expected.bin": {
+          "bytes": 4859,
+          "lines": 326
+        },
+        "toolchain/tests/M24/sl_buf.expected.bin": {
+          "bytes": 4411,
+          "lines": 74
+        },
+        "toolchain/tests/M24/sl_counter.expected.bin": {
+          "bytes": 4359,
+          "lines": 40
+        },
+        "toolchain/tests/M24/sl_init.expected.bin": {
+          "bytes": 4356,
+          "lines": 39
+        },
+        "toolchain/tests/M24/u2_ptr.expected.bin": {
+          "bytes": 4400,
+          "lines": 88
+        },
+        "toolchain/tests/M24/u2_sizeof.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M24/u2_typepun.expected.bin": {
+          "bytes": 4347,
+          "lines": 35
+        },
+        "toolchain/tests/M24/union_kr.expected.bin": {
+          "bytes": 4548,
+          "lines": 144
+        },
+        "toolchain/tests/M25/argvloop.expected.bin": {
+          "bytes": 13052,
+          "lines": 359
+        },
+        "toolchain/tests/M25/b5_intptr_arr.expected.bin": {
+          "bytes": 4354,
+          "lines": 41
+        },
+        "toolchain/tests/M25/decay_regress.expected.bin": {
+          "bytes": 4357,
+          "lines": 42
+        },
+        "toolchain/tests/M25/ppc_index.expected.bin": {
+          "bytes": 4403,
+          "lines": 72
+        },
+        "toolchain/tests/M25/ppc_load.expected.bin": {
+          "bytes": 4367,
+          "lines": 49
+        },
+        "toolchain/tests/M25/ppc_param.expected.bin": {
+          "bytes": 4391,
+          "lines": 87
+        },
+        "toolchain/tests/M25/ppc_write.expected.bin": {
+          "bytes": 4430,
+          "lines": 88
+        },
+        "toolchain/tests/M25/ppi.expected.bin": {
+          "bytes": 4378,
+          "lines": 58
+        },
+        "toolchain/tests/M26/g53_bigframe.expected.bin": {
+          "bytes": 4607,
+          "lines": 190
+        },
+        "toolchain/tests/M26/g53_param.expected.bin": {
+          "bytes": 4543,
+          "lines": 157
+        },
+        "toolchain/tests/M27/fp_array.expected.bin": {
+          "bytes": 4572,
+          "lines": 214
+        },
+        "toolchain/tests/M27/fp_arrcall.expected.bin": {
+          "bytes": 4566,
+          "lines": 211
+        },
+        "toolchain/tests/M27/fp_cast.expected.bin": {
+          "bytes": 4458,
+          "lines": 129
+        },
+        "toolchain/tests/M27/fp_local_init.expected.bin": {
+          "bytes": 4452,
+          "lines": 126
+        },
+        "toolchain/tests/M27/g_fp_init.expected.bin": {
+          "bytes": 4432,
+          "lines": 116
+        },
+        "toolchain/tests/M27/libc_gaps.expected.bin": {
+          "bytes": 12861,
+          "lines": 128
+        },
+        "toolchain/tests/M28/f_acompound.expected.bin": {
+          "bytes": 5947,
+          "lines": 943
+        },
+        "toolchain/tests/M28/f_add.expected.bin": {
+          "bytes": 4909,
+          "lines": 337
+        },
+        "toolchain/tests/M28/f_arrelem.expected.bin": {
+          "bytes": 4899,
+          "lines": 329
+        },
+        "toolchain/tests/M28/f_cast.expected.bin": {
+          "bytes": 4649,
+          "lines": 198
+        },
+        "toolchain/tests/M28/f_cmp.expected.bin": {
+          "bytes": 5421,
+          "lines": 657
+        },
+        "toolchain/tests/M28/f_conv.expected.bin": {
+          "bytes": 4524,
+          "lines": 121
+        },
+        "toolchain/tests/M28/f_decl.expected.bin": {
+          "bytes": 4386,
+          "lines": 45
+        },
+        "toolchain/tests/M28/f_div.expected.bin": {
+          "bytes": 4996,
+          "lines": 387
+        },
+        "toolchain/tests/M28/f_fbig.expected.bin": {
+          "bytes": 13422,
+          "lines": 522
+        },
+        "toolchain/tests/M28/f_gfmt.expected.bin": {
+          "bytes": 14601,
+          "lines": 1259
+        },
+        "toolchain/tests/M28/f_gwidth.expected.bin": {
+          "bytes": 14686,
+          "lines": 1266
+        },
+        "toolchain/tests/M28/f_knr.expected.bin": {
+          "bytes": 4595,
+          "lines": 246
+        },
+        "toolchain/tests/M28/f_mul.expected.bin": {
+          "bytes": 4733,
+          "lines": 239
+        },
+        "toolchain/tests/M28/f_param.expected.bin": {
+          "bytes": 4708,
+          "lines": 330
+        },
+        "toolchain/tests/M28/f_printf.expected.bin": {
+          "bytes": 13928,
+          "lines": 840
+        },
+        "toolchain/tests/M28/f_ptrderef.expected.bin": {
+          "bytes": 5105,
+          "lines": 430
+        },
+        "toolchain/tests/M28/f_round.expected.bin": {
+          "bytes": 5046,
+          "lines": 430
+        },
+        "toolchain/tests/M28/f_sci.expected.bin": {
+          "bytes": 13764,
+          "lines": 733
+        },
+        "toolchain/tests/M28/f_store.expected.bin": {
+          "bytes": 4420,
+          "lines": 67
+        },
+        "toolchain/tests/M28/f_struct.expected.bin": {
+          "bytes": 4722,
+          "lines": 226
+        },
+        "toolchain/tests/M28/od_probe.expected.bin": {
+          "bytes": 12892,
+          "lines": 236
+        },
+        "toolchain/tests/M28/od_probe2.expected.bin": {
+          "bytes": 12833,
+          "lines": 186
+        },
+        "toolchain/tests/M28/od_probe3.expected.bin": {
+          "bytes": 13528,
+          "lines": 686
+        },
+        "toolchain/tests/M28/od_probe4.expected.bin": {
+          "bytes": 13323,
+          "lines": 672
+        },
+        "toolchain/tests/M28/od_probe5.expected.bin": {
+          "bytes": 12929,
+          "lines": 238
+        },
+        "toolchain/tests/M29/gptr_heap.expected.bin": {
+          "bytes": 13460,
+          "lines": 517
+        },
+        "toolchain/tests/M29/heap_intptr.expected.bin": {
+          "bytes": 13284,
+          "lines": 380
+        },
+        "toolchain/tests/M29/realloc_grow.expected.bin": {
+          "bytes": 13690,
+          "lines": 608
+        },
+        "toolchain/tests/M29/setjmp_jump.expected.bin": {
+          "bytes": 13043,
+          "lines": 262
+        },
+        "toolchain/tests/M3/fn_arg1.expected.bin": {
+          "bytes": 4354,
+          "lines": 50
+        },
+        "toolchain/tests/M3/fn_arg2.expected.bin": {
+          "bytes": 4357,
+          "lines": 61
+        },
+        "toolchain/tests/M3/fn_call_in_expr.expected.bin": {
+          "bytes": 4383,
+          "lines": 75
+        },
+        "toolchain/tests/M3/fn_const.expected.bin": {
+          "bytes": 4336,
+          "lines": 30
+        },
+        "toolchain/tests/M3/fn_locals.expected.bin": {
+          "bytes": 4358,
+          "lines": 52
+        },
+        "toolchain/tests/M3/fn_multi_call.expected.bin": {
+          "bytes": 4398,
+          "lines": 108
+        },
+        "toolchain/tests/M3/fn_param_assign.expected.bin": {
+          "bytes": 4347,
+          "lines": 67
+        },
+        "toolchain/tests/M3/fn_recurse.expected.bin": {
+          "bytes": 4404,
+          "lines": 96
+        },
+        "toolchain/tests/M3/sq7m7.expected.bin": {
+          "bytes": 4364,
+          "lines": 64
+        },
+        "toolchain/tests/M30/divmod_const.expected.bin": {
+          "bytes": 4423,
+          "lines": 117
+        },
+        "toolchain/tests/M30/mul_const.expected.bin": {
+          "bytes": 4389,
+          "lines": 83
+        },
+        "toolchain/tests/M30/shift_const.expected.bin": {
+          "bytes": 4395,
+          "lines": 99
+        },
+        "toolchain/tests/M4/addr_local.expected.bin": {
+          "bytes": 4348,
+          "lines": 35
+        },
+        "toolchain/tests/M4/addr_param.expected.bin": {
+          "bytes": 4371,
+          "lines": 53
+        },
+        "toolchain/tests/M4/call_stmt.expected.bin": {
+          "bytes": 4398,
+          "lines": 88
+        },
+        "toolchain/tests/M4/inc_via_ptr.expected.bin": {
+          "bytes": 4417,
+          "lines": 116
+        },
+        "toolchain/tests/M4/ptr_arg_read.expected.bin": {
+          "bytes": 4375,
+          "lines": 74
+        },
+        "toolchain/tests/M4/ptr_param_pass.expected.bin": {
+          "bytes": 4394,
+          "lines": 102
+        },
+        "toolchain/tests/M4/ptr_write.expected.bin": {
+          "bytes": 4370,
+          "lines": 50
+        },
+        "toolchain/tests/M4/swap_one.expected.bin": {
+          "bytes": 4467,
+          "lines": 186
+        },
+        "toolchain/tests/M5/arr_decay.expected.bin": {
+          "bytes": 4481,
+          "lines": 162
+        },
+        "toolchain/tests/M5/arr_decl.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M5/arr_index.expected.bin": {
+          "bytes": 4516,
+          "lines": 147
+        },
+        "toolchain/tests/M5/arr_mixed.expected.bin": {
+          "bytes": 4412,
+          "lines": 73
+        },
+        "toolchain/tests/M5/arr_store.expected.bin": {
+          "bytes": 4374,
+          "lines": 55
+        },
+        "toolchain/tests/M5/arr_var_idx.expected.bin": {
+          "bytes": 4448,
+          "lines": 105
+        },
+        "toolchain/tests/M5/ptr_index.expected.bin": {
+          "bytes": 4384,
+          "lines": 80
+        },
+        "toolchain/tests/M5/sum_loop.expected.bin": {
+          "bytes": 4621,
+          "lines": 241
+        },
+        "toolchain/tests/M6/aud_starinc_cp.expected.bin": {
+          "bytes": 4977,
+          "lines": 450
+        },
+        "toolchain/tests/M6/char_arr.expected.bin": {
+          "bytes": 4531,
+          "lines": 156
+        },
+        "toolchain/tests/M6/char_cmp.expected.bin": {
+          "bytes": 4357,
+          "lines": 36
+        },
+        "toolchain/tests/M6/char_lit.expected.bin": {
+          "bytes": 4323,
+          "lines": 18
+        },
+        "toolchain/tests/M6/char_scalar.expected.bin": {
+          "bytes": 4323,
+          "lines": 18
+        },
+        "toolchain/tests/M6/char_walk.expected.bin": {
+          "bytes": 4598,
+          "lines": 199
+        },
+        "toolchain/tests/M6/cp_add.expected.bin": {
+          "bytes": 4548,
+          "lines": 175
+        },
+        "toolchain/tests/M6/cp_diff.expected.bin": {
+          "bytes": 4396,
+          "lines": 64
+        },
+        "toolchain/tests/M6/cp_postinc.expected.bin": {
+          "bytes": 4505,
+          "lines": 141
+        },
+        "toolchain/tests/M6/p_add_int.expected.bin": {
+          "bytes": 4461,
+          "lines": 112
+        },
+        "toolchain/tests/M6/p_diff.expected.bin": {
+          "bytes": 4395,
+          "lines": 63
+        },
+        "toolchain/tests/M6/p_postinc.expected.bin": {
+          "bytes": 4492,
+          "lines": 132
+        },
+        "toolchain/tests/M6/p_predec.expected.bin": {
+          "bytes": 4494,
+          "lines": 131
+        },
+        "toolchain/tests/M6/p_sub_int.expected.bin": {
+          "bytes": 4474,
+          "lines": 119
+        },
+        "toolchain/tests/M6/star_chr_r.expected.bin": {
+          "bytes": 4378,
+          "lines": 75
+        },
+        "toolchain/tests/M6/star_chr_w.expected.bin": {
+          "bytes": 4405,
+          "lines": 93
+        },
+        "toolchain/tests/M6/starinc_r.expected.bin": {
+          "bytes": 4477,
+          "lines": 120
+        },
+        "toolchain/tests/M6/starinc_w.expected.bin": {
+          "bytes": 4602,
+          "lines": 196
+        },
+        "toolchain/tests/M6/strlen_test.expected.bin": {
+          "bytes": 4673,
+          "lines": 321
+        },
+        "toolchain/tests/M6/void_par.expected.bin": {
+          "bytes": 4345,
+          "lines": 33
+        },
+        "toolchain/tests/M6/void_ret.expected.bin": {
+          "bytes": 4395,
+          "lines": 87
+        },
+        "toolchain/tests/M6/voidp_pass.expected.bin": {
+          "bytes": 4419,
+          "lines": 103
+        },
+        "toolchain/tests/M7/aud_cast_sizeof.expected.bin": {
+          "bytes": 4353,
+          "lines": 32
+        },
+        "toolchain/tests/M7/cast_int_chr.expected.bin": {
+          "bytes": 4323,
+          "lines": 18
+        },
+        "toolchain/tests/M7/cast_ptr.expected.bin": {
+          "bytes": 4362,
+          "lines": 43
+        },
+        "toolchain/tests/M7/g_char_arr.expected.bin": {
+          "bytes": 4480,
+          "lines": 120
+        },
+        "toolchain/tests/M7/g_char_init.expected.bin": {
+          "bytes": 4322,
+          "lines": 18
+        },
+        "toolchain/tests/M7/g_int_arr.expected.bin": {
+          "bytes": 4410,
+          "lines": 71
+        },
+        "toolchain/tests/M7/g_int_init.expected.bin": {
+          "bytes": 4320,
+          "lines": 17
+        },
+        "toolchain/tests/M7/g_int_scalar.expected.bin": {
+          "bytes": 4323,
+          "lines": 18
+        },
+        "toolchain/tests/M7/sizeof_ident.expected.bin": {
+          "bytes": 4360,
+          "lines": 17
+        },
+        "toolchain/tests/M7/sizeof_str.expected.bin": {
+          "bytes": 4318,
+          "lines": 16
+        },
+        "toolchain/tests/M7/sizeof_type.expected.bin": {
+          "bytes": 4340,
+          "lines": 26
+        },
+        "toolchain/tests/M7/static_ign.expected.bin": {
+          "bytes": 4320,
+          "lines": 17
+        },
+        "toolchain/tests/M7/str_basic.expected.bin": {
+          "bytes": 4349,
+          "lines": 35
+        },
+        "toolchain/tests/M7/str_walk.expected.bin": {
+          "bytes": 4472,
+          "lines": 122
+        },
+        "toolchain/tests/M7/strcopy_test.expected.bin": {
+          "bytes": 4639,
+          "lines": 376
+        },
+        "toolchain/tests/M8/aud_bf_rw.expected.bin": {
+          "bytes": 4488,
+          "lines": 103
+        },
+        "toolchain/tests/M8/bf_layout.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M8/bf_read.expected.bin": {
+          "bytes": 4402,
+          "lines": 58
+        },
+        "toolchain/tests/M8/bf_write.expected.bin": {
+          "bytes": 4395,
+          "lines": 51
+        },
+        "toolchain/tests/M8/bsd_struct_test.expected.bin": {
+          "bytes": 4802,
+          "lines": 433
+        },
+        "toolchain/tests/M8/bv_pass.expected.bin": {
+          "bytes": 4392,
+          "lines": 66
+        },
+        "toolchain/tests/M8/enum_basic.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M8/enum_explicit.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M8/forward_struct.expected.bin": {
+          "bytes": 4381,
+          "lines": 52
+        },
+        "toolchain/tests/M8/ptr_typedef.expected.bin": {
+          "bytes": 4726,
+          "lines": 262
+        },
+        "toolchain/tests/M8/struct_arr.expected.bin": {
+          "bytes": 4849,
+          "lines": 375
+        },
+        "toolchain/tests/M8/struct_arrow.expected.bin": {
+          "bytes": 4378,
+          "lines": 53
+        },
+        "toolchain/tests/M8/struct_def.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M8/struct_global.expected.bin": {
+          "bytes": 4346,
+          "lines": 27
+        },
+        "toolchain/tests/M8/struct_local.expected.bin": {
+          "bytes": 4338,
+          "lines": 26
+        },
+        "toolchain/tests/M8/struct_nested.expected.bin": {
+          "bytes": 4354,
+          "lines": 34
+        },
+        "toolchain/tests/M8/struct_param.expected.bin": {
+          "bytes": 4449,
+          "lines": 154
+        },
+        "toolchain/tests/M8/typedef_int.expected.bin": {
+          "bytes": 4329,
+          "lines": 20
+        },
+        "toolchain/tests/M8/typedef_struct.expected.bin": {
+          "bytes": 4327,
+          "lines": 19
+        },
+        "toolchain/tests/M9/break_for.expected.bin": {
+          "bytes": 4407,
+          "lines": 60
+        },
+        "toolchain/tests/M9/break_while.expected.bin": {
+          "bytes": 4407,
+          "lines": 59
+        },
+        "toolchain/tests/M9/continue_for.expected.bin": {
+          "bytes": 4407,
+          "lines": 60
+        },
+        "toolchain/tests/M9/for_basic.expected.bin": {
+          "bytes": 4383,
+          "lines": 49
+        },
+        "toolchain/tests/M9/for_empty.expected.bin": {
+          "bytes": 4383,
+          "lines": 49
+        },
+        "toolchain/tests/M9/m9_ctrl_test.expected.bin": {
+          "bytes": 4604,
+          "lines": 181
+        },
+        "toolchain/tests/M9/switch_basic.expected.bin": {
+          "bytes": 4420,
+          "lines": 92
+        },
+        "toolchain/tests/M9/switch_enum.expected.bin": {
+          "bytes": 4386,
+          "lines": 56
+        },
+        "toolchain/tests/M9/switch_fall.expected.bin": {
+          "bytes": 4418,
+          "lines": 65
+        },
+        "toolchain/tests/M9/ternary_assoc.expected.bin": {
+          "bytes": 4375,
+          "lines": 43
+        },
+        "toolchain/tests/M9/ternary_basic.expected.bin": {
+          "bytes": 4352,
+          "lines": 33
+        },
+        "toolchain/tests/multitu/m_main.expected.bin": {
+          "bytes": 1195,
+          "lines": 9
+        },
+        "toolchain/tests/multitu/sh_b.expected.bin": {
+          "bytes": 1210,
+          "lines": 16
+        },
+        "toolchain/tests/preproc/pp_ifdef.expected.bin": {
+          "bytes": 1832,
+          "lines": 4
+        },
+        "toolchain/tests/preproc/pp_main.expected.bin": {
+          "bytes": 1214,
+          "lines": 22
+        }
+      }
+    }
+  },
+  "system": {
+    "kernel_bytes": 44776,
+    "fcc_userland_bytes": 225028
+  },
+  "dp": {
+    "fcc_bytes": 0,
+    "reservations": [
+      {
+        "owner": "fcc_future_imgregs",
+        "lo": 192,
+        "hi": 223
+      },
+      {
+        "owner": "fcc_future_scratch",
+        "lo": 224,
+        "hi": 239
+      }
+    ],
+    "overlaps": []
+  },
+  "cycles": {
+    "bsearch": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 2387,
+      "llvm_mos": 682
+    },
+    "bubbleSort": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 17050,
+      "llvm_mos": 11594
+    },
+    "djb2Hash": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 2643,
+      "llvm_mos": 2046
+    },
+    "dotProduct": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 5712,
+      "llvm_mos": 1534
+    },
+    "fib": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 10912,
+      "llvm_mos": 11594
+    },
+    "memcmp": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 716,
+      "llvm_mos": 682
+    },
+    "popcount": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 1534,
+      "llvm_mos": 1194
+    },
+    "strLen": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 1023,
+      "llvm_mos": 767
+    },
+    "strcpy": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 1194,
+      "llvm_mos": 1108
+    },
+    "sumOfSquares": {
+      "cyc_per_call": null,
+      "build": "ok",
+      "skip": "no-markers (bare-metal hang/timeout)",
+      "calypsi": 16368,
+      "llvm_mos": 6820
+    },
+    "t12_divmod": {
+      "cyc_per_call": 156.23175,
+      "build": "ok",
+      "calypsi": null,
+      "llvm_mos": null
+    },
+    "t12_mul": {
+      "cyc_per_call": 127.1977,
+      "build": "ok",
+      "calypsi": null,
+      "llvm_mos": null
+    },
+    "t12_shift": {
+      "cyc_per_call": 159.2353,
+      "build": "ok",
+      "calypsi": null,
+      "llvm_mos": null
+    }
+  }
+}

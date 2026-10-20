@@ -1,0 +1,27 @@
+# /etc/fstab -- the filesystem table, fstab(5).
+#
+# fsck(8) reads this before it will check anything: 2.11BSD's main.c opens the
+# checklist unconditionally, ahead of the explicit-device path, and errexits
+# with "Can't open checklist file" when it is missing.  That is upstream's own
+# ordering and FGX keeps it rather than reaching around it.
+#
+# THE ROOT IS LISTED NOW.  This file used to say it could not be:
+#
+#   "ROOT IS NOT LISTED, and that is the truth rather than an omission: at UFS
+#    2.1 the root filesystem is still ProDOS and has no block device to name.
+#    The root swap (campaign phase 2.2-2.5) is what puts a line here for it."
+#
+# Both halves of that condition are met.  The root is a 2.11BSD filesystem
+# (campaign 2.5, 2026-09-05) and it has a block device to name: /dev/sd0, the
+# boot spindle, generated from ROOT_BLKUNIT in tools/ninja/gen.py alongside
+# the /dev/sd2 that has named the mount fixture's volume since UFS 1.8b-2.
+#
+# THE NAME AGREES WITH THREE OTHER PLACES BY CONSTRUCTION, not by being typed
+# the same way in each: the node's unit comes from gen.py, the kernel mounts
+# ROOT_UNIT 0 (root_mount.c), and the name df(1) prints is built from the
+# mounted device's own rdev (ufs_devname, ufs_vfsops.c).  This line is the one
+# hand-written copy, which is what fstab IS -- a statement of intent that the
+# machine is then checked against.
+#
+# spec		file	vfstype	mntops	freq	passno
+/dev/sd0	/	ufs	rw	1	1

@@ -1,0 +1,10 @@
+{
+ "name": "dynskip",
+ "description": "A BOUND TEXT'S SECOND EXEC SKIPS ITS CODE PATCHES (shared libc SP5 spec 5.2).  The first exec of dyntrue patches its code and writes the bind record; a later one finds the text cached and the record matching the rows it ACQUIREd, so it patches only the data segment.  ldd runs the binder under LD_TRACE_LOADED_OBJECTS, which reports `text patched' or `text bound' with the count of code sites skipped.  dyntrue runs once first so its text is cached before the traced runs.  Control: clear the record word in ld_bind before the compare; the traced runs report `text patched'.",
+ "command": "/testbin/dyntrue; ldd /testbin/dyntrue; ldd /testbin/dyntrue",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": ["text bound, ", " code sites skipped"],
+  "screen_lacks": ["ld.so:", "PANIC", "BRK"]
+ }
+}

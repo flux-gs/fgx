@@ -1,0 +1,29 @@
+{
+ "name": "ensoniqplayrate",
+ "description": "ensoniqplay(1) M1 rate argument: play the same 11025-byte fixture but force -r 11025, exercising the -r flag (atoi) and proving the sample-rate->DOC-freq formula generalizes to a second rate.  freq = round(11025*512/26320) = 214, and at half the rate the one-shot takes twice as long: 11025 bytes / 11025 Hz = 1.0 s = ~60 ticks.  So 'freq 214' checks the math at a new point and 'halted after 6' (60-69 ticks) checks that halving the rate doubled the play time.",
+ "command": "ensoniqplay -r 11025 /etc/tone440.pcm",
+ "timeout_s": 120,
+ "exit_on_prompt": true,
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/tone440.pcm",
+   "prodos_dir": "/FGX/etc",
+   "name": "tone440.pcm",
+   "replace": false
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "11025 bytes @ 11025 Hz (freq 214), playing",
+   "halted after 6",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "BRK",
+   "PANIC",
+   "cannot open",
+   "timed out",
+   "Fatal"
+  ]
+ }
+}

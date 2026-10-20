@@ -1,0 +1,5 @@
+# Spawn/exit churn, then fifty failed execs of a truncated image.
+sh /testdata/textchurn
+i=0
+while [ $i -lt 50 ]; do /testbin/trunc 2>/dev/null; i=`expr $i + 1`; done
+echo CHURNED

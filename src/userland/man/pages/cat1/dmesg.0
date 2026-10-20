@@ -1,0 +1,28 @@
+
+
+
+DMESG(1)            UNIX Programmer's Manual               DMESG(1)
+
+
+
+NAME
+     dmesg - print the kernel log
+
+SYNOPSIS
+     dmesg
+
+DESCRIPTION
+     _D_m_e_s_g prints the contents of the kernel log ring buffer:
+     boot messages, module loads, device registrations, and any
+     kernel diagnostics since boot (up to the 4 KB the ring
+     holds; older messages scroll off).
+
+     This is an FGX-native tool: the kernel exposes the ring
+     directly through a system call, so there is no /dev/kmem
+     spelunking and no incremental (-) mode -- the whole ring
+     prints every time.
+
+SEE ALSO
+     stat(1), uptime(1)
+
+FGX                          FGX-native                          1

@@ -1,0 +1,43 @@
+
+
+RESOLV.CONF(5)      UNIX Programmer's Manual        RESOLV.CONF(5)
+
+
+
+NAME
+     resolv.conf - resolver configuration file
+
+DESCRIPTION
+     The file /etc/resolv.conf configures the FGX name resolver
+     used by gethostbyname(3).  dhclient(8) rewrites the nameserver
+     line from the DHCP lease at boot; a search domain may be added
+     by hand.  Blank lines and lines beginning with `#' are
+     ignored.  The recognized directives are:
+
+     nameserver a.b.c.d
+          The IP address of the DNS server to query.  Only the
+          first nameserver line is used.
+
+     search domain ...
+          Domains appended to an unqualified name (one with no
+          dot) before it is looked up: with `search example.com',
+          the name `www' resolves as www.example.com.  Only the
+          first domain is used.
+
+     domain name
+          A single search domain; equivalent to `search name'.
+
+FILES
+     /etc/resolv.conf
+
+SEE ALSO
+     host(1), gethostbyname(3), hosts(5), dhclient(8)
+
+BUGS
+     Only one nameserver and one search domain are honored; BSD's
+     multiple-server failover and full search list are not
+     implemented.
+
+
+
+Printed 7/20/86                                                5

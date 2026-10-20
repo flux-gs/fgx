@@ -1,0 +1,13 @@
+{
+ "name": "relocseg",
+ "description": "A RELOCATION NAMING A SEGMENT THE IMAGE DOES NOT HAVE IS REFUSED WITH ENOEXEC (apple/fgx#522).  The fixture is /bin/true with its first relocation's source segment set to 8, past both its two segments and the format's cap.  The loader's relocation walk took both segment numbers from the file unchecked; a source segment it had no bank for resolved to bank 0, and the patch byte went into bank 0 at the offset the file named.  It now checks both against the image's segment count and refuses the image, as 2.11BSD exec refuses a malformed one (sys/kern_exec.c).  ldd execs the image and perror()s the failure (bin/ldd.c).  Control: the loader before the check, which does not say Exec format error.",
+ "command": "/bin/ldd /testbin/relocseg",
+ "timeout_s": 240,
+ "stage_files": [
+  {"host": "tools/mame_test/fixtures/relocseg.bin", "prodos_dir": "/FGX/testbin", "name": "relocseg"}
+ ],
+ "expect": {
+  "screen_contains": ["execution failed: Exec format error"],
+  "screen_lacks": ["Undefined error", "PANIC", "BRK"]
+ }
+}

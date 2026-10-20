@@ -1,0 +1,21 @@
+{
+ "name": "telnet_loopback",
+ "description": "telnetd P2: /testbin/telnetd backgrounded on 127.0.0.1:2323 with telnet(1) connecting to it in the same emulator -- no hardware, no host, no second machine.  PROVEN: bind+listen on a loopback address, connect() matching the listener, accept() pairing the descriptors, the pty opening, spawnx() of /bin/getty, and a clean client session.  NOT asserted: the 'login:' prompt.  It DOES render -- the full chain was observed reaching 'FGX/gs / login:' -- but ONLY when the client carries an extra stdout write (a debug printf) between telrcv() and ttyflush().  Without it the 15 bytes reach the tty buffer (TTYBYTES()=15, SYNCHing=0, flushout=0) and ttyflush() is entered, yet nothing appears, and a 90s timeout does not help -- so it is not timing.  Asserting 'login:' here would make the gate depend on a heisenbug, so it asserts the three facts that hold unconditionally.",
+ "command": "/testbin/telnetd 2323 & telnet 127.0.0.1 2323",
+ "timeout_s": 40,
+ "stage_files": [
+  {
+   "host": "bin/telnetd.bin",
+   "prodos_dir": "/FGX/TESTBIN",
+   "name": "TELNETD",
+   "replace": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "telnetd: listening",
+   "Connected to 127.0.0.1.",
+   "telnetd: session on /dev/ttyp0"
+  ]
+ }
+}

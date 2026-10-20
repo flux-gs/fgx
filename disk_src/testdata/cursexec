@@ -1,0 +1,8 @@
+# curssodyn's first exec on a fresh boot (termlib and curses loaded on
+# first use), its mean over 20 resident, and cursso's (bound on the host).
+# curses clears the screen, so each EXT line is collected and printed last.
+/testbin/exectime /testbin/curssodyn 1 | grep EXT > /tmp/x
+ldd /testbin/curssodyn >> /tmp/x
+/testbin/exectime /testbin/curssodyn 20 | grep EXT >> /tmp/x
+/testbin/exectime /testbin/cursso 20 | grep EXT >> /tmp/x
+cat /tmp/x

@@ -1,0 +1,12 @@
+{
+  "name": "softjmp",
+  "description": "THE PAIR-1 CONTROL softfork IS NOT.  softfork's own description records that disabling snapshot-fork's pair-1 copy of SE_SoftBank does not make it fail -- the child inherits _fcc_sfp at the fork point and its frames grow DOWNWARD into unused space, so the overlap never arises -- and it names what a real control needs: a child that moves sfp back UP over the parent's frames, via a longjmp to an outer setjmp, which is what bsh does on error.  softjmp is that.  setjmp saves _fcc_sfp (setjmp.h, jmp_buf +10..11), so the child's longjmp puts its soft-frame pointer above every frame the parent still holds; it then recurses six levels DEEPER than the parent did, covering all of them with 0x5A5A.  The parent sits in fork() at the bottom of its recursion the whole time and checks every frame on the way out.  THE ASSERTION IS SJOK PLUS THE ABSENCE OF SJBAD, so a corrupted parent frame fails loudly rather than reading as a silent pass.  The marker carries the child's EXIT STATUS and is built by shell expansion (the command contains $A$B, never the literal), so the shell's echo of the typed line cannot satisfy it -- the shape apple/fgx#36 was filed for.  41 is the measured contract, not a presumed 0.",
+  "command": "A=SJ; B=DONE; sh -c '/testbin/softjmp'; echo $A$B=$?",
+  "boot_s": 45,
+  "timeout_s": 120,
+  "exit_on_prompt": { "sentinel": "fgx#", "count_delta": 1 },
+  "expect": {
+    "screen_contains": [ "SJSTART", "SJOK", "SJDONE=41" ],
+    "screen_lacks": [ "SJBAD", "PANIC", "BRK" ]
+  }
+}

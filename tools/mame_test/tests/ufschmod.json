@@ -1,0 +1,23 @@
+{
+  "name": "ufschmod",
+  "description": "chmod(2) AND chown(2) REACH THE FILESYSTEM.  UFS 2.6, and the first thing on this system that can change a file's mode after it is made.  Both are 2.11BSD's own syscall numbers -- 15 and 16, from usr/sys/sys/init_sysent.c:125 -- whose table slots had been kept as stubs; ufs_setattr refused va_mode and va_uid outright until now, returning EPERM with a note deferring them to 2.6.\n\nWHAT EACH ARM DISCRIMINATES, and the four are four different code paths rather than four spellings:\n  `-rw-r----x' is chmod 0641: THE OCTAL FORM, straight through vfs_setattr to VOP_SETATTR.  A digit in each of the three positions, and 1 in the last, so a kernel that stored a byte, or dropped the execute bit, or applied the umask (it must not -- chmod is not a create) reads differently.\n  `-rw-rw---x' is `chmod g+w' ON TOP OF IT: THE SYMBOLIC FORM, which is 90 lines of upstream newmode() parsing [ugoa][+-=][rwxXstugo] against the file's CURRENT mode -- so this arm also says lstat's answer came back right, since g+w means nothing without the other eight bits to add to.\n  `daemon' is the OWNER, and the command never types that word -- it types the NUMBER 1.  So the arm is the whole round trip: chown(2) writes uid 1 into the inode, ufs_getattr reports it, and ls(1) turns it back into a name through getname()/getpwnam(3) against /etc/passwd.  A needle the command line carries would have matched the echo instead, which is what `ufswrite's append arm did.\n\nTHE PORTS ARE VERBATIM AND THAT IS WHERE THE COVERAGE COMES FROM.  chmod(1) is vendor/2.11BSD/usr/bin/chmod.c and chown(8) is vendor/2.11BSD/usr/usr.sbin/chown/chown.c, neither edited.  Taking chmod whole is what brings newmode(); a version that only took octal would pass a test written for octal and be wrong about every third thing a person types.\n\nMEASURED DISCRIMINATING: put `return (EPERM)' back at the head of ufs_setattr's mode arm and the two mode strings go red while the owner arm stays green; put it back on the owner arm and `daemon' goes red while the modes stay green.  The two halves are separately covered.\n\nWHAT IT DOES NOT CLAIM: that chmod is ENFORCED, or that a non-root caller is refused.  Nothing in this kernel evaluates a credential -- file.h's f_cred is still 0 -- so ufs_setattr runs 4.3BSD-Reno's cr_uid == 0 path for every caller.  chmod(2) and chown(2) say so in their BUGS sections.  A test for refusal would be a test of a thing that does not exist.\n\nAND IT ENDS IN `sync', WHICH IS WHAT MAKES THE ORACLE ARM MEAN ANYTHING.  ufsfsck_check.py hands the boot volume this run wrote to `fgxfs fsck', and a volume whose superblock was never written back is INCONSISTENT BY DESIGN -- ufs_alloc hands out blocks from a batch and sets sb_fmod, trusting sync(2) to flush, which is upstream's policy and the reason BSD fscks after a crash.  Every manifest here ends by stopping the machine, so without the sync this arm would be asserting that an unclean shutdown leaves a clean volume, which is neither true nor desirable.  With it, the arm is the campaign's phase-1 bar: a volume FGX wrote and closed is one an independent implementation calls clean.  apple/fgx#332 is why the arm is here at all.",
+  "command": "cd /tmp; echo hi > c1; chmod 0641 c1; ls -l c1; chmod g+w c1; /sbin/chown 1 c1; ls -l c1; sync",
+  "boot_s": 45,
+  "timeout_s": 40,
+  "exit_on_prompt": {
+    "sentinel": "fgx#",
+    "count_delta": 1
+  },
+  "expect": {
+    "screen_contains": [
+      "-rw-r----x",
+      "-rw-rw---x",
+      "daemon"
+    ],
+    "screen_lacks": [
+      "Not owner",
+      "Function not implemented"
+    ],
+    "check_script": "ufsfsck_check.py"
+  }
+}

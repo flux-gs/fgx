@@ -1,0 +1,17 @@
+{
+ "name": "ufsglobempty",
+ "description": "THE SHELL CAN GLOB, WHICH TURNS ON namei ACCEPTING THE EMPTY PATH.  2.11BSD's sh resolves a pattern by splitting off its directory part and scanning that -- and for a pattern with no '/' in it, that part is the EMPTY STRING (usr/bin/sh/expand.c:61 walks back for a slash, finds none, and sets `s=nullstr'), followed by `stat(s)' and `opendir(s)'.  Both upstreams answer such a name with the STARTING DIRECTORY -- 4.3BSD-Reno kern/vfs_lookup.c:198 and 2.11BSD usr/sys/sys/ufs_namei.c:226, the arm both open with \"Check for degenerate name (e.g. / or \\\"\\\") which is a way of talking about a directory\" -- and FGX answered ENOENT from a guard of its own in front of the arm it had already ported.  With ENOENT, `dir' stays 0, nothing is scanned, no match is found, and sh leaves the word LITERAL, which is why the symptom was a printed pattern rather than an error (apple/fgx#298).  THE NEEDLE IS THE EXPANSION AND NOT THE PATTERN: the console echoes the command, so `.pro*' is on screen either way and asserting it would pass on a broken kernel.  `.profile' can only appear if the scan ran, matched, and the name came back -- and /root is the one directory on this volume whose interesting entries are dotfiles, which sh only offers to a pattern that begins with a dot.",
+ "command": "cd /root; echo .pro*",
+ "boot_s": 45,
+ "timeout_s": 14,
+ "expect": {
+  "screen_contains": [
+   "fgx#",
+   ".profile"
+  ],
+  "screen_lacks": [
+   "not found",
+   "cannot execute"
+  ]
+ }
+}

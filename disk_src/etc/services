@@ -1,0 +1,24 @@
+# /etc/services - see services(5).
+echo             7/tcp
+echo             7/udp
+daytime         13/tcp
+daytime         13/udp
+ftp-data        20/tcp
+ftp             21/tcp
+telnet          23/tcp
+smtp            25/tcp          mail
+time            37/tcp          timserver
+time            37/udp          timserver
+domain          53/tcp          nameserver
+domain          53/udp          nameserver
+bootps          67/udp
+bootpc          68/udp
+tftp            69/udp
+finger          79/tcp
+http            80/tcp          www
+pop3           110/tcp
+nntp           119/tcp          usenet
+ntp            123/udp
+imap           143/tcp
+https          443/tcp
+syslog         514/udp

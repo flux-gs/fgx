@@ -1,0 +1,118 @@
+STTY(1)                    UNIX Programmer's Manual                    STTY(1)
+
+NNAAMMEE
+       stty - set and report terminal modes
+
+SSYYNNOOPPSSIISS
+       ssttttyy [--aa | --ee] [--ff _f_i_l_e] [_o_p_e_r_a_n_d ...]
+
+DDEESSCCRRIIPPTTIIOONN
+       _s_t_t_y sets and reports the I/O modes of a terminal, writing its report
+       to the diagnostic output.  With no operand it reports the terminal
+       speed and the mode bits that differ from their defaults; with --aa it
+       reports everything it knows.  It operates on the standard output unless
+       --ff names another terminal.
+
+       On FGX the terminal is the old-style _s_g_t_t_y(3) interface: the ssggttttyybb
+       mode word (below), the ttcchhaarrss special characters, and a read-only
+       window size.  The following options are available:
+
+       --aa      Report every mode _s_t_t_y knows.  Equivalent to the operand aallll or
+               eevveerryytthhiinngg.
+
+       --ee      Same as --aa.
+
+       --ff _f_i_l_e Open and use the terminal named by _f_i_l_e rather than the
+               standard output -- for example ssttttyy --ff //ddeevv//ttttyy0000 to inspect
+               the second serial port.
+
+       The operands aallll and eevveerryytthhiinngg report everything (as --aa); ssppeeeedd prints
+       the terminal speed alone and ssiizzee prints the window size (rows then
+       columns) on the standard output.
+
+MMOODDEESS
+       The mode operands set or clear ssgg__ffllaaggss bits.  Each has a negated form
+       spelled with a leading --.
+
+       rraaww       Raw mode: no input processing (erase, kill, interrupt); each
+                 byte is delivered to _r_e_a_d(2) as received.  --rraaww (or ccooookkeedd)
+                 restores line processing.
+
+       ccbbrreeaakk    Deliver each character to _r_e_a_d as received, but keep
+                 interrupt processing; no erase/kill.  --ccbbrreeaakk delivers input
+                 only a line at a time.
+
+       eecchhoo      Echo input characters.  --eecchhoo suppresses the echo (as _v_i does
+                 in visual mode).
+
+       nnll        Accept only newline to end a line.  --nnll allows carriage
+                 return for newline and maps output accordingly.
+
+       ttaabbss      Preserve tabs on output.  --ttaabbss expands tabs to spaces.
+
+       ttaannddeemm    Enable xon/xoff (start/stop) input flow control; --ttaannddeemm
+                 disables it.
+
+SSPPEECCIIAALL CCHHAARRAACCTTEERRSS
+       For the operands that take a character argument _c, _c may be given
+       literally, as ``uunnddeeff'' to leave the character undefined, or as a two-
+       character ^^_x sequence naming a control character (^^??= delete).
+
+       eerraassee _c   Erase (backspace) character (default DEL, ^?).
+
+       kkiillll _c    Line-kill character (default ^U).
+
+       iinnttrr _c    Interrupt character (default ^C).
+
+       qquuiitt _c    Quit character.
+
+       ssttaarrtt _c   Output-start character (default ^Q).
+
+       ssttoopp _c    Output-stop character (default ^S).
+
+       eeooff _c     End-of-file character (default ^D).
+
+       bbrrkk _c     Additional line-delimiter (wakeup) character; undefined by
+                 default.
+
+SSPPEEEEDD
+       00 5500 7755 111100 113344 115500 220000 330000 660000 11220000 11880000 22440000 44880000 99660000 1199220000 3388440000
+       Record the terminal input and output speed as the number given.  The
+       console boots at 9600 baud.
+
+FFGGXX NNOOTTEESS
+       FGX's console line discipline is 2.11BSD's, so it acts on EECCHHOO,
+       CCBBRREEAAKK, RRAAWW (single-keystroke unechoed input for _v_i), CCRRMMOODD,
+       XXTTAABBSS and TTAANNDDEEMM.  The ttcchhaarrss characters are LIVE: the interrupt,
+       quit, start and stop characters are the ones the discipline compares
+       each arriving keystroke against, so ssttttyy  iinnttrr really does move ^C.
+       They used to be merely saved and restored; the tty campaign changed
+       that.
+
+       The window size is REPORTED per line and is not settable here; there is
+       no rroowwss or ccoollss operand.  Each tty carries its own size and a pty
+       tracks what its far end reports, so the figure is a live reading of the
+       session it is run in.
+
+       The LOCAL MODES are accepted: ccrrttbbss, ccrrtteerraassee, ccrrttkkiillll, pprrtteerraassee,
+       ccttlleecchhoo, lliittoouutt, ppaassss88, ttoossttoopp, mmddmmbbuuff, nnoohhaanngg, rrttssccttss,
+       ddeeccccttllqq and nnooffllsshh, each with a leading `-' to clear it, plus the
+       compounds ccrrtt, nneewwccrrtt and ddeecc.  ccttlleecchhoo is the one that makes a
+       typed control character echo as ^X: without it the discipline emits the
+       raw byte and a ^^CC leaves no mark on the screen.  ddeecc is the 2.11BSD
+       idiom, setting ccrrttbbss, ccttlleecchhoo and ddeeccccttllqq together with the DEC
+       erase/kill/interrupt characters.
+
+       Terminal features FGX's console model does not provide are still not
+       accepted: parity (eevveenn/oodddd), line disciplines (nneeww/oolldd), the
+       llttcchhaarrss group (ssuusspp, wweerraassee) and modem control (ddccdd, ddttrr,
+       fflluusshhoouutt, hhuupp).
+
+SSEEEE AALLSSOO
+       _s_g_t_t_y(3), _i_o_c_t_l(2), _v_i(1), _t_s_e_t(1)
+
+AAUUTTHHOORR
+       Ported to FGX from the 4BSD/2.11BSD _s_t_t_y, scoped to the FGX _s_g_t_t_y
+       terminal interface.
+
+FGX                                   FGX                              STTY(1)

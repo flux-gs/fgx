@@ -1,0 +1,43 @@
+{
+ "name": "pdremove",
+ "description": "A ProDOS VOLUME MOUNTED WITH -o write LOSES FILES AND DIRECTORIES AS ProDOS 8 LOSES THEM, AND THE BLOCKS COME BACK.  /dev/sd1 is a fresh disk/pdscratch.po; /testdata/pdremove removes through pdmount -r/-J/-D/-O and the check script reads the volume the machine left.\n\nON THE SCREEN:\n  mw=0      mount -o write mounted writable.\n  PDRM ._ext errno=1   a resource fork does not go on its own: EPERM.\n  PDRM sap errno=1 / f02 errno=1   a clear destroy bit ($80) refuses: EPERM.\n  PDRM nosuch errno=2  a name that is not there.\n  PDRM hello errno=13  uid 1 cannot take a name from a 755 root-owned directory.\n  PDRM hello/tree/ext/f01 errno=0   a seedling, a tree, a GS/OS extended file and a seedling go.\n  PDRD sub/inner errno=66   a directory with a file in it: ENOTEMPTY.\n  PDRD sub/inner/deep errno=20   rmdir of a file: ENOTDIR.\n  PDRM sub/inner/deep errno=0, PDRM sub errno=1   the file goes; unlink of a directory is EPERM.\n  PDRD sub/inner errno=0   the emptied directory goes.\n  PDOU f03 5000 gone=2 bad=0   a file unlinked while open: its name is gone, and 5000 bytes written through the descriptor read back.\n  PDCR big / PDWR big 20000   a new file takes the freed blocks.\n  um=0      the unmount, after the unlinked file's last close gave its blocks back.\n\nIN THE CHECK SCRIPT (pdremove_check.py): cadius CHECKVOLUME silent (after a control it must flag) -- so every freed block is free and no live block is; the removed entries are gone and every directory's file count, links and pointers hold; every file left is byte-identical in cadius's extraction; big's blocks all belonged to removed files; and each removed index block that was not reused is written back flipped, as ProDOS 8 and GS/OS leave one.",
+ "command": "sh /testdata/pdremove",
+ "boot_s": 45,
+ "timeout_s": 600,
+ "extra_hards": [
+  "disk/pdscratch.po"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "mw=0",
+   "PDRM ._ext errno=1",
+   "PDRM sap errno=1",
+   "PDRM f02 errno=1",
+   "PDRM nosuch errno=2",
+   "PDRM hello errno=13",
+   "PDRM hello errno=0",
+   "PDRM tree errno=0",
+   "PDRM ext errno=0",
+   "PDRM f01 errno=0",
+   "PDRD sub/inner errno=66",
+   "PDRD sub/inner/deep errno=20",
+   "PDRM sub/inner/deep errno=0",
+   "PDRM sub errno=1",
+   "PDRD sub/inner errno=0",
+   "PDOU f03 5000 gone=2 bad=0",
+   "PDCR big errno=0",
+   "PDWR big 20000 errno=0",
+   "um=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "setuid errno"
+  ],
+  "check_script": "pdremove_check.py"
+ }
+}

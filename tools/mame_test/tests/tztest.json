@@ -1,0 +1,30 @@
+{
+ "name": "tztest",
+ "description": "libc time zones (toolchain/lib/libc_c/ctime.c, 4.3BSD-Reno 5.23) against /usr/share/zoneinfo.  A1/A2: TZ=America/New_York gives 07:00 EST (gmtoff -18000) on 2026-01-15 and 08:00 EDT (-14400, isdst 1) on 2026-07-15, both 12:00 UTC.  A3: asctime of A1 is Thu Jan 15 07:00:00 2026.  B1: the POSIX string TEN-10 is UTC+10, 22:00 and gmtoff 36000, which overflows if getsecs multiplies the hours in a 16-bit int.  B2: an unknown TZ falls back to GMT.  B3: gmtime names its zone GMT -- the GMT file's first abbreviation, which a zic -r build makes -00.  C1: mktime inverts localtime at both A instants.  C2: mktime with tm_isdst -1 on 2026-03-08 gives 01:30 EST and 03:30 EDT, and -1 for 02:30 in the spring-forward gap, as the vendored Reno ctime.c does on the host.  F1: difftime(10, 3) is 7.0.  D1: date(1) 2601151200 under TZ=America/New_York takes the time as local (2.11BSD patch #454) and sets the clock to 17:00 UTC; the test puts the clock back.  E1/E2 (/testdata/tzrun copies a zone into /etc/localtime and runs adjkerntz -a, as the kernel is adjusted at boot): under America/New_York machdep.adjkerntz is minus New York's gmtoff and the kernel clock is the battery clock plus it; back under UTC the offset is 0 and the two agree.",
+ "command": "sh -c '. /testdata/tzrun'",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "TZ A1 07:00 -18000 0 EST ok",
+   "TZ A2 08:00 -14400 1 EDT ok",
+   "TZ A3 ok",
+   "TZ B1 22:00 36000 0 TEN ok",
+   "TZ B2 12:00 0 0 GMT ok",
+   "TZ B3 GMT ok",
+   "TZ C1 0 ok",
+   "TZ C2 1772951400 -1 1772955000 ok",
+   "TZ F1 7 ok",
+   "TZ D1 ",
+   "TZ E1 off=",
+   "TZ E2 off=0 ",
+   "TZ VERDICT PASS"
+  ],
+  "screen_lacks": [
+   "TZ VERDICT FAIL",
+   "FAIL",
+   "PANIC",
+   "BRK",
+   "not found"
+  ]
+ }
+}

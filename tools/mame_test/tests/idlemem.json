@@ -1,0 +1,27 @@
+{
+ "name": "idlemem",
+ "description": "MEMORY AT AN IDLE PROMPT, the shared libc SP5 measure (spec section 1).  After the boot settles, vmstat -m prints the kernel heap's tables, the Memory Manager block table (boot claim, arena growth, user grants) and the Memory Manager's own TOTAL/FREE/MAXBLK; the coremap region is the 56-bank user pool's page map: free pieces of 4 bytes {size, address} in 256-byte pages, size 0 ending it (src/kernel/bank.s), so banks in use = 56 - free pages / 256.  A probe for measurement, not a pass/fail gate: it asserts only that the readout reached the screen.",
+ "command": "sh",
+ "post_commands": [
+  "sleep 20; /usr/fgx/bin/vmstat -m"
+ ],
+ "post_gap_frames": 1800,
+ "timeout_s": 300,
+ "exit_on_prompt": false,
+ "memory_regions": [
+  {
+   "name": "coremap",
+   "symbol": "_coremap",
+   "len": 128
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "MM     TOTAL="
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

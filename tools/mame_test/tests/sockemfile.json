@@ -1,0 +1,16 @@
+{
+ "name": "sockemfile",
+ "description": "apple/fgx#145, second edge: an accept() that fails on resources must leave the connection ACCEPTABLE.  _Loop_AcceptTry wired the accepted end, cross-linked the pair and CONSUMED the listener's SLF_PENDING flag before it ever asked for an fd, so one fd shortage produced three kinds of stuck at once -- a fully wired descriptor with no fd that nothing would free (a SOCKD slot gone for the boot), a connector believing it was talking to a peer no process could reach, and a listener that would never offer the connection again.  THE RETRY IS THE ASSERTION and it is the only thing that can see this: accept() returning -1/EMFILE under pressure was always correct, so a test that checked only that passes with the defect present.  `loopprobe -x' fills the fd table (FS_MAX_FDS 30), watches the accept fail with EMFILE, frees ONE fd, and requires the same connection to be acceptable and to still carry bytes.  The listener is put in non-blocking mode BEFORE the pressure, because after the defect eats the pending flag a blocking accept sleeps out the timeout and a fixture that hangs reports nothing.  Needs no hardware.",
+ "command": "/testbin/loopprobe -x",
+ "timeout_s": 60,
+ "expect": {
+  "screen_contains": [
+   "loopprobe: X OK accept retryable after EMFILE"
+  ],
+  "screen_lacks": [
+   "loopprobe: FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

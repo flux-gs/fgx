@@ -1,0 +1,36 @@
+{
+  "name": "argvlen",
+  "description": "AN ARGUMENT REACHES THE PROGRAM WHOLE, AND ONE TOO BIG IS REFUSED (apple/fgx#301, apple/fgx#438). argv used to be copied TWICE: the kernel laid the strings in a bank-0 stack frame, and crt0 copied each one again into args_input, a 128-byte block in the binary's own data bank holding argv[0] plus every argument plus their NULs. Both copies truncated SILENTLY -- crt0's total at 128 bytes (122 characters once `echo' and the NULs are counted) and the kernel's _la_measureStr per string, also at 128. No errno, no diagnostic, exit 0: a program simply ran on an argument its caller had not passed, which is apple/fgx#436's shape one layer up. crt0 copies nothing now and args_argv[i] points into the frame, which is where 2.11BSD's argv points (`copyoutstr' onto the new process's stack, `suword((caddr_t)ap, ucp)' storing each pointer into it, usr/sys/sys/kern_exec.c:300-338). EVERY LONG VALUE IS BUILT FROM SHORT TYPED LINES so the terminal line is never itself long -- that confound is what made the first investigation blame the line, and it took building the value inside the shell to see the cut was on the ARGUMENT. THE ARMS. `wc -c' counts the bytes echo(1) actually received plus its newline, so each number is exact rather than read off a wrapped screen. 10 -> 11 is the control that argv works at all. 130 -> 131 is the discriminating arm: it was 123 under crt0's cap and 129 under the kernel's, so it separates this fix from a half-fix. 130+130 -> 262 is the TOTAL arm: it was 123 when the cap was shared across all arguments, and 257 when only the kernel's per-string cap remained. 1000 -> 1001 is well past both. THE REFUSAL ARM IS THE OTHER HALF AND IS NOT OPTIONAL: a 5000-character argument does not fit the child's stack frame, and the point of the change is that it is REFUSED rather than shortened -- `arg list too long', E2BIG, from the pre-write floor gate in loader.s that was written for exactly this and documented as unreachable until the per-string cap grew. A kernel that went back to truncating would print 123 or 129 here and never print the refusal, so the two halves cannot both pass by accident. THE COMPLETION MARKER IS ASSEMBLED BY THE SHELL (`Z=ARGV; echo ${Z}DONE') so that `ARGVDONE' is never a contiguous string in the typed line -- typed plainly it is satisfied by the command echo whether or not anything ran, which check_vacuous_assertions catches.",
+  "command": "pwd",
+  "post_commands": [
+    "a=0123456789",
+    "b=$a$a$a$a$a$a$a$a$a$a$a$a$a",
+    "c=$a$a$a$a$a$a$a$a$a$a",
+    "d=$c$c$c$c$c$c$c$c$c$c",
+    "e=$d$d$d$d$d",
+    "echo $a | wc -c",
+    "echo $b | wc -c",
+    "echo $b $b | wc -c",
+    "echo $d | wc -c",
+    "echo $e | wc -c",
+    "Z=ARGV; echo ${Z}DONE"
+  ],
+  "post_gap_frames": 260,
+  "exit_on_prompt": false,
+  "boot_s": 45,
+  "timeout_s": 480,
+  "expect": {
+    "screen_contains": [
+      "11",
+      "131",
+      "262",
+      "1001",
+      "arg list too long",
+      "ARGVDONE"
+    ],
+    "screen_lacks": [
+      "PANIC",
+      "BRK"
+    ]
+  }
+}

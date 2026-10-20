@@ -1,0 +1,29 @@
+
+
+COLOR(1)            UNIX Programmer's Manual               COLOR(1)
+
+
+
+NAME
+     color - set console foreground, background, or border color
+
+SYNOPSIS
+     color -fg|-bg|-bd name
+     color -fg|-bg -x RRGGBB
+
+DESCRIPTION
+     _C_o_l_o_r rewrites the console's default palette slots (fore-
+     ground/background) or the IIgs border color.  The 16 ANSI
+     color names are: black red green yellow blue magenta cyan
+     white gray brightred brightgreen brightyellow brightblue
+     brightmagenta brightcyan brightwhite.
+
+     -x takes six hex digits; each channel is truncated to its
+     high nibble (the SHR palette is 4 bits per channel).  The
+     border carries only the 16 hardware colors, so -bd does not
+     accept -x.
+
+SEE ALSO
+     font(1)
+
+FGX                          FGX-native                          1

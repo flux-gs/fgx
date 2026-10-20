@@ -1,0 +1,95 @@
+
+
+KLOG(4)              UNIX Programmer's Manual               KLOG(4)
+
+
+
+NAME
+     klog - kernel log ring, as a readable device
+
+SYNOPSIS
+     fd = open("/dev/klog", O_RDONLY);
+
+DESCRIPTION
+     /dev/klog is a read-only view of the kernel's message ring
+     with a position of its own.  Each read returns the bytes
+     written since the last one, and a read on a caught-up
+     descriptor waits until there is something rather than
+     reporting end of file.  It is what syslogd(8) reads kernel
+     messages from, so that they land in the same log as the
+     messages syslog(3) senders write to /dev/log.
+
+     ONE READER.  A second open is refused EBUSY.  Two readers
+     would share the one position, so each would see an arbitrary
+     part of the log and neither would see all of it.
+
+     The position is set once, when the module loads, at the
+     oldest message the ring holds, so the first reader gets the
+     boot log.  A reopen -- a restarted syslogd(8) -- resumes
+     where the last reader stopped instead of reading it all
+     again.  If the ring had wrapped when the module loaded, the
+     position starts caught up; dmesg(1) still has the history.
+
+     FIONBIO is honoured, so a caught-up read can return EAGAIN
+     instead of waiting.  select(2) reports the device readable
+     exactly when the reader has not caught up, which is how
+     syslogd watches it alongside its socket.
+
+     dmesg(1) IS UNAFFECTED.  It copies the whole ring out and
+     consumes nothing, so it and /dev/klog are independent
+     readers with independent positions, and reading one does not
+     take bytes from the other.
+
+SEE ALSO
+     dmesg(1), syslog(3), unix(4)
+
+BUGS
+     A WOKEN READER CAN WAIT UP TO A SECOND.  Upstream releases a
+     blocked reader when the message is written; this one sleeps
+     on the channel the kernel wakes once a second, so a message
+     can sit in the ring that long before the reader sees it.  No
+     message is lost and the order is not disturbed, but a kernel
+     message and a user message written in the same instant can
+     reach the log a second apart, and a message written just
+     before the machine stops may not be read at all.  The reason
+     is a budget: the wakeup belongs in the ring writer, which is
+     core-bank code with five bytes free.  apple/fgx#461.
+
+     A READER THAT FALLS A WHOLE RING BEHIND LOSES DATA
+     SILENTLY.  The writer does not consult readers -- it cannot
+     afford to, for the same reason as above -- and the ring
+     carries no generation count, only a write index and a
+     wrapped flag.  So a reader the writer laps sees the newest
+     bytes, in order, with no indication that anything was
+     skipped.  Upstream counts that in its overrun field because
+     upstream's writer is the one that discards.  It takes four
+     kilobytes of kernel messages inside one wakeup period.
+
+     THE EINTR PATH WAS BROKEN, NOT MERELY UNCOVERED.  A read
+     waiting on a caught-up ring returns EINTR when a signal
+     arrives, and that arm is written the way pty(4)'s is -- but
+     the sleeper was never marked blocked, so neither a signal
+     nor the clock could reach it and the read never returned.
+     An earlier probe read that as "alarm(2) does not interrupt
+     a sleeping task"; it was this defect, apple/fgx#468, and it
+     is fixed.  The klogintr test drives the arm with ^C on a
+     real blocking read.
+
+     THE KERNEL'S TRACE LINES ARE NOT DELIVERED.  The ring also
+     carries the scheduler's own instrumentation -- a line per
+     kernel-slot and stack move -- which upstream's message
+     buffer never held, and the notes the kernel keeps off the
+     console: a refused fork, a refused heap grow, a console
+     switch.  Each such line opens with a marker byte, and this
+     device steps over it whole, so a reader is neither handed
+     nor woken by it; dmesg(8) still shows the whole ring.
+     Delivered, the instrumentation reached syslogd(8) about once
+     a second and kept the root file system busy, and the notes
+     reached root's terminal as kern.crit.  apple/fgx#482.
+
+     Upstream's FIOASYNC, FIONREAD and TIOCSPGRP are not
+     implemented.  syslogd(8) uses none of them: it opens the
+     device read-only, puts it in a select(2) mask and reads it.
+
+HISTORY
+     /dev/klog appeared in 4.2BSD.

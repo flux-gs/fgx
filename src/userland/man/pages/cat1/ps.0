@@ -1,0 +1,86 @@
+
+
+PS(1)               UNIX Programmer's Manual                  PS(1)
+
+
+
+NAME
+     ps - process status
+
+SYNOPSIS
+     ps
+
+DESCRIPTION
+     _P_s prints one line per process, a synthetic line for the
+     kernel itself (pid 0), and a summary of the bank-0 stack
+     arena.  It takes no options: FGX has no /dev/kmem and no
+     proc filesystem, so the kernel hands the whole table over
+     through one system call and _p_s formats it.
+
+     The columns are:
+
+     PID    process id.
+
+     PPID   parent process id.
+
+     ST     state.  R runnable or running, S sleeping, T
+            stopped, Z zombie (exited, not yet reaped).
+
+     STK    pages of bank-0 stack RESERVED for this process,
+            guard page included.  This is what consumes the
+            arena: a process gets what its binary's header asks
+            for, plus a page for the argv/envp frame, plus the
+            guard.
+
+     HWM    bytes of that reservation the process has actually
+            TOUCHED at its deepest so far.  This is a
+            measurement, not an estimate: the kernel fills every
+            stack it carves with a known word, and _p_s asks it
+            for the lowest address where that word is gone.  A
+            dash means the region lies outside the arena and was
+            never filled.
+
+     HEAP   bytes of C heap this process had left at its
+            TIGHTEST -- again a measurement, not an estimate.
+            The heap is the tail of the process's 64 KB data
+            bank, grown by sbrk(2), and the kernel keeps a
+            high-water mark of the break alongside the break
+            itself.  The peak rather than the current figure,
+            because a process that peaks while it starts up and
+            then frees reads as idle afterwards.  A dash means
+            the process has no data bank of its own.
+
+     CMD    command name.
+
+     The last line reports the stack arena as a whole, counted
+     from the allocator's own page bitmap rather than summed
+     from the rows above it:
+
+           stack arena: 25/147 pages used
+
+     Bank-0 stack is the scarcest thing on the machine -- every
+     task's stack must live in bank 0 because the 65816 stack
+     pointer is 16 bits -- so STK and HWM are the columns to
+     read when a spawn fails for want of room.  HEAP is the
+     other end of the same trade: moving a large local off the
+     stack puts it in the data bank, where it comes out of this
+     number.
+
+DIAGNOSTICS
+     A process whose HWM approaches its reservation is close to
+     its guard page; entering the guard page is logged by the
+     kernel and can be read with dmesg(1) ("GUARD stkhwm").  A
+     process whose reservation is many times its HWM is holding
+     arena that nothing else can use.
+
+BUGS
+     Every process is listed; there is no way to select, sort or
+     widen the output.
+
+     The high-water mark understates by however much a program
+     happens to write the fill word into its own deepest frame.
+
+SEE ALSO
+     dmesg(1), kill(1), vmstat(1)
+
+FGX                          FGX-native                          1

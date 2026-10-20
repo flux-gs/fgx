@@ -1,0 +1,12 @@
+{
+ "name": "ensoniqplaybig",
+ "description": "ensoniqplay multi-bank streaming: an 88200-byte raw 8-bit PCM (4.0s at 22050 Hz) has a streaming pool > 64KB, so the mm_alloc pool spans multiple banks -- exercising the 24-bit cross-bank pool pointer (strm_copy LDAL + the far-store load) at a scale M2's sub-64KB tests never reached.  'finished after 2' (200-299 ticks; 88200/22050 = 4.0s = ~240 ticks) proves the whole file streamed across bank boundaries.",
+ "command": "ensoniqplay /etc/big.pcm",
+ "timeout_s": 180,
+ "exit_on_prompt": true,
+ "stage_files": [ { "host": "tools/mame_test/fixtures/big.pcm", "prodos_dir": "/FGX/etc", "name": "big.pcm", "replace": false } ],
+ "expect": {
+  "screen_contains": [ "88200 bytes @ 22050 Hz (freq 429), streaming", "finished after 2", "fgx#" ],
+  "screen_lacks": [ "BRK", "PANIC", "out of memory", "timed out", "Fatal" ]
+ }
+}

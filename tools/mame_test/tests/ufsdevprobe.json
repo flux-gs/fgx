@@ -1,0 +1,39 @@
+{
+ "name": "ufsdevprobe",
+ "description": "The FILESYSTEM asserted through DEVICE FILES -- the fourth and last of ufsprobe.mod's mutually exclusive gates, split out of ufswprobe at UFS 1.13a and the first split forced by the size of the PROBE module rather than of the module under test (measured: ufsprobe.mod at kernel.ufswprobe = 1 is 64,295 bytes of 65,536, so the next case of any size does not link whichever file it goes in).  CASES 1300-1335.  What they have to catch is a device number written to the WRONG HALF of di_addr[0], which is invisible by every other means: a PDP-11 daddr_t is stored high word first and 2.11BSD overlays the address array with `u_short i_dummy; dev_t i_rdev`, so the number is the SECOND 16-bit word on the platter and the first is zero -- and a kernel that wrote the high word would read the high word and agree with itself perfectly.  Case 1316 reads the low word off the platter RAW, under the buffer cache, and 1317 requires the high word to be zero.  Cases 1318-1324 are checkalias: two names with one device number are two INODES and ONE vnode, both ends marked VALIASED, because the driver's last close is decided by counting the set and two independent vnodes make that count wrong in the direction that resets hardware under a live user.  Case 1329 is the other half of the same key -- a BLOCK device with the same number is a different device, since the major number spaces are separate.  Cases 1330-1334 unlink a device file and require its i-list slot back, which is the case plain spec_vnodeops could not pass: its inactive and reclaim slots are spec_nullop, so the inode would never be freed and would stay on the hash after the vnode was recycled -- apple/fgx#175's shape reached from a device file.  NOTHING OPENS A DRIVER: spec_read and spec_write on a character device still panic, because the switch that maps a major number to a driver is 1.13b.  It writes to inode 11 and the nodes it makes, checks the slot is FREE first so a volume whose layout changes stops the probe rather than being overwritten, and puts every slot back.  CASES 1370-1380, THE DOUBLE-INDIRECT TRUNCATE (apple/fgx#193), and they are here rather than in the truncate gate because ufs_wprobe has 571 bytes of its 64 KB module bank left (measured) and this case costs 1,864.  Of the three gates that build a struct mount and can therefore call ufs_itrunc at all, this one has both the room and an established write-and-restore discipline.  WHAT IT COVERS IS THE LEVEL THAT NOTHING ELSE REACHES: every other truncate case in the tree stays at recursion level 0, and level 0 is exactly where a wrong row stride cannot be seen, because ufs_indirtrunc copies the block it is walking into indircopy[level] at offset level*1024 and any stride multiplies to zero there.  fcc emitted a stride of 512 (apple/fgx#192), so at level 1 the copy landed in the MIDDLE of level 0's row -- and the block free list is built FROM that copy.  A file is built on inode 40 (checked free first) with holes everywhere except logical 260 and logical 516, costing five blocks: two data blocks, the two level-0 indirects naming them, and the double indirect above both.  1375 requires exactly five off the free list, 1377 requires ufs_itrunc's own count to say five, and 1378 requires sb_tfree to come back to where it started.  THE SECOND CHILD IS NOT DECORATION AND THE FIRST DRAFT DID NOT HAVE IT: with only logical 260 written the level-1 block has one live entry at index 0, ufs_indirtrunc scans downward and recurses on it LAST, and a recursion that clobbers the parent's copy is never read back -- measured by aliasing indircopy[level] onto indircopy[0] by hand, which is #192's collision exactly, and watching the case stay GREEN.  Logical 516 is 260 + NINDIR, so it lands in child 1: the walk now recurses at index 1 and must still read index 0 correctly afterwards, and the same alias turns 1377 red.  Aiming the write at logical 4 instead reports 1373, which is the control that says the case reaches the double indirect at all rather than passing on a tree it never built.  AND THE ORACLE JUDGES WHAT IT LEAVES BEHIND.  `ufsfsck_check.py' fscks every staged spindle once the machine has finished with it, which is the campaign plan's phase-1 arm 1 -- \"mount -t ufs survives a full read/write exercise; host fgxfs fsck clean\".  It works even though this probe RESTORES the volume, because the restore is SEMANTIC rather than byte for byte: a completed run puts the free list and the counts back where it found them, so anything the exercise damaged OUTSIDE what it meant to touch still shows.  Measured on two completed runs: 305 used, 3,725 free, 1,020 free inodes, identical to a fresh mkfs.  IT IS NOT SELF-SUFFICIENT and must not be read as though it were -- a run that PANICS before doing anything leaves a clean volume too, which is exactly what apple/fgx#272 did -- so this arm is worth something only beside the `ufs: ok' above it and tryprobe.sh's exit status (apple/fgx#273).",
+ "command": "ls /",
+ "timeout_s": 30,
+ "extra_hards": [
+  "disk/ufsscratch.fs"
+ ],
+ "expect": {
+  "screen_contains": [
+   "ufs: ok",
+   "fgx#"
+  ],
+  "screen_lacks": [
+   "ufs: BROKEN",
+   "ufs: vfs.mod not loaded",
+   "BRK",
+   "PANIC",
+   "GUARD stkhwm"
+  ],
+  "klog_lacks": [
+   "fs: /dev SELF-TEST FAILED"
+  ],
+  "check_script": "ufsfsck_check.py"
+ },
+ "requires": {
+  "config": {
+   "kernel.ufsdevprobe": "1"
+  },
+  "reason": "the device-file half of the filesystem probe is compiled into ufsprobe.mod only at kernel.ufsdevprobe = 1, and it is a SEPARATE GATE from the other three because the four do not fit in one 64 KB module bank -- see cfg/system.cfg for the measurement.  It is off by default because it WRITES to a disk on the boot path.  Run it with `sh tools/tryprobe.sh ufsdevprobe`."
+ },
+ "memory_regions": [
+  {
+   "name": "klog",
+   "ptr_addr_hex": "CFG_DP_KKERN+B0",
+   "len": 4096
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "name": "ldorder",
+ "description": "Shared libc SP4: ldload with no conf file loads libc alone, silently; a conf with a library listed above one it needs refuses that one naming both, names a missing file and a line with no major, and loads the rest.",
+ "command": "/sbin/ldload /nonexistent; /sbin/ldload /testbin/ld.so.conf.bad; /testbin/lddig libcurses",
+ "timeout_s": 240,
+ "expect": {
+  "screen_contains": ["ldload: libcurses needs libtermlib, which is listed after it", "ld.so: libnope.so.1: not found", "line 6: expected", "ldload: libtermlib.so.1.0", "LDD FAIL libcurses not resident"],
+  "screen_lacks": ["/nonexistent:", "PANIC", "BRK"]
+ }
+}

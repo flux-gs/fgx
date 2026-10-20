@@ -1,0 +1,4 @@
+{"name":"sbrktest",
+ "description":"The per-task private sbrk bank: break grows zero-filled and survives. Pair 1 of the fork snapshot.",
+ "command":"/testbin/sbrktest","timeout_s":120,
+ "expect":{"screen_contains":["SBTEST OK"]}}

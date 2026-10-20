@@ -1,0 +1,128 @@
+
+
+LOGIN(1)            UNIX Programmer's Manual            LOGIN(1)
+
+
+
+NAME
+     login - authenticate and start a session
+
+SYNOPSIS
+     login [-T type] [ name ]
+
+DESCRIPTION
+     Login authenticates a user against /etc/passwd and, on
+     success, replaces itself with that user's shell.  It expects
+     the terminal line on file descriptors 0, 1 and 2, which is
+     how getty(8) invokes it; the optional name argument is the
+     login name getty has already read and echoed.
+
+     Without an argument (or on any retry) login prompts:
+
+          login:
+
+     and then, always:
+
+          Password:
+
+     The password is read with echo off.  A password is asked for
+     even when the account does not exist -- answering "no such
+     user" immediately would tell an attacker which names are
+     real.  Three attempts are allowed; each failure prints
+
+          Login incorrect
+
+     and re-prompts.  After the third, login exits 1 and init(8)
+     starts a fresh getty on the line.
+
+     An empty line, or a login name longer than 63 characters, is
+     discarded and the prompt repeated.  This costs no attempt: it
+     is a malformed line, not a failed authentication.  Ten such
+     lines in one session do end it, so holding Return down cannot
+     hold the terminal open forever -- upstream relies on its
+     alarm(3) login timeout for that, which this port does not
+     have.
+
+     On success login sets the group and user id from the passwd
+     entry, chdir()s to the home directory (failure is not fatal),
+     and execs the shell named there -- /bin/sh if the field is
+     empty -- with argv[0] set to a hyphen followed by the last
+     component of the shell's path, e.g. "-sh".  The leading
+     hyphen is what makes it a login shell.
+
+ENVIRONMENT
+     The exec'd shell receives exactly five variables; nothing is
+     inherited from getty:
+
+          PATH=:/bin:/usr/bin:/sbin
+          HOME       the passwd entry's directory field
+          SHELL      the shell being exec'd
+          USER       the login name
+          TERM       the type given by -T if there is one;
+                     otherwise the ty_type field for this line
+                     from /etc/ttys, or vt100 if the line is not
+                     listed there.  The pty slaves are listed as
+                     fgxpty, which is right for a session from the
+                     FGX console and wrong for anything else --
+                     hence -T, which telnetd(8) fills in from the
+                     client's own TERMINAL-TYPE negotiation and
+                     passes down through getty(8)
+
+SECURITY
+     Root may log in only on a line marked secure in /etc/ttys
+     (see ttys(5)).  A line that is not listed in /etc/ttys at all
+     is not treated as insecure -- refusing root on every line the
+     file does not mention would lock the only account out of
+     anything newly added.  The pty slaves are therefore listed
+     explicitly: ttyp0 is secure and ttyp1 is not, which is what
+     makes this gate a path that can be tested rather than code
+     that has never run.
+
+     Passwords are stored hashed, in the tagged form
+
+          $f$xy$hhhhhhhh
+
+     where xy is a two-character salt and hhhhhhhh is eight hex
+     digits.  Login dispatches on the $ tag to recover the salt,
+     never on the string's length, so a second hash format can be
+     added later without changing stored entries.
+
+     THE THREAT MODEL IS DELIBERATELY LIMITED.  This hash is not
+     DES; see crypt(3).  It stops a shoulder-surfer and a casual
+     reader of /etc/passwd.  It is not a defence against an
+     attacker who has the file and wants the password.
+
+     An account whose password field is empty cannot be logged
+     into at all.  Traditional BSD treats an empty field as "no
+     password required"; FGX fails closed instead, so a truncated
+     or half-written /etc/passwd cannot open an account.
+
+DIAGNOSTICS
+     login: /bin/tcsh: out of memory, falling back to /bin/sh
+          The shell named in the passwd entry could not be
+          exec'd for want of bank-0 stack arena, so login retried
+          with /bin/sh, which costs 12 pages against tcsh's 55.
+          The session starts; it is simply not the requested
+          shell.  Losing the shell would otherwise drop the user
+          back to a login prompt they cannot get past.  The
+          fallback is skipped when /bin/sh is already the shell
+          that failed, so this message never names /bin/sh.
+
+FILES
+     /etc/passwd           user database
+     /etc/ttys             line database (TERM, secure flag)
+
+SEE ALSO
+     getty(8), telnetd(8), ttys(5), passwd(5), crypt(3)
+
+BUGS
+     There is no lastlog, wtmp or utmp, so nothing records who
+     logged in or when, and who(1) has nothing to read.  There is
+     no login timeout: a prompt left unanswered waits forever.
+     Quotas, login classes and supplementary groups do not exist
+     on FGX and the corresponding upstream code is deleted rather
+     than stubbed.
+
+
+
+Printed 7/20/86                                                1

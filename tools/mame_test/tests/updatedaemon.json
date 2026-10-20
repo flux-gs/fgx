@@ -1,0 +1,12 @@
+{
+  "name": "updatedaemon",
+  "description": "THE MACHINE SYNCS ITSELF, asserted by an independent fsck of the volume it wrote.  apple/fgx#389.  Nothing on a running FGX called sync(2): a dirty buffer goes out when something needs the buffer back and a superblock when its allocation batch of fifty fills, and neither of those is a clock.  The boot allocates ONE block -- init creates /etc/utmp and login writes a record past EOF -- which fills no batch, so a volume powered off at the shell prompt recorded that block as free while an inode owned it, and apple/fgx#332 measured the consequence: feed that image back, create one more file, and the SAME BLOCK goes to a second inode.  update(8) is BSD's answer and now FGX's, started from /etc/rc.  THE COMMAND TYPES NO `sync' AND MUST NOT: every other manifest that fscks what FGX wrote ends its command in one, which is the workaround this replaces.  `sleep 45' is the assertion's clock -- it holds the machine past the daemon's thirty-second tick -- and `ls /' before it is only there to prove the shell is alive.  MUTATION-VERIFIED: take `/sbin/update &' out of /etc/rc and ufsfsck_check reports a block on the free list and owned by an inode.",
+  "command": "ls /; sleep 45",
+  "boot_s": 45,
+  "timeout_s": 90,
+  "expect": {
+    "screen_contains": ["etc", "sbin", "fgx#"],
+    "screen_lacks": ["PANIC", "BRK", "not found"],
+    "check_script": "ufsfsck_check.py"
+  }
+}

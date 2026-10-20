@@ -1,0 +1,16 @@
+{
+ "name": "ldctl_race",
+ "description": "Shared libc SP4: two first users: the second waits until the first is killed, then takes the row over with its banks.",
+ "command": "/testbin/ldctl race",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDC race ok"
+  ],
+  "screen_lacks": [
+   "LDC FAIL",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

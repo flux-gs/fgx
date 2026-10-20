@@ -1,0 +1,10 @@
+{
+  "plugin": {
+    "name": "fgxdebug",
+    "description": "FGX Apple IIgs debug inspector",
+    "version": "0.1.0",
+    "author": "FGX",
+    "type": "plugin",
+    "start": "false"
+  }
+}

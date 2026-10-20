@@ -1,0 +1,13 @@
+{
+  "name": "scrollrgn",
+  "description": "A SCROLL MOVES THE CELLS WITH THE PIXELS, IN A REGION AND DOWNWARD TOO (apple/fgx#535).  /testdata/scrollrgn.txt clears the screen, writes 24 lines whose lengths are 1..24, sets the scroll region to rows 5-12 and scrolls it up three times with line feeds at its bottom, scrolls it down twice with RI at its top, then resets the region and scrolls the whole screen down with RI at row 1.  conpaint_check.py then compares the SHR pixels with the CharBuf cell by cell.  THE LENGTHS ARE WHAT MAKE IT DISCRIMINATE: the check sees ink against blank, and before the fix a region's pixels moved while its cells stayed, so each moved row's pixels carried its neighbour's length -- a column of cells inked on one side and blank on the other.  Every row differing in length from the next is what turns a stale row into a mismatch.  A probe, not a gate test.",
+  "command": "cat /testdata/scrollrgn.txt",
+  "timeout_s": 60,
+  "memory_regions": [
+    {"name": "shr", "addr_hex": "012000", "len": 32000, "frame": 240},
+    {"name": "vc0char", "addr_hex": "030000", "len": 8000, "conbank": true, "frame": 240},
+    {"name": "toprow", "addr_equ": "KFAR_VT_STATE+VT_TOP_ROW", "len": 2, "farbank": true, "frame": 240},
+    {"name": "rstate", "addr_equ": "KFAR_VT_STATE+VT_RENDER_STATE", "len": 1, "farbank": true, "frame": 240}
+  ],
+  "expect": {"screen_lacks": ["PANIC", "BRK"], "check_script": "conpaint_check.py"}
+}

@@ -1,0 +1,11 @@
+# Every path that takes or drops a text reference, then a quiet moment:
+# spawn and exit, a background child outliving a foreground one, fork then
+# exec, an exec that fails, and a subshell that runs on, without exec, in its
+# parent's text.
+for i in 1 2 3 4 5 6 7 8 9 10; do /bin/true; done
+/bin/sleep 5 &
+/bin/sleep 8
+sh -c /bin/true
+( exec /nonexistent ) 2>/dev/null
+( /bin/sleep 30; : ) &
+A=TC; echo $A DONE

@@ -1,0 +1,29 @@
+{
+ "name": "ctrlc",
+ "description": "^C at a bsh prompt is an INTERRUPT, not a character.  A nested `sh` is started (it must OUTLIVE the injection, or the harness ends the run at the first returned prompt), a raw $03 is injected at frame 400, and `pwd` is typed at frame 900 with NO Enter in between -- so the two share one line buffer.  If the $03 was inserted as data the shell runs '<^C>pwd', which fails; if it was consumed as SIGINT the buffer is empty and pwd prints /root.  /root cannot come from anywhere else here: the nested shell's prompt is '#' and the outer one is 'fgx#'.  The screen_lacks list is the other half, and 'cannot execute' is in it because that is what bsh ACTUALLY says for '<^C>pwd' -- the mutation run printed it while 'not found' stayed clean, so asserting only the latter would have caught nothing -- it catches the shell trying to EXECUTE a command with a control byte glued to its front.  Avoid quotes in post_commands; they do not survive the paste, which cost a run that looked like a kernel failure.  GOES RED WITHOUT THE FIX: FGX never ran 2.11BSD ttyopen()'s process-group half (tty.c:650-660), so tty[0] had no foreground group; the heartbeat converts ^C to SIGINT only for a line that HAS one, and with none the raw $03 reached the shell as ordinary input.  Compared against real BSD, where ^C on an empty sh line echoes and returns a fresh prompt.  Control-verified: with no injection the screen shows ONE '#', with it TWO -- the second is the interrupt's fresh prompt.",
+ "command": "sh",
+ "exit_on_prompt": false,
+ "timeout_s": 120,
+ "raw_inject": [
+  [
+   400,
+   3,
+   0
+  ]
+ ],
+ "post_commands": [
+  "pwd"
+ ],
+ "post_gap_frames": 900,
+ "expect": {
+  "screen_contains": [
+   "/root"
+  ],
+  "screen_lacks": [
+   "cannot execute",
+   "not found",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "vmstat",
+  "description": "vmstat(1), the 2.11BSD port over sysctl(3) (apple/fgx#529).  Two lines of the default report -- the first since boot, the second the difference of two readings a second apart -- then -s's sums and -m's kernel memory tables.  The default header and both data lines prove the five leaves it reads (vm.cp_time, vm.sum, vm.meter, kern.boottime, kern.clockrate) answered: getleaf() exits with `cannot read' on any refusal.  A probe, not a gate test.",
+  "command": "sh",
+  "post_commands": [
+    "/usr/fgx/bin/vmstat 1 2; /usr/fgx/bin/vmstat -s; /usr/fgx/bin/vmstat -m"
+  ],
+  "post_gap_frames": 600,
+  "timeout_s": 300,
+  "exit_on_prompt": false,
+  "expect": {
+    "screen_contains": [" r b w   avm   fre  ti tc  pi  po  fr  fc  ov  in  sy  cs us sy id", "system calls", "cpu context switches", "MM     TOTAL="],
+    "screen_lacks": ["cannot read", "Time makes no sense", "PANIC", "BRK"]
+  }
+}

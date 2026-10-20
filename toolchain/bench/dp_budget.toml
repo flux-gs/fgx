@@ -1,0 +1,24 @@
+# toolchain/bench/dp_budget.toml — the PER-TASK USER direct-page page that
+# fcc-compiled code shares with its crt0/libc runtime. The FGX kernel and GS/OS
+# live in SEPARATE bank-0 DP pages (see docs/memory-map.md); they are listed
+# below as informational-only and never collide with user code.
+# fcc uses ZERO user DP today (locals are stack-relative, scratch is absolute).
+# Tier 2/3 will claim ranges here; fbench flags any overlap within THIS page.
+
+[[reservation]]
+owner = "fcc_future_imgregs"
+range = [0xC0, 0xDF]   # 16 i16 imaginary regs = $C0..$DF inclusive ($DF = IMG7 hi byte)
+note  = "RESERVED for the Tier-3 imaginary-register pool (matches reference backend); unused today"
+
+[[reservation]]
+owner = "fcc_future_scratch"
+range = [0xE0, 0xEF]
+note  = "Tier-2/3 lowering scratch (reference $E0-$EF); unused today"
+
+# --- informational: SEPARATE pages, never overlap user code ---
+[[informational]]
+owner = "fgx_kernel_dp"
+note  = "kernel DP page is distinct from the user task page — see docs/memory-map.md; fill exact range when sourced"
+[[informational]]
+owner = "gsos_firmware_dp"
+note  = "GS/OS+firmware DP — separate page"

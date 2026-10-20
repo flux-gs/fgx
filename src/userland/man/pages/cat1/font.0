@@ -1,0 +1,26 @@
+
+
+FONT(1)             UNIX Programmer's Manual                FONT(1)
+
+
+
+NAME
+     font - list, load, or revert the console bitmap font
+
+SYNOPSIS
+     font [ name | default ]
+
+DESCRIPTION
+     With no argument, _f_o_n_t lists the fonts in the font direc-
+     tory plus the built-in default, marking the active one with
+     an asterisk.  With a _n_a_m_e, the corresponding .FNT file is
+     loaded (the name is case-insensitive).  The literal _d_e_f_a_u_l_t
+     reverts to the built-in font.
+
+FILES
+     /lib/fonts/*.FNT
+
+SEE ALSO
+     color(1)
+
+FGX                          FGX-native                          1

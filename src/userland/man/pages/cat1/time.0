@@ -1,0 +1,32 @@
+
+
+
+TIME(1)             UNIX Programmer's Manual                TIME(1)
+
+
+
+NAME
+     time - time a command
+
+SYNOPSIS
+     time command [ arguments ]
+
+DESCRIPTION
+     The given command is executed (searched for along $_P_A_T_H);
+     after it is complete, _t_i_m_e prints the elapsed time during
+     the command to the standard error stream, in seconds and
+     tenths, and exits with the command's exit status.
+
+     This is the 2.11BSD _t_i_m_e adapted to FGX: there is no per-
+     process CPU accounting, so only the real (wall-clock) line
+     is printed -- the user and sys lines do not exist here.
+     Timing uses the 60 Hz system tick counter.
+
+BUGS
+     Elapsed time is measured in ticks; anything under a
+     sixtieth of a second reads as 0.0.
+
+SEE ALSO
+     date(1), sleep(1)
+
+FGX                        2.11BSD port                          1

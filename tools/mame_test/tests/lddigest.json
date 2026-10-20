@@ -1,0 +1,20 @@
+{
+ "name": "lddigest",
+ "description": "Shared libc SP4: the machine binder's digest of dynsodyn's and dynsomisdyn's binding (LD_BIND_DIGEST: each patched site's word, each bank as library and segment, and the count) equals fgx_bind --digest's for the same libraries, and curssodyn's, taken through a first-use load of termlib and curses.  fgx_bind places the boot set, libc and /etc/ld.so.conf's libfgx, first, as the machine has them resident.  Control: a host digest made with no ld.so.conf (fgx_bind --conf of an empty file) puts curssodyn's termlib and curses 140 bytes higher, and `LDB same3' becomes `differ'.",
+ "command": "sh /testdata/lddigest",
+ "timeout_s": 180,
+ "expect": {
+  "screen_contains": [
+   "LDB same1",
+   "LDB same2",
+   "LDB same3"
+  ],
+  "screen_lacks": [
+   "differ",
+   "n=0",
+   "ld.so:",
+   "PANIC",
+   "BRK"
+  ]
+ }
+}

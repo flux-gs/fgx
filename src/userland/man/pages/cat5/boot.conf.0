@@ -1,0 +1,58 @@
+
+
+BOOT.CONF(5)         UNIX Programmer's Manual        BOOT.CONF(5)
+
+
+
+NAME
+     boot.conf - stage-2 boot loader configuration
+
+DESCRIPTION
+     The file /etc/boot.conf is read by the stage-2 loader before
+     the kernel starts.  Blank lines and text from a `#' to the end
+     of line are ignored.  Each directive is dispatched on its
+     first letter, in either case:
+
+     kernel path
+          The kernel image to load, e.g. `kernel /fgxunix'.  Read
+          in a first pass over the file; the path may be up to 64
+          bytes.
+
+     region bb oooo ssss
+          Claim a fixed memory region: bank, offset and size, in
+          hexadecimal.
+
+     bank bb
+          Claim a whole bank, in hexadecimal.
+
+     Any other directive is SKIPPED rather than rejected.  That is
+     deliberate: an older boot.conf carrying a `user-banks' line
+     still boots, instead of double-claiming a handle the memory
+     manager has already placed.
+
+     Only the first 512 bytes of the file are read.
+
+     THE FILE IS OPTIONAL.  Without it the loader claims nothing
+     and loads the kernel from its built-in default path, which is
+     what the shipped `kernel /fgxunix' line already names -- so
+     deleting the file changes nothing.
+
+     A region or bank claim is rarely right.  Both the kernel and
+     the rest of the operating system are placed dynamically by the
+     memory manager, so there is no fixed bank to reserve.  Bank-0
+     working RAM -- the kernel stacks, the block staging buffer and
+     the task stack arena -- is claimed by the loader's own Tool
+     Note 27 claim, not from this file, so a `region' covering bank
+     0 duplicates a claim already made.
+
+     The parser is src/boot/stage2.s.
+
+FILES
+     /etc/boot.conf
+
+SEE ALSO
+     init(8), modload.conf(5), fgxunix(5)
+
+
+
+Printed 8/8/26                                                 5
