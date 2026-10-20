@@ -100,18 +100,26 @@ ENOMEM          EQU     12
 RD_CurDiskSize  EQU     $E11642
 RD_DiskHandles  EQU     $E11646
 RD_FormatFlag   EQU     $E1164A
-RD_BP_MIN       EQU     $0036
-RD_BP_MAX       EQU     $0037
-RD_DEFAULT_BYTES EQU    $00100000
-RD_MAX_BYTES    EQU     $00200000
+; ProBoot.src's CreateRAM5 (GS/OS 6.0.1, GS.OS/Boot) names these two:
+RD_NumBanks     EQU     $E11624         ; "Number of 64K banks in machine"
+RD_MaxDiskParm  EQU     $E102F7         ; "inside the Battery RAM buffer (max
+                                        ;  RAM5 size, N*32K)"
+; THE RAM DISK HAS ONE FIXED DEVICE INDEX, row 8, so its node is always
+; /dev/ram0 (tools/ninja/gen.py mints `b /dev/ram0 8').  A block minor IS the
+; row.  Dev_Init fills SmartPort units from row 0 upward, and rows 0..7 are the
+; /dev/sd0..sd7 nodes, so row 8 is the first one no disk node names; a machine
+; with more than eight SmartPort units takes it, and the RAM disk is then not
+; registered.  Not a higher row: a mount on rows 29..31 crashes the machine
+; (flux-gs/fgx#4), and 8 is clear of it.
+RD_DEVIDX       EQU     8
 
 ;------------------------------------------------------------------------------
 ; Kernel statics this module reads DBR-relatively (DBR = kernel bank
 ; throughout).  GENERATED from the kernel build listing every build, so they
 ; cannot drift: _rdBufPtr/_rdSizeBytes/_rdBlocks/_rdPresent stayed kernel-side
-; because the dispatch stubs report on them, and _kFgxUserID / _fsDirBuf /
-; _diskStates / _blkCurHi / _blkCurBufBank / _blkSrcPool / _kBlkTabBase are the
-; kernel's own.
+; because the dispatch stubs report on them, and _fsDirBuf / _diskStates / _blkCurHi /
+; _blkCurBufBank / _blkSrcPool / _kBlkTabBase / ROMVersion are the kernel's
+; own.
 ;------------------------------------------------------------------------------
                 PUT     kernel_exports.s
 
@@ -158,8 +166,8 @@ ramdisk_ops     DA      _RAM_ReadBlock-$050000          ; +0 read
 ; mod_init - Mod_Load JSLs here with DBR = KERNEL bank and MX %00.
 ;
 ; Does what RamDisk_Init did, then returns C=1 so the load counts as a success.
-; RamDisk_Init's own C was always don't-care (a missing RAM disk is non-fatal),
-; and that stays true: the module loads even when NewHandle fails.
+; RamDisk_Init's own C is don't-care (a missing RAM disk is non-fatal): the
+; module loads whether or not the machine has a RAM disk.
 ;==============================================================================
 mod_init        MX      %00
                 JSR     RamDisk_Init
@@ -169,23 +177,31 @@ mod_init        MX      %00
                 MX      %00
 
 ;==============================================================================
-; RamDisk_Init - detect-or-create the /RAM5 buffer and log the outcome.
+; RamDisk_Init - take up the RAM disk the Control Panel set up, if there is one.
 ;
-; Boot entry point (called from main.s right after Toolbox_GetOwnID, so
-; _kFgxUserID is valid for RamDisk_Create's NewHandle).  Tries to adopt a
-; pre-existing firmware/GS-OS RAM-disk buffer; if none, creates an FGX-owned
-; one.  Emits a dmesg line:
+; THE RAM DISK IS THE ROM'S, sized by BRAM (Control Panel, "RAM disk"), and FGX
+; never makes one BRAM did not ask for.  The ROM creates it at power-up and
+; keeps it, formatted, across soft reboots.  So, as GS/OS's driver does
+; (ram5.aii Startup: "see if there is a RAMdisk installed or not"):
 ;
-;   ramdisk: NNNN blocks @ bank $XX (adopted)   - adopted a pre-existing buffer
-;   ramdisk: NNNN blocks @ bank $XX (created)   - allocated our own buffer
-;   ramdisk: none                                - NewHandle failed (non-fatal)
+;   1. adopt the buffer the ROM left at the bank-$E1 rendezvous;
+;   2. if there is none, RamDisk_RomMake has the ROM make it -- only where
+;      ProBoot's CreateRAM5 does, the ROM 3 8 MB case -- and step 1 runs again;
+;   3. RamDisk_Format puts down an empty ProDOS volume if it never has been
+;      formatted, or holds only an empty Pascal volume (NukeIfEmptyPascal);
+;   4. register it as device row RD_DEVIDX (/dev/ram0).
+;
+; One dmesg line:
+;
+;   ramdisk: NNNN blocks @ bank $XX (adopted)   - the ROM's disk, already there
+;   ramdisk: NNNN blocks @ bank $XX (made)      - the ROM made it just now
+;   ramdisk: none                                - BRAM asks for no RAM disk
 ;
 ; where NNNN = _rdBlocks (decimal) and $XX = the buffer's bank byte
-; (_rdBufPtr+2).  Non-fatal: always returns to the caller; its own C is
-; don't-care (callers must not branch on it).
+; (_rdBufPtr+2).
 ;
 ; Register/flag contract:
-;   In:   none.  _kFgxUserID must be valid (precondition of RamDisk_Create).
+;   In:   none.
 ;   Out:  P (incl. M/X widths) restored via PHP/PLP; A/X/Y clobbered;
 ;         _libcTmp0 clobbered (holds the suffix-label address for the log).
 ; Reference: _fs_logMount (src/drivers/fs/fs.s) - same Kern_Log* compose style.
@@ -197,31 +213,22 @@ RamDisk_Init
                 MX      %00
 
                 JSR     RamDisk_DetectExisting
-                BCC     @rdi_create             ; nothing to adopt -> create
-                ; Adopted: suffix = " (adopted)".
+                BCC     @rdi_make               ; none at the rendezvous
                 LDA     #@rdi_sfx_adopted
                 STA     _libcTmp0
                 BRA     @rdi_present
 
-@rdi_create     JSR     RamDisk_Create
-                BCC     @rdi_none               ; NewHandle failed -> "none"
-                ; Created: suffix = " (created)".
-                LDA     #@rdi_sfx_created
+@rdi_make       JSR     RamDisk_RomMake
+                JSR     RamDisk_DetectExisting
+                BCC     @rdi_none               ; BRAM asks for none
+                LDA     #@rdi_sfx_made
                 STA     _libcTmp0
-                ; fall through to the shared present-path log.
 
-;--- Shared present-path: lay down a ProDOS volume (no-op if already
-;    formatted, e.g. an adopted GS/OS disk), then log.  RamDisk_Format
-;    early-returns on RD_FormatFlag==$FFFF, so calling it unconditionally on
-;    the present path is safe; its C is don't-care here (a write failure just
-;    leaves the buffer unmountable - still non-fatal for boot).  NOT reached
-;    on the @rdi_none (allocation-failed) path.
-@rdi_present    JSR     RamDisk_Format
+@rdi_present    JSR     RamDisk_NukeIfEmptyPascal
+                JSR     RamDisk_Format
 
-                ;--- Register the RAM disk in _devTable so the block layer +
-                ;    mount enumerator can see it (Task 4.1).  Non-fatal: if the
-                ;    device table is full it simply isn't registered (its C is
-                ;    don't-care).  NOT reached on the @rdi_none path. ---
+                ;--- Register it as row RD_DEVIDX.  Non-fatal: a row already
+                ;    taken leaves it unregistered (its C is don't-care). ---
                 JSR     RamDisk_RegisterDev
 
             ;--- Emit the dmesg line.  Byte-for-byte what the in-kernel
@@ -255,14 +262,14 @@ RamDisk_Init
             JSL     SYS_KCALL               ; XX (buffer bank, 2 hex digits)
             LDA     _libcTmp0               ; suffix stashed above (DP)
             LDX     #KSVC_LOGSTRNE
-            JSL     SYS_KCALL               ; " (adopted)" / " (created)"
+            JSL     SYS_KCALL               ; " (adopted)" / " (made)"
             LDX     #KSVC_LOGEOL
             JSL     SYS_KCALL
             PLB                             ; DBR = kernel bank again
             PLP
             RTS
 
-;--- Allocation failed: "ramdisk: none" (non-fatal). ---
+;--- No RAM disk: "ramdisk: none". ---
 @rdi_none   PHB
             PHK
             PLB                             ; DBR = this module's bank
@@ -278,15 +285,16 @@ RamDisk_Init
 @rdi_pfx         ASC    'ramdisk: ',00
 @rdi_mid         ASC    ' blocks @ bank $',00
 @rdi_sfx_adopted ASC    ' (adopted)',00
-@rdi_sfx_created ASC    ' (created)',00
+@rdi_sfx_made    ASC    ' (made)',00
 @rdi_nopfx       ASC    'ramdisk: none',00
 
 ;==============================================================================
 ; RamDisk_RegisterDev - inject the RAM disk into _devTable / _diskStates.
 ;
-; Finds the first free _devTable slot (Dev_Init filled 0..N-1 with the boot bus
-; + SmartPort units; N..31 are still DEV_CLASS_EMPTY) and populates it for the
-; RAM disk so the block layer + mount enumerator can see it:
+; Takes _devTable row RD_DEVIDX, the last one (Dev_Init fills rows 0..N-1 with
+; the boot bus and SmartPort units from the bottom), so the RAM disk is always
+; the same block minor and /dev/ram0 always names it, and populates it so the
+; block layer can see it:
 ;
 ;   _devTable[idx]:  DEV_Class = DEV_CLASS_RAM
 ;                    DEV_Flags = DEV_FLAG_ONLINE
@@ -305,9 +313,8 @@ RamDisk_Init
 ;
 ; Register/flag contract:
 ;   In:   _rdBlocks valid (the present path of RamDisk_Init guarantees this).
-;   Out:  Non-fatal; C is don't-care.  If the device table is full (no
-;         DEV_CLASS_EMPTY slot by idx 31) it simply returns without
-;         registering.  P (incl. M/X widths) restored via PHP/PLP;
+;   Out:  Non-fatal; C is don't-care.  If row RD_DEVIDX is already taken
+;         it returns without registering.  P (incl. M/X widths) restored via PHP/PLP;
 ;         A/X/Y clobbered; _devPtr + _blkBuf/_fsTmp1 clobbered (NOT _fsTmp2,
 ;         which Blk_Read's contract preserves).
 ;
@@ -321,7 +328,7 @@ RamDisk_Init
 ; genuinely spare padding when this was written (dpmap.s: "was _blkUnit
 ; (retired) + pad"); UFS 1.0 made it live.  _fsTmp1 is safe because it is
 ; documented caller-saved fs scratch that Blk_Read/Blk_Write preserve for their
-; callers, and RamDisk_Format has already clobbered it via _RAM_WriteBlock.
+; callers.
 ; Reference: _dev_allocDevEntry (dev.s) - exact field-population style.
 ;==============================================================================
 RamDisk_RegisterDev    
@@ -330,11 +337,10 @@ RamDisk_RegisterDev
                 SEP     #$20
                 MX      %10                     ; M=8, X=16 (mirror _dev_alloc*)
 
-                ;--- 1. Find the first free _devTable slot (idx 1..31).  For
-                ;    each idx: _devPtr = dev_table_ptr + idx*DEV_SIZE, then read
-                ;    DEV_Class via [_devPtr],Y (Y=0).  First class==EMPTY wins.
-                ;    None free by 31 -> non-fatal: just return. ---
-                LDA     #1
+                ;--- 1. Row RD_DEVIDX, if it is DEV_CLASS_EMPTY.  The loop is a
+                ;    one-row scan: past RD_DEVIDX it ends at FS_MAX_DEVICES and
+                ;    returns without registering. ---
+                LDA     #RD_DEVIDX
                 STA     _fsTmp1                 ; idx (8-bit; chosen-slot scratch --
                                                 ;   NOT _blkBuf+2, see the header)
 @rrd_findL      MX      %10
@@ -468,6 +474,60 @@ RamDisk_RegisterDev
                 PLB                             ; restore DBR
 
                 PLP
+                RTS
+
+;==============================================================================
+; RamDisk_NukeIfEmptyPascal - an EMPTY Pascal RAM5 is marked unformatted.
+;
+; ram5.aii's NukeIfEmptyPascal (added 6-May-93 DAL): "If we have an empty
+; Pascal RAM5, nuke it.  (This happens if we Scan past slot 5 and there are no
+; floppies attached.  The ROM decides we are in UCSD Pascal even though we
+; aren't in anything yet.)"  Its three tests on the first chunk, in its order:
+; block 2's first word is $0000 ("HFS has signature here"), block 2 +$006 is
+; $5204 ("$04 $52 for Pascal (as in 4 'RAM5')"), and block 2 +$010, the Pascal
+; io_file_count, is 0 -- then FormatFlag = 0, so RamDisk_Format lays down
+; ProDOS.  A Pascal volume with files on it is left alone, as upstream leaves
+; it.  The case is the ROM's own boot scan formatting RAM5 as Pascal on a real
+; machine; the suite's MAME boot does not reach it (MakeDisk leaves FormatFlag
+; 0, and RamDisk_Format writes ProDOS without this), so it is upstream's guard
+; ported as written rather than a path a test covers.
+;
+; RAM5 IS FORMATTED HERE, NOT BY THE ROM.  ram5.aii hands the job back to the
+; ROM ($FC/159D), but it calls from inside GS/OS; called from FGX the same ROM
+; routine writes an empty PASCAL volume (measured: block 2 reads
+; 00 00 06 00 00 00 04 'RAM5' after it, with FormatFlag $FFFF), because, as
+; the comment above says, the ROM chooses Pascal when the machine does not
+; look like ProDOS.  RamDisk_Format writes the ProDOS directory itself.
+;
+; In:  MX %00, DBR = kernel bank, _rdBufPtr valid.  Out: P restored; A/Y
+;      clobbered; _libcTmp2 clobbered.
+;==============================================================================
+RamDisk_NukeIfEmptyPascal
+                MX      %00
+                PHP
+                REP     #$30
+                MX      %00
+                LDA     _rdBufPtr
+                STA     _libcTmp2
+                SEP     #$20
+                MX      %10
+                LDA     _rdBufPtr+2
+                STA     _libcTmp2+2             ; [_libcTmp2] = block 0
+                REP     #$20
+                MX      %00
+                LDY     #$0400
+                LDA     [_libcTmp2],Y
+                BNE     @rnp_out                ; not Pascal
+                LDY     #$0406
+                LDA     [_libcTmp2],Y
+                CMP     #$5204
+                BNE     @rnp_out                ; not Pascal
+                LDY     #$0410
+                LDA     [_libcTmp2],Y
+                BNE     @rnp_out                ; Pascal, with files
+                LDA     #0
+                STAL    RD_FormatFlag           ; mark it unformatted
+@rnp_out        PLP
                 RTS
 
 ;==============================================================================
@@ -691,6 +751,21 @@ _RamDisk_WriteDirBuf MX %00
                 STA     _blkNum                 ; block number
                 LDA     #_fsDirBuf              ; source buffer OFFSET (kernel bank)
                 STA     _blkBuf
+                ;--- THE LATCHES Blk_Write WOULD HAVE SET, since this goes to
+                ;    the body directly.  Blk_Read/Blk_Write leave the last
+                ;    transfer's _blkCurHi and _blkCurBufBank latched, and the
+                ;    body reads both: a UFS read before this module loaded left
+                ;    the vfs_bio arena's bank there, and the directory went in
+                ;    from that bank instead of _fsDirBuf (measured: block 2 all
+                ;    zeros after a format that reported success).  A 16-bit
+                ;    block in the kernel bank, not a pool entry. ---
+                STZ    |_blkCurHi
+                STZ    |_blkCurBufBank
+                SEP     #$20
+                MX      %10
+                STZ    |_blkSrcPool
+                REP     #$20
+                MX      %00
                 JSR     _RamWrBody              ; C / A=EIO propagate to caller
                                                 ; (the BODY: _RAM_WriteBlock is
                                                 ;  the RTL wrapper the kernel
@@ -779,180 +854,68 @@ RamDisk_DetectExisting
                 RTS
 
 ;==============================================================================
-; RamDisk_Create - allocate an FGX-owned RAM-disk buffer and record it.
+; RamDisk_RomMake - have the ROM create the RAM disk BRAM asks for, on the one
+; machine where it fails to.
 ;
-; Sizes the buffer from the BRAM minimum RAM-disk-size graduation (ReadBParam
-; $0C03, parm RD_BP_MIN), where each graduation = 32 KB (e.g. $20 -> 1024 KB),
-; clamped to [RD_DEFAULT_BYTES .. RD_MAX_BYTES] (1..2 MB).  NewHandles a
-; locked|fixed block (may span banks) under the kernel MM user ID, writes the
-; handle + size to the bank-$E1 GS/OS RAM Disk Tool Set rendezvous
-; (RD_DiskHandles/RD_CurDiskSize), dereferences the handle to the stable 24-bit
-; buffer base, and records:
-;   _rdBufPtr    = 24-bit buffer base (via _RamDisk_DerefHandle)
-;   _rdSizeBytes = 32-bit clamped size in bytes
-;   _rdBlocks    = _rdSizeBytes / 512
-;   _rdPresent   = 1
-;   RD_FormatFlag ($E1164A) = 0  (unformatted; Phase 3 builds the ProDOS dir)
+; ProBoot.src's CreateRAM5 (GS/OS 6.0.1, GS.OS/Boot), "to compensate for a ROM
+; 3 bug that fails to create RAM5 if you have 8 Megs of RAM".  The same three
+; conditions, in its order: no RAM5 handle yet (DiskHandle+1), a non-zero BRAM
+; maximum (MaxDiskParm), and NumBanks >= $80 -- and on ROM 3 only.  The same
+; entry: "pretend like we have *almost* 8 megs, to make ROM check happy" with
+; A = $81, then "jump into the middle of MakeDisk, right after TotalMem" at
+; $FC/14D1, with B = $E1, D on a 32-byte stack frame, and the return built as
+; a pushed RTL address plus $00BC-1 for MakeDisk's RTS.  The ROM sizes the disk
+; from BRAM, allocates it and fills in the bank-$E1 rendezvous.
 ;
-; PRECONDITION: _kFgxUserID must already be valid (set by Toolbox_GetOwnID,
-; main.s:239).  This routine does NOT call GetOwnID; Task 1.4 wires the
-; RamDisk_Init call AFTER that point.  (Not yet called - Task 1.4.)
+; CreateRAM5 then RESETS the machine so the ROM brings the new disk up.  This
+; does not: RamDisk_DetectExisting adopts it, NukeIfEmptyPascal and
+; RamDisk_Format make it a ProDOS volume, and the boot carries on.
 ;
-; Register/flag contract:
-;   In:   none (reads BRAM + _kFgxUserID; writes rendezvous + kernel statics).
-;   Out:  C=1 and all statics + rendezvous populated on success;
-;         C=0 and A=ENOMEM if NewHandle fails (rendezvous + _rd* statics left
-;         untouched - exactly as RamDisk_DetectExisting left them).
-;         P (incl. M/X widths) restored to the caller's entry state via PHP/PLP
-;         on every return path; A/X/Y are clobbered.
-; Reference: ram5.aii buffer-allocate path; _Sys_MmAlloc NewHandle frame
-;            (src/kernel/syscall.s).
+; With no BRAM size there is nothing to make, and nothing is made.
+;
+; In:  MX %00, DBR = kernel bank.  Out: P restored; A/X/Y clobbered.
 ;==============================================================================
-RamDisk_Create    
+RamDisk_RomMake
                 MX      %00
                 PHP
-                REP     #$30                    ; M=16, X=16
+                REP     #$30
                 MX      %00
-
-                ;--- Read the BRAM minimum RAM-disk-size graduation. ---
-                PEA     $0000                   ; result space (word)
-                PEA     RD_BP_MIN               ; parm # = $0036
-                LDX     #$0C03                  ; _ReadBParam (Misc Tool Set)
-                JSL     $E10000
-                PLA                             ; A = graduation (32K/unit)
-
-                ;--- grad -> bytes (= grad << 15), 32-bit, decomposed:
-                ;      hi16 = grad >> 1
-                ;      lo16 = (grad bit0) ? $8000 : 0
-                ;    Stage straight into _rdSizeBytes (its final home). ---
-                AND     #$00FF                  ; keep grad in low byte (hi=0)
-                LSR     A                       ; A = grad>>1 = bytes hi16; C = bit0
-                STA     _rdSizeBytes+2          ; bytes hi16
-                LDA     #0
-                ROR     A                       ; A = C<<15 = bytes lo16 ($8000/$0000)
-                STA     _rdSizeBytes            ; bytes lo16
-
-                ;--- Clamp to [RD_DEFAULT_BYTES .. RD_MAX_BYTES] (32-bit; compare
-                ;    hi16, then lo16).  Literal halves of the EQUs below:
-                ;      RD_DEFAULT_BYTES $00100000 -> hi $0010, lo $0000
-                ;      RD_MAX_BYTES     $00200000 -> hi $0020, lo $0000
-                ;    Covers grad==0 (BRAM unreadable -> floor to default) and
-                ;    oversize (-> ceiling). ---
-                ; Low floor: bytes < RD_DEFAULT_BYTES ?
-                LDA     _rdSizeBytes+2
-                CMP     #$0010                  ; hi16 vs default hi
-                BCC     @rdc_floor              ; hi < default hi -> too small
-                BNE     @rdc_chkmax             ; hi > default hi -> not below floor
-                LDA     _rdSizeBytes
-                CMP     #$0000                  ; equal hi: compare lo16 vs default lo
-                BCS     @rdc_chkmax             ; lo >= default lo -> at/above floor
-@rdc_floor      LDA     #$0000                  ; -> RD_DEFAULT_BYTES ($00100000)
-                STA     _rdSizeBytes
-                LDA     #$0010
-                STA     _rdSizeBytes+2
-                BRA     @rdc_clamped            ; default is within [def..max]
-@rdc_chkmax     ; High ceiling: bytes > RD_MAX_BYTES ?
-                LDA     _rdSizeBytes+2
-                CMP     #$0020                  ; hi16 vs max hi
-                BCC     @rdc_clamped            ; hi < max hi -> within range
-                BNE     @rdc_ceil               ; hi > max hi -> too big
-                LDA     _rdSizeBytes
-                CMP     #$0000                  ; equal hi: compare lo16 vs max lo
-                BEQ     @rdc_clamped            ; lo == max lo -> exactly max, ok
-                BCC     @rdc_clamped            ; lo < max lo -> within range
-@rdc_ceil       LDA     #$0000                  ; -> RD_MAX_BYTES ($00200000)
-                STA     _rdSizeBytes
-                LDA     #$0020
-                STA     _rdSizeBytes+2
-@rdc_clamped
-
-                ;--- NewHandle the clamped size (mirror _Sys_MmAlloc frame).
-                ;    blockSize pushed HI word then LO word (Toolbox arg order). ---
-                PEA     $0000                   ; +2 result handle lo placeholder
-                PEA     $0000                   ; +2 result handle hi placeholder
-                LDA     _rdSizeBytes+2
-                PHA                             ; +2 blockSize hi
-                LDA     _rdSizeBytes
-                PHA                             ; +2 blockSize lo
-                LDA     _kFgxUserID
-                PHA                             ; +2 userID
-                PEA     $C008                   ; +2 attr = locked|fixed|noSpec;
-                                                ;   NO noCross -> may span banks
-                PEA     $0000                   ; +2 locationPtr hi (ignored)
-                PEA     $0000                   ; +2 locationPtr lo (ignored)
-                LDX     #$0902                  ; _NewHandle
-                JSL     $E10000
-                BCS     @rdc_fail
-                ; Success: Toolbox popped the 12 input bytes; 4-byte handle on
-                ; top: 1,S = handle lo (offset), 3,S = handle hi (bank in lo byte).
-
-                ;--- Write the handle to the bank-$E1 rendezvous (long stores). ---
-                LDA     1,S                     ; handle lo16 (offset)
-                STAL    RD_DiskHandles
-                STA     _libcTmp2               ; stash lo16 for the deref
-                LDA     3,S                     ; handle hi16 (bank in low byte)
-                STAL    RD_DiskHandles+2
-                PLX                             ; pop handle lo
-                PLX                             ; pop handle hi
-                ;    A still = handle hi16; set the DP long-ptr bank byte.
-                SEP     #$20
-                MX      %10                     ; M=8, X=16
-                STA     _libcTmp2+2             ; _libcTmp2+2 = handle bank byte
-                REP     #$20
-                MX      %00
-
-                ;--- Write the size to the rendezvous (long stores). ---
-                LDA     _rdSizeBytes
-                STAL    RD_CurDiskSize          ; size lo16
-                LDA     _rdSizeBytes+2
-                STAL    RD_CurDiskSize+2        ; size hi16
-
-                ;--- Deref the handle -> _rdBufPtr (24-bit base). ---
-                JSR     _RamDisk_DerefHandle    ; [_libcTmp2] -> _rdBufPtr
-
-                ;--- _rdBlocks = _rdSizeBytes / 512 (>>9 over the 32-bit value;
-                ;    result fits 16 bits for sizes <= 2 MB).  Divide the CLAMPED
-                ;    size so the count is correct post-clamp. ---
-                LDA     _rdSizeBytes+2          ; hi16 -> shift scratch
-                STA     _libcTmp0
-                LDA     _rdSizeBytes            ; lo16 in A
-                LDX     #9                      ; 16-bit X (set by REP #$30)
-@rdc_shr        LSR     _libcTmp0               ; hi16 >> 1; bit0 -> C
-                ROR     A                       ; C -> lo16 bit15
-                DEX
-                BNE     @rdc_shr
-                STA     _rdBlocks               ; quotient low 16 = block count
-
-                ;--- RD_FormatFlag = 0 (needs a ProDOS dir; Phase 3 sets $FFFF). ---
-                LDA     #0
-                STAL    RD_FormatFlag
-
-                ;--- Mark present. ---
-                SEP     #$20
-                MX      %10
-                LDA     #1
-                STA     _rdPresent
-
-                PLP
+                LDA     ROMVersion              ; DBR = kernel bank here
+                CMP     #3
+                BNE     @rrm_out                ; ROM 3 only, as CreateRAM5
+                LDAL    RD_DiskHandles+1
+                BNE     @rrm_out                ; already have a RAM5 handle
+                LDAL    RD_MaxDiskParm
+                AND     #$00FF
+                BEQ     @rrm_out                ; BRAM asks for no RAM disk
+                LDAL    RD_NumBanks
+                CMP     #$80
+                BCC     @rrm_out                ; under 8 MB: the ROM made it
+                PHB
+                PEA     $E1E1
+                PLB
+                PLB                             ; B = $E1
+                PHD
+                TSC
                 SEC
-                RTS
-
-@rdc_fail       MX      %00                     ; reached via BCS from the JSL
-                                                ; (toolbox returns M=16, X=16)
-                ; _NewHandle left the (null) result space on the stack; pop it.
-                PLX
-                PLX
-                ; _rdSizeBytes was staged with the attempted size BEFORE the
-                ; NewHandle call; re-zero it so the rendezvous + ALL _rd* statics
-                ; are left exactly as RamDisk_DetectExisting did - no partial
-                ; state leaks for a later reader.  M=16 here, so two 16-bit STAs
-                ; clear all 4 bytes.
-                LDA     #0
-                STA     _rdSizeBytes
-                STA     _rdSizeBytes+2
-                LDA     #ENOMEM
-                PLP
+                SBC     #$0020
+                TCS
+                INC     A
+                TCD                             ; D = 32 bytes of stack
+                PHK
+                PER     @rrm_ret-1
+                PEA     $00BC-1                 ; RTS lands on $FC/00BC: RTL
+                LDA     #$0081                  ; *almost* 8 megs
+                JML     $FC14D1
+@rrm_ret        REP     #$30
+                MX      %00
+                TSC
                 CLC
+                ADC     #$0020
+                TCS
+                PLD
+                PLB
+@rrm_out        PLP
                 RTS
 
 ;==============================================================================
@@ -960,8 +923,7 @@ RamDisk_Create
 ;
 ; An MM handle is a 4-byte pointer to a master pointer; for a locked|fixed
 ; block the master pointer is stable and IS the buffer's 24-bit base (see the
-; _Sys_MmAlloc convention in src/kernel/syscall.s).  Factored out so Task 1.3
-; (RamDisk_Create) can reuse the same deref on a freshly-allocated handle.
+; _Sys_MmAlloc convention in src/kernel/syscall.s).
 ;
 ;   In:   _libcTmp2 = the handle's low 24 bits (DP long pointer).  MX %00.
 ;   Out:  _rdBufPtr = the 24-bit master pointer (buffer base).

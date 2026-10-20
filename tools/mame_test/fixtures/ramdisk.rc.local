@@ -1,0 +1,4 @@
+# /etc/rc.local for the ramdisk test: the boot leaves a file on the RAM disk,
+# written through the writable mount /etc/rc made.  `echo', not `: >': 2.11BSD
+# sh drops a redirection on `:' (xec.c, SYSNULL: io=0).
+echo b1 >/ram5/b1
