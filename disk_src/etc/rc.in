@@ -172,6 +172,16 @@ UFSPROBE=
 [ -f /lib/modules/ufsprobe ] && UFSPROBE=ufsprobe
 /sbin/modload net ramdisk pty klog fpsim $UFSPROBE >/dev/console 2>&1
 
+# THE CONTROL PANEL'S RAM DISK, WRITABLE, AT /ram5, when the machine has one.
+# ramdisk.mod takes it up only when BRAM asks for one (Control Panel, "RAM
+# disk") and registers it as /dev/ram0; the ROM formats it as a ProDOS volume
+# and keeps it across soft reboots, so what is on it survives a reboot.
+# mount_prodos loads prodos and prodosw itself.  Quiet when there is none: the
+# mount fails on an empty device row, and that is the machine without a RAM
+# disk, not an error.
+/sbin/mount_prodos -o write /dev/ram0 /ram5 >/dev/null 2>&1 &&
+	echo 'ram5: /dev/ram0 mounted on /ram5' >/dev/console 2>&1
+
 # DESK ACCESSORIES ARE NOT INSTALLED HERE.  loadcda(8) installs one, from
 # /usr/fgx/cda or anywhere, when it is wanted: a desk accessory holds its code
 # and resource fork in memory from then until the machine restarts, since none

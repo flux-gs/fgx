@@ -58,6 +58,20 @@ that large (`Clock is too far off`) rather than step the clock by it.
 `ntp -s` (`ntp(8)`) sets the clock once from a server, for a machine that does
 not need `ntpd` running.
 
+## The RAM disk
+
+Set a RAM disk size in the Control Panel ("RAM disk", in battery RAM) and FGX
+mounts it, writable, on `/ram5` at every boot -- `df` shows it as `/dev/ram0`.
+It is a ProDOS volume, the same `/RAM5` GS/OS and ProDOS 8 see, and because
+the ROM keeps it across a soft reboot, what you put on it is still there after
+one.  With no size set there is no RAM disk, and FGX makes none.
+
+On an 8 MB ROM 03 machine the ROM fails to create the RAM disk itself (GS/OS
+works around the same bug at boot), so FGX has the ROM make it, sized from the
+Control Panel setting.  The boot log says which happened:
+`ramdisk: 512 blocks @ bank $38 (adopted)` for a disk the ROM had, `(made)` for
+one FGX had the ROM make, `ramdisk: none` for no size set.
+
 ## Devices
 
 These modules drive hardware a machine may not have, so `/etc/rc.local` loads

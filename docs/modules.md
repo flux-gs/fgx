@@ -28,7 +28,7 @@ Every directory under `src/modules/`:
 | `serial` | 0 | both SCC channels as ttys, `/dev/tty00` (channel A, printer port) and `/dev/tty01` (channel B, modem port), IRQ-driven through the Serial Interrupt Manager | `/etc/rc.local`, off by default |
 | `bpf` | 0 | `/dev/bpf0`, raw-frame capture through W5100 MACRAW | `/etc/rc.local`, off by default |
 | `net` | 0 | the socket layer, UDP/ICMP/TCP over the W5100, the 127.0.0.1 loopback transport, AF_UNIX datagram sockets, and the `pipe(2)` rings (`pipe.s`) | `/etc/rc` |
-| `ramdisk` | 0 | the RAM-disk block device (`RAM5`) | `/etc/rc` |
+| `ramdisk` | 0 | the Control Panel RAM disk (`RAM5`) as `/dev/ram0`, device row 8: adopts the ROM's, has the ROM make it on an 8 MB ROM 03 (GS/OS `CreateRAM5`), or registers nothing when battery RAM sets no size; `/etc/rc` mounts it writable on `/ram5` | `/etc/rc` |
 | `pty` | 0 | the pseudo-terminal pairs (`/dev/ptyp*`, `/dev/ttyp*`) | `/etc/rc` |
 | `sscon` | 0 | the console on a Second Sight card's Host Text mode; registers as a console backend via `KSVC_CONBACKEND`, and does nothing if the card is absent | `/etc/rc.local`, off by default |
 | `cda` | 0 | classic desk accessory support: patches the Desk Manager's SaveAll/RestAll so the Ctrl-OA-Esc menu restores FGX's border and text colours; `/dev/cda` | `/etc/rc.local`, off by default |
