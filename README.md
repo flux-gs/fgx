@@ -214,6 +214,26 @@ The bug report form asks for what we need to find the problem:
   real hardware, say what you tried in the emulator.
 - **Screenshots**, or a photo of the screen.
 
+## Acknowledgements
+
+FGX's own code -- the kernel's IIgs layer, the fcc compiler and toolchain, and
+the drivers -- was written from scratch, almost entirely with
+[Claude Code](https://claude.com/claude-code), with feedback from ChatGPT.
+
+Tremendous thanks to everyone who published Apple IIgs source code for others
+to learn from. FGX leans on that reference material throughout, and above all
+on the work of the **GNO Consortium**, whose GNO/ME showed that Unix on the
+IIgs could be done.
+
+Our thanks also go to the developers and maintainers of **2.11BSD**, which
+gave FGX its kernel design, its userland and its filesystem, and still runs on
+PDP-11s today. FGX stands on the BSD heritage, from 4.3BSD-Reno's VFS to
+NetBSD's long memory, and on **SunOS 4.1.3**, whose shared library model FGX
+adopted. We are grateful to be building on them.
+
+And finally, thanks to the **[cCc]** crew and the extended [cCc] family for
+their input and moral support along the way.
+
 ## License
 
 FGX is licensed under the **BSD 2-Clause License** — see [`LICENSE`](LICENSE).
