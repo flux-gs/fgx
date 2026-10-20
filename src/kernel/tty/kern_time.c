@@ -49,7 +49,11 @@ int tz_dsttime = 0;
 long adjkerntz = 0;                     /* FreeBSD clock.c:100's int, which is
                                          * 32 bits there: a zone ten hours out
                                          * is 36,000 s */
-int disable_rtc_set = 0;                /* FreeBSD clock.c:101 */
+int disable_rtc_set = 1;                /* FreeBSD clock.c:101, which is 0:
+                                         * FGX leaves the IIgs clock alone
+                                         * unless machdep.disable_rtc_set is
+                                         * cleared -- the clock belongs to the
+                                         * machine, and GS/OS reads it too */
 int wall_cmos_clock = 1;                /* FreeBSD clock.c:119; the IIgs clock
                                          * holds LOCAL time */
 
@@ -276,7 +280,8 @@ tod_frame(t)
 
 /* resettodr -- write the clock back to the battery clock, in local time:
  * FreeBSD clock.c:771, `tm -= tz.tz_minuteswest * 60 + (wall_cmos_clock ?
- * adjkerntz : 0)' (:788), unless disable_rtc_set.  FreeBSD calls it from
+ * adjkerntz : 0)' (:788), unless disable_rtc_set, which FGX sets by default
+ * where FreeBSD clears it (see its definition above).  FreeBSD calls it from
  * settimeofday (kern_time.c:144) and from a write to machdep.adjkerntz
  * (machdep.c:716), and not at reboot: its boot() syncs and unmounts and
  * leaves the RTC alone (kern_shutdown.c:174). */

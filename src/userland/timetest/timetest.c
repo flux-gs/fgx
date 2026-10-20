@@ -11,12 +11,17 @@
  *   TT A3 diff=N ok    less the boot's machdep.adjkerntz, the kernel's seconds are
  *                      the battery clock's, read directly (SYS_RTCREAD),
  *                      within 2 s -- inittodr's conversion
- * and, as root (settimeofday), each undone before the next:
+ * and, as root (settimeofday), each undone before the next, with the
+ * battery-clock write-back turned on for them (machdep.disable_rtc_set is 1
+ * by default) and off again after:
  *   TT B1 diff=N ok    settimeofday(now + 1000) reads back within 1 s
  *   TT B2 rtc=N ok     ...and the battery clock read directly agrees within
  *                      2 s: resettodr wrote it back
  *   TT B3 tz=M,D ok    a zone-only call sets the zone and leaves the time
  *   TT B4 e=22 ok      a tv_usec of 1000000 is EINVAL and changes nothing
+ *   TT B5 rtc=N ok     with the default left alone, settimeofday(now + 1000)
+ *                      leaves the battery clock where it was (N near 0, where
+ *                      a write-back would make it near 1000)
  * and adjtime, measured over exactly 120 ticks (the clock moves only on a
  * tick, so a read just after one is exact), then cancelled:
  *   TT C1 extra=N ok   a +1 s slew runs 120 x 66 us fast (7000..9000)
@@ -24,10 +29,11 @@
  *                      under 1 s
  *   TT C2 extra=N ok   a -1 s slew runs as much slow
  * and the machdep sysctls, each restored:
- *   TT D1 K,0,1,16688 ok   adjkerntz (K, the boot's), disable_rtc_set, wall_cmos_clock and
+ *   TT D1 K,1,1,16688 ok   adjkerntz (K, the boot's), disable_rtc_set, wall_cmos_clock and
  *                      tick read their defaults, take a write and read it back
  *   TT D2 rtc=N,M ok   adjkerntz = 3600 writes the battery clock back an hour
- *                      behind the kernel (N near -3600), and 0 puts it back
+ *                      behind the kernel (N near -3600), and 0 puts it back,
+ *                      with the write-back on for the case
  *   TT D3 extra=N ok   tick at 25000 runs the clock 120 x 8312 us fast over
  *                      120 ticks (an int is 16 bits: twice 16688 is not one)
  *   TT D4 e=45 ok      an unknown machdep leaf is EOPNOTSUPP
@@ -228,8 +234,9 @@ main()
         struct timeval now, back;
         struct timezone z, zz;
         long d, rd;
-        int st;
+        int st, rs;
 
+        rs = machdep(CPU_DISRTCSET, 0);
         gettimeofday(&now, (struct timezone *)0);
         now.tv_sec += 1000L;
         st = settimeofday(&now, (struct timezone *)0);
@@ -274,6 +281,20 @@ main()
         printf("TT B4 e=%d %s\n", errno,
                (st == -1 && errno == EINVAL && d >= 0 && d <= 1) ? "ok" : "FAIL");
         if (st != -1 || errno != EINVAL || d < 0 || d > 1)
+            fail = 1;
+        machdep(CPU_DISRTCSET, rs);
+
+        gettimeofday(&now, (struct timezone *)0);
+        now.tv_sec += 1000L;
+        settimeofday(&now, (struct timezone *)0);
+        gettimeofday(&back, (struct timezone *)0);
+        rd = rtcnow() - back.tv_sec + 1000L + kz0;
+        back.tv_sec -= 1000L;
+        settimeofday(&back, (struct timezone *)0);          /* undo */
+        if (rd < 0)
+            rd = -rd;
+        printf("TT B5 rtc=%ld %s\n", rd, rd <= 2 ? "ok" : "FAIL");
+        if (rd > 2)
             fail = 1;
     }
 
@@ -320,18 +341,20 @@ main()
             if (machdep(ids[i], d[i]) != d[i] + 1)      /* reads, restores */
                 ok = 0;
         }
-        ok = ok && d0 == kz0 && d[1] == 0 && d[2] == 1 && d[3] == 16688;
+        ok = ok && d0 == kz0 && d[1] == 1 && d[2] == 1 && d[3] == 16688;
         printf("TT D1 %ld,%d,%d,%d %s\n", d0, d[1], d[2], d[3],
                ok ? "ok" : "FAIL");
         if (!ok)
             fail = 1;
 
+        v = machdep(CPU_DISRTCSET, 0);
         mdlong(CPU_ADJKERNTZ, 3600L);
         gettimeofday(&now, (struct timezone *)0);
         r1 = rtcnow() - now.tv_sec;
         mdlong(CPU_ADJKERNTZ, kz0);
         gettimeofday(&now, (struct timezone *)0);
         r2 = rtcnow() - now.tv_sec + kz0;
+        machdep(CPU_DISRTCSET, v);
         ok = r1 >= -3602L && r1 <= -3598L && r2 >= -2L && r2 <= 2L;
         printf("TT D2 rtc=%ld,%ld %s\n", r1, r2, ok ? "ok" : "FAIL");
         if (!ok)

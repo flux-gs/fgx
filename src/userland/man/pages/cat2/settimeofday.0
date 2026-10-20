@@ -88,11 +88,13 @@ BUGS
      runs at 60 Hz (16667) and a 50 Hz machine at 20000; clkrate
      measures it.  tv_usec is kept to about 15 microseconds.
 
-     settimeofday also writes the time to the battery clock, in
-     local time: UTC less tz_minuteswest minutes and, while
-     machdep.wall_cmos_clock is set, machdep.adjkerntz seconds;
-     machdep.disable_rtc_set stops the write.  At boot the
-     battery clock is read back the same way.
+     With machdep.disable_rtc_set cleared, settimeofday also
+     writes the time to the battery clock, in local time: UTC
+     less tz_minuteswest minutes and, while
+     machdep.wall_cmos_clock is set, machdep.adjkerntz seconds.
+     On FGX disable_rtc_set is 1 by default, where FreeBSD's is
+     0, so the IIgs clock is left alone unless it is cleared.  At
+     boot the battery clock is read the same way.
 
 
 

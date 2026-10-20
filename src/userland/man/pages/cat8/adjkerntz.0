@@ -94,6 +94,13 @@ BBUUGGSS
      _m_a_c_h_d_e_p_._a_d_j_k_e_r_n_t_z is a _l_o_n_g on FGX, where _i_n_t is 16 bits and could not
      hold a zone more than nine hours from UTC.
 
+     FGX does not write the IIgs clock unless machdep.disable_rtc_set is
+     cleared: it is 1 by default, where FreeBSD's is 0, because the clock
+     belongs to the machine and GS/OS reads it too.  So `adjkerntz -a' at a
+     daylight saving change moves the kernel's offset and leaves the IIgs
+     clock as it was; set the IIgs clock to the new local time, as GS/OS
+     needs anyway, or FGX reads it an hour out at the next boot.
+
 AAUUTTHHOORRSS
      Andrey A. Chernov <ache@astral.msk.su>
 
