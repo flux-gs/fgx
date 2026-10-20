@@ -2,7 +2,8 @@
  * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
  *
  * FGX-Provenance: 2.11BSD mount(8)
- *   vendor/2.11BSD/usr/sbin/mount/mount.c, VERBATIM.
+ *   vendor/2.11BSD/usr/sbin/mount/mount.c, verbatim but for the two
+ *   places marked FGX DELTA.
  *   Copyright (c) 1980, 1989, 1993, 1994 The Regents of the University of
  *   California.  All rights reserved.  UCB notice retained per the BSD
  *   license; the FGX header above is BSD-2-Clause (see LICENSE /
@@ -189,7 +190,8 @@ main(argc, argv)
 				if (badvfstype(mntbuf[i].f_type, vfslist))
 					continue;
 				prmount(mntbuf[i].f_mntfromname,
-				    mntbuf[i].f_mntonname, mntbuf[i].f_flags);
+				    mntbuf[i].f_mntonname, mntbuf[i].f_type,
+				    mntbuf[i].f_flags);
 			}
 		}
 		exit(rval);
@@ -329,7 +331,8 @@ mountfs(vfstype, spec, name, flags, options, mntopts)
 			return (1);
 		}
 
-		/* FGX DELTA, AND THE ONLY ONE IN THIS FILE (apple/fgx#333).
+		/* FGX DELTA, one of two in this file (apple/fgx#333; the other
+		 * is prmount's type name).
 		 * Upstream writes this as WIFEXITED(status) / WIFSIGNALED(status)
 		 * / WEXITSTATUS(status), and 2.11BSD's macros take the UNION:
 		 *
@@ -370,7 +373,8 @@ mountfs(vfstype, spec, name, flags, options, mntopts)
 				warn("%s", name);
 				return (1);
 			}
-			prmount(sf.f_mntfromname, sf.f_mntonname, sf.f_flags);
+			prmount(sf.f_mntfromname, sf.f_mntonname, sf.f_type,
+			    sf.f_flags);
 		}
 		break;
 	}
@@ -378,23 +382,31 @@ mountfs(vfstype, spec, name, flags, options, mntopts)
 	return (0);
 }
 
+static char *vfsnames[] = INITMOUNTNAMES;
+
+/*
+ * FGX DELTA: the listing names the filesystem type first inside the
+ * parentheses, `/dev/ram0 on /ram5 (prodos, ...)', as the 4.4BSD-Lite2
+ * descendants print it (FreeBSD, macOS).  2.11BSD prints only the flags,
+ * which leaves a ProDOS mount indistinguishable from a UFS one.
+ */
 void
-prmount(spec, name, flags)
+prmount(spec, name, type, flags)
 	char *spec, *name;
-	int flags;
+	int type, flags;
 {
 	register struct opt *o;
-	register int f;
 
-	(void)printf("%s on %s", spec, name);
+	(void)printf("%s on %s (%s", spec, name,
+	    type >= 0 && type <= MOUNT_MAXTYPE ? vfsnames[type] : "?");
 
 	flags &= MNT_VISFLAGMASK;
-	for (f = 0, o = optnames; flags && o->o_opt; o++)
+	for (o = optnames; flags && o->o_opt; o++)
 		if (flags & o->o_opt) {
-			(void)printf("%s%s", !f++ ? " (" : ", ", o->o_name);
+			(void)printf(", %s", o->o_name);
 			flags &= ~o->o_opt;
 		}
-	(void)printf(f ? ")\n" : "\n");
+	(void)printf(")\n");
 }
 
 struct statfs *
@@ -433,7 +445,6 @@ badvfstype(vfstype, vfslist)
 	int vfstype;
 	register char **vfslist;
 {
-static char *vfsnames[] = INITMOUNTNAMES;
 
 	if ((vfstype < 0) || (vfstype > MOUNT_MAXTYPE))
 		return (0);

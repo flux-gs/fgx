@@ -17,8 +17,8 @@
       "u=0",
       "big",
       "lost+found",
-      "/dev/sd1 on /mnt",
-      "/dev/sd0 on /"
+      "/dev/sd1 on /mnt (ufs",
+      "/dev/sd0 on / (ufs"
     ],
     "screen_lacks": [
       "PANIC",

@@ -27,6 +27,7 @@
    "pd=0",
    "writing needs -o write, mounted read-only",
    "mt=0",
+  "/dev/sd1 on /mnt (prodos, read-only)",
    "Hello",
    "TREE",
    "f09",
