@@ -8,6 +8,21 @@ depends on hardware a machine may not have, or that opens the machine to the
 network, is listed in `/etc/rc.local` and commented out.  `/etc/rc` runs that
 file last, as 2.11BSD's `rc` does; remove the `#` from a line to turn it on.
 
+## Logins and passwords
+
+The console (Option-1) is a root shell as soon as the machine has booted.  The
+other consoles (Option-2 and Option-3) and telnet ask for a login.  Two
+accounts can log in, and **both passwords are `fgx`**:
+
+| Account | What it is |
+|---|---|
+| `root` | the super-user |
+| `fgx` | an ordinary user, in group `wheel`, so it can `su` to root |
+
+Change them with `passwd(1)` -- as root, `passwd root` and `passwd fgx` -- before
+the machine is on a network you do not control, and before turning on telnet
+logins (see [Network services](#network-services)).
+
 ## The clock and the time zone
 
 **The IIgs clock keeps local time, and FGX keeps UTC.**  At boot, `/etc/rc`

@@ -12,7 +12,8 @@
 
 > The button downloads this version's bootable 32 MB hard-disk image; every
 > tagged release carries its own as `fgx-<version>.fs`. GitHub Actions builds
-> it from the tag, with fcc's fixture suite. The images of the three newest
+> it from the tag, with fcc's fixture suite. The `root` and `fgx` accounts
+> both have the password `fgx`. The images of the three newest
 > commits on `main` are on the rolling `main-latest` pre-release, as
 > `fgx-main-<commit>.fs`: untested between releases. On first boot, choose a time zone
 > and turn on the devices and services the machine needs: see
