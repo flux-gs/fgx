@@ -25,13 +25,13 @@ Every directory under `src/modules/`:
 | `ufs` | 2 | the block half of 2.11BSD UFS: inodes, superblock, block and inode allocators, bmap, mount | pre-staged in `/fgxunix` |
 | `ufsdir` | 4 | the name half of UFS: the vnode operations and the directory scan (calls into `ufs` and `vfs`, never the reverse) | pre-staged in `/fgxunix` |
 | `ld` | 0 | the shared-library registry `ldload(8)` fills; reached through `LD_TRAMP` (`$00031A`) | `/etc/rc`, first and alone |
-| `serial` | 0 | both SCC channels as ttys, `/dev/tty00` (channel A, printer port) and `/dev/tty01` (channel B, modem port), IRQ-driven through the Serial Interrupt Manager | `/etc/rc` |
-| `bpf` | 0 | `/dev/bpf0`, raw-frame capture through W5100 MACRAW | `/etc/rc` |
+| `serial` | 0 | both SCC channels as ttys, `/dev/tty00` (channel A, printer port) and `/dev/tty01` (channel B, modem port), IRQ-driven through the Serial Interrupt Manager | `/etc/rc.local`, off by default |
+| `bpf` | 0 | `/dev/bpf0`, raw-frame capture through W5100 MACRAW | `/etc/rc.local`, off by default |
 | `net` | 0 | the socket layer, UDP/ICMP/TCP over the W5100, the 127.0.0.1 loopback transport, AF_UNIX datagram sockets, and the `pipe(2)` rings (`pipe.s`) | `/etc/rc` |
 | `ramdisk` | 0 | the RAM-disk block device (`RAM5`) | `/etc/rc` |
 | `pty` | 0 | the pseudo-terminal pairs (`/dev/ptyp*`, `/dev/ttyp*`) | `/etc/rc` |
-| `sscon` | 0 | the console on a Second Sight card's Host Text mode; registers as a console backend via `KSVC_CONBACKEND`, and does nothing if the card is absent | `/etc/rc` |
-| `cda` | 0 | classic desk accessory support: patches the Desk Manager's SaveAll/RestAll so the Ctrl-OA-Esc menu restores FGX's border and text colours; `/dev/cda` | `/etc/rc` |
+| `sscon` | 0 | the console on a Second Sight card's Host Text mode; registers as a console backend via `KSVC_CONBACKEND`, and does nothing if the card is absent | `/etc/rc.local`, off by default |
+| `cda` | 0 | classic desk accessory support: patches the Desk Manager's SaveAll/RestAll so the Ctrl-OA-Esc menu restores FGX's border and text colours; `/dev/cda` | `/etc/rc.local`, off by default |
 | `klog` | 0 | `/dev/klog`, the kernel log ring for syslogd; port of 2.11BSD `usr/sys/sys/subr_log.c` | `/etc/rc` |
 | `fpsim` | 0 | the floating point simulator: one shared copy of fcc's soft double, reached through `FPSIM_TRAMP` (`$000324`); until it loads a double operation raises SIGILL (FGX's counterpart of 2.11BSD `usr/sys/pdp/mch_fpsim.s`) | `/etc/rc` |
 | `ufsprobe` | 3 | filesystem self-tests; assembles to a bare header unless a probe gate in `cfg/system.cfg` is on, and is staged only then | `/etc/rc`, last, when present |
@@ -107,11 +107,14 @@ At boot:
 1. The kernel registers the pre-staged `vfs`, `ufs`, `ufsdir` from memory
    (`Mod_RegisterPreLoaded`, `src/kernel/main.s`), then mounts the UFS root.
 2. `/etc/rc` loads `ld` alone (so `ldload(8)` can make the shared libraries
-   resident before `fsck`), then, after the root is writable, everything else
-   in one process: `/sbin/modload serial bpf net ramdisk pty sscon cda klog
-   fpsim $UFSPROBE`.  `/etc/modload.conf` holds the same list in the same
-   order and `tools/check_modload_lists.py` fails the build if they disagree;
-   **`rc.in` is the list that runs**.
+   resident before `fsck`), then, after the root is writable, the rest every
+   machine needs in one process: `/sbin/modload net ramdisk pty klog fpsim
+   $UFSPROBE`.  The modules for hardware a machine may not have -- `serial`,
+   `bpf`, `sscon`, `cda` -- are lines in `/etc/rc.local`, which
+   `/etc/rc` sources last and which ships with each commented out (see
+   [CONFIGURING.md](CONFIGURING.md)).  `/etc/modload.conf` holds the same
+   list in the same order and `tools/check_modload_lists.py` fails the build
+   if they disagree; **`rc.in` and `rc.local` are the list that runs**.
 3. `mount_prodos(8)` runs `modload(8)` when the kernel answers `ENODEV` (no
    such filesystem type): `prodos`, plus `prodosw` for a writable mount.
 

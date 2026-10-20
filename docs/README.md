@@ -11,6 +11,7 @@ in below.
 | [ROADMAP.md](ROADMAP.md) | what's shipped vs planned, per subsystem |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | setup, the dev loop, the build checks, how work lands |
 | [BUILDING.md](BUILDING.md) | build `disk/fgxroot.fs` by hand, the image, the gate, the release |
+| [CONFIGURING.md](CONFIGURING.md) | a running machine: the clock and time zone, devices (serial, bpf, sscon, cda), network services |
 
 ## Developing for / contributing to FGX
 

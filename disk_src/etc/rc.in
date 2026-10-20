@@ -104,6 +104,17 @@ fi
 # unless /etc/wall_cmos_clock exists.
 /sbin/adjkerntz -i
 
+# A ZONE NOBODY CHOSE IS SAID ONCE, AT BOOT.  The image cannot know where the
+# machine is, so it ships UTC, and the IIgs clock -- which keeps local time --
+# then reads as UTC.  Nothing corrects it behind the user's back: the kernel
+# does not write the battery clock unless machdep.disable_rtc_set is cleared,
+# and ntpd does not run unless /etc/rc.local starts it.  docs/CONFIGURING.md
+# says how to choose a zone.
+if [ -f /etc/wall_cmos_clock ] && cmp -s /etc/localtime /usr/share/zoneinfo/UTC
+then
+	echo 'time zone not set (UTC); the IIgs clock is read as UTC -- see /etc/rc.local' >/dev/console 2>&1
+fi
+
 # LEFT-OVER RUN STATE GOES, AND utmp STARTS EMPTY, before anything reads them.
 # This is 4.3BSD-Reno's line (etc/rc, `(cd /var/run; rm -rf *; cp /dev/null
 # utmp; chmod 644 utmp)'), which comes from the same read-only-root boot FGX
@@ -135,6 +146,13 @@ cat /etc/motd >/dev/console 2>&1
 # line a boot reaches the shell with no serial, no bpf, no net, no ramdisk and
 # no pty -- `dhclient: no network interface' is what that looks like.
 #
+# THESE ARE THE ONES EVERY MACHINE NEEDS: net carries the sockets AND pipe(2),
+# ramdisk finds the RAM disk the Control Panel set up, pty the
+# pseudo-terminals, klog syslogd's /dev/klog, and fpsim every double (without
+# it a floating-point operation raises SIGILL).  The modules for hardware a
+# machine may not have -- serial, bpf, sscon, cda -- are loaded by
+# /etc/rc.local, which ships with them commented out.
+#
 # THE NAMES ARE LOWERCASE, and so are the files under /lib/modules: a 2.11BSD
 # root is case-sensitive.
 #
@@ -144,7 +162,7 @@ cat /etc/motd >/dev/console 2>&1
 # other modload process.
 #
 # THE LIST IS /etc/modload.conf's, IN ITS ORDER: rc's two modload lines, the
-# one above and this one, are that list together, and
+# one above and this one, and any rc.local enables, are that list together, and
 # tools/check_modload_lists.py fails the build when the two disagree.
 # ufsprobe is last because it drives its cases from its own mod_init, so a
 # case touching a pty needs pty.mod already up.
@@ -152,7 +170,7 @@ cat /etc/motd >/dev/console 2>&1
 # a shipping build has no probe gate on and leaves it off the disk.
 UFSPROBE=
 [ -f /lib/modules/ufsprobe ] && UFSPROBE=ufsprobe
-/sbin/modload serial bpf net ramdisk pty sscon cda klog fpsim $UFSPROBE >/dev/console 2>&1
+/sbin/modload net ramdisk pty klog fpsim $UFSPROBE >/dev/console 2>&1
 
 # DESK ACCESSORIES ARE NOT INSTALLED HERE.  loadcda(8) installs one, from
 # /usr/fgx/cda or anywhere, when it is wanted: a desk accessory holds its code
@@ -194,17 +212,8 @@ done
 # /etc/crontab and the user tables crontab(1) keeps in /var/cron/tabs.
 /sbin/cron
 
-# Network services: telnet logins, via /etc/inetd.conf.
-/sbin/inetd
-
-# The time daemon, last, as 2.11BSD's rc.local starts it after the standard
-# daemons (usr/etc/rc.local, `ntpd').  It detaches itself, reads /etc/ntp.conf,
-# and keeps the clock with those servers: adjtime(2) slews a small offset and
-# settimeofday(2) steps a large one, so no separate `ntp -s' is needed first.
-# Only with a network, as 2.11BSD's rc gates its network daemons on $INET
-# (set by /etc/netstart): without one it has no server to reach, and it would
-# hold sockets from a table of eight.
-if [ "$INET" = YES ]
-then
-	/sbin/ntpd
-fi
+# THE MACHINE'S OWN CHOICES, LAST, as 2.11BSD's rc ends with `/etc/rc.local'
+# (usr/etc/rc): the optional modules, inetd (telnet logins) and ntpd, each
+# shipped commented out.  Sourced rather than run, so it sees $INET from
+# /etc/netstart without an export and costs no fork.
+[ -f /etc/rc.local ] && . /etc/rc.local

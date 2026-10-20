@@ -10,7 +10,9 @@
 
 > The button downloads this version's bootable 32 MB hard-disk image; every
 > tagged release carries its own as `fgx-<version>.fs`. GitHub Actions builds
-> it from the tag, with fcc's fixture suite.
+> it from the tag, with fcc's fixture suite. On first boot, choose a time zone
+> and turn on the devices and services the machine needs: see
+> [Configuring a machine](docs/CONFIGURING.md).
 
 FGX is a port of 2.11BSD to the Apple IIgs (WDC 65C816). Its kernel runs
 2.11BSD's tty subsystem and clists, timekeeping, sysctl and kernel log, and
@@ -169,6 +171,7 @@ essentials:
 - **[Architecture overview](docs/architecture.md)** — start here
 - [Contributing](docs/CONTRIBUTING.md) — setup, the dev loop, the build gates, how work lands
 - [Building](docs/BUILDING.md) — the ninja build, the image, the gate, the release
+- [Configuring a machine](docs/CONFIGURING.md) -- the clock and time zone, devices, network services
 - [Writing an FGX program](docs/developing-userland.md) · [Userland ABI & syscalls](docs/userland-abi.md)
 - [Testing](docs/testing.md) — the gate, its budget, and the MAME harness
 - [Roadmap & subsystem status](docs/ROADMAP.md)

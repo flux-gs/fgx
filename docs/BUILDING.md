@@ -80,6 +80,14 @@ the graph: `/etc/rc`, copied from `disk_src/etc/rc.in`, and `/etc/version` and
 `/etc/build`, from git state and the clock -- nothing depends on a file for
 those two, so they cannot be graph outputs.  `uname -r` and `uname -v` read them.
 
+**The image's time zone** is `/etc/localtime`: the zone named by `FGX_TZ`, else
+the one in `.fgx_tz` (one line, e.g. `America/Los_Angeles`, untracked -- this
+machine's own setting), else UTC, which is what CI publishes.  `gen.py` creates
+an empty `.fgx_tz` when there is none, so writing a zone into it later re-runs
+`gen.py` by itself; `FGX_TZ` needs `python3 tools/ninja/gen.py` re-run by hand.
+A running machine chooses its zone without a rebuild: see
+[CONFIGURING.md](CONFIGURING.md).
+
 Before the image is built, `tools/prune_staged.py` takes out of `disk_src/`
 whatever the build no longer produces.  Ninja cannot express "ensure this is
 absent", which is how `disk_src/bin/jsh` once shipped after jsh was deleted.

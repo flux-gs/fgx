@@ -1,0 +1,11 @@
+# /etc/rc.local for every test boot -- run.py stages it over the image's own,
+# which ships everything turned off.  The suite tests the devices and daemons a
+# machine can turn on, so this turns all of them on, as the boot did before
+# they became optional: the modules in one modload, inetd for telnetd's tests,
+# and ntpd when there is a network.
+/sbin/modload serial bpf sscon cda >/dev/console 2>&1
+/sbin/inetd
+if [ "$INET" = YES ]
+then
+	/sbin/ntpd
+fi

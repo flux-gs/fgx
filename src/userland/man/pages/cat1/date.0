@@ -15,8 +15,10 @@ DESCRIPTION
      If no arguments are given, the current date and time are
      printed, with the time zone's abbreviation.  Providing an
      argument will set the desired date; only the super-user can
-     set the date.  The kernel keeps UTC and writes the IIgs
-     battery clock in local time (see _a_d_j_k_e_r_n_t_z(8)).
+     set the date.  The kernel keeps UTC.  It does not write the
+     IIgs battery clock unless machdep.disable_rtc_set is
+     cleared, so a date set here lasts until the next boot,
+     which reads the battery clock again (see _a_d_j_k_e_r_n_t_z(8)).
 
      The time given and the time printed are local time in the
      time zone TZ names, else /etc/localtime (see _c_t_i_m_e(3)).
@@ -43,9 +45,10 @@ EXAMPLES
      sets the date to July 11, 2026, 6:45:30 PM.
 
 FILES
-     The clock is the IIgs battery RAM real-time clock, written
-     via the Miscellaneous Tool Set.  The year must be 1904 or
-     later.
+     The boot reads the IIgs battery RAM real-time clock through
+     the Miscellaneous Tool Set; with machdep.disable_rtc_set
+     cleared, setting the date writes it back.  The year must be
+     1904 or later.
 
 SEE ALSO
      gettimeofday(2), settimeofday(2), ctime(3), adjkerntz(8)
