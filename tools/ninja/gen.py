@@ -2164,8 +2164,8 @@ def emit(tools, out_path):
     # /etc/localtime is FGX_TZ, else the zone named in the untracked .fgx_tz
     # (this machine's own setting, as disk_src/etc/dhclient.conf is), else UTC.
     # FGX_TZ is read HERE, so a change needs gen.py re-run before ninja, as
-    # every environment knob here does; .fgx_tz is a regen input when it
-    # exists, so editing it re-runs gen.py by itself.
+    # every environment knob here does; .fgx_tz is always a regen input, so
+    # editing it re-runs gen.py by itself.
     fgx_tz = os.environ.get("FGX_TZ") or local_tz() or "UTC"
     lines.append("build build/.zoneinfo_staged disk_src/etc/localtime: tzzones | "
                  "build/tz_host/zic tools/ninja/tz.sh tools/check_tzlimits.py "
@@ -2619,9 +2619,14 @@ def emit(tools, out_path):
     # silent staleness one level up, so the stubs are globbed rather than
     # typed: this module, the tool manifest, and each tool's companion
     # *_stubs.s, whose existence decides whether a link edge names it.
-    gen_inputs = ["tools/ninja/gen.py", "tools/ninja/manifest.json"]
-    if local_tz():
-        gen_inputs.append(".fgx_tz")
+    # .fgx_tz IS ALWAYS AN INPUT, so writing a zone into it re-runs gen.py.  A
+    # missing input with no rule stops ninja, so the file is made empty when it
+    # is absent -- empty is UTC, as absent was -- and a zone set after the first
+    # build is no longer ignored.
+    tzp = os.path.join(ROOT, ".fgx_tz")
+    if not os.path.exists(tzp):
+        open(tzp, "w").close()
+    gen_inputs = ["tools/ninja/gen.py", "tools/ninja/manifest.json", ".fgx_tz"]
     gen_inputs += sorted(
         rel(p) for p in glob.glob(os.path.join(ROOT, "src/userland/*/*_stubs.s")))
     lines.append("rule regen_ninja\n"
