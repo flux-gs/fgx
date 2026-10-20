@@ -1,0 +1,37 @@
+{
+ "name": "ramdisk",
+ "description": "THE CONTROL PANEL RAM DISK IS TAKEN UP AND MOUNTED WRITABLE AT /ram5.  BRAM asks for a 256 KB RAM disk (rdMinRam/rdMaxRam $36/$37 = 8, 32 KB units; run.py rewrites the checksum).  MAME's IIgs has 8 MB, the case where ROM 3 fails to create RAM5 (ProBoot.src's CreateRAM5), so ramdisk.mod has the ROM's MakeDisk make it -- `512 blocks ... (made)' -- replaces the empty Pascal volume the ROM leaves with a ProDOS one, and registers it as /dev/ram0; /etc/rc mounts it with mount_prodos -o write.  The staged rc.local creates /ram5/b1 during the boot, so b1 in the listing is a write through the mount, and df naming /dev/ram0 on /ram5 is the mount itself.  WHAT IT DOES NOT COVER: keeping the disk across a soft reboot.  A warm_reset_frame run made the disk again on the second boot and stalled at the system logger, and run.py's own notes say MAME's reset line does not give a working warm reset (apple/fgx#120), so that property is unmeasured here.  Without the BRAM setting the module logs `ramdisk: none' and makes nothing, which every other test's boot shows.",
+ "bram": {
+  "36": 8,
+  "37": 8
+ },
+ "stage_files": [
+  {
+   "host": "tools/mame_test/fixtures/ramdisk.rc.local",
+   "prodos_dir": "/FGX/ETC",
+   "name": "rc.local"
+  }
+ ],
+ "command": "echo z >/ram5/z; ls /ram5; cat /ram5/z; df",
+ "timeout_s": 120,
+ "boot_s": 45,
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "512 blocks @ bank",
+   "(made)",
+   "ram5: /dev/ram0 mounted on /ram5",
+   "b1",
+   "/dev/ram0         256"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not a ProDOS volume",
+   "Read-only file system"
+  ]
+ }
+}

@@ -515,7 +515,7 @@ KNOWN_MANIFEST_KEYS = {
     "raw_inject", "capture_writes", "stage_files", "pc_sample", "boot_device",
     "mame_slots", "extra_hards", "cycle_markers", "disk_image", "exit_marker",
     "boot_s", "primary_input",
-    "fresh_nvram", "serial",
+    "fresh_nvram", "serial", "bram",
     "out_path", "paste_mode", "png_snapshot", "requires", "stack_excursion",
     "use_state", "watch_addrs", "watch_min",
     "warm_reset_frame", "warm_settle_frames", "poison", "host_proc",
@@ -524,6 +524,71 @@ KNOWN_MANIFEST_KEYS = {
     # Injected by run.py itself, not written by manifest authors.
     "_exit_reason", "_no_state", "_hostproc",
 }
+
+
+def bram_checksum(b):
+    """The IIgs battery-RAM checksum over bytes 0..251, as the 4 bytes stored
+    at 252..255: the 16-bit sum, then the sum ^ $AAAA, little-endian.  The
+    loop is gsport's clk_calculate_bram_checksum (src/clock.c), byte-stepped
+    so successive words overlap; the ROM rejects a BRAM whose stored value
+    disagrees and falls back to its defaults."""
+    c = 0
+    for i in range(250, -1, -1):
+        c = (c & 0xFFFF) << 1
+        c = (c & 0xFFFF) + b[i] + (b[i + 1] << 8) + (c >> 16)
+    c &= 0xFFFF
+    x = c ^ 0xAAAA
+    return bytes([c & 0xFF, c >> 8, x & 0xFF, x >> 8])
+
+
+def apply_bram(rtc_path, params):
+    """Set battery-RAM parameters {"36": 8, ...} (hex parameter number ->
+    value, the Toolbox Ref's numbers) in a per-test MAME rtc file, and
+    rewrite its checksum so the ROM accepts it."""
+    b = bytearray(Path(rtc_path).read_bytes())
+    if len(b) != 256:
+        fatal(f"bram: {rtc_path} is {len(b)} bytes, not a 256-byte BRAM")
+    for k, v in params.items():
+        n = int(str(k), 16)
+        if not 0 <= n < 252:
+            fatal(f"bram: parameter ${n:02X} is not a BRAM parameter")
+        b[n] = int(v) & 0xFF
+    b[252:] = bram_checksum(b)
+    Path(rtc_path).write_bytes(bytes(b))
+
+
+def _selftest_bram():
+    """The checksum must reproduce a stored one, and a patched BRAM must carry
+    a checksum that matches it -- else every `bram' test boots on the ROM's
+    defaults and asserts on a RAM disk nobody configured."""
+    import tempfile
+    fails = []
+    real = AMPLE_SUP / "nvram" / "apple2gs" / "rtc"
+    if real.is_file():
+        rb = real.read_bytes()
+        if len(rb) == 256 and bram_checksum(rb) != rb[252:]:
+            fails.append("the checksum does not reproduce the stored one in %s"
+                         % real)
+    b = bytearray(range(256))
+    b[252:] = bram_checksum(b)
+    with tempfile.NamedTemporaryFile(delete=False) as f:
+        f.write(b)
+        p = f.name
+    apply_bram(p, {"36": 8, "37": 8})
+    nb = Path(p).read_bytes()
+    os.unlink(p)
+    if nb[0x36] != 8 or nb[0x37] != 8:
+        fails.append("apply_bram did not set the parameters")
+    if bram_checksum(nb) != nb[252:]:
+        fails.append("apply_bram left a checksum that does not match")
+    if nb[252:] == b[252:]:
+        fails.append("the checksum did not change with the parameters")
+    for f_ in fails:
+        print("run.py --self-test (bram): FAIL -- " + f_)
+    if not fails:
+        print("run.py bram self-test: OK (reproduces a stored checksum, and a "
+              "patched BRAM carries a matching one)")
+    return 1 if fails else 0
 
 
 def _selftest_manifest_keys():
@@ -1412,6 +1477,15 @@ def run_mame(*, manifest, mode, debug=False, headless=True, scratch=None):
         # EMPTY, for the same reason as the floppy branch above.
         shutil.rmtree(_nvdir, ignore_errors=True)
         _nvdir.mkdir(parents=True, exist_ok=True)
+    if manifest.get("bram"):
+        # PER-TEST BATTERY RAM, over the copy above: a test that needs a
+        # Control Panel setting -- a RAM disk size, say -- names the BRAM
+        # parameters and gets them with a checksum the ROM accepts.
+        _rtc = _nvdir / "apple2gs" / "rtc"
+        if not _rtc.is_file():
+            fatal("bram: no BRAM to patch at %s -- it is copied from the "
+                  "shared Ample nvram, which has none" % _rtc)
+        apply_bram(_rtc, manifest["bram"])
 
     # CPU speed: MAME's apple2gs models a ZipGS accelerator via the a2_config
     # "CPU type" port (0=Standard 2.8MHz, 1=7MHz, 3=8, 5=12, 7=16 MHz ZipGS).
@@ -2890,7 +2964,7 @@ def main():
     # Before argparse: the self-test must run without a MAME install.
     if "--self-test" in sys.argv:
         return (_selftest_manifest_keys() or _selftest_config_requirement()
-                or _selftest_dump_summary())
+                or _selftest_dump_summary() or _selftest_bram())
     p = argparse.ArgumentParser()
     p.add_argument("names", nargs="*",
                    help="test names to run (default: all)")
