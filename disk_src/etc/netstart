@@ -1,16 +1,13 @@
-# /etc/netstart - network bring-up, sourced by /etc/rc (`. /etc/netstart`).
+# /etc/netstart - network bring-up, sourced by /etc/rc
 echo >/dev/console 2>&1
 echo Starting network... >/dev/console 2>&1
-# INET says whether the network came up, as 2.11BSD's netstart sets it for
-# /etc/rc's network daemons (ntpd); dhclient returns nonzero without a lease.
 INET=NO
 if dhclient >/dev/console 2>&1
 then
 	INET=YES
 fi
 
-# Renew = re-run `dhclient` (no daemon yet).  For static addressing
-# instead, comment out the dhclient lines above and use e.g.:
+# static address instead of dhclient:
 # ifconfig u2s1 inet 192.168.2.50 netmask 255.255.255.0 broadcast 192.168.2.255
 # route add default 192.168.2.1
 # INET=YES
