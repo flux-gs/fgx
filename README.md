@@ -4,7 +4,7 @@
 
 [![build](https://github.com/flux-gs/fgx/actions/workflows/build.yml/badge.svg)](https://github.com/flux-gs/fgx/actions/workflows/build.yml)
 &nbsp;
-[**⬇ Download `fgx-2.0.0.fs`**](https://github.com/flux-gs/fgx/releases/download/v2.0.0/fgx-2.0.0.fs)
+[**⬇ Download `fgx-2.1.0.fs`**](https://github.com/flux-gs/fgx/releases/download/v2.1.0/fgx-2.1.0.fs)
 &nbsp;·&nbsp;
 [all releases →](https://github.com/flux-gs/fgx/releases)
 &nbsp;·&nbsp;
