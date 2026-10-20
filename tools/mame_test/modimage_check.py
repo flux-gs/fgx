@@ -16,8 +16,10 @@ offset, length and expected byte comes from the module files themselves:
   * which bank an ordinal is in   -> _modBankTab, read by the plugin at runtime
   * where a module sits in it     -> its own FGXM load address (header +4)
   * how many bytes are its image  -> its own FGXM text size (header +10)
-  * which modules should be there -> /etc/modload.conf, plus any module found
-                                     staged by the loader (see PRE-LOADED below)
+  * which modules should be there -> /etc/modload.conf and the modules the
+                                     test boot's rc.local loads, plus any module
+                                     found staged by the loader (see PRE-LOADED
+                                     below)
 
 That matters more than it looks.  Module offsets move whenever a module grows
 (gen_modplace reassigns them), so a manifest carrying `"addr_hex": "005100"`
@@ -83,6 +85,9 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 MODDIR = REPO / "disk_src" / "lib" / "modules"
 CONF = REPO / "disk_src" / "etc" / "modload.conf"
+# The test boot's /etc/rc.local (run.py stages it), which turns on the modules
+# modload.conf leaves to rc.local: they are loaded, so they are compared too.
+TEST_RC_LOCAL = REPO / "tools" / "mame_test" / "rc.local"
 SYSCFG = REPO / "cfg" / "system.cfg"
 HDR = 40                                  # FGXM_HEADER_SZ (include/fgxm.s)
 ORG_BANK = 0x05                           # FGX_MOD_ORG_BANK; ordinal = hi - this
@@ -150,6 +155,15 @@ def conf_modules():
         line = line.split("#", 1)[0].strip()
         if line and line.lower() not in off:
             out.append(line.lower())
+    if TEST_RC_LOCAL.exists():
+        for line in TEST_RC_LOCAL.read_text().splitlines():
+            words = line.split("#", 1)[0].split()
+            if words[:1] in (["modload"], ["/sbin/modload"]):
+                for w in words[1:]:
+                    if w[:1] in "<>" or w[:1].isdigit():
+                        break
+                    if w.lower() not in off and w.lower() not in out:
+                        out.append(w.lower())
     return out
 
 

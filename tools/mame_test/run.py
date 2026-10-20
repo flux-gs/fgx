@@ -357,6 +357,18 @@ def _shared_inputs_hash(no_state):
     return h.hexdigest()
 
 
+# EVERY TEST BOOT TURNS THE OPTIONAL DEVICES AND DAEMONS ON.  The image's own
+# /etc/rc.local ships them commented out; the suite tests them, so each boot
+# stages this one over it, first, before the manifest's own stage_files.
+TEST_RC_LOCAL = {"host": "tools/mame_test/rc.local", "prodos_dir": "/FGX/ETC",
+                 "name": "rc.local"}
+
+
+def stage_list(m):
+    """The files a test stages: the test rc.local, then the manifest's."""
+    return [TEST_RC_LOCAL] + m.get("stage_files", [])
+
+
 def _test_input_key(manifest_path, m, shared_hash):
     """Per-test input key: run-wide hash + this test's manifest bytes +
     every file it stages + its check_script.  Conservative: any byte
@@ -367,7 +379,7 @@ def _test_input_key(manifest_path, m, shared_hash):
     # Resolved as staging resolves it: a relative `host' names a file under
     # REPO, and read from the caller's directory it hashed as <absent>, so a
     # rebuilt staged binary kept the verdict of the one it replaced.
-    for sf in m.get("stage_files", []):
+    for sf in stage_list(m):
         _sp = Path(sf["host"])
         _hash_file(h, _sp if _sp.is_absolute() else REPO / sf["host"])
     # A SECOND SPINDLE IS AN INPUT, AND THE KEY COULD NOT SEE IT.  `extra_hards'
@@ -1432,7 +1444,7 @@ def run_mame(*, manifest, mode, debug=False, headless=True, scratch=None):
     # "name": <PRODOS_NAME, default host basename upper>, "replace": true}.
     # replace=true uses cadius REPLACEFILE (keeps the existing file's type/aux),
     # otherwise DELETEFILE+ADDFILE (idempotent add of a new file).
-    for sf in manifest.get("stage_files", []):
+    for sf in stage_list(manifest):
         hostp = sf["host"]
         hostp = hostp if os.path.isabs(hostp) else str(REPO / hostp)
         ensure_toolchain_fixture(hostp)

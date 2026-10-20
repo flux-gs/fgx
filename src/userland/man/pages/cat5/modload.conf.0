@@ -32,6 +32,11 @@ DESCRIPTION
      root, which is where 4.3BSD runs modload(8) from as well: out
      of /etc/rc, once the filesystem is mounted.
 
+     The modules for hardware a machine may not have -- serial,
+     bpf, sscon and cda -- are not listed: /etc/rc.local loads
+     them, and ships with each one commented out.  Remove the
+     `#' from a module's line there to load it at boot.
+
      hello is a demonstration module: the smallest working example
      of the module interface.  It ships in /lib/modules and is
      commented out here.

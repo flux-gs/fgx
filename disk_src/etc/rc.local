@@ -1,0 +1,35 @@
+# /etc/rc.local -- this machine's startup choices, read last by /etc/rc, as
+# 2.11BSD's rc ends with it (usr/etc/rc, usr/etc/rc.local).  Everything here
+# ships turned off: remove the `#' from a line to turn it on, and it takes
+# effect at the next boot.  docs/CONFIGURING.md describes each one.
+#
+# THE TIME ZONE IS NOT SET HERE.  The IIgs clock keeps local time and the image
+# ships UTC, so until a zone is chosen the clock is read as UTC.  Choose one by
+# copying its file over /etc/localtime and rebooting:
+#
+#	cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+#
+# FGX does not write the IIgs clock back (machdep.disable_rtc_set is 1), so
+# setting the time with date(1) or ntpd changes FGX's clock only.
+
+# MODULES FOR HARDWARE THIS MACHINE MAY NOT HAVE.  The ones every machine needs
+# are loaded by /etc/rc.
+#
+# The SCC serial ports, /dev/tty00 (printer) and /dev/tty01 (modem):
+#/sbin/modload serial >/dev/console 2>&1
+# /dev/bpf0, raw Ethernet frames from the Uthernet II:
+#/sbin/modload bpf >/dev/console 2>&1
+# A console on a Second Sight card (ttyv3, Option-4):
+#/sbin/modload sscon >/dev/console 2>&1
+# Classic desk accessories (/dev/cda, loadcda(8)):
+#/sbin/modload cda >/dev/console 2>&1
+
+# NETWORK DAEMONS, only when /etc/netstart brought the network up.
+if [ "$INET" = YES ]
+then
+	# Telnet logins, as /etc/inetd.conf lists them.
+	#/sbin/inetd
+	# The time daemon: keeps FGX's clock with the servers in /etc/ntp.conf.
+	#/sbin/ntpd
+	:
+fi

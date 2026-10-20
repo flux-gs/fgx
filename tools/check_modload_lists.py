@@ -29,6 +29,8 @@ import re
 import sys
 
 RC_IN = pathlib.Path("disk_src/etc/rc.in")
+# rc sources rc.local last, so its uncommented modload lines continue the list.
+RC_LOCAL = pathlib.Path("disk_src/etc/rc.local")
 CONF = pathlib.Path("disk_src/etc/modload.conf")
 MODLOAD_RE = re.compile(r"^\s*(?:/sbin/)?modload\s+(.*)$", re.M)
 
@@ -167,13 +169,16 @@ def main(argv):
             print("check_modload_lists: FAIL -- %s not found (run from the "
                   "repo root)" % p)
             return 1
-    problems = compare(RC_IN.read_text(), CONF.read_text())
+    rc = RC_IN.read_text()
+    if RC_LOCAL.exists():
+        rc += "\n" + RC_LOCAL.read_text()
+    problems = compare(rc, CONF.read_text())
     if problems:
         print("check_modload_lists: FAIL -- " + problems[0])
         for line in problems[1:]:
             print(line)
         return 1
-    names, _ = rc_list(RC_IN.read_text())
+    names, _ = rc_list(rc)
     print("check_modload_lists: clean (%d modules, same order in both: %s)"
           % (len(names), " ".join(names)))
     return 0
