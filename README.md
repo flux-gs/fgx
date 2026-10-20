@@ -191,7 +191,7 @@ See [CHANGELOG.md](CHANGELOG.md).
 We will try to answer questions, and contributions are welcome.
 
 - **Questions and discussion:** join the community in **#fgx** on the
-  [Apple II Infinitum Slack](https://apple2.gs/slack/).
+  Apple II Infinitum Slack.
 - **Bugs:** open a [GitHub issue](https://github.com/flux-gs/fgx/issues/new/choose).
 - **Changes:** send a pull request; [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)
   has the workflow.

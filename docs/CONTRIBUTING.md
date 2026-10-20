@@ -189,7 +189,7 @@ change that rests on K&R or BSD text quotes or names that text, as
 **Report problems** in [GitHub Issues](https://github.com/flux-gs/fgx/issues/new/choose);
 the bug report form asks for the version, the hardware, what happened, and how
 to reproduce it in Ample or MAME.  Ask questions in #fgx on the
-[Apple II Infinitum Slack](https://apple2.gs/slack/). Issue references
+Apple II Infinitum Slack. Issue references
 already in the tree (`#123`, `apple/fgx#123`) point to the project's earlier
 tracker.
 
