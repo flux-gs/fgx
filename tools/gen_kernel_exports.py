@@ -416,13 +416,13 @@ MANIFESTS = {
         ('_rdSizeBytes', '_rdSizeBytes', 0, 'lo16'),
         ('_rdBlocks', '_rdBlocks', 0, 'lo16'),
         ('_rdPresent', '_rdPresent', 0, 'lo16'),
-        ('_kFgxUserID', '_kFgxUserID', 0, 'lo16'),
         ('_fsDirBuf', '_fsDirBuf', 0, 'lo16'),
         ('_diskStates', '_diskStates', 0, 'lo16'),
         ('_blkCurHi', '_blkCurHi', 0, 'lo16'),
         ('_blkCurBufBank', '_blkCurBufBank', 0, 'lo16'),
         ('_blkSrcPool', '_blkSrcPool', 0, 'lo16'),
         ('_kBlkTabBase', '_kBlkTabBase', 0, 'lo16'),
+        ('ROMVersion', 'ROMVersion', 0, 'lo16'),
     ],
     # pty: the pty driver, lifted out of the core bank 2026-08-11.  All lo16
     # for the same reason as ramdisk -- the module's ops are entered by the
