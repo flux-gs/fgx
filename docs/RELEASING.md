@@ -62,9 +62,20 @@ toolchain, runs fcc's fixture and library suites, builds `disk/fgxroot.fs` with
 `ninja release` on Linux, and publishes it on the tag's GitHub release as
 `fgx-X.Y.Z.fs`; the version is in the file name and in the image as
 `/etc/version`.  A maintainer can also start the build by hand from the
-Actions tab.  Pull requests and branch pushes do not start it: the build is
-heavy, and the gate (`tools/gate.sh`, run locally, since the MAME tests need a
-ROM) is what attests that a commit boots.  merlin32 is built from upstream
+Actions tab.
+
+Every push to `main` runs the same build and publishes its image on the
+rolling `main-latest` pre-release as `fgx-main-<commit>.fs`, moving the
+`main-latest` tag to that commit and deleting all but the newest three
+(`MAIN_KEEP` in the workflow).  Release assets are stored outside git, so
+neither these nor the release images grow the repository.  A pre-release is
+never GitHub's "Latest", so the newest `vX.Y.Z` stays the default download.
+`/etc/version` in a `main` image is `git describe`'s, e.g.
+`v2.0.0-5-g712de08`.
+
+Pull requests and other branches do not start the build, and it does not
+attest that a commit boots: the gate (`tools/gate.sh`, run locally, since the
+MAME tests need a ROM) does that.  merlin32 is built from upstream
 plus `.github/merlin32-cr-lookback.patch`, and cadius at a pinned commit; the
 pins are in the workflow.
 

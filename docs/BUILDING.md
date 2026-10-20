@@ -197,7 +197,9 @@ everything else. A change spanning the compiler and the OS is one commit, one
 branch, one review, one gate.
 
 Pushing a `vX.Y.Z` tag runs the GitHub Actions build, which publishes
-`fgx-X.Y.Z.fs` (from `ninja release`) on the tag's release.
+`fgx-X.Y.Z.fs` (from `ninja release`) on the tag's release.  Every push to
+`main` publishes `fgx-main-<commit>.fs` on the rolling `main-latest`
+pre-release, which keeps the newest three.
 
 ## Troubleshooting
 

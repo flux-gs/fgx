@@ -1,20 +1,21 @@
 # Host-side build of FGX: the toolchain, its library tests, and the release
-# disk image; on a vX.Y.Z tag, a GitHub release carrying that image.  The
-# emulator tests do not run here: they need an Apple IIgs ROM, which cannot be
-# distributed.
+# disk image; on a vX.Y.Z tag, a GitHub release carrying that image, and on
+# main, the image of that commit on the rolling `main-latest' pre-release.
+# The emulator tests do not run here: they need an Apple IIgs ROM, which cannot
+# be distributed.
 #
-# The build is heavy, so it runs only when a release manager asks for it:
-# pushing a version tag, or a manual run (Actions > build > Run workflow).
-# Both need write access to the repository.  Pull requests, from forks or
-# otherwise, never start it; a merged contribution is built with the next
-# release.
+# It runs on a version tag, on every push to main (which is a merged pull
+# request, since main takes nothing else), and by hand (Actions > build > Run
+# workflow).  Pull requests, from forks or otherwise, never start it.
 name: build
 on:
   push:
     tags: ['v*.*.*']
+    branches: [main]
   workflow_dispatch:
 
-# A re-pushed tag cancels the run it replaces rather than queueing another.
+# A newer push to the same ref cancels the run it replaces rather than queueing
+# another.
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
@@ -28,7 +29,11 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
+      # Full history, so /etc/version is `git describe' against the v* tags
+      # (v2.0.0-5-g712de08 on main) rather than a bare hash.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Host packages
         run: |
@@ -121,3 +126,56 @@ jobs:
               --repo "$GITHUB_REPOSITORY" --title "FGX $GITHUB_REF_NAME" \
               --notes "Bootable image: $img (32MB hard disk).  See CHANGELOG.md.  The image includes GPL programs (frotz); their source is this release's tagged tree."
           fi
+
+  # A push to main publishes its image on the `main-latest' pre-release as
+  # fgx-main-<sha>.fs, moves that tag to the commit, and keeps only the newest
+  # MAIN_KEEP images there.  Release assets live outside git, so nothing here
+  # grows the repository; a pre-release is never marked Latest, so the newest
+  # vX.Y.Z stays the release GitHub points people at.
+  main-image:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: main-latest
+      MAIN_KEEP: 3
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: fgxroot
+
+      - name: Publish
+        run: |
+          sha="${GITHUB_SHA:0:7}"
+          img="fgx-main-$sha.fs"
+          cp fgxroot.fs "$img"
+          if gh api "repos/$GH_REPO/git/refs/tags/$TAG" >/dev/null 2>&1; then
+            gh api -X PATCH "repos/$GH_REPO/git/refs/tags/$TAG" \
+              -f sha="$GITHUB_SHA" -F force=true >/dev/null
+          else
+            gh api "repos/$GH_REPO/git/refs" \
+              -f ref="refs/tags/$TAG" -f sha="$GITHUB_SHA" >/dev/null
+          fi
+          notes="Disk images of the newest $MAIN_KEEP commits on main, newest $sha.  Untested builds between releases: the emulator tests need an Apple IIgs ROM and do not run in CI.  For a release, take the newest vX.Y.Z.  The image includes GPL programs (frotz); their source is the commit named in the file name."
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --prerelease --notes "$notes"
+          else
+            gh release create "$TAG" --prerelease --latest=false \
+              --title "FGX main (rolling)" --notes "$notes"
+          fi
+          gh release upload "$TAG" "$img#$img (32MB hard-disk image, main $sha)" --clobber
+
+      - name: Prune
+        run: |
+          id=$(gh api "repos/$GH_REPO/releases/tags/$TAG" --jq .id)
+          gh api --paginate "repos/$GH_REPO/releases/$id/assets" \
+            --jq '.[] | select(.name | startswith("fgx-main-")) | [.created_at, .id, .name] | @tsv' |
+            sort -r | tail -n +$((MAIN_KEEP + 1)) |
+            while IFS=$'\t' read -r _ aid name; do
+              echo "deleting $name"
+              gh api -X DELETE "repos/$GH_REPO/releases/assets/$aid"
+            done
