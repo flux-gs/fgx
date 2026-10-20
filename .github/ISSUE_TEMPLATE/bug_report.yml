@@ -7,8 +7,8 @@ body:
       value: |
         FGX comes with no support, offered or implied, but every report is read.
         A bug we can reproduce in Ample or MAME is a bug we can fix, so the
-        steps below matter most.  Questions are better asked in #fgx on the
-        [Apple II Infinitum Slack](https://apple2.gs/slack/).
+        steps below matter most.  For questions, ask in #fgx on the
+        Apple II Infinitum Slack.
 
   - type: input
     id: version
