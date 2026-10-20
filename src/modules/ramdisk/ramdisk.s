@@ -110,7 +110,7 @@ RD_MaxDiskParm  EQU     $E102F7         ; "inside the Battery RAM buffer (max
 ; /dev/sd0..sd7 nodes, so row 8 is the first one no disk node names; a machine
 ; with more than eight SmartPort units takes it, and the RAM disk is then not
 ; registered.  Not a higher row: a mount on rows 29..31 crashes the machine
-; (apple/fgx GitHub issue, see the commit), and 8 is clear of it.
+; (flux-gs/fgx#4), and 8 is clear of it.
 RD_DEVIDX       EQU     8
 
 ;------------------------------------------------------------------------------
