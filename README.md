@@ -7,10 +7,14 @@
 [**⬇ Download `fgx-2.0.0.fs`**](https://github.com/flux-gs/fgx/releases/download/v2.0.0/fgx-2.0.0.fs)
 &nbsp;·&nbsp;
 [all releases →](https://github.com/flux-gs/fgx/releases)
+&nbsp;·&nbsp;
+[latest from main →](https://github.com/flux-gs/fgx/releases/tag/main-latest)
 
 > The button downloads this version's bootable 32 MB hard-disk image; every
 > tagged release carries its own as `fgx-<version>.fs`. GitHub Actions builds
-> it from the tag, with fcc's fixture suite. On first boot, choose a time zone
+> it from the tag, with fcc's fixture suite. The images of the three newest
+> commits on `main` are on the rolling `main-latest` pre-release, as
+> `fgx-main-<commit>.fs`: untested between releases. On first boot, choose a time zone
 > and turn on the devices and services the machine needs: see
 > [Configuring a machine](docs/CONFIGURING.md).
 
