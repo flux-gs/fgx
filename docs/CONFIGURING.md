@@ -109,6 +109,13 @@ Each has its own line in `/etc/rc.local`; remove the `#` to load it:
 the image was built for -- slot 3, set by `sscon.slot` in `cfg/system.cfg`.
 Without a card it prints `sscon: no card in slot 3` and does nothing.
 
+**CD-ROMs.**  A CD-ROM drive on a SmartPort card -- an Apple SCSI CD-ROM on
+the Apple II SCSI Card -- attaches as `/dev/cd0` with no module to load, and
+the boot log says whether a disc is in it (`cd0 at sp0 unit 2: empty`).  The
+card presents a CD's ProDOS partition as a disk, so a ProDOS CD mounts with
+`mount_prodos -o ro /dev/cd0 /mnt`.  The device is read-only; an ISO 9660
+filesystem cannot be mounted yet.
+
 **Desk accessories.**  `cda` only makes the menu work; `loadcda(8)` installs an
 accessory, from `/usr/fgx/cda` or anywhere, and it stays in memory until the
 machine restarts.

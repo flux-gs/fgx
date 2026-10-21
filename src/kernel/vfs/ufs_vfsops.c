@@ -180,8 +180,8 @@ struct ufs_sb *sb;
 /* ufs_devname -- write "/dev/<driver><unit>" into a MNAMELEN buffer.
  *
  * THE NAME MATCHES THE NODE: the major names the driver, as bdevsw does, and
- * the minor is its unit -- `sd' for a SmartPort disk and `ram' for the RAM
- * disk, the names tools/ninja/gen.py mints.  2.11BSD would spell the same
+ * the minor is its unit -- `sd' for a SmartPort disk, `ram' for the RAM disk
+ * and `cd' for a CD-ROM, the names tools/ninja/gen.py mints.  2.11BSD would spell the same
  * thing `ra0a' or `hk0a' -- controller, unit, partition -- and FGX has neither
  * controllers nor partitions to name.
  *
@@ -201,6 +201,8 @@ dev_t dev;
         buf[n++] = 's'; buf[n++] = 'd';
     } else if (major(dev) == RAM_MAJOR) {
         buf[n++] = 'r'; buf[n++] = 'a'; buf[n++] = 'm';
+    } else if (major(dev) == CD_MAJOR) {
+        buf[n++] = 'c'; buf[n++] = 'd';
     } else {
         buf[n++] = '?';
     }

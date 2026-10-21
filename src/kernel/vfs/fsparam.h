@@ -271,7 +271,8 @@ typedef long            off_t;
  * these (tools/ninja/gen.py), so a renumbering is a new image. */
 #define SD_MAJOR        0       /* SmartPort disks */
 #define RAM_MAJOR       1       /* the Control Panel RAM disk */
-#define NBLKDEV         2
+#define CD_MAJOR        2       /* SmartPort CD-ROMs */
+#define NBLKDEV         3
 
 /* Errno values kernel C needs.  It links no libc, so it cannot include
  * errno.h; these must stay equal to their toolchain/include/errno.h

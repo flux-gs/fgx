@@ -50,13 +50,14 @@
  * (usr/sys/sys/ufs_bio.c:38), which is bio_strategy below.  ufs_strategy fills
  * b_dev from the inode's i_devvp (ufs_vnops.c), and bgetvp sets it from v_rdev
  * or to NODEV (vfs_bio.c).  A buffer that reaches here still holding NODEV is a
- * bug in the caller, not a default to paper over, and is rejected as an error;
- * so is a major past the table, which is getmdev's ENXIO (ufs_mount.c:346).
+ * bug in the caller, not a default to paper over: NODEV's major is past the
+ * table, so it is getmdev's ENXIO (ufs_mount.c:346) like any other.
  *
  * EACH DRIVER OWNS A SLICE OF THE KERNEL'S DEVICE TABLE, and its unit is a row
  * there.  The table is what the block layer
  * (src/drivers/block) indexes, so kc_blkio takes a ROW: sd units are rows 0..7
- * in the order the SmartPort scan found them, and the RAM disk is row 8.  The
+ * in the order the SmartPort scan found them, the RAM disk is row 8, and
+ * SmartPort CD-ROMs are rows 9..12.  The
  * slices are BDEV_SD_ROW0/BDEV_NSD and BDEV_RAM_ROW in include/fs.s, which
  * the scan and ramdisk.mod register against; the two copies are equal by
  * hand.  A unit in range whose row holds no device fails its transfer with EIO
@@ -89,11 +90,15 @@ extern void biodone();
 struct bdevsw {
     char    d_row0;             /* the driver's unit 0 */
     char    d_nunit;            /* how many units it has */
+    char    d_flags;            /* D_RDONLY */
 };
+#define D_RDONLY        1       /* a write is EROFS, as NetBSD's cdstrategy
+                                 * answers one (sys/scsi/cd.c:369) */
 
 struct bdevsw bdevsw[NBLKDEV] = {
-    { 0, 8 },                   /* sd = 0: BDEV_SD_ROW0, BDEV_NSD */
-    { 8, 1 },                   /* ram = 1: BDEV_RAM_ROW */
+    { 0, 8, 0 },                /* sd = 0: BDEV_SD_ROW0, BDEV_NSD */
+    { 8, 1, 0 },                /* ram = 1: BDEV_RAM_ROW */
+    { 9, 4, D_RDONLY },         /* cd = 2: BDEV_CD_ROW0, BDEV_NCD */
 };
 
 /* bio_strategy -- `(*bdevsw[major(dev)].d_strategy)(bp)', with the one
@@ -110,14 +115,10 @@ bio_strategy(bp)
     int     rc;
     int     isread;
 
+    /* NODEV is 0xFFFF, so its major is past the table too: a buffer no
+     * device was ever filled in for fails here with the rest.  brelse turns
+     * B_ERROR into B_INVAL, so it will not be served to anyone as a hit. */
     rc = ENXIO;
-    if (bp->b_dev == NODEV) {
-        /* No device was ever filled in.  Fail the buffer rather than issue
-         * I/O; brelse turns B_ERROR into B_INVAL, so it will not be served to
-         * anyone as a hit. */
-        rc = EIO;
-        goto out;
-    }
     if (major(bp->b_dev) >= NBLKDEV)
         goto out;
     d = &bdevsw[major(bp->b_dev)];
@@ -127,6 +128,9 @@ bio_strategy(bp)
     isread = 0;
     if (bp->b_flags & B_READ)
         isread = 1;
+    rc = EROFS;
+    if (!isread && (d->d_flags & D_RDONLY))
+        goto out;
 
     dblk = bp->b_blkno * (daddr_t)DEVB_PER_FSB;
 

@@ -694,6 +694,10 @@ def write_dev_nodes_list(path="build/dev_nodes.list"):
     # 0: 256.  The sd nodes are major 0 (SD_MAJOR), so their number is the
     # unit alone.
     out += ["b /dev/ram0 256 600"]
+    # THE CD-ROMS, block major 2 (CD_MAJOR): one node per unit the scan can
+    # attach (BDEV_NCD in include/fs.s), attached or not, as the sd nodes are.
+    # 400: the medium is read-only.
+    out += [f"b /dev/cd{u} {512 + u} 400" for u in range(4)]
     # The raw disks beside the block nodes they name -- see RAW_DISK_NODES.
     # 600 like the block nodes: reading a spindle past the filesystem on it is
     # root's business, which is 2.11BSD's own mode for /dev/rra0a.

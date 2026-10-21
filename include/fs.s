@@ -179,10 +179,14 @@ FS_MAX_DEVICES  EQU     32
 ; src/kernel/vfs/bio_strategy.c turns its own unit into a row here, by these
 ; same numbers -- the C copy is there, equal by hand.  SmartPort disks take
 ; rows from BDEV_SD_ROW0 in the order the scan finds them, at most BDEV_NSD,
-; one per /dev/sd node; the RAM disk is BDEV_RAM_ROW, past them.
+; one per /dev/sd node; the RAM disk is BDEV_RAM_ROW, past them; and a
+; SmartPort unit whose DIB says CD-ROM takes a cd row instead of an sd one,
+; from BDEV_CD_ROW0, at most BDEV_NCD.  All below row 29 (flux-gs/fgx#4).
 BDEV_SD_ROW0    EQU     0
 BDEV_NSD        EQU     8
 BDEV_RAM_ROW    EQU     8
+BDEV_CD_ROW0    EQU     9
+BDEV_NCD        EQU     4
 
 ; SP_UNIT_MAX -- the highest SmartPort unit number a slot may be asked about.
 ;
@@ -209,8 +213,9 @@ BDEV_RAM_ROW    EQU     8
 ; not assigned a slot/drive pair at all.
 ;
 ; THE SCAN IS NOT BOUNDED BY THIS IN PRACTICE.  _dev_enumBus exits on the first
-; STATUS failure -- end of chain -- and on FS_MAX_DEVICES above, so a card with
-; three units costs three STATUS calls and a fourth that fails.  This constant
+; STATUS failure -- end of chain -- and is bounded by the port's own device
+; count, so a card with three units costs three STATUS calls and a fourth
+; that fails.  This constant
 ; only decides how far a card that KEEPS ANSWERING is followed.
 SP_UNIT_MAX     EQU     $7E                 ; 126; $00 is the port itself
 
@@ -219,6 +224,7 @@ DEV_CLASS_DISK   EQU    1
 DEV_CLASS_SERIAL EQU    2
 DEV_CLASS_NET    EQU    3
 DEV_CLASS_RAM    EQU    4
+DEV_CLASS_CD     EQU    5               ; read-only; offline when empty
 
 DEV_FLAG_ONLINE  EQU    $01
 ; DEV_FLAG_VFSOWNED - this device is cached by vfs_bio, so the LEGACY block
@@ -308,6 +314,17 @@ SP_READ         EQU     $08             ; SmartPort generic READ -- byte
 ; SmartPort STATUS status-code values (param+4).
 ;------------------------------------------------------------------------------
 SP_STAT_DEVICE  EQU     $00             ; device status (count if unit=0)
+SP_STAT_DIB     EQU     $03             ; device information block
+; The STANDARD call's DIB (Apple IIGS Firmware Reference p.123): +0 the
+; general status byte, +1..3 the block count, +4 the ID string's length,
+; +5..20 the string, +21 the device type, +22 the subtype, +23..24 the version.
+; Code $00's reply is the DIB's first four bytes, so +0..3 read the same
+; whichever call filled the stage.
+DIB_Type        EQU     21
+SP_GS_ONLINE    EQU     $10             ; status byte: "Device online or disk
+                                        ;   in drive" (p.122)
+SP_DEVTYPE_CDROM EQU    $05             ; "SCSI CD-ROM", SmartPort Technical
+                                        ;   Note #4
 
 ;------------------------------------------------------------------------------
 ; SmartPort staging buffer: firmware-mandated bank-$00 address where READ
