@@ -113,8 +113,9 @@ Without a card it prints `sscon: no card in slot 3` and does nothing.
 the Apple II SCSI Card -- attaches as `/dev/cd0` with no module to load, and
 the boot log says whether a disc is in it (`cd0 at sp0 unit 2: empty`).  The
 card presents a CD's ProDOS partition as a disk, so a ProDOS CD mounts with
-`mount_prodos -o ro /dev/cd0 /mnt`.  The device is read-only; an ISO 9660
-filesystem cannot be mounted yet.
+`mount_prodos -o ro /dev/cd0 /mnt`, and a CD without one -- an ISO 9660
+disc, Rock Ridge or not -- with `mount_isofs /dev/cd0 /mnt` (`mount_isofs(8)`).
+The device is read-only.
 
 **Desk accessories.**  `cda` only makes the menu work; `loadcda(8)` installs an
 accessory, from `/usr/fgx/cda` or anywhere, and it stays in memory until the
