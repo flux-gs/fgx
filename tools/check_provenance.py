@@ -1031,9 +1031,31 @@ def check_copyright_claims(root=ROOT):
     return errors
 
 
+def inputs():
+    """Every file this check reads, for the build graph's stamp.
+
+    THE CHECK NAMES ITS OWN INPUTS so the graph cannot drift from them: a
+    stamp whose inputs are someone else's (it rode on the kernel listings)
+    never re-ran for a new userland port, which went unregistered through a
+    green gate.
+    """
+    files = {os.path.relpath(REGISTRY, ROOT)}
+    files.update(r for r in load_registry()
+                 if os.path.isfile(os.path.join(ROOT, r)))
+    files.update(scan_userland_c())
+    files.update(SOURCE_CITE_FILES)
+    files.update(v for _n, _ours, v in load_vendor_claims()
+                 if os.path.isfile(os.path.join(ROOT, v)))
+    return sorted(files)
+
+
 def main():
     if "--self-test" in sys.argv:
         return _selftest()
+
+    if "--inputs" in sys.argv:
+        print("\n".join(inputs()))
+        return 0
 
     if not os.path.exists(REGISTRY):
         sys.stderr.write("PROVENANCE CHECK FAILED: docs/PROVENANCE.md not found\n")
