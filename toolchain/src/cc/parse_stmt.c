@@ -3090,7 +3090,17 @@ build_decl(TypeSpec t)
                 if (cnt >= 64) die(line, col, "too many declarators");
                 tmp[cnt++] = in;
             } else {
+                /* A pointer or arithmetic object's initializer is "a single
+                 * expression, perhaps in braces" (K&R A8.7). */
+                int braced = (g_cur.kind == TOK_LBRACE);
+                if (braced)
+                    next_tok();
                 int rhs = ast_build_assign();
+                if (braced) {
+                    if (g_cur.kind == TOK_COMMA)
+                        next_tok();
+                    expect(TOK_RBRACE, "'}' closing a braced scalar initializer");
+                }
                 int in = ast_new(N_STORE_VAR, line, col);
                 g_ast[in].sym_lc = lc;
                 g_ast[in].a = rhs;
@@ -4348,6 +4358,11 @@ parse_static_local(void)
             if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
             break;
         }
+        /* "a single expression, perhaps in braces" (K&R A8.7), as at
+         * file scope. */
+        int braced = (g_cur.kind == TOK_LBRACE);
+        if (braced)
+            next_tok();
         int neg = 0;
         if (g_cur.kind == TOK_MINUS) { neg = 1; next_tok(); }
         if (ty == LT_DOUBLE) {
@@ -4414,6 +4429,11 @@ parse_static_local(void)
                 "static-local initializer must be a constant (int/char "
                 "literal or, for char*, a string literal, or a null "
                 "pointer constant)");
+        }
+        if (braced) {
+            if (g_cur.kind == TOK_COMMA)
+                next_tok();
+            expect(TOK_RBRACE, "'}' closing a braced scalar initializer");
         }
     }
 
@@ -9413,6 +9433,16 @@ parse_global_decl(TypeSpec t)
         int ptr_init_groups = 0;              /* trailing ')' after the operand */
         if (g_cur.kind == TOK_EQ) {
             next_tok();
+            /* "The initializer for a pointer or an object of arithmetic type
+             * is a single expression, perhaps in braces" (K&R A8.7).  The
+             * braces go, and the expression is parsed as if they were not
+             * there; a trailing comma is the list nicety A8.7 allows. */
+            int scalar_braced = 0;
+            if (g_cur.kind == TOK_LBRACE && !is_array &&
+                decl_type != LT_STRUCT && decl_type != LT_STRUCT_ARRAY) {
+                next_tok();
+                scalar_braced = 1;
+            }
             /* A leading pointer cast in a pointer-global initializer:
              * `BLKPTR bloktop = (BLKPTR)end;` and the macro form
              * `BLKPTR bloktop = BLK(end);` == `((BLKPTR)(end))` (2.11BSD sh
@@ -9821,6 +9851,11 @@ strlit_array_done: ;
                     g->init_value_hi = (unsigned)((v >> 16) & 0xFFFFL);
                 if (g->type == LT_LLONG)
                     g->init_value_q = (unsigned)((unsigned long)v >> 32);
+            }
+            if (scalar_braced) {
+                if (g_cur.kind == TOK_COMMA)
+                    next_tok();
+                expect(TOK_RBRACE, "'}' closing a braced scalar initializer");
             }
         }
         if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }

@@ -68,6 +68,7 @@
   "bit_xor": 42,
   "block_scope_shadow": 42,
   "block_stmt": 42,
+  "bracescalar": 42,
   "break_for": 42,
   "break_while": 42,
   "bsd_struct_test": 42,
