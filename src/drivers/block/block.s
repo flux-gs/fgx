@@ -486,6 +486,19 @@ Blk_Read        ENT
                 ; If it ever does, fall through to the device rather than
                 ; returning the caller a buffer nobody filled.
 @bkr_noRa
+                ;--- A 2048-BYTE UNIT HAS NO SINGLE-BLOCK PATH: its ReadBlock
+                ;    returns the first 512 bytes of SECTOR b, not block b.  A
+                ;    read the read-ahead could not do fails rather than return
+                ;    the wrong quarter. ---
+                SEP     #$20
+                MX      %10
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                AND     #DEV_FLAG_SEC2K
+                BEQ     @bkr_sp
+                LDA     #EIO
+                BRA     @bkr_err
+@bkr_sp
                 ;--- Dispatch to _SP_ReadBlock (callee PHP/PLP preserves M/X) ---
                 REP     #$30
                 MX      %00

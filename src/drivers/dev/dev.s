@@ -455,27 +455,80 @@ _dev_enumBus    MX      %10
                 BRA     @deu_next
 
                 ; A CD-ROM ATTACHES EMPTY OR LOADED, so its size is not
-                ; tested: the drive is there either way.  Its row is the next
-                ; cd one, and the sd counter is left where it was.
-@deu_cd         LDA    |_devNextCd
-                CMP     #BDEV_NCD
-                BCS     @deu_next               ; every cd unit is taken
-                LDA     _fsTmp1
-                PHA
-                LDA    |_devNextCd
-                CLC
-                ADC     #BDEV_CD_ROW0
-                STA     _fsTmp1
-                JSR     _dev_allocDevEntry
-                PLA
-                STA     _fsTmp1
-                INC    |_devNextCd
+                ; tested: the drive is there either way.
+@deu_cd         JSR     _dev_attachCd
 
 @deu_next       INC     _blkNum
                 BRA     @deu_L
 
 @deu_done       PLP
                 RTS
+
+;==============================================================================
+; _dev_attachCd - attach the CD-ROM just probed as the next cd unit: its row is
+; BDEV_CD_ROW0 + _devNextCd, and the sd counter (_fsTmp1) is left as it was.
+;
+; Input (MX %10):  as _dev_allocDevEntry, less the row; BLK_STAGE = its DIB.
+; Effects:         _devNextCd++, unless every cd unit is taken.
+; Clobbers:        A, X, Y, BLK_STAGE, and what _dev_allocDevEntry clobbers.
+;==============================================================================
+_dev_attachCd   MX      %10
+                LDA    |_devNextCd
+                CMP     #BDEV_NCD
+                BCC     @dac_room
+                RTS                             ; every cd unit is taken
+@dac_room
+
+                ; ITS SECTOR SIZE.  The card presents a disc with a ProDOS
+                ; partition as that partition in 512-byte blocks, and a disc
+                ; without one whole, in the drive's 2048-byte sectors; STATUS
+                ; $06 says which.  An empty drive does not answer, and is
+                ; taken as 512 -- the size is read once, here.
+                LDA     #SP_STAT_BLKSZ
+                JSR     _dev_status
+                BCC     @dac_cd512
+                LDAL    BLK_STAGE               ; big-endian: $08 $00 = 2048
+                CMP     #$08
+                BNE     @dac_cd512
+                LDA     #DEV_FLAG_SEC2K
+                BRA     @dac_cdSz
+@dac_cd512      LDA     #0
+@dac_cdSz       PHA
+                LDA     #SP_STAT_DIB            ; the DIB again, for the attach
+                JSR     _dev_status
+                PLA
+                PHA
+                BEQ     @dac_cdRow
+                ; Its size in 512-byte blocks, as every other unit's is.
+                LDX     #2
+@dac_cdX4       LDAL    BLK_STAGE+1
+                ASL
+                STAL    BLK_STAGE+1
+                LDAL    BLK_STAGE+2
+                ROL
+                STAL    BLK_STAGE+2
+                LDAL    BLK_STAGE+3
+                ROL
+                STAL    BLK_STAGE+3
+                DEX
+                BNE     @dac_cdX4
+@dac_cdRow      LDA     _fsTmp1
+                PHA
+                LDA    |_devNextCd
+                CLC
+                ADC     #BDEV_CD_ROW0
+                STA     _fsTmp1
+                JSR     _dev_allocDevEntry      ; leaves _devPtr on the row
+                PLA
+                STA     _fsTmp1
+                PLA                             ; DEV_FLAG_SEC2K or 0
+                BEQ     @dac_cdDone
+                LDY     #DEV_Flags
+                ORA     [_devPtr],Y
+                STA     [_devPtr],Y
+@dac_cdDone     INC    |_devNextCd
+                RTS
+
 
 ;==============================================================================
 ; _dev_allocDevEntry - populate _devTable[_fsTmp1] and _diskStates[_fsTmp1]
