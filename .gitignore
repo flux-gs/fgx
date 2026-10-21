@@ -158,6 +158,9 @@ tools/*-fgx2/*
 *.2mg
 *.dsk
 *.hdv
+# ...but tests/isofs's Rock Ridge volume is a committed fixture, made by an
+# independent writer (tools/testdata/isofs/mkfixture.py says why).
+!tools/testdata/isofs/rrtest.hdv
 
 # MAME snapshot directory
 snap/

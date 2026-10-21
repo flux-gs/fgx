@@ -1,0 +1,35 @@
+{
+ "name": "isofs",
+ "description": "AN ISO 9660 VOLUME WITH ROCK RIDGE MOUNTS AND READS AS ITS WRITER MEANT IT.  tools/testdata/isofs/rrtest.hdv, written by pycdlib (an independent writer; mkfixture.py says what it holds), comes in through `extra_hards' as /dev/sd1 -- a SmartPort spindle, so this needs no CD-ROM and runs on the default machine; a CD's 2048-byte sectors are the block layer's business and reach isofs as the same 512-byte blocks.\n\nWHAT EACH ARM DISCRIMINATES:\n  `m=0' is mount_isofs, which loads isofs.mod with modload when mount(2) answers ENODEV.  Without the module it is 1.\n  `ReadMe.txt' and `A Long File Name With Spaces.txt' are Rock Ridge NM names; without Rock Ridge they read readme.txt and longname.txt.  `toolong.txt' is a name past MAXNAMLEN falling back to its ISO 9660 name.\n  `-rwxr-xr-x' is runme's PX mode; without Rock Ridge every file is -r-xr-xr-x.  `link -> ReadMe.txt' is ls reading SL through readlink.\n  `40' is many/ listed whole: a directory of several logical blocks, rendered through readdir's 128-byte windows.\n  `3000 3000 13893' is wc over big.txt, whose bytes cross seven 2048-byte sectors.\n  `nine levels down' and the pwd line are a directory Rock Ridge relocated past ISO 9660's eight levels: lookup follows CL to it, and getwd climbs out through PL.\n  `u=0' is the unmount.\n\nTHE NEEDLES CANNOT BE SATISFIED BY THE COMMAND ECHO: none of the names, the mode string, `40', the wc line or the file contents appear in the typed line, and the statuses are `m=$?'/`u=$?' there.",
+ "command": "/sbin/mount_isofs /dev/sd1 /mnt;echo m=$?;cd /mnt;ls -l;ls many|wc -l;cat link;wc big.txt;cd level1/level2/level3/level4/level5/level6/level7/level8/level9;cat deep.txt;pwd;cd /;/sbin/umount /mnt;echo u=$?",
+ "boot_s": 45,
+ "timeout_s": 150,
+ "extra_hards": [
+  "tools/testdata/isofs/rrtest.hdv"
+ ],
+ "exit_on_prompt": {
+  "sentinel": "fgx#",
+  "count_delta": 1
+ },
+ "expect": {
+  "screen_contains": [
+   "m=0",
+   "ReadMe.txt",
+   "A Long File Name With Spaces.txt",
+   "toolong.txt",
+   "-rwxr-xr-x",
+   "link -> ReadMe.txt",
+   "hello from rock ridge",
+   "3000 3000 13893",
+   "nine levels down",
+   "/mnt/level1/level2/level3/level4/level5/level6/level7/level8/level9",
+   "u=0"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "not found",
+   "read error"
+  ]
+ }
+}
