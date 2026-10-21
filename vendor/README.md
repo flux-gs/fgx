@@ -31,6 +31,7 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
                                               node numbering, name handling and
                                               Rock Ridge support
     SunOS-4.1.3/bin/ldd.c                     ldd(1), ported to src/userland/ldd
+    SunOS-4.1.3/usr.bin/eject.c, man1/eject.1 eject(1), ported to src/userland/eject
     frotz-2.44/                               Frotz, ported to src/userland/frotz
                                               (its README)
     65816-llvm-mos/                           the soft double runtime behind

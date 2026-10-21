@@ -1,0 +1,92 @@
+EJECT(1)	    UNIX Programmer's Manual		 EJECT(1)
+
+
+
+NAME
+     eject - eject media device from drive
+
+SYNOPSIS
+     eject [ -dfnq ] [ _d_e_v_i_c_e | _n_i_c_k_n_a_m_e ]
+
+DESCRIPTION
+     _e_j_e_c_t is used for those removable media devices that do
+     not have a manual eject button.  The device may be
+     specified by its name or by a nickname; if no device is
+     specified the default device, _/_d_e_v_/_c_d_0, is used.
+
+     Only devices that support _e_j_e_c_t under program control
+     respond to this command: on FGX, the CD-ROM drives
+     _/_d_e_v_/_c_d_0 to _/_d_e_v_/_c_d_3.
+
+     It is not recommended to physically eject media from a
+     device which contains mounted filesystems.  _e_j_e_c_t
+     automatically searches for any mounted filesystems which
+     reside on the device and attempts to unmount them prior to
+     ejecting the media (see _u_m_o_u_n_t(8)).  If the unmount
+     operation fails, _e_j_e_c_t prints a warning message and
+     exits.
+
+     _e_j_e_c_t can also display its default device and a list of
+     nicknames.
+
+OPTIONS
+     -d	 Display the name of the default device to be ejected.
+
+     -f	 Go on to the eject even if the device contains mounted
+	 filesystems.  See BUGS.
+
+     -n	 Display the nickname to device name translation table.
+
+     -q	 Query to see if the media is present.
+
+     _d_e_v_i_c_e
+	 Specify which device to _e_j_e_c_t, by the name as it
+	 appears in the directory _/_d_e_v.
+
+     _n_i_c_k_n_a_m_e
+	 Specify which device to _e_j_e_c_t, by its nickname as known
+	 to this command: _c_d, _c_d_r_o_m, or _c_d_0 to _c_d_3.
+
+EXAMPLES
+     To change the disc in the first CD-ROM drive:
+
+	  eject cd
+	  (put the new disc in)
+	  mount_isofs /dev/cd0 /mnt
+
+     A disc changed by hand needs only an unmount first; the
+     drive is asked about its new disc on the next read.
+
+FILES
+     /dev/cd0 to /dev/cd3
+		    block files
+
+EXIT STATUS
+     _e_j_e_c_t returns the following exit codes:
+
+	  0    If the operation was successful or, with the -q
+	       option, if the media _i_s in the drive.
+
+	  1    If the operation was unsuccessful or, with the -q
+	       option, if the media is _n_o_t in the drive.
+
+	  2    If invalid flags were specified, or the device
+	       cannot be opened.
+
+	  3    If an _i_o_c_t_l(2) request failed.
+
+SEE ALSO
+     mount_isofs(8), umount(8)
+
+DIAGNOSTICS
+     A short help message is printed if an unknown flag is
+     specified.  A diagnostic is printed if the device name
+     cannot be opened or does not support _e_j_e_c_t.
+
+BUGS
+     -f cannot eject a disc whose filesystem will not unmount:
+     FGX has no raw CD-ROM device, and a block device with a
+     filesystem mounted on it cannot be opened.
+
+     There should be a way to change the default on a per-user
+     basis.

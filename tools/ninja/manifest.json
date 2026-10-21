@@ -395,6 +395,9 @@
    "name": "ldd"
   },
   {
+   "name": "eject"
+  },
+  {
    "name": "exectime"
   },
   {
@@ -950,6 +953,10 @@
   {
    "src": "bin/ldd.bin",
    "dst": "disk_src/bin/ldd"
+  },
+  {
+   "src": "bin/eject.bin",
+   "dst": "disk_src/bin/eject"
   },
   {
    "src": "src/userland/lddig/ld.so.conf.t",
