@@ -1,4 +1,5 @@
-/*
+/* SPDX-License-Identifier: LicenseRef-SunOS
+ *
  * Copyright (c) 1989 Sun Microsystems, Inc. All rights reserved.
  *
  * eject - program to eject removeable media
