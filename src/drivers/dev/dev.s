@@ -295,6 +295,9 @@ _dev_patchBlkTramp MX   %10
 ;==============================================================================
 ; _dev_rawStatus - call SmartPort STATUS (code $00) for a unit, via BlkTramp.
 ; _dev_status    - the same, with the status code in A (8-bit).
+; _dev_call      - STATUS or CONTROL: the command in X, its code in A.  The
+;                  two calls' parameter lists are the same shape, CONTROL's
+;                  list pointer naming BLK_STAGE as STATUS's buffer does.
 ;
 ; Input (MX %10):  _blkNum (low byte) = SmartPort unit to probe.
 ;                  BlkTramp+9/+10 already patched to target bus.
@@ -304,14 +307,16 @@ _dev_patchBlkTramp MX   %10
 _dev_rawStatus  MX      %10
                 LDA     #SP_STAT_DEVICE
 _dev_status     MX      %10
+                LDX     #SP_STATUS
+_dev_call       MX      %10
                 PHP
                 SEP     #$20
                 MX      %10
                 PHA                             ; the status code, for +4
 
-                ; BlkTramp+11 = command byte (SP_STATUS = $00).
+                ; BlkTramp+11 = command byte.
                 LDY     #$0B
-                LDA     #SP_STATUS
+                TXA
                 STA     [_blkEntryPtr],Y
 
                 ; Params at [_blkTrampPtr]: +1=unit, +2/+3=buf ptr, +4=status code.
@@ -455,27 +460,87 @@ _dev_enumBus    MX      %10
                 BRA     @deu_next
 
                 ; A CD-ROM ATTACHES EMPTY OR LOADED, so its size is not
-                ; tested: the drive is there either way.  Its row is the next
-                ; cd one, and the sd counter is left where it was.
-@deu_cd         LDA    |_devNextCd
-                CMP     #BDEV_NCD
-                BCS     @deu_next               ; every cd unit is taken
-                LDA     _fsTmp1
-                PHA
-                LDA    |_devNextCd
-                CLC
-                ADC     #BDEV_CD_ROW0
-                STA     _fsTmp1
-                JSR     _dev_allocDevEntry
-                PLA
-                STA     _fsTmp1
-                INC    |_devNextCd
+                ; tested: the drive is there either way.
+@deu_cd         JSR     _dev_attachCd
 
 @deu_next       INC     _blkNum
                 BRA     @deu_L
 
 @deu_done       PLP
                 RTS
+
+;==============================================================================
+; _dev_attachCd - attach the CD-ROM just probed as the next cd unit: its row is
+; BDEV_CD_ROW0 + _devNextCd, and the sd counter (_fsTmp1) is left as it was.
+;
+; Input (MX %10):  as _dev_allocDevEntry, less the row; BLK_STAGE = its DIB.
+; Effects:         _devNextCd++, unless every cd unit is taken.
+; Clobbers:        A, X, Y, BLK_STAGE, and what _dev_allocDevEntry clobbers.
+;==============================================================================
+_dev_attachCd   MX      %10
+                LDA    |_devNextCd
+                CMP     #BDEV_NCD
+                BCC     @dac_room
+                RTS                             ; every cd unit is taken
+@dac_room
+
+                ; ITS SECTOR SIZE.  The card presents a disc with a ProDOS
+                ; partition as that partition in 512-byte blocks, and a disc
+                ; without one whole, in the drive's 2048-byte sectors; STATUS
+                ; $06 says which.  An empty drive does not answer, and is
+                ; taken as 512 -- the size is read once, here.
+                LDA     #SP_STAT_BLKSZ
+                JSR     _dev_status
+                BCC     @dac_cd512
+                LDAL    BLK_STAGE               ; big-endian: $08 $00 = 2048
+                CMP     #$08
+                BNE     @dac_cd512
+                LDA     #DEV_FLAG_SEC2K
+                BRA     @dac_cdSz
+@dac_cd512      LDA     #0
+@dac_cdSz       PHA
+                LDA     #SP_STAT_DIB            ; the DIB again, for the attach
+                JSR     _dev_status
+                PLA
+                PHA
+                BEQ     @dac_cdRow
+                ; Its size in 512-byte blocks, as every other unit's is.
+                LDX     #2
+@dac_cdX4       LDAL    BLK_STAGE+1
+                ASL
+                STAL    BLK_STAGE+1
+                LDAL    BLK_STAGE+2
+                ROL
+                STAL    BLK_STAGE+2
+                LDAL    BLK_STAGE+3
+                ROL
+                STAL    BLK_STAGE+3
+                DEX
+                BNE     @dac_cdX4
+@dac_cdRow      LDA     _fsTmp1
+                PHA
+                LDA    |_devNextCd
+                CLC
+                ADC     #BDEV_CD_ROW0
+                STA     _fsTmp1
+                JSR     _dev_allocDevEntry      ; leaves _devPtr on the row
+                PLA
+                STA     _fsTmp1
+                PLA                             ; DEV_FLAG_SEC2K or 0
+                BEQ     @dac_cdDone
+                LDY     #DEV_Flags
+                ORA     [_devPtr],Y
+                STA     [_devPtr],Y
+@dac_cdDone     LDY     #DEV_Flags      ; AN EMPTY DRIVE IS PROBED AGAIN on its
+                LDA     [_devPtr],Y     ;   next read: a disc put in after boot
+                AND     #DEV_FLAG_ONLINE ;  is found then (Dev_Reprobe)
+                BNE     @dac_cdOn
+                LDA     [_devPtr],Y
+                ORA     #DEV_FLAG_STALE
+                STA     [_devPtr],Y
+@dac_cdOn       INC    |_devNextCd
+                RTS
+
 
 ;==============================================================================
 ; _dev_allocDevEntry - populate _devTable[_fsTmp1] and _diskStates[_fsTmp1]
@@ -771,6 +836,265 @@ Dev_LogSize     ENT
 
 @dls_blks       ASC     ' blocks (',00
 @dls_kb         ASC     'KB)',00
+
+;==============================================================================
+; _dev_cdrow - the CD-ROM row a block dev_t names: BDEV_CD_MAJOR, a unit
+; below BDEV_NCD, and a row the scan attached a CD-ROM to.
+;
+; In (MX %00):  A = dev_t.
+; Out:          C=1 + _fsCurDevIdx = the row, _devPtr = its record; C=0 when
+;               it is no CD-ROM.  M=16 on exit.  Clobbers A, X.
+;==============================================================================
+_dev_cdrow      MX      %00
+                TAX
+                AND     #$FF00
+                CMP     #BDEV_CD_MAJOR*256
+                BNE     @dcr_no
+                TXA
+                AND     #$00FF
+                CMP     #BDEV_NCD
+                BCS     @dcr_no
+                CLC
+                ADC     #BDEV_CD_ROW0
+                SEP     #$20
+                MX      %10
+                STA     _fsCurDevIdx
+                REP     #$20
+                MX      %00
+                AND     #$00FF
+                ASL
+                ASL
+                ASL
+                ASL                             ; *16 (DEV_SIZE)
+                CLC
+                ADC     dev_table_ptr
+                STA     _devPtr
+                SEP     #$20
+                MX      %10
+                LDA     dev_table_ptr+2
+                ADC     #0
+                STA     _devPtr+2
+                LDY     #DEV_Class
+                LDA     [_devPtr],Y
+                REP     #$20
+                MX      %00
+                AND     #$00FF
+                CMP     #DEV_CLASS_CD
+                BNE     @dcr_no
+                SEC
+                RTS
+@dcr_no         CLC
+                RTS
+
+;==============================================================================
+; _dev_unitof - aim BlkTramp at _devPtr's bus and put its unit in _blkNum.
+; In (MX %10): _devPtr.  Clobbers A, X, Y, _fsTmp0, _fsTmp1+1.
+;==============================================================================
+_dev_unitof     MX      %10
+                LDY     #DEV_StateLo
+                LDA     [_devPtr],Y
+                STA     _fsTmp0
+                INY
+                LDA     [_devPtr],Y
+                STA     _fsTmp0+1
+                LDY     #DSS_BusIdx
+                LDA     (_fsTmp0),Y
+                STA     _fsTmp1+1
+                LDY     #DSS_LocalUnit
+                LDA     (_fsTmp0),Y
+                STA     _blkNum
+                STZ     _blkNum+1
+                JMP     _dev_patchBlkTramp
+
+;==============================================================================
+; Dev_BlkStale - KSVC_BLKSTALE: a filesystem on dev_t A was unmounted, so a
+; CD-ROM there may get another disc.  Its row is marked DEV_FLAG_STALE and the
+; block cache dropped (_BlkCache_InvalAll, which mount and unmount already
+; use); the next read probes the drive again.  Anything else is left alone.
+; In (MX %00): A = dev_t.  Out: C=1.  Clobbers A, X, Y.
+;==============================================================================
+Dev_BlkStale    ENT
+                MX      %00
+                JSR     _dev_cdrow
+                BCC     @dbs_out
+                SEP     #$20
+                MX      %10
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                ORA     #DEV_FLAG_STALE
+                STA     [_devPtr],Y
+                REP     #$30
+                MX      %00
+                JSR     _BlkCache_InvalAll
+@dbs_out        SEC
+                RTS
+
+;==============================================================================
+; Dev_BlkIoctl - KSVC_BLKIOCTL: a block device's ioctl, the command staged in
+; _Sys_IoctlCmd.  netbsd-0-9's cdioctl, of which one request is carried:
+; CDIOCEJECT, its cd_start_unit(..., CD_EJECT) as the card's CONTROL $04
+; (SmartPort Technical Note #5: "CONTROL code $04 ... is now defined as
+; EJECT").  The row is then stale, as after an unmount.  Every other request,
+; and every device but a CD-ROM, is ENOTTY -- "inappropriate ioctl".
+; In (MX %00): A = dev_t.  Out: C=1, or C=0 + A = errno.  Clobbers A, X, Y.
+;==============================================================================
+Dev_BlkIoctl    ENT
+                MX      %00
+                TAX
+                LDA    |_Sys_IoctlCmd
+                CMP     #CDIOCEJECT
+                BNE     @dbi_notty
+                TXA
+                JSR     _dev_cdrow
+                BCC     @dbi_notty
+                LDA     _blkNum
+                PHA
+                LDA     _fsTmp0
+                PHA
+                LDA     _fsTmp1
+                PHA
+                SEP     #$20
+                MX      %10
+                JSR     _dev_unitof
+                LDA     #SP_CTL_EJECT
+                LDX     #SP_CONTROL
+                JSR     _dev_call
+                REP     #$30
+                MX      %00
+                PLA
+                STA     _fsTmp1
+                PLA
+                STA     _fsTmp0
+                PLA
+                STA     _blkNum                 ; PLA/STA: carry survives
+                BCC     @dbi_eio
+                SEP     #$20
+                MX      %10
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                ORA     #DEV_FLAG_STALE
+                STA     [_devPtr],Y
+                REP     #$30
+                MX      %00
+                JSR     _BlkCache_InvalAll
+                SEC
+                RTS
+@dbi_eio        LDA     #EIO
+                CLC
+                RTS
+@dbi_notty      LDA     #ENOTTY
+                CLC
+                RTS
+
+;==============================================================================
+; Dev_Reprobe - the drive behind a DEV_FLAG_STALE row, asked again before a
+; read trusts what attach recorded: netbsd-0-9's cdopen, which checks the
+; unit, starts it and loads its parameters on every open, done here on the
+; first read after the medium may have changed.
+;
+; THE CARD IS ASKED TO RESCAN FIRST (SP_CTL_RESCAN).  Its own tables --
+; whether the unit is a ProDOS partition or the whole disc, the block size,
+; the size its reads are bounded by -- were built at its start-up probe, and
+; a new disc needs new ones.  Then the sector size (SP_STAT_BLKSZ) and the
+; DIB, as at attach.  An empty drive stays stale, so the read after a disc
+; goes in probes again.
+;
+; ASSUMES THE UNIT NUMBER HOLDS: the rescan renumbers the bus in ID order, so
+; a disc with more ProDOS partitions than the last one moves the units after
+; it.  This CD-ROM's own unit does not move.
+;
+; In (MX %00): _devPtr = the row's record.  Preserves _blkNum, _fsTmp0 and
+; _fsTmp1, Blk_Read's caller's.  Clobbers A, X, Y and BLK_STAGE.
+;==============================================================================
+Dev_Reprobe     ENT
+                MX      %00
+                PHP
+                REP     #$30
+                MX      %00
+                LDA     _blkNum
+                PHA
+                LDA     _fsTmp0
+                PHA
+                LDA     _fsTmp1
+                PHA
+                SEP     #$20
+                MX      %10
+                JSR     _dev_unitof
+                LDA     #SP_CTL_RESCAN
+                LDX     #SP_CONTROL
+                JSR     _dev_call               ; the answer is the reads below
+                LDA     #SP_STAT_BLKSZ
+                JSR     _dev_status
+                BCC     @drp_512
+                LDAL    BLK_STAGE               ; big-endian: $08 $00 = 2048
+                CMP     #$08
+                BNE     @drp_512
+                LDA     #DEV_FLAG_SEC2K
+                BRA     @drp_sz
+@drp_512        LDA     #0
+@drp_sz         STA     _fsTmp1                 ; the new flags
+                LDA     #SP_STAT_DIB
+                JSR     _dev_status
+                BCS     @drp_dib
+                JSR     _dev_rawStatus
+                BCS     @drp_dib
+                LDA     #0                      ; no answer: as an empty drive
+                STAL    BLK_STAGE
+@drp_dib        LDAL    BLK_STAGE
+                AND     #SP_GS_ONLINE
+                BEQ     @drp_off
+                LDA     _fsTmp1
+                ORA     #DEV_FLAG_ONLINE
+                BRA     @drp_fl
+@drp_off        LDA     #DEV_FLAG_STALE         ; no disc: no sector size either
+@drp_fl         STA     _fsTmp1
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                AND     #DEV_FLAG_VFSOWNED
+                ORA     _fsTmp1
+                STA     [_devPtr],Y
+                ; ITS SIZE IN 512-BYTE BLOCKS, as at attach.
+                LDA     _fsTmp1
+                AND     #DEV_FLAG_SEC2K
+                BEQ     @drp_cnt
+                LDX     #2
+@drp_x4         LDAL    BLK_STAGE+1
+                ASL
+                STAL    BLK_STAGE+1
+                LDAL    BLK_STAGE+2
+                ROL
+                STAL    BLK_STAGE+2
+                LDAL    BLK_STAGE+3
+                ROL
+                STAL    BLK_STAGE+3
+                DEX
+                BNE     @drp_x4
+@drp_cnt        PHB
+                PHK
+                PLB                             ; DBR = kernel bank: the state
+                LDY     #DSS_BlkCount           ;   record is there (_fsTmp0,
+                LDAL    BLK_STAGE+1             ;   from _dev_unitof)
+                STA     (_fsTmp0),Y
+                INY
+                LDAL    BLK_STAGE+2
+                STA     (_fsTmp0),Y
+                INY
+                LDAL    BLK_STAGE+3
+                STA     (_fsTmp0),Y
+                INY
+                LDA     #0
+                STA     (_fsTmp0),Y
+                PLB
+                REP     #$30
+                MX      %00
+                PLA
+                STA     _fsTmp1
+                PLA
+                STA     _fsTmp0
+                PLA
+                STA     _blkNum
+                PLP
+                RTS
 
 ;==============================================================================
 ; END dev.s

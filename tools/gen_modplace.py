@@ -64,7 +64,7 @@ import sys
 # were ahead of them and did not shift.
 ORDER = ('net', 'serial', 'bpf', 'ramdisk', 'pty',
          'vfs', 'ufs', 'ufsprobe', 'ufsdir', 'prodos', 'prodosw', 'cda',
-         'sscon', 'klog', 'fpsim', 'ld')
+         'sscon', 'klog', 'fpsim', 'ld', 'isofs')
 # fpsim (the soft double, apple/fgx#447) packs after klog, appended.
 # klog packs after sscon.  APPENDED, never inserted: net's and bpf's
 # placement-absolute w5100_patchsites.s tables sit at indices 0 and 2, and an
@@ -95,7 +95,9 @@ ORDER = ('net', 'serial', 'bpf', 'ramdisk', 'pty',
 # bank would have crowded out the drivers still to migrate and then overflowed
 # anyway, which is the exact failure this comment already warned about.
 OWN_BANK = {'vfs': 1, 'ufs': 2, 'ufsprobe': 3, 'ufsdir': 4, 'prodos': 5,
-            'prodosw': 6}
+            'prodosw': 6, 'isofs': 7}
+# isofs is ordinal 7, for prodos's reason: a filesystem is most of a bank, and
+# appended here and to ORDER it moves nothing already placed.
 # prodos is ordinal 5 for size.  It packed last in the shared bank, where its
 # slot ran from $4500 to the end of the bank, 47,872 bytes; create and mkdir
 # took it to 52,327, and unlink, rmdir, rename and truncate are still to come.

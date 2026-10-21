@@ -37,6 +37,7 @@ Every directory under `src/modules/`:
 | `ufsprobe` | 3 | filesystem self-tests; assembles to a bare header unless a probe gate in `cfg/system.cfg` is on, and is staged only then | `/etc/rc`, last, when present |
 | `prodos` | 5 | the ProDOS filesystem type under the VFS: mount, lookup, read, readdir (`vfssw[MOUNT_PRODOS]`) | `mount_prodos(8)` |
 | `prodosw` | 6 | the write half of the ProDOS type (bitmap, write, create, remove, rename, truncate) | `mount_prodos(8)`, for a writable mount |
+| `isofs` | 7 | the ISO 9660 filesystem type, with Rock Ridge: mount, lookup, read, readdir, readlink (`vfssw[MOUNT_ISOFS]`) | `mount_isofs(8)` |
 | `common` | -- | not a module: `kc_sys.s` (the C-to-kernel seam every C module shares) and `probe_dev.s` (the probe disk scan), `PUT` into the modules that need them | -- |
 
 Ordinals come from `tools/gen_modplace.py` `OWN_BANK`; absent means 0, the
@@ -115,8 +116,9 @@ At boot:
    [CONFIGURING.md](CONFIGURING.md)).  `/etc/modload.conf` holds the same
    list in the same order and `tools/check_modload_lists.py` fails the build
    if they disagree; **`rc.in` and `rc.local` are the list that runs**.
-3. `mount_prodos(8)` runs `modload(8)` when the kernel answers `ENODEV` (no
-   such filesystem type): `prodos`, plus `prodosw` for a writable mount.
+3. `mount_prodos(8)` and `mount_isofs(8)` run `modload(8)` when the kernel
+   answers `ENODEV` (no such filesystem type): `prodos`, plus `prodosw` for a
+   writable mount, and `isofs`.
 
 **`modload(8)`** (`src/userland/modload/modload.c`) opens
 `/lib/modules/<name>` and streams it to the kernel through `SYS_MODLOAD` (110):

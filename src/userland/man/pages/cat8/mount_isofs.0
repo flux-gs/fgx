@@ -1,0 +1,72 @@
+MOUNT_ISOFS(8)       UNIX Programmer's Manual       MOUNT_ISOFS(8)
+
+
+
+NAME
+     mount_isofs - mount an ISO 9660 file system
+
+SYNOPSIS
+     mount_isofs [ -o options ] special node
+
+DESCRIPTION
+     Mount_isofs attaches the ISO 9660 file system on the block
+     device special -- a CD-ROM, /dev/cd0, or an image on a disk
+     -- to the directory node.  It is not normally run by hand:
+     mount(8) runs it for "mount -t isofs".  The options are
+     mount(8)'s -o list.
+
+     The file system is always mounted read-only.  A device that
+     is not an ISO 9660 volume is reported as "not an ISO 9660
+     volume".
+
+     The file system is the module isofs, which is not loaded at
+     boot; mount_isofs loads it with modload(8) the first time it
+     is needed.
+
+NAMES
+     An ISO 9660 name is listed in lowercase, without its
+     ";version" suffix or the "." before one: README.TXT;1 is
+     readme.txt.  Lookup ignores case, and a ";version" may be
+     given.  An associated file, which a Macintosh disc uses for
+     a resource fork, is listed as =name.
+
+ROCK RIDGE
+     A volume with the Rock Ridge extensions (RRIP 1.09 or 1.12)
+     is read through them: names keep their case and their
+     length, files have their modes, owners, groups and link
+     counts, and symbolic links work.  A directory Rock Ridge
+     moved under rr_moved to get past ISO 9660's eight levels is
+     found where it belongs, and rr_moved itself is listed too.
+
+     A Rock Ridge name longer than 63 characters, the longest
+     this system can hold, is listed under its ISO 9660 name
+     instead.
+
+EXAMPLES
+     Mount the CD in the first CD-ROM drive on /mnt:
+
+          mount_isofs /dev/cd0 /mnt
+
+SEE ALSO
+     mount(8), umount(8), mount_prodos(8), modload(8)
+
+HISTORY
+     The file system and this command appeared in NetBSD 0.9.
+     The Rock Ridge support is 4.4BSD-Lite2's.
+
+BUGS
+     Joliet names, which discs made on Windows and macOS carry,
+     are not read; such a disc lists its ISO 9660 names.
+
+     Only a disc's first session is read.
+
+     A file recorded interleaved is refused with EIO.
+
+     A file's inode number is folded to 16 bits and can repeat on
+     a large volume.
+
+     Owner, group and mode cannot be chosen at mount time.
+
+
+
+Printed 10/21/26                                               1

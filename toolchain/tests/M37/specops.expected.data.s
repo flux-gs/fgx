@@ -25,6 +25,10 @@ _specops_cd_ioctls DA      $0000
 _specops_cd_polls DA      $0000
 _specops_cd_ioctlret DA      $0019
 _specops_cd_pollmask DA      $0000
+_specops_blk_closes DA      $0000
+_specops_blk_ioctls DA      $0000
+_specops_blk_last DA      $FFFF
+_specops_blk_ioctlret DA      $0019
 _specops_fake_disk DS      64
 _specops_fake_buf DS      4
 _specops_fake_iov DS      6

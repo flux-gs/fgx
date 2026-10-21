@@ -158,6 +158,18 @@ static int cd_pollmask = 0;
 int kc_cdioctl(idx) int idx; { cd_ioctls++; cd_last_idx = idx; return (cd_ioctlret); }
 int kc_cdpoll(idx)  int idx; { cd_polls++;  cd_last_idx = idx; return (cd_pollmask); }
 
+/* The block switch's two ops, d_close and d_ioctl (modules/common/
+ * kc_blkdev.s).  Counted, with the dev each was given, for the same reason
+ * the chardev ones are: a VBLK arm that stopped dispatching would otherwise
+ * return the same 0 or ENOTTY these do. */
+static int blk_closes   = 0;
+static int blk_ioctls   = 0;
+static int blk_last     = -1;
+static int blk_ioctlret = ENOTTY;
+
+int kc_blkstale(dev) int dev; { blk_closes++; blk_last = dev; return (0); }
+int kc_blkioctl(dev) int dev; { blk_ioctls++; blk_last = dev; return (blk_ioctlret); }
+
 void biodone();
 
 /* A fake disk, as in biocache.c and vreclaim.c: one byte per block is enough
@@ -669,14 +681,31 @@ main()
     if (bread(vp, (daddr_t)11, &bp) != 0)       return (115);
     brelse(bp);
     if (incore(vp, (daddr_t)11) == 0)           return (116);  /* cached now */
+    blk_closes = 0;
+    blk_last   = -1;
     if (VOP_CLOSE(vp, 0, (char *)0) != 0)       return (117);
     if (incore(vp, (daddr_t)11))                return (89);   /* dropped */
+    /* AND THE DRIVER IS TOLD, with this device: the last close is when a
+     * CD-ROM may take another disc. */
+    if (blk_closes != 1)                        return (160);
+    if (blk_last != (int)vp->v_rdev)            return (161);
     fake_disk[11] = (char)0x22;                 /* "a different volume" */
     n = fake_reads;
     if (bread(vp, (daddr_t)11, &bp) != 0)       return (90);
     if (fake_reads != n + 1)                    return (91);   /* went to disk */
     if (bp->b_addr[0] != (char)0x22)            return (92);   /* the NEW bytes */
     brelse(bp);
+
+    /* ---- 6b. A BLOCK DEVICE'S IOCTL REACHES ITS DRIVER, and the answer is
+     * the driver's: 0 for a request it carries, ENOTTY for one it does not.
+     * Two answers, so a constant cannot pass both. */
+    blk_ioctls   = 0;
+    blk_ioctlret = 0;
+    if (VOP_IOCTL(vp, 0, (char *)0, 0, (char *)0) != 0)       return (162);
+    blk_ioctlret = ENOTTY;
+    if (VOP_IOCTL(vp, 0, (char *)0, 0, (char *)0) != ENOTTY)  return (163);
+    if (blk_ioctls != 2)                        return (164);
+    if (blk_last != (int)vp->v_rdev)            return (165);
 
     /* ---- 7. THE FLUSH DOES NOT WAIT FOR THE LAST CLOSE ----
      *
@@ -685,13 +714,11 @@ main()
      * every close of a block device drops its cached blocks and only the
      * DRIVER close is withheld until the last one.  This follows the code.
      *
-     * WHY THE vcount BRANCH IS NOT ASSERTED HERE.  It guards a driver close,
-     * and FGX has none -- kc_blkio is stateless, so there is nothing for a
-     * last close to release.  The branch is therefore correct and currently
-     * UNOBSERVABLE, and an assertion on it would pass whatever it did.  What
-     * is asserted instead is that the alias machinery it depends on works:
-     * vcount sees both names, so the branch will have the right answer to act
-     * on the day a character-device switch gives it something to do.
+     * THE vcount BRANCH guards the driver close, kc_blkstale: a close while
+     * another name still holds the device must not tell the driver the
+     * medium is free.  Asserted below with both aliases open, after the
+     * alias machinery it depends on is shown to work: vcount sees both
+     * names.
      *
      * The aliases are made the way a filesystem makes them -- two vnodes of
      * its own -- because bdevvp's are VT_NON and checkalias revives those
@@ -708,8 +735,10 @@ main()
     if (bread(vp, (daddr_t)12, &bp) != 0)       return (100);
     brelse(bp);
     if (incore(vp, (daddr_t)12) == 0)           return (101);  /* cached */
+    blk_closes = 0;
     if (VOP_CLOSE(vp, 0, (char *)0) != 0)       return (102);
     if (incore(vp, (daddr_t)12))                return (103);  /* dropped */
+    if (blk_closes != 0)                        return (166);  /* not last */
 
     /* ---- 8. spec_open REFUSES what it is supposed to refuse ---- */
     reset();

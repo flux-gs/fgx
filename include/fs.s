@@ -187,6 +187,7 @@ BDEV_NSD        EQU     8
 BDEV_RAM_ROW    EQU     8
 BDEV_CD_ROW0    EQU     9
 BDEV_NCD        EQU     4
+BDEV_CD_MAJOR   EQU     2               ; CD_MAJOR in fsparam.h
 
 ; SP_UNIT_MAX -- the highest SmartPort unit number a slot may be asked about.
 ;
@@ -252,6 +253,18 @@ DEV_FLAG_ONLINE  EQU    $01
 ; because it makes the rule testable: a vfs_bio-owned device must hold zero
 ; entries in the legacy pool, which a probe can assert.
 DEV_FLAG_VFSOWNED EQU   $02
+; THE UNIT'S SECTORS ARE 2048 BYTES -- a CD-ROM the Apple II SCSI Card
+; presents whole (no ProDOS partition), as STATUS $06 reports at attach.  Its
+; ReadBlock returns only the first 512 bytes of a sector, so Blk_Read serves it
+; through the byte-count Read instead (_BlkCache_ReadAhead, one sector a run),
+; and every layer above still sees 512-byte blocks: block b is quarter b&3 of
+; sector b>>2, as SunOS 4.1.3's sr.c divides its block number by 4.
+DEV_FLAG_SEC2K   EQU   $04
+; THE MEDIUM MAY HAVE CHANGED: the next read probes the drive again
+; (Dev_Reprobe) before it trusts the sector size, the size or the cache.  Set
+; on a CD-ROM row by an unmount from it (kc_blkstale), by an eject, and at
+; attach when the drive is empty -- a disc put in later is found then.
+DEV_FLAG_STALE   EQU   $08
 
 ;==============================================================================
 ; Disk-state struct (pointed to by DEV_State for class=disk devices).
@@ -302,6 +315,13 @@ DOP_SIZE        EQU     *                   ; 9
 SP_STATUS       EQU     $00             ; SmartPort STATUS
 SP_READ_BLOCK   EQU     $01             ; SmartPort READ BLOCK
 SP_WRITE_BLOCK  EQU     $02             ; SmartPort WRITE BLOCK
+SP_CONTROL      EQU     $04             ; SmartPort CONTROL
+; The Apple II SCSI Card's CONTROL codes (rev C ROM, control table at offset
+; $0973; SmartPort Technical Note #5 for the first): EJECT, and a rescan of the
+; bus that rebuilds its per-device tables -- block size, partition, size --
+; for a disc that changed since the card's own start-up probe.
+SP_CTL_EJECT    EQU     $04
+SP_CTL_RESCAN   EQU     $1F
 SP_READ         EQU     $08             ; SmartPort generic READ -- byte
                                         ; count, so MANY blocks per call.
                                         ; Only ever issued EXTENDED ($48):
@@ -315,6 +335,11 @@ SP_READ         EQU     $08             ; SmartPort generic READ -- byte
 ;------------------------------------------------------------------------------
 SP_STAT_DEVICE  EQU     $00             ; device status (count if unit=0)
 SP_STAT_DIB     EQU     $03             ; device information block
+SP_STAT_BLKSZ   EQU     $06             ; the Apple II SCSI Card's own: the
+                                        ;   unit's block size, 2 bytes, BIG-
+                                        ;   endian (READ CAPACITY, or a
+                                        ;   partition's sbBlkSize) -- its ROM,
+                                        ;   STATUS table at offset $11E1
 ; The STANDARD call's DIB (Apple IIGS Firmware Reference p.123): +0 the
 ; general status byte, +1..3 the block count, +4 the ID string's length,
 ; +5..20 the string, +21 the device type, +22 the subtype, +23..24 the version.

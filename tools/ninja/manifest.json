@@ -245,6 +245,10 @@
    "tu_list": "src/userland/mount/tu.list"
   },
   {
+   "name": "mount_isofs",
+   "tu_list": "src/userland/mount_isofs/tu.list"
+  },
+  {
    "name": "mount_prodos",
    "tu_list": "src/userland/mount_prodos/tu.list"
   },
@@ -389,6 +393,9 @@
   },
   {
    "name": "ldd"
+  },
+  {
+   "name": "eject"
   },
   {
    "name": "exectime"
@@ -820,6 +827,10 @@
    "dst": "disk_src/sbin/mount"
   },
   {
+   "src": "bin/mount_isofs.bin",
+   "dst": "disk_src/sbin/mount_isofs"
+  },
+  {
    "src": "bin/mount_prodos.bin",
    "dst": "disk_src/sbin/mount_prodos"
   },
@@ -942,6 +953,10 @@
   {
    "src": "bin/ldd.bin",
    "dst": "disk_src/bin/ldd"
+  },
+  {
+   "src": "bin/eject.bin",
+   "dst": "disk_src/bin/eject"
   },
   {
    "src": "src/userland/lddig/ld.so.conf.t",

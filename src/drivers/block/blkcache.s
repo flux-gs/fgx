@@ -278,8 +278,8 @@ _BlkCache_AllocLRU MX   %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _BlkCache_ReadAhead - fill an aligned RUN of BLKCACHE_RA_K slots with one
-; extended $48 call.  Blk_Read's miss path calls this on an extended bus; on
+; _BlkCache_ReadAhead - fill an aligned RUN of BLKCACHE_RA_K slots (4 for a
+; 2048-byte unit, _bra_k) with one extended $48 call.  Blk_Read's miss path calls this on an extended bus; on
 ; success the requested block (and K-1 of its neighbours) are cached, and the
 ; caller re-consults the cache instead of touching the device.
 ;
@@ -322,8 +322,13 @@ _BlkCache_ReadAhead MX   %00
 @bra_cacheUp
                 ; Streaming?  A one-off read gains nothing from pulling in 7
                 ; neighbours and costs the whole transfer.
+                ; A 2048-byte unit is read this way or not at all, streaming or
+                ; not: its ReadBlock returns a quarter of the sector.
+                JSR     _bra_k
+                BCS     @bra_seqOk
                 LDA    |_blkRaSeq
                 BNE     @bra_noVeryEarly
+@bra_seqOk
 
                 ; Extended bus?  Asked FIRST, before anything is overwritten:
                 ; a $4x call on a standard bus never returns, so there is no
@@ -340,11 +345,15 @@ _BlkCache_ReadAhead MX   %00
 @bra_isExt
 
                 ; base_blk = blk & ~(K-1); bail if the run would wrap 16 bits.
-                LDA     _blkNum
-                AND     #BLKCACHE_RA_ALIGN
+                JSR     _bra_k
+                DEC                             ; K-1
+                PHA
+                EOR     #$FFFF                  ; ~(K-1)
+                AND     _blkNum
                 STA     _libcTmp2               ; base_blk
                 CLC
-                ADC     #BLKCACHE_RA_KM1
+                ADC     1,S
+                PLA                             ; N/Z only: C survives
                 BCS     @bra_noNear             ; run crosses $FFFF
 
                 ; slot_base = LRU_NBUF + (base_blk MOD RA_SLOTS).  That IS the
@@ -363,10 +372,11 @@ _BlkCache_ReadAhead MX   %00
                 ; Refuse the whole run if ANY slot is pinned: a live pointer
                 ; into that buffer exists and the transfer would rewrite it
                 ; underneath its holder.
+                JSR     _bra_k
+                TAX
                 LDA    |_blkRaSlot
                 BCH_IDX
                 TAY                             ; Y = first header offset
-                LDX     #BLKCACHE_RA_K
 @bra_pinChk     SEP     #$20
                 MX      %10
                 LDA     [_kHeapCur],Y           ; BCH_Flags
@@ -401,18 +411,35 @@ _BlkCache_ReadAhead MX   %00
                 STA    |_blkRaDstBank
                 REP     #$20
                 MX      %00
-                LDA     #BLKCACHE_RA_BYTES
+                JSR     _bra_k
+                XBA                             ; K*256
+                ASL                             ; K*512
                 STA    |_blkRaCount
 
                 ; Issue the call for base_blk, not the requested block -- the
                 ; run is aligned.  _blkNum is restored before anything branches
                 ; (PLA touches N/Z only, never carry), because every path
                 ; downstream still expects the block that was asked for.
+                ;
+                ; A 2048-BYTE UNIT IS ADDRESSED IN ITS OWN SECTORS: the card
+                ; puts Read's address into the SCSI READ unconverted (its ROM,
+                ; bank 9 $CCC2), so the run's first block goes over as sector
+                ; base_blk/4, high word and all, and comes back.
                 LDA     _blkNum
+                PHA
+                LDA    |_blkCurHi
                 PHA
                 LDA     _libcTmp2
                 STA     _blkNum
-                JSR     _SP_ReadBlockN
+                JSR     _bra_k
+                BCC     @bra_lba
+                LSR    |_blkCurHi
+                ROR     _blkNum
+                LSR    |_blkCurHi
+                ROR     _blkNum
+@bra_lba        JSR     _SP_ReadBlockN
+                PLA
+                STA    |_blkCurHi
                 PLA
                 STA     _blkNum
                 BCC     @bra_fail
@@ -422,12 +449,13 @@ _BlkCache_ReadAhead MX   %00
                 ; Written only AFTER the transfer succeeded -- a header that
                 ; claims bytes its buffer does not hold is the one thing this
                 ; cache may never do.
+                JSR     _bra_k
+                TAX
                 LDA     _libcTmp2               ; base_blk -> running block no.
                 STA    |_blkRaBlk
                 LDA    |_blkRaSlot
                 BCH_IDX
                 TAY                             ; Y = first header offset
-                LDX     #BLKCACHE_RA_K
 @bra_mark       SEP     #$20
                 MX      %10
                 LDA     #BCH_FL_VALID
@@ -463,10 +491,11 @@ _BlkCache_ReadAhead MX   %00
                 ; those slots no longer match their headers -- drop them.  A
                 ; stale VALID header here would serve garbage forever.
 @bra_fail       INC    |_blkRaFail
+                JSR     _bra_k
+                TAX
                 LDA    |_blkRaSlot
                 BCH_IDX
                 TAY
-                LDX     #BLKCACHE_RA_K
 @bra_inval      SEP     #$20
                 MX      %10
                 LDA     #$00
@@ -480,6 +509,29 @@ _BlkCache_ReadAhead MX   %00
                 DEX
                 BNE     @bra_inval
 @bra_no         PLP
+                CLC
+                RTS
+
+;------------------------------------------------------------------------------
+; _bra_k - the run length for _devPtr's unit: 4 blocks (one 2048-byte sector)
+; for a DEV_FLAG_SEC2K unit, BLKCACHE_RA_K for any other.  A sector at a time
+; rather than K: a run past the disc's last sector would fail the whole
+; transfer, and directory reads are scattered.
+; Out: A = K, C=1 iff a 2048-byte unit.  MX %00 in/out; clobbers Y.
+;------------------------------------------------------------------------------
+_bra_k          MX      %00
+                SEP     #$20
+                MX      %10
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                REP     #$20
+                MX      %00
+                AND     #DEV_FLAG_SEC2K
+                BEQ     @brk_disk
+                LDA     #4
+                SEC
+                RTS
+@brk_disk       LDA     #BLKCACHE_RA_K
                 CLC
                 RTS
 

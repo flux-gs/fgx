@@ -137,6 +137,8 @@ extern int kc_cddread();
 extern int kc_cddwrite();
 extern int kc_cdioctl();        /* d_ioctl -- UFS 1.7d I4 */
 extern int kc_cdpoll();         /* d_select, as a POLL* mask -- UFS 1.7d I4 */
+extern int kc_blkioctl();       /* bdevsw d_ioctl -- modules/common/kc_blkdev.s */
+extern int kc_blkstale();       /* bdevsw d_close -- the same */
 
 /* POLLIN and POLLOUT, from include/chardev.s.  Restated for the reason the
  * errnos and NTTY are: kernel C cannot include an assembly header, and
@@ -388,10 +390,12 @@ int spec_close(vp, flag, cred)
             return (0);
         if (vcount(vp) > 1 && (vp->v_flag & VXLOCK) == 0)
             return (0);
-        /* Reno calls bdevsw[].d_close here.  kc_blkio is stateless, so there
-         * is no driver state to release -- the cache invalidation above IS the
-         * whole of what closing this device means on FGX. */
-        return (0);
+        /* Reno calls bdevsw[].d_close here, and netbsd-0-9's cdclose is the
+         * one with work to do: cd_prevent_unit(unit, PR_ALLOW, ...), the
+         * medium free to change once nothing holds the drive.  FGX's card
+         * cannot lock the tray, so its half is the other side: the CD-ROM is
+         * probed again on its next read.  Every other device has no close. */
+        return (kc_blkstale((int)vp->v_rdev));
     }
     kc_panic("spec_close: not special");
     return (0);
@@ -411,9 +415,12 @@ int spec_close(vp, flag, cred)
  * including what it would take to pass them properly and why that is a change
  * to every driver's ioctl entry rather than to this line.
  *
- * FGX HAS NO BLOCK IOCTL, so VBLK keeps the answer it had.  Reno's block arm
- * carries a B_TAPE special case ahead of the switch call; there is no tape,
- * and ENOTTY is what BSD returns for a request a device does not implement.
+ * THE BLOCK ARM is Reno's `(*bdevsw[major(dev)].d_ioctl)', by the same
+ * staged road; the CD-ROM's CDIOCEJECT is the one request it carries, and
+ * every other is ENOTTY.  Reno's B_TAPE special case ahead of the switch call
+ * is not here: there is no tape.  A MOUNTED DISC CANNOT BE EJECTED THIS WAY
+ * because it cannot be opened: spec_open's VBLK arm answers EBUSY through
+ * mountedon, as on Reno.
  *
  * THE DEFAULT ARM DOES NOT PANIC WHERE RENO'S DOES.  Reno reaches this only
  * through a device vnode, so "neither VCHR nor VBLK" is impossible and panic
@@ -430,6 +437,8 @@ int spec_ioctl(vp, com, data, fflag, cred)
 {
     if (vp->v_type == VCHR)
         return (kc_cdioctl((int)vp->v_rdev));
+    if (vp->v_type == VBLK)
+        return (kc_blkioctl((int)vp->v_rdev));
     return (ENOTTY);
 }
 

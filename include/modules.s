@@ -630,7 +630,15 @@ KSVC_BANKGRANT          EQU     56  ; -> C=1 + A = a pool bank in no TCB
                                     ;   frees; C=0 + A = ENOMEM.  ld.mod's
                                     ;   library banks (shared libc SP4).
 KSVC_BANKFREE           EQU     57  ; A = a bank KSVC_BANKGRANT gave -> C=1
-KSVC_COUNT              EQU     58
+KSVC_BLKSTALE           EQU     58  ; A = a block dev_t: a filesystem on it was
+                                    ;   unmounted, so its medium may change.  A
+                                    ;   CD-ROM row is marked DEV_FLAG_STALE and
+                                    ;   the block cache dropped.  C=1.
+KSVC_BLKIOCTL           EQU     59  ; A = a block dev_t, _Sys_IoctlCmd staged:
+                                    ;   a block device's ioctl.  CDIOCEJECT
+                                    ;   ejects a CD-ROM.  -> C=1, or C=0 + A =
+                                    ;   errno (ENOTTY for anything else).
+KSVC_COUNT              EQU     60
 SYS_BLKREAD             EQU     MOD_JT_BASE+$16
 SYS_BLKWRITE            EQU     MOD_JT_BASE+$1A
 SYS_BLKSTATUS           EQU     MOD_JT_BASE+$1E

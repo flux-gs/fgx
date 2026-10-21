@@ -14,6 +14,7 @@ and emit_kernel_id() below.
 Usage:  gen_kernel_exports.py <kernel-listing> <module> <out.s>
         gen_kernel_exports.py --kernel-id <out.s>
 """
+import os
 import re
 import sys
 
@@ -506,23 +507,47 @@ def parse_listing(path):
     """Return {label: 'XXXX'} for every label-definition line in the listing.
 
     A definition line is "...| 02/XXXX : <bytes> | <label> <directive> ...";
-    the label is the first token of the final '|'-separated column.
+    the label is the first token of the column AFTER THE ADDRESS -- not of
+    the last '|' column, because Merlin's absolute-address prefix puts a '|'
+    in the operand: `LDA |_Sys_IoctlCmd' would otherwise read as a
+    definition of _Sys_IoctlCmd at the LDA's address.
     """
     addrs = {}
     with open(path, errors='replace') as f:
         for line in f:
-            if '|' not in line:
+            m = ADDR_RE.search(line)
+            if not m:
                 continue
-            src = line.rsplit('|', 1)[-1].strip()
-            if not src:
+            rest = line[m.end() - 1:].split('|', 1)
+            if len(rest) < 2:
                 continue
+            src = rest[1][1:]                 # the column's one space
+            if not src or src[0].isspace():
+                continue                      # no label: an instruction
             label = src.split()[0]
             if label in addrs:
                 continue                      # first (definition) wins
-            m = ADDR_RE.search(line)
-            if m:
-                addrs[label] = 0x020000 | int(m.group(1), 16)   # bank-$02 addr
+            addrs[label] = 0x020000 | int(m.group(1), 16)   # bank-$02 addr
     return addrs
+
+
+def self_test():
+    import tempfile
+    lines = (
+        ' 1 | dev.s 944 | Code | 00 | | 3 | 02/5287 : AD 3A 67    |'
+        '          LDA   |_Sys_IoctlCmd\n'
+        ' 2 | syscall.s 882 | Data | 00 | | 2 | 02/673A : 00 00       |'
+        ' _Sys_IoctlCmd  DS  2   ; SYS_IOCTL cmd word\n'
+        ' 3 | kbid.s 14 | Equivalence | 00 | | 0 | 02/DDB9               |'
+        ' _kbid000  EQU  0+_Sys_RdMax\n')
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, 'listing.txt')
+        open(p, 'w').write(lines)
+        a = parse_listing(p)
+    assert a['_Sys_IoctlCmd'] == 0x02673A, hex(a['_Sys_IoctlCmd'])
+    assert a['_kbid000'] == 0x02DDB9, hex(a['_kbid000'])
+    assert 'LDA' not in a, 'an opcode is not a label'
+    print('gen_kernel_exports: self-test OK')
 
 
 #==============================================================================
@@ -661,6 +686,8 @@ def emit_kernel_id(outpath):
 
 
 def main():
+    if sys.argv[1:] == ['--self-test']:
+        return self_test()
     if len(sys.argv) == 3 and sys.argv[1] == '--kernel-id':
         emit_kernel_id(sys.argv[2])
         return

@@ -93,13 +93,15 @@ FIXED_BANKS = {0x02: ("kernel", "fgx_S01_KernelMain_Output.txt"),
                0x7C: ("far",    "fgxfar_Output.txt"),
                0x7D: ("tty",    "fgxtty_Output.txt")}
 
-# _modBankTab's slots, in order (src/kernel/modload.s: MOD_BANK_MAX = 7).
-MOD_SLOTS = ("shared", "vfs", "ufs", "ufsprobe", "ufsdir", "prodos", "prodosw")
+# _modBankTab's slots, in order (src/kernel/modload.s: MOD_BANK_MAX = 8).
+MOD_SLOTS = ("shared", "vfs", "ufs", "ufsprobe", "ufsdir", "prodos", "prodosw",
+             "isofs")
 MOD_LISTING = {"vfs": "module_vfs_Output.txt", "ufs": "module_ufs_Output.txt",
                "ufsprobe": "module_ufsprobe_Output.txt",
                "ufsdir": "module_ufsdir_Output.txt",
                "prodos": "module_prodos_Output.txt",
-               "prodosw": "module_prodosw_Output.txt"}
+               "prodosw": "module_prodosw_Output.txt",
+               "isofs": "module_isofs_Output.txt"}
 
 _ADDR = re.compile(r"([0-9A-Fa-f]{2})/([0-9A-Fa-f]{4})")
 _MNEM = re.compile(r"\b([A-Z]{3,5})\b")

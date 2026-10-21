@@ -73,6 +73,7 @@
 #define VT_UFS          1
 #define VT_SPEC         2
 #define VT_PRODOS       3       /* FGX-local: no BSD has a ProDOS tag */
+#define VT_ISOFS        4       /* netbsd-0-9's isofs; FGX-local number */
 
 /* v_flag bits.
  *

@@ -83,6 +83,10 @@ _UFSDIR_C = ("ufs_vnops", "ufs_lookup", "spec_vnops", "vfs_cache")
 # half's date arithmetic.
 _PRODOS_C = ("kern_epoch", "prodos_node", "prodos_vfsops", "prodos_vnops")
 _PRODOSW_C = ("kern_time", "prodos_write")
+# The ISO 9660 filesystem type, in isofs.mod.  Same rule, same flags;
+# kern_epoch is its recording-date arithmetic, as it is prodos.mod's.
+_ISOFS_C = ("kern_epoch", "isofs_node", "isofs_vfsops", "isofs_vnops",
+            "isofs_rrip")
 # spec_vnops JOINED ufsdir on 2026-09-05 and the move DELETED code rather than
 # adding any.  ufs_vnops.c is its only caller -- it names all ten spec_* in its
 # device-vnode ops vector -- and it lives here, so those ten were ten cross-bank
@@ -925,8 +929,16 @@ rule libcchk
   command = python3 tools/check_libc_piles.py --self-test > /dev/null && python3 tools/check_libc_piles.py && touch $out
   description = libc pile freshness
 
+# Provenance (docs/PROVENANCE.md): every registered port carries its markers,
+# no unregistered port does.  ITS OWN STAMP, whose inputs are the files the
+# check reads -- it names them itself (--inputs).  Riding on the kernel checks
+# made a new userland port invisible to it until the kernel next changed.
+rule provcheck
+  command = python3 tools/check_provenance.py --self-test > /dev/null && python3 tools/check_provenance.py && touch $out
+  description = provenance
+
 rule kchecks
-  command = python3 tools/check_mx.py --self-test > /dev/null && python3 tools/check_baked_addrs.py --self-test > /dev/null && python3 tools/check_provenance.py --self-test > /dev/null && python3 tools/check_bsd_enforcement.py --self-test > /dev/null && python3 tools/check_chardev_ops.py --self-test > /dev/null && python3 tools/gen_syscall_table.py --self-test > /dev/null && python3 tools/gen_w5100_patchsites.py --self-test > /dev/null && python3 tools/gen_mod_bankpatch.py --self-test > /dev/null && python3 tools/check_kernel_ceiling.py --self-test > /dev/null && python3 tools/check_bank0_geometry.py --self-test > /dev/null && python3 tools/check_stage2_mirrors.py --self-test > /dev/null && python3 tools/mkfgxunix.py --self-test > /dev/null && python3 tools/check_stat_layout.py --self-test > /dev/null && python3 tools/check_statfs_layout.py --self-test > /dev/null && python3 tools/check_argv_caps.py --self-test > /dev/null && python3 tools/check_probe_offsets.py --self-test > /dev/null && python3 tools/check_far_calls.py --self-test > /dev/null && python3 tools/check_far_rtl_calls.py --self-test > /dev/null && python3 tools/check_selfbank_jsl.py --self-test > /dev/null && python3 tools/check_man_overstrike.py --self-test > /dev/null && python3 tools/check_path_copy.py --self-test > /dev/null && python3 tools/check_sock_argblk.py --self-test > /dev/null && python3 tools/gen_far_bankpatch.py --self-test > /dev/null && python3 tools/check_kc_dbr.py --self-test > /dev/null && python3 tools/check_kernelc_errno.py --self-test > /dev/null && python3 tools/gen_mod_imports.py --check-all > /dev/null && python3 tools/check_hb_scratch.py --self-test > /dev/null && python3 tools/check_spl_balance.py --self-test > /dev/null && python3 tools/check_ntty.py --self-test > /dev/null && python3 tools/check_canaries.py --self-test > /dev/null && python3 tools/check_vnodeops.py --self-test > /dev/null && python3 tools/gen_vfs_equ.py --selftest > /dev/null && python3 tools/check_kernel_bank_emission.py --selftest > /dev/null 2>&1 && python3 tools/check_kernel_bank_emission.py && python3 tools/check_kc_dbr.py && python3 tools/gen_mod_imports.py --check-all && python3 tools/check_kernelc_errno.py && python3 tools/check_hb_scratch.py && python3 tools/check_spl_balance.py && python3 tools/check_ntty.py && python3 tools/check_canaries.py && python3 tools/check_vnodeops.py && python3 tools/check_mx.py build/fgx_S01_KernelMain_Output.txt build/fgx_S02_BlockDriver_Output.txt build/fgxfar_Output.txt build/fgxtty_Output.txt && python3 tools/check_baked_addrs.py && python3 tools/check_provenance.py && python3 tools/check_bsd_enforcement.py && python3 tools/check_chardev_ops.py && python3 tools/gen_syscall_table.py --check && python3 tools/gen_w5100_patchsites.py build/fgx_S01_KernelMain_Output.txt src/kernel/w5100_patchsites.s --anchor _w5SiteBase --check && python3 tools/check_kernel_ceiling.py && python3 tools/check_bank0_geometry.py && python3 tools/check_stage2_mirrors.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_stat_layout.py && python3 tools/check_statfs_layout.py && python3 tools/check_argv_caps.py && python3 tools/check_probe_offsets.py && python3 tools/check_far_calls.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_far_rtl_calls.py && python3 tools/check_selfbank_jsl.py && python3 tools/check_man_overstrike.py && python3 tools/check_path_copy.py && python3 tools/check_sock_argblk.py && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/far_patchsites.s core --check && python3 tools/gen_far_bankpatch.py build/fgxfar_Output.txt src/kernel/far/core_patchsites.s far --check && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/tty_patchsites.s core-tty --check && python3 tools/gen_far_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/core_patchsites.s tty --check && python3 tools/gen_mod_bankpatch.py build/fgxfar_Output.txt src/kernel/far/fnptr_patchsites.s --bank 08 --macro KFAR_FN_PTR --check && python3 tools/gen_mod_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/fnptr_patchsites.s --bank 09 --macro KFAR_FN_PTR --check && python3 tools/gen_wavee_bankpatch.py build/fgx_S01_KernelMain_Output.txt --check && touch $out
+  command = python3 tools/check_mx.py --self-test > /dev/null && python3 tools/check_baked_addrs.py --self-test > /dev/null && python3 tools/check_bsd_enforcement.py --self-test > /dev/null && python3 tools/check_chardev_ops.py --self-test > /dev/null && python3 tools/gen_syscall_table.py --self-test > /dev/null && python3 tools/gen_w5100_patchsites.py --self-test > /dev/null && python3 tools/gen_mod_bankpatch.py --self-test > /dev/null && python3 tools/gen_kernel_exports.py --self-test > /dev/null && python3 tools/check_kernel_ceiling.py --self-test > /dev/null && python3 tools/check_bank0_geometry.py --self-test > /dev/null && python3 tools/check_stage2_mirrors.py --self-test > /dev/null && python3 tools/mkfgxunix.py --self-test > /dev/null && python3 tools/check_stat_layout.py --self-test > /dev/null && python3 tools/check_statfs_layout.py --self-test > /dev/null && python3 tools/check_argv_caps.py --self-test > /dev/null && python3 tools/check_probe_offsets.py --self-test > /dev/null && python3 tools/check_far_calls.py --self-test > /dev/null && python3 tools/check_far_rtl_calls.py --self-test > /dev/null && python3 tools/check_selfbank_jsl.py --self-test > /dev/null && python3 tools/check_man_overstrike.py --self-test > /dev/null && python3 tools/check_path_copy.py --self-test > /dev/null && python3 tools/check_sock_argblk.py --self-test > /dev/null && python3 tools/gen_far_bankpatch.py --self-test > /dev/null && python3 tools/check_kc_dbr.py --self-test > /dev/null && python3 tools/check_kernelc_errno.py --self-test > /dev/null && python3 tools/gen_mod_imports.py --check-all > /dev/null && python3 tools/check_hb_scratch.py --self-test > /dev/null && python3 tools/check_spl_balance.py --self-test > /dev/null && python3 tools/check_ntty.py --self-test > /dev/null && python3 tools/check_canaries.py --self-test > /dev/null && python3 tools/check_vnodeops.py --self-test > /dev/null && python3 tools/gen_vfs_equ.py --selftest > /dev/null && python3 tools/check_kernel_bank_emission.py --selftest > /dev/null 2>&1 && python3 tools/check_kernel_bank_emission.py && python3 tools/check_kc_dbr.py && python3 tools/gen_mod_imports.py --check-all && python3 tools/check_kernelc_errno.py && python3 tools/check_hb_scratch.py && python3 tools/check_spl_balance.py && python3 tools/check_ntty.py && python3 tools/check_canaries.py && python3 tools/check_vnodeops.py && python3 tools/check_mx.py build/fgx_S01_KernelMain_Output.txt build/fgx_S02_BlockDriver_Output.txt build/fgxfar_Output.txt build/fgxtty_Output.txt && python3 tools/check_baked_addrs.py && python3 tools/check_bsd_enforcement.py && python3 tools/check_chardev_ops.py && python3 tools/gen_syscall_table.py --check && python3 tools/gen_w5100_patchsites.py build/fgx_S01_KernelMain_Output.txt src/kernel/w5100_patchsites.s --anchor _w5SiteBase --check && python3 tools/check_kernel_ceiling.py && python3 tools/check_bank0_geometry.py && python3 tools/check_stage2_mirrors.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_stat_layout.py && python3 tools/check_statfs_layout.py && python3 tools/check_argv_caps.py && python3 tools/check_probe_offsets.py && python3 tools/check_far_calls.py build/fgx_S01_KernelMain_Output.txt && python3 tools/check_far_rtl_calls.py && python3 tools/check_selfbank_jsl.py && python3 tools/check_man_overstrike.py && python3 tools/check_path_copy.py && python3 tools/check_sock_argblk.py && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/far_patchsites.s core --check && python3 tools/gen_far_bankpatch.py build/fgxfar_Output.txt src/kernel/far/core_patchsites.s far --check && python3 tools/gen_far_bankpatch.py build/fgx_S01_KernelMain_Output.txt src/kernel/tty_patchsites.s core-tty --check && python3 tools/gen_far_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/core_patchsites.s tty --check && python3 tools/gen_mod_bankpatch.py build/fgxfar_Output.txt src/kernel/far/fnptr_patchsites.s --bank 08 --macro KFAR_FN_PTR --check && python3 tools/gen_mod_bankpatch.py build/fgxtty_Output.txt src/kernel/tty/fnptr_patchsites.s --bank 09 --macro KFAR_FN_PTR --check && python3 tools/gen_wavee_bankpatch.py build/fgx_S01_KernelMain_Output.txt --check && touch $out
   description = kernel checks
 
 # Each linker probe's own script builds it; ninja supplies the dependency set.
@@ -1857,7 +1869,7 @@ def emit(tools, out_path):
     _probes = any(_cfg_values().get(g, "0") != "0" for g in _UFSPROBE_GATES)
     for _vc in dict.fromkeys(_VFS_C + _UFS_C + _UFSDIR_C +
                              (_UFSPROBE_C if _probes else ()) +
-                             _PRODOS_C + _PRODOSW_C):
+                             _PRODOS_C + _PRODOSW_C + _ISOFS_C):
         lines.append(
             f"build src/kernel/vfs/{_vc}.s | src/kernel/vfs/{_vc}.data.s: "
             # `| toolchain/fcc`, a REAL input, not `|| toolchain/fcc`.
@@ -1929,7 +1941,7 @@ def emit(tools, out_path):
         # a file it reads does not re-run on the edit that breaks it.
         "build/fgxfar_Output.txt build/fgxtty_Output.txt "
         "| tools/check_mx.py "
-        "tools/check_baked_addrs.py tools/check_provenance.py "
+        "tools/check_baked_addrs.py "
         "tools/check_chardev_ops.py include/chardev.s "
         "tools/gen_syscall_table.py tools/gen_w5100_patchsites.py "
         "tools/check_kernel_ceiling.py tools/check_bank0_geometry.py "
@@ -2006,7 +2018,7 @@ def emit(tools, out_path):
     MODULES = tuple(m for m in ("serial", "bpf", "net", "ramdisk", "pty",
                                 "vfs", "ufs", "ufsprobe", "ufsdir", "prodos",
                                 "prodosw", "cda", "sscon", "klog", "fpsim",
-                                "ld")
+                                "ld", "isofs")
                     if m != "ufsprobe" or probes)
     MODCHECK = ("net", "bpf")
     # Modules built from C IN PLACE: the .c compiles to <m>_c.s + <m>_c.data.s,
@@ -2029,7 +2041,8 @@ def emit(tools, out_path):
     # chance to drift; only which module's link picks the .s up changed.
     MODULE_PUTS_KERNELC = {"vfs": _VFS_C, "ufs": _UFS_C,
                            "ufsprobe": _UFSPROBE_C, "ufsdir": _UFSDIR_C,
-                           "prodos": _PRODOS_C, "prodosw": _PRODOSW_C}
+                           "prodos": _PRODOS_C, "prodosw": _PRODOSW_C,
+                           "isofs": _ISOFS_C}
     lines.append("\n# ---- kernel modules " + "-" * 49)
     # Placement chain: module N's offset in the shared bank comes from the
     # MEASURED footprints of modules 1..N-1, so its placement edge takes their
@@ -2093,7 +2106,8 @@ def emit(tools, out_path):
     # expected there and nowhere else: an empty table in vfs.mod or ufs.mod
     # would mean every function pointer in it dispatching to bank 0.
     for m, _ord in (("vfs", "06"), ("ufs", "07"), ("ufsprobe", "08"),
-                    ("ufsdir", "09"), ("prodos", "0A"), ("prodosw", "0B")):
+                    ("ufsdir", "09"), ("prodos", "0A"), ("prodosw", "0B"),
+                    ("isofs", "0C")):
         if m not in MODULES:
             continue
         emptyok = " --allow-empty" if m == "ufsprobe" else ""
@@ -2634,7 +2648,9 @@ def emit(tools, out_path):
     tzp = os.path.join(ROOT, ".fgx_tz")
     if not os.path.exists(tzp):
         open(tzp, "w").close()
-    gen_inputs = ["tools/ninja/gen.py", "tools/ninja/manifest.json", ".fgx_tz"]
+    # docs/PROVENANCE.md: a new row is a new input to the provenance stamp.
+    gen_inputs = ["tools/ninja/gen.py", "tools/ninja/manifest.json", ".fgx_tz",
+                  "docs/PROVENANCE.md"]
     gen_inputs += sorted(
         rel(p) for p in glob.glob(os.path.join(ROOT, "src/userland/*/*_stubs.s")))
     lines.append("rule regen_ninja\n"
@@ -2643,8 +2659,15 @@ def emit(tools, out_path):
                  "  generator = 1\n")
     lines.append("build build.ninja: regen_ninja | " + " ".join(gen_inputs) + "\n")
 
+    _prov = subprocess.run(
+        [sys.executable, os.path.join(ROOT, "tools/check_provenance.py"),
+         "--inputs"], cwd=ROOT, capture_output=True, text=True, check=True)
+    lines.append("build build/.provenance_checked: provcheck | "
+                 "tools/check_provenance.py " +
+                 " ".join(_prov.stdout.split()) + "\n")
     lines.append("build all: phony kernel modules userland probes disk "
-                 "build/.libc_checked build/static_libs/libtermlib.s\n")
+                 "build/.libc_checked build/.provenance_checked "
+                 "build/static_libs/libtermlib.s\n")
     lines.append("# `ninja release` builds the CLEAN image + floppy\n")
     lines.append("default all\n")
     write_if_changed(os.path.join(ROOT, out_path), "\n".join(lines))
