@@ -12,12 +12,14 @@ screen with every colour pair it can show, written as ANSI art writes them:
               as ANSI.SYS art spells them.  At the right, the row's colour as
               a foreground in code page 437 blocks, with its name.
   row 19      the shade ramp $DB $B2 $B1 $B0 in each of the sixteen colours
-  rows 20-23  a double-line box: SGR 7, 4, 38;5, 48;2 and 90-107 samples,
-              then single-line box drawing, half blocks and the high glyphs
-  row 24      footer, with no line end, so the screen does not scroll
+  rows 20-23  a double-line box: samples of SGR 7, 4, 38;5, 48;2 and 90-107,
+              then the code page's graphics block $B0-$DF and $F0-$FE
+  row 24      left empty: the last line end puts the cursor there, so the
+              shell's prompt lands on it and nothing scrolls
 
 Lines end in CR LF (ansicat sets LLITOUT, so the tty adds no CR), and none
-reaches column 80, so no terminal's autowrap moves a row.  A ^Z and a SAUCE
+reaches column 80, so no terminal's autowrap moves a row.  Cells whose
+foreground and background match are invisible, as on any VGA.  A ^Z and a SAUCE
 record (80x25, iCE colour) follow.
 
 Usage: tools/mkcolours_ans.py [output]
@@ -51,7 +53,8 @@ def chart():
         for fg in range(16):
             r += sgr(fg, bg) + " %X%X " % (bg, fg)
         name = NAMES[bg & 7].upper() if bg & 8 else NAMES[bg & 7]
-        r += sgr(7, 0) + "  " + sgr(bg, 0) + "\xdb\xdb\xb2\xb1\xb0 " + name
+        r += sgr(7, 0) + "  " + sgr(bg, 0) + "\xdb\xdb\xb2\xb1\xb0 "
+        r += sgr(bg or 7, 0) + name             # black's name in white
         rows.append(r)
     rows.append(sgr(7, 0))
     rows.append(sgr(7, 0) + "    " +
@@ -61,27 +64,23 @@ def chart():
     samples = [
         (ESC + "0;7;33;44m", " reverse "),
         (ESC + "0;4;37;40m", " underline "),
-        (ESC + "0;38;5;196;40m", " 38;5;196 "),
-        (ESC + "0;37;48;2;0;0;255m", " 48;2;0;0;255 "),
-        (ESC + "0;95;104m", " 95;104 "),
-        (ESC + "0;30;107m", " 30;107 "),
+        (ESC + "0;38;5;196;40m", " 256-color "),
+        (ESC + "0;37;48;2;0;0;255m", " 24-bit "),
+        (ESC + "0;95;104m", " aixterm fg "),
+        (ESC + "0;30;107m", " aixterm bg "),
     ]
     inner = "".join(s + t for s, t in samples)
     width = sum(len(t) for _, t in samples)
     rows.append(box + "\xc9" + "\xcd" * 76 + "\xbb")
     rows.append(box + "\xba" + sgr(7, 1) + " " + inner +
                 sgr(7, 1) + " " * (75 - width) + box + "\xba")
-    glyphs = ("\xda\xc4\xc2\xbf \xc3\xc5\xb4 \xc0\xc1\xd9 \xb3 "
-              "\xdc\xdf\xdd\xde\xfe "
-              + "".join(chr(c) for c in range(0x80, 0xa8))
-              + " " + "".join(chr(c) for c in range(0xe0, 0xf0)))
+    glyphs = ("".join(chr(c) for c in range(0xb0, 0xe0)) + "  "
+              + "".join(chr(c) for c in range(0xf0, 0xff)))
     rows.append(box + "\xba" + sgr(14, 1) + " " + glyphs[:75].ljust(75) +
                 box + "\xba")
     rows.append(box + "\xc8" + "\xcd" * 76 + "\xbc")
-    rows.append(sgr(8, 0) + " ansicat /testdata/colours.ans > /dev/ttyv3"
-                .ljust(79) + ESC + "0m")
-    assert len(rows) == 25
-    return "\r\n".join(rows)
+    assert len(rows) == 24
+    return "\r\n".join(rows) + ESC + "0m\r\n"
 
 
 def sauce():
