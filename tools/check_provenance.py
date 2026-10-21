@@ -195,7 +195,8 @@ SYMBOL_CITE = re.compile(
 )
 
 # Vendored trees a bare or partial citation path may be rooted at.
-VENDOR_ROOTS = ("vendor/2.11BSD", "vendor/4.3BSD-Reno", "vendor/netbsd-0-9")
+VENDOR_ROOTS = ("vendor/2.11BSD", "vendor/4.3BSD-Reno", "vendor/netbsd-0-9",
+                "vendor/4.4BSD-Lite2")
 
 
 def load_symbol_cites():

@@ -84,6 +84,7 @@ struct vfsops {
 #define MOUNT_UFS       1
 /* 2-9 are BSD's -- Reno's NFS, MFS and PC, netbsd-0-9's ISOFS through AFS --
  * and are left empty here rather than reused, for the reason above. */
+#define MOUNT_ISOFS     5       /* netbsd-0-9's: ISO 9660, isofs.mod */
 #define MOUNT_PRODOS    10      /* FGX-local: no BSD assigns ProDOS a number */
 #define MOUNT_MAXTYPE   10
 

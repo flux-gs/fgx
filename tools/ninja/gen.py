@@ -83,6 +83,9 @@ _UFSDIR_C = ("ufs_vnops", "ufs_lookup", "spec_vnops", "vfs_cache")
 # half's date arithmetic.
 _PRODOS_C = ("kern_epoch", "prodos_node", "prodos_vfsops", "prodos_vnops")
 _PRODOSW_C = ("kern_time", "prodos_write")
+# The ISO 9660 filesystem type, in isofs.mod.  Same rule, same flags;
+# kern_epoch is its recording-date arithmetic, as it is prodos.mod's.
+_ISOFS_C = ("kern_epoch", "isofs_node", "isofs_vfsops", "isofs_vnops")
 # spec_vnops JOINED ufsdir on 2026-09-05 and the move DELETED code rather than
 # adding any.  ufs_vnops.c is its only caller -- it names all ten spec_* in its
 # device-vnode ops vector -- and it lives here, so those ten were ten cross-bank
@@ -1857,7 +1860,7 @@ def emit(tools, out_path):
     _probes = any(_cfg_values().get(g, "0") != "0" for g in _UFSPROBE_GATES)
     for _vc in dict.fromkeys(_VFS_C + _UFS_C + _UFSDIR_C +
                              (_UFSPROBE_C if _probes else ()) +
-                             _PRODOS_C + _PRODOSW_C):
+                             _PRODOS_C + _PRODOSW_C + _ISOFS_C):
         lines.append(
             f"build src/kernel/vfs/{_vc}.s | src/kernel/vfs/{_vc}.data.s: "
             # `| toolchain/fcc`, a REAL input, not `|| toolchain/fcc`.
@@ -2006,7 +2009,7 @@ def emit(tools, out_path):
     MODULES = tuple(m for m in ("serial", "bpf", "net", "ramdisk", "pty",
                                 "vfs", "ufs", "ufsprobe", "ufsdir", "prodos",
                                 "prodosw", "cda", "sscon", "klog", "fpsim",
-                                "ld")
+                                "ld", "isofs")
                     if m != "ufsprobe" or probes)
     MODCHECK = ("net", "bpf")
     # Modules built from C IN PLACE: the .c compiles to <m>_c.s + <m>_c.data.s,
@@ -2029,7 +2032,8 @@ def emit(tools, out_path):
     # chance to drift; only which module's link picks the .s up changed.
     MODULE_PUTS_KERNELC = {"vfs": _VFS_C, "ufs": _UFS_C,
                            "ufsprobe": _UFSPROBE_C, "ufsdir": _UFSDIR_C,
-                           "prodos": _PRODOS_C, "prodosw": _PRODOSW_C}
+                           "prodos": _PRODOS_C, "prodosw": _PRODOSW_C,
+                           "isofs": _ISOFS_C}
     lines.append("\n# ---- kernel modules " + "-" * 49)
     # Placement chain: module N's offset in the shared bank comes from the
     # MEASURED footprints of modules 1..N-1, so its placement edge takes their
@@ -2093,7 +2097,8 @@ def emit(tools, out_path):
     # expected there and nowhere else: an empty table in vfs.mod or ufs.mod
     # would mean every function pointer in it dispatching to bank 0.
     for m, _ord in (("vfs", "06"), ("ufs", "07"), ("ufsprobe", "08"),
-                    ("ufsdir", "09"), ("prodos", "0A"), ("prodosw", "0B")):
+                    ("ufsdir", "09"), ("prodos", "0A"), ("prodosw", "0B"),
+                    ("isofs", "0C")):
         if m not in MODULES:
             continue
         emptyok = " --allow-empty" if m == "ufsprobe" else ""

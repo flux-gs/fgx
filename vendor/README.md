@@ -25,6 +25,11 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
     FreeBSD-2.2.8/{sbin/adjkerntz,sys}        adjkerntz(8) and the kernel time
                                               files it pairs with
     netbsd-0-9/usr.bin/elvis                  elvis (vi)
+    netbsd-0-9/sys/isofs, sbin/mount_isofs    the ISO 9660 filesystem, ported to
+                                              src/kernel/vfs/isofs_*
+    4.4BSD-Lite2/sys/isofs/cd9660             cd9660, the same code grown: its
+                                              node numbering, name handling and
+                                              Rock Ridge support
     SunOS-4.1.3/bin/ldd.c                     ldd(1), ported to src/userland/ldd
     frotz-2.44/                               Frotz, ported to src/userland/frotz
                                               (its README)

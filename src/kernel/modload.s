@@ -111,11 +111,12 @@ _mlcPathBuf     DS      _MLC_PATH_MAX   ; "/lib/modules/<name>",NUL
 ;
 ; ORDINAL 0 IS THE SHARED BANK and keeps its old name, because that is what the
 ; DBR-restore path and hellofail's fixture comment refer to.
-; SEVEN: the shared bank, vfs, ufs, ufsprobe, ufsdir, prodos and prodosw.  The
-; parse below bounds-checks against this, so raising it is the whole change --
-; but note the table GROWS, which moves every kernel static after it, and the
-; MAME harness resolves _modBankTab by address (the probe-address-rot class).
-MOD_BANK_MAX    EQU     7
+; EIGHT: the shared bank, vfs, ufs, ufsprobe, ufsdir, prodos, prodosw and
+; isofs.  The parse below bounds-checks against this, so raising it is the whole
+; change -- but note the table GROWS, which moves every kernel static after it,
+; and the MAME harness resolves _modBankTab by address (the probe-address-rot
+; class).
+MOD_BANK_MAX    EQU     8
 _modBankTab     DS      MOD_BANK_MAX
 _modSharedBank  EQU     _modBankTab
 _mlBankOrd      DS      2               ; this load's ordinal, parsed from the

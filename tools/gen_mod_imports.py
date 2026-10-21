@@ -120,6 +120,22 @@ TABLES = {
         ('uiomove',       'VFSCORE_Uiomove',     10, 'uiomove(cp, n, uio) -> errno'),
     ]),
 
+    # What isofs.mod imports from vfs.mod: prodos_from_vfs's rows less bwrite
+    # and vgone, an ISO 9660 volume being read-only and its nodes reclaimed
+    # only by the pool.
+    'isofs_from_vfs': ('_isVImp', '_isVfsBank', 'isvret_', [
+        ('bread',         'VFSCORE_Bread',       12, 'bread(vp, blkno, bpp) -> errno'),
+        ('brelse',        'VFSCORE_Brelse',       4, 'brelse(bp)'),
+        ('getnewvnode',   'VFSCORE_Getnewvnode', 14, 'getnewvnode(tag, mp, vops, vpp) -> errno'),
+        ('vget',          'VFSCORE_Vget',         4, 'vget(vp) -> errno'),
+        ('vref',          'VFSCORE_Vref',         4, 'vref(vp)'),
+        ('vrele',         'VFSCORE_Vrele',        4, 'vrele(vp)'),
+        ('namei',         'VFSCORE_Namei',        4, 'namei(ndp) -> errno'),
+        ('vflush',        'VFSCORE_Vflush',      10, 'vflush(mp, skipvp, flags) -> errno'),
+        ('vfs_setvfsops', 'VFSCORE_Setvfsops',    6, 'vfs_setvfsops(type, ops) -> errno'),
+        ('uiomove',       'VFSCORE_Uiomove',     10, 'uiomove(cp, n, uio) -> errno'),
+    ]),
+
     # What prodosw.mod, the ProDOS write half, imports from vfs.mod -- ProDOS FST
     # P6: every vfs.mod entry prodos_write.c calls.  Byte counts are
     # prodos_from_vfs's rows.
@@ -781,6 +797,7 @@ PAIRS = [
     ('prodos_from_vfs',   'src/modules/prodos/vfs_import.s'),
     ('prodosw_from_vfs',  'src/modules/prodosw/vfs_import.s'),
     ('prodosw_from_prodos', 'src/modules/prodosw/prodos_import.s'),
+    ('isofs_from_vfs',    'src/modules/isofs/vfs_import.s'),
 ]
 
 

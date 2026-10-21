@@ -1,0 +1,3 @@
+# mount_isofs(8) translation units.  mount_isofs.c is the entry point; the
+# option parser is mount(8)'s own, shared rather than copied.
+src/userland/mount/getmntopts.c

@@ -56,6 +56,7 @@ struct statfs {
  * and mount(8)/umount(8) both index it by f_type to print a name. */
 #define MOUNT_NONE      0
 #define MOUNT_UFS       1
+#define MOUNT_ISOFS     5      /* netbsd-0-9's number and name */
 #define MOUNT_PRODOS    10     /* FGX-local; 2-9 are BSD's -- see below */
 #define MOUNT_MAXTYPE   10
 
