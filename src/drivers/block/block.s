@@ -1085,6 +1085,24 @@ _SP_ReadBlock   ENT
                 ; so there is nothing to recover to.  The interface gate above is
                 ; what makes this second question safe to ask.
 @sprb_extErr    MX      %11
+                ; EXCEPT OFFLINE AND DISKSW, which only a device that took the
+                ; call can give: "The device is off line or no disk is in
+                ; drive" ($2F) and "Media has been swapped (extended calls
+                ; only)" ($2E), Firmware Reference Table 7-6, p.156.  An empty
+                ; CD-ROM answers OFFLINE, and downgrading the bus for it left
+                ; the drive unreadable once a disc went in -- its 2048-byte
+                ; sectors have no standard-call path -- and the rest of the
+                ; card on single-block reads.  Those two are the read's EIO.
+                LDA    |_blkExtErr
+                CMP     #$2F                    ; OFFLINE
+                BEQ     @sprb_extMedia
+                CMP     #$2E                    ; DISKSW
+                BNE     @sprb_extBus
+@sprb_extMedia  LDA     #EIO
+                PLP
+                CLC
+                RTS
+@sprb_extBus
                 ; X is NOT the bus offset here -- the firmware returns its transfer
                 ; count in X/Y and preserves neither (apple/fgx#111).  Recompute
                 ; from _fsTmp1, which it cannot reach: it runs at D=$0000 and the
@@ -1300,7 +1318,10 @@ _SP_ReadBlockN  ENT
                 ; A $48 that errors means this bus does not implement the
                 ; GENERIC Read, whatever $CnFB claimed about extended
                 ; addressing.  Latch it off so we ask exactly once per boot
-                ; instead of paying for a failed call on every miss.
+                ; instead of paying for a failed call on every miss -- on any
+                ; error but OFFLINE and DISKSW, for the reason _SP_ReadBlock's
+                ; extended arm gives: only a device that took the call answers
+                ; those, so they say nothing about the bus.
                 ; X IS NOT THE BUS OFFSET HERE.  It was one before _blkFwCall,
                 ; and SmartPort firmware returns the transfer count in X/Y --
                 ; nothing preserves it.  Recompute from _fsTmp1, which the
@@ -1311,6 +1332,11 @@ _SP_ReadBlockN  ENT
                 ; again.  apple/fgx#111.
 @sprbn_err      MX      %11                     ; both 8-bit: the firmware returned
                                                 ; through SEP #$30 (see above)
+                LDA    |_blkRaErr
+                CMP     #$2F                    ; OFFLINE
+                BEQ     @sprbn_eio
+                CMP     #$2E                    ; DISKSW
+                BEQ     @sprbn_eio
                 LDA     _fsTmp1                 ; bus idx
                 ASL
                 ASL
@@ -1319,7 +1345,7 @@ _SP_ReadBlockN  ENT
                 LDA    |_busTable+BS_Flags,X
                 AND     #$FF-BS_FLAG_MB
                 STA    |_busTable+BS_Flags,X
-                LDA     #EIO
+@sprbn_eio      LDA     #EIO
                 PLP
                 CLC
                 RTS
