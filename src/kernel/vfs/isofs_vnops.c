@@ -51,6 +51,12 @@ extern int      iso_unlock();
 extern int      iso_access();
 extern unsigned iso_ino16();
 extern long     kern_epoch();
+extern void     iso_rroffset();         /* isofs_rrip.c */
+extern void     iso_rrattr();
+extern int      iso_rrname();
+extern long     iso_rrparent();
+extern int      iso_rrlink();
+extern int      iso_bcmp();
 
 #define ASSOCCHAR       '='
 
@@ -176,6 +182,57 @@ struct isoattr  *ia;
     ia->ia_uid    = 0;
     ia->ia_gid    = 0;
     ia->ia_nlink  = (ia->ia_flags & ISO_FL_DIR) ? 2 : 1;
+    if (imp->im_rr)
+        iso_rrattr(imp, rp, ia);
+}
+
+
+/* iso_dotattr -- the attributes of the directory whose data is at extent
+ * `ext', from its own "." record: what a Rock Ridge CL or PL field points
+ * at, and the root.  Lite2 reads the same record for a relocated directory
+ * (cd9660_vget_internal's `relocated' arm).  The caller does not hold
+ * iso_blk. */
+int
+iso_dotattr(imp, ext, ia)
+struct isomount *imp;
+long             ext;
+struct isoattr  *ia;
+{
+    int error;
+
+    iso_bufget();
+    error = iso_getblk(imp, ext);
+    if (error == 0) {
+        if (isonum_711(&iso_blk[ISO_DR_LEN]) < ISO_DR_SIZE + 1 ||
+            isonum_711(&iso_blk[ISO_DR_NAMELEN]) != 1 ||
+            iso_blk[ISO_DR_NAME] != 0)
+            error = EIO;
+        else {
+            iso_parse(imp, iso_blk, ia);
+            ia->ia_flags |= ISO_FL_DIR;
+        }
+    }
+    iso_bufrel();
+    return (error);
+}
+
+
+/* iso_mountrr -- whether the mounted volume is Rock Ridge, from its root's
+ * "." record (iso_rroffset).  Called once, by isofs_mount. */
+int
+iso_mountrr(imp)
+struct isomount *imp;
+{
+    int error;
+
+    imp->im_rr = 0;
+    iso_bufget();
+    error = iso_getblk(imp, imp->im_rootext);
+    if (error == 0 && isonum_711(&iso_blk[ISO_DR_NAMELEN]) == 1 &&
+        iso_blk[ISO_DR_NAME] == 0)
+        iso_rroffset(imp, iso_blk);
+    iso_bufrel();
+    return (error);
 }
 
 
@@ -293,25 +350,29 @@ struct isonode *ip;
  * its name, ends the search, upstream's "illegal entry, stop" -- as an error
  * here rather than a miss, because the directory is not what it claims. */
 static int
-iso_dirscan(dp, nm, n, inop, ia)
+iso_dirscan(dp, nm, n, inop, ia, clp)
 struct isonode *dp;
 char           *nm;
 int             n;
 long           *inop;
 struct isoattr *ia;
+long           *clp;
 {
     struct isomount *imp;
     unsigned char   *rp;
+    char             rr[MAXNAMLEN];
     long             lbn;
     long             nblk;
     int              off;
     int              len;
     int              nl;
+    int              rl;
     int              assoc;
     int              error;
 
     imp   = dp->i_mnt;
-    assoc = (n > 1 && nm[0] == ASSOCCHAR);
+    *clp  = -1L;
+    assoc = (n > 1 && nm[0] == ASSOCCHAR && !imp->im_rr);
     if (assoc) {
         nm++;
         n--;
@@ -338,10 +399,23 @@ struct isoattr *ia;
             /* "." and ".." are records 0 and 1, the bytes 0 and 1. */
             if (nl == 1 && (rp[ISO_DR_NAME] == 0 || rp[ISO_DR_NAME] == 1))
                 continue;
-            if (((rp[ISO_DR_FLAGS] & ISO_FL_ASSOC) != 0) != assoc)
+            /* A ROCK RIDGE NAME MATCHES EXACTLY, case and all -- lookup
+             * compares it with bcmp in Lite2's cd9660_lookup.  A relocated
+             * directory's entry here is not a name at all (RE), and an entry
+             * with no NM, or one too long for FGX, falls back to its ISO
+             * 9660 name. */
+            rl = imp->im_rr ? iso_rrname(imp, rp, rr, clp) : 0;
+            if (rl < 0)
                 continue;
-            if (isofncmp((unsigned char *)nm, n, &rp[ISO_DR_NAME], nl) != 0)
-                continue;
+            if (rl > 0) {
+                if (rl != n || iso_bcmp((unsigned char *)rr, nm, n) != 0)
+                    continue;
+            } else {
+                if (((rp[ISO_DR_FLAGS] & ISO_FL_ASSOC) != 0) != assoc)
+                    continue;
+                if (isofncmp((unsigned char *)nm, n, &rp[ISO_DR_NAME], nl))
+                    continue;
+            }
             iso_parse(imp, rp, ia);
             if (ia->ia_flags & ISO_FL_DIR)
                 *inop = iso_dirino(imp, rp);
@@ -367,10 +441,12 @@ struct isoattr *ia;
 {
     struct isomount *imp;
     unsigned char   *rp;
+    long             pl;
     int              len;
     int              error;
 
     imp = dp->i_mnt;
+    pl  = -1L;
     iso_bufget();
     error = iso_getblk(imp, dp->i_attr.ia_extent);
     if (error == 0) {
@@ -383,9 +459,16 @@ struct isoattr *ia;
             iso_parse(imp, rp, ia);
             ia->ia_flags |= ISO_FL_DIR;
             *inop = iso_dirino(imp, rp);
+            /* A RELOCATED DIRECTORY's ".." names rr_moved; its PL field
+             * names the parent it really has (cd9660_rrip_pclink). */
+            pl = imp->im_rr ? iso_rrparent(imp, rp) : -1L;
         }
     }
     iso_bufrel();
+    if (error == 0 && pl >= 0L) {
+        error = iso_dotattr(imp, pl, ia);
+        *inop = ISO_BYTE(imp, pl);
+    }
     return (error);
 }
 
@@ -412,6 +495,7 @@ struct nameidata *ndp;
     struct isoattr  ia;
     char           *nm;
     long            ino;
+    long            cl;
     int             n;
     int             error;
 
@@ -434,8 +518,17 @@ struct nameidata *ndp;
     }
     if (n == 2 && nm[0] == '.' && nm[1] == '.')
         error = iso_dotdot(dp, &ino, &ia);
-    else
-        error = iso_dirscan(dp, nm, n, &ino, &ia);
+    else {
+        error = iso_dirscan(dp, nm, n, &ino, &ia, &cl);
+        /* A CL FIELD MAKES THIS ENTRY A PLACEHOLDER for a directory Rock
+         * Ridge moved out of the way of ISO 9660's eight levels: the node is
+         * the directory it names, made from that directory's own "."
+         * record. */
+        if (error == 0 && cl >= 0L) {
+            error = iso_dotattr(dp->i_mnt, cl, &ia);
+            ino = ISO_BYTE(dp->i_mnt, cl);
+        }
+    }
     if (error)
         return (error);
 
@@ -590,6 +683,7 @@ int          *eofflagp;
     char             nm[MAXNAMLEN + 1];
     long             lo;
     long             ino;
+    long             cl;
     int              boff;
     int              off;
     int              len;
@@ -658,8 +752,14 @@ int          *eofflagp;
                 else
                     ino = ISO_BYTE(imp, ip->i_attr.ia_extent) + lo -
                           (long)boff + (long)off;
-                n = isofntrans(&rp[ISO_DR_NAME], nl, nm,
-                               (rp[ISO_DR_FLAGS] & ISO_FL_ASSOC) != 0);
+                n = imp->im_rr ? iso_rrname(imp, rp, nm, &cl) : 0;
+                if (n < 0)
+                    continue;   /* relocated: listed where CL points */
+                if (n > 0 && cl >= 0L)
+                    ino = ISO_BYTE(imp, cl);
+                if (n == 0)
+                    n = isofntrans(&rp[ISO_DR_NAME], nl, nm,
+                                   (rp[ISO_DR_FLAGS] & ISO_FL_ASSOC) != 0);
             }
             last = dout;
             dout = iso_direct(dout, iso_ino16(ino), nm, n);
@@ -682,13 +782,43 @@ int          *eofflagp;
 }
 
 
-/* iso_readlink -- a Rock Ridge symbolic link's target.  Without Rock Ridge
- * nothing is a link, and VOP_READLINK is only asked of one. */
+/* iso_readlink -- a Rock Ridge symbolic link's target, from its SL fields:
+ * Lite2's cd9660_readlink.  The node's number IS its directory record's byte
+ * address (isofs.h), so the record is found without a search.  The target
+ * is built in iso_dirbuf, under the same lock. */
 int
 iso_readlink(vp, uio, cred)
 struct vnode *vp;
 struct uio   *uio;
 char         *cred;
 {
-    return (EINVAL);
+    struct isonode  *ip;
+    struct isomount *imp;
+    unsigned char   *rp;
+    int              off;
+    int              n;
+    int              error;
+
+    ip  = VTOI(vp);
+    imp = ip->i_mnt;
+    if (vp->v_type != VLNK || !imp->im_rr)
+        return (EINVAL);
+    iso_bufget();
+    error = iso_getblk(imp, ip->i_number >> imp->im_bshift);
+    if (error == 0) {
+        off = (int)(ip->i_number & (long)(imp->im_bsize - 1));
+        rp  = &iso_blk[off];
+        if (off + ISO_DR_SIZE > imp->im_bsize ||
+            off + isonum_711(&rp[ISO_DR_LEN]) > imp->im_bsize)
+            error = EIO;
+        else {
+            n = iso_rrlink(imp, rp, iso_dirbuf, DIRBLKSIZ);
+            if (n == 0)
+                error = EINVAL;
+            else
+                error = uiomove(iso_dirbuf, n, uio);
+        }
+    }
+    iso_bufrel();
+    return (error);
 }

@@ -40,10 +40,10 @@ _modFnPtrTab    ANOP
                 DA      $28F6
                 DA      $28FA
                 DA      $28FE
-                DA      $3E4F
-                DA      $3E53
-                DA      $3E57
-                DA      $3E5B
-                DA      $3E5F
-                DA      $3E63
+                DA      $3EAD
+                DA      $3EB1
+                DA      $3EB5
+                DA      $3EB9
+                DA      $3EBD
+                DA      $3EC1
 _modFnPtrBytes  EQU     76      ; 38 cell(s), 2 bytes of table each

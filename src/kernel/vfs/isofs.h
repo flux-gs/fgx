@@ -130,6 +130,9 @@ struct isomount {
     long            im_volsize;     /* logical blocks */
     long            im_rootext;     /* the root directory's extent... */
     long            im_rootsize;    /* ...and size */
+    char            im_rr;          /* Rock Ridge: iso_rroffset found it */
+    unsigned char   im_rrskip;      /* SP's skip, for every record... */
+    unsigned char   im_rrskip0;     /* ...and where SP was, in the root's "." */
 };
 
 #define VFSTOISO(mp)        ((struct isomount *)(mp)->mnt_data)

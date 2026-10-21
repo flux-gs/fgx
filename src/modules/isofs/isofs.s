@@ -164,6 +164,8 @@ _Is_ResolveVfs  MX      %00
                 PUT     ../../kernel/vfs/isofs_vfsops.data.s
                 PUT     ../../kernel/vfs/isofs_vnops.s
                 PUT     ../../kernel/vfs/isofs_vnops.data.s
+                PUT     ../../kernel/vfs/isofs_rrip.s
+                PUT     ../../kernel/vfs/isofs_rrip.data.s
                 ; LAST: the only output whose size depends on a scan of this
                 ; module's own listing, so nothing after it can move a cell.
                 PUT     fnptr_patchsites.s

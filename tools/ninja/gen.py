@@ -85,7 +85,8 @@ _PRODOS_C = ("kern_epoch", "prodos_node", "prodos_vfsops", "prodos_vnops")
 _PRODOSW_C = ("kern_time", "prodos_write")
 # The ISO 9660 filesystem type, in isofs.mod.  Same rule, same flags;
 # kern_epoch is its recording-date arithmetic, as it is prodos.mod's.
-_ISOFS_C = ("kern_epoch", "isofs_node", "isofs_vfsops", "isofs_vnops")
+_ISOFS_C = ("kern_epoch", "isofs_node", "isofs_vfsops", "isofs_vnops",
+            "isofs_rrip")
 # spec_vnops JOINED ufsdir on 2026-09-05 and the move DELETED code rather than
 # adding any.  ufs_vnops.c is its only caller -- it names all ten spec_* in its
 # device-vnode ops vector -- and it lives here, so those ten were ten cross-bank

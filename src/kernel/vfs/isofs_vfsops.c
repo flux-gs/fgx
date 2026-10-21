@@ -38,6 +38,8 @@ extern void          kc_panic();
 extern void          iso_hashinit();
 extern int           iso_iget();
 extern void          iso_parse();
+extern int           iso_mountrr();
+extern int           iso_dotattr();
 extern struct vfsops isofs_vfsops;
 int                  isofs_statfs();    /* below; isofs_mount ends in it */
 
@@ -166,9 +168,15 @@ struct nameidata *ndp;
         vrele(devvp);
         return (error);
     }
+    imp->im_rr = 0;
     iso_parse(imp, rootdr, &ia);
     imp->im_rootext  = ia.ia_extent;
     imp->im_rootsize = ia.ia_size;
+    error = iso_mountrr(imp);
+    if (error) {
+        vrele(devvp);
+        return (error);
+    }
 
     imp->im_mountp = mp;
     mp->mnt_data   = (char *)imp;
@@ -250,8 +258,7 @@ int           forcibly;
 
 
 /* isofs_root -- the root directory's node, locked: VFS_ROOT's contract.
- * Its attributes are its own "." record's, read by lookup when a node is
- * made; here, at the top, the record in the volume descriptor serves. */
+ * Its attributes are its own "." record's, Rock Ridge's PX among them. */
 int
 isofs_root(mp, vpp)
 struct mount  *mp;
@@ -264,15 +271,9 @@ struct vnode **vpp;
 
     *vpp = (struct vnode *)0;
     imp = VFSTOISO(mp);
-    ia.ia_extent = imp->im_rootext;
-    ia.ia_size   = imp->im_rootsize;
-    ia.ia_flags  = ISO_FL_DIR;
-    ia.ia_interleaved = 0;
-    ia.ia_mtime  = 0L;
-    ia.ia_mode   = 0555;
-    ia.ia_uid    = 0;
-    ia.ia_gid    = 0;
-    ia.ia_nlink  = 2;
+    error = iso_dotattr(imp, imp->im_rootext, &ia);
+    if (error)
+        return (error);
     error = iso_iget(imp, ISO_BYTE(imp, imp->im_rootext), &ia, &ip);
     if (error)
         return (error);
