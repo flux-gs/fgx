@@ -66,7 +66,12 @@
 #                  Both cards are SmartPort cards and boot FGX (the smoke test
 #                  passes on each).  The SCSI card has extended SmartPort, so
 #                  FGX takes its multi-block read path; CFFA 2.0 reads single
-#                  blocks.
+#                  blocks.  MAME puts an Apple CD-ROM drive on the SCSI card's
+#                  bus as well, which FGX attaches as /dev/cd0 -- empty unless
+#                  -cdrom loads a disc.
+#   -cdrom FILE    load FILE (.iso, .chd, ...) into that CD-ROM drive; implies
+#                  -scsi.  A ProDOS CD mounts with
+#                  `mount_prodos -o ro /dev/cd0 /mnt'.
 #   -keep-config   do NOT wipe /tmp/fgx_debug_config.json (for instrumented
 #                  -debug sessions where you set the fgxdebug config up first)
 #   -showconfig    print MAME's resolved config and exit
@@ -100,6 +105,7 @@ PHASOR=0; PHASORSLOT=4
 SECONDSIGHT=0; SSSLOT=3
 STORAGE=retronet
 FLOP=""
+CDROM=""
 DISKS=()
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -113,6 +119,7 @@ while [ $# -gt 0 ]; do
     -retronet)    STORAGE=retronet ;;
     -cffa)        STORAGE=cffa ;;
     -scsi)        STORAGE=scsi ;;
+    -cdrom)       shift; CDROM="${1:-}"; STORAGE=scsi; [ -n "$CDROM" ] || { echo "error: -cdrom requires a CD image path" >&2; exit 1; } ;;
     -netslot)     shift; NETSLOT="${1:-}"; case "$NETSLOT" in [1-7]) ;; *) echo "error: -netslot requires a slot number 1-7" >&2; exit 1 ;; esac ;;
     -phasorslot)  shift; PHASORSLOT="${1:-}"; PHASOR=1; case "$PHASORSLOT" in [1-7]) ;; *) echo "error: -phasorslot requires a slot number 1-7" >&2; exit 1 ;; esac ;;
     -secondsight) SECONDSIGHT=1 ;;
@@ -364,6 +371,7 @@ elif [ "$STORAGE" = cffa ]; then
 elif [ "$STORAGE" = scsi ]; then
   # Apple II SCSI Card in slot 7; boot disk on the SCSI bus (-hard1).
   ARGS+=( -sl7 scsi -hard1 "${DISKS[0]}" )
+  if [ -n "$CDROM" ]; then ARGS+=( -cdrom "$CDROM" ); fi
 else
   # Disks on slot-7 retronet: boot on hard1, extras on hard2+.
   ARGS+=( -sl7 retronet -hard1 "${DISKS[0]}" )
@@ -410,6 +418,7 @@ elif [ "$STORAGE" = cffa ]; then
 elif [ "$STORAGE" = scsi ]; then
   echo "Booting under MAME (slot-7 Apple II SCSI Card):"
   echo "  hard1 (boot): ${DISKS[0]}  [SmartPort-only-loader repro]"
+  echo "  cdrom: ${CDROM:-(empty)}"
 else
   echo "Booting under MAME (slot-7 retronet):"
   echo "  hard1 (boot): ${DISKS[0]}"

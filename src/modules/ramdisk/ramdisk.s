@@ -104,14 +104,12 @@ RD_FormatFlag   EQU     $E1164A
 RD_NumBanks     EQU     $E11624         ; "Number of 64K banks in machine"
 RD_MaxDiskParm  EQU     $E102F7         ; "inside the Battery RAM buffer (max
                                         ;  RAM5 size, N*32K)"
-; THE RAM DISK HAS ONE FIXED DEVICE INDEX, row 8, so its node is always
-; /dev/ram0 (tools/ninja/gen.py mints `b /dev/ram0 8').  A block minor IS the
-; row.  Dev_Init fills SmartPort units from row 0 upward, and rows 0..7 are the
-; /dev/sd0..sd7 nodes, so row 8 is the first one no disk node names; a machine
-; with more than eight SmartPort units takes it, and the RAM disk is then not
-; registered.  Not a higher row: a mount on rows 29..31 crashes the machine
-; (flux-gs/fgx#4), and 8 is clear of it.
-RD_DEVIDX       EQU     8
+; THE RAM DISK HAS ONE FIXED DEVICE-TABLE ROW, BDEV_RAM_ROW (include/fs.s),
+; the slice ramstrategy (src/kernel/vfs/bio_strategy.c) turns /dev/ram0 --
+; block major 1, minor 0 -- into.  Dev_Init attaches at most BDEV_NSD SmartPort
+; disks, in rows below it, so the row is free whatever the scan found.  Not a
+; higher row: a mount on rows 29..31 crashes the machine (flux-gs/fgx#4).
+RD_DEVIDX       EQU     BDEV_RAM_ROW
 
 ;------------------------------------------------------------------------------
 ; Kernel statics this module reads DBR-relatively (DBR = kernel bank
@@ -291,10 +289,9 @@ RamDisk_Init
 ;==============================================================================
 ; RamDisk_RegisterDev - inject the RAM disk into _devTable / _diskStates.
 ;
-; Takes _devTable row RD_DEVIDX, the last one (Dev_Init fills rows 0..N-1 with
-; the boot bus and SmartPort units from the bottom), so the RAM disk is always
-; the same block minor and /dev/ram0 always names it, and populates it so the
-; block layer can see it:
+; Takes _devTable row RD_DEVIDX, the RAM disk's slice (Dev_Init fills the sd
+; rows below it with the boot bus and SmartPort units), so /dev/ram0 always
+; names it, and populates it so the block layer can see it:
 ;
 ;   _devTable[idx]:  DEV_Class = DEV_CLASS_RAM
 ;                    DEV_Flags = DEV_FLAG_ONLINE
@@ -314,7 +311,8 @@ RamDisk_Init
 ; Register/flag contract:
 ;   In:   _rdBlocks valid (the present path of RamDisk_Init guarantees this).
 ;   Out:  Non-fatal; C is don't-care.  If row RD_DEVIDX is already taken
-;         it returns without registering.  P (incl. M/X widths) restored via PHP/PLP;
+;         it returns without registering: /dev/ram0 names that row and no
+;         other.  P (incl. M/X widths) restored via PHP/PLP;
 ;         A/X/Y clobbered; _devPtr + _blkBuf/_fsTmp1 clobbered (NOT _fsTmp2,
 ;         which Blk_Read's contract preserves).
 ;
@@ -337,20 +335,11 @@ RamDisk_RegisterDev
                 SEP     #$20
                 MX      %10                     ; M=8, X=16 (mirror _dev_alloc*)
 
-                ;--- 1. Row RD_DEVIDX, if it is DEV_CLASS_EMPTY.  The loop is a
-                ;    one-row scan: past RD_DEVIDX it ends at FS_MAX_DEVICES and
-                ;    returns without registering. ---
+                ;--- 1. Row RD_DEVIDX, if it is DEV_CLASS_EMPTY. ---
                 LDA     #RD_DEVIDX
                 STA     _fsTmp1                 ; idx (8-bit; chosen-slot scratch --
                                                 ;   NOT _blkBuf+2, see the header)
-@rrd_findL      MX      %10
-                LDA     _fsTmp1
-                CMP     #FS_MAX_DEVICES
-                BCC     @rrd_chk
-                ; No free slot -> don't register (non-fatal).
-                PLP
-                RTS
-@rrd_chk        ; _devPtr = dev_table_ptr + idx*DEV_SIZE.
+                ; _devPtr = dev_table_ptr + idx*DEV_SIZE.
                 REP     #$20
                 MX      %00
                 LDA     _fsTmp1
@@ -372,8 +361,8 @@ RamDisk_RegisterDev
                 LDA     [_devPtr],Y
                 CMP     #DEV_CLASS_EMPTY
                 BEQ     @rrd_found
-                INC     _fsTmp1               ; next idx
-                BRA     @rrd_findL
+                PLP                             ; taken: don't register
+                RTS
 
 @rrd_found      ; _devPtr already points at the chosen slot; idx in _fsTmp1.
 

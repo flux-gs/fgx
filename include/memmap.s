@@ -1109,6 +1109,7 @@ _devAllocSlot           DS  1               ; slot scratch across _dev_allocDevE
 ; INVALID unit number on the bus being enumerated -- the SmartPort device count
 ; plus one, or SP_UNIT_MAX+1 when the port does not answer the roll call.
 _devUnitLimit           DS  1               ; first out-of-range unit (count+1)
+_devNextCd              DS  1               ; next cd unit (BDEV_NCD caps it)
 _busTable               DS  8*8             ; FS_MAX_BUSES * 8 B padded per entry
 KMem_busTable_end       EQU *
 KMem_busTable_canary    DS  1

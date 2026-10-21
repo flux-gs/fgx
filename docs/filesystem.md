@@ -180,11 +180,16 @@ Device nodes are ordinary inodes on the root (`IFCHR`/`IFBLK`), made at image
 build time. A device vnode wears specfs's vector (`spec_vnops.c`), so its
 operations reach a driver instead of the filesystem's data blocks.
 
-FGX has no `cdevsw`/`bdevsw`. `dev_t` is a single-major index:
+A block `dev_t` is 2.11BSD's major and minor: the major (high byte) indexes
+`bdevsw` (`src/kernel/vfs/bio_strategy.c`) and the minor is the driver's
+unit. Character devices have no `cdevsw` yet; their `dev_t` is a single-major
+index:
 
 | Kind | `rdev` means | Nodes |
 |------|--------------|-------|
-| Block | SmartPort unit number | `/dev/sd0`..`/dev/sd7` (one per unit the slot-7 card can carry, attached or not, as 2.11BSD's MAKEDEV does) |
+| Block, major 0 (`sd`) | SmartPort disk, in the order the scan finds them | `/dev/sd0`..`/dev/sd7` (one per unit, attached or not, as 2.11BSD's MAKEDEV does) |
+| Block, major 1 (`ram`) | the Control Panel RAM disk | `/dev/ram0` |
+| Block, major 2 (`cd`) | a SmartPort CD-ROM (device type `$05`), read-only | `/dev/cd0`..`/dev/cd3` |
 | Character | chardev registry index (`src/kernel/chardev.s`, `CHARDEV_MAX` in `include/chardev.s`) | `null`, `console`, `tty`, `ttyv1`..`ttyv3`, `ptyp0`/`ttyp0`, `ptyp1`/`ttyp1`, `tty00`, `tty01`, `bpf0`, `cda`, `klog`, and the raw disks `rsd0`..`rsd7` |
 
 The node lists are in `tools/ninja/gen.py` (`DEV_NODES`, `VC_DEV_NODES`,

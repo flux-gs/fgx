@@ -368,8 +368,8 @@ _hexNibble      MX      %10
 ;
 ;   fs: /VOL on sNdM          the BOOT volume's own mount -- the one line that
 ;                             says what the machine actually booted from
-;   bus N: slot M entry=$..   every SmartPort controller past the boot bus
-;   dev NN: sMdU blk=$....    every unit on them
+;   spN at slot M             every SmartPort controller past the boot bus
+;   sdN at spB unit U: ...    every unit on them
 ;   INODEPROBE / BLKPROBE     the boot self-tests' verdicts
 ;
 ; dmesg(1) can fetch them AFTER boot -- but only from a shell, and a boot that

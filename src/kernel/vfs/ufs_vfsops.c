@@ -177,27 +177,38 @@ struct ufs_sb *sb;
  * superblock IS the on-disk bytes; ours is decoded into um_sb, so the decode is
  * the copy and the buffer's life can end with the read.
  */
-/* ufs_devname -- write "/dev/sd<unit>" into a MNAMELEN buffer.
+/* ufs_devname -- write "/dev/<driver><unit>" into a MNAMELEN buffer.
  *
- * THE NAME MATCHES THE NODE, and the node is the one this tree already chose:
- * /dev/sd2 has named the mount fixture's spindle since UFS 1.8b-2, so `sd'
- * plus the SmartPort unit is FGX's device naming and not a new invention.
- * 2.11BSD would spell the same thing `ra0a' or `hk0a' -- controller, unit,
- * partition -- and FGX has neither controllers nor partitions to name.
+ * THE NAME MATCHES THE NODE: the major names the driver, as bdevsw does, and
+ * the minor is its unit -- `sd' for a SmartPort disk, `ram' for the RAM disk
+ * and `cd' for a CD-ROM, the names tools/ninja/gen.py mints.  2.11BSD would spell the same
+ * thing `ra0a' or `hk0a' -- controller, unit, partition -- and FGX has neither
+ * controllers nor partitions to name.
  *
- * ONE DIGIT, because a SmartPort bus carries at most a handful of units and
- * FS_MAX_MOUNTS is 14; a two-digit unit would need the loop and is not a
- * shape this machine can reach.  Anything out of range gets '?' rather than a
- * wrong digit -- an unreadable name is better than a plausible one. */
+ * ONE DIGIT, because a driver here has at most eight units; anything out of
+ * range, or a major with no name, gets '?' rather than a wrong character -- an
+ * unreadable name is better than a plausible one. */
 static void
-ufs_devname(buf, unit)
+ufs_devname(buf, dev)
 char *buf;
-int   unit;
+dev_t dev;
 {
+    int unit, n;
+
     buf[0] = '/'; buf[1] = 'd'; buf[2] = 'e'; buf[3] = 'v'; buf[4] = '/';
-    buf[5] = 's'; buf[6] = 'd';
-    buf[7] = (unit >= 0 && unit <= 9) ? (char)('0' + unit) : '?';
-    buf[8] = 0;
+    n = 5;
+    if (major(dev) == SD_MAJOR) {
+        buf[n++] = 's'; buf[n++] = 'd';
+    } else if (major(dev) == RAM_MAJOR) {
+        buf[n++] = 'r'; buf[n++] = 'a'; buf[n++] = 'm';
+    } else if (major(dev) == CD_MAJOR) {
+        buf[n++] = 'c'; buf[n++] = 'd';
+    } else {
+        buf[n++] = '?';
+    }
+    unit = minor(dev);
+    buf[n++] = (unit <= 9) ? (char)('0' + unit) : '?';
+    buf[n] = 0;
 }
 
 int
@@ -346,7 +357,7 @@ struct ufsmount *ump;
         mp->mnt_stat.f_mntonname[i]   = 0;
         mp->mnt_stat.f_mntfromname[i] = 0;
     }
-    ufs_devname(mp->mnt_stat.f_mntfromname, (int)ump->um_dev);
+    ufs_devname(mp->mnt_stat.f_mntfromname, ump->um_dev);
 
     return (ufs_statfs(mp, &mp->mnt_stat));
 }
@@ -642,10 +653,8 @@ ufs_mountpool()
  *      if (vp->v_type != VBLK) { vrele(vp); return (ENOTBLK); }
  *      if (major(vp->v_rdev) >= nblkdev) { vrele(vp); return (ENXIO); }
  *
- * THE MAJOR CHECK IS NOT CARRIED, and its absence is the same fact spec_vnops
- * records at length: FGX has one block driver reached through kc_blkio, so
- * `major(dev)' is a constant and `>= nblkdev' can never be true.  A check that
- * cannot fire is a check a reader has to disprove.
+ * nblkdev IS NBLKDEV, a constant in fsparam.h: the switch it counts is in
+ * vfs.mod, and module C cannot read another bank's variable.
  *
  * ENOTBLK IS THE INTERESTING RETURN and it is upstream's.  Mounting a
  * character device, or a regular file, is the mistake this catches -- and it
@@ -676,6 +685,10 @@ struct nameidata *ndp;
     if (vp->v_type != VBLK) {
         vrele(vp);
         return (ENOTBLK);
+    }
+    if (major(vp->v_rdev) >= NBLKDEV) {
+        vrele(vp);
+        return (ENXIO);
     }
     *devvpp = vp;
     return (0);

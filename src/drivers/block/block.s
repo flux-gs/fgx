@@ -230,13 +230,9 @@ Blk_LogBootDev  ENT
                 ; runs -- so Dev_Init's loop, which prints every unit it finds,
                 ; never sees it.  A storage inventory that omits the drive the
                 ; machine booted from is the one line a reader most needs.
-                ; It is always s<slot>,d1 and always /dev/sd0.
-                ; THE SLOT DIGIT IS PATCHED INTO THE STRING, not emitted
-                ; between two calls.  This is the BLOCK segment and the main
-                ; segment exports only Kern_LogStr -- Kern_LogStrNoEOL and
-                ; _kernLogPutByte are not cross-segment entries, and adding two
-                ; to the linker's surface to print one character is the wrong
-                ; trade.  One ASC run, one label on the byte that varies.
+                ; It is always unit 1 of bus 0 and always /dev/sd0, so the
+                ; bus's own line goes first, as Dev_Init prints one for every
+                ; other bus.  THE SLOT DIGIT IS PATCHED INTO THE STRING.
                 SEP     #$20
                 MX      %10
                 LDA    |_busTable+BS_Slot
@@ -245,6 +241,9 @@ Blk_LogBootDev  ENT
                 STA    |_blkBootSlot
                 REP     #$30
                 MX      %00
+                LDA     #_blkBootBus
+                STA     _conStrPtr
+                JSR     Kern_LogStr
                 LDA     #_blkBootMsg
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
@@ -303,9 +302,9 @@ Blk_LogBootDev  ENT
                 PLP
                 RTS
 
-_blkBootMsg     ASC     'blk: dev 00: s'
-_blkBootSlot    ASC     '?'
-                ASC     ',d1 (attaching sd0) ',00
+_blkBootBus     ASC     'sp0 at slot '
+_blkBootSlot    ASC     '?',00
+_blkBootMsg     ASC     'sd0 at sp0 unit 1: ',00
 _blkBootNone    ASC     '',00
 
 ;------------------------------------------------------------------------------

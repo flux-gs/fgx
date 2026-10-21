@@ -270,7 +270,7 @@ reset()
     fake_writes = 0;
 }
 
-#define DEV_A   ((dev_t)0x0301)
+#define DEV_A   ((dev_t)0x0201)   /* cd unit 1: a block major bdevsw has */
 
 /* A device vnode THE WAY A FILESYSTEM MAKES ONE: a vnode of its own, tagged
  * with the filesystem that named it, handed to checkalias.
