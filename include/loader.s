@@ -906,6 +906,10 @@ TIOCGETP        EQU     $7408               ; gtty: *arg = tty sgttyb
 TIOCSETP        EQU     $7409               ; stty: tty sgttyb = *arg (flush)
 TIOCSETN        EQU     $740A               ; stty: as TIOCSETP, no flush
 
+; A CD-ROM's eject: netbsd-0-9's CDIOCEJECT, _IO('c', 24) (sys/sys/cdio.h:144),
+; less the size bits FGX's 16-bit ioctl numbers do not carry.
+CDIOCEJECT      EQU     $6318
+
 ;------------------------------------------------------------------------------
 ; pty ioctls (pty subsystem plan 2026-07-20).  Values mirror toolchain
 ; include/sgtty.h (the C side) — keep in sync.  TIOCGLTC/TIOCSLTC are

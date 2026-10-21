@@ -16,6 +16,7 @@
 #include "buf.h"
 #include "mount.h"
 #include "namei.h"
+#include "file.h"
 #include "vfsops.h"
 #include "prodos.h"
 
@@ -215,7 +216,9 @@ struct statfs *sbp;
 
 
 /* prodos_unmount -- ufs_unmount's shape: every node this mount produced goes
- * or the unmount does not, then the device reference and the pool slot. */
+ * or the unmount does not, then the device reference and the pool slot.  The
+ * device is closed first, as Reno's ufs_unmount does: that drops its buffers
+ * and lets a CD-ROM take another disc (spec_close). */
 int
 prodos_unmount(mp, forcibly)
 struct mount *mp;
@@ -235,6 +238,8 @@ int           forcibly;
         return (error);
 
     pmp->pm_devvp->v_specflags &= ~SI_MOUNTEDON;
+    (void)VOP_CLOSE(pmp->pm_devvp,
+        (mp->mnt_flag & MNT_RDONLY) ? FREAD : FREAD | FWRITE, (char *)0);
     vrele(pmp->pm_devvp);
     mp->mnt_data   = (char *)0;
     mp->mnt_op     = (struct vfsops *)0;

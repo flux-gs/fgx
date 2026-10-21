@@ -25,6 +25,7 @@
 #include "buf.h"
 #include "mount.h"
 #include "namei.h"
+#include "file.h"
 #include "vfsops.h"
 #include "isofs.h"
 
@@ -228,8 +229,10 @@ struct statfs *sbp;
 
 
 /* isofs_unmount -- every node this mount produced goes or the unmount does
- * not, then the device reference and the pool slot.  isofs_unmount's, less
- * the forcible arm, which FGX's other filesystems refuse too. */
+ * not, then the device reference and the pool slot.  cd9660_unmount's, less
+ * the forcible arm, which FGX's other filesystems refuse too.  Its
+ * VOP_CLOSE of the device is what drops the disc's buffers and lets the
+ * drive take another (spec_close). */
 int
 isofs_unmount(mp, forcibly)
 struct mount *mp;
@@ -249,6 +252,7 @@ int           forcibly;
         return (error);
 
     imp->im_devvp->v_specflags &= ~SI_MOUNTEDON;
+    (void)VOP_CLOSE(imp->im_devvp, FREAD, (char *)0);
     vrele(imp->im_devvp);
     mp->mnt_data   = (char *)0;
     mp->mnt_op     = (struct vfsops *)0;

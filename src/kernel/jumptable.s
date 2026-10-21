@@ -551,6 +551,14 @@ _Sys_KCallImpl      MX  %00
                 BNE     @kc_s57
                 BRL     @kc_bankfree
 @kc_s57        ANOP
+                CPX     #KSVC_BLKSTALE
+                BNE     @kc_s58
+                BRL     @kc_blkstale
+@kc_s58        ANOP
+                CPX     #KSVC_BLKIOCTL
+                BNE     @kc_s59
+                BRL     @kc_blkioctl
+@kc_s59        ANOP
                 ; Unknown service.  A module built against a NEWER kernel can
                 ; ask for one that does not exist here; say so instead of
                 ; halting.  (Two services do not earn a jump table -- a
@@ -915,6 +923,14 @@ _ktp105         JSL     KTTY_TOD_NOW
 @kc_bankfree    JSR     Bank_Free               ; A = bank; preserves X/Y
                 PLB
                 SEC
+                RTL
+
+                ; --- KSVC_BLKSTALE / KSVC_BLKIOCTL: A = block dev_t (dev.s) ---
+@kc_blkstale    JSR     Dev_BlkStale
+                PLB
+                RTL
+@kc_blkioctl    JSR     Dev_BlkIoctl            ; C=0 -> A = errno
+                PLB
                 RTL
 
                 ; --- KSVC_TICKS: -> A = _kSystemTicks, LOW WORD ---

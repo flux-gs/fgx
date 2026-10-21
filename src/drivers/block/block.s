@@ -61,6 +61,7 @@ _RAM_WriteBlock EXT
 ; than the whole-string entry blkcache.s already declares for this segment.
 Kern_LogStrNoEOL EXT
 Dev_LogSize     EXT
+Dev_Reprobe     EXT
 
 ;------------------------------------------------------------------------------
 ; Blk_Init - initialize driver from loader handoff data.
@@ -399,6 +400,20 @@ Blk_Read        ENT
                 LDA     dev_table_ptr+2
                 ADC     #0                  ; +carry from 16-bit add
                 STA     _devPtr+2
+                ;--- A MEDIUM THAT MAY HAVE CHANGED IS PROBED BEFORE ANYTHING
+                ; ELSE READS ITS RECORD: the sector size decides the read path
+                ; below, and a stale size would read the wrong bytes (fs.s,
+                ; DEV_FLAG_STALE). ---
+                LDY     #DEV_Flags
+                LDA     [_devPtr],Y
+                AND     #DEV_FLAG_STALE
+                BEQ     @bkr_fresh
+                REP     #$30
+                MX      %00
+                JSR     Dev_Reprobe
+                SEP     #$20
+                MX      %10
+@bkr_fresh
                 ;--- Owned by vfs_bio?  Then the legacy cache never sees this
                 ; device (UFS 1.3c).  Derived once here and read at four points
                 ; below; see DEV_FLAG_VFSOWNED. ---

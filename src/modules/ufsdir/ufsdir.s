@@ -100,6 +100,7 @@ ud_vtdir        ASC     'VTDR'
 ; before the line that uses one.
 ;------------------------------------------------------------------------------
                 PUT     ../common/kc_sys.s
+                PUT     ../common/kc_blkdev.s
 
 ;--- cdevsw's bulk chardev ops, WITH spec_vnops.c since 2026-09-05.  It was
 ;--- vfs.mod's on the same rule that puts it here now: not ../common/kc_sys.s's,
