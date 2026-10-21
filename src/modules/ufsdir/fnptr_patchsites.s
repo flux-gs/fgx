@@ -8,29 +8,6 @@
 ; single-bank image already is.
 
 _modFnPtrTab    ANOP
-                DA      $3047
-                DA      $304B
-                DA      $304F
-                DA      $3053
-                DA      $3057
-                DA      $305B
-                DA      $305F
-                DA      $3063
-                DA      $3067
-                DA      $306B
-                DA      $306F
-                DA      $3073
-                DA      $3077
-                DA      $307B
-                DA      $307F
-                DA      $3083
-                DA      $3087
-                DA      $308B
-                DA      $308F
-                DA      $3093
-                DA      $3097
-                DA      $309B
-                DA      $309F
                 DA      $30A3
                 DA      $30A7
                 DA      $30AB
@@ -40,29 +17,29 @@ _modFnPtrTab    ANOP
                 DA      $30BB
                 DA      $30BF
                 DA      $30C3
-                DA      $8276
-                DA      $827A
-                DA      $827E
-                DA      $8282
-                DA      $8286
-                DA      $828A
-                DA      $828E
-                DA      $8292
-                DA      $8296
-                DA      $829A
-                DA      $829E
-                DA      $82A2
-                DA      $82A6
-                DA      $82AA
-                DA      $82AE
-                DA      $82B2
-                DA      $82B6
-                DA      $82BA
-                DA      $82BE
-                DA      $82C2
-                DA      $82C6
-                DA      $82CA
-                DA      $82CE
+                DA      $30C7
+                DA      $30CB
+                DA      $30CF
+                DA      $30D3
+                DA      $30D7
+                DA      $30DB
+                DA      $30DF
+                DA      $30E3
+                DA      $30E7
+                DA      $30EB
+                DA      $30EF
+                DA      $30F3
+                DA      $30F7
+                DA      $30FB
+                DA      $30FF
+                DA      $3103
+                DA      $3107
+                DA      $310B
+                DA      $310F
+                DA      $3113
+                DA      $3117
+                DA      $311B
+                DA      $311F
                 DA      $82D2
                 DA      $82D6
                 DA      $82DA
@@ -104,6 +81,29 @@ _modFnPtrTab    ANOP
                 DA      $836A
                 DA      $836E
                 DA      $8372
-                DA      $D046
-                DA      $D04A
+                DA      $8376
+                DA      $837A
+                DA      $837E
+                DA      $8382
+                DA      $8386
+                DA      $838A
+                DA      $838E
+                DA      $8392
+                DA      $8396
+                DA      $839A
+                DA      $839E
+                DA      $83A2
+                DA      $83A6
+                DA      $83AA
+                DA      $83AE
+                DA      $83B2
+                DA      $83B6
+                DA      $83BA
+                DA      $83BE
+                DA      $83C2
+                DA      $83C6
+                DA      $83CA
+                DA      $83CE
+                DA      $D0A2
+                DA      $D0A6
 _modFnPtrBytes  EQU     196      ; 98 cell(s), 2 bytes of table each

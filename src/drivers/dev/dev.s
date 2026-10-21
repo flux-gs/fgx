@@ -420,8 +420,8 @@ _dev_enumBus    MX      %10
                 CMP    |_devUnitLimit           ; what the PORT said it has
                 BCS     @deu_done
                 LDA     _fsTmp1
-                CMP     #FS_MAX_DEVICES
-                BCS     @deu_done               ; device table full
+                CMP     #BDEV_SD_ROW0+BDEV_NSD
+                BCS     @deu_done               ; every sd unit is taken
 
                 JSR     _dev_rawStatus
                 BCC     @deu_done               ; STATUS failed -> end of chain
@@ -430,7 +430,7 @@ _dev_enumBus    MX      %10
                 ; at slot-5 unit 1) is NOT end-of-chain.  SKIP it and keep
                 ; scanning so a later unit (e.g. the Control-Panel RAM disk) is
                 ; still found.  The scan stays bounded by the port's own device
-                ; count, the FS_MAX_DEVICES check and the STATUS-fail exit.
+                ; count, the BDEV_NSD check and the STATUS-fail exit.
                 ; ALL THREE BYTES of the count: a volume of an exact multiple
                 ; of 65,536 blocks has zeroes in the low two (apple/fgx#443).
                 LDAL    BLK_STAGE+1

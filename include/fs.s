@@ -174,6 +174,16 @@ DEV_SIZE        EQU     *                   ; 16 bytes
 
 FS_MAX_DEVICES  EQU     32
 
+; THE BLOCK DRIVERS' SLICES OF THE DEVICE TABLE.  A block dev_t is a major and
+; a minor (src/kernel/vfs/fsparam.h), and each driver's strategy in
+; src/kernel/vfs/bio_strategy.c turns its own unit into a row here, by these
+; same numbers -- the C copy is there, equal by hand.  SmartPort disks take
+; rows from BDEV_SD_ROW0 in the order the scan finds them, at most BDEV_NSD,
+; one per /dev/sd node; the RAM disk is BDEV_RAM_ROW, past them.
+BDEV_SD_ROW0    EQU     0
+BDEV_NSD        EQU     8
+BDEV_RAM_ROW    EQU     8
+
 ; SP_UNIT_MAX -- the highest SmartPort unit number a slot may be asked about.
 ;
 ; SMARTPORT'S OWN CEILING, not ProDOS's.  Apple IIGS Firmware Reference p.122,

@@ -42,14 +42,14 @@
  * device carries it without anyone naming it.
  *
  *----------------------------------------------------------------------------
- * FGX HAS NO cdevsw/bdevsw, AND THAT SHAPES THESE OPERATIONS.
+ * FGX HAS A bdevsw AND NO cdevsw, AND THAT SHAPES THESE OPERATIONS.
  *
  * Reno dispatches through two device-switch tables indexed by major number.
- * FGX's block layer is one driver reached through kc_blkio, and its character
- * devices are a REGISTRY reached by index (src/kernel/chardev.s).  So `dev_t`
- * here is a device INDEX in a single-major space: major(dev) is a constant and
- * minor(dev) is dev.  Introducing a two-field dev_t to hold one major would be
- * ceremony, not fidelity.
+ * FGX's block side is 2.11BSD's bdevsw, in bio_strategy.c: `dev_t' is a major
+ * and a minor (fsparam.h), and the major picks the driver.  Its character
+ * devices are a REGISTRY reached by index (src/kernel/chardev.s), so a VCHR
+ * vnode's v_rdev is a registry index in a single-major space: major(dev) is a
+ * constant and minor(dev) is dev.
  *
  * THE CHARACTER ARMS ARE LIVE AS OF UFS 1.13b.  open, close, read and write
  * dispatch through kc_cdopen/kc_cdclose/kc_cdread/kc_cdwrite onto that
@@ -283,7 +283,9 @@ int spec_lookup(vp, ndp)
  *               /etc/rc and refused once init has gone multiuser.
  *   NODEV       a device vnode that names no device would index off the end of
  *               the device table.  bio_strategy rejects it too, but by then
- *               the caller believes the open succeeded. */
+ *               the caller believes the open succeeded.
+ *   NBLKDEV     a block major no driver claims is getmdev's ENXIO (2.11BSD
+ *               usr/sys/sys/ufs_mount.c:346), and for the same reason. */
 int spec_open(vp, mode, cred)
     register struct vnode *vp;
     int mode;
@@ -300,6 +302,8 @@ int spec_open(vp, mode, cred)
         return (ENXIO);
 
     if (vp->v_type == VBLK) {
+        if (major(vp->v_rdev) >= NBLKDEV)
+            return (ENXIO);
         error = mountedon(vp);
         if (error)
             return (error);
@@ -480,12 +484,11 @@ int spec_select(vp, which, fflags, cred)
 
 /* spec_strategy -- hand the buffer to the disk.
  *
- * Reno indexes bdevsw by major(bp->b_dev); FGX has one block driver, so this
- * is the call it would have made.  The indirection is not pointless even with
- * one entry: it is what lets the buffer cache issue I/O without knowing
- * whether the vnode it holds is a device or a file, and it is the seam a
- * filesystem's own strategy (ufs_strategy, which fills b_dev from the inode's
- * i_devvp and then reaches this one) plugs into at 1.6. */
+ * Reno indexes bdevsw by major(bp->b_dev) here; bio_strategy does, so this
+ * calls it.  The indirection is what lets the buffer cache issue I/O without
+ * knowing whether the vnode it holds is a device or a file, and it is the seam
+ * a filesystem's own strategy (ufs_strategy, which fills b_dev from the
+ * inode's i_devvp and then reaches this one) plugs into. */
 int spec_strategy(bp)
     struct buf *bp;
 {

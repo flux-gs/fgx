@@ -16,10 +16,9 @@
  * porting the drivers against half a shape later costs more than having it
  * early.
  *
- * `struct bdevsw' is NOT carried.  FGX's block layer is the SmartPort/ProDOS
- * device table in src/drivers/block, which has no d_strategy and no d_psize,
- * and nothing in the tty campaign touches it.  A struct nothing will fill is
- * not the same bet as a struct the next increment fills.
+ * `struct bdevsw' is in src/kernel/vfs/bio_strategy.c, the one file that
+ * fills and calls it: the block switch lives in vfs.mod with the buffer cache,
+ * and this header is the tty bank's.
  */
 #ifndef _CONF_H_
 #define _CONF_H_

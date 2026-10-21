@@ -690,10 +690,10 @@ def write_dev_nodes_list(path="build/dev_nodes.list"):
     # mounts the root and nothing else, as 2.11BSD's kernel does), so the path
     # it was named for cannot be reached at all.
     out += [f"b /dev/sd{u} {u} 600" for u in ROOT_BLKUNITS]
-    # THE RAM DISK, at the device row ramdisk.mod registers it in (RD_DEVIDX,
-    # row 8, the first past the sd units): a block minor is the row, so the
-    # node names the Control Panel RAM disk whatever the SmartPort scan found.
-    out += ["b /dev/ram0 8 600"]
+    # THE RAM DISK, block major 1 (RAM_MAJOR, src/kernel/vfs/fsparam.h) minor
+    # 0: 256.  The sd nodes are major 0 (SD_MAJOR), so their number is the
+    # unit alone.
+    out += ["b /dev/ram0 256 600"]
     # The raw disks beside the block nodes they name -- see RAW_DISK_NODES.
     # 600 like the block nodes: reading a spindle past the filesystem on it is
     # root's business, which is 2.11BSD's own mode for /dev/rra0a.

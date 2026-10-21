@@ -1,3 +1,11 @@
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD usr/sys/pdp/conf.c, usr/sys/sys/ufs_bio.c
+ *   The block device switch is ported from usr/sys/pdp/conf.c and its call
+ *   from usr/sys/sys/ufs_bio.c, 2.11BSD.  Original work:
+ *   Copyright (c) 1986 Regents of the University of California.
+ *   All rights reserved.
+ */
 /* bio_strategy.c -- the kernel's disk, under the buffer cache.
  *
  * vfs_bio.c calls this and declares it extern; the unit fixture supplies a
@@ -35,15 +43,24 @@
  * precisely this reason; there is no way to set it once here.
  *
  *----------------------------------------------------------------------------
- * THE DEVICE NUMBER IS AN INDEX.
+ * THE DEVICE NUMBER IS A MAJOR AND A MINOR, AND bdevsw IS INDEXED BY THE MAJOR.
  *
- * b_dev is a device INDEX into the kernel's device table, in the single-major
- * dev_t space spec_vnops.c describes (FGX has no bdevsw; major(dev) is a
- * constant and minor(dev) is the index).  ufs_strategy fills it in from the
- * inode's i_devvp (ufs_vnops.c), and bgetvp sets it from v_rdev or to NODEV
- * (vfs_bio.c).  A buffer that reaches here still holding NODEV is a bug in the caller, not a
- * default to paper over: NODEV is 0xFFFF and would index far off the end of a
- * device table with a handful of entries.  It is rejected as an error.
+ * This is 2.11BSD's block device switch (usr/sys/h/conf.h, usr/sys/pdp/
+ * conf.c:174) and its one call, `(*bdevsw[major(dev)].d_strategy)(bp)'
+ * (usr/sys/sys/ufs_bio.c:38), which is bio_strategy below.  ufs_strategy fills
+ * b_dev from the inode's i_devvp (ufs_vnops.c), and bgetvp sets it from v_rdev
+ * or to NODEV (vfs_bio.c).  A buffer that reaches here still holding NODEV is a
+ * bug in the caller, not a default to paper over, and is rejected as an error;
+ * so is a major past the table, which is getmdev's ENXIO (ufs_mount.c:346).
+ *
+ * EACH DRIVER OWNS A SLICE OF THE KERNEL'S DEVICE TABLE, and its unit is a row
+ * there.  The table is what the block layer
+ * (src/drivers/block) indexes, so kc_blkio takes a ROW: sd units are rows 0..7
+ * in the order the SmartPort scan found them, and the RAM disk is row 8.  The
+ * slices are BDEV_SD_ROW0/BDEV_NSD and BDEV_RAM_ROW in include/fs.s, which
+ * the scan and ramdisk.mod register against; the two copies are equal by
+ * hand.  A unit in range whose row holds no device fails its transfer with EIO
+ * in the block layer, which is where "nothing attached there" is known.
  */
 
 #include "fsparam.h"
@@ -51,7 +68,7 @@
 #include "buf.h"
 
 /* The block layer, reached through the kernel-C seam (src/kernel/far/kc_sys.s).
- *   kc_blkio(dev, blkhi, blklo, addr, isread) -> 0 on success, else errno.
+ *   kc_blkio(row, blkhi, blklo, addr, isread) -> 0 on success, else errno.
  * It is sleep-free by construction: SmartPort PIO spins, and the RAM disk
  * copies.  tools/check_fs_sleep_invariant.py holds both this file and kc_sys.s
  * to that. */
@@ -63,24 +80,49 @@ extern void biodone();
 #define DEV_BLKSIZE     512
 #define DEVB_PER_FSB    (FS_BLKSIZE / DEV_BLKSIZE)
 
+/* The block device switch, indexed by major: 2.11BSD's struct bdevsw with
+ * each driver's slice of the device table where its function pointers would
+ * be.  Every FGX block driver reaches the disk through the same kc_blkio, so
+ * the drivers differ only in WHICH ROWS are theirs -- and vfs.mod's bank has
+ * no room for a strategy routine per driver that would say so in code.  The
+ * rows are include/fs.s's BDEV_* slices; the two copies are equal by hand. */
+struct bdevsw {
+    char    d_row0;             /* the driver's unit 0 */
+    char    d_nunit;            /* how many units it has */
+};
+
+struct bdevsw bdevsw[NBLKDEV] = {
+    { 0, 8 },                   /* sd = 0: BDEV_SD_ROW0, BDEV_NSD */
+    { 8, 1 },                   /* ram = 1: BDEV_RAM_ROW */
+};
+
+/* bio_strategy -- `(*bdevsw[major(dev)].d_strategy)(bp)', with the one
+ * strategy every driver shares inlined: the unit becomes a row, and the row
+ * gets two 512-byte transfers.  THE HIGH WORD MUST BE SET AGAIN FOR THE SECOND
+ * TRANSFER: see the header. */
 void
 bio_strategy(bp)
     struct buf *bp;
 {
+    struct bdevsw *d;
     daddr_t dblk;
     int     i;
     int     rc;
     int     isread;
 
+    rc = ENXIO;
     if (bp->b_dev == NODEV) {
-        /* No device was ever filled in.  Fail the buffer rather than issuing
-         * I/O to index 0xFFFF; brelse turns B_ERROR into B_INVAL, so it will
-         * not be served to anyone as a hit. */
-        bp->b_error = EIO;
-        bp->b_flags |= B_ERROR;
-        biodone(bp);
-        return;
+        /* No device was ever filled in.  Fail the buffer rather than issue
+         * I/O; brelse turns B_ERROR into B_INVAL, so it will not be served to
+         * anyone as a hit. */
+        rc = EIO;
+        goto out;
     }
+    if (major(bp->b_dev) >= NBLKDEV)
+        goto out;
+    d = &bdevsw[major(bp->b_dev)];
+    if (minor(bp->b_dev) >= d->d_nunit)
+        goto out;
 
     isread = 0;
     if (bp->b_flags & B_READ)
@@ -92,7 +134,7 @@ bio_strategy(bp)
         /* &bp->b_addr[n], not b_addr + n: the arena is in a different bank
          * from this code, and pointer arithmetic has dropped the bank byte in
          * this compiler before. */
-        rc = kc_blkio((int)bp->b_dev,
+        rc = kc_blkio(d->d_row0 + minor(bp->b_dev),
                       (int)(dblk >> 16),
                       (int)dblk,
                       &bp->b_addr[i * DEV_BLKSIZE],
@@ -102,12 +144,14 @@ bio_strategy(bp)
              * That is worth knowing rather than hiding: the buffer is marked
              * B_ERROR so nothing reads it back as good, but the on-disk half
              * write has already happened and only fsck will see it. */
-            bp->b_error = rc;
-            bp->b_flags |= B_ERROR;
             break;
         }
         dblk = dblk + (daddr_t)1;
     }
-
+out:
+    if (rc != 0) {
+        bp->b_error = rc;
+        bp->b_flags |= B_ERROR;
+    }
     biodone(bp);
 }
