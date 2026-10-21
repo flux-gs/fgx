@@ -168,7 +168,7 @@ _dev_readSlotByte MX    %10
 ;
 ; Reads [$CnFF] to derive the firmware entry ($Cn00 + [$CnFF] + 3).
 ; Populates _busTable[_fsTmp0] with slot, entry, unit_count=0, flags=0.
-; Increments _fsTmp0.  Logs "bus N: slot M entry=$HHLL".
+; Increments _fsTmp0.  Logs "spN at slot M".
 ;
 ; Input (MX %10):
 ;   _fsTmp0   = next-free bus idx
@@ -221,7 +221,8 @@ _dev_registerBus MX     %10
                 ; 5. Increment bus idx.
                 INC     _fsTmp0
 
-                ; 6. Log "bus N: slot M entry=$HHLL".
+                ; 6. Log "spN at slot M", BSD's controller line: the bus
+                ;    is named before the units on it are.
                 REP     #$20
                 MX      %00
                 LDA     #@drb_pfx
@@ -247,26 +248,13 @@ _dev_registerBus MX     %10
                 CLC
                 ADC     #'0'
                 JSR     _kernLogPutByte
-
-                REP     #$20
-                MX      %00
-                LDA     #@drb_sfx
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA     _blkBuf+1
-                JSR     Kern_LogHex8
-                LDA     _blkBuf
-                JSR     Kern_LogHex8
                 JSR     Kern_LogEOL
 
                 PLP
                 RTS
 
-@drb_pfx        ASC     'bus ',00
-@drb_mid        ASC     ': slot ',00
-@drb_sfx        ASC     ' entry=$',00
+@drb_pfx        ASC     'sp',00
+@drb_mid        ASC     ' at slot ',00
 
 ;==============================================================================
 ; _dev_patchBlkTramp - patch BlkTramp's inline JSR target to a bus's firmware.
@@ -627,91 +615,41 @@ _dev_allocDevEntry MX   %10
                 ADC     #1
                 STA    |_busTable+BS_UnitCount,X
 
-                ;--- 8. Log "blk: dev NN: sM,dU (attaching sdN)" ---
+                ;--- 8. Log "sdN at spB unit U: <size>", NetBSD's attach line
+                ;    (sys/scsi/cd.c: "cd%d at %s%d targ %d lun %d: %s") -- the
+                ;    device, where it was found, then what it is.  The row is
+                ;    the sd unit (include/fs.s, BDEV_SD_ROW0).
                 REP     #$20
                 MX      %00
                 LDA     #@dae_pfx
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA     _fsTmp1                 ; dev idx as 2-hex-digit
-                JSR     Kern_LogHex8
-
-                REP     #$20
-                MX      %00
+                LDA     _fsTmp1
+                AND     #$00FF
+                SEC
+                SBC     #BDEV_SD_ROW0
+                JSR     Kern_LogDec16
                 LDA     #@dae_mid
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA    |_devAllocSlot           ; slot (stashed earlier)
-                CLC
-                ADC     #'0'
-                JSR     _kernLogPutByte
-                LDA     #$2C                    ; `,' BY VALUE: Merlin reads a
-                                                ;   comma inside an immediate as
-                                                ;   its operand separator and
-                                                ;   reports a missing string
-                                                ;   delimiter.  `s7,d2'.
-                JSR     _kernLogPutByte
-                LDA     #'d'
-                JSR     _kernLogPutByte
-                ; TWO DIGITS WHEN THERE ARE TWO.  This was `ADC #'0'' alone,
-                ; which is correct for units 1..9 and prints ':' for 10, ';'
-                ; for 11 and so on -- invisible while the scan stopped at 8.
-                ; Raising the cap to SmartPort's own $7E makes it reachable, so
-                ; the tens digit is emitted when there is one and suppressed
-                ; when there is not, keeping `s7d2' the shape it has always
-                ; been for the units anyone has so far seen.
-                LDA     _blkNum
-                LDX     #0
-@dae_tens       CMP     #10
-                BCC     @dae_ones
-                SBC     #10                     ; C=1 here, so this is -10
-                INX
-                BRA     @dae_tens
-@dae_ones       PHA
-                TXA
-                BEQ     @dae_unit               ; no tens digit to print
-                CLC
-                ADC     #'0'
-                JSR     _kernLogPutByte
-@dae_unit       PLA
-                CLC
-                ADC     #'0'
-                JSR     _kernLogPutByte
-
-                ; ...AND THE NODE IT WILL ANSWER ON.  The device index IS
-                ; the SmartPort unit and /dev/sd<unit> is the block node baked
-                ; for it, so naming both in one line is what makes the log
-                ; usable: `mount /dev/sd1' is answerable from this line alone,
-                ; where `s7,d2' by itself is a bus address nobody can name.
-                ;
-                ; THE BLOCK COUNT CAME OFF.  It was ` blk=$0080', a hex figure
-                ; in a development spelling; 2.11BSD prints a size here
-                ; (`ra0: RA82 size=1954000') and this can too, but in decimal
-                ; and only once there is a 24-bit decimal printer -- the count
-                ; is three bytes and Kern_LogDec16 takes two.
-                REP     #$20
-                MX      %00
-                LDA     #@dae_attPfx
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA     _fsTmp1                 ; dev idx = the sd unit
-                REP     #$30
-                MX      %00
+                LDA     _fsTmp1+1               ; bus idx
                 AND     #$00FF
                 JSR     Kern_LogDec16
-                LDA     #@dae_attSfx
+                LDA     #@dae_unit
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                LDA     _blkNum                 ; SmartPort unit on that bus
+                AND     #$00FF
+                JSR     Kern_LogDec16
+                LDA     #@dae_colon
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
                 ; ---- AND ITS SIZE.  2.11BSD prints one (`ra0: RA82
                 ; size=1954000').  BLK_STAGE still holds the status result
                 ; this routine stored into the disk state a few lines up.
                 JSR     Dev_LogSize
+                SEP     #$20
+                MX      %10
 
                 ;--- 9. Increment dev idx ---
                 INC     _fsTmp1
@@ -719,10 +657,10 @@ _dev_allocDevEntry MX   %10
                 PLP
                 RTS
 
-@dae_pfx        ASC     'blk: dev ',00
-@dae_mid        ASC     ': s',00
-@dae_attPfx     ASC     ' (attaching sd',00
-@dae_attSfx     ASC     ') ',00
+@dae_pfx        ASC     'sd',00
+@dae_mid        ASC     ' at sp',00
+@dae_unit       ASC     ' unit ',00
+@dae_colon      ASC     ': ',00
 
 ;==============================================================================
 ; Dev_LogSize - end the attach line with the size in BLK_STAGE+1..3:
