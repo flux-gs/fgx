@@ -521,6 +521,11 @@ _kVcWrCurs      DS      2       ; 1 = _Vc_WriteEnter hid the block cursor for th
                                 ;   EVERY ttyv write -- most of all the on-screen
                                 ;   one, which is the cursor the user is looking
                                 ;   at.  Same single-static reasoning as above.
+_kConPendTick   DS      2       ; low 16 bits of _kSystemTicks when the console's
+                                ;   pending scroll (render state 2) was first seen
+                                ;   at the end of a write, 0 when none is timed;
+                                ;   _Con_DrainScroll draws it once it is
+                                ;   CON_SCROLL_TICKS old (ttyv.s).
 _kVcEchoFrom    DS      2       ; 0 = the engine points where _FarSh_CdWrite
                                 ;   found it, else the VC it pointed at before
                                 ;   _Vc_EchoEnter moved it to the written line's

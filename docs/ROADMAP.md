@@ -329,13 +329,18 @@ archived tracker; new work is tracked in GitHub Issues.
 
 ### Graphics / console
 
-- **Phase 2 -- mixed text + pixel regions** -- per-row gfx-mode bitmap, the
-  renderer skipping text blit for gfx rows, a lock call + a minimal pixel /
-  block-blit surface; line/circle/fill go to a userland `libgfx` later.
-- **Scanline-native framebuffer console, Phases 1-4** (Phase 0, scroll
-  coalescing, landed): P1 scanline FB core + a `$C02E` beam-counter timer, P2
-  split-screen bands, P3 graphics layer, P4 C-conversion of the control logic.
-  Spec: `docs/history/plans/2026-06-30-scanline-framebuffer-console-design.md`.
+- **Scanline-native framebuffer console: DEFERRED (2026-10-22).** The scroll
+  batching the spec's Phases 0-1 describe is in (flux-gs/fgx#27: a write's
+  full-screen scrolls move the pixels once, by every row scrolled). Phases 2-4
+  (split-screen bands, the inline graphics layer, the C conversion) are not
+  being built: SHR's 640 mode has 4 colors a line, the far bank has about 100
+  bytes free, and nothing in FGX emits graphics. Graphics that want the screen
+  take it with `SYS_SCREEN_CTL`, the way HP's `grf` takes it from `ite`; a Tek
+  4014 viewer for 2.11BSD `plot(1)`/`graph(1)` would be a user program on that.
+  Revisit when a real consumer appears (a `plot` port, the Second Sight bitmap
+  modes). Era models read for it: NetBSD 0.9 hp300 `ite`/`grf`, SunOS 4.1.3
+  `tektool`, DEC sixel. Spec:
+  `docs/history/plans/2026-06-30-scanline-framebuffer-console-design.md`.
 - **Second Sight card bitmap modes** (320x200x8, 640x480) for images.
 - **Console defects:** apple/fgx#187
   (two blind border writes), #495 (screensaver).

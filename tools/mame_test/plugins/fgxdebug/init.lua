@@ -1379,6 +1379,13 @@ function fgxdebug.startplugin()
     local prompt_snapshot_frame = nil  -- frame to take the baseline (the
                                        -- autoboot paste moment; config-fed)
     local prompt_target_delta = 1   -- exit when count - snapshot >= this
+    -- settle_frames: frames to run on after the count is reached before the
+    -- final dump.  The console draws a pending scroll up to 100 ms after the
+    -- last write (ttyv.s CON_SCROLL_TICKS), so a check that reads the PIXELS
+    -- at exit needs the screen to have caught up with the CharBuf the
+    -- sentinel was found in.
+    local prompt_settle = 0
+    local prompt_exit_at = nil
     local CHARBUF_ADDR = 0x030000
     local CHARBUF_LEN  = 8000
 
@@ -1432,6 +1439,9 @@ function fgxdebug.startplugin()
                 prompt_sentinel = sent
                 local cd = eop:match('"count_delta"%s*:%s*(%d+)')
                 if cd then prompt_target_delta = tonumber(cd) end
+                local sf = eop:match('"settle_frames"%s*:%s*(%d+)')
+                prompt_settle = sf and tonumber(sf) or 0
+                prompt_exit_at = nil
                 emu.print_info(string.format(
                     "fgxdebug: exit_on_prompt sentinel=%q count_delta=%d",
                     prompt_sentinel, prompt_target_delta))
@@ -2248,7 +2258,13 @@ function fgxdebug.startplugin()
         -- Prompt-count exit: poll charbuf every 12 frames (~5 Hz)
         -- after all pastes have fired.  Cheap enough not to bother
         -- with deeper instrumentation.
-        if prompt_sentinel and prompt_snapshot
+        if prompt_exit_at and frame_count >= prompt_exit_at
+                and not exit_pending then
+            emu.print_info(string.format(
+                "fgxdebug: prompt-exit settled @ frame %d", frame_count))
+            request_exit()
+        end
+        if prompt_sentinel and prompt_snapshot and not prompt_exit_at
                 and input_script_idx > #input_script
                 and frame_count % 12 == 0
                 and not exit_pending then
@@ -2262,7 +2278,11 @@ function fgxdebug.startplugin()
                     "fgxdebug: prompt-exit @ frame %d (count %d -> %d, delta %d)",
                     frame_count, prompt_snapshot, cur,
                     cur - prompt_snapshot))
-                request_exit()
+                if prompt_settle > 0 then
+                    prompt_exit_at = frame_count + prompt_settle
+                else
+                    request_exit()
+                end
             end
         end
 

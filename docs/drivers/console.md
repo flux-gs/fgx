@@ -116,20 +116,33 @@ at a safe point (below).
 All 200 SCBs are set to `$80` (640 mode, palette 0) by `_Con_InitSCBs`.
 
 **Render gate, `VT_RENDER_STATE`** (`include/console.s`): 0 = immediate,
-3 = suspended. `Con_RenderRow` and `_Con_RenderCell` skip pixel work at 3; the
-cell ring is always updated.
+1 = a console write is open, 2 = a full-screen scroll is pending, 3 =
+suspended. `Con_RenderRow` and `_Con_RenderCell` skip pixel work at 2 and 3;
+at 2 they record the topmost row skipped (`VT_DIRTY_LO`). The cell ring is
+always updated.
+- 1 is set by `Con_WriteArm` when `_Vc_WriteEnter` opens a write to the
+  console on screen with no module renderer, and cleared by `Con_WriteDone`
+  from `_Vc_WriteLeave`. A full-screen scroll at 1 or 2 counts the row
+  (`VT_PEND_ROWS`) instead of moving the pixels and leaves 2.
+  `_Con_FlushPending` pays it off: one `MVN` moves the rows still on screen up
+  by the count, then every row from the topmost exposed or dirty row down is
+  rendered (a screenful or more renders all of them). `Con_WriteDone` leaves
+  a pending scroll pending, so the next write's scrolls add to it and a program
+  that writes one line per `write(2)` moves the pixels once for several lines.
+  `_Vc_WriteLeave` starts a clock on it (`_Con_StampScroll`, `_kConPendTick`),
+  and `_Con_DrainScroll` -- at every syscall return and in swtch's idle loop,
+  beside `_Tty_DrainOutPend` -- calls `Con_DrainPending` once it is
+  `CON_SCROLL_TICKS` (6, 100 ms) old, so the screen is current within that of
+  the last write with no console read needed. The three other pixel writers
+  flush before they touch the screen: `Con_Clear`, a partial-region
+  `Con_ScrollRegionUp` and `Con_ScrollRegionDown`. Tests `conscroll` and
+  `conpaint` hold the pixels to the CharBuf (flux-gs/fgx#27).
 - 3 is set by `SYS_SCREEN_CTL` claim (`_Sys_ScreenCtl`, `syscall.s`) while
   a task owns the SHR screen. It is cleared on release or when the owner dies
   (`process.s`). It is also used by `Con_EnterVC` while a background console is
   written. A full-screen `Con_ScrollRegionUp` taken at 3 skips its pixel
   `MVN`; the cell ring has already moved, and the release's `Con_RenderAll`
   repaints it.
-
-There is no deferred scroll repaint.  One existed while console writes went
-through the console pseudo-descriptor, which armed it; it stopped engaging
-when that path was retired, and measured afterwards it saved about 6% of a
-1,100-line `cat` at a 30-tick flush interval and nothing at the original 4, so
-it was removed (apple/fgx#534).
 
 **Back end.** Five sites touch pixels: `Con_RenderRow`, `_Con_RenderCell`,
 `Con_Clear`, `Con_ScrollRegionUp` and `Con_ScrollRegionDown`. Each tests
@@ -305,8 +318,9 @@ screen row 0, and `VT_BUF_ROWS` is the ring size.
 
 - **Full-screen scroll up** (region = rows 0..24): `Con_ScrollRegionUp`
   advances `VT_TOP_ROW`, so the cells need not move. It then moves the pixels
-  up one 1280-byte character row with `MVN` in bank `$01` (or skips that
-  while a task owns the screen, see the render gate). Last, it clears and renders the bottom row. A DECSC-saved
+  up one 1280-byte character row with `MVN` in bank `$01` (or counts the row
+  while a console write is open, or skips it while a task owns the screen, see
+  the render gate). Last, it clears and renders the bottom row. A DECSC-saved
   row inside the region moves up with it.
 - **Partial regions** (DECSTBM, `VT_SR_TOP`/`VT_SR_BOT`) and **scroll down**
   (`Con_ScrollRegionDown`, reached from RI at the top and from SD) cannot use

@@ -457,6 +457,7 @@ swtch_nosave    ENT
                 ; submitted.  Entering C here is safe for the reason
                 ; _Tty_DrainOutPend's header gives.
                 JSR     _Tty_DrainOutPend
+                JSR     _Con_DrainScroll        ; a console scroll left pending
 @sw_noTtyReq    ; Slice D: drain a pending VC switch HERE TOO, not only at
                 ; syscall exit.  Alt-N is SWALLOWED by the heartbeat rather than
                 ; enqueued -- a shell must not see a stray digit -- so a task

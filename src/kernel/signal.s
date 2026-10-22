@@ -1096,6 +1096,7 @@ _we019          STAL    _Sys_DeliveredSig
                 ; TTY_FgPgrp (5.3d): with FgPgrp 0 the heartbeat never sets the
                 ; flag, so this is a cheap "BEQ" on the common path.
                 JSR     _Tty_DrainOutPend
+                JSR     _Con_DrainScroll        ; a console scroll left pending
 @scs_noTtyReq    ; Slice D: a VC switch is REQUESTED in the keyboard ISR and
                 ; executed here, where no task is inside the console engine.
                 ; AFTER the label, not before it: the BEQ above skips to here

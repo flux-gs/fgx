@@ -188,8 +188,10 @@ VT_ATTR             EQU     $59             ; 1 B: current attribute byte
 ;
 ; It is also the ONE console scalar the CORE kernel touches, from syscall.s
 ; and process.s, through patched LDAL/STAL.
-VT_RENDER_STATE     EQU     $5A             ; 1 B: 0=immediate, 3=suspended
-                                            ;   (direct-SHR claim)
+VT_RENDER_STATE     EQU     $5A             ; 1 B: 0=immediate, 1=armed (a
+                                            ;   console write is open), 2=a
+                                            ;   full-screen scroll is pending,
+                                            ;   3=suspended (direct-SHR claim)
                                             ; $5B: pad, and it is LOAD-BEARING.
                                             ;   Two core-bank readers take this
                                             ;   cell 16-bit and AND #$00FF, so
@@ -198,7 +200,11 @@ VT_RENDER_STATE     EQU     $5A             ; 1 B: 0=immediate, 3=suspended
                                             ;   Con_Init zeroes the region; put
                                             ;   a live field here and those
                                             ;   reads start carrying it.
-; $5C..$67: free.
+VT_PEND_ROWS        EQU     $5C             ; 1 B: rows the pending scroll owes
+                                            ;   the pixels (state 2 only)
+VT_DIRTY_LO         EQU     $5D             ; 1 B: topmost viewport row drawn
+                                            ;   while pending, $FF for none
+; $5E..$67: free.
 VT_BRACKET_RENDER   EQU     $68             ; 1 B: VT_RENDER_STATE as it stood when
                                             ;   Con_EnterVC opened a write bracket,
                                             ;   put back by Con_LeaveVC.  GLOBAL,

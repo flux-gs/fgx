@@ -1644,10 +1644,62 @@ _kfp333         JSL     KFAR_CON_ENTERVC
                 LDA     #1
                 STA     _kVcWrCurs
 _kfp337         JSL     KFAR_CON_HIDECURSOR
+                ; AND LET THE WRITE'S FULL-SCREEN SCROLLS BE COUNTED, the pixels
+                ; moving once when it ends (console_scroll.s Con_WriteArm).
+_kfp1016        JSL     KFAR_CON_WRARM
 @vwe_ok         PLY
                 PLX
                 SEC
                 RTS
+
+;------------------------------------------------------------------------------
+; _Con_StampScroll / _Con_DrainScroll - draw a console's pending scroll once it
+; has waited CON_SCROLL_TICKS.
+;
+; A write that ends with a full-screen scroll still pending (render state 2,
+; console_scroll.s) leaves it for the next write to add to, so a program that
+; writes one line per write(2) moves the pixels once for every few lines rather
+; than once per line.  _Con_StampScroll, at the end of each write, starts the
+; clock the first time it sees one.  _Con_DrainScroll runs where
+; _Tty_DrainOutPend runs -- every syscall return and swtch's idle loop -- and
+; draws it when the clock has run, so the screen is current within
+; CON_SCROLL_TICKS of the last write whether or not anything reads or writes
+; the console again.  A state other than 2 (a task's claim, a VC switch's
+; reset, a flush by another pixel writer) stops the clock.
+;
+; MX %00.  Clobbers A, X, Y.  Kernel-DP contexts only.
+;------------------------------------------------------------------------------
+CON_SCROLL_TICKS EQU    6               ; 100 ms at 60 Hz
+
+_Con_StampScroll MX     %00
+_kfp1018        LDAL    KFAR_VT_STATE+VT_RENDER_STATE
+                AND     #$00FF
+                CMP     #2
+                BNE     @css_none
+                LDA     _kConPendTick
+                BNE     @css_done               ; already timed
+                LDA     _kSystemTicks
+                ORA     #1                      ; 0 means "not timed"
+                STA     _kConPendTick
+@css_done       RTS
+@css_none       STZ     _kConPendTick
+                RTS
+
+_Con_DrainScroll MX     %00
+                LDA     _kConPendTick
+                BEQ     @cds_done               ; nothing timed
+_kfp1019        LDAL    KFAR_VT_STATE+VT_RENDER_STATE
+                AND     #$00FF
+                CMP     #2
+                BNE     @cds_stop
+                LDA     _kSystemTicks
+                SEC
+                SBC     _kConPendTick
+                CMP     #CON_SCROLL_TICKS
+                BCC     @cds_done
+_kfp1020        JSL     KFAR_CON_DRAINPEND
+@cds_stop       STZ     _kConPendTick
+@cds_done       RTS
 
 ;------------------------------------------------------------------------------
 _Vc_WriteLeave  ENT
@@ -1665,6 +1717,8 @@ _Vc_WriteLeave  ENT
                 LDA     _kVcWrCurs
                 BEQ     @vwl_noCurs
                 STZ     _kVcWrCurs
+_kfp1017        JSL     KFAR_CON_WRDONE
+                JSR     _Con_StampScroll        ; a scroll still owed: time it
 _kfp338         JSL     KFAR_CON_SHOWCURSOR
 @vwl_noCurs     LDA     _kVcWrBracket
                 BEQ     @vwl_done

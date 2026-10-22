@@ -30,11 +30,14 @@ _Con_rrCol      EQU     _conScratch3        ; column counter (byte)
                 MX      %00
 Con_RenderRow
                 PHA                             ; save vpRow BEFORE the guard clobbers A
-                LDA    |CON_VT_STATE+VT_RENDER_STATE         ; skip pixel work while claimed (3)
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
                 AND     #$00FF
                 CMP     #$0002
-                BCC     @crr_go                 ; state < 2: render; >= 2: skip
-                PLA                             ; claimed: rebalance stack, drop vpRow
+                BCC     @crr_go                 ; state < 2: render
+                BNE     @crr_skip               ; 3: a task owns the screen
+                PLA                             ; 2: the flush draws it
+                JMP     _Con_MarkDirty
+@crr_skip       PLA                             ; rebalance stack, drop vpRow
                 RTS
 @crr_go         PLA
                 BIT    |_conBackendOn           ; a module's renderer? (console_backend.s)
@@ -319,11 +322,14 @@ _kcb019         LDAL    CON_CHARBUF,X
 ;------------------------------------------------------------------------------
 _Con_RenderCell
                 PHA                         ; save vpRow BEFORE the guard clobbers A
-                LDA    |CON_VT_STATE+VT_RENDER_STATE         ; skip pixel work while claimed (3)
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
                 AND     #$00FF
                 CMP     #$0002
-                BCC     @rc_go              ; state < 2: render; >= 2: skip
-                PLA                         ; claimed: rebalance stack, drop vpRow
+                BCC     @rc_go              ; state < 2: render
+                BNE     @rc_skip            ; 3: a task owns the screen
+                PLA                         ; 2: the flush draws it
+                JMP     _Con_MarkDirty
+@rc_skip        PLA                         ; rebalance stack, drop vpRow
                 RTS
 @rc_go          BIT    |_conBackendOn       ; a module's renderer? (console_backend.s)
                 BPL     @rc_shr
