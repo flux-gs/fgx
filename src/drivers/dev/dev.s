@@ -372,6 +372,21 @@ _dev_enumBus    MX      %10
                 SEP     #$20
                 MX      %10
 
+                ;--- EXTENDED CALLS ARE THE BUS'S OWN CLAIM, decided from the
+                ; DIBs this walk reads anyway: the card's $CnFB bit 7, then
+                ; every answering device's DIB subtype bit 7 (Firmware Reference
+                ; p.142), with at least one device answering -- block.s's
+                ; Blk_DetectCaps rule, which asked it of the boot bus alone.
+                ; A second card could be extended or not, whatever the boot
+                ; one was, and a 2048-byte CD-ROM has no standard-call path. ---
+                STZ    |_devExtOk
+                DO      CFG_KERNEL_SPEXT
+                LDX     #$FB
+                JSR     _dev_slotByteOfBus      ; A = this bus's $CnFB
+                AND     #$80
+                STA    |_devExtOk
+                FIN
+
                 ;--- THE ROLL CALL, BEFORE WALKING ANYTHING ---------------
                 ; SmartPort says how many devices it has, and asking is the
                 ; protocol's own answer to "how far do I scan":
@@ -429,12 +444,18 @@ _dev_enumBus    MX      %10
                 LDA     #SP_STAT_DIB
                 JSR     _dev_status
                 BCC     @deu_nodib
+                LDAL    BLK_STAGE+DIB_Subtype
+                ORA     #$7F                    ; bit 7 kept, the rest set
+                AND    |_devExtOk
+                ORA     #$01                    ; a device answered
+                STA    |_devExtOk
                 LDAL    BLK_STAGE+DIB_Type
                 CMP     #SP_DEVTYPE_CDROM
                 BEQ     @deu_cd
                 BRA     @deu_disk
 @deu_nodib      JSR     _dev_rawStatus
                 BCC     @deu_done               ; STATUS failed -> end of chain
+                STZ    |_devExtOk               ; no DIB: no claim to go on
 
 @deu_disk       LDA     _fsTmp1
                 CMP     #BDEV_SD_ROW0+BDEV_NSD
@@ -466,7 +487,64 @@ _dev_enumBus    MX      %10
 @deu_next       INC     _blkNum
                 BRA     @deu_L
 
-@deu_done       PLP
+@deu_done       LDA     _fsTmp1+1
+                BEQ     @deu_ret                ; the boot bus: Blk_DetectCaps
+                LDA    |_devExtOk
+                CMP     #$81
+                BNE     @deu_ret
+                JSR     _dev_busOff             ; X = this bus's offset
+                LDA    |_busTable+BS_Flags,X
+                ORA     #BS_FLAG_EXT+BS_FLAG_MB
+                STA    |_busTable+BS_Flags,X
+                REP     #$20
+                MX      %00
+                LDA     #@deu_sp
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                LDA     _fsTmp1+1
+                AND     #$00FF
+                JSR     Kern_LogDec16
+                LDA     #@deu_ext
+                STA     _conStrPtr
+                JSR     Kern_LogStr
+                SEP     #$20
+                MX      %10
+@deu_ret        PLP
+                RTS
+
+@deu_sp         ASC     'sp',00
+@deu_ext        ASC     ': extended SmartPort',00
+
+;==============================================================================
+; _dev_busOff - X = _fsTmp1+1 * 8, the current bus's _busTable offset.
+; MX %10 in/out; clobbers A.
+;==============================================================================
+_dev_busOff     MX      %10
+                REP     #$20
+                MX      %00
+                LDA     _fsTmp1+1
+                AND     #$00FF
+                ASL
+                ASL
+                ASL
+                TAX
+                SEP     #$20
+                MX      %10
+                RTS
+
+;==============================================================================
+; _dev_slotByteOfBus - A = byte X of the current bus's slot ROM page ($Cn00+X).
+; _dev_readSlotByte's read, from the bus's slot rather than _fsTmp0+1, which is
+; Dev_Init's slot counter.  MX %10 in/out; X preserved; clobbers A.
+;==============================================================================
+_dev_slotByteOfBus MX   %10
+                PHX
+                JSR     _dev_busOff
+                LDA    |_busTable+BS_Slot,X
+                ORA     #$C0
+                STA     @sbb+2                  ; addr_hi = $C0|slot
+                PLX
+@sbb            LDAL    $000000,X               ; +2 patched, bank $00
                 RTS
 
 ;==============================================================================
@@ -483,6 +561,18 @@ _dev_attachCd   MX      %10
                 BCC     @dac_room
                 RTS                             ; every cd unit is taken
 @dac_room
+                ; THE DIB ENUMERATION READ IS KEPT, not asked for again: its
+                ; first four bytes, the status and block count the attach
+                ; reads, go on the stack across the block-size question.  A
+                ; card may take seconds over each STATUS to an empty drive.
+                LDAL    BLK_STAGE+3
+                PHA
+                LDAL    BLK_STAGE+2
+                PHA
+                LDAL    BLK_STAGE+1
+                PHA
+                LDAL    BLK_STAGE
+                PHA
 
                 ; ITS SECTOR SIZE.  The card presents a disc with a ProDOS
                 ; partition as that partition in 512-byte blocks, and a disc
@@ -498,10 +588,16 @@ _dev_attachCd   MX      %10
                 LDA     #DEV_FLAG_SEC2K
                 BRA     @dac_cdSz
 @dac_cd512      LDA     #0
-@dac_cdSz       PHA
-                LDA     #SP_STAT_DIB            ; the DIB again, for the attach
-                JSR     _dev_status
+@dac_cdSz       TAY                             ; Y.lo = the flag
                 PLA
+                STAL    BLK_STAGE
+                PLA
+                STAL    BLK_STAGE+1
+                PLA
+                STAL    BLK_STAGE+2
+                PLA
+                STAL    BLK_STAGE+3
+                TYA
                 PHA
                 BEQ     @dac_cdRow
                 ; Its size in 512-byte blocks, as every other unit's is.
