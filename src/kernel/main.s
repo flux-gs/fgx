@@ -3440,6 +3440,17 @@ _LogDetectedHardware    MX %00
 ; Stores result in CPUSpeedMHz as MHz*10 (e.g., 28 = 2.8 MHz, 160 = 16.0 MHz).
 ;=============================================================================
 _MeasureCPUSpeed
+                ; MEASURED WITH INTERRUPTS ENABLED, though boot holds them off
+                ; until Toolbox_InstallHB.  A TransWarp GS with its
+                ; AppleTalk/IRQ option on "will slow down to the appropriate
+                ; speed whenever the interrupts are disabled (the IRQ Disable
+                ; flag is set)" (TransWarp GS User's Manual p.14), and a probe
+                ; run under the boot SEI measures that, not the speed user code
+                ; runs at.  Nothing of FGX's is on the IRQ vector yet and
+                ; stage 1 has quieted the DOC; a firmware VBL interrupt, if
+                ; armed, costs the count a few hundred cycles of ~33 ms.
+                PHP
+                CLI
                 SEP     #$20            ; 8-bit A
                 REP     #$10            ; 16-bit X/Y
 
@@ -3539,6 +3550,7 @@ _MeasureCPUSpeed
                 BRA     @div_loop
 @div_done
                 STX     CPUSpeedMHz
+                PLP                     ; the boot SEI back
                 RTS
 
 _CalcResult     DS      4
