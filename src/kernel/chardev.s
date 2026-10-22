@@ -1200,6 +1200,95 @@ _Null_Write     MX %00
                 RTL
 
 
+;------------------------------------------------------------------------------
+; _Null_DRead / _Null_DWrite - /dev/null's bulk ops, 2.11BSD's mmrw minor 2
+; (pdp/mem.c:58-67): a read is end of file at once, and a write consumes every
+; region whole --
+;
+;       c = iov->iov_len;
+;       iov->iov_base += c;
+;       iov->iov_len -= c;
+;       uio->uio_offset += c;
+;       uio->uio_resid -= c;
+;
+; with mmrw's loop stepping over an emptied region (uio_iov++, uio_iovcnt--).
+; Without them spec_chwrite moved every discarded byte through its own uiomove
+; and device call, and output to /dev/null cost more than output to a file.
+;
+; In:  Y = minor.  Frame: 9,S uio offset, 11,S uio bank, 13,S flag.
+; Out: C=1 success, or C=0 + A = errno.  Clobbers _libcTmp0-2.
+;------------------------------------------------------------------------------
+_Null_DRead     MX %00
+                LDA     #0                      ; nothing moved: end of file
+                SEC
+                RTL
+
+_Null_DWrite    MX %00
+                LDA     9,S                     ; the uio
+                STA     _libcTmp2
+                SEP     #$20
+                MX      %10
+                LDA     11,S
+                STA     _libcTmp2+2
+                REP     #$30
+                MX      %00
+@ndw_L          LDY     #UIO_RESID
+                LDA     [_libcTmp2],Y
+                BEQ     @ndw_done
+                LDY     #UIO_IOV                ; [_libcTmp0] = the region
+                LDA     [_libcTmp2],Y
+                STA     _libcTmp0
+                LDY     #UIO_IOV+2
+                LDA     [_libcTmp2],Y
+                STA     _libcTmp1
+                LDY     #IOV_LEN
+                LDA     [_libcTmp0],Y           ; c
+                BNE     @ndw_take
+                LDY     #UIO_IOVCNT             ; an emptied region: the next.
+                LDA     [_libcTmp2],Y           ;   None left with bytes still
+                BEQ     @ndw_bad                ;   owed is mmrw's panic("mmrw")
+                DEC
+                STA     [_libcTmp2],Y
+                LDY     #UIO_IOV
+                LDA     _libcTmp0
+                CLC
+                ADC     #IOV_SIZE
+                STA     [_libcTmp2],Y
+                BRA     @ndw_L
+@ndw_take       PHA                             ; 1,S = c
+                LDA     #0
+                STA     [_libcTmp0],Y           ; iov_len -= c (Y = IOV_LEN)
+                LDY     #IOV_BASE
+                LDA     [_libcTmp0],Y
+                CLC
+                ADC     1,S
+                STA     [_libcTmp0],Y           ; iov_base += c
+                LDY     #IOV_BASE+2
+                LDA     [_libcTmp0],Y
+                ADC     #0
+                STA     [_libcTmp0],Y
+                LDY     #UIO_OFFSET
+                LDA     [_libcTmp2],Y
+                CLC
+                ADC     1,S
+                STA     [_libcTmp2],Y           ; uio_offset += c
+                LDY     #UIO_OFFSET+2
+                LDA     [_libcTmp2],Y
+                ADC     #0
+                STA     [_libcTmp2],Y
+                LDY     #UIO_RESID
+                LDA     [_libcTmp2],Y
+                SEC
+                SBC     1,S
+                STA     [_libcTmp2],Y           ; uio_resid -= c
+                PLA
+                BRA     @ndw_L
+@ndw_done       SEC
+                RTL
+@ndw_bad        LDA     #EIO
+                CLC
+                RTL
+
 _Null_Ioctl     MX %00
                 LDA #ENOTTY
                 CLC
@@ -1221,8 +1310,8 @@ _NullChardev_Ops    ENT
                 DFB     <_Null_Write,>_Null_Write,^_Null_Write
                 DFB     <_Null_Ioctl,>_Null_Ioctl,^_Null_Ioctl
                 DFB     <_Null_Poll,>_Null_Poll,^_Null_Poll
-                DFB     0,0,0                                   ; d_read:  none -- per-byte
-                DFB     0,0,0                                   ; d_write: none -- per-byte
+                DFB     <_Null_DRead,>_Null_DRead,^_Null_DRead
+                DFB     <_Null_DWrite,>_Null_DWrite,^_Null_DWrite
                 DFB     0,0,0                                   ; d_stop:  nothing in flight
 
 _NullChardev_Name   ASC     'null',00
