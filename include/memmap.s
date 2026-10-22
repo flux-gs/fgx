@@ -171,9 +171,6 @@ _blkRaErr       DS      2               ; SmartPort errno from the last failed
 _blkExtErr      DS      2               ; and the same for the last failed $41,
                                         ; latched before the trampoline cleanup
                                         ; overwrites A (apple/fgx#119)
-_blkDibSubtype  DS      1               ; boot device's DIB subtype byte, $FF if
-                                        ; no unit answered.  Read/written
-                                        ; DBR-relative, like _busTable
 ; HIGH word of the block number for the operation in flight.  Blk_Read and
 ; Blk_Write latch _blkNumHi into this on entry and zero the DP cell in the same
 ; breath; from that point the device layer, the cache and read-ahead all read

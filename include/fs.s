@@ -345,6 +345,8 @@ SP_STAT_BLKSZ   EQU     $06             ; the Apple II SCSI Card's own: the
 ; +5..20 the string, +21 the device type, +22 the subtype, +23..24 the version.
 ; Code $00's reply is the DIB's first four bytes, so +0..3 read the same
 ; whichever call filled the stage.
+DIB_IdLen       EQU     4
+DIB_Id          EQU     5
 DIB_Type        EQU     21
 DIB_Subtype     EQU     22              ; bit 7: supports extended calls
 SP_GS_ONLINE    EQU     $10             ; status byte: "Device online or disk

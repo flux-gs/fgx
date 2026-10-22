@@ -52,7 +52,6 @@
 
 ; Cross-segment externals — block driver is link-file segment #2.
 Blk_Init        EXT
-Blk_LogBootDev  EXT                     ; the boot drive's own inventory line
 Blk_Read        EXT
 Blk_Write       EXT
 _BlkCache_InvalAll EXT
@@ -63,9 +62,6 @@ _BlkCache_PinAllocZ EXT
 _BlkCache_Probe EXT
                 FIN
 Blk_Status      EXT
-Blk_DetectCaps  EXT
-Blk_CapsFlags   EXT
-Blk_DibSubtype  EXT
 _blkSmartJump   EXT
 _blkFwCall      EXT
 
@@ -503,21 +499,8 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 JSR     _AllocProcNameTbl       ; per-task name table (seed [kernel])
                                                 ; before the first spawn (init)
                 JSR     Blk_Init
-                ; THE CONTROLLER, THEN ITS UNITS -- BSD's order, and it is the
-                ; CALL order that produces it rather than the log order.
-                ;
-                ; `blk: ... (dev subtype $FF)' reports what the boot unit
-                ; answered to a DIB status, and `Blk_DetectCaps' is what asks:
-                ; ahead of that call the line reads `subtype $00', which is BSS
-                ; rather than a card answering 0.  So Blk_DetectCaps sits right
-                ; after the Blk_Init it requires ("MUST run after Blk_Init,
-                ; which fills _busTable[0].BS_Slot" -- its own header), and the
-                ; enumeration follows the card whose read path it uses.
-                JSR     Blk_DetectCaps          ; pick the read architecture from
-                                                ; the bus's $CnFB capability byte
-                JSR     _LogBlkCaps             ; ...say which path that was
-                JSR     Blk_LogBootDev          ; ...the drive it booted from
-                JSR     Dev_Init                ; ...and everything else on it
+                JSR     Dev_Init                ; every bus and its units, the
+                                                ;   boot bus first
                 JSR     Fs_Init                 ; zero the fs buffers
                 JSR     _Chardev_InitBuiltins   ; registers /dev/null
                                                 ; (cheap; pure-table write)
@@ -1018,7 +1001,7 @@ _kfp931         LDAL    KFAR_LD_HEADER+FGX1_OFF_STACK    ; hint byte
                 ; byte (cold boot if test interrupted)`.
                 ;
                 ; PLACEMENT IS MEASURED, NOT CHOSEN.  Two earlier sites (kernel
-                ; entry, and after _LogBlkCaps) both failed: a watchpoint on $03F4
+                ; entry, and after the boot bus's caps line) both failed: a watchpoint on $03F4
                 ; caught exactly ONE write in a whole run, from ROM $FAB1 at frame
                 ; 65 -- the ROM re-establishes the pair during the firmware
                 ; bring-up FGX drives, so anything before that is undone.  Here is
@@ -1761,60 +1744,6 @@ _AllocLogBuf
                 RTS
 
 _panic_msg_logbuf ASC   'PANIC: cannot alloc logBuf',00
-
-;==============================================================================
-; _LogBlkCaps - report the boot bus's block-read architecture.
-;
-; Multi-block reads are used only when the storage device supports them, so
-; both pathways exist and the correct one is selected per device.  This is the
-; visible half of that: the choice is made in
-; Blk_DetectCaps from $CnFB bit 7 AND the device's DIB subtype bit 7, and
-; printed here so a boot log always says which path is live rather than leaving
-; it to be inferred from timing.
-;
-; The subtype byte goes out with it because apple/fgx#119 was diagnosed from a
-; FloppyEmu's OLED and nothing else.  On a machine that will not boot, the boot
-; log is the only instrument there is, and which of the two gates refused is the
-; whole question.  $FF means no device was consulted -- either none answered a
-; DIB status, or the interface gate refused before the device was asked.
-;==============================================================================
-_LogBlkCaps
-                MX      %00
-                PHP
-                REP     #$30
-                MX      %00
-                SEP     #$20
-                MX      %10
-                JSR     Blk_CapsFlags           ; A.lo = BS_Flags
-                AND     #BS_FLAG_EXT
-                REP     #$30
-                MX      %00
-                BEQ     @lbc_std
-                LDA     #_msg_blkcaps_ext
-                BRA     @lbc_emit
-@lbc_std        LDA     #_msg_blkcaps_std
-@lbc_emit       STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                LDA     #_msg_blkcaps_sub
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                JSR     Blk_DibSubtype          ; A.lo = DIB subtype
-                JSR     Kern_LogHex8
-                REP     #$20
-                MX      %00
-                LDA     #_msg_blkcaps_end
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL        ; the ')' -- opened at
-                JSR     Kern_LogEOL             ; _msg_blkcaps_sub and never closed
-                PLP
-                RTS
-
-_msg_blkcaps_ext ASC    'blk: extended SmartPort - multi-block read path',00
-_msg_blkcaps_std ASC    'blk: standard SmartPort - single-block read path',00
-_msg_blkcaps_sub ASC    ' (dev subtype $',00
-_msg_blkcaps_end ASC    ')',00
 
 
 ;==============================================================================

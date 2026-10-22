@@ -152,7 +152,7 @@ Kern_LogStr     ENT                     ; cross-segment: blkcache.s probe logs
 ; Kern_LogStrNoEOL - append null-term string (no newline).  Use to
 ; compose "prefix: $XX" lines: LogStrNoEOL + LogHex8/16 + LogEOL.
 ;------------------------------------------------------------------------------
-Kern_LogStrNoEOL ENT             ; cross-segment: block.s's boot-drive line
+Kern_LogStrNoEOL ENT
                                 MX      %00
                 PHP
                 REP     #$30
@@ -273,7 +273,7 @@ Kern_LogHex16
 ; Scratch: _klogDecVal (running LOW word), _klogDecLead (leading-zero flag);
 ; the running HIGH word lives on the stack for the call.
 ;------------------------------------------------------------------------------
-Kern_LogDec16 ENT             ; cross-segment: block.s's boot-drive line
+Kern_LogDec16 ENT
                 MX      %00
                 LDX     #0                      ; high word 0
 Kern_LogDec32 ENT
