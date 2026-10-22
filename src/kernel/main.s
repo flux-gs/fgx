@@ -484,6 +484,19 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 ; yet either, so the message went nowhere at all.  Measured,
                 ; not reasoned about: the summary simply vanished from the log.
                 JSR     _LogDetectedHardware
+                ; THE CONSOLE COMES UP BEFORE THE STORAGE PROBE, so each attach
+                ; line appears as its device is found, as BSD's autoconf
+                ; prints them.  A card that takes seconds over a STATUS -- an
+                ; empty CD-ROM drive behind a SCSI card -- then sits under its
+                ; own bus line rather than behind a blank screen.  Con_Init
+                ; needs the heap (Kmem_Init), the far bank and the font the
+                ; boot program staged, all in place by here.
+                JSR     _BootScreen             ; SHR console + log mirror.
+                JSR     _RAM_FloorCheck         ; refuse to run below the floor.
+                                                ; AFTER _BootScreen on purpose:
+                                                ; before it, a halt message
+                                                ; reaches only the log ring --
+                                                ; a BLANK SCREEN, measured.
                 REP     #$30
                 MX      %00
                 JSR     _AllocDevTable          ; dev_table_ptr = Kmalloc(512, M_KERN)
@@ -654,18 +667,6 @@ _kfp011         JSL     KFAR_SOUND_INIT         ; far bank; configure DOC oscill
                 BCC     @kern_psLoop
 @kern_psDone    REP     #$20
                 MX      %00
-                JSR     _BootScreen             ; SHR console + log mirror.
-                JSR     _RAM_FloorCheck         ; refuse to run below the floor.
-                                                ; AFTER _BootScreen on purpose:
-                                                ; everything before it goes to
-                                                ; the log ring, which only this
-                                                ; call mirrors to the display,
-                                                ; so an earlier halt is a BLANK
-                                                ; SCREEN -- measured.
-                                                ; the font load's Fs_Open
-                                                ; now goes through dispatch
-                                                ; (or legacy if Mod_Load
-                                                ;  above failed).
                 JSR     _LogFarBank             ; far kernel bank state
                 JSR     _LogTtyBank             ; tty kernel bank state
                 JSR     _ClistInit              ; tty bank's clist pool -- NOT a
