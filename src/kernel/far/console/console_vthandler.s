@@ -234,7 +234,19 @@ _Vt_Handle_ED
                 JSR     Con_Clear               ; clear SHR pixels
                 JSR     _Con_FillCharBuf        ; clear CharBuf (else RenderAll paints old text back)
                 JSR     _Vt_FillAttrBuf_Current
-                JMP     Con_RenderAll
+                ; A BLANK CELL DRAWS ONLY ITS BACKGROUND, which Con_Clear has
+                ; just painted, unless inverse or underline marks it -- so the
+                ; repaint of every blank cell is skipped then.  A module's
+                ; renderer still gets it: Con_Clear only told it to clear.
+                BIT    |_conBackendOn
+                BMI     @ed_render
+                SEP     #$20
+                LDA    |CON_VT_STATE+VT_ATTR
+                AND     #$60                    ; I | U
+                REP     #$20
+                BNE     @ed_render
+                RTS
+@ed_render      JMP     Con_RenderAll
 @ed_toCursor
                 JMP     _Vt_Erase_StartToCursor
 
