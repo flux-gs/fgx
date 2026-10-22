@@ -1,11 +1,12 @@
 {
  "name": "conscroll",
- "description": "A WRITE THAT SCROLLS PAINTS EVERY ROW IT SCROLLED IN, asserted against the PIXELS.  While a console write is open a full-screen scroll is counted instead of moved; the count outlives the write, and the pixels move once by every row owed when _Con_DrainScroll finds it CON_SCROLL_TICKS old (ttyv.s, at syscall return and in swtch's idle loop).  `cat' of 150 lines scrolls many rows per write(2), and the shell's prompt write and read that follow are what leave the drain to the idle loop.  conpaint_check.py compares the SHR framebuffer with the CharBuf cell by cell after the command.  Measured both ways: a drain that never runs fails it, and so does a flush that moves the pixels without rendering the rows it exposed.  The input comes from a man page with head(1) so no fixture is needed; the MARKDONE sentinel ends the run when the output does, because the shell's own prompts scroll out of the CharBuf.",
+ "description": "A WRITE THAT SCROLLS PAINTS EVERY ROW IT SCROLLED IN, asserted against the PIXELS.  While a console write is open a full-screen scroll is counted instead of moved; the count outlives the write, and the pixels move once by every row owed when _Con_DrainScroll finds it CON_SCROLL_TICKS old (ttyv.s, at syscall return and in swtch's idle loop).  `cat' of 150 lines scrolls many rows per write(2), and the shell's prompt write and read that follow are what leave the drain to the idle loop.  conpaint_check.py compares the SHR framebuffer with the CharBuf cell by cell after the command.  Measured both ways: a drain that never runs fails it, and so does a flush that moves the pixels without rendering the rows it exposed.  The input comes from a man page with head(1) so no fixture is needed; the MARKDONE sentinel ends the run when the output does, because the shell's own prompts scroll out of the CharBuf, and settle_frames runs half a second past it so the pixels are read after the drain rather than racing it.",
  "command": "head -150 /usr/man/cat1/tcsh.1 >/tmp/c; cat /tmp/c; echo MARK\"\"DONE",
  "timeout_s": 240,
  "exit_on_prompt": {
   "sentinel": "MARKDONE",
-  "count_delta": 0
+  "count_delta": 0,
+  "settle_frames": 30
  },
  "memory_regions": [
   {
