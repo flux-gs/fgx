@@ -555,12 +555,18 @@ _Con_FlushPending
                 RTS
 
 ;------------------------------------------------------------------------------
-; Con_WriteArm / Con_WriteDone - open and close the console write that lets a
-; full-screen scroll be counted rather than moved (_Vc_WriteEnter and
-; _Vc_WriteLeave, around one write(2)).  Arming takes only an immediate console
-; with no module renderer, so a task's claim (3) is never touched; done draws
-; what the write owes and returns an armed console to immediate.
-; MX %00 in and out.  Con_WriteDone clobbers A, X, Y.
+; Con_WriteArm / Con_WriteDone / Con_DrainPending - the console write that lets
+; a full-screen scroll be counted rather than moved.
+;
+; Con_WriteArm and Con_WriteDone open and close one write(2) (_Vc_WriteEnter,
+; _Vc_WriteLeave).  Arming takes only an immediate console with no module
+; renderer, so a task's claim (3) is never touched.  Done returns an armed
+; console with nothing pending to immediate, and LEAVES A PENDING SCROLL
+; PENDING: the next write's scrolls add to it, so a program writing a line at
+; a time moves the pixels once for many lines.  Con_DrainPending draws it and
+; returns the console to immediate; the core calls it once the pending scroll
+; is CON_SCROLL_TICKS old (ttyv.s _Con_DrainScroll).
+; MX %00 in and out.  Con_DrainPending clobbers A, X, Y.
 ;------------------------------------------------------------------------------
 Con_WriteArm
                 BIT    |_conBackendOn           ; a module's renderer
@@ -574,9 +580,9 @@ Con_WriteArm
                 REP     #$20
 @wa_done        RTS
 
-Con_WriteDone
-                JSR     _Con_FlushPending
-                SEP     #$20
+Con_DrainPending
+                JSR     _Con_FlushPending       ; 2 -> 1, drawn
+Con_WriteDone   SEP     #$20
                 LDA    |CON_VT_STATE+VT_RENDER_STATE
                 CMP     #1
                 BNE     @wd_sep

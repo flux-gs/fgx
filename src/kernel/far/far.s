@@ -366,9 +366,11 @@
                 DFB     0
                 JMP     _fw_Con_WriteDone       ; slot 80
                 DFB     0
+                JMP     _fw_Con_DrainPending    ; slot 81
+                DFB     0
 
-                ; --- slots 81.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
-                LUP     KFAR_SLOT_COUNT-81
+                ; --- slots 82.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
+                LUP     KFAR_SLOT_COUNT-82
                 JMP     _Far_StubHalt
                 DFB     0
                 --^
@@ -1249,6 +1251,12 @@ _fw_Con_WriteDone        PHB
                 PHK
                 PLB
                 JSR     Con_WriteDone
+                PLB
+                RTL
+_fw_Con_DrainPending     PHB
+                PHK
+                PLB
+                JSR     Con_DrainPending
                 PLB
                 RTL
 _fw__Con_InitSCBs        PHB

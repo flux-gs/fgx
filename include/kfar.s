@@ -419,6 +419,7 @@ KFAR_VFS_FSETATTR   EQU    KFAR_SLOT0+4*78
 ; _Vc_WriteLeave.
 KFAR_CON_WRARM      EQU     KFAR_SLOT0+4*79 ; slot 79: Con_WriteArm
 KFAR_CON_WRDONE     EQU     KFAR_SLOT0+4*80 ; slot 80: Con_WriteDone
+KFAR_CON_DRAINPEND  EQU     KFAR_SLOT0+4*81 ; slot 81: Con_DrainPending
 
 ; --- the FGX binary loader, slots 39-42 (far-bank phase 3) ---
 ; loader.s left the core bank because the core bank ran out: 67 bytes from its

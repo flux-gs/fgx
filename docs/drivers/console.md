@@ -126,11 +126,17 @@ always updated.
   (`VT_PEND_ROWS`) instead of moving the pixels and leaves 2.
   `_Con_FlushPending` pays it off: one `MVN` moves the rows still on screen up
   by the count, then every row from the topmost exposed or dirty row down is
-  rendered (a screenful or more renders all of them). `Con_WriteDone` flushes,
-  and so do the three other pixel writers before they touch the screen:
-  `Con_Clear`, a partial-region `Con_ScrollRegionUp` and
-  `Con_ScrollRegionDown`. Test `conscroll` holds the pixels to the CharBuf
-  after a scrolling `cat` (flux-gs/fgx#27).
+  rendered (a screenful or more renders all of them). `Con_WriteDone` leaves
+  a pending scroll pending, so the next write's scrolls add to it and a program
+  that writes one line per `write(2)` moves the pixels once for several lines.
+  `_Vc_WriteLeave` starts a clock on it (`_Con_StampScroll`, `_kConPendTick`),
+  and `_Con_DrainScroll` -- at every syscall return and in swtch's idle loop,
+  beside `_Tty_DrainOutPend` -- calls `Con_DrainPending` once it is
+  `CON_SCROLL_TICKS` (6, 100 ms) old, so the screen is current within that of
+  the last write with no console read needed. The three other pixel writers
+  flush before they touch the screen: `Con_Clear`, a partial-region
+  `Con_ScrollRegionUp` and `Con_ScrollRegionDown`. Tests `conscroll` and
+  `conpaint` hold the pixels to the CharBuf (flux-gs/fgx#27).
 - 3 is set by `SYS_SCREEN_CTL` claim (`_Sys_ScreenCtl`, `syscall.s`) while
   a task owns the SHR screen. It is cleared on release or when the owner dies
   (`process.s`). It is also used by `Con_EnterVC` while a background console is
