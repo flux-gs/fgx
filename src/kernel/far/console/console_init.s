@@ -238,6 +238,7 @@ _cfp019         JSL     _FarSh_Halt
 ; content is untouched.
 ;------------------------------------------------------------------------------
 Con_Clear
+                JSR     _Con_FlushPending   ; the clear writes real pixels
                 BIT    |_conBackendOn       ; a module's renderer? (console_backend.s)
                 BMI     @cc_be
                 JSR     _Con_ClearShr

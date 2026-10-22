@@ -361,8 +361,14 @@
                 JMP     _Vfs_Fsetattr           ; slot 78
                 DFB     0
 
-                ; --- slots 79.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
-                LUP     KFAR_SLOT_COUNT-79
+                ; --- slots 79-80: a console write's counted scrolls ---
+                JMP     _fw_Con_WriteArm        ; slot 79
+                DFB     0
+                JMP     _fw_Con_WriteDone       ; slot 80
+                DFB     0
+
+                ; --- slots 81.. unassigned, stride 4 (3-byte JMP + 1 pad) ---
+                LUP     KFAR_SLOT_COUNT-81
                 JMP     _Far_StubHalt
                 DFB     0
                 --^
@@ -1231,6 +1237,18 @@ _fw_Con_HideCursor       PHB
                 PHK
                 PLB
                 JSR     Con_HideCursor
+                PLB
+                RTL
+_fw_Con_WriteArm         PHB
+                PHK
+                PLB
+                JSR     Con_WriteArm
+                PLB
+                RTL
+_fw_Con_WriteDone        PHB
+                PHK
+                PLB
+                JSR     Con_WriteDone
                 PLB
                 RTL
 _fw__Con_InitSCBs        PHB

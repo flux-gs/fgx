@@ -126,6 +126,8 @@ _FarPatchTbl
                 DA      _kfp332+3
                 DA      _kfp333+3
                 DA      _kfp337+3
+                DA      _kfp1016+3
+                DA      _kfp1017+3
                 DA      _kfp338+3
                 DA      _kfp334+3
                 DA      _kfp962+3
@@ -138,5 +140,5 @@ _FarPatchTbl
                 DA      _kfp335+3
                 DA      _kfp402+3
                 DA      _kfp401+3
-_FarPatchEntries EQU 124
-_FarPatchBytes   EQU 248
+_FarPatchEntries EQU 126
+_FarPatchBytes   EQU 252

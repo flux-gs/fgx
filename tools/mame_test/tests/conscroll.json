@@ -1,0 +1,45 @@
+{
+ "name": "conscroll",
+ "description": "A WRITE THAT SCROLLS PAINTS EVERY ROW IT SCROLLED IN, asserted against the PIXELS.  While a console write is open a full-screen scroll is counted instead of moved, and the pixels move once when the write ends, by every row it scrolled (console_scroll.s _Con_FlushPending).  `cat' of 150 lines makes each write(2) scroll many rows at once, so the end-of-write flush is what paints the bottom of the screen.  conpaint_check.py compares the SHR framebuffer with the CharBuf cell by cell after the command; a flush that moves the pixels but does not render the exposed rows fails it (measured).  The input comes from a man page with head(1) so no fixture is needed; the MARKDONE sentinel ends the run when the output does, because the shell's own prompts scroll out of the CharBuf.",
+ "command": "head -150 /usr/man/cat1/tcsh.1 >/tmp/c; cat /tmp/c; echo MARK\"\"DONE",
+ "timeout_s": 240,
+ "exit_on_prompt": {
+  "sentinel": "MARKDONE",
+  "count_delta": 0
+ },
+ "memory_regions": [
+  {
+   "name": "shr",
+   "addr_hex": "012000",
+   "len": 32000
+  },
+  {
+   "name": "vc0char",
+   "addr_hex": "030000",
+   "len": 8000,
+   "conbank": true
+  },
+  {
+   "name": "toprow",
+   "addr_equ": "KFAR_VT_STATE+VT_TOP_ROW",
+   "len": 2,
+   "farbank": true
+  },
+  {
+   "name": "rstate",
+   "addr_equ": "KFAR_VT_STATE+VT_RENDER_STATE",
+   "len": 1,
+   "farbank": true
+  }
+ ],
+ "expect": {
+  "screen_contains": [
+   "MARKDONE"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK"
+  ],
+  "check_script": "conpaint_check.py"
+ }
+}

@@ -17,6 +17,22 @@
 ;------------------------------------------------------------------------------
 Con_ScrollRegionUp
                 SEP     #$20
+                ; A PARTIAL REGION MOVES REAL PIXELS, and while a full-screen
+                ; scroll is pending they sit where they were before it: draw the
+                ; pending scroll first.
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
+                CMP     #2
+                BNE     @sru_noFlush
+                LDA    |CON_VT_STATE+VT_SR_TOP
+                BNE     @sru_flush
+                LDA    |CON_VT_STATE+VT_SR_BOT
+                CMP     _Con_VisRowsM1
+                BEQ     @sru_noFlush
+@sru_flush      MX      %10
+                REP     #$20
+                JSR     _Con_FlushPending
+                SEP     #$20
+@sru_noFlush
                 ; Keep the DECSC-saved row in sync with the scroll so userland
                 ; tools (sh's tab-completion menu) can rely on DECSC/DECRC even
                 ; when drawing below the cursor pushes the saved line up.
@@ -76,14 +92,44 @@ Con_ScrollRegionUp
                 ; A partial region (top != 0 or bot != last) did not advance the
                 ; ring; its cells are copied below and its pixels moved as usual.
                 ; (M=1 here.)
+                ;
+                ; AN OPEN CONSOLE WRITE COUNTS THE SCROLL INSTEAD (states 1 and
+                ; 2): the pixels move once, by every row the write scrolled, when
+                ; the write ends (_Con_FlushPending).  The first such scroll in a
+                ; write starts the count and the dirty row afresh; each later one
+                ; carries the dirty row up with the text on it.
                 LDA    |CON_VT_STATE+VT_RENDER_STATE
-                CMP     #3
-                BNE     @sru_noDefer            ; not claimed: move the pixels
+                BEQ     @sru_noDefer            ; immediate: move the pixels
                 LDA     _conTmp0
                 BNE     @sru_noDefer            ; top != 0 -> partial region
                 LDA     _conTmp1
                 CMP     _Con_VisRowsM1
                 BNE     @sru_noDefer            ; bot != last -> partial region
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
+                CMP     #3
+                BEQ     @sru_skipMvn            ; owned: keep the 3
+                CMP     #2
+                BEQ     @sru_count
+                LDA     #2
+                STA    |CON_VT_STATE+VT_RENDER_STATE
+                LDA     #0
+                STA    |CON_VT_STATE+VT_PEND_ROWS
+                DEC     A                       ; $FF: no row drawn yet
+                STA    |CON_VT_STATE+VT_DIRTY_LO
+@sru_count      MX      %10
+                LDA    |CON_VT_STATE+VT_PEND_ROWS
+                CMP     _Con_VisRows
+                BCS     @sru_dirty              ; a screenful: nothing survives
+                INC     A
+                STA    |CON_VT_STATE+VT_PEND_ROWS
+@sru_dirty      MX      %10
+                LDA    |CON_VT_STATE+VT_DIRTY_LO
+                BEQ     @sru_skipMvn            ; row 0 stays row 0
+                CMP     #$FF
+                BEQ     @sru_skipMvn            ; none
+                DEC     A
+                STA    |CON_VT_STATE+VT_DIRTY_LO
+@sru_skipMvn    MX      %10
                 REP     #$20
                 JMP     @sru_clearTail          ; skip the MVN; clear + render
 @sru_noDefer
@@ -212,6 +258,7 @@ _Con_HkScrollUp JSL     $000000                 ; operand written by Con_SetBack
 ; _conTmp5 = count_m1
 ;------------------------------------------------------------------------------
 Con_ScrollRegionDown
+                JSR     _Con_FlushPending       ; it moves real pixels too
                 SEP     #$20
                 LDA    |CON_VT_STATE+VT_SR_TOP
                 STA     _conTmp0
@@ -420,3 +467,121 @@ Con_ReverseIndex
 ;==============================================================================
 ; END console_scroll.s
 ;==============================================================================
+
+;------------------------------------------------------------------------------
+; _Con_MarkDirty - a render skipped while a scroll is pending: remember the
+; topmost viewport row it would have drawn, for _Con_FlushPending.
+; A = vpRow.  MX %00 in and out; X and Y preserved.
+;------------------------------------------------------------------------------
+_Con_MarkDirty
+                SEP     #$20
+                CMP    |CON_VT_STATE+VT_DIRTY_LO
+                BCS     @md_done
+                STA    |CON_VT_STATE+VT_DIRTY_LO
+@md_done        MX      %10
+                REP     #$20
+                RTS
+
+;------------------------------------------------------------------------------
+; _Con_FlushPending - draw a pending full-screen scroll (render state 2): one
+; MVN moves the rows still on screen up by VT_PEND_ROWS, then every row from
+; the newly exposed ones, or the topmost row drawn while pending if that is
+; higher, to the bottom is rendered from the cells.  A screenful or more
+; leaves nothing to move, so that renders the whole viewport.  Leaves state 1;
+; does nothing in any other state.
+;
+; The cells are already right -- the ring advanced and the rows cleared as each
+; scroll was counted -- so the pixels end exactly as the immediate path leaves
+; them, one row move instead of one per line.
+;
+; MX %00 in and out.  Clobbers A, X, Y, _conTmp2.
+;------------------------------------------------------------------------------
+_Con_FlushPending
+                SEP     #$20
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
+                CMP     #2
+                BEQ     @fp_go
+                REP     #$20
+                RTS
+@fp_go          MX      %10
+                LDA     #1
+                STA    |CON_VT_STATE+VT_RENDER_STATE
+                REP     #$20
+                LDA    |CON_VT_STATE+VT_PEND_ROWS
+                AND     #$00FF
+                CMP     _Con_VisRows
+                BCC     @fp_move
+                JMP     Con_RenderAll
+@fp_move        PHA                             ; n, the rows owed
+                ASL
+                TAX
+                LDA     _Con_RowOffsets,X
+                CLC
+                ADC     #$2000
+                STA     _conTmp2                ; src = row n
+                LDA     _Con_VisRows
+                DEC
+                ASL
+                TAX
+                LDA     _Con_RowOffsets,X
+                CLC
+                ADC     #1280+$2000             ; end of the last row
+                SEC
+                SBC     _conTmp2
+                DEC                             ; count - 1
+                LDX     _conTmp2
+                LDY     #$2000                  ; dst = row 0
+                MVN     $01,$01
+                SEP     #$20
+                _DBRK                           ; MVN left DBR = $01
+                REP     #$20
+                PLA                             ; n
+                EOR     #$FFFF
+                SEC
+                ADC     _Con_VisRows            ; first exposed row = vis - n
+                STA     _conTmp2
+                LDA    |CON_VT_STATE+VT_DIRTY_LO
+                AND     #$00FF
+                CMP     _conTmp2
+                BCC     @fp_first               ; a higher row was drawn
+                LDA     _conTmp2
+@fp_first
+@fp_L           PHA
+                JSR     Con_RenderRow
+                PLA
+                INC
+                CMP     _Con_VisRows
+                BCC     @fp_L
+                RTS
+
+;------------------------------------------------------------------------------
+; Con_WriteArm / Con_WriteDone - open and close the console write that lets a
+; full-screen scroll be counted rather than moved (_Vc_WriteEnter and
+; _Vc_WriteLeave, around one write(2)).  Arming takes only an immediate console
+; with no module renderer, so a task's claim (3) is never touched; done draws
+; what the write owes and returns an armed console to immediate.
+; MX %00 in and out.  Con_WriteDone clobbers A, X, Y.
+;------------------------------------------------------------------------------
+Con_WriteArm
+                BIT    |_conBackendOn           ; a module's renderer
+                BMI     @wa_done
+                SEP     #$20
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
+                BNE     @wa_sep                 ; armed already, or claimed
+                INC     A
+                STA    |CON_VT_STATE+VT_RENDER_STATE
+@wa_sep         MX      %10
+                REP     #$20
+@wa_done        RTS
+
+Con_WriteDone
+                JSR     _Con_FlushPending
+                SEP     #$20
+                LDA    |CON_VT_STATE+VT_RENDER_STATE
+                CMP     #1
+                BNE     @wd_sep
+                LDA     #0
+                STA    |CON_VT_STATE+VT_RENDER_STATE
+@wd_sep         MX      %10
+                REP     #$20
+                RTS

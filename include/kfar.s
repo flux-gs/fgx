@@ -414,6 +414,12 @@ KFAR_VFS_FLOCK      EQU    KFAR_SLOT0+4*77
 ; kern_fsetattr.c's.
 KFAR_VFS_FSETATTR   EQU    KFAR_SLOT0+4*78
 
+; --- slots 79-80: a console write that counts its full-screen scrolls and
+; moves the pixels once at the end (console_scroll.s), from _Vc_WriteEnter and
+; _Vc_WriteLeave.
+KFAR_CON_WRARM      EQU     KFAR_SLOT0+4*79 ; slot 79: Con_WriteArm
+KFAR_CON_WRDONE     EQU     KFAR_SLOT0+4*80 ; slot 80: Con_WriteDone
+
 ; --- the FGX binary loader, slots 39-42 (far-bank phase 3) ---
 ; loader.s left the core bank because the core bank ran out: 67 bytes from its
 ; ceiling with the tty campaign still to land.  The four names below are its

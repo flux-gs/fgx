@@ -1644,6 +1644,9 @@ _kfp333         JSL     KFAR_CON_ENTERVC
                 LDA     #1
                 STA     _kVcWrCurs
 _kfp337         JSL     KFAR_CON_HIDECURSOR
+                ; AND LET THE WRITE'S FULL-SCREEN SCROLLS BE COUNTED, the pixels
+                ; moving once when it ends (console_scroll.s Con_WriteArm).
+_kfp1016        JSL     KFAR_CON_WRARM
 @vwe_ok         PLY
                 PLX
                 SEC
@@ -1665,6 +1668,7 @@ _Vc_WriteLeave  ENT
                 LDA     _kVcWrCurs
                 BEQ     @vwl_noCurs
                 STZ     _kVcWrCurs
+_kfp1017        JSL     KFAR_CON_WRDONE         ; the scrolls it counted, drawn
 _kfp338         JSL     KFAR_CON_SHOWCURSOR
 @vwl_noCurs     LDA     _kVcWrBracket
                 BEQ     @vwl_done
