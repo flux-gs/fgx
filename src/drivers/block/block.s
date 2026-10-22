@@ -102,6 +102,7 @@ Blk_Init        ENT
                 ; Default device index = 0 (boot device, _devTable[0]).
                 LDA     #$00
                 STA     _fsCurDevIdx
+                STZ    |_blkExtErr+1            ; no DISKSW retry pending
                 ; Populate _busTable[0] = boot bus.
                 ; BS_Entry* holds the SmartPort firmware entry ($Cn00 + [$CnFF] + 3),
                 ; NOT BlkTramp.  The loader wrote the firmware entry to
@@ -1049,6 +1050,7 @@ _SP_ReadBlock   ENT
                 STA     [_blkEntryPtr],Y
                 BCS     @sprb_extErr
 
+                STZ    |_blkExtErr+1            ; the DISKSW retry is spent
                 PLP
                 SEC
                 RTS
@@ -1085,24 +1087,45 @@ _SP_ReadBlock   ENT
                 ; so there is nothing to recover to.  The interface gate above is
                 ; what makes this second question safe to ask.
 @sprb_extErr    MX      %11
-                ; EXCEPT OFFLINE AND DISKSW, which only a device that took the
-                ; call can give: "The device is off line or no disk is in
-                ; drive" ($2F) and "Media has been swapped (extended calls
-                ; only)" ($2E), Firmware Reference Table 7-6, p.156.  An empty
-                ; CD-ROM answers OFFLINE, and downgrading the bus for it left
-                ; the drive unreadable once a disc went in -- its 2048-byte
-                ; sectors have no standard-call path -- and the rest of the
-                ; card on single-block reads.  Those two are the read's EIO.
+                ; EXCEPT DISKSW AND A CD-ROM'S OFFLINE, which only a device
+                ; that took the call can give: "Media has been swapped
+                ; (extended calls only)" ($2E) and "The device is off line or
+                ; no disk is in drive" ($2F), Firmware Reference Table 7-6,
+                ; p.156.
+                ;
+                ; DISKSW IS A NOTICE, AND THE READ IS ASKED AGAIN, once: it
+                ; reports a medium change to the first extended call that can
+                ; see it, and the boot program reads with standard calls, so
+                ; the kernel's first extended read is that call.  A second
+                ; DISKSW in a row is taken as any other error.  _blkExtErr+1 is
+                ; the retry latch; the 8-bit store above writes only the code.
                 LDA    |_blkExtErr
-                CMP     #$2F                    ; OFFLINE
-                BEQ     @sprb_extMedia
                 CMP     #$2E                    ; DISKSW
+                BNE     @sprb_extOff
+                LDA    |_blkExtErr+1
+                BNE     @sprb_extBus            ; already asked again
+                INC    |_blkExtErr+1
+                PLP
+                MX      %00
+                JMP     _SP_ReadBlock
+                MX      %11
+                ; An empty CD-ROM answers OFFLINE, and downgrading the bus for
+                ; it left the drive unreadable once a disc went in -- its
+                ; 2048-byte sectors have no standard-call path -- and the rest
+                ; of the card on single-block reads.  That is the read's EIO.
+                ; A disk's OFFLINE downgrades the bus, as every other error.
+@sprb_extOff    CMP     #$2F                    ; OFFLINE
                 BNE     @sprb_extBus
-@sprb_extMedia  LDA     #EIO
+                LDY     #DEV_Class
+                LDA     [_devPtr],Y
+                CMP     #DEV_CLASS_CD
+                BNE     @sprb_extBus
+                STZ    |_blkExtErr+1
+                LDA     #EIO
                 PLP
                 CLC
                 RTS
-@sprb_extBus
+@sprb_extBus    STZ    |_blkExtErr+1
                 ; X is NOT the bus offset here -- the firmware returns its transfer
                 ; count in X/Y and preserves neither (apple/fgx#111).  Recompute
                 ; from _fsTmp1, which it cannot reach: it runs at D=$0000 and the
