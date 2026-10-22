@@ -256,7 +256,7 @@ main(argc, argv)
 	        ttype != (char *)0 && ttype[0] != '\0' ? ttype
 	        : (ty != (struct ttyent *)0 && ty->ty_type[0] != '\0'
 	           ? ty->ty_type : "vt100"));
-	env[0] = "PATH=:/bin:/usr/bin:/sbin";
+	env[0] = "PATH=:/bin:/usr/bin:/sbin:/usr/fgx/bin";
 	env[1] = envhome;
 	env[2] = envshell;
 	env[3] = envuser;
