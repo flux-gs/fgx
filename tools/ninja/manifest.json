@@ -602,6 +602,9 @@
    "name": "clkrate"
   },
   {
+   "name": "rtcread"
+  },
+  {
    "name": "timetest"
   },
   {
@@ -1545,6 +1548,10 @@
   {
    "src": "bin/clkrate.bin",
    "dst": "disk_src/testbin/clkrate"
+  },
+  {
+   "src": "bin/rtcread.bin",
+   "dst": "disk_src/testbin/rtcread"
   },
   {
    "src": "bin/timetest.bin",
