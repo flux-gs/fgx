@@ -562,6 +562,13 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 JSR     _KernIrq_Install        ; patch $E10010 with our IRQ
                                                 ; trampoline (passthrough in
                                                 ; phase 1; SCC dispatch later)
+                ; THE DOC IS QUIETED BEFORE THE CLI.  Its registers are whatever
+                ; the ROM and the boot left, and an oscillator with its interrupt
+                ; enabled interrupts through $E1002C, whose firmware default is
+                ; a system failure ($08FF, unclaimedSndIntErr) until something
+                ; claims it.  Sound_Init halts every oscillator, which also
+                ; clears its interrupt enable, and drains what is pending.
+_kfp011         JSL     KFAR_SOUND_INIT         ; far bank; configure DOC oscillators 0/1
                 JSR     Toolbox_InstallHB       ; install HB task, enable VBL, CLI
 
                 ; PID 1 task setup.  Must precede any Fs_Open (dispatch
@@ -671,7 +678,6 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 ; DEVICES (Blk_Init) rather than mounts, and Blk_Init is long
                 ; past by then.
 
-_kfp011         JSL     KFAR_SOUND_INIT         ; far bank; configure DOC oscillators 0/1
                 ; Boot chime.  It lives in the far bank because Sound_Beep
                 ; does.
 _kfp012         JSL     KFAR_BOOT_CHIME         ; far bank; gated internally
