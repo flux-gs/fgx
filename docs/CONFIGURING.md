@@ -111,7 +111,8 @@ Without a card it prints `sscon: no card in slot 3` and does nothing.
 
 **CD-ROMs.**  A CD-ROM drive on a SmartPort card -- an Apple SCSI CD-ROM on
 the Apple II SCSI Card -- attaches as `/dev/cd0` with no module to load, and
-the boot log says whether a disc is in it (`cd0 at sp0 unit 2: empty`).  The
+the boot log names it and says whether a disc is in it (`cd0 at sp0 unit 2:
+<SONYCD-ROMCDU-80> CD-ROM, empty`).  The
 card presents a CD's ProDOS partition as a disk, so a ProDOS CD mounts with
 `mount_prodos -o ro /dev/cd0 /mnt`, and a CD without one -- an ISO 9660
 disc, Rock Ridge or not -- with `mount_isofs /dev/cd0 /mnt` (`mount_isofs(8)`).

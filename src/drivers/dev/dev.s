@@ -6,8 +6,9 @@
 ;                      and _devTable[0] / _diskStates[0] were already
 ;                      populated by Blk_Init from the loader handoff.
 ;                      Dev_Init probes slots 1..7 (skipping the boot slot)
-;                      for additional SmartPort controllers and enumerates
-;                      their local units 1..SP_UNIT_MAX.
+;                      for additional SmartPort controllers, then enumerates
+;                      every bus's local units 1..SP_UNIT_MAX, the boot bus
+;                      included: its unit 1 is _devTable[0].
 ;
 ; DP scratch used (all caller-saved; no Con_* calls inside Dev_Init so
 ; no aliasing risk with console scratch at $D0-$EF):
@@ -95,13 +96,8 @@ Dev_Init        ENT
 
                 JSR     _dev_patchBlkTramp
 
-                ; Starting unit: 2 for bus 0 (skip known boot unit); 1 else.
-                LDA     _fsTmp1+1
-                BNE     @di_u1
-                LDA     #2
-                BRA     @di_uSet
-@di_u1          LDA     #1
-@di_uSet        STA     _blkNum
+                LDA     #1                      ; every bus from unit 1; the
+                STA     _blkNum                 ;   boot bus's unit 1 is row 0
 
                 JSR     _dev_enumBus
 
@@ -168,7 +164,7 @@ _dev_readSlotByte MX    %10
 ;
 ; Reads [$CnFF] to derive the firmware entry ($Cn00 + [$CnFF] + 3).
 ; Populates _busTable[_fsTmp0] with slot, entry, unit_count=0, flags=0.
-; Increments _fsTmp0.  Logs "spN at slot M".
+; Increments _fsTmp0.
 ;
 ; Input (MX %10):
 ;   _fsTmp0   = next-free bus idx
@@ -221,40 +217,8 @@ _dev_registerBus MX     %10
                 ; 5. Increment bus idx.
                 INC     _fsTmp0
 
-                ; 6. Log "spN at slot M", BSD's controller line: the bus
-                ;    is named before the units on it are.
-                REP     #$20
-                MX      %00
-                LDA     #@drb_pfx
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA     _fsTmp0
-                SEC
-                SBC     #1                      ; bus idx just used
-                CLC
-                ADC     #'0'
-                JSR     _kernLogPutByte
-
-                REP     #$20
-                MX      %00
-                LDA     #@drb_mid
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                SEP     #$20
-                MX      %10
-                LDA     _fsTmp0+1
-                CLC
-                ADC     #'0'
-                JSR     _kernLogPutByte
-                JSR     Kern_LogEOL
-
                 PLP
                 RTS
-
-@drb_pfx        ASC     'sp',00
-@drb_mid        ASC     ' at slot ',00
 
 ;==============================================================================
 ; _dev_patchBlkTramp - patch BlkTramp's inline JSR target to a bus's firmware.
@@ -353,7 +317,7 @@ _dev_call       MX      %10
 ; _dev_enumBus - enumerate STATUS-responding units on the current bus,
 ; allocating a _devTable + _diskStates entry for each.
 ;
-; Input (MX %10):  _blkNum = starting unit (1 for non-boot bus, 2 for boot).
+; Input (MX %10):  _blkNum = 1, the first unit.
 ;                  _fsTmp1 = next-free sd row.
 ;                  _fsTmp1+1 = current bus idx.
 ;                  _devNextCd = next-free cd unit.
@@ -365,20 +329,40 @@ _dev_call       MX      %10
 ;                  populates the tables and logs.  0-block disks are skipped
 ;                  (not end-of-chain), as is a unit whose driver's rows are
 ;                  all taken; stops at the port's own device count or a STATUS
-;                  failure.  Clobbers _devUnitLimit.
+;                  failure.  Unit 1 of the boot bus is the boot disk, which
+;                  Blk_Init registered as row 0: it is attached to that row.
+;                  Logs the bus's line before its units and its capability
+;                  line after them.  Clobbers _devUnitLimit.
 ;==============================================================================
 _dev_enumBus    MX      %10
                 PHP
                 SEP     #$20
                 MX      %10
 
+                ;--- "spN at slot M", BSD's controller line: the bus is named
+                ; before the units on it are.
+                JSR     _dev_logBus
+                REP     #$20
+                MX      %00
+                LDA     #@deu_slot
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                SEP     #$20
+                MX      %10
+                JSR     _dev_busOff
+                LDA    |_busTable+BS_Slot,X
+                CLC
+                ADC     #'0'
+                JSR     _kernLogPutByte
+                JSR     Kern_LogEOL
+
                 ;--- EXTENDED CALLS ARE THE BUS'S OWN CLAIM, decided from the
                 ; DIBs this walk reads anyway: the card's $CnFB bit 7, then
                 ; every answering device's DIB subtype bit 7 (Firmware Reference
-                ; p.142), with at least one device answering -- block.s's
-                ; Blk_DetectCaps rule, which asked it of the boot bus alone.
-                ; A second card could be extended or not, whatever the boot
-                ; one was, and a 2048-byte CD-ROM has no standard-call path. ---
+                ; p.142), with at least one device answering.  Every bus
+                ; decides for itself, the boot bus too: a second card could be
+                ; extended or not, whatever the boot one is, and a 2048-byte
+                ; CD-ROM has no standard-call path. ---
                 STZ    |_devExtOk
                 DO      CFG_KERNEL_SPEXT
                 LDX     #$FB
@@ -433,7 +417,9 @@ _dev_enumBus    MX      %10
 @deu_L          MX      %10
                 LDA     _blkNum
                 CMP    |_devUnitLimit           ; what the PORT said it has
-                BCS     @deu_done
+                BCC     @deu_unit
+                BRL     @deu_done
+@deu_unit
 
                 ; THE DIB FIRST, FOR ITS DEVICE TYPE: a SCSI CD-ROM is a cd
                 ; unit and not an sd one, as BSD attaches by the device's own
@@ -456,10 +442,26 @@ _dev_enumBus    MX      %10
 @deu_nodib      JSR     _dev_rawStatus
                 BCC     @deu_done               ; STATUS failed -> end of chain
                 STZ    |_devExtOk               ; no DIB: no claim to go on
+                LDA     #0
+                STAL    BLK_STAGE+DIB_IdLen     ; ...and no ID to print
 
-@deu_disk       LDA     _fsTmp1
+@deu_disk       LDA     _fsTmp1+1
+                BNE     @deu_sd
+                LDA     _blkNum
+                DEC     A
+                BNE     @deu_sd
+                LDA     _fsTmp1                 ; the boot disk: row 0
+                PHA
+                STZ     _fsTmp1
+                JSR     _dev_logHead
+                JSR     _dev_allocDevEntry
+                PLA
+                STA     _fsTmp1
+                BRA     @deu_next
+
+@deu_sd         LDA     _fsTmp1
                 CMP     #BDEV_SD_ROW0+BDEV_NSD
-                BCS     @deu_next               ; every sd unit is taken
+                BCS     @deu_full               ; every sd unit is taken
 
                 ; A STATUS-ok unit reporting 0 blocks (e.g. an EMPTY 3.5 drive
                 ; at slot-5 unit 1) is NOT end-of-chain.  SKIP it and keep
@@ -474,9 +476,19 @@ _dev_enumBus    MX      %10
                 BNE     @deu_real
                 LDAL    BLK_STAGE+3
                 BNE     @deu_real
+                REP     #$20
+                MX      %00
+                LDA     #_devNoMediaStr
+                BRA     @deu_skip
+@deu_full       REP     #$20
+                MX      %00
+                LDA     #_devNoRowStr
+@deu_skip       JSR     _dev_logSkip
+                MX      %10                     ; its exit width
                 BRA     @deu_next
 
-@deu_real       JSR     _dev_allocDevEntry      ; populates + logs
+@deu_real       JSR     _dev_logHead
+                JSR     _dev_allocDevEntry      ; populates, ends the line
                 INC     _fsTmp1
                 BRA     @deu_next
 
@@ -485,35 +497,81 @@ _dev_enumBus    MX      %10
 @deu_cd         JSR     _dev_attachCd
 
 @deu_next       INC     _blkNum
-                BRA     @deu_L
+                BRL     @deu_L
 
-@deu_done       LDA     _fsTmp1+1
-                BEQ     @deu_ret                ; the boot bus: Blk_DetectCaps
+                ;--- "spN: K units, extended SmartPort, multi-block reads":
+                ; the unit count the port gave, when it gave one, and which
+                ; calls the block driver makes to this bus.  The multi-block
+                ; half is a guess that the first $48 to fail takes back
+                ; (block.s _SP_ReadBlockN).
+@deu_done       JSR     _dev_logBus
+                REP     #$20
+                MX      %00
+                LDA     #@deu_colon
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                LDA    |_devUnitLimit
+                AND     #$00FF
+                DEC     A
+                CMP     #SP_UNIT_MAX
+                BCS     @deu_nocount            ; the port gave no roll call
+                PHA
+                JSR     Kern_LogDec16
+                LDA     #@deu_units
+                PLX
+                DEX
+                BNE     @deu_plural
+                LDA     #@deu_unit1
+@deu_plural     STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+@deu_nocount    SEP     #$20
+                MX      %10
                 LDA    |_devExtOk
                 CMP     #$81
-                BNE     @deu_ret
-                JSR     _dev_busOff             ; X = this bus's offset
+                BNE     @deu_std
+                JSR     _dev_busOff
                 LDA    |_busTable+BS_Flags,X
                 ORA     #BS_FLAG_EXT+BS_FLAG_MB
                 STA    |_busTable+BS_Flags,X
                 REP     #$20
                 MX      %00
-                LDA     #@deu_sp
+                LDA     #@deu_ext
+                BRA     @deu_say
+@deu_std        REP     #$20
+                MX      %00
+                LDA     #@deu_stdcall
+@deu_say        STA     _conStrPtr
+                JSR     Kern_LogStr
+                SEP     #$20
+                MX      %10
+                PLP
+                RTS
+
+@deu_slot       ASC     ' at slot ',00
+@deu_colon      ASC     ': ',00
+@deu_units      ASC     ' units, ',00
+@deu_unit1      ASC     ' unit, ',00
+@deu_ext        ASC     'extended SmartPort, multi-block reads',00
+@deu_stdcall    ASC     'standard SmartPort, single-block reads',00
+
+;==============================================================================
+; _dev_logBus - "spN", the current bus's name, with no newline.
+; MX %10 in/out; clobbers A, X, Y.
+;==============================================================================
+_dev_logBus     MX      %10
+                REP     #$20
+                MX      %00
+                LDA     #@dlb_sp
                 STA     _conStrPtr
                 JSR     Kern_LogStrNoEOL
                 LDA     _fsTmp1+1
                 AND     #$00FF
                 JSR     Kern_LogDec16
-                LDA     #@deu_ext
-                STA     _conStrPtr
-                JSR     Kern_LogStr
                 SEP     #$20
                 MX      %10
-@deu_ret        PLP
                 RTS
 
-@deu_sp         ASC     'sp',00
-@deu_ext        ASC     ': extended SmartPort',00
+@dlb_sp         ASC     'sp',00
 
 ;==============================================================================
 ; _dev_busOff - X = _fsTmp1+1 * 8, the current bus's _busTable offset.
@@ -559,8 +617,19 @@ _dev_attachCd   MX      %10
                 LDA    |_devNextCd
                 CMP     #BDEV_NCD
                 BCC     @dac_room
-                RTS                             ; every cd unit is taken
-@dac_room
+                REP     #$20                    ; every cd unit is taken
+                MX      %00
+                LDA     #_devNoRowStr
+                JMP     _dev_logSkip
+@dac_room       MX      %10
+                LDA     _fsTmp1
+                PHA                             ; the sd row, back at the end
+                LDA    |_devNextCd
+                CLC
+                ADC     #BDEV_CD_ROW0
+                STA     _fsTmp1                 ; this CD-ROM's row
+                JSR     _dev_logHead            ; from the DIB, before the
+                                                ;   block-size reply overlays it
                 ; THE DIB ENUMERATION READ IS KEPT, not asked for again: its
                 ; first four bytes, the status and block count the attach
                 ; reads, go on the stack across the block-size question.  A
@@ -613,15 +682,7 @@ _dev_attachCd   MX      %10
                 STAL    BLK_STAGE+3
                 DEX
                 BNE     @dac_cdX4
-@dac_cdRow      LDA     _fsTmp1
-                PHA
-                LDA    |_devNextCd
-                CLC
-                ADC     #BDEV_CD_ROW0
-                STA     _fsTmp1
-                JSR     _dev_allocDevEntry      ; leaves _devPtr on the row
-                PLA
-                STA     _fsTmp1
+@dac_cdRow      JSR     _dev_allocDevEntry      ; leaves _devPtr on the row
                 PLA                             ; DEV_FLAG_SEC2K or 0
                 BEQ     @dac_cdDone
                 LDY     #DEV_Flags
@@ -635,6 +696,8 @@ _dev_attachCd   MX      %10
                 ORA     #DEV_FLAG_STALE
                 STA     [_devPtr],Y
 @dac_cdOn       INC    |_devNextCd
+                PLA
+                STA     _fsTmp1                 ; the sd row
                 RTS
 
 
@@ -829,49 +892,15 @@ _dev_allocDevEntry MX   %10
                 ADC     #1
                 STA    |_busTable+BS_UnitCount,X
 
-                ;--- 8. Log "sdN at spB unit U: <size>", NetBSD's attach line
-                ;    (sys/scsi/cd.c: "cd%d at %s%d targ %d lun %d: %s") -- the
-                ;    device, where it was found, then what it is.  The unit is
-                ;    the row less its driver's first (include/fs.s, BDEV_*).
+                ;--- 8. End the attach line _dev_logHead began: the size, or
+                ;    that there is no disc.  2.11BSD prints a size (`ra0: RA82
+                ;    size=1954000'), NetBSD's cd "loaded" or "empty".  An empty
+                ;    drive's block count is not its own -- MAME's Apple SCSI
+                ;    card reports 17352 for one -- so it is not printed.
+                ;    BLK_STAGE still holds the status stored into the disk
+                ;    state above.
                 REP     #$20
                 MX      %00
-                LDA     _fsTmp1
-                AND     #$00FF
-                CMP     #BDEV_CD_ROW0
-                BCS     @dae_cdname
-                SEC
-                SBC     #BDEV_SD_ROW0
-                PHA
-                LDA     #@dae_pfx
-                BRA     @dae_name
-@dae_cdname     SBC     #BDEV_CD_ROW0           ; C=1 from the CMP
-                PHA
-                LDA     #@dae_cdpfx
-@dae_name       STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                PLA                             ; the unit
-                JSR     Kern_LogDec16
-                LDA     #@dae_mid
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                LDA     _fsTmp1+1               ; bus idx
-                AND     #$00FF
-                JSR     Kern_LogDec16
-                LDA     #@dae_unit
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                LDA     _blkNum                 ; SmartPort unit on that bus
-                AND     #$00FF
-                JSR     Kern_LogDec16
-                LDA     #@dae_colon
-                STA     _conStrPtr
-                JSR     Kern_LogStrNoEOL
-                ; ---- AND ITS SIZE, or that there is no disc.  2.11BSD prints
-                ; a size (`ra0: RA82 size=1954000'), NetBSD's cd "loaded" or
-                ; "empty".  An empty drive's block count is not its own --
-                ; MAME's Apple SCSI card reports 17352 for one -- so it is not
-                ; printed.  BLK_STAGE still holds the status this routine
-                ; stored into the disk state above.
                 LDA     _fsTmp1
                 AND     #$00FF
                 CMP     #BDEV_CD_ROW0
@@ -890,12 +919,153 @@ _dev_allocDevEntry MX   %10
                 PLP
                 RTS
 
-@dae_pfx        ASC     'sd',00
-@dae_cdpfx      ASC     'cd',00
 @dae_empty      ASC     'empty',00
-@dae_mid        ASC     ' at sp',00
-@dae_unit       ASC     ' unit ',00
-@dae_colon      ASC     ': ',00
+
+;==============================================================================
+; _dev_logHead - begin a unit's attach line: "sdN at spB unit U: <ID> type, ".
+;
+; NetBSD's attach line (sys/scsi/cd.c: "cd%d at %s%d targ %d lun %d: %s") --
+; the device, where it was found, then what it is.  What it is comes from the
+; device, as NetBSD 0.9's scsi_probe (sys/scsi/scsiconf.c) prints each target's
+; inquiry strings and type, "<%s%s%s>" and "type %d(%s)"; SmartPort's
+; counterparts are the DIB's ID string and device type (Firmware Reference
+; p.123; type names from SmartPort Technical Note #4).  The unit is the row less its driver's first (include/
+; fs.s, BDEV_*).  A unit that gave no DIB has ID length 0 and prints neither.
+; _dev_allocDevEntry ends the line with the size.
+;
+; Input (MX %10): _fsTmp1 = the row, _fsTmp1+1 = bus idx, _blkNum = unit,
+;                 BLK_STAGE = the unit's DIB.
+; Clobbers:       A, X, Y.
+;==============================================================================
+_dev_logHead    MX      %10
+                REP     #$20
+                MX      %00
+                LDA     _fsTmp1
+                AND     #$00FF
+                CMP     #BDEV_CD_ROW0
+                BCS     _dlh_cdname
+                SEC
+                SBC     #BDEV_SD_ROW0
+                PHA
+                LDA     #_dlh_pfx
+                BRA     _dlh_name
+_dlh_cdname     SBC     #BDEV_CD_ROW0           ; C=1 from the CMP
+                PHA
+                LDA     #_dlh_cdpfx
+_dlh_name       STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                PLA                             ; the unit
+                JSR     Kern_LogDec16
+                LDA     #_devAtStr
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                SEP     #$20
+                MX      %10
+_dev_logUnit    JSR     _dev_logBus
+                REP     #$20
+                MX      %00
+                LDA     #_devUnitStr
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                LDA     _blkNum                 ; SmartPort unit on that bus
+                AND     #$00FF
+                JSR     Kern_LogDec16
+                LDA     #_dlh_colon
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                SEP     #$20
+                MX      %10
+
+                LDAL    BLK_STAGE+DIB_IdLen
+                BEQ     _dlh_ret                ; no DIB
+                LDA     #'<'
+                JSR     _kernLogPutByte
+                LDX     #0
+_dlh_idL        LDAL    BLK_STAGE+DIB_Id,X
+                AND     #$7F
+                JSR     _kernLogPutByte
+                INX
+                CPX     #16                     ; the string's field is 16
+                BCS     _dlh_idEnd
+                TXA
+                CMPL    BLK_STAGE+DIB_IdLen
+                BCC     _dlh_idL
+_dlh_idEnd      LDA     #'>'
+                JSR     _kernLogPutByte
+                LDA     #' '
+                JSR     _kernLogPutByte
+
+                LDAL    BLK_STAGE+DIB_Type
+                REP     #$20
+                MX      %00
+                AND     #$00FF
+                CMP     #DEV_NTYPES
+                BCS     _dlh_hex
+                ASL
+                TAX
+                LDA    |_devTypeNames,X
+                BEQ     _dlh_hex                ; a reserved type
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                BRA     _dlh_sep
+_dlh_hex        LDA     #_dlh_type
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                LDAL    BLK_STAGE+DIB_Type
+                JSR     Kern_LogHex8
+_dlh_sep        LDA     #_dlh_comma
+                STA     _conStrPtr
+                JSR     Kern_LogStrNoEOL
+                SEP     #$20
+                MX      %10
+_dlh_ret        RTS
+
+;==============================================================================
+; _dev_logSkip - the whole line for a unit that answered and is not attached:
+; "spB unit U: <ID> type, <A's string>".  An empty drive and a unit past the
+; last device number both say so, rather than vanishing from the inventory.
+;
+; Input (MX %00): A = the reason string; as _dev_logUnit otherwise.
+; Exit MX %10.  Clobbers A, X, Y.
+;==============================================================================
+_dev_logSkip    MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
+                JSR     _dev_logUnit
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _conStrPtr
+                JSR     Kern_LogStr
+                SEP     #$20
+                MX      %10
+                RTS
+
+_devNoMediaStr  ASC     'no media',00
+_devNoRowStr    ASC     'not attached, every unit number in use',00
+_dlh_pfx        ASC     'sd',00
+_dlh_cdpfx      ASC     'cd',00
+_devAtStr       ASC     ' at ',00
+_devUnitStr     ASC     ' unit ',00
+_dlh_colon      ASC     ': ',00
+_dlh_type       ASC     'type $',00
+_dlh_comma      ASC     ', ',00
+
+; The DIB device types, SmartPort Technical Note #4, $00..$0A; 0 = reserved,
+; printed as its number like any type past the table.
+DEV_NTYPES      EQU     11
+_devTypeNames   DA      _devTyRam,_devTy35,_devTyHd,_devTyScsi,_devTyRom
+                DA      _devTyCd,_devTyTape,_devTyHd,0,_devTyPrn,_devTy525
+_devTyRam       ASC     'RAM disk',00
+_devTy35        ASC     '3.5-inch disk',00
+_devTyHd        ASC     'hard disk',00
+_devTyScsi      ASC     'SCSI device',00
+_devTyRom       ASC     'ROM disk',00
+_devTyCd        ASC     'CD-ROM',00
+_devTyTape      ASC     'tape',00
+_devTyPrn       ASC     'printer',00
+_devTy525       ASC     '5.25-inch disk',00
 
 ;==============================================================================
 ; Dev_LogSize - end the attach line with the size in BLK_STAGE+1..3:
