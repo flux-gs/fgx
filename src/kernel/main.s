@@ -1944,6 +1944,25 @@ _ConfigureHardware
                 AND     #$F7
                 STAL    HW_SHADOW
 
+                ; BLACK THE PAGE BEFORE SHOWING IT.  The console clears it
+                ; only at _BootScreen, a few hundred lines on, and until then
+                ; the display showed whatever the frame buffer, SCBs and
+                ; palettes held -- for seconds on an unaccelerated machine.
+                ; All zero is black: palette 0 colour 0 everywhere.  An
+                ; overlapping MVN carries the first zero word up the bank.
+                REP     #$30
+                MX      %00
+                LDA     #0
+                STAL    $E12000
+                PHB
+                LDX     #$2000
+                LDY     #$2002
+                LDA     #$9FFF-$2002            ; count-1: through $E1:9FFF
+                MVN     $E1,$E1
+                PLB
+                SEP     #$20
+                MX      %10
+
                 ; Enable Super HiRes
                 LDA     #$81
                 STAL    HW_NEWVIDEO
