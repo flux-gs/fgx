@@ -1110,6 +1110,9 @@ _devAllocSlot           DS  1               ; slot scratch across _dev_allocDevE
 ; plus one, or SP_UNIT_MAX+1 when the port does not answer the roll call.
 _devUnitLimit           DS  1               ; first out-of-range unit (count+1)
 _devNextCd              DS  1               ; next cd unit (BDEV_NCD caps it)
+; Whether the bus being enumerated may take extended calls: bit 7 while its card
+; and every device so far claim them, bit 0 once a device has answered.
+_devExtOk               DS  1
 _busTable               DS  8*8             ; FS_MAX_BUSES * 8 B padded per entry
 KMem_busTable_end       EQU *
 KMem_busTable_canary    DS  1

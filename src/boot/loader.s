@@ -109,6 +109,9 @@ ZP_BLKCNT       EQU     $46             ; stage-2 blocks still to read
 ZP_BLKIDX       EQU     $47             ; byte offset into S2Blks (3 per entry)
 
 ; Hardware
+SND_CTL         EQU     $C03C           ; Sound GLU control (bit 7 busy)
+SND_DATA        EQU     $C03D
+SND_ADRL        EQU     $C03E
 BORDER_COLOR    EQU     $C034
 TBCOLOR         EQU     $C022
 
@@ -127,6 +130,41 @@ BootStart
                 SEI
                 CLD
                 STX     ZP_SLOT
+
+                ; QUIET THE DOC.  An oscillator left running with its interrupt
+                ; enabled interrupts through $E1002C, whose firmware default is
+                ; a system failure ($08FF, unclaimedSndIntErr), and firmware
+                ; calls from here to the kernel can run with interrupts on.
+                ; Halting every oscillator clears its interrupt enable; reading
+                ; the Oscillator Interrupt register ($E0) until bit 7 is set
+                ; acknowledges what already fired.  A DOC read lags one cycle,
+                ; so the first is discarded (Hardware Reference pp.106-107).
+                ; The Sound Control register's volume bits are kept.
+@dqw0           LDA     SND_CTL
+                BMI     @dqw0
+                AND     #$0F                    ; volume
+                ORA     #$20                    ; DOC registers, auto-increment
+                STA     SND_CTL
+                LDA     #$A0                    ; oscillator 0's control
+                STA     SND_ADRL
+                LDX     #32
+                LDA     #$01                    ; halted, interrupt disabled
+@dqh            STA     SND_DATA
+                DEX
+                BNE     @dqh
+@dqw1           LDA     SND_CTL
+                BMI     @dqw1
+                AND     #$0F                    ; DOC registers, no increment
+                STA     SND_CTL
+                LDA     #$E0
+                STA     SND_ADRL
+                LDA     SND_DATA                ; the lagging read, discarded
+                LDX     #33
+@dqd            LDA     SND_DATA
+                BMI     @dqq                    ; bit 7: no IRQ pending
+                DEX
+                BNE     @dqd
+@dqq
 
                 ; FGX color scheme: blue border (matches the kernel
                 ; console default at console_init.s -- border color $02)

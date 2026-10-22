@@ -484,6 +484,19 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 ; yet either, so the message went nowhere at all.  Measured,
                 ; not reasoned about: the summary simply vanished from the log.
                 JSR     _LogDetectedHardware
+                ; THE CONSOLE COMES UP BEFORE THE STORAGE PROBE, so each attach
+                ; line appears as its device is found, as BSD's autoconf
+                ; prints them.  A card that takes seconds over a STATUS -- an
+                ; empty CD-ROM drive behind a SCSI card -- then sits under its
+                ; own bus line rather than behind a blank screen.  Con_Init
+                ; needs the heap (Kmem_Init), the far bank and the font the
+                ; boot program staged, all in place by here.
+                JSR     _BootScreen             ; SHR console + log mirror.
+                JSR     _RAM_FloorCheck         ; refuse to run below the floor.
+                                                ; AFTER _BootScreen on purpose:
+                                                ; before it, a halt message
+                                                ; reaches only the log ring --
+                                                ; a BLANK SCREEN, measured.
                 REP     #$30
                 MX      %00
                 JSR     _AllocDevTable          ; dev_table_ptr = Kmalloc(512, M_KERN)
@@ -562,6 +575,13 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 JSR     _KernIrq_Install        ; patch $E10010 with our IRQ
                                                 ; trampoline (passthrough in
                                                 ; phase 1; SCC dispatch later)
+                ; THE DOC IS QUIETED BEFORE THE CLI.  Its registers are whatever
+                ; the ROM and the boot left, and an oscillator with its interrupt
+                ; enabled interrupts through $E1002C, whose firmware default is
+                ; a system failure ($08FF, unclaimedSndIntErr) until something
+                ; claims it.  Sound_Init halts every oscillator, which also
+                ; clears its interrupt enable, and drains what is pending.
+_kfp011         JSL     KFAR_SOUND_INIT         ; far bank; configure DOC oscillators 0/1
                 JSR     Toolbox_InstallHB       ; install HB task, enable VBL, CLI
 
                 ; PID 1 task setup.  Must precede any Fs_Open (dispatch
@@ -647,18 +667,6 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 BCC     @kern_psLoop
 @kern_psDone    REP     #$20
                 MX      %00
-                JSR     _BootScreen             ; SHR console + log mirror.
-                JSR     _RAM_FloorCheck         ; refuse to run below the floor.
-                                                ; AFTER _BootScreen on purpose:
-                                                ; everything before it goes to
-                                                ; the log ring, which only this
-                                                ; call mirrors to the display,
-                                                ; so an earlier halt is a BLANK
-                                                ; SCREEN -- measured.
-                                                ; the font load's Fs_Open
-                                                ; now goes through dispatch
-                                                ; (or legacy if Mod_Load
-                                                ;  above failed).
                 JSR     _LogFarBank             ; far kernel bank state
                 JSR     _LogTtyBank             ; tty kernel bank state
                 JSR     _ClistInit              ; tty bank's clist pool -- NOT a
@@ -671,7 +679,6 @@ _kfp903         JSL     KFAR_VFS_FILEINIT       ; slot 31; bank byte patched
                 ; DEVICES (Blk_Init) rather than mounts, and Blk_Init is long
                 ; past by then.
 
-_kfp011         JSL     KFAR_SOUND_INIT         ; far bank; configure DOC oscillators 0/1
                 ; Boot chime.  It lives in the far bank because Sound_Beep
                 ; does.
 _kfp012         JSL     KFAR_BOOT_CHIME         ; far bank; gated internally
@@ -1937,6 +1944,25 @@ _ConfigureHardware
                 LDAL    HW_SHADOW
                 AND     #$F7
                 STAL    HW_SHADOW
+
+                ; BLACK THE PAGE BEFORE SHOWING IT.  The console clears it
+                ; only at _BootScreen, a few hundred lines on, and until then
+                ; the display showed whatever the frame buffer, SCBs and
+                ; palettes held -- for seconds on an unaccelerated machine.
+                ; All zero is black: palette 0 colour 0 everywhere.  An
+                ; overlapping MVN carries the first zero word up the bank.
+                REP     #$30
+                MX      %00
+                LDA     #0
+                STAL    $E12000
+                PHB
+                LDX     #$2000
+                LDY     #$2002
+                LDA     #$9FFF-$2002            ; count-1: through $E1:9FFF
+                MVN     $E1,$E1
+                PLB
+                SEP     #$20
+                MX      %10
 
                 ; Enable Super HiRes
                 LDA     #$81
@@ -3414,6 +3440,17 @@ _LogDetectedHardware    MX %00
 ; Stores result in CPUSpeedMHz as MHz*10 (e.g., 28 = 2.8 MHz, 160 = 16.0 MHz).
 ;=============================================================================
 _MeasureCPUSpeed
+                ; MEASURED WITH INTERRUPTS ENABLED, though boot holds them off
+                ; until Toolbox_InstallHB.  A TransWarp GS with its
+                ; AppleTalk/IRQ option on "will slow down to the appropriate
+                ; speed whenever the interrupts are disabled (the IRQ Disable
+                ; flag is set)" (TransWarp GS User's Manual p.14), and a probe
+                ; run under the boot SEI measures that, not the speed user code
+                ; runs at.  Nothing of FGX's is on the IRQ vector yet and
+                ; stage 1 has quieted the DOC; a firmware VBL interrupt, if
+                ; armed, costs the count a few hundred cycles of ~33 ms.
+                PHP
+                CLI
                 SEP     #$20            ; 8-bit A
                 REP     #$10            ; 16-bit X/Y
 
@@ -3513,6 +3550,7 @@ _MeasureCPUSpeed
                 BRA     @div_loop
 @div_done
                 STX     CPUSpeedMHz
+                PLP                     ; the boot SEI back
                 RTS
 
 _CalcResult     DS      4

@@ -346,6 +346,7 @@ SP_STAT_BLKSZ   EQU     $06             ; the Apple II SCSI Card's own: the
 ; Code $00's reply is the DIB's first four bytes, so +0..3 read the same
 ; whichever call filled the stage.
 DIB_Type        EQU     21
+DIB_Subtype     EQU     22              ; bit 7: supports extended calls
 SP_GS_ONLINE    EQU     $10             ; status byte: "Device online or disk
                                         ;   in drive" (p.122)
 SP_DEVTYPE_CDROM EQU    $05             ; "SCSI CD-ROM", SmartPort Technical

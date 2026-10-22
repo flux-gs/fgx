@@ -114,6 +114,30 @@ Sound_Init      ENT
                 DEX
                 BNE     @si_volL
 
+                ; --- Drain the Oscillator Interrupt register ($E0).  Halting
+                ;     clears every interrupt enable, but an oscillator that
+                ;     reached the end of its wavetable before that left IRQ
+                ;     asserted, and reading $E0 is what acknowledges it.  Bit 7
+                ;     set means no oscillator is interrupting.  A read lags one
+                ;     cycle, so the first is discarded (Hardware Reference
+                ;     pp.106-107); auto-increment off keeps the address on $E0.
+                ;     At most one read per oscillator, and one over.
+                JSR     _SoundWait
+                LDAL    SND_CTRL
+                AND     #%10011111              ; DOC registers, no auto-incr
+                STAL    SND_CTRL
+                LDA     #$E0
+                JSR     _SoundSetAddr
+                JSR     _SoundWait
+                LDAL    SND_DATA                ; the lagging read, discarded
+                LDX     #33
+@si_irqL        JSR     _SoundWait
+                LDAL    SND_DATA
+                BMI     @si_irqDone             ; bit 7: no IRQ pending
+                DEX
+                BNE     @si_irqL
+@si_irqDone
+
                 ; --- Enable 18 oscillators: per-oscillator sample rate
                 ;     ≈ 44.7 kHz.  Matches morse_gs's pitch reference so the
                 ;     freq-register values below behave the same as their
