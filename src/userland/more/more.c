@@ -81,7 +81,6 @@
 /* fcc libc: read/write are not in <stdio.h>; fopen/fgetc/fseek/ftell/
    fclose/fprintf + FILE + SEEK_SET come from <stdio.h>. */
 int read(int fd, char *buf, int n);
-int write(int fd, char *buf, int n);
 
 /* Screen geometry + clear/standout come from the libc termcap table via the
    C-callable bridge -- the same path clear(1)/ul(1) use -- rather than baked
@@ -101,7 +100,6 @@ int   seekable;                 /* 1 if back-scroll is possible (file input) */
 int   ateof;                    /* set when a page hit end-of-input */
 int   curpage;                  /* current page index */
 long  pgoff[MAXPG];             /* file offset where each page starts */
-char  ob[1];                    /* output byte */
 char  rb[1];                    /* stdin read byte */
 char  kb[1];                    /* fd 2 control-key byte */
 
@@ -123,12 +121,12 @@ char *cap_se;                   /* standout off ("se")                         *
 char  tcbuf[32];                /* tgetent entry buffer (baked-ignored)        */
 char  capbuf[64];               /* tgetstr area buffer  (baked-ignored)        */
 
-/* write one byte to stdout (fd 1).  Returns c so it can serve as tputs's
-   int (*outc)(int) callback (the termcap emit path). */
+/* One byte into stdout's buffer, as upstream's putch() is putchar(); the
+   page goes out when the prompt flushes it rather than as a write(2) per
+   byte.  Returns c so it can serve as tputs's int (*outc)(int) callback. */
 int putch(int c)
 {
-    ob[0] = c;
-    write(1, ob, 1);
+    putchar(c);
     return c;
 }
 
@@ -348,9 +346,10 @@ int main(int argc, char **argv)
            so they exit before reaching the prompt). */
         if (cap_so)
             tputs(cap_so, 1, putch);
-        write(1, "--More--", 8);
+        fputs("--More--", stdout);
         if (cap_se)
             tputs(cap_se, 1, putch);
+        fflush(stdout);             /* upstream prompt(): before the wait */
         for (;;) {
             k = readch();
             if (k == 'q' || k == 'Q') {
@@ -364,6 +363,7 @@ int main(int argc, char **argv)
             if (k == 'b' || k == 'B' || k == 2) {
                 if (!seekable) {
                     putch(7);       /* pipe: not seekable -> bell (as 2.11BSD more) */
+                    fflush(stdout);
                 } else {
                     if (curpage > 0)
                         curpage--;  /* back one page; clamp at the first page */
