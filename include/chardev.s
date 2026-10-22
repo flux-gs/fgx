@@ -155,6 +155,14 @@ UIO_OFFSET      EQU     6               ; off_t: where in the device/file.  The
                                 ;   pins it at 6 with rc 80.
 UIO_RESID       EQU     10              ; unsigned short: bytes still to move
 UIO_RW          EQU     14              ; int: UIO_READ 0 / UIO_WRITE 1
+; The region list ahead of them, for an op that walks it (/dev/null's d_write):
+; uio_iov is a 4-byte pointer at 0 and uio_iovcnt follows it, which is what puts
+; uio_offset at 6; a struct iovec is iov_base (4) then iov_len (2).
+UIO_IOV         EQU     0               ; struct iovec *: the regions, in order
+UIO_IOVCNT      EQU     4               ; int: how many remain
+IOV_BASE        EQU     0               ; char *
+IOV_LEN         EQU     4               ; unsigned short
+IOV_SIZE        EQU     6
 ; The VALUES, for the paths that BUILD one -- the write side at T3 stage 3 and
 ; the read side at stage 4.  uio.h is the authority; these are its assembly
 ; side, like the offsets above.
