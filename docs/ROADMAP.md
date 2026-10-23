@@ -110,15 +110,21 @@ phase B
 [`history/plans/2026-10-10-coremap-phase-b-code-packing-plan.md`](history/plans/2026-10-10-coremap-phase-b-code-packing-plan.md).
 Archive: "Chartered campaigns", item 0 ("Memory campaign").
 
-### Performance -- parked
+### Performance -- active
 
-Ad hoc; the seams are exhausted (the biggest non-idle profile item is 3.6%).
-**Open if resumed:** 7.8 zero-init into bss (a linker change), 7.9 an
-80-column console (interactive only); defects apple/fgx#381 (uiomove
-overhead), #386 (`/dev/null` writes slower than a file).  Do not re-litigate 7.6, 7.7,
-raising NBUF, PackBytes, or Toolbox-for-speed.  Design:
+The 2026-10-23 profile measured one tool at a time on a 93 KB input and found
+the time the earlier exec-heavy workloads could not show: stdio is not
+2.11BSD's (`getc`/`putc` are call chains, 56-76% of `grep`, `wc`, `tr`), no
+saved text (every exec rereads its binary), and fcc's output.  Landed on
+perf/quick-wins: `head`/`cat` from 2.11BSD, the ufs double write, signed
+`% 2^k`, the division cores, the `_fcc_tmp_b` peepholes.  **Next:** the
+2.11BSD stdio port, then saved text (`vm_text.c`).  Still open from the
+earlier dive: 7.8 zero-init into bss, 7.9 an 80-column console,
+apple/fgx#381 (uiomove overhead).  Do not re-litigate 7.6, 7.7, raising NBUF,
+PackBytes, or Toolbox-for-speed.  Profile:
+[`history/plans/2026-10-23-performance-profile.md`](history/plans/2026-10-23-performance-profile.md);
+earlier dive:
 [`history/plans/2026-09-09-performance-dive-results.md`](history/plans/2026-09-09-performance-dive-results.md).
-Archive: "Chartered campaigns", item 4 (Performance campaign).
 
 ### Shared libc -- landed
 
