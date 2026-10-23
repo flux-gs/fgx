@@ -132,11 +132,9 @@ bio_strategy_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _biocache_L3
                 EOR     #$8000
 _biocache_L3
@@ -144,11 +142,9 @@ _biocache_L3
                 BRL     _biocache_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _biocache_L4
                 EOR     #$8000
 _biocache_L4
@@ -186,10 +182,8 @@ _biocache_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #4
                 STA     [_fcc_fpr0]
                 DO      8+bio_strategy_FRAMESIZE/256
                 TSC
@@ -283,10 +277,8 @@ _biocache_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L5
@@ -599,11 +591,8 @@ _biocache_bufhashof_stkok        TCS
                 PHA
                 LDA     #16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     _fcc_tmp_b
                 PLA
                 AND     _fcc_tmp_b
@@ -2421,11 +2410,9 @@ _biocache_L12
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _biocache_L15
                 EOR     #$8000
 _biocache_L15
@@ -2510,11 +2497,9 @@ _biocache_L16
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L19
                 EOR     #$8000
 _biocache_L19
@@ -2627,11 +2612,9 @@ _biocache_L20
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L23
                 EOR     #$8000
 _biocache_L23
@@ -3174,15 +3157,11 @@ _biocache_L33
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L30
                 LDA     #1
@@ -3402,10 +3381,8 @@ _biocache_L42
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #64
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -3458,10 +3435,8 @@ _biocache_L38
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -3469,10 +3444,8 @@ _biocache_L38
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L45
@@ -3961,10 +3934,8 @@ _biocache_L59
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L56
@@ -3984,10 +3955,8 @@ _biocache_L55
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L62
@@ -3997,10 +3966,8 @@ _biocache_L55
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #64
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -4035,10 +4002,8 @@ _biocache_L62
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -4251,10 +4216,8 @@ brelse_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #64
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L63
@@ -4313,10 +4276,8 @@ _biocache_L63
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #64
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L64
@@ -4407,10 +4368,8 @@ _biocache_L64
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #64
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L65
@@ -4500,10 +4459,8 @@ _biocache_L65
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #4
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L66
@@ -4531,10 +4488,8 @@ _biocache_L65
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
 _biocache_L66
                 DO      8+brelse_FRAMESIZE/256
@@ -4561,10 +4516,8 @@ _biocache_L66
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L67
@@ -4829,10 +4782,8 @@ _biocache_L67
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L69
@@ -4889,10 +4840,8 @@ _biocache_L69
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8192
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8192
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L71
@@ -4949,10 +4898,8 @@ _biocache_L71
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #128
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L73
@@ -5041,10 +4988,8 @@ _biocache_L70
                 PHA
                 LDA     #2048
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #128
                 STA     _fcc_tmp_b
                 PLA
                 AND     _fcc_tmp_b
@@ -5150,20 +5095,14 @@ _biocache_L76
                 PHA
                 LDA     #64
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #256
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #128
                 EOR     #$FFFF
                 STA     _fcc_tmp_b
                 PLA
@@ -5223,15 +5162,11 @@ _biocache_L77
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L78
                 DO      8+biowait_FRAMESIZE/256
@@ -5289,15 +5224,11 @@ _biocache_L78
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #4
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L79
                 LDA     #0
@@ -5418,10 +5349,8 @@ biodone_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L82
@@ -5466,10 +5395,8 @@ _biocache_L82
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     [_fcc_fpr0]
                 DO      8+biodone_FRAMESIZE/256
                 TSC
@@ -5495,15 +5422,11 @@ _biocache_L82
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L84
                 DO      8+biodone_FRAMESIZE/256
@@ -5606,10 +5529,8 @@ _biocache_L85
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1024
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1024
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L87
@@ -5620,10 +5541,8 @@ _biocache_L85
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -5648,11 +5567,9 @@ _biocache_L88
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _biocache_L91
                 EOR     #$8000
 _biocache_L91
@@ -5726,10 +5643,8 @@ _biocache_L83
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #256
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L92
@@ -5796,10 +5711,8 @@ _biocache_L92
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #64
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L93
@@ -5992,10 +5905,8 @@ bread_stkok        TCS
                 PHA
                 LDA     #2
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #512
                 STA     _fcc_tmp_b
                 PLA
                 AND     _fcc_tmp_b
@@ -6019,10 +5930,8 @@ _biocache_L94
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -6165,10 +6074,8 @@ bwrite_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #256
                 STA     3,S   ; fccstk d=0 b=3
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
@@ -6194,10 +6101,8 @@ bwrite_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 STA     5,S   ; fccstk d=0 b=5
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
@@ -6225,20 +6130,14 @@ bwrite_stkok        TCS
                 PHA
                 LDA     #1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #4
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #512
                 EOR     #$FFFF
                 STA     _fcc_tmp_b
                 PLA
@@ -6617,15 +6516,11 @@ bdwrite_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L99
                 DO      8+bdwrite_FRAMESIZE/256
@@ -6652,10 +6547,8 @@ bdwrite_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #512
                 STA     [_fcc_fpr0]
                 DO      8+bdwrite_FRAMESIZE/256
                 TSC
@@ -6747,10 +6640,8 @@ _biocache_L99
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     [_fcc_fpr0]
                 DO      8+bdwrite_FRAMESIZE/256
                 TSC
@@ -6831,10 +6722,8 @@ bawrite_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #256
                 STA     [_fcc_fpr0]
                 DO      8+bawrite_FRAMESIZE/256
                 TSC
@@ -7026,10 +6915,8 @@ _biocache_L100
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _biocache_L102
                 DO      8+bgetvp_FRAMESIZE/256
@@ -7057,10 +6944,8 @@ _biocache_L100
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _biocache_L102
                 LDA     #0
@@ -7597,10 +7482,8 @@ _biocache_L109
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L112
@@ -7821,10 +7704,8 @@ _biocache_L114
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L117
@@ -7836,15 +7717,11 @@ _biocache_L117
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L118
                 SEP     #$20
@@ -7881,10 +7758,8 @@ _biocache_L118
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     [_fcc_fpr0]
                 DO      10+vflushbuf_FRAMESIZE/256
                 TSC
@@ -7897,15 +7772,11 @@ _biocache_L118
                 LDA     10+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L119
                 LDA     3,S   ; fccstk d=0 b=3
@@ -7959,15 +7830,11 @@ _biocache_L116
                 LDA     10+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L121
                 TAY
@@ -8035,10 +7902,8 @@ _biocache_L122
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1024
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1024
                 STA     [_fcc_fpr0]
                 DO      8+vflushbuf_FRAMESIZE/256
                 TSC
@@ -8255,15 +8120,11 @@ _biocache_L132
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L133
                 BRL     _biocache_L129
@@ -8279,10 +8140,8 @@ _biocache_L133
                 LDA     6+bflush_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #65535
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65535
                 BNE     *+5
                 BRL     _biocache_L135
                 LDA     3,S   ; fccstk d=0 b=3
@@ -8334,10 +8193,8 @@ _biocache_L134
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -8560,10 +8417,8 @@ _biocache_L144
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L147
@@ -8573,10 +8428,8 @@ _biocache_L144
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #64
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -8608,10 +8461,8 @@ _biocache_L147
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     [_fcc_fpr0]
                 DO      10+vinvalbuf_FRAMESIZE/256
                 TSC
@@ -8632,10 +8483,8 @@ _biocache_L147
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L149
@@ -8758,10 +8607,8 @@ _biocache_L151
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
 _biocache_L154
                 LDA     3,S   ; fccstk d=0 b=3
@@ -9009,9 +8856,7 @@ _biocache_L160
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L158
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9126,9 +8971,7 @@ _biocache_L168
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L166
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9145,11 +8988,9 @@ _biocache_L166
                 PHA
                 LDA     #16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_tmp_b
                 PLA
                 LDX     _fcc_tmp_b
@@ -9162,9 +9003,7 @@ _biocache_L166
 _biocache_L170
                 BMI     *+5
                 BRL     _biocache_L169
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9315,9 +9154,7 @@ _biocache_L173
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L171
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9432,9 +9269,7 @@ _biocache_L181
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L179
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9451,11 +9286,9 @@ _biocache_L179
                 PHA
                 LDA     #16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_tmp_b
                 PLA
                 LDX     _fcc_tmp_b
@@ -9468,9 +9301,7 @@ _biocache_L179
 _biocache_L183
                 BMI     *+5
                 BRL     _biocache_L182
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9682,9 +9513,7 @@ _biocache_L189
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L187
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9746,9 +9575,7 @@ _biocache_L192
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L190
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9765,11 +9592,9 @@ _biocache_L190
                 PHA
                 LDA     #16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_tmp_b
                 PLA
                 LDX     _fcc_tmp_b
@@ -9782,9 +9607,7 @@ _biocache_L190
 _biocache_L194
                 BMI     *+5
                 BRL     _biocache_L193
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -9853,11 +9676,9 @@ _biocache_L195
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _biocache_L198
                 EOR     #$8000
 _biocache_L198
@@ -10124,11 +9945,9 @@ _biocache_L199
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _biocache_L202
                 EOR     #$8000
 _biocache_L202
@@ -10253,10 +10072,8 @@ _biocache_L201
                 TCS
                 FGX2_FARCALL _biocache_totalfree
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L203
                 LDA     #1
@@ -10277,10 +10094,8 @@ _biocache_L203
                 PLA
                 TYA
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L204
                 LDA     #2
@@ -10302,11 +10117,9 @@ _biocache_L205
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L208
                 EOR     #$8000
 _biocache_L208
@@ -10319,10 +10132,8 @@ _biocache_L208
                 PLA
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L209
                 LDA     #3
@@ -10351,11 +10162,9 @@ _biocache_L210
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L213
                 EOR     #$8000
 _biocache_L213
@@ -10475,15 +10284,11 @@ _biocache_L214
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L217
                 LDA     #5
@@ -10593,15 +10398,11 @@ _biocache_L218
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L221
                 LDA     #7
@@ -10730,11 +10531,8 @@ _biocache_L225
                 PHA
                 LDA     #16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -10779,10 +10577,8 @@ _biocache_L226
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L227
                 LDA     #11
@@ -10802,10 +10598,8 @@ _biocache_L227
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L228
@@ -11009,10 +10803,8 @@ _biocache_L233
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L234
@@ -11029,10 +10821,8 @@ _biocache_L233
 _biocache_L234
                 FGX2_FARCALL _biocache_totalfree
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L235
                 LDA     #17
@@ -11158,10 +10948,8 @@ _biocache_L236
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L239
                 LDA     #19
@@ -11263,11 +11051,9 @@ _biocache_L240
                 PHA
                 LDA     #16
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -11306,9 +11092,7 @@ _biocache_L243
                 CLC
                 ADC     #4
                 TCS
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
@@ -11431,11 +11215,9 @@ _biocache_L245
 _biocache_L246
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _biocache_L250
                 EOR     #$8000
 _biocache_L250
@@ -11814,10 +11596,8 @@ _biocache_L260
                 BRL     _biocache_L264
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _biocache_L264
                 LDA     #1
@@ -11934,10 +11714,8 @@ _biocache_L263
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L266
                 LDA     #26
@@ -11957,10 +11735,8 @@ _biocache_L266
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -12106,10 +11882,8 @@ _biocache_L268
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L271
                 LDA     #29
@@ -12201,11 +11975,9 @@ _biocache_L275
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L278
                 EOR     #$8000
 _biocache_L278
@@ -12297,10 +12069,8 @@ _biocache_L276
 _biocache_L277
                 FGX2_FARCALL _biocache_totalfree
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L282
                 LDA     #32
@@ -12316,10 +12086,8 @@ _biocache_L277
 _biocache_L282
                 LDA     _biocache_stub_slept
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L283
                 LDA     #33
@@ -12343,11 +12111,9 @@ _biocache_L284
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L287
                 EOR     #$8000
 _biocache_L287
@@ -12359,13 +12125,7 @@ _biocache_L287
                 TAY
                 PLA
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _biocache_L288
                 LDA     #40
@@ -12401,10 +12161,8 @@ _biocache_L285
 _biocache_L286
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L289
                 LDA     #34
@@ -12426,11 +12184,9 @@ _biocache_L290
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L293
                 EOR     #$8000
 _biocache_L293
@@ -12475,10 +12231,8 @@ _biocache_L291
 _biocache_L292
                 FGX2_FARCALL _biocache_totalfree
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L294
                 LDA     #35
@@ -12494,10 +12248,8 @@ _biocache_L292
 _biocache_L294
                 LDA     _biocache_stub_slept
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L295
                 LDA     #36
@@ -12513,10 +12265,8 @@ _biocache_L294
 _biocache_L295
                 LDA     _biocache_stub_panic
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L296
                 LDA     #37
@@ -12554,11 +12304,9 @@ _biocache_L297
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _biocache_L300
                 EOR     #$8000
 _biocache_L300
@@ -12575,11 +12323,9 @@ _biocache_L300
                 PHA
                 LDA     15,S   ; fccstk d=2 b=13
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -12656,10 +12402,8 @@ _biocache_L299
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L301
                 LDA     #45
@@ -12675,10 +12419,8 @@ _biocache_L299
 _biocache_L301
                 LDA     _biocache_fake_reads
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L302
                 LDA     #46
@@ -12739,15 +12481,11 @@ _biocache_L303
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L304
                 LDA     #48
@@ -12826,10 +12564,8 @@ _biocache_L304
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L305
                 LDA     #49
@@ -12884,10 +12620,8 @@ _biocache_L308
 _biocache_L306
                 LDA     _biocache_fake_reads
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L309
                 LDA     #51
@@ -12966,10 +12700,8 @@ _biocache_L309
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L310
                 LDA     #52
@@ -13024,10 +12756,8 @@ _biocache_L310
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L311
                 LDA     #53
@@ -13043,10 +12773,8 @@ _biocache_L310
 _biocache_L311
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L312
                 LDA     #54
@@ -13089,10 +12817,8 @@ _biocache_L313
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #8
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L314
@@ -13161,10 +12887,8 @@ _biocache_L314
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L315
                 LDA     #57
@@ -13218,10 +12942,8 @@ _biocache_L315
                 TCS
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L316
                 LDA     #58
@@ -13241,15 +12963,11 @@ _biocache_L316
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L317
                 LDA     #59
@@ -13317,10 +13035,8 @@ _biocache_L317
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L318
                 LDA     #61
@@ -13456,11 +13172,9 @@ _biocache_L324
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L327
                 EOR     #$8000
 _biocache_L327
@@ -13522,10 +13236,8 @@ _biocache_L327
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L328
                 LDA     11,S   ; fccstk d=0 b=11
@@ -13549,10 +13261,8 @@ _biocache_L325
 _biocache_L326
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _biocache_L329
                 LDA     #65
@@ -13682,10 +13392,8 @@ _biocache_L330
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L331
                 LDA     #67
@@ -13788,10 +13496,8 @@ _biocache_L331
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -13810,10 +13516,8 @@ _biocache_L331
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L332
@@ -13836,11 +13540,9 @@ _biocache_L333
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _biocache_L336
                 EOR     #$8000
 _biocache_L336
@@ -13902,10 +13604,8 @@ _biocache_L336
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L337
                 LDA     11,S   ; fccstk d=0 b=11
@@ -13929,10 +13629,8 @@ _biocache_L334
 _biocache_L335
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L338
                 LDA     #69
@@ -14043,10 +13741,8 @@ _biocache_L339
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -14150,10 +13846,8 @@ _biocache_L340
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #65535
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65535
                 BNE     *+5
                 BRL     _biocache_L343
                 LDA     #74
@@ -14270,10 +13964,8 @@ _biocache_L343
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L344
                 LDA     #75
@@ -14324,10 +14016,8 @@ _biocache_L344
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L345
                 LDA     #76
@@ -14535,10 +14225,8 @@ _biocache_L349
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L352
                 LDA     #79
@@ -14717,10 +14405,8 @@ _biocache_L353
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L356
                 LDA     #81
@@ -14771,10 +14457,8 @@ _biocache_L356
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L357
                 LDA     #82
@@ -14908,10 +14592,8 @@ _biocache_L357
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L358
                 LDA     #83
@@ -14962,10 +14644,8 @@ _biocache_L358
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L359
                 LDA     #84
@@ -14981,10 +14661,8 @@ _biocache_L358
 _biocache_L359
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L360
                 LDA     #85
@@ -15091,10 +14769,8 @@ _biocache_L360
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L361
                 LDA     #86
@@ -15145,10 +14821,8 @@ _biocache_L361
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L362
                 LDA     #87
@@ -15221,10 +14895,8 @@ _biocache_L362
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L363
                 LDA     #88
@@ -15240,10 +14912,8 @@ _biocache_L362
 _biocache_L363
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L364
                 LDA     #89
@@ -15317,10 +14987,8 @@ _biocache_L365
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L366
                 LDA     #91
@@ -15371,10 +15039,8 @@ _biocache_L366
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L367
                 LDA     #92
@@ -15416,10 +15082,8 @@ _biocache_L367
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L368
                 LDA     #93
@@ -15655,10 +15319,8 @@ _biocache_L368
                 TCS
                 TYA
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _biocache_L369
                 LDA     #94
@@ -15795,10 +15457,8 @@ _biocache_L370
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -15848,10 +15508,8 @@ _biocache_L370
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _biocache_L373
                 LDA     #96
@@ -16466,10 +16124,8 @@ _biocache_L386
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _biocache_L389
                 LDA     #102
@@ -16519,10 +16175,8 @@ _biocache_L389
                 TCS
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _biocache_L390
                 LDA     #103
@@ -16642,10 +16296,8 @@ _biocache_L393
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L394
                 LDA     #107
@@ -16696,10 +16348,8 @@ _biocache_L394
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _biocache_L395
                 LDA     #108
@@ -16750,10 +16400,8 @@ _biocache_L395
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L396
                 LDA     #109
@@ -16795,10 +16443,8 @@ _biocache_L396
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L397
                 LDA     #110
@@ -17008,10 +16654,8 @@ _biocache_L397
                 TYA
                 STA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L398
                 LDA     #111
@@ -17027,10 +16671,8 @@ _biocache_L397
 _biocache_L398
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L399
                 LDA     #112
@@ -17104,10 +16746,8 @@ _biocache_L400
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L401
                 LDA     #114
@@ -17158,10 +16798,8 @@ _biocache_L401
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L402
                 LDA     #115
@@ -17203,10 +16841,8 @@ _biocache_L402
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L403
                 LDA     #116
@@ -17222,10 +16858,8 @@ _biocache_L402
 _biocache_L403
                 FGX2_FARCALL _biocache_totalfree
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _biocache_L404
                 LDA     #117
@@ -17402,10 +17036,8 @@ _biocache_L404
                 TYA
                 STA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L405
                 LDA     #118
@@ -17421,10 +17053,8 @@ _biocache_L404
 _biocache_L405
                 LDA     _biocache_fake_writes
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L406
                 LDA     #119
@@ -17498,10 +17128,8 @@ _biocache_L407
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L408
                 LDA     #121
@@ -17552,10 +17180,8 @@ _biocache_L408
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L409
                 LDA     #122
@@ -17623,10 +17249,8 @@ _biocache_L409
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L410
                 LDA     #123
@@ -17642,10 +17266,8 @@ _biocache_L409
 _biocache_L410
                 LDA     _biocache_fake_reads
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _biocache_L411
                 LDA     #124
@@ -17713,10 +17335,8 @@ _biocache_L412
                 TCS
                 LDA     _biocache_stub_slept
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L413
                 LDA     #71
@@ -17732,10 +17352,8 @@ _biocache_L412
 _biocache_L413
                 LDA     _biocache_stub_panic
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L414
                 LDA     #72

@@ -67,11 +67,9 @@ _arrfieldlong_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _arrfieldlong_L3
                 EOR     #$8000
 _arrfieldlong_L3
@@ -316,10 +314,8 @@ _arrfieldlong_L6
 _arrfieldlong_L8
                 STX     _fcc_long_hi
                 TAX
-                LDA     #2571
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2571
                 BNE     *+5
                 BRL     _arrfieldlong_L7
                 LDA     #53
@@ -367,10 +363,8 @@ _arrfieldlong_L7
                 TYA
                 JSR     _fcc_long_and
                 TAX
-                LDA     #3085
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3085
                 BNE     *+5
                 BRL     _arrfieldlong_L9
                 LDA     #54
@@ -593,10 +587,8 @@ _arrfieldlong_L12
 _arrfieldlong_L14
                 STX     _fcc_long_hi
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _arrfieldlong_L13
                 LDA     #58
@@ -610,9 +602,7 @@ _arrfieldlong_L14
                 TYA
                 RTL
 _arrfieldlong_L13
-                LDA     #2
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFE
                 STA     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -708,10 +698,8 @@ _arrfieldlong_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #17185
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17185
                 BNE     *+5
                 BRL     _arrfieldlong_L16
                 LDA     #60
@@ -738,10 +726,8 @@ _arrfieldlong_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _arrfieldlong_L18
                 LDA     3,S   ; fccstk d=0 b=3
@@ -757,10 +743,8 @@ _arrfieldlong_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _arrfieldlong_L18
                 LDA     #0

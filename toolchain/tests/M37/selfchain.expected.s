@@ -27,11 +27,9 @@ _selfchain_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _selfchain_L3
                 EOR     #$8000
 _selfchain_L3
@@ -185,11 +183,9 @@ _selfchain_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _selfchain_L7
                 EOR     #$8000
 _selfchain_L7
@@ -376,11 +372,10 @@ _selfchain_L6
                 LDA     #_selfchain_tbl
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -399,11 +394,9 @@ _selfchain_L6
                 LDA     #_selfchain_tbl
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -495,11 +488,10 @@ _selfchain_L15
                 LDA     #_selfchain_tbl
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -518,11 +510,10 @@ _selfchain_L15
                 LDA     #_selfchain_tbl
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 CLC
                 ADC     _fcc_fpr0

@@ -21,11 +21,9 @@ _comma_stmt_bump_stkok        TCS
                 INC     _fcc_fb
                 LDA     g
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     g
                 TAY
                 TSC
@@ -88,11 +86,9 @@ main_stkok        TCS
                 FGX2_FARCALL _comma_stmt_bump
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
@@ -102,11 +98,9 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_fpr0+2
@@ -152,11 +146,9 @@ main_stkok        TCS
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -164,11 +156,9 @@ main_stkok        TCS
                 CLC
                 ADC     g
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 TAY
                 TSC
                 CLC

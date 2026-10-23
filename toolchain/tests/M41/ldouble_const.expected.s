@@ -856,18 +856,12 @@ _ldouble_const_L18
 _ldouble_const_L21
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _ldouble_const_L23
                 LDA     #8
-                PHA
-                LDA     #8
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _ldouble_const_L23
                 LDA     #0
@@ -891,10 +885,8 @@ _ldouble_const_L24
 _ldouble_const_L22
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _ldouble_const_L25
                 LDA     #9
@@ -1809,10 +1801,8 @@ _ldouble_const_L68
 _ldouble_const_L66
                 LDA     #24
                 TAX
-                LDA     #24
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24
                 BEQ     *+5
                 BRL     _ldouble_const_L70
                 LDA     #$0000
@@ -1887,10 +1877,8 @@ _ldouble_const_L71
 _ldouble_const_L69
                 LDA     gs+0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _ldouble_const_L75
                 LDA     #$9999
@@ -2026,10 +2014,8 @@ _ldouble_const_L81
 _ldouble_const_L79
                 LDA     gi
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _ldouble_const_L82
                 LDA     #28

@@ -31,11 +31,9 @@ _bfold_gi_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _bfold_gi_L3
                 EOR     #$8000
 _bfold_gi_L3

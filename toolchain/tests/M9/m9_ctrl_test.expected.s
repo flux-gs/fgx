@@ -133,11 +133,9 @@ _m9_ctrl_test_L8
                 JSR     _fcc_safepoint
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #10
                 BVC     _m9_ctrl_test_L11
                 EOR     #$8000
 _m9_ctrl_test_L11
@@ -145,20 +143,16 @@ _m9_ctrl_test_L11
                 BRL     _m9_ctrl_test_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _m9_ctrl_test_L12
                 BRL     _m9_ctrl_test_L9
 _m9_ctrl_test_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _m9_ctrl_test_L13
                 BRL     _m9_ctrl_test_L10
@@ -169,11 +163,9 @@ _m9_ctrl_test_L13
                 PHA
                 LDA     7,S   ; fccstk d=4 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _m9_ctrl_test_L16
                 EOR     #$8000
 _m9_ctrl_test_L16
@@ -201,11 +193,9 @@ _m9_ctrl_test_L15
 _m9_ctrl_test_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     3,S   ; fccstk d=0 b=3
                 BRL     _m9_ctrl_test_L8
 _m9_ctrl_test_L10

@@ -57,9 +57,7 @@ cl_hash_idiom_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_img0
                 TAY
                 JSR     _fcc_long_from_int
@@ -636,11 +634,9 @@ _clhash_L6
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5006
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5006
                 BVC     _clhash_L9
                 EOR     #$8000
 _clhash_L9
@@ -827,11 +823,9 @@ _clhash_L13
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5003
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5003
                 BVC     _clhash_L16
                 EOR     #$8000
 _clhash_L16

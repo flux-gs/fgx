@@ -115,10 +115,8 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -130,11 +128,9 @@ _spawnops_L1
                 BRL     _spawnops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L0
                 LDA     #0
@@ -169,28 +165,22 @@ _spawnops_L0
                 BRL     _spawnops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _spawnops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L3
                 SEP     #$20
@@ -222,22 +212,14 @@ _spawnops_L3
                 ADC     #8
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _spawnops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L4
                 LDA     #0
@@ -276,10 +258,8 @@ _spawnops_L4
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -329,11 +309,9 @@ _spawnops_L7
                 BRL     _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5

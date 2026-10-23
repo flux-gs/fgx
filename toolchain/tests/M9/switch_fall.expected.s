@@ -39,29 +39,23 @@ main_stkok        TCS
 _switch_fall_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _switch_fall_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _switch_fall_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
                 BRL     _switch_fall_L0
 _switch_fall_L4

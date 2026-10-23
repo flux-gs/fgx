@@ -108,10 +108,8 @@ _libc_gaps_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #119
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #119
                 BEQ     *+5
                 BRL     _libc_gaps_L2
                 LDA     #1
@@ -131,11 +129,9 @@ _libc_gaps_L1
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #34
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #34
                 TAY
                 TSC
                 CLC

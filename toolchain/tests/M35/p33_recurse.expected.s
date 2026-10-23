@@ -30,11 +30,9 @@ fib_stkok        TCS
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _p33_recurse_L1
                 EOR     #$8000
 _p33_recurse_L1
@@ -71,11 +69,8 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 PHA
                 FGX2_FARCALL fib
                 TAY
@@ -93,11 +88,9 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 PHA
                 FGX2_FARCALL fib
                 TAY
@@ -144,10 +137,8 @@ fact_stkok        TCS
                 LDA     6+fact_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #1
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -191,11 +182,9 @@ _p33_recurse_L2
                 LDA     8+fact_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 PHA
                 FGX2_FARCALL fact
                 TAY
@@ -237,10 +226,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BNE     *+5
                 BRL     _p33_recurse_L4
                 LDA     #1
@@ -261,10 +248,8 @@ _p33_recurse_L4
                 PLA
                 TYA
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BNE     *+5
                 BRL     _p33_recurse_L5
                 LDA     #2
@@ -285,10 +270,8 @@ _p33_recurse_L5
                 PLA
                 TYA
                 TAX
-                LDA     #610
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #610
                 BNE     *+5
                 BRL     _p33_recurse_L6
                 LDA     #3

@@ -173,11 +173,9 @@ _char_walk_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 BVC     _char_walk_L2
                 EOR     #$8000
 _char_walk_L2
@@ -209,11 +207,9 @@ _char_walk_L2
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _char_walk_L0
 _char_walk_L1

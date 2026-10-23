@@ -263,10 +263,8 @@ _fltpr_ecvt_L10
                 BRL     _fltpr_ecvt_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L7
                 LDA     #0
@@ -279,10 +277,8 @@ _fltpr_ecvt_L8
                 BRL     _fltpr_ecvt_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L5
                 LDA     #0
@@ -393,10 +389,8 @@ _fltpr_ecvt_L17
                 BRL     _fltpr_ecvt_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L14
                 LDA     #0
@@ -409,10 +403,8 @@ _fltpr_ecvt_L15
                 BRL     _fltpr_ecvt_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L12
                 LDA     #0
@@ -527,13 +519,7 @@ _fltpr_ecvt_L24
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L21
                 LDA     1,S   ; fccstk d=0 b=1
-                PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFE
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L21
                 LDA     #0
@@ -546,10 +532,8 @@ _fltpr_ecvt_L22
                 BRL     _fltpr_ecvt_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L19
                 LDA     #0

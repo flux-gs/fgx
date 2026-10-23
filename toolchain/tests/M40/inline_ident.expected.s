@@ -24,37 +24,29 @@ main_stkok        TCS
                 LDA     #0
                 STA     inline
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _inline_ident_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     _fcc_img0
 _inline_ident_L0
                 LDA     #1
                 STA     inline
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _inline_ident_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #22
                 STA     _fcc_img0
 _inline_ident_L1
                 LDA     _fcc_img0

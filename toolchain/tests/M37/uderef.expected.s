@@ -164,10 +164,8 @@ _uderef_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #54
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #54
                 BEQ     *+5
                 BRL     _uderef_L5
                 LDA     #4
@@ -175,10 +173,8 @@ _uderef_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #56
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #56
                 BEQ     *+5
                 BRL     _uderef_L5
                 LDA     #0
@@ -194,10 +190,8 @@ _uderef_L6
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _uderef_L3
                 LDA     #0

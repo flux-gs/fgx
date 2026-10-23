@@ -80,11 +80,9 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 TAY
                 TSC
                 CLC

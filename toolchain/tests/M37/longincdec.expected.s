@@ -74,10 +74,8 @@ _longincdec_L1
 _longincdec_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _longincdec_L3
                 LDA     #1

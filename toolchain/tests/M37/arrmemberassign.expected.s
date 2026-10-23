@@ -39,11 +39,9 @@ _arrmemberassign_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _arrmemberassign_L3
                 EOR     #$8000
 _arrmemberassign_L3
@@ -172,10 +170,8 @@ _arrmemberassign_L4
                 LDA     #g_arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -193,10 +189,8 @@ _arrmemberassign_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BNE     *+5
                 BRL     _arrmemberassign_L5
                 LDA     #1
@@ -259,10 +253,8 @@ _arrmemberassign_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22136
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22136
                 BNE     *+5
                 BRL     _arrmemberassign_L7
                 LDA     #3
@@ -282,10 +274,8 @@ _arrmemberassign_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #43690
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43690
                 BNE     *+5
                 BRL     _arrmemberassign_L8
                 LDA     #4
@@ -306,10 +296,8 @@ _arrmemberassign_L8
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #48059
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48059
                 BNE     *+5
                 BRL     _arrmemberassign_L9
                 LDA     #5
@@ -333,10 +321,9 @@ _arrmemberassign_L9
                 LDA     #g_arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -397,10 +384,9 @@ _arrmemberassign_L10
                 LDA     #g_arr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC

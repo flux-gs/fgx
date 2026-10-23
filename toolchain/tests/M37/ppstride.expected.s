@@ -387,10 +387,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BNE     *+5
                 BRL     _ppstride_L0
                 LDA     #1
@@ -424,10 +422,8 @@ _ppstride_L0
                 TCS
                 TYA
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _ppstride_L1
                 LDA     #2
@@ -443,10 +439,8 @@ _ppstride_L0
 _ppstride_L1
                 FGX2_FARCALL floc
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _ppstride_L2
                 LDA     #3

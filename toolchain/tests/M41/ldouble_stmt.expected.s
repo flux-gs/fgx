@@ -768,10 +768,8 @@ _ldouble_stmt_L5
                 FGX2_FARCALL _fcc_dtol
                 STA     33,S   ; fccstk d=0 b=33
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _ldouble_stmt_L6
                 LDA     #7

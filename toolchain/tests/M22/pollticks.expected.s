@@ -25,11 +25,9 @@ _pollticks_L0
                 JSR     _fcc_safepoint
                 FGX2_FARCALL pollkey
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _pollticks_L2
                 EOR     #$8000
 _pollticks_L2
@@ -39,10 +37,8 @@ _pollticks_L2
 _pollticks_L1
                 FGX2_FARCALL yield
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _pollticks_L3
                 LDA     #1
@@ -58,11 +54,9 @@ _pollticks_L1
 _pollticks_L3
                 FGX2_FARCALL pollkey
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _pollticks_L5
                 EOR     #$8000
 _pollticks_L5
@@ -87,11 +81,9 @@ _pollticks_L4
                 SBC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _pollticks_L7
                 EOR     #$8000
 _pollticks_L7

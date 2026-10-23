@@ -288,6 +288,38 @@ int main(void)
           "L1                 SEP     #$20\n                REP     #$20\n                LDA     #0\n",
           "L1                 SEP     #$20\n                REP     #$20\n                LDA     #0\n");
 
+
+    /* pat_neg_const: a negated literal is loaded directly */
+    check("neg_const_fold",
+          "                LDA     #1\n                EOR     #$FFFF\n                INC\n                STA     x\n", "                LDA     #$FFFF\n                STA     x\n");
+    /* ...but never a LABELED load, whose label is a branch target */
+    check("neg_const_keep_labeled",
+          "L1                 LDA     #1\n                EOR     #$FFFF\n                INC\n                STA     x\n", "L1                 LDA     #1\n                EOR     #$FFFF\n                INC\n                STA     x\n");
+
+    /* pat_tmpb_const: the reader takes the literal; the store and the dead
+     * load go */
+    check("tmpb_cmp_const",
+          "                LDA     #10\n                STA     _fcc_tmp_b\n                TXA\n                CMP     _fcc_tmp_b\n                BEQ     L2\n", "                TXA\n                CMP     #10\n                BEQ     L2\n");
+    /* a stacked constant: PHA / LDA #k / STA / PLA / CMP -> CMP #k */
+    check("tmpb_cmp_stacked",
+          "                PHA\n                LDA     #5\n                STA     _fcc_tmp_b\n                PLA\n                CMP     _fcc_tmp_b\n                BNE     L2\n", "                CMP     #5\n                BNE     L2\n");
+    /* SEC between the transfer and the reader */
+    check("tmpb_sbc_const",
+          "                LDA     #0\n                STA     _fcc_tmp_b\n                TXA\n                SEC\n                SBC     _fcc_tmp_b\n                BVC     L4\n", "                TXA\n                SEC\n                SBC     #0\n                BVC     L4\n");
+    /* A is still read (ASL works on the loaded k): the load stays */
+    check("tmpb_keep_live_load",
+          "                LDA     #3\n                STA     _fcc_tmp_b\n                ASL\n                CLC\n                ADC     _fcc_tmp_b\n                STA     y\n", "                LDA     #3\n                ASL\n                CLC\n                ADC     #3\n                STA     y\n");
+    /* _fcc_tmp_b read again later in the block: nothing changes */
+    check("tmpb_keep_live_after",
+          "                LDA     #10\n                STA     _fcc_tmp_b\n                TXA\n                CMP     _fcc_tmp_b\n                LDA     _fcc_tmp_b\n                STA     y\n", "                LDA     #10\n                STA     _fcc_tmp_b\n                TXA\n                CMP     _fcc_tmp_b\n                LDA     _fcc_tmp_b\n                STA     y\n");
+    /* a width change between the store and the reader: nothing changes */
+    check("tmpb_keep_width_change",
+          "                LDA     #10\n                STA     _fcc_tmp_b\n                SEP     #$20\n                TXA\n                CMP     _fcc_tmp_b\n", "                LDA     #10\n                STA     _fcc_tmp_b\n                SEP     #$20\n                TXA\n                CMP     _fcc_tmp_b\n");
+    /* a unit that reads _fcc_tmp_b with no store in the same block breaks
+     * the invariant the rules rest on: none of them run */
+    check("tmpb_invariant_off",
+          "                LDA     _fcc_tmp_b\n                STA     y\n                LDA     #10\n                STA     _fcc_tmp_b\n                TXA\n                CMP     _fcc_tmp_b\n                BEQ     L2\n", "                LDA     _fcc_tmp_b\n                STA     y\n                LDA     #10\n                STA     _fcc_tmp_b\n                TXA\n                CMP     _fcc_tmp_b\n                BEQ     L2\n");
+
     /* the INC fold keeps an ADC whose V a BVC reads */
     check("clcadc_keep_v_read",
           "                CLC\n                ADC     #1\n                BVC     L5\n", "                CLC\n                ADC     #1\n                BVC     L5\n");

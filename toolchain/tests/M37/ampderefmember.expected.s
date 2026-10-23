@@ -234,11 +234,9 @@ main_stkok        TCS
                 LDA     #bufs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -267,11 +265,9 @@ main_stkok        TCS
                 LDA     #bufs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -310,10 +306,8 @@ main_stkok        TCS
                 LDA:    data,X
                 AND     #$00FF
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BNE     *+5
                 BRL     _ampderefmember_L0
                 LDA     #1
@@ -337,11 +331,9 @@ _ampderefmember_L0
                 LDA     #bufs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -387,10 +379,8 @@ _ampderefmember_L1
                 LDA:    data,X
                 AND     #$00FF
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BNE     *+5
                 BRL     _ampderefmember_L2
                 LDA     #3
@@ -414,11 +404,10 @@ _ampderefmember_L2
                 LDA     #bufs
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -494,21 +483,17 @@ _ampderefmember_L3
                 LDA     #bufs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _ampderefmember_L4
                 LDA     #5
@@ -549,11 +534,9 @@ _ampderefmember_L4
                 LDA     #bufs
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -696,10 +679,8 @@ _ampderefmember_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BNE     *+5
                 BRL     _ampderefmember_L12
                 LDA     #7

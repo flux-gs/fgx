@@ -181,9 +181,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #2
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFE
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 JSR     _fcc_long_from_int
@@ -289,10 +287,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _longswitch_L12
                 LDA     #1
@@ -397,10 +393,8 @@ _longswitch_L12
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _longswitch_L13
                 LDA     #2
@@ -505,10 +499,8 @@ _longswitch_L13
                 TCS
                 TYA
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _longswitch_L14
                 LDA     #3
@@ -537,10 +529,8 @@ _longswitch_L14
                 TCS
                 TYA
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _longswitch_L15
                 LDA     #4
@@ -570,10 +560,8 @@ _longswitch_L15
                 TCS
                 TYA
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _longswitch_L16
                 LDA     #5
@@ -678,10 +666,8 @@ _longswitch_L16
                 TCS
                 TYA
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BNE     *+5
                 BRL     _longswitch_L17
                 LDA     #6
@@ -711,10 +697,8 @@ _longswitch_L17
                 TCS
                 TYA
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BNE     *+5
                 BRL     _longswitch_L18
                 LDA     #7

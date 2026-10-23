@@ -63,11 +63,9 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #37
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #37
                 TAY
                 TSC
                 CLC

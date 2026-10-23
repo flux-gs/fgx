@@ -67,10 +67,8 @@ main_stkok        TCS
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _f_add_L0
                 LDA     #1
@@ -126,10 +124,8 @@ _f_add_L0
                 FGX2_FARCALL _fcc_dsub
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _f_add_L1
                 LDA     #2
@@ -185,10 +181,8 @@ _f_add_L1
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _f_add_L2
                 LDA     #3
@@ -250,10 +244,8 @@ _f_add_L2
                 JSR     _fcc_fsub
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _f_add_L3
                 LDA     #4
@@ -288,10 +280,8 @@ _f_add_L3
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_add_L4
                 LDA     #5
@@ -357,10 +347,8 @@ _f_add_L4
                 FGX2_FARCALL _fcc_dsub
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _f_add_L5
                 LDA     #6
@@ -422,10 +410,8 @@ _f_add_L5
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _f_add_L6
                 LDA     #42

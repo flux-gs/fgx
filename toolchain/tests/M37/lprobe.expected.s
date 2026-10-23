@@ -52,11 +52,9 @@ _lprobe_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5010
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5010
                 BVC     _lprobe_L3
                 EOR     #$8000
 _lprobe_L3
@@ -419,10 +417,8 @@ _lprobe_L6
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BNE     *+5
                 BRL     _lprobe_L8
                 LDA     #2
@@ -611,10 +607,8 @@ _lprobe_L10
                 TAX
                 LDA:    cstore,X
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BNE     *+5
                 BRL     _lprobe_L11
                 LDA     #5

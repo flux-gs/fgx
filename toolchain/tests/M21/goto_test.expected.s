@@ -27,39 +27,31 @@ main_stkok        TCS
 main_uL_dec_block
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 STA     _fcc_img0
                 BRL     main_uL_done
 main_uL_inc_loop
                 LDA     _fcc_img1
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _goto_test_L0
                 BRL     main_uL_done
 _goto_test_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5

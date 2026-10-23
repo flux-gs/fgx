@@ -139,11 +139,9 @@ main_stkok        TCS
                 BRL     _fconv_unsigned_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L0
                 LDA     U
@@ -171,11 +169,9 @@ _fconv_unsigned_L0
                 BRL     _fconv_unsigned_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L1
                 LDA     U
@@ -238,11 +234,9 @@ _fconv_unsigned_L1
                 BRL     _fconv_unsigned_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L2
                 FGX2_FARCALL ret_u
@@ -269,11 +263,9 @@ _fconv_unsigned_L2
                 BRL     _fconv_unsigned_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L3
                 LDA     UL+2
@@ -384,11 +376,9 @@ _fconv_unsigned_L6
                 BRL     _fconv_unsigned_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L4
                 LDA     #16611
@@ -441,11 +431,9 @@ _fconv_unsigned_L4
                 BRL     _fconv_unsigned_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L7
                 LDA     #16870
@@ -495,11 +483,9 @@ _fconv_unsigned_L7
                 BRL     _fconv_unsigned_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L8
                 LDA     U
@@ -539,11 +525,9 @@ _fconv_unsigned_L8
                 BRL     _fconv_unsigned_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_unsigned_L9
                 LDA     1,S   ; fccstk d=0 b=1

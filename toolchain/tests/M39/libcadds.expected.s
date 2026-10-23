@@ -98,11 +98,9 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _libcadds_L1
                 EOR     #$8000
 _libcadds_L1
@@ -236,10 +234,8 @@ _libcadds_L2
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _libcadds_L5
                 LDA     #3
@@ -316,10 +312,8 @@ _libcadds_L5
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _libcadds_L6
                 LDA     #4

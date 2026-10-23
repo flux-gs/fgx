@@ -71,18 +71,14 @@ _dstore_struct_expr_L0
                 BPL     _dstore_struct_expr_L0
                 LDA     dst+0
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L10
                 LDA     dst+2
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L10
                 LDA     #1
@@ -95,10 +91,8 @@ _dstore_struct_expr_L11
                 BRL     _dstore_struct_expr_L8
                 LDA     dst+4
                 TAX
-                LDA     #13107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13107
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L8
                 LDA     #1
@@ -111,10 +105,8 @@ _dstore_struct_expr_L9
                 BRL     _dstore_struct_expr_L6
                 LDA     after+0
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L6
                 LDA     #1
@@ -127,10 +119,8 @@ _dstore_struct_expr_L7
                 BRL     _dstore_struct_expr_L4
                 LDA     after+2
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L4
                 LDA     #1
@@ -143,10 +133,8 @@ _dstore_struct_expr_L5
                 BRL     _dstore_struct_expr_L2
                 LDA     after+4
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L2
                 LDA     #1
@@ -159,11 +147,9 @@ _dstore_struct_expr_L3
                 BRL     _dstore_struct_expr_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _dstore_struct_expr_L1
                 LDA     3,S   ; fccstk d=0 b=3
@@ -191,18 +177,14 @@ _dstore_struct_expr_L12
                 BPL     _dstore_struct_expr_L12
                 LDA     dst+0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L18
                 LDA     dst+2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L18
                 LDA     #1
@@ -215,10 +197,8 @@ _dstore_struct_expr_L19
                 BRL     _dstore_struct_expr_L16
                 LDA     dst+4
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L16
                 LDA     #1
@@ -231,10 +211,8 @@ _dstore_struct_expr_L17
                 BRL     _dstore_struct_expr_L14
                 LDA     after+0
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L14
                 LDA     #1
@@ -247,11 +225,9 @@ _dstore_struct_expr_L15
                 BRL     _dstore_struct_expr_L13
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _dstore_struct_expr_L13
                 LDA     3,S   ; fccstk d=0 b=3
@@ -279,18 +255,14 @@ _dstore_struct_expr_L23
                 BPL     _dstore_struct_expr_L23
                 LDA     dst+2
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L21
                 LDA     dst+4
                 TAX
-                LDA     #13107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13107
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L21
                 LDA     #1
@@ -303,11 +275,9 @@ _dstore_struct_expr_L22
                 BRL     _dstore_struct_expr_L20
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _dstore_struct_expr_L20
                 LDA     _fcc_img0

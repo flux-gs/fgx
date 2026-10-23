@@ -266,11 +266,9 @@ _wide_bump_L2
                 BRL     _wide_bump_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L0
                 SEP     #$20
@@ -395,11 +393,9 @@ _wide_bump_L7
                 BRL     _wide_bump_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L5
                 LDA     #1
@@ -630,11 +626,9 @@ _wide_bump_L10
                 BRL     _wide_bump_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L8
                 SEP     #$20
@@ -774,11 +768,9 @@ _wide_bump_L8
                 BRL     _wide_bump_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L11
                 LDA     #$0000
@@ -874,11 +866,9 @@ _wide_bump_L11
                 BRL     _wide_bump_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L12
                 LDA     #$0001
@@ -988,10 +978,8 @@ _wide_bump_L17
                 BRL     _wide_bump_L14
                 LDA     _wide_bump_gobj+0
                 TAX
-                LDA     #1234
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1234
                 BEQ     *+5
                 BRL     _wide_bump_L14
                 LDA     #1
@@ -1004,11 +992,9 @@ _wide_bump_L15
                 BRL     _wide_bump_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L13
                 LDA     #16388
@@ -1097,11 +1083,9 @@ _wide_bump_L13
                 BRL     _wide_bump_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L18
                 SEP     #$20
@@ -1233,11 +1217,9 @@ _wide_bump_L21
                 BRL     _wide_bump_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L19
                 SEP     #$20
@@ -1552,11 +1534,9 @@ _wide_bump_L24
                 BRL     _wide_bump_L22
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L22
                 SEP     #$20
@@ -1729,11 +1709,9 @@ _wide_bump_L22
                 BRL     _wide_bump_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L27
                 LDA     #16336
@@ -1912,11 +1890,9 @@ _wide_bump_L30
                 BRL     _wide_bump_L28
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L28
                 LDA     #16410
@@ -2071,11 +2047,9 @@ _wide_bump_L33
                 BRL     _wide_bump_L31
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L31
                 LDA     #16368
@@ -2244,11 +2218,9 @@ _wide_bump_L36
                 BRL     _wide_bump_L34
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L34
                 SEP     #$20
@@ -2375,11 +2347,9 @@ _wide_bump_L34
                 BRL     _wide_bump_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L37
                 LDA     3,S   ; fccstk d=0 b=3

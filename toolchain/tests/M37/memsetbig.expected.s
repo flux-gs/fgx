@@ -329,11 +329,9 @@ _memsetbig_L7
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -425,11 +423,8 @@ _memsetbig_L10
                 PHA
                 LDA     #40000
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -465,11 +460,9 @@ _memsetbig_L15
 _memsetbig_L13
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -561,11 +554,8 @@ _memsetbig_L16
                 PHA
                 LDA     #40000
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -601,11 +591,9 @@ _memsetbig_L21
 _memsetbig_L19
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -701,11 +689,9 @@ _memsetbig_L24
 _memsetbig_L22
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -720,11 +706,8 @@ _memsetbig_L22
                 TCS
                 LDA     #32766
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #0
                 PHA
@@ -744,11 +727,8 @@ _memsetbig_L22
                 PHA
                 LDA     #32766
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     11,S   ; fccstk d=4 b=7
                 STA     _fcc_fpr0+2
@@ -779,11 +759,8 @@ _memsetbig_L31
                 PHA
                 LDA     #32766
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -819,11 +796,9 @@ _memsetbig_L29
 _memsetbig_L27
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -838,11 +813,9 @@ _memsetbig_L27
                 TCS
                 LDA     #32766
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     #0
                 PHA
@@ -862,11 +835,9 @@ _memsetbig_L27
                 PHA
                 LDA     #32766
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     11,S   ; fccstk d=4 b=7
                 STA     _fcc_fpr0+2
@@ -897,11 +868,9 @@ _memsetbig_L36
                 PHA
                 LDA     #32766
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -937,11 +906,9 @@ _memsetbig_L34
 _memsetbig_L32
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -1001,11 +968,9 @@ _memsetbig_L32
 _memsetbig_L37
                 LDA     #40000
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -1095,11 +1060,8 @@ _memsetbig_L38
                 PHA
                 LDA     #40000
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr

@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L0
                 LDA     #1
@@ -40,10 +38,8 @@ main_stkok        TCS
 _pdplayout_L0
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L1
                 LDA     #2
@@ -59,10 +55,8 @@ _pdplayout_L0
 _pdplayout_L1
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L2
                 LDA     #3
@@ -78,10 +72,8 @@ _pdplayout_L1
 _pdplayout_L2
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L3
                 LDA     #4
@@ -97,10 +89,8 @@ _pdplayout_L2
 _pdplayout_L3
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L4
                 LDA     #5
@@ -138,10 +128,8 @@ _pdplayout_L4
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L5
                 LDA     #6
@@ -179,10 +167,8 @@ _pdplayout_L5
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _pdplayout_L6
                 LDA     #7
@@ -220,10 +206,8 @@ _pdplayout_L6
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _pdplayout_L7
                 LDA     #8
@@ -261,10 +245,8 @@ _pdplayout_L7
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _pdplayout_L8
                 LDA     #9
@@ -302,10 +284,8 @@ _pdplayout_L8
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BNE     *+5
                 BRL     _pdplayout_L9
                 LDA     #10
@@ -321,10 +301,8 @@ _pdplayout_L8
 _pdplayout_L9
                 LDA     #24
                 TAX
-                LDA     #24
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24
                 BNE     *+5
                 BRL     _pdplayout_L10
                 LDA     #11
@@ -340,10 +318,8 @@ _pdplayout_L9
 _pdplayout_L10
                 LDA     #64
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _pdplayout_L11
                 LDA     #12
@@ -379,10 +355,8 @@ _pdplayout_L11
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _pdplayout_L12
                 LDA     #13
@@ -420,10 +394,8 @@ _pdplayout_L12
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L13
                 LDA     #14
@@ -461,10 +433,8 @@ _pdplayout_L13
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L14
                 LDA     #15
@@ -502,10 +472,8 @@ _pdplayout_L14
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _pdplayout_L15
                 LDA     #16
@@ -543,10 +511,8 @@ _pdplayout_L15
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _pdplayout_L16
                 LDA     #17
@@ -584,10 +550,8 @@ _pdplayout_L16
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _pdplayout_L17
                 LDA     #18
@@ -625,10 +589,8 @@ _pdplayout_L17
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _pdplayout_L18
                 LDA     #19
@@ -666,10 +628,8 @@ _pdplayout_L18
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BNE     *+5
                 BRL     _pdplayout_L19
                 LDA     #20
@@ -707,10 +667,8 @@ _pdplayout_L19
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52
                 BNE     *+5
                 BRL     _pdplayout_L20
                 LDA     #21
@@ -750,10 +708,8 @@ _pdplayout_L20
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #60
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #60
                 BNE     *+5
                 BRL     _pdplayout_L21
                 LDA     #22
@@ -769,10 +725,8 @@ _pdplayout_L20
 _pdplayout_L21
                 LDA     #70
                 TAX
-                LDA     #70
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #70
                 BNE     *+5
                 BRL     _pdplayout_L22
                 LDA     #23
@@ -810,10 +764,8 @@ _pdplayout_L22
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L23
                 LDA     #24
@@ -851,10 +803,8 @@ _pdplayout_L23
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L24
                 LDA     #25
@@ -892,10 +842,8 @@ _pdplayout_L24
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _pdplayout_L25
                 LDA     #26
@@ -911,10 +859,8 @@ _pdplayout_L24
 _pdplayout_L25
                 LDA     #446
                 TAX
-                LDA     #446
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #446
                 BNE     *+5
                 BRL     _pdplayout_L26
                 LDA     #27
@@ -952,10 +898,8 @@ _pdplayout_L26
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L27
                 LDA     #28
@@ -993,10 +937,8 @@ _pdplayout_L27
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _pdplayout_L28
                 LDA     #29
@@ -1034,10 +976,8 @@ _pdplayout_L28
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _pdplayout_L29
                 LDA     #30
@@ -1075,10 +1015,8 @@ _pdplayout_L29
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #208
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #208
                 BNE     *+5
                 BRL     _pdplayout_L30
                 LDA     #31
@@ -1116,10 +1054,8 @@ _pdplayout_L30
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #210
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #210
                 BNE     *+5
                 BRL     _pdplayout_L31
                 LDA     #32
@@ -1157,10 +1093,8 @@ _pdplayout_L31
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #410
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #410
                 BNE     *+5
                 BRL     _pdplayout_L32
                 LDA     #33
@@ -1198,10 +1132,8 @@ _pdplayout_L32
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #414
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #414
                 BNE     *+5
                 BRL     _pdplayout_L33
                 LDA     #34
@@ -1239,10 +1171,8 @@ _pdplayout_L33
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #418
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #418
                 BNE     *+5
                 BRL     _pdplayout_L34
                 LDA     #35
@@ -1280,10 +1210,8 @@ _pdplayout_L34
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #422
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #422
                 BNE     *+5
                 BRL     _pdplayout_L35
                 LDA     #36
@@ -1321,10 +1249,8 @@ _pdplayout_L35
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #428
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #428
                 BNE     *+5
                 BRL     _pdplayout_L36
                 LDA     #37
@@ -1362,10 +1288,8 @@ _pdplayout_L36
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #440
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #440
                 BNE     *+5
                 BRL     _pdplayout_L37
                 LDA     #38
@@ -1403,10 +1327,8 @@ _pdplayout_L37
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #444
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #444
                 BNE     *+5
                 BRL     _pdplayout_L38
                 LDA     #39
@@ -1458,10 +1380,8 @@ _pdplayout_L38
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L39
                 LDA     #40
@@ -1511,10 +1431,8 @@ _pdplayout_L39
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L40
                 LDA     #41
@@ -1566,19 +1484,14 @@ _pdplayout_L40
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L41
                 LDA     #42
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 TAY
                 TSC
                 CLC
@@ -1623,15 +1536,11 @@ _pdplayout_L41
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _pdplayout_L42
                 LDA     #44
@@ -1657,15 +1566,11 @@ _pdplayout_L42
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _pdplayout_L43
                 LDA     #45
@@ -1691,15 +1596,11 @@ _pdplayout_L43
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _pdplayout_L44
                 LDA     #46
@@ -1725,15 +1626,11 @@ _pdplayout_L44
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _pdplayout_L45
                 LDA     #47

@@ -21,18 +21,14 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #5
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _sizeof_localarr_L3
                 LDA     #5
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _sizeof_localarr_L3
                 LDA     #0
@@ -44,11 +40,7 @@ _sizeof_localarr_L4
                 BEQ     *+5
                 BRL     _sizeof_localarr_L1
                 LDA     #5
-                PHA
-                LDA     #5
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _sizeof_localarr_L1
                 LDA     #0
@@ -72,10 +64,8 @@ _sizeof_localarr_L2
 _sizeof_localarr_L0
                 LDA     #6
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _sizeof_localarr_L5
                 LDA     #2
@@ -91,10 +81,8 @@ _sizeof_localarr_L0
 _sizeof_localarr_L5
                 LDA     #16
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _sizeof_localarr_L9
                 LDA     #16
@@ -104,10 +92,8 @@ _sizeof_localarr_L5
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_localarr_L9
                 LDA     #0
@@ -119,11 +105,7 @@ _sizeof_localarr_L10
                 BEQ     *+5
                 BRL     _sizeof_localarr_L7
                 LDA     #16
-                PHA
-                LDA     #16
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _sizeof_localarr_L7
                 LDA     #0
@@ -147,10 +129,8 @@ _sizeof_localarr_L8
 _sizeof_localarr_L6
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _sizeof_localarr_L12
                 LDA     #12
@@ -160,10 +140,8 @@ _sizeof_localarr_L6
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _sizeof_localarr_L12
                 LDA     #0
@@ -187,10 +165,8 @@ _sizeof_localarr_L13
 _sizeof_localarr_L11
                 LDA     #16
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _sizeof_localarr_L14
                 LDA     #5
@@ -206,10 +182,8 @@ _sizeof_localarr_L11
 _sizeof_localarr_L14
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _sizeof_localarr_L16
                 LDA     #12
@@ -219,10 +193,8 @@ _sizeof_localarr_L14
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _sizeof_localarr_L16
                 LDA     #0
@@ -246,10 +218,8 @@ _sizeof_localarr_L17
 _sizeof_localarr_L15
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _sizeof_localarr_L18
                 LDA     #7
@@ -265,10 +235,8 @@ _sizeof_localarr_L15
 _sizeof_localarr_L18
                 LDA     #24
                 TAX
-                LDA     #24
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24
                 BEQ     *+5
                 BRL     _sizeof_localarr_L20
                 LDA     #24
@@ -278,10 +246,8 @@ _sizeof_localarr_L18
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_localarr_L20
                 LDA     #0
@@ -305,18 +271,14 @@ _sizeof_localarr_L21
 _sizeof_localarr_L19
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _sizeof_localarr_L23
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_localarr_L23
                 LDA     #0
@@ -340,10 +302,8 @@ _sizeof_localarr_L24
 _sizeof_localarr_L22
                 LDA     #10
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _sizeof_localarr_L28
                 LDA     #40
@@ -353,10 +313,8 @@ _sizeof_localarr_L22
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_localarr_L28
                 LDA     #0
@@ -369,10 +327,8 @@ _sizeof_localarr_L29
                 BRL     _sizeof_localarr_L26
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_localarr_L26
                 LDA     #0
@@ -396,10 +352,8 @@ _sizeof_localarr_L27
 _sizeof_localarr_L25
                 LDA     #1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _sizeof_localarr_L30
                 LDA     #11

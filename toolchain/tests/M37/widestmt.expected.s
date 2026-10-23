@@ -141,11 +141,9 @@ main_stkok        TCS
                 BRL     _widestmt_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L0
                 LDA     #gl
@@ -265,11 +263,9 @@ _widestmt_L0
                 BRL     _widestmt_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L1
                 LDA     #1
@@ -321,11 +317,9 @@ _widestmt_L1
                 BRL     _widestmt_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -417,11 +411,9 @@ _widestmt_L5
                 BRL     _widestmt_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L3
                 SEP     #$20
@@ -486,19 +478,15 @@ _widestmt_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _widestmt_L8
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L8
                 LDA     #$FFFF
@@ -550,11 +538,9 @@ _widestmt_L8
                 BRL     _widestmt_L9
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _widestmt_L9
                 LDA     _fcc_img0

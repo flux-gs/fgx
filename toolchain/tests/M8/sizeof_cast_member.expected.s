@@ -58,18 +58,12 @@ main_stkok        TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     3,S   ; fccstk d=0 b=3
-                PHA
-                LDA     #8
-                STA     _fcc_tmp_b
-                PLA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 TAY
                 TSC
                 CLC

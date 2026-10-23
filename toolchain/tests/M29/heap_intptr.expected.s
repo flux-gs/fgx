@@ -152,10 +152,8 @@ _heap_intptr_L0
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _heap_intptr_L3
                 LDA     #1
@@ -180,10 +178,8 @@ _heap_intptr_L3
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _heap_intptr_L4
                 LDA     #2
@@ -203,10 +199,8 @@ _heap_intptr_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _heap_intptr_L5
                 LDA     #3
@@ -322,10 +316,8 @@ _heap_intptr_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _heap_intptr_L6
                 LDA     #4
@@ -351,10 +343,8 @@ _heap_intptr_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _heap_intptr_L7
                 LDA     #5

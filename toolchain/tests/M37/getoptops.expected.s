@@ -521,55 +521,39 @@ _getoptops_L4
                 TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _getoptops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #108
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #108
                 BEQ     *+5
                 BRL     _getoptops_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     5,S   ; fccstk d=0 b=5
                 BRL     _getoptops_L7
 _getoptops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _getoptops_L8
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     5,S   ; fccstk d=0 b=5
                 BRL     _getoptops_L9
 _getoptops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #111
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #111
                 BEQ     *+5
                 BRL     _getoptops_L10
                 SEP     #$20
@@ -610,10 +594,8 @@ _getoptops_L11
 _getoptops_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #102
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #102
                 BEQ     *+5
                 BRL     _getoptops_L13
                 SEP     #$20
@@ -654,18 +636,14 @@ _getoptops_L14
 _getoptops_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #63
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #63
                 BEQ     *+5
                 BRL     _getoptops_L16
                 LDA     optopt
                 TAX
-                LDA     #122
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #122
                 BEQ     *+5
                 BRL     _getoptops_L17
                 LDA     #1
@@ -673,9 +651,7 @@ _getoptops_L13
 _getoptops_L17
                 BRL     _getoptops_L18
 _getoptops_L16
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     13,S   ; fccstk d=0 b=13
 _getoptops_L18
 _getoptops_L15
@@ -686,19 +662,15 @@ _getoptops_L7
 _getoptops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _getoptops_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L19
                 LDA     9,S   ; fccstk d=0 b=9
@@ -707,11 +679,9 @@ _getoptops_L19
                 BRL     _getoptops_L20
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L20
                 LDA     7,S   ; fccstk d=0 b=7
@@ -720,11 +690,9 @@ _getoptops_L20
                 BRL     _getoptops_L21
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L21
                 LDA     11,S   ; fccstk d=0 b=11
@@ -733,45 +701,35 @@ _getoptops_L21
                 BRL     _getoptops_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L22
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _getoptops_L23
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L23
                 LDA     optind
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _getoptops_L24
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L24
                 SEP     #$20
@@ -812,11 +770,9 @@ _getoptops_L24
                 BRL     _getoptops_L25
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L25
                 LDA     1,S   ; fccstk d=0 b=1

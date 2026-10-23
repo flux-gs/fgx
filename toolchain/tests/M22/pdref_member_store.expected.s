@@ -265,9 +265,7 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -309,10 +307,8 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     a
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _pdref_member_store_L0
                 LDA     #1
@@ -327,13 +323,7 @@ main_stkok        TCS
                 RTL
 _pdref_member_store_L0
                 LDA     b
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _pdref_member_store_L1
                 LDA     #2
@@ -349,10 +339,8 @@ _pdref_member_store_L0
 _pdref_member_store_L1
                 LDA     c
                 TAX
-                LDA     #33
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #33
                 BNE     *+5
                 BRL     _pdref_member_store_L2
                 LDA     #3

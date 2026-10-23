@@ -21,11 +21,8 @@ onint_stkok        TCS
                 INC     _fcc_fb
                 LDA     hits
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     hits
                 TAY
                 TSC
@@ -76,19 +73,15 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _ttyops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L0
                 SEP     #$20
@@ -112,19 +105,15 @@ _ttyops_L0
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _ttyops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L1
                 SEP     #$20
@@ -149,22 +138,14 @@ _ttyops_L1
                 ADC     #8
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _ttyops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L2
                 SEP     #$20
@@ -211,11 +192,9 @@ _ttyops_L6
                 BRL     _ttyops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L3
                 LDA     #0
@@ -265,11 +244,9 @@ _ttyops_L9
                 BRL     _ttyops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L7
                 LDA     3,S   ; fccstk d=0 b=3
@@ -312,11 +289,9 @@ _ttyops_L12
                 BRL     _ttyops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L10
                 LDA     #0
@@ -359,11 +334,9 @@ _ttyops_L15
                 BRL     _ttyops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L13
                 LDA     5,S   ; fccstk d=0 b=5

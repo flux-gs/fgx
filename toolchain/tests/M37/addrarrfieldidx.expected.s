@@ -27,11 +27,9 @@ _addrarrfieldidx_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _addrarrfieldidx_L3
                 EOR     #$8000
 _addrarrfieldidx_L3
@@ -90,11 +88,9 @@ _addrarrfieldidx_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _addrarrfieldidx_L7
                 EOR     #$8000
 _addrarrfieldidx_L7
@@ -204,11 +200,9 @@ _addrarrfieldidx_L2
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -267,11 +261,9 @@ _addrarrfieldidx_L8
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -330,11 +322,9 @@ _addrarrfieldidx_L9
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -393,11 +383,10 @@ _addrarrfieldidx_L10
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -456,11 +445,10 @@ _addrarrfieldidx_L11
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -519,11 +507,9 @@ _addrarrfieldidx_L12
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -531,10 +517,8 @@ _addrarrfieldidx_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _addrarrfieldidx_L13
                 LDA     #7
@@ -558,11 +542,9 @@ _addrarrfieldidx_L13
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -571,10 +553,8 @@ _addrarrfieldidx_L13
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _addrarrfieldidx_L14
                 LDA     #8
@@ -647,11 +627,10 @@ _addrarrfieldidx_L14
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -710,11 +689,10 @@ _addrarrfieldidx_L15
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -722,10 +700,8 @@ _addrarrfieldidx_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _addrarrfieldidx_L16
                 LDA     #11
@@ -798,11 +774,10 @@ _addrarrfieldidx_L16
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -861,11 +836,10 @@ _addrarrfieldidx_L17
                 LDA     #earr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -874,10 +848,8 @@ _addrarrfieldidx_L17
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _addrarrfieldidx_L18
                 LDA     #13
@@ -1004,11 +976,9 @@ _addrarrfieldidx_L22
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _addrarrfieldidx_L25
                 EOR     #$8000
 _addrarrfieldidx_L25
@@ -1061,11 +1031,9 @@ _addrarrfieldidx_L26
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _addrarrfieldidx_L29
                 EOR     #$8000
 _addrarrfieldidx_L29
@@ -1202,10 +1170,8 @@ _addrarrfieldidx_L24
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BNE     *+5
                 BRL     _addrarrfieldidx_L30
                 LDA     #30
@@ -1226,10 +1192,8 @@ _addrarrfieldidx_L30
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #26214
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26214
                 BNE     *+5
                 BRL     _addrarrfieldidx_L31
                 LDA     #31
@@ -1278,10 +1242,8 @@ _addrarrfieldidx_L31
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _addrarrfieldidx_L32
                 LDA     #32
@@ -1330,10 +1292,8 @@ _addrarrfieldidx_L32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _addrarrfieldidx_L33
                 LDA     #33
@@ -1382,10 +1342,8 @@ _addrarrfieldidx_L33
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _addrarrfieldidx_L34
                 LDA     #34
@@ -1418,10 +1376,8 @@ _addrarrfieldidx_L34
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #13107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13107
                 BNE     *+5
                 BRL     _addrarrfieldidx_L35
                 LDA     #35
@@ -1455,10 +1411,8 @@ _addrarrfieldidx_L35
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #17476
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17476
                 BNE     *+5
                 BRL     _addrarrfieldidx_L36
                 LDA     #36

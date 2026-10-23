@@ -63,11 +63,9 @@ store_stkok        TCS
                 LDA     8+store_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _longparamseed_L1
                 EOR     #$8000
 _longparamseed_L1
@@ -381,10 +379,8 @@ main_stkok        TCS
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BEQ     *+5
                 BRL     _longparamseed_L12
                 LDA     #1
@@ -392,10 +388,8 @@ main_stkok        TCS
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #86
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #86
                 BEQ     *+5
                 BRL     _longparamseed_L12
                 LDA     #0
@@ -422,10 +416,8 @@ _longparamseed_L11
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52
                 BEQ     *+5
                 BRL     _longparamseed_L15
                 LDA     #3
@@ -433,10 +425,8 @@ _longparamseed_L11
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #18
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #18
                 BEQ     *+5
                 BRL     _longparamseed_L15
                 LDA     #0
@@ -466,9 +456,7 @@ _longparamseed_L14
                 PHA
                 TYA
                 PHA
-                LDA     #8
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF8
                 PHA
                 LDA     #3
                 PHA
@@ -482,10 +470,8 @@ _longparamseed_L14
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #186
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #186
                 BEQ     *+5
                 BRL     _longparamseed_L20
                 LDA     #1
@@ -493,10 +479,8 @@ _longparamseed_L14
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #254
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #254
                 BEQ     *+5
                 BRL     _longparamseed_L20
                 LDA     #0
@@ -512,10 +496,8 @@ _longparamseed_L21
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #202
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #202
                 BEQ     *+5
                 BRL     _longparamseed_L18
                 LDA     #0
@@ -559,10 +541,8 @@ _longparamseed_L17
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #240
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #240
                 BEQ     *+5
                 BRL     _longparamseed_L25
                 LDA     #1
@@ -570,10 +550,8 @@ _longparamseed_L17
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #222
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #222
                 BEQ     *+5
                 BRL     _longparamseed_L25
                 LDA     #0
@@ -589,10 +567,8 @@ _longparamseed_L26
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                LDA     #188
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #188
                 BEQ     *+5
                 BRL     _longparamseed_L23
                 LDA     #0
@@ -632,10 +608,8 @@ _longparamseed_L22
                 TCS
                 TYA
                 TAX
-                LDA     #18
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #18
                 BNE     *+5
                 BRL     _longparamseed_L27
                 LDA     #5
@@ -667,10 +641,8 @@ _longparamseed_L27
                 TCS
                 TYA
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BNE     *+5
                 BRL     _longparamseed_L28
                 LDA     #6

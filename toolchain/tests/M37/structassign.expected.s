@@ -31,11 +31,9 @@ _structassign_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #7
                 BVC     _structassign_L3
                 EOR     #$8000
 _structassign_L3
@@ -122,10 +120,8 @@ _structassign_L4
                 BPL     _structassign_L4
                 LDA     dst+0
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BNE     *+5
                 BRL     _structassign_L5
                 LDA     #1
@@ -141,10 +137,8 @@ _structassign_L4
 _structassign_L5
                 LDA     dst+2
                 TAX
-                LDA     #22136
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22136
                 BNE     *+5
                 BRL     _structassign_L6
                 LDA     #2
@@ -166,11 +160,9 @@ _structassign_L7
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #7
                 BVC     _structassign_L10
                 EOR     #$8000
 _structassign_L10
@@ -250,10 +242,8 @@ _structassign_L8
 _structassign_L9
                 LDA     dst+32
                 TAX
-                LDA     #43981
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43981
                 BNE     *+5
                 BRL     _structassign_L12
                 LDA     #4
@@ -321,10 +311,8 @@ _structassign_L12
 _structassign_L13
                 LDA     src+32
                 TAX
-                LDA     #43981
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43981
                 BNE     *+5
                 BRL     _structassign_L14
                 LDA     #6
@@ -346,11 +334,9 @@ _structassign_L15
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #7
                 BVC     _structassign_L18
                 EOR     #$8000
 _structassign_L18
@@ -445,10 +431,8 @@ _structassign_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BNE     *+5
                 BRL     _structassign_L20
                 LDA     #7
@@ -524,10 +508,8 @@ _structassign_L21
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #43981
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43981
                 BNE     *+5
                 BRL     _structassign_L22
                 LDA     #9
@@ -613,10 +595,8 @@ _structassign_L23
                 LDA     odst+0
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _structassign_L24
                 LDA     #10
@@ -633,10 +613,8 @@ _structassign_L24
                 LDA     odst+1
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _structassign_L25
                 LDA     #11
@@ -653,10 +631,8 @@ _structassign_L25
                 LDA     odst+2
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _structassign_L26
                 LDA     #12
@@ -673,10 +649,8 @@ _structassign_L26
                 LDA     fence
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BNE     *+5
                 BRL     _structassign_L27
                 LDA     #13

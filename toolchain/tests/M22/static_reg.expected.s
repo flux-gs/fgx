@@ -23,11 +23,9 @@ accum_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     accum_sl_calls
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     accum_sl_calls
                 TAX
                 LDA     1,S   ; fccstk d=0 b=1
@@ -67,11 +65,9 @@ main_stkok        TCS
                 FGX2_FARCALL accum
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 TAY
                 TSC
                 CLC

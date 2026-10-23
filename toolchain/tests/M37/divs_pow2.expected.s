@@ -47,19 +47,15 @@ _divs_pow2_L1
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _divs_pow2_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _divs_pow2_L0
                 LDA     #1535
@@ -88,19 +84,15 @@ _divs_pow2_L3
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _divs_pow2_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _divs_pow2_L2
                 LDA     #511
@@ -129,24 +121,18 @@ _divs_pow2_L5
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _divs_pow2_L4
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L7
@@ -172,24 +158,18 @@ _divs_pow2_L7
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _divs_pow2_L6
-                LDA     #1024
-                EOR     #$FFFF
-                INC
+                LDA     #$FC00
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L9
@@ -214,27 +194,17 @@ _divs_pow2_L9
                 ROR
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFE
                 BEQ     *+5
                 BRL     _divs_pow2_L8
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _divs_pow2_L8
-                LDA     #1025
-                EOR     #$FFFF
-                INC
+                LDA     #$FBFF
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L11
@@ -259,27 +229,17 @@ _divs_pow2_L11
                 ROR
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFE
                 BEQ     *+5
                 BRL     _divs_pow2_L10
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     _fcc_img0
 _divs_pow2_L10
-                LDA     #511
-                EOR     #$FFFF
-                INC
+                LDA     #$FE01
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L13
@@ -305,24 +265,18 @@ _divs_pow2_L13
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L12
                 LDA     _fcc_img0
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     _fcc_img0
 _divs_pow2_L12
-                LDA     #512
-                EOR     #$FFFF
-                INC
+                LDA     #$FE00
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L15
@@ -347,27 +301,17 @@ _divs_pow2_L15
                 ROR
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _divs_pow2_L14
                 LDA     _fcc_img0
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     _fcc_img0
 _divs_pow2_L14
-                LDA     #513
-                EOR     #$FFFF
-                INC
+                LDA     #$FDFF
                 STA     b
                 CMP     #$8000
                 BCC     _divs_pow2_L17
@@ -392,27 +336,17 @@ _divs_pow2_L17
                 ROR
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _divs_pow2_L16
                 LDA     _fcc_img0
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #256
                 STA     _fcc_img0
 _divs_pow2_L16
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 STA     c
                 CMP     #$8000
                 BCC     _divs_pow2_L19
@@ -421,27 +355,17 @@ _divs_pow2_L16
 _divs_pow2_L19
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _divs_pow2_L18
                 LDA     _fcc_img0
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #512
                 STA     _fcc_img0
 _divs_pow2_L18
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     c
                 CMP     #$8000
                 BCC     _divs_pow2_L21
@@ -451,19 +375,15 @@ _divs_pow2_L21
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L20
                 LDA     _fcc_img0
                 TAX
-                LDA     #1024
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1024
                 STA     _fcc_img0
 _divs_pow2_L20
                 LDA     #3
@@ -476,19 +396,15 @@ _divs_pow2_L23
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _divs_pow2_L22
                 LDA     _fcc_img0
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2048
                 STA     _fcc_img0
 _divs_pow2_L22
                 LDA     #32767
@@ -501,19 +417,15 @@ _divs_pow2_L25
                 CMP     #$8000
                 ROR
                 TAX
-                LDA     #16383
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16383
                 BEQ     *+5
                 BRL     _divs_pow2_L24
                 LDA     _fcc_img0
                 TAX
-                LDA     #4096
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4096
                 STA     _fcc_img0
 _divs_pow2_L24
                 LDA     #$0000
@@ -528,55 +440,35 @@ _divs_pow2_L24
 _divs_pow2_L27
                 CMP     #$8000
                 ROR
-                PHA
-                LDA     #16384
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$C000
                 BEQ     *+5
                 BRL     _divs_pow2_L26
                 LDA     _fcc_img0
                 TAX
-                LDA     #8192
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8192
                 STA     _fcc_img0
 _divs_pow2_L26
-                LDA     #100
-                EOR     #$FFFF
-                INC
+                LDA     #$FF9C
                 STA     b
                 LDX     #10
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
-                PHA
-                LDA     #10
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFF6
                 BEQ     *+5
                 BRL     _divs_pow2_L28
                 LDA     _fcc_img0
                 TAX
-                LDA     #16384
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16384
                 STA     _fcc_img0
 _divs_pow2_L28
                 LDA     _fcc_img0
                 TAX
-                LDA     #32767
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32767
                 BEQ     *+5
                 BRL     _divs_pow2_L29
                 LDA     #42

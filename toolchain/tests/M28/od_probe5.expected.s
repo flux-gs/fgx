@@ -84,11 +84,9 @@ f0_stkok        TCS
                 LDA     6+f0_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 TAY
                 TSC
                 CLC
@@ -126,11 +124,9 @@ f1_stkok        TCS
                 LDA     6+f1_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 TAY
                 TSC
                 CLC
@@ -168,11 +164,9 @@ f2_stkok        TCS
                 LDA     6+f2_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 TAY
                 TSC
                 CLC
@@ -210,11 +204,9 @@ f3_stkok        TCS
                 LDA     6+f3_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #30
                 TAY
                 TSC
                 CLC
@@ -251,11 +243,9 @@ _od_probe5_L0
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _od_probe5_L3
                 EOR     #$8000
 _od_probe5_L3
@@ -316,11 +306,9 @@ _od_probe5_L1
 _od_probe5_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #24
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #24
                 TAY
                 TSC
                 CLC

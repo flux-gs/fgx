@@ -50,11 +50,9 @@ bump_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #10
                 TAY
                 TSC
                 CLC
@@ -142,10 +140,9 @@ main_stkok        TCS
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -162,10 +159,8 @@ main_stkok        TCS
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -182,10 +177,9 @@ main_stkok        TCS
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -267,10 +261,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L0
                 LDA     #1
@@ -325,10 +317,8 @@ _ptr_stride_struct_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L1
                 LDA     #2
@@ -383,10 +373,8 @@ _ptr_stride_struct_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L2
                 LDA     #3
@@ -443,10 +431,8 @@ _ptr_stride_struct_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L3
                 LDA     #4
@@ -505,10 +491,8 @@ _ptr_stride_struct_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L4
                 LDA     #5
@@ -565,10 +549,8 @@ _ptr_stride_struct_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L5
                 LDA     #6
@@ -592,10 +574,9 @@ _ptr_stride_struct_L5
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -626,10 +607,8 @@ _ptr_stride_struct_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L6
                 LDA     #7
@@ -653,10 +632,9 @@ _ptr_stride_struct_L6
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -672,10 +650,8 @@ _ptr_stride_struct_L6
                 LDA     gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -692,10 +668,8 @@ _ptr_stride_struct_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L7
                 LDA     #8
@@ -719,10 +693,9 @@ _ptr_stride_struct_L7
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -738,10 +711,9 @@ _ptr_stride_struct_L7
                 LDA     gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -758,10 +730,8 @@ _ptr_stride_struct_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L8
                 LDA     #9
@@ -785,10 +755,9 @@ _ptr_stride_struct_L8
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -804,10 +773,9 @@ _ptr_stride_struct_L8
                 LDA     gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 LDA     _fcc_fpr0
@@ -826,10 +794,8 @@ _ptr_stride_struct_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BNE     *+5
                 BRL     _ptr_stride_struct_L9
                 LDA     #10
@@ -853,10 +819,9 @@ _ptr_stride_struct_L9
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -887,10 +852,8 @@ _ptr_stride_struct_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L10
                 LDA     #11
@@ -956,10 +919,8 @@ _ptr_stride_struct_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L11
                 LDA     #12
@@ -1031,10 +992,8 @@ _ptr_stride_struct_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L12
                 LDA     #13
@@ -1100,10 +1059,8 @@ _ptr_stride_struct_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L13
                 LDA     #14
@@ -1175,10 +1132,8 @@ _ptr_stride_struct_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L14
                 LDA     #15
@@ -1202,10 +1157,9 @@ _ptr_stride_struct_L14
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1230,10 +1184,9 @@ _ptr_stride_struct_L14
                 LDA     [_fcc_fpr0],Y
                 PHA
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -1259,10 +1212,8 @@ _ptr_stride_struct_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L15
                 LDA     #16
@@ -1286,10 +1237,9 @@ _ptr_stride_struct_L15
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1334,10 +1284,8 @@ _ptr_stride_struct_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L16
                 LDA     #17
@@ -1413,10 +1361,8 @@ _ptr_stride_struct_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L17
                 LDA     #18
@@ -1489,10 +1435,8 @@ _ptr_stride_struct_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L18
                 LDA     #19
@@ -1516,10 +1460,9 @@ _ptr_stride_struct_L18
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1574,10 +1517,8 @@ _ptr_stride_struct_L18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L19
                 LDA     #20
@@ -1684,10 +1625,8 @@ _ptr_stride_struct_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L20
                 LDA     #21
@@ -1794,10 +1733,8 @@ _ptr_stride_struct_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L21
                 LDA     #22
@@ -1821,10 +1758,9 @@ _ptr_stride_struct_L21
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1861,10 +1797,8 @@ _ptr_stride_struct_L21
                 LDA     [_fcc_fpr0],Y
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -1902,10 +1836,8 @@ _ptr_stride_struct_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L22
                 LDA     #23
@@ -1973,10 +1905,8 @@ _ptr_stride_struct_L22
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L23
                 LDA     #24
@@ -2038,10 +1968,8 @@ _ptr_stride_struct_L23
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L24
                 LDA     #25
@@ -2065,10 +1993,9 @@ _ptr_stride_struct_L24
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -2095,10 +2022,8 @@ _ptr_stride_struct_L24
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -2115,10 +2040,8 @@ _ptr_stride_struct_L24
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L25
                 LDA     #26
@@ -2177,10 +2100,8 @@ _ptr_stride_struct_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L26
                 LDA     #27
@@ -2204,10 +2125,9 @@ _ptr_stride_struct_L26
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -2243,10 +2163,8 @@ _ptr_stride_struct_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L27
                 LDA     #28
@@ -2320,10 +2238,8 @@ _ptr_stride_struct_L27
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L28
                 LDA     #29
@@ -2396,10 +2312,8 @@ _ptr_stride_struct_L28
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L29
                 LDA     #30
@@ -2495,10 +2409,8 @@ _ptr_stride_struct_L29
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L30
                 LDA     #31
@@ -2566,10 +2478,8 @@ _ptr_stride_struct_L30
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L31
                 LDA     #32
@@ -2593,10 +2503,9 @@ _ptr_stride_struct_L31
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -2650,10 +2559,8 @@ _ptr_stride_struct_L31
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L32
                 LDA     #33
@@ -2727,10 +2634,8 @@ _ptr_stride_struct_L32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L33
                 LDA     #34
@@ -2803,10 +2708,8 @@ _ptr_stride_struct_L33
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L34
                 LDA     #35
@@ -2902,10 +2805,8 @@ _ptr_stride_struct_L34
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L35
                 LDA     #36
@@ -2973,10 +2874,8 @@ _ptr_stride_struct_L35
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L36
                 LDA     #37
@@ -3000,10 +2899,9 @@ _ptr_stride_struct_L36
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -3028,10 +2926,8 @@ _ptr_stride_struct_L36
                 LDA     [_fcc_fpr0],Y
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -3057,10 +2953,8 @@ _ptr_stride_struct_L36
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L37
                 LDA     #38
@@ -3138,10 +3032,8 @@ _ptr_stride_struct_L37
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L38
                 LDA     #39
@@ -3214,10 +3106,8 @@ _ptr_stride_struct_L38
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L39
                 LDA     #40
@@ -3290,10 +3180,8 @@ _ptr_stride_struct_L39
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L40
                 LDA     #41
@@ -3456,10 +3344,8 @@ _ptr_stride_struct_L40
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #61
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #61
                 BNE     *+5
                 BRL     _ptr_stride_struct_L41
                 LDA     #43
@@ -3518,10 +3404,8 @@ _ptr_stride_struct_L41
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #61
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #61
                 BNE     *+5
                 BRL     _ptr_stride_struct_L42
                 LDA     #44
@@ -3580,10 +3464,8 @@ _ptr_stride_struct_L42
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #62
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #62
                 BNE     *+5
                 BRL     _ptr_stride_struct_L43
                 LDA     #45
@@ -3644,10 +3526,8 @@ _ptr_stride_struct_L43
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #60
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #60
                 BNE     *+5
                 BRL     _ptr_stride_struct_L44
                 LDA     #46
@@ -3724,10 +3604,8 @@ _ptr_stride_struct_L44
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #62
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #62
                 BNE     *+5
                 BRL     _ptr_stride_struct_L45
                 LDA     #47
@@ -3807,10 +3685,8 @@ _ptr_stride_struct_L45
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L46
                 LDA     #48
@@ -3883,10 +3759,8 @@ _ptr_stride_struct_L46
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L47
                 LDA     #49
@@ -3990,10 +3864,8 @@ _ptr_stride_struct_L47
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L48
                 LDA     #50
@@ -4103,10 +3975,8 @@ _ptr_stride_struct_L48
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L49
                 LDA     #51
@@ -4214,10 +4084,8 @@ _ptr_stride_struct_L49
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _ptr_stride_struct_L50
                 LDA     #52
@@ -4325,10 +4193,8 @@ _ptr_stride_struct_L50
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _ptr_stride_struct_L51
                 LDA     #53
@@ -4363,10 +4229,9 @@ _ptr_stride_struct_L51
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -4412,10 +4277,8 @@ _ptr_stride_struct_L51
                 LDA     [_fcc_ptr]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -4442,10 +4305,8 @@ _ptr_stride_struct_L51
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L52
                 LDA     #54
@@ -4480,10 +4341,9 @@ _ptr_stride_struct_L52
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -4559,10 +4419,8 @@ _ptr_stride_struct_L52
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L53
                 LDA     #55
@@ -4668,10 +4526,8 @@ _ptr_stride_struct_L53
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #71
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #71
                 BNE     *+5
                 BRL     _ptr_stride_struct_L54
                 LDA     #56
@@ -4777,10 +4633,8 @@ _ptr_stride_struct_L54
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #72
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #72
                 BNE     *+5
                 BRL     _ptr_stride_struct_L55
                 LDA     #57
@@ -4889,10 +4743,8 @@ _ptr_stride_struct_L55
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L56
                 LDA     #58
@@ -4918,10 +4770,9 @@ _ptr_stride_struct_L56
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -4955,10 +4806,8 @@ _ptr_stride_struct_L56
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -4981,10 +4830,8 @@ _ptr_stride_struct_L56
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -5037,10 +4884,8 @@ _ptr_stride_struct_L57
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5055,10 +4900,8 @@ _ptr_stride_struct_L57
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L60
                 LDA     #60
@@ -5115,10 +4958,8 @@ _ptr_stride_struct_L60
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -5171,10 +5012,9 @@ _ptr_stride_struct_L61
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5189,10 +5029,8 @@ _ptr_stride_struct_L61
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L64
                 LDA     #62
@@ -5339,10 +5177,8 @@ _ptr_stride_struct_L65
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ptr_stride_struct_L68
                 LDA     #64
@@ -5366,10 +5202,9 @@ _ptr_stride_struct_L68
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5415,10 +5250,9 @@ _ptr_stride_struct_L68
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5441,10 +5275,9 @@ _ptr_stride_struct_L68
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -5509,10 +5342,9 @@ _ptr_stride_struct_L69
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5527,10 +5359,8 @@ _ptr_stride_struct_L69
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ptr_stride_struct_L72
                 LDA     #66
@@ -5554,10 +5384,9 @@ _ptr_stride_struct_L72
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5596,10 +5425,8 @@ _ptr_stride_struct_L72
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5622,10 +5449,8 @@ _ptr_stride_struct_L72
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -5701,10 +5526,8 @@ _ptr_stride_struct_L73
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L76
                 LDA     #68
@@ -5859,10 +5682,8 @@ _ptr_stride_struct_L77
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #62
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #62
                 BNE     *+5
                 BRL     _ptr_stride_struct_L80
                 LDA     #70
@@ -5899,10 +5720,9 @@ _ptr_stride_struct_L80
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5940,10 +5760,8 @@ _ptr_stride_struct_L80
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -5966,10 +5784,8 @@ _ptr_stride_struct_L80
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -6044,10 +5860,8 @@ _ptr_stride_struct_L81
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L84
                 LDA     #72
@@ -6071,10 +5885,9 @@ _ptr_stride_struct_L84
                 LDA     #t3
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -6114,10 +5927,8 @@ _ptr_stride_struct_L84
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -6140,10 +5951,8 @@ _ptr_stride_struct_L84
                 LDA     #t3
                 STA     _fcc_fpr1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr1
@@ -6220,10 +6029,8 @@ _ptr_stride_struct_L85
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _ptr_stride_struct_L88
                 LDA     #74

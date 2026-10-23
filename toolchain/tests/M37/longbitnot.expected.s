@@ -489,10 +489,8 @@ _longbitnot_L7
                 AND     _fcc_tmp_b
                 STA     sh
                 TAX
-                LDA     #240
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #240
                 BNE     *+5
                 BRL     _longbitnot_L8
                 LDA     #40

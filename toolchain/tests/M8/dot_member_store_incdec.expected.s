@@ -89,11 +89,9 @@ _dot_member_store_incdec_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _dot_member_store_incdec_L3
                 EOR     #$8000
 _dot_member_store_incdec_L3
@@ -142,11 +140,9 @@ _dot_member_store_incdec_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
@@ -162,10 +158,8 @@ _dot_member_store_incdec_L2
                 LDA:    row,X
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _dot_member_store_incdec_L5
                 LDA     #3
@@ -173,10 +167,8 @@ _dot_member_store_incdec_L2
                 LDA:    row,X
                 AND     #$00FF
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _dot_member_store_incdec_L5
                 LDA     #1
@@ -189,11 +181,9 @@ _dot_member_store_incdec_L6
                 BRL     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     _fcc_img1
 _dot_member_store_incdec_L4
                 SEP     #$20
@@ -232,19 +222,15 @@ _dot_member_store_incdec_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img1
 _dot_member_store_incdec_L7
                 LDA     #9
@@ -279,19 +265,15 @@ _dot_member_store_incdec_L7
                 STA     [_fcc_fpr0]
                 LDA     B+10
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _dot_member_store_incdec_L8
                 LDA     _fcc_img1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img1
 _dot_member_store_incdec_L8
                 LDA     #65535
@@ -352,11 +334,9 @@ _dot_member_store_incdec_L8
                 BRL     _dot_member_store_incdec_L9
                 LDA     _fcc_img1
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img1
 _dot_member_store_incdec_L9
                 LDA     _fcc_img1

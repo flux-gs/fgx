@@ -61,11 +61,9 @@ main_stkok        TCS
                 BRL     _u_long_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _u_long_L0
                 LDA     ua+2
@@ -93,11 +91,9 @@ _u_long_L0
                 BRL     _u_long_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _u_long_L1
                 LDA     ua+2
@@ -142,11 +138,9 @@ _u_long_L1
                 BRL     _u_long_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _u_long_L2
                 LDA     ua+2
@@ -190,11 +184,9 @@ _u_long_L2
                 BRL     _u_long_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _u_long_L3
                 LDA     #$FFFF
@@ -246,11 +238,9 @@ _u_long_L3
                 BRL     _u_long_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _u_long_L4
                 LDA     ua+2
@@ -290,19 +280,15 @@ _u_long_L4
                 BRL     _u_long_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     _fcc_img0
 _u_long_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #63
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #63
                 BEQ     *+5
                 BRL     _u_long_L6
                 LDA     #42

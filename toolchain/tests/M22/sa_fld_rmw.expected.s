@@ -27,11 +27,9 @@ _sa_fld_rmw_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _sa_fld_rmw_L3
                 EOR     #$8000
 _sa_fld_rmw_L3
@@ -95,10 +93,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -119,10 +116,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -143,10 +139,8 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -155,11 +149,9 @@ _sa_fld_rmw_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 LDY     #8
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -172,10 +164,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 ASL
                 CLC
@@ -184,11 +175,9 @@ _sa_fld_rmw_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 LDY     #8
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -201,10 +190,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -223,10 +211,8 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -249,10 +235,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -275,10 +260,9 @@ _sa_fld_rmw_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 ASL
                 CLC

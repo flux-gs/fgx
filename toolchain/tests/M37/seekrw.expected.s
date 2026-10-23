@@ -56,19 +56,15 @@ _seekrw_filesize_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _seekrw_L1
                 EOR     #$8000
 _seekrw_L1
                 BMI     *+5
                 BRL     _seekrw_L0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -142,11 +138,9 @@ _seekrw_L2
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #35
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #35
                 BVC     _seekrw_L5
                 EOR     #$8000
 _seekrw_L5
@@ -215,19 +209,15 @@ _seekrw_L4
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _seekrw_L7
                 EOR     #$8000
 _seekrw_L7
                 BMI     *+5
                 BRL     _seekrw_L6
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -317,11 +307,9 @@ main_stkok        TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _seekrw_L9
                 EOR     #$8000
 _seekrw_L9
@@ -446,11 +434,9 @@ _seekrw_L10
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #32
                 BVC     _seekrw_L13
                 EOR     #$8000
 _seekrw_L13
@@ -461,10 +447,8 @@ _seekrw_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _seekrw_L14
                 LDA     #0
@@ -480,10 +464,8 @@ _seekrw_L12
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #35
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #35
                 BEQ     *+5
                 BRL     _seekrw_L20
                 LDA     11,S   ; fccstk d=0 b=11
@@ -503,10 +485,8 @@ _seekrw_L21
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BEQ     *+5
                 BRL     _seekrw_L18
                 LDA     #1
@@ -522,10 +502,8 @@ _seekrw_L19
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _seekrw_L16
                 LDA     #1
@@ -538,11 +516,9 @@ _seekrw_L17
                 BRL     _seekrw_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _seekrw_L15
                 SEP     #$20
@@ -697,10 +673,8 @@ _seekrw_L15
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #35
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #35
                 BEQ     *+5
                 BRL     _seekrw_L27
                 LDA     #0
@@ -708,10 +682,8 @@ _seekrw_L15
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BEQ     *+5
                 BRL     _seekrw_L27
                 LDA     #1
@@ -727,10 +699,8 @@ _seekrw_L28
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BEQ     *+5
                 BRL     _seekrw_L25
                 LDA     #1
@@ -746,10 +716,8 @@ _seekrw_L26
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _seekrw_L23
                 LDA     #1
@@ -762,11 +730,9 @@ _seekrw_L24
                 BRL     _seekrw_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _seekrw_L22
                 SEP     #$20
@@ -850,10 +816,8 @@ _seekrw_L22
                 TCS
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _seekrw_L30
                 LDA     #8
@@ -879,10 +843,8 @@ _seekrw_L22
                 TCS
                 TYA
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _seekrw_L30
                 LDA     #1
@@ -980,10 +942,8 @@ _seekrw_L32
                 BRL     _seekrw_L40
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #35
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #35
                 BEQ     *+5
                 BRL     _seekrw_L40
                 LDA     #1
@@ -999,10 +959,8 @@ _seekrw_L41
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #56
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #56
                 BEQ     *+5
                 BRL     _seekrw_L38
                 LDA     #1
@@ -1018,10 +976,8 @@ _seekrw_L39
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #102
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #102
                 BEQ     *+5
                 BRL     _seekrw_L36
                 LDA     #1
@@ -1037,10 +993,8 @@ _seekrw_L37
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _seekrw_L34
                 LDA     #1
@@ -1053,11 +1007,9 @@ _seekrw_L35
                 BRL     _seekrw_L33
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _seekrw_L33
                 SEP     #$20
@@ -1145,18 +1097,14 @@ _seekrw_L33
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _seekrw_L45
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _seekrw_L45
                 LDA     #1
@@ -1190,10 +1138,8 @@ _seekrw_L46
                 TCS
                 TYA
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _seekrw_L43
                 LDA     #1
@@ -1233,10 +1179,8 @@ _seekrw_L47
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _seekrw_L49
                 LDA     #8
@@ -1262,10 +1206,8 @@ _seekrw_L47
                 TCS
                 TYA
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _seekrw_L49
                 LDA     #0
@@ -1359,10 +1301,8 @@ _seekrw_L48
                 BRL     _seekrw_L62
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #35
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #35
                 BEQ     *+5
                 BRL     _seekrw_L62
                 LDA     #1
@@ -1378,10 +1318,8 @@ _seekrw_L63
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BEQ     *+5
                 BRL     _seekrw_L60
                 LDA     #1
@@ -1397,10 +1335,8 @@ _seekrw_L61
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BEQ     *+5
                 BRL     _seekrw_L58
                 LDA     #1
@@ -1416,10 +1352,8 @@ _seekrw_L59
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #73
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #73
                 BEQ     *+5
                 BRL     _seekrw_L56
                 LDA     #1
@@ -1435,10 +1369,8 @@ _seekrw_L57
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #80
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #80
                 BEQ     *+5
                 BRL     _seekrw_L54
                 LDA     #1
@@ -1454,10 +1386,8 @@ _seekrw_L55
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _seekrw_L52
                 LDA     #1
@@ -1470,11 +1400,9 @@ _seekrw_L53
                 BRL     _seekrw_L51
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _seekrw_L51
                 SEP     #$20

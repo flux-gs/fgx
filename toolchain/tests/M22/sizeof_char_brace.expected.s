@@ -34,12 +34,8 @@ main_stkok        TCS
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                PHA
-                LDA     #3
-                STA     _fcc_tmp_b
-                PLA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAY
                 TSC
                 CLC

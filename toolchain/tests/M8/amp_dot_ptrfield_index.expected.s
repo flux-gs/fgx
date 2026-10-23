@@ -296,11 +296,9 @@ _amp_dot_ptrfield_index_L2
                 BRL     _amp_dot_ptrfield_index_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _amp_dot_ptrfield_index_L0
                 LDA     1,S   ; fccstk d=0 b=1
@@ -331,19 +329,15 @@ _amp_dot_ptrfield_index_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _amp_dot_ptrfield_index_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _amp_dot_ptrfield_index_L3
                 SEP     #$20
@@ -368,19 +362,15 @@ _amp_dot_ptrfield_index_L3
                 STA     _fcc_img1
                 LDA     [_fcc_img1]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _amp_dot_ptrfield_index_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _amp_dot_ptrfield_index_L4
                 LDA     _fcc_img2
@@ -407,19 +397,15 @@ _amp_dot_ptrfield_index_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BEQ     *+5
                 BRL     _amp_dot_ptrfield_index_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _amp_dot_ptrfield_index_L5
                 LDA     _fcc_img0

@@ -349,11 +349,9 @@ _epp_L2
                 BRL     _epp_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     21,S   ; fccstk d=0 b=21
 _epp_L3
                 LDA     21,S   ; fccstk d=0 b=21

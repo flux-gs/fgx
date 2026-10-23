@@ -188,11 +188,9 @@ main_stkok        TCS
                 BRL     _arrfield_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _arrfield_L0
                 SEP     #$20
@@ -481,11 +479,9 @@ _arrfield_L0
                 BRL     _arrfield_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _arrfield_L1
                 SEP     #$20
@@ -523,11 +519,9 @@ _arrfield_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -547,19 +541,15 @@ _arrfield_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _arrfield_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _arrfield_L2
                 SEP     #$20
@@ -687,11 +677,9 @@ _arrfield_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #9
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
@@ -763,11 +751,9 @@ _arrfield_L2
                 BRL     _arrfield_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _arrfield_L3
                 LDA     ginit+6
@@ -795,11 +781,9 @@ _arrfield_L3
                 BRL     _arrfield_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     1,S   ; fccstk d=0 b=1
 _arrfield_L4
                 LDA     1,S   ; fccstk d=0 b=1

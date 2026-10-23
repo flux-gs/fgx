@@ -27,11 +27,9 @@ _p33_promote_scalar_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #520
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #520
                 BVC     _p33_promote_scalar_L3
                 EOR     #$8000
 _p33_promote_scalar_L3
@@ -82,10 +80,8 @@ _p33_promote_scalar_L2
                 ADC     _fcc_img2
                 STA     _fcc_img3
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BNE     *+5
                 BRL     _p33_promote_scalar_L4
                 LDA     #1
@@ -113,10 +109,8 @@ _p33_promote_scalar_L4
                 ADC     _fcc_tmp_b
                 STA     _fcc_img3
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BNE     *+5
                 BRL     _p33_promote_scalar_L5
                 LDA     #2
@@ -134,18 +128,14 @@ _p33_promote_scalar_L5
                 STA     _fcc_img2
                 STA     _fcc_img1
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L7
                 LDA     _fcc_img2
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L7
                 LDA     #0
@@ -185,10 +175,8 @@ _p33_promote_scalar_L6
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L10
                 SEP     #$20
@@ -209,10 +197,8 @@ _p33_promote_scalar_L6
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L10
                 LDA     #0

@@ -143,10 +143,9 @@ main_stkok        TCS
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -163,10 +162,8 @@ main_stkok        TCS
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -183,10 +180,9 @@ main_stkok        TCS
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -226,10 +222,9 @@ main_stkok        TCS
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -254,10 +249,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -287,10 +280,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L0
                 LDA     #1
@@ -314,10 +305,9 @@ _callchain_ptr_compound_L0
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -375,10 +365,8 @@ _callchain_ptr_compound_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L1
                 LDA     #2
@@ -402,10 +390,9 @@ _callchain_ptr_compound_L1
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -430,10 +417,8 @@ _callchain_ptr_compound_L1
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -463,10 +448,8 @@ _callchain_ptr_compound_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L2
                 LDA     #3
@@ -490,10 +473,9 @@ _callchain_ptr_compound_L2
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -551,10 +533,8 @@ _callchain_ptr_compound_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L3
                 LDA     #4
@@ -578,10 +558,9 @@ _callchain_ptr_compound_L3
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -616,10 +595,8 @@ _callchain_ptr_compound_L3
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -649,10 +626,8 @@ _callchain_ptr_compound_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L4
                 LDA     #5
@@ -676,10 +651,9 @@ _callchain_ptr_compound_L4
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -747,10 +721,8 @@ _callchain_ptr_compound_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L5
                 LDA     #6
@@ -774,10 +746,9 @@ _callchain_ptr_compound_L5
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -841,10 +812,8 @@ _callchain_ptr_compound_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L6
                 LDA     #7
@@ -868,10 +837,8 @@ _callchain_ptr_compound_L6
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -935,10 +902,8 @@ _callchain_ptr_compound_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L7
                 LDA     #8
@@ -962,10 +927,9 @@ _callchain_ptr_compound_L7
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -990,10 +954,8 @@ _callchain_ptr_compound_L7
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -1012,10 +974,8 @@ _callchain_ptr_compound_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L8
                 LDA     #9
@@ -1052,10 +1012,8 @@ _callchain_ptr_compound_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L9
                 LDA     #10
@@ -1079,10 +1037,9 @@ _callchain_ptr_compound_L9
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1129,10 +1086,8 @@ _callchain_ptr_compound_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L10
                 LDA     #11
@@ -1158,10 +1113,9 @@ _callchain_ptr_compound_L10
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1186,10 +1140,8 @@ _callchain_ptr_compound_L10
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -1198,10 +1150,8 @@ _callchain_ptr_compound_L10
                 STA     [_fcc_fpr0]
                 LDA     calls
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L11
                 LDA     #12
@@ -1242,21 +1192,16 @@ _callchain_ptr_compound_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 TAX
                 LDA:    ivv,X
                 TAX
-                LDA     #51
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #51
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L12
                 LDA     #13
@@ -1272,10 +1217,8 @@ _callchain_ptr_compound_L11
 _callchain_ptr_compound_L12
                 LDA     calls
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L13
                 LDA     #14
@@ -1297,21 +1240,17 @@ _callchain_ptr_compound_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 TAX
                 LDA:    ivv,X
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L14
                 LDA     #15
@@ -1346,10 +1285,9 @@ _callchain_ptr_compound_L14
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1385,10 +1323,8 @@ _callchain_ptr_compound_L14
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 PLA
@@ -1410,10 +1346,8 @@ _callchain_ptr_compound_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L15
                 LDA     #16
@@ -1429,10 +1363,8 @@ _callchain_ptr_compound_L14
 _callchain_ptr_compound_L15
                 LDA     calls
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L16
                 LDA     #17
@@ -1467,10 +1399,9 @@ _callchain_ptr_compound_L16
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1529,10 +1460,8 @@ _callchain_ptr_compound_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L17
                 LDA     #18
@@ -1567,10 +1496,9 @@ _callchain_ptr_compound_L17
                 LDA     #blk
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1629,10 +1557,8 @@ _callchain_ptr_compound_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _callchain_ptr_compound_L18
                 LDA     #19

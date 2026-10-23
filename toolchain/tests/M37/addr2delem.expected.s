@@ -27,11 +27,9 @@ _addr2delem_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _addr2delem_L3
                 EOR     #$8000
 _addr2delem_L3
@@ -45,11 +43,9 @@ _addr2delem_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _addr2delem_L7
                 EOR     #$8000
 _addr2delem_L7
@@ -216,11 +212,9 @@ _addr2delem_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _addr2delem_L11
                 EOR     #$8000
 _addr2delem_L11
@@ -234,11 +228,9 @@ _addr2delem_L12
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _addr2delem_L15
                 EOR     #$8000
 _addr2delem_L15
@@ -252,11 +244,9 @@ _addr2delem_L16
                 JSR     _fcc_safepoint
                 LDA     _fcc_img2
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _addr2delem_L19
                 EOR     #$8000
 _addr2delem_L19
@@ -356,10 +346,8 @@ _addr2delem_L10
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #272
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #272
                 BNE     *+5
                 BRL     _addr2delem_L20
                 LDA     #50
@@ -385,10 +373,8 @@ _addr2delem_L20
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #273
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #273
                 BNE     *+5
                 BRL     _addr2delem_L21
                 LDA     #51
@@ -414,10 +400,8 @@ _addr2delem_L21
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #288
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #288
                 BNE     *+5
                 BRL     _addr2delem_L22
                 LDA     #52
@@ -460,10 +444,8 @@ _addr2delem_L22
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #274
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #274
                 BNE     *+5
                 BRL     _addr2delem_L23
                 LDA     #53
@@ -489,10 +471,8 @@ _addr2delem_L23
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #275
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #275
                 BNE     *+5
                 BRL     _addr2delem_L24
                 LDA     #54
@@ -537,10 +517,8 @@ _addr2delem_L24
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #289
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #289
                 BNE     *+5
                 BRL     _addr2delem_L25
                 LDA     #55
@@ -583,10 +561,8 @@ _addr2delem_L25
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #256
                 BNE     *+5
                 BRL     _addr2delem_L26
                 LDA     #56
@@ -881,10 +857,8 @@ _addr2delem_L31
                 LDA     #_addr2delem_i3
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -911,10 +885,8 @@ _addr2delem_L31
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #595
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #595
                 BNE     *+5
                 BRL     _addr2delem_L32
                 LDA     #62
@@ -938,10 +910,8 @@ _addr2delem_L32
                 LDA     #_addr2delem_i3
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -963,10 +933,8 @@ _addr2delem_L32
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #592
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #592
                 BNE     *+5
                 BRL     _addr2delem_L33
                 LDA     #63
@@ -990,10 +958,8 @@ _addr2delem_L33
                 LDA     #_addr2delem_i3
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -1006,10 +972,8 @@ _addr2delem_L33
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                LDA     #576
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #576
                 BNE     *+5
                 BRL     _addr2delem_L34
                 LDA     #64

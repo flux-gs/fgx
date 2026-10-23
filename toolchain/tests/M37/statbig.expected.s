@@ -41,11 +41,9 @@ main_stkok        TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _statbig_L1
                 EOR     #$8000
 _statbig_L1
@@ -70,11 +68,9 @@ _statbig_L2
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #66
                 BVC     _statbig_L5
                 EOR     #$8000
 _statbig_L5
@@ -144,10 +140,8 @@ _statbig_L4
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _statbig_L6
                 SEP     #$20

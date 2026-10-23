@@ -90,11 +90,9 @@ _heapchurn_L3
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #46
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #46
                 BVC     _heapchurn_L6
                 EOR     #$8000
 _heapchurn_L6
@@ -373,11 +371,9 @@ _heapchurn_L14
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #46
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #46
                 BVC     _heapchurn_L17
                 EOR     #$8000
 _heapchurn_L17
@@ -529,10 +525,8 @@ _heapchurn_L21
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _heapchurn_L23
                 LDA     #100
@@ -577,11 +571,9 @@ _heapchurn_L24
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #46
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #46
                 BVC     _heapchurn_L27
                 EOR     #$8000
 _heapchurn_L27

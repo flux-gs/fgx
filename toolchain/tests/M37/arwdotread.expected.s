@@ -162,11 +162,9 @@ _arwdotread_L2
                 BRL     _arwdotread_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     _fcc_img0
 _arwdotread_L0
                 LDA     7,S   ; fccstk d=0 b=7
@@ -176,19 +174,15 @@ _arwdotread_L0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #44
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #44
                 BEQ     *+5
                 BRL     _arwdotread_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #22
                 STA     _fcc_img0
 _arwdotread_L3
                 LDA     _fcc_img0

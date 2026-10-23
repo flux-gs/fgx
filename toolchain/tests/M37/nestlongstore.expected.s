@@ -106,10 +106,8 @@ main_stkok        TCS
 _nestlongstore_L0
                 LDA     _nestlongstore_o+2
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _nestlongstore_L1
                 LDA     #2
@@ -125,10 +123,8 @@ _nestlongstore_L0
 _nestlongstore_L1
                 LDA     _nestlongstore_o+8
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _nestlongstore_L2
                 LDA     #3
@@ -144,18 +140,14 @@ _nestlongstore_L1
 _nestlongstore_L2
                 LDA     _nestlongstore_o+0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _nestlongstore_L4
                 LDA     _nestlongstore_o+16
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _nestlongstore_L4
                 LDA     #0
@@ -245,10 +237,8 @@ _nestlongstore_L3
 _nestlongstore_L6
                 LDA     _nestlongstore_o+8
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _nestlongstore_L7
                 LDA     #6
@@ -329,10 +319,8 @@ _nestlongstore_L7
 _nestlongstore_L8
                 LDA     _nestlongstore_o+8
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _nestlongstore_L9
                 LDA     #8
@@ -346,9 +334,7 @@ _nestlongstore_L8
                 TYA
                 RTL
 _nestlongstore_L9
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 STA     _nestlongstore_gi
                 SEP     #$20
                 MX      %10
@@ -575,10 +561,8 @@ _nestlongstore_L11
 _nestlongstore_L12
                 LDA     _nestlongstore_o+8
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _nestlongstore_L13
                 LDA     #12
@@ -594,10 +578,8 @@ _nestlongstore_L12
 _nestlongstore_L13
                 LDA     _nestlongstore_o+14
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _nestlongstore_L14
                 LDA     #13
@@ -711,10 +693,8 @@ _nestlongstore_L15
                 STA     [_fcc_fpr0]
                 LDA     _nestlongstore_o+2
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BNE     *+5
                 BRL     _nestlongstore_L16
                 LDA     #15
@@ -783,10 +763,8 @@ _nestlongstore_L16
 _nestlongstore_L17
                 LDA     _nestlongstore_o+2
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BNE     *+5
                 BRL     _nestlongstore_L18
                 LDA     #17

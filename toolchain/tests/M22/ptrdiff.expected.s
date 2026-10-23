@@ -74,10 +74,9 @@ main_stkok        TCS
                 LDA     #g6
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -131,10 +130,8 @@ main_stkok        TCS
                 LSR
                 LSR
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _ptrdiff_L0
                 LDA     #1
@@ -163,10 +160,8 @@ _ptrdiff_L0
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _ptrdiff_L1
                 LDA     #2
@@ -193,10 +188,8 @@ _ptrdiff_L1
                 SBC     _fcc_fpr1
                 LSR
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _ptrdiff_L2
                 LDA     #3

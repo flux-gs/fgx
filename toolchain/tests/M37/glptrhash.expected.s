@@ -50,11 +50,9 @@ _glptrhash_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5010
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5010
                 BVC     _glptrhash_L3
                 EOR     #$8000
 _glptrhash_L3
@@ -474,10 +472,8 @@ _glptrhash_L6
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _glptrhash_L7
                 LDA     #1
@@ -618,10 +614,8 @@ _glptrhash_L10
                 TAX
                 LDA:    cstorage,X
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _glptrhash_L11
                 LDA     #5

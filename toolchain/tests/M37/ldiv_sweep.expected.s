@@ -29,11 +29,9 @@ _ldiv_sweep_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #14
                 BVC     _ldiv_sweep_L3
                 EOR     #$8000
 _ldiv_sweep_L3
@@ -47,11 +45,9 @@ _ldiv_sweep_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #14
                 BVC     _ldiv_sweep_L7
                 EOR     #$8000
 _ldiv_sweep_L7
@@ -231,11 +227,9 @@ _ldiv_sweep_L10
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #11
                 BVC     _ldiv_sweep_L13
                 EOR     #$8000
 _ldiv_sweep_L13
@@ -249,11 +243,9 @@ _ldiv_sweep_L14
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #9
                 BVC     _ldiv_sweep_L17
                 EOR     #$8000
 _ldiv_sweep_L17
@@ -841,10 +833,8 @@ _ldiv_sweep_L31
 _ldiv_sweep_L32
                 LDA     _fcc_img2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _ldiv_sweep_L33
                 LDA     #42

@@ -74,10 +74,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #58
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #58
                 BEQ     *+5
                 BRL     _preinc_deref_expr_L1
                 LDA     _fcc_img1
@@ -174,10 +172,8 @@ _preinc_deref_expr_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #56
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #56
                 BEQ     *+5
                 BRL     _preinc_deref_expr_L6
                 LDA     _fcc_img1
@@ -239,12 +235,7 @@ _preinc_deref_expr_L5
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
-                STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                LDA     _fcc_fpr0
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     _fcc_fpr0
                 LDA     #0
                 CLC
@@ -272,10 +263,8 @@ _preinc_deref_expr_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BEQ     *+5
                 BRL     _preinc_deref_expr_L11
                 LDA     _fcc_img1

@@ -45,19 +45,15 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _tcops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     5,S   ; fccstk d=0 b=5
 _tcops_L0
                 SEP     #$20
@@ -79,19 +75,15 @@ _tcops_L0
                 TCS
                 TYA
                 TAX
-                LDA     #80
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #80
                 BEQ     *+5
                 BRL     _tcops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     5,S   ; fccstk d=0 b=5
 _tcops_L1
                 LDA     #0
@@ -155,10 +147,8 @@ _tcops_L6
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #27
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #27
                 BEQ     *+5
                 BRL     _tcops_L3
                 LDA     #1
@@ -171,11 +161,9 @@ _tcops_L4
                 BRL     _tcops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     5,S   ; fccstk d=0 b=5
 _tcops_L2
                 SEP     #$20
@@ -197,19 +185,15 @@ _tcops_L2
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _tcops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     5,S   ; fccstk d=0 b=5
 _tcops_L7
                 LDA     5,S   ; fccstk d=0 b=5

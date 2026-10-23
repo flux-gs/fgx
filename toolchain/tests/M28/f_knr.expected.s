@@ -328,10 +328,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _f_knr_L0
                 LDA     #1
@@ -371,10 +369,8 @@ _f_knr_L0
                 TCS
                 TYA
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_knr_L1
                 LDA     #2
@@ -412,10 +408,8 @@ _f_knr_L1
                 TCS
                 TYA
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _f_knr_L2
                 LDA     #3

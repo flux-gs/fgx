@@ -22,10 +22,8 @@ main_stkok        TCS
                 LDA     #32
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #10
                 TAY
                 TSC
                 CLC

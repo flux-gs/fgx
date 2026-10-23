@@ -74,28 +74,18 @@ main_stkok        TCS
                 STA:    $0000,X
                 PLA
                 LDA     #2
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
+                INC
+                INC
                 CLC
-                ADC     _fcc_tmp_b
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #4
                 TAX
                 LDA:    gbuf,X
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _sizeof_const_L0
                 LDA     #1
@@ -114,10 +104,8 @@ _sizeof_const_L0
                 TAX
                 LDA:    hdr,X
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _sizeof_const_L1
                 LDA     #2
@@ -136,10 +124,8 @@ _sizeof_const_L1
                 TAX
                 LDA:    main_sl_sb,X
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _sizeof_const_L2
                 LDA     #3
@@ -155,10 +141,8 @@ _sizeof_const_L1
 _sizeof_const_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _sizeof_const_L3
                 LDA     #4

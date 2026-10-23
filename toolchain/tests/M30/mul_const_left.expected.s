@@ -145,9 +145,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_const_left_iv
                 TAY
@@ -202,10 +200,8 @@ main_stkok        TCS
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L0
                 LDA     #1
@@ -221,13 +217,7 @@ main_stkok        TCS
 _mul_const_left_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 ASL
-                PHA
-                LDA     #6
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFA
                 BNE     *+5
                 BRL     _mul_const_left_L1
                 LDA     #2
@@ -245,10 +235,8 @@ _mul_const_left_L1
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L2
                 LDA     #3
@@ -266,10 +254,8 @@ _mul_const_left_L2
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L3
                 LDA     #4
@@ -287,10 +273,8 @@ _mul_const_left_L3
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L4
                 LDA     #5
@@ -314,10 +298,8 @@ _mul_const_left_L4
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #44
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #44
                 BNE     *+5
                 BRL     _mul_const_left_L5
                 LDA     #6
@@ -335,10 +317,8 @@ _mul_const_left_L5
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L6
                 LDA     #7
@@ -360,10 +340,8 @@ _mul_const_left_L6
                 ADC     _fcc_tmp_b
                 ASL
                 TAX
-                LDA     #70
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #70
                 BNE     *+5
                 BRL     _mul_const_left_L7
                 LDA     #8
@@ -382,10 +360,8 @@ _mul_const_left_L7
                 STX     _fcc_tmp_b
                 JSR     _fcc_mul16
                 TAX
-                LDA     #20879
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20879
                 BNE     *+5
                 BRL     _mul_const_left_L8
                 LDA     #9
@@ -407,13 +383,7 @@ _mul_const_left_L8
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #84
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFAC
                 BNE     *+5
                 BRL     _mul_const_left_L9
                 LDA     #10
@@ -431,13 +401,7 @@ _mul_const_left_L9
                 LDX     #65532
                 STX     _fcc_tmp_b
                 JSR     _fcc_mul16
-                PHA
-                LDA     #28
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFE4
                 BNE     *+5
                 BRL     _mul_const_left_L10
                 LDA     #11
@@ -457,10 +421,8 @@ _mul_const_left_L10
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #54464
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #54464
                 BNE     *+5
                 BRL     _mul_const_left_L11
                 LDA     #12
@@ -479,10 +441,8 @@ _mul_const_left_L11
                 ASL
                 ASL
                 TAX
-                LDA     #36
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #36
                 BNE     *+5
                 BRL     _mul_const_left_L12
                 LDA     #13
@@ -500,10 +460,8 @@ _mul_const_left_L12
                 ASL
                 ASL
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BNE     *+5
                 BRL     _mul_const_left_L13
                 LDA     #14
@@ -603,13 +561,7 @@ _mul_const_left_L15
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #84
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFAC
                 BNE     *+5
                 BRL     _mul_const_left_L16
                 LDA     #17
@@ -661,11 +613,8 @@ _mul_const_left_L16
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -714,10 +663,8 @@ _mul_const_left_L16
                 LDA:    _mul_const_left_row256,X
                 AND     #$00FF
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _mul_const_left_L17
                 LDA     #18
@@ -732,11 +679,10 @@ _mul_const_left_L16
                 RTL
 _mul_const_left_L17
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 PHA
                 LDA     #7
@@ -748,10 +694,8 @@ _mul_const_left_L17
                 LDA:    _mul_const_left_row10,X
                 AND     #$00FF
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _mul_const_left_L18
                 LDA     #19
@@ -802,11 +746,9 @@ _mul_const_left_L18
                 LDA     #_mul_const_left_row10
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     5,S   ; fccstk d=4 b=1
@@ -856,10 +798,8 @@ _mul_const_left_L18
                 LDA:    _mul_const_left_row256,X
                 AND     #$00FF
                 TAX
-                LDA     #13
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13
                 BNE     *+5
                 BRL     _mul_const_left_L19
                 LDA     #20
@@ -890,10 +830,8 @@ _mul_const_left_L19
                 LDA:    _mul_const_left_row10,X
                 AND     #$00FF
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BNE     *+5
                 BRL     _mul_const_left_L20
                 LDA     #21

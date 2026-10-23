@@ -85,11 +85,8 @@ _structsrcdeep_fill_stkok        TCS
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 DO      8+_structsrcdeep_fill_FRAMESIZE/256
@@ -125,11 +122,9 @@ _structsrcdeep_fill_stkok        TCS
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
@@ -170,11 +165,9 @@ _structsrcdeep_fill_stkok        TCS
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
@@ -295,11 +288,8 @@ _structsrcdeep_L0
                 LDA     12+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -353,11 +343,9 @@ _structsrcdeep_L1
                 LDA     12+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
@@ -412,11 +400,9 @@ _structsrcdeep_L2
                 LDA     12+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
@@ -566,11 +552,9 @@ _structsrcdeep_L4
                 JSR     _fcc_safepoint
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _structsrcdeep_L7
                 EOR     #$8000
 _structsrcdeep_L7
@@ -793,11 +777,9 @@ _structsrcdeep_L8
                 BRL     _structsrcdeep_L9
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L9
                 LDA     #0
@@ -876,11 +858,9 @@ _structsrcdeep_L10
                 BRL     _structsrcdeep_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L11
                 LDA     #2
@@ -940,18 +920,14 @@ _structsrcdeep_L12
                 BPL     _structsrcdeep_L12
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #13058
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13058
                 BEQ     *+5
                 BRL     _structsrcdeep_L16
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
-                LDA     #17410
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17410
                 BEQ     *+5
                 BRL     _structsrcdeep_L16
                 LDA     #1
@@ -998,11 +974,9 @@ _structsrcdeep_L15
                 BRL     _structsrcdeep_L13
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L13
                 LDA     #0
@@ -1062,18 +1036,14 @@ _structsrcdeep_L18
                 BPL     _structsrcdeep_L18
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #13056
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13056
                 BEQ     *+5
                 BRL     _structsrcdeep_L22
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
-                LDA     #17408
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17408
                 BEQ     *+5
                 BRL     _structsrcdeep_L22
                 LDA     #1
@@ -1120,11 +1090,9 @@ _structsrcdeep_L21
                 BRL     _structsrcdeep_L19
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L19
                 LDA     #1
@@ -1229,11 +1197,9 @@ _structsrcdeep_L24
                 BRL     _structsrcdeep_L25
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L25
                 LDA     #0
@@ -1296,18 +1262,14 @@ _structsrcdeep_L26
                 BPL     _structsrcdeep_L26
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BEQ     *+5
                 BRL     _structsrcdeep_L30
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BEQ     *+5
                 BRL     _structsrcdeep_L30
                 LDA     #1
@@ -1354,11 +1316,9 @@ _structsrcdeep_L29
                 BRL     _structsrcdeep_L27
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L27
                 LDA     #0
@@ -1454,10 +1414,8 @@ _structsrcdeep_L39
                 BRL     _structsrcdeep_L36
                 LDA     gt+2
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BEQ     *+5
                 BRL     _structsrcdeep_L36
                 LDA     #1
@@ -1470,10 +1428,8 @@ _structsrcdeep_L37
                 BRL     _structsrcdeep_L34
                 LDA     gt+0
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _structsrcdeep_L34
                 LDA     #1
@@ -1486,11 +1442,9 @@ _structsrcdeep_L35
                 BRL     _structsrcdeep_L33
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L33
                 LDA     17,S   ; fccstk d=0 b=17

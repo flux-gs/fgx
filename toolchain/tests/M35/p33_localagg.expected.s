@@ -213,18 +213,14 @@ main_stkok        TCS
                 TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _p33_localagg_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _p33_localagg_L1
                 LDA     #0
@@ -266,10 +262,8 @@ _p33_localagg_L0
                 TCS
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _p33_localagg_L3
                 LDA     #2
@@ -295,11 +289,9 @@ _p33_localagg_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _p33_localagg_L7
                 EOR     #$8000
 _p33_localagg_L7
@@ -313,11 +305,9 @@ _p33_localagg_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _p33_localagg_L11
                 EOR     #$8000
 _p33_localagg_L11
@@ -406,10 +396,8 @@ _p33_localagg_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _p33_localagg_L12
                 LDA     #3
@@ -449,10 +437,8 @@ _p33_localagg_L12
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _p33_localagg_L13
                 LDA     #4
@@ -492,10 +478,8 @@ _p33_localagg_L13
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _p33_localagg_L14
                 LDA     #5

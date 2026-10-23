@@ -42,10 +42,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #115
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #115
                 BEQ     *+5
                 BRL     _dyntables_L0
                 LDA     #0
@@ -58,11 +56,9 @@ _dyntables_L1
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 TAY
                 TSC
                 CLC

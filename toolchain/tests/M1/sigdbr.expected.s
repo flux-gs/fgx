@@ -73,11 +73,8 @@ churn_stkok        TCS
                 LDA     6+churn_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -124,13 +121,7 @@ main_stkok        TCS
                 ADC     #6
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sigdbr_L0
                 LDA     #1
@@ -163,10 +154,8 @@ _sigdbr_L0
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _sigdbr_L2
                 LDA     #2
@@ -191,10 +180,8 @@ _sigdbr_L2
                 TYA
                 LDA     sig_flag
                 TAX
-                LDA     #16898
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16898
                 BNE     *+5
                 BRL     _sigdbr_L3
                 LDA     #3

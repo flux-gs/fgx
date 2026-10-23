@@ -96,11 +96,9 @@ _pidx_char_L1
 _pidx_char_L2
                 LDA     _fcc_img1
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #65
                 TAY
                 TSC
                 CLC

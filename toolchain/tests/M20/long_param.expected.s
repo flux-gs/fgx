@@ -137,11 +137,9 @@ _long_param_L3
 _long_param_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _long_param_L0
 _long_param_L2

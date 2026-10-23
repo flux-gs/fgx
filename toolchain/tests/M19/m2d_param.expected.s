@@ -42,10 +42,9 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #0
@@ -83,10 +82,9 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #1
@@ -128,10 +126,9 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2
@@ -173,10 +170,8 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -218,10 +213,8 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -263,10 +256,8 @@ sum_2x3_stkok        TCS
                 FIN
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2

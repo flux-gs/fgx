@@ -185,10 +185,8 @@ main_stkok        TCS
                 TYA
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _call_postfix_L2
                 LDA     #1
@@ -222,10 +220,8 @@ _call_postfix_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BNE     *+5
                 BRL     _call_postfix_L3
                 LDA     #2
@@ -256,10 +252,8 @@ _call_postfix_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BNE     *+5
                 BRL     _call_postfix_L4
                 LDA     #3
@@ -281,10 +275,8 @@ _call_postfix_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _call_postfix_L5
                 LDA     #4

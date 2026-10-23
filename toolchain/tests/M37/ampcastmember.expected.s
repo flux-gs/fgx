@@ -112,10 +112,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ampcastmember_L0
                 LDA     #1
@@ -136,10 +134,8 @@ _ampcastmember_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _ampcastmember_L1
                 LDA     #2
@@ -244,10 +240,8 @@ _ampcastmember_L3
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _ampcastmember_L6
                 LDA     #5
@@ -273,10 +267,8 @@ _ampcastmember_L6
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _ampcastmember_L7
                 LDA     #6
@@ -313,10 +305,8 @@ _ampcastmember_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BNE     *+5
                 BRL     _ampcastmember_L8
                 LDA     #7
@@ -336,10 +326,8 @@ _ampcastmember_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _ampcastmember_L9
                 LDA     #8
@@ -393,10 +381,8 @@ _ampcastmember_L9
                 LDA     [_fcc_img4]
                 AND     #$00FF
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BNE     *+5
                 BRL     _ampcastmember_L10
                 LDA     #9

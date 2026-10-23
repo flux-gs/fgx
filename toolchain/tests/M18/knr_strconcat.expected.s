@@ -85,19 +85,15 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _knr_strconcat_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _knr_strconcat_L0
                 LDA     _fcc_img4
@@ -112,19 +108,15 @@ _knr_strconcat_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _knr_strconcat_L1
                 LDA     _fcc_img6
@@ -139,19 +131,15 @@ _knr_strconcat_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #33
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #33
                 BNE     *+5
                 BRL     _knr_strconcat_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _knr_strconcat_L2
                 LDA     _fcc_img8
@@ -166,19 +154,15 @@ _knr_strconcat_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _knr_strconcat_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _knr_strconcat_L3
                 LDA     _fcc_img2
@@ -193,19 +177,15 @@ _knr_strconcat_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _knr_strconcat_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _knr_strconcat_L4
                 LDA     _fcc_img2
@@ -220,19 +200,15 @@ _knr_strconcat_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BNE     *+5
                 BRL     _knr_strconcat_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     _fcc_img0
 _knr_strconcat_L5
                 LDA     _fcc_img2
@@ -247,27 +223,21 @@ _knr_strconcat_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     _fcc_img0
 _knr_strconcat_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L7
                 LDA     _fcc_img0

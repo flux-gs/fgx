@@ -251,22 +251,14 @@ main_stkok        TCS
                 STA     L+2
                 TYA
                 FGX2_FARCALL ri
-                PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFE
                 BEQ     *+5
                 BRL     _fconv_call_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L0
                 FGX2_FARCALL rf
@@ -293,11 +285,9 @@ _fconv_call_L0
                 BRL     _fconv_call_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L1
                 LDA     F+2
@@ -310,19 +300,15 @@ _fconv_call_L1
                 PLA
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _fconv_call_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L2
                 LDA     F+2
@@ -363,11 +349,9 @@ _fconv_call_L2
                 BRL     _fconv_call_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L3
                 LDA     L+2
@@ -409,28 +393,22 @@ _fconv_call_L3
                 BRL     _fconv_call_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L4
                 LDA     gi
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _fconv_call_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L5
                 LDA     gl+2
@@ -459,29 +437,23 @@ _fconv_call_L5
                 BRL     _fconv_call_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L6
                 LDA     gc
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _fconv_call_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L7
                 LDA     1,S   ; fccstk d=0 b=1

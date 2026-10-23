@@ -68,11 +68,9 @@ _ptrmemidx_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _ptrmemidx_L3
                 EOR     #$8000
 _ptrmemidx_L3
@@ -118,11 +116,9 @@ _ptrmemidx_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -254,19 +250,15 @@ _ptrmemidx_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _ptrmemidx_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img1
 _ptrmemidx_L4
                 LDA     7,S   ; fccstk d=0 b=7
@@ -292,19 +284,15 @@ _ptrmemidx_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #13
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13
                 BEQ     *+5
                 BRL     _ptrmemidx_L5
                 LDA     _fcc_img1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img1
 _ptrmemidx_L5
                 LDA     7,S   ; fccstk d=0 b=7
@@ -330,19 +318,15 @@ _ptrmemidx_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _ptrmemidx_L6
                 LDA     _fcc_img1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img1
 _ptrmemidx_L6
                 LDA     7,S   ; fccstk d=0 b=7
@@ -399,19 +383,15 @@ _ptrmemidx_L6
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _ptrmemidx_L7
                 LDA     _fcc_img1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     _fcc_img1
 _ptrmemidx_L7
                 LDA     _fcc_img1

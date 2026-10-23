@@ -89,11 +89,9 @@ main_stkok        TCS
                 FGX2_FARCALL setjmp
                 LDA     sjm_hits
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _sigjmpmask_L2
                 EOR     #$8000
 _sigjmpmask_L2
@@ -111,10 +109,8 @@ _sigjmpmask_L2
 _sigjmpmask_L1
                 LDA     sjm_hits
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _sigjmpmask_L3
                 LDA     #21
@@ -153,11 +149,9 @@ _sigjmpmask_L4
                 PHA
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -198,11 +192,9 @@ _sigjmpmask_L4
                 BRL     _sigjmpmask_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
 _sigjmpmask_L5
                 LDA     1,S   ; fccstk d=0 b=1

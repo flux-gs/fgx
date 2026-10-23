@@ -363,10 +363,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _pre_deref_rmw_L0
                 LDA     #1
@@ -386,11 +384,9 @@ _pre_deref_rmw_L0
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 TAY
                 TSC
                 CLC

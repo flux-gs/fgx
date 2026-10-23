@@ -287,11 +287,9 @@ main_stkok        TCS
                 BRL     _pfvar_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L4
                 LDA     #12345
@@ -362,10 +360,8 @@ _pfvar_L4
                 BRL     _pfvar_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _pfvar_L6
                 LDA     #1
@@ -378,11 +374,9 @@ _pfvar_L7
                 BRL     _pfvar_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L5
                 LDA     #7
@@ -454,11 +448,9 @@ _pfvar_L5
                 BRL     _pfvar_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L8
                 SEP     #$20
@@ -533,11 +525,9 @@ _pfvar_L8
                 BRL     _pfvar_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L9
                 LDA     #122
@@ -606,11 +596,9 @@ _pfvar_L9
                 BRL     _pfvar_L10
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L10
                 LDA     9,S   ; fccstk d=0 b=9
@@ -687,11 +675,9 @@ _pfvar_L10
                 BRL     _pfvar_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L11
                 LDA     13,S   ; fccstk d=0 b=13
@@ -768,11 +754,9 @@ _pfvar_L11
                 BRL     _pfvar_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L12
                 LDA     #7
@@ -808,19 +792,15 @@ _pfvar_L12
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _pfvar_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     1,S   ; fccstk d=0 b=1
 _pfvar_L13
                 LDA     1,S   ; fccstk d=0 b=1

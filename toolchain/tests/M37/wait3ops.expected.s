@@ -93,12 +93,8 @@ _wait3ops_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                PHA
-                LDA     #76
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #76
                 BVC     _wait3ops_L3
                 EOR     #$8000
 _wait3ops_L3
@@ -149,12 +145,8 @@ _wait3ops_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
-                PHA
-                LDA     #76
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #76
                 BVC     _wait3ops_L7
                 EOR     #$8000
 _wait3ops_L7
@@ -172,10 +164,8 @@ _wait3ops_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _wait3ops_L8
                 LDA     #1
@@ -195,11 +185,9 @@ _wait3ops_L6
                 BRL     _wait3ops_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L9
                 LDA     #4660
@@ -235,10 +223,8 @@ _wait3ops_L9
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -250,11 +236,9 @@ _wait3ops_L11
                 BRL     _wait3ops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L10
                 SEP     #$20
@@ -299,28 +283,22 @@ _wait3ops_L10
                 BRL     _wait3ops_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _wait3ops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L13
                 LDA     #0
@@ -332,12 +310,8 @@ _wait3ops_L14
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
-                PHA
-                LDA     #76
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #76
                 BVC     _wait3ops_L17
                 EOR     #$8000
 _wait3ops_L17
@@ -355,10 +329,8 @@ _wait3ops_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _wait3ops_L18
                 LDA     #0
@@ -378,11 +350,9 @@ _wait3ops_L16
                 BRL     _wait3ops_L19
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L19
                 LDA     5,S   ; fccstk d=0 b=5

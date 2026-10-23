@@ -161,11 +161,9 @@ _arrmemberdecay_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _arrmemberdecay_L7
                 EOR     #$8000
 _arrmemberdecay_L7
@@ -190,11 +188,9 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 JSR     _fcc_long_from_int
                 TAY
                 LDA     _fcc_long_hi
@@ -237,11 +233,8 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -266,11 +259,8 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
@@ -786,10 +776,8 @@ _arrmemberdecay_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _arrmemberdecay_L18
                 LDA     11,S   ; fccstk d=0 b=11
@@ -804,10 +792,8 @@ _arrmemberdecay_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BEQ     *+5
                 BRL     _arrmemberdecay_L18
                 LDA     #0
@@ -851,10 +837,8 @@ _arrmemberdecay_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _arrmemberdecay_L21
                 LDA     15,S   ; fccstk d=0 b=15
@@ -869,10 +853,8 @@ _arrmemberdecay_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _arrmemberdecay_L21
                 LDA     #0
@@ -907,10 +889,8 @@ _arrmemberdecay_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BNE     *+5
                 BRL     _arrmemberdecay_L23
                 LDA     #10
@@ -937,10 +917,8 @@ _arrmemberdecay_L23
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _arrmemberdecay_L24
                 LDA     #11
@@ -956,10 +934,8 @@ _arrmemberdecay_L23
 _arrmemberdecay_L24
                 LDA     o+0
                 TAX
-                LDA     #23130
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #23130
                 BNE     *+5
                 BRL     _arrmemberdecay_L25
                 LDA     #12

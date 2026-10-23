@@ -29,10 +29,8 @@ main_stkok        TCS
                 STA     g+2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _paren_member_L0
                 LDA     #1
@@ -48,10 +46,8 @@ main_stkok        TCS
 _paren_member_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _paren_member_L1
                 LDA     #2
@@ -67,10 +63,8 @@ _paren_member_L0
 _paren_member_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #240
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #240
                 TAX
                 LDA     #64
                 STA     _fcc_tmp_b
@@ -99,10 +93,8 @@ _paren_member_L4
 _paren_member_L2
                 LDA     g+2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _paren_member_L5
                 LDA     #4

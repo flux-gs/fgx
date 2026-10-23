@@ -76,11 +76,9 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #7
                 TAY
                 TSC
                 CLC

@@ -29,11 +29,9 @@ _ss_recurse_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #256
                 BVC     _ss_recurse_L3
                 EOR     #$8000
 _ss_recurse_L3
@@ -98,10 +96,8 @@ _ss_recurse_L2
                 LDA     6+rec_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -123,11 +119,8 @@ _ss_recurse_L5
                 FIN
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 DO      8+rec_FRAMESIZE/256
                 TSC
@@ -140,11 +133,9 @@ _ss_recurse_L5
                 LDA     8+rec_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 PHA
                 FGX2_FARCALL rec
                 TAY

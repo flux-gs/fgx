@@ -20,10 +20,9 @@ _init_md_elide_sl_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 PHA
                 LDA     #0
                 CLC
@@ -34,17 +33,14 @@ _init_md_elide_sl_stkok        TCS
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #83
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #83
                 BEQ     *+5
                 BRL     _init_md_elide_L3
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 PHA
                 LDA     #2
                 CLC
@@ -55,10 +51,8 @@ _init_md_elide_sl_stkok        TCS
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #110
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #110
                 BEQ     *+5
                 BRL     _init_md_elide_L3
                 LDA     #0
@@ -70,10 +64,8 @@ _init_md_elide_L4
                 BEQ     *+5
                 BRL     _init_md_elide_L1
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #0
                 CLC
@@ -84,10 +76,8 @@ _init_md_elide_L4
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BEQ     *+5
                 BRL     _init_md_elide_L1
                 LDA     #0
@@ -110,10 +100,9 @@ _init_md_elide_L2
                 RTL
 _init_md_elide_L0
                 LDA     #6
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 PHA
                 LDA     #0
                 CLC
@@ -124,17 +113,14 @@ _init_md_elide_L0
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #83
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #83
                 BEQ     *+5
                 BRL     _init_md_elide_L8
                 LDA     #6
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 PHA
                 LDA     #1
                 CLC
@@ -145,10 +131,8 @@ _init_md_elide_L0
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _init_md_elide_L8
                 LDA     #0
@@ -160,10 +144,9 @@ _init_md_elide_L9
                 BEQ     *+5
                 BRL     _init_md_elide_L6
                 LDA     #6
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 PHA
                 LDA     #2
                 CLC
@@ -174,10 +157,8 @@ _init_md_elide_L9
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                LDA     #116
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #116
                 BEQ     *+5
                 BRL     _init_md_elide_L6
                 LDA     #0
@@ -200,10 +181,8 @@ _init_md_elide_L7
                 RTL
 _init_md_elide_L5
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -215,17 +194,13 @@ _init_md_elide_L5
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _init_md_elide_L13
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -237,10 +212,8 @@ _init_md_elide_L5
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L13
                 LDA     #0
@@ -252,10 +225,8 @@ _init_md_elide_L14
                 BEQ     *+5
                 BRL     _init_md_elide_L11
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -267,10 +238,8 @@ _init_md_elide_L14
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L11
                 LDA     #0
@@ -294,10 +263,8 @@ _init_md_elide_L12
 _init_md_elide_L10
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _init_md_elide_L18
                 LDA     #1
@@ -313,10 +280,8 @@ _init_md_elide_L10
                 TAX
                 LDA:    _init_md_elide_sl_sl_sz,X
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _init_md_elide_L18
                 LDA     #0
@@ -340,10 +305,8 @@ _init_md_elide_L19
                 TAX
                 LDA:    _init_md_elide_sl_sl_sz,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L16
                 LDA     #0
@@ -393,10 +356,9 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 PHA
@@ -453,10 +415,9 @@ main_stkok        TCS
                 BEQ     *+5
                 BRL     _init_md_elide_L23
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 PHA
@@ -521,10 +482,8 @@ _init_md_elide_L24
                 BEQ     *+5
                 BRL     _init_md_elide_L21
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 PHA
@@ -600,10 +559,9 @@ _init_md_elide_L22
                 RTL
 _init_md_elide_L20
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 PHA
@@ -660,10 +618,9 @@ _init_md_elide_L20
                 BEQ     *+5
                 BRL     _init_md_elide_L28
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 ASL
                 PHA
@@ -728,10 +685,9 @@ _init_md_elide_L29
                 BEQ     *+5
                 BRL     _init_md_elide_L26
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 ASL
                 PHA
@@ -807,10 +763,9 @@ _init_md_elide_L27
                 RTL
 _init_md_elide_L25
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -824,17 +779,13 @@ _init_md_elide_L25
                 TAX
                 LDA:    ml,X
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28
                 BEQ     *+5
                 BRL     _init_md_elide_L33
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -848,10 +799,8 @@ _init_md_elide_L25
                 TAX
                 LDA:    ml,X
                 TAX
-                LDA     #29
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #29
                 BEQ     *+5
                 BRL     _init_md_elide_L33
                 LDA     #0
@@ -863,10 +812,8 @@ _init_md_elide_L34
                 BEQ     *+5
                 BRL     _init_md_elide_L31
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -880,10 +827,8 @@ _init_md_elide_L34
                 TAX
                 LDA:    ml,X
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #31
                 BEQ     *+5
                 BRL     _init_md_elide_L31
                 LDA     #0
@@ -918,10 +863,8 @@ _init_md_elide_L30
                 TAX
                 LDA:    mix,X
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _init_md_elide_L38
                 LDA     #1
@@ -937,10 +880,8 @@ _init_md_elide_L30
                 TAX
                 LDA:    mix,X
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _init_md_elide_L38
                 LDA     #0
@@ -964,10 +905,8 @@ _init_md_elide_L39
                 TAX
                 LDA:    mix,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _init_md_elide_L36
                 LDA     #0
@@ -1002,10 +941,8 @@ _init_md_elide_L35
                 TAX
                 LDA:    mix,X
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _init_md_elide_L41
                 LDA     #2
@@ -1021,10 +958,8 @@ _init_md_elide_L35
                 TAX
                 LDA:    mix,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L41
                 LDA     #0
@@ -1048,10 +983,8 @@ _init_md_elide_L42
 _init_md_elide_L40
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _init_md_elide_L43
                 LDA     #6
@@ -1066,10 +999,8 @@ _init_md_elide_L40
                 RTL
 _init_md_elide_L43
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -1081,17 +1012,13 @@ _init_md_elide_L43
                 TAX
                 LDA:    unsized,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _init_md_elide_L47
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -1103,10 +1030,8 @@ _init_md_elide_L43
                 TAX
                 LDA:    unsized,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L47
                 LDA     #0
@@ -1118,10 +1043,8 @@ _init_md_elide_L48
                 BEQ     *+5
                 BRL     _init_md_elide_L45
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -1133,10 +1056,8 @@ _init_md_elide_L48
                 TAX
                 LDA:    unsized,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L45
                 LDA     #0
@@ -1178,10 +1099,8 @@ _init_md_elide_L44
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _init_md_elide_L50
                 LDA     #0
@@ -1204,10 +1123,8 @@ _init_md_elide_L44
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _init_md_elide_L50
                 LDA     #0
@@ -1249,10 +1166,8 @@ _init_md_elide_L49
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _init_md_elide_L53
                 LDA     #0
@@ -1275,10 +1190,8 @@ _init_md_elide_L49
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L53
                 LDA     #0
@@ -1320,10 +1233,8 @@ _init_md_elide_L52
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _init_md_elide_L56
                 LDA     #1
@@ -1346,10 +1257,8 @@ _init_md_elide_L52
                 TAX
                 LDA:    cube,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L56
                 LDA     #0
@@ -1519,10 +1428,8 @@ _init_md_elide_L58
                 TAX
                 LDA:    trail,X
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _init_md_elide_L64
                 LDA     #1
@@ -1538,10 +1445,8 @@ _init_md_elide_L58
                 TAX
                 LDA:    trail,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L64
                 LDA     #0
@@ -1566,10 +1471,8 @@ _init_md_elide_L63
                 FGX2_FARCALL _init_md_elide_sl
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _init_md_elide_L66
                 LDA     1,S   ; fccstk d=0 b=1

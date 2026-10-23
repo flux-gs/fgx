@@ -24,7 +24,6 @@ main_stkok        TCS
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$002A
-                STA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_long_hi
                 STA     3,S   ; fccstk d=0 b=3

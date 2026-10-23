@@ -19,27 +19,21 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_img0
                 TAY
                 JSR     _fcc_long_from_int
                 LDA     _fcc_long_hi
                 STA     _fcc_img1
                 TYA
-                LDA     #5
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFB
                 STA     _fcc_img2
                 TAY
                 JSR     _fcc_long_from_int
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_img4
                 TAY
@@ -60,27 +54,21 @@ main_stkok        TCS
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_img6
                 TAY
                 JSR     _fcc_long_from_int
                 LDA     _fcc_long_hi
                 STA     _fcc_img7
                 TYA
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 STA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_tmp_b
                 JSR     _fcc_long_from_int
                 LDA     _fcc_long_hi
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     #9
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF7
                 STA     gs+0
                 TAY
                 JSR     _fcc_long_from_int
@@ -91,9 +79,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 JSR     _fcc_long_from_int
                 STA     [_fcc_fpr0]
                 TAX
@@ -112,9 +98,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
-                LDA     #123
-                EOR     #$FFFF
-                INC
+                LDA     #$FF85
                 JSR     _fcc_long_from_int
                 TAY
                 LDA     1,S

@@ -23,18 +23,14 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     braced+0
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BEQ     *+5
                 BRL     _struct_chararray_init_L9
                 LDA     braced+6
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BEQ     *+5
                 BRL     _struct_chararray_init_L9
                 LDA     #1
@@ -63,10 +59,8 @@ _struct_chararray_init_L10
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _struct_chararray_init_L7
                 LDA     #1
@@ -95,10 +89,8 @@ _struct_chararray_init_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BEQ     *+5
                 BRL     _struct_chararray_init_L5
                 LDA     #1
@@ -127,10 +119,8 @@ _struct_chararray_init_L6
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BEQ     *+5
                 BRL     _struct_chararray_init_L3
                 LDA     #1
@@ -159,10 +149,8 @@ _struct_chararray_init_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #68
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #68
                 BEQ     *+5
                 BRL     _struct_chararray_init_L1
                 LDA     #1
@@ -175,27 +163,21 @@ _struct_chararray_init_L2
                 BRL     _struct_chararray_init_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _struct_chararray_init_L0
                 LDA     shortb+0
                 TAX
-                LDA     #13107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13107
                 BEQ     *+5
                 BRL     _struct_chararray_init_L20
                 LDA     shortb+6
                 TAX
-                LDA     #17476
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17476
                 BEQ     *+5
                 BRL     _struct_chararray_init_L20
                 LDA     #1
@@ -224,10 +206,8 @@ _struct_chararray_init_L21
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BEQ     *+5
                 BRL     _struct_chararray_init_L18
                 LDA     #1
@@ -256,10 +236,8 @@ _struct_chararray_init_L19
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L16
                 LDA     #1
@@ -288,10 +266,8 @@ _struct_chararray_init_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L14
                 LDA     #1
@@ -320,10 +296,8 @@ _struct_chararray_init_L15
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L12
                 LDA     #1
@@ -336,27 +310,21 @@ _struct_chararray_init_L13
                 BRL     _struct_chararray_init_L11
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _struct_chararray_init_L11
                 LDA     fromstr+0
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BEQ     *+5
                 BRL     _struct_chararray_init_L39
                 LDA     fromstr+6
                 TAX
-                LDA     #26214
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26214
                 BEQ     *+5
                 BRL     _struct_chararray_init_L39
                 LDA     #1
@@ -385,10 +353,8 @@ _struct_chararray_init_L40
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #104
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #104
                 BEQ     *+5
                 BRL     _struct_chararray_init_L37
                 LDA     #1
@@ -417,10 +383,8 @@ _struct_chararray_init_L38
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #105
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #105
                 BEQ     *+5
                 BRL     _struct_chararray_init_L35
                 LDA     #1
@@ -449,10 +413,8 @@ _struct_chararray_init_L36
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L33
                 LDA     #1
@@ -481,10 +443,8 @@ _struct_chararray_init_L34
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L31
                 LDA     #1
@@ -497,10 +457,8 @@ _struct_chararray_init_L32
                 BRL     _struct_chararray_init_L29
                 LDA     exact+0
                 TAX
-                LDA     #30583
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30583
                 BEQ     *+5
                 BRL     _struct_chararray_init_L29
                 LDA     #1
@@ -513,10 +471,8 @@ _struct_chararray_init_L30
                 BRL     _struct_chararray_init_L27
                 LDA     exact+6
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BEQ     *+5
                 BRL     _struct_chararray_init_L27
                 LDA     #1
@@ -545,10 +501,8 @@ _struct_chararray_init_L28
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _struct_chararray_init_L25
                 LDA     #1
@@ -577,10 +531,8 @@ _struct_chararray_init_L26
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _struct_chararray_init_L23
                 LDA     #1
@@ -593,11 +545,9 @@ _struct_chararray_init_L24
                 BRL     _struct_chararray_init_L22
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _struct_chararray_init_L22
                 LDA     _fcc_img0

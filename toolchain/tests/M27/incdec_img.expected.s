@@ -29,11 +29,9 @@ _incdec_img_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #10
                 BVC     _incdec_img_L3
                 EOR     #$8000
 _incdec_img_L3
@@ -41,11 +39,9 @@ _incdec_img_L3
                 BRL     _incdec_img_L2
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img1
 _incdec_img_L1
                 INC     _fcc_img0
@@ -74,11 +70,9 @@ _incdec_img_L2
                 ADC     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #15
                 TAY
                 TSC
                 CLC

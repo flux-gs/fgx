@@ -107,10 +107,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _charpack_L0
                 LDA     #1
@@ -126,10 +124,8 @@ main_stkok        TCS
 _charpack_L0
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _charpack_L1
                 LDA     #2
@@ -145,10 +141,8 @@ _charpack_L0
 _charpack_L1
                 LDA     #4
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _charpack_L2
                 LDA     #3
@@ -164,10 +158,8 @@ _charpack_L1
 _charpack_L2
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _charpack_L3
                 LDA     #4
@@ -183,10 +175,8 @@ _charpack_L2
 _charpack_L3
                 LDA     #6
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _charpack_L4
                 LDA     #5
@@ -215,19 +205,15 @@ _charpack_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                LDA     #17
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17
                 BEQ     *+5
                 BRL     _charpack_L6
                 LDA     2,S   ; fccstk d=0 b=2
                 AND     #$00FF
                 TAX
-                LDA     #34
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #34
                 BEQ     *+5
                 BRL     _charpack_L6
                 LDA     #0
@@ -258,10 +244,8 @@ _charpack_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                LDA     #17
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17
                 BNE     *+5
                 BRL     _charpack_L8
                 LDA     #7
@@ -278,19 +262,15 @@ _charpack_L8
                 LDA     gcc+0
                 AND     #$00FF
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _charpack_L10
                 LDA     gcc+1
                 AND     #$00FF
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BEQ     *+5
                 BRL     _charpack_L10
                 LDA     #0
@@ -341,19 +321,15 @@ _charpack_L9
                 LDA     gb+0
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _charpack_L15
                 LDA     gb+1
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _charpack_L15
                 LDA     #0
@@ -367,10 +343,8 @@ _charpack_L16
                 LDA     gb+6
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _charpack_L13
                 LDA     #0
@@ -526,10 +500,8 @@ _charpack_L17
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _charpack_L21
                 SEP     #$20
@@ -549,10 +521,8 @@ _charpack_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _charpack_L21
                 LDA     #0
@@ -580,10 +550,8 @@ _charpack_L22
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _charpack_L19
                 LDA     #0
@@ -631,10 +599,8 @@ _charpack_L18
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _charpack_L23
                 LDA     #11
@@ -672,10 +638,8 @@ _charpack_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _charpack_L25
                 LDA     #12
@@ -708,10 +672,8 @@ _charpack_L25
 _charpack_L26
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _charpack_L27
                 LDA     #12
@@ -762,18 +724,15 @@ _charpack_L29
                 TYA
                 PHA
                 LDA     #17
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #17
                 ASL
                 TAX
-                LDA     #51
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #51
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b

@@ -492,9 +492,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     #65534
                 STA     19,S   ; fccstk d=0 b=19
@@ -627,11 +625,9 @@ main_stkok        TCS
                 BRL     _llong_store_L2
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     21,S   ; fccstk d=0 b=21
 _llong_store_L2
                 LDA     #$89AB
@@ -792,11 +788,9 @@ _llong_store_L5
                 BRL     _llong_store_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     21,S   ; fccstk d=0 b=21
 _llong_store_L3
                 LDA     17,S   ; fccstk d=0 b=17
@@ -926,11 +920,9 @@ _llong_store_L8
                 BRL     _llong_store_L6
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     21,S   ; fccstk d=0 b=21
 _llong_store_L6
                 LDA     lo_neg+2
@@ -1061,11 +1053,9 @@ _llong_store_L11
                 BRL     _llong_store_L9
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     21,S   ; fccstk d=0 b=21
 _llong_store_L9
                 LDA     21,S   ; fccstk d=0 b=21

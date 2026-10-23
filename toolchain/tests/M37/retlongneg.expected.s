@@ -32,9 +32,7 @@ retneg_stkok        TCS
                 CMP     #0
                 BNE     *+5
                 BRL     _retlongneg_L0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 TAY
                 TSC

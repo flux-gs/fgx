@@ -56,11 +56,8 @@ jump_from_deep_stkok        TCS
                 LDA     8+jump_from_deep_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PLX
                 FGX2_FARCALL longjmp
                 TAY
@@ -103,10 +100,8 @@ main_stkok        TCS
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _setjmp_jump_L0
                 LDA     #40
@@ -128,10 +123,8 @@ main_stkok        TCS
 _setjmp_jump_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BNE     *+5
                 BRL     _setjmp_jump_L1
                 LDA     #2
@@ -147,10 +140,8 @@ _setjmp_jump_L0
 _setjmp_jump_L1
                 LDA     marker
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _setjmp_jump_L2
                 LDA     #3
@@ -176,10 +167,8 @@ _setjmp_jump_L2
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _setjmp_jump_L3
                 SEP     #$20
@@ -207,10 +196,8 @@ _setjmp_jump_L2
 _setjmp_jump_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _setjmp_jump_L4
                 LDA     #5

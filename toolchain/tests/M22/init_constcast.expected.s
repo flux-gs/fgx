@@ -24,15 +24,11 @@ main_stkok        TCS
                 LDA:    cols,X
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BNE     *+5
                 BRL     _init_constcast_L0
                 LDA     #1
@@ -51,10 +47,8 @@ _init_constcast_L0
                 TAX
                 LDA:    flags,X
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _init_constcast_L1
                 LDA     #2
@@ -73,10 +67,8 @@ _init_constcast_L1
                 TAX
                 LDA:    flags,X
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _init_constcast_L2
                 LDA     #3
@@ -100,11 +92,9 @@ _init_constcast_L2
                 LDA     #keys
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -128,10 +118,8 @@ _init_constcast_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BNE     *+5
                 BRL     _init_constcast_L3
                 LDA     #4
@@ -155,11 +143,9 @@ _init_constcast_L3
                 LDA     #keys
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -167,10 +153,8 @@ _init_constcast_L3
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _init_constcast_L4
                 LDA     #5
@@ -194,11 +178,10 @@ _init_constcast_L4
                 LDA     #keys
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -241,11 +224,10 @@ _init_constcast_L5
                 LDA     #keys
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0

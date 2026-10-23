@@ -40,10 +40,8 @@ main_stkok        TCS
                 LDA:    arr,X
                 AND     #$00FF
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BEQ     *+5
                 BRL     _static_ptr_disp_L3
                 LDA     #13
@@ -51,10 +49,8 @@ main_stkok        TCS
                 LDA:    arr,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L3
                 LDA     #1
@@ -70,10 +66,8 @@ _static_ptr_disp_L4
                 LDA:    arr,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L1
                 LDA     #1
@@ -86,11 +80,9 @@ _static_ptr_disp_L2
                 BRL     _static_ptr_disp_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _static_ptr_disp_L0
                 SEP     #$20
@@ -108,10 +100,8 @@ _static_ptr_disp_L0
                 TAX
                 LDA:    iarr,X
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BEQ     *+5
                 BRL     _static_ptr_disp_L10
                 LDA     #1
@@ -119,10 +109,8 @@ _static_ptr_disp_L0
                 TAX
                 LDA:    iarr,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L10
                 LDA     #1
@@ -138,10 +126,8 @@ _static_ptr_disp_L11
                 TAX
                 LDA:    iarr,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L8
                 LDA     #1
@@ -198,11 +184,9 @@ _static_ptr_disp_L7
                 BRL     _static_ptr_disp_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _static_ptr_disp_L5
                 LDA     #4369
@@ -219,18 +203,14 @@ _static_ptr_disp_L5
                 STA     [_fcc_fpr0]
                 LDA     obj+0
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BEQ     *+5
                 BRL     _static_ptr_disp_L17
                 LDA     obj+2
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BEQ     *+5
                 BRL     _static_ptr_disp_L17
                 LDA     #1
@@ -288,11 +268,9 @@ _static_ptr_disp_L16
                 BRL     _static_ptr_disp_L14
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _static_ptr_disp_L14
                 LDA     _fcc_img0

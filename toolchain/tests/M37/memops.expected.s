@@ -107,11 +107,9 @@ _memops_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _memops_L3
                 EOR     #$8000
 _memops_L3
@@ -144,11 +142,9 @@ _memops_L3
                 BRL     _memops_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img1
 _memops_L4
 _memops_L1
@@ -212,11 +208,9 @@ _memops_L7
                 BRL     _memops_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     11,S   ; fccstk d=0 b=11
 _memops_L5
                 LDA     11,S   ; fccstk d=0 b=11

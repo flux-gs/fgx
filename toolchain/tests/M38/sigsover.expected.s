@@ -65,11 +65,9 @@ opt_stkok        TCS
                 LDA     6+opt_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #37
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #37
                 TAY
                 TSC
                 CLC

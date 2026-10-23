@@ -21,11 +21,8 @@ seq_stkok        TCS
                 INC     _fcc_fb
                 LDA     seq_sl_n
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     seq_sl_n
                 TAY
                 TSC

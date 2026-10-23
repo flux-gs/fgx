@@ -57,11 +57,9 @@ add8_stkok        TCS
                 LDA     6+add8_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 TAY
                 TSC
                 CLC
@@ -632,11 +630,9 @@ _locfnp_L6
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #20
                 STA     _fcc_tmp_b
                 PLA
                 CLC

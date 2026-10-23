@@ -93,11 +93,9 @@ _m2d_partial_L3
 _m2d_partial_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _m2d_partial_L0
 _m2d_partial_L2
@@ -131,10 +129,9 @@ main_stkok        TCS
                 LDA     #3
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 STA     _fcc_tmp_b
                 SEP     #$20
@@ -162,10 +159,8 @@ main_stkok        TCS
                 LDA     #3
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 STA     _fcc_tmp_b
                 SEP     #$20

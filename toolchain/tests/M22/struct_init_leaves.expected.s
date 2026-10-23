@@ -77,11 +77,9 @@ _struct_init_leaves_L2
                 BRL     _struct_init_leaves_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _struct_init_leaves_L0
                 LDA     _struct_init_leaves_zru+10
@@ -140,11 +138,9 @@ _struct_init_leaves_L5
                 BRL     _struct_init_leaves_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _struct_init_leaves_L3
                 LDA     _struct_init_leaves_zru+18
@@ -172,10 +168,8 @@ _struct_init_leaves_L3
                 BRL     _struct_init_leaves_L7
                 LDA     _struct_init_leaves_zru+20
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _struct_init_leaves_L7
                 LDA     #1
@@ -188,11 +182,9 @@ _struct_init_leaves_L8
                 BRL     _struct_init_leaves_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _struct_init_leaves_L6
                 LDA     _struct_init_leaves_part+2
@@ -251,11 +243,9 @@ _struct_init_leaves_L11
                 BRL     _struct_init_leaves_L9
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _struct_init_leaves_L9
                 LDA     _struct_init_leaves_part+10
@@ -314,11 +304,9 @@ _struct_init_leaves_L14
                 BRL     _struct_init_leaves_L12
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _struct_init_leaves_L12
                 LDA     _struct_init_leaves_nulv+2
@@ -397,11 +385,9 @@ _struct_init_leaves_L17
                 BRL     _struct_init_leaves_L15
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _struct_init_leaves_L15
                 SEP     #$20
@@ -575,10 +561,8 @@ _struct_init_leaves_L26
                 BRL     _struct_init_leaves_L23
                 LDA     _struct_init_leaves_nulv+20
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_init_leaves_L23
                 LDA     #1
@@ -591,11 +575,9 @@ _struct_init_leaves_L24
                 BRL     _struct_init_leaves_L22
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _struct_init_leaves_L22
                 LDA     _fcc_img0

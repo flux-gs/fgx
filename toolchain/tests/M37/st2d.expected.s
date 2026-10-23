@@ -275,11 +275,9 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -504,10 +502,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #16
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -594,11 +590,9 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -653,10 +647,8 @@ main_stkok        TCS
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _st2d_L5
                 LDA     #1
@@ -664,10 +656,8 @@ main_stkok        TCS
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BEQ     *+5
                 BRL     _st2d_L5
                 LDA     #1
@@ -683,10 +673,8 @@ _st2d_L6
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BEQ     *+5
                 BRL     _st2d_L3
                 LDA     #1
@@ -702,10 +690,8 @@ _st2d_L4
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
-                LDA     #68
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #68
                 BEQ     *+5
                 BRL     _st2d_L1
                 LDA     #1
@@ -718,19 +704,15 @@ _st2d_L2
                 BRL     _st2d_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     _fcc_img0
 _st2d_L0
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _st2d_L14
                 LDA     #0
@@ -738,10 +720,8 @@ _st2d_L0
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _st2d_L14
                 LDA     #1
@@ -757,10 +737,8 @@ _st2d_L15
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _st2d_L12
                 LDA     #1
@@ -776,10 +754,8 @@ _st2d_L13
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _st2d_L10
                 LDA     #1
@@ -795,10 +771,8 @@ _st2d_L11
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _st2d_L8
                 LDA     #1
@@ -811,11 +785,9 @@ _st2d_L9
                 BRL     _st2d_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #30
                 STA     _fcc_img0
 _st2d_L7
                 LDA     _fcc_img0

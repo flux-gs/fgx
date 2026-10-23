@@ -173,10 +173,8 @@ _sprintf_farbuf_L0
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _sprintf_farbuf_L3
                 LDA     #1

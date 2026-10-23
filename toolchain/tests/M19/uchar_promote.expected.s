@@ -21,9 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_img1
                 LDA     #200
                 SEP     #$20
@@ -62,9 +60,7 @@ main_stkok        TCS
                 LDA     C
                 AND     #$00FF
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_lts16
@@ -80,11 +76,9 @@ _uchar_promote_L2
                 BRL     _uchar_promote_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _uchar_promote_L0
                 LDA     _fcc_img2
@@ -106,38 +100,26 @@ _uchar_promote_L5
                 BRL     _uchar_promote_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _uchar_promote_L3
                 LDA     C
                 AND     #$00FF
                 PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFE
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_divs16
-                PHA
-                LDA     #100
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FF9C
                 BEQ     *+5
                 BRL     _uchar_promote_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _uchar_promote_L6
                 LDA     #1
@@ -161,11 +143,9 @@ _uchar_promote_L9
                 BRL     _uchar_promote_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _uchar_promote_L7
                 LDA     G+2
@@ -187,36 +167,28 @@ _uchar_promote_L12
                 BRL     _uchar_promote_L10
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _uchar_promote_L10
                 LDA     _fcc_img2
                 AND     #$00FF
                 PHA
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mods16
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _uchar_promote_L13
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     _fcc_img0
 _uchar_promote_L13
                 LDA     C
@@ -227,19 +199,15 @@ _uchar_promote_L13
                 TXA
                 JSR     _fcc_gts16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _uchar_promote_L14
                 LDA     _fcc_img0
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     _fcc_img0
 _uchar_promote_L14
                 LDA     C
@@ -247,11 +215,9 @@ _uchar_promote_L14
                 EOR     #$FFFF
                 INC
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _uchar_promote_L16
                 EOR     #$8000
 _uchar_promote_L16
@@ -259,11 +225,9 @@ _uchar_promote_L16
                 BRL     _uchar_promote_L15
                 LDA     _fcc_img0
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     _fcc_img0
 _uchar_promote_L15
                 LDA     _fcc_img0

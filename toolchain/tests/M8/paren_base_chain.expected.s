@@ -242,11 +242,9 @@ _paren_base_chain_L2
                 BRL     _paren_base_chain_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L0
                 SEP     #$20
@@ -266,19 +264,15 @@ _paren_base_chain_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _paren_base_chain_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L3
                 SEP     #$20
@@ -298,19 +292,15 @@ _paren_base_chain_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _paren_base_chain_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L4
                 SEP     #$20
@@ -405,10 +395,8 @@ _paren_base_chain_L9
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _paren_base_chain_L6
                 LDA     #1
@@ -421,11 +409,9 @@ _paren_base_chain_L7
                 BRL     _paren_base_chain_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _paren_base_chain_L5
                 SEP     #$20
@@ -517,11 +503,9 @@ _paren_base_chain_L12
                 BRL     _paren_base_chain_L10
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _paren_base_chain_L10
                 SEP     #$20
@@ -581,11 +565,9 @@ _paren_base_chain_L15
                 BRL     _paren_base_chain_L13
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L13
                 SEP     #$20
@@ -654,11 +636,9 @@ _paren_base_chain_L18
                 BRL     _paren_base_chain_L16
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L16
                 SEP     #$20
@@ -718,11 +698,9 @@ _paren_base_chain_L21
                 BRL     _paren_base_chain_L19
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     _fcc_img0
 _paren_base_chain_L19
                 LDA     _fcc_img0

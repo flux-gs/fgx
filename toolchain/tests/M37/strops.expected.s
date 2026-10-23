@@ -135,19 +135,15 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _strops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L0
                 SEP     #$20
@@ -169,19 +165,15 @@ _strops_L0
                 TCS
                 TYA
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _strops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L1
                 LDA     #3
@@ -216,19 +208,15 @@ _strops_L1
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _strops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L2
                 LDA     #4
@@ -263,11 +251,9 @@ _strops_L2
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _strops_L4
                 EOR     #$8000
 _strops_L4
@@ -275,11 +261,9 @@ _strops_L4
                 BRL     _strops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L3
                 LDA     #8
@@ -316,10 +300,8 @@ _strops_L3
                 LDA:    g2,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _strops_L6
                 LDA     #7
@@ -327,10 +309,8 @@ _strops_L3
                 LDA:    g2,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _strops_L6
                 LDA     #1
@@ -343,11 +323,9 @@ _strops_L7
                 BRL     _strops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L5
                 LDA     #6
@@ -382,19 +360,15 @@ _strops_L5
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _strops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L8
                 LDA     #108
@@ -452,11 +426,9 @@ _strops_L11
                 BRL     _strops_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L9
                 LDA     #108
@@ -514,11 +486,9 @@ _strops_L14
                 BRL     _strops_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L12
                 LDA     #122
@@ -566,11 +536,9 @@ _strops_L17
                 BRL     _strops_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L15
                 LDA     #0
@@ -628,11 +596,9 @@ _strops_L20
                 BRL     _strops_L18
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L18
                 LDA     1,S   ; fccstk d=0 b=1

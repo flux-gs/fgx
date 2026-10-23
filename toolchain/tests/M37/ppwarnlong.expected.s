@@ -22,11 +22,9 @@ main_stkok        TCS
                 LDA     #20
                 STA     acc
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #22
                 TAY
                 TSC
                 CLC

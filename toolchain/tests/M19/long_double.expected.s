@@ -396,27 +396,21 @@ main_stkok        TCS
                 BRL     _long_double_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L2
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _long_double_L6
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _long_double_L6
                 LDA     #1
@@ -428,12 +422,8 @@ _long_double_L7
                 BNE     *+5
                 BRL     _long_double_L4
                 LDA     #8
-                PHA
-                LDA     #8
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _long_double_L8
                 EOR     #$8000
 _long_double_L8
@@ -449,11 +439,9 @@ _long_double_L5
                 BRL     _long_double_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L3
                 SEP     #$20
@@ -530,11 +518,9 @@ _long_double_L3
                 PHA
                 LDA     #2
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -550,11 +536,9 @@ _long_double_L11
                 BRL     _long_double_L9
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L9
                 LDA     g+6
@@ -629,11 +613,9 @@ _long_double_L9
                 BRL     _long_double_L12
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L12
                 LDA     13,S   ; fccstk d=0 b=13

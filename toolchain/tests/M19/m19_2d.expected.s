@@ -93,11 +93,9 @@ _m19_2d_L3
 _m19_2d_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _m19_2d_L0
 _m19_2d_L2
@@ -219,11 +217,9 @@ _m19_2d_L7
 _m19_2d_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _m19_2d_L4
 _m19_2d_L6
@@ -277,10 +273,9 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2

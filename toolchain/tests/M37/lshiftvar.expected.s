@@ -27,10 +27,8 @@ _lshiftvar_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #12
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -82,10 +80,8 @@ _lshiftvar_L3
                 TYA
                 LDA     _fcc_img1
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _lshiftvar_L5
                 LDA     _fcc_img5
@@ -132,10 +128,8 @@ _lshiftvar_L6
 _lshiftvar_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _lshiftvar_L8
                 LDA     _fcc_img5
@@ -182,10 +176,8 @@ _lshiftvar_L9
 _lshiftvar_L7
                 LDA     _fcc_img1
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _lshiftvar_L11
                 LDA     _fcc_img5
@@ -232,10 +224,8 @@ _lshiftvar_L12
 _lshiftvar_L10
                 LDA     _fcc_img1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _lshiftvar_L14
                 LDA     _fcc_img5
@@ -300,10 +290,8 @@ _lshiftvar_L16
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #7
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -387,10 +375,8 @@ _lshiftvar_L20
                 STA     _fcc_img2
                 LDA     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -482,10 +468,8 @@ _lshiftvar_L24
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #7
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -539,10 +523,8 @@ _lshiftvar_L28
                 STA     _fcc_img3
                 LDA     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC

@@ -102,11 +102,9 @@ _div16_sweep_L2
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _div16_sweep_L5
                 EOR     #$8000
 _div16_sweep_L5
@@ -120,11 +118,9 @@ _div16_sweep_L6
                 JSR     _fcc_safepoint
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _div16_sweep_L9
                 EOR     #$8000
 _div16_sweep_L9
@@ -141,10 +137,8 @@ _div16_sweep_L9
                 LDA:    dv,X
                 STA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #1000
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #1000
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -253,11 +247,9 @@ _div16_sweep_L15
                 JSR     _fcc_safepoint
                 LDA     _fcc_img4
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #14
                 BVC     _div16_sweep_L18
                 EOR     #$8000
 _div16_sweep_L18
@@ -271,11 +263,9 @@ _div16_sweep_L19
                 JSR     _fcc_safepoint
                 LDA     _fcc_img3
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #10
                 BVC     _div16_sweep_L22
                 EOR     #$8000
 _div16_sweep_L22
@@ -323,13 +313,7 @@ _div16_sweep_L22
                 BNE     *+5
                 BRL     _div16_sweep_L24
                 LDA     _fcc_img0
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _div16_sweep_L24
                 LDA     #1
@@ -375,10 +359,8 @@ _div16_sweep_L23
 _div16_sweep_L26
                 LDA     _fcc_img1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _div16_sweep_L28
                 LDA     _fcc_img1
@@ -411,11 +393,9 @@ _div16_sweep_L29
 _div16_sweep_L27
                 LDA     _fcc_img1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _div16_sweep_L33
                 EOR     #$8000
 _div16_sweep_L33
@@ -431,11 +411,9 @@ _div16_sweep_L32
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _div16_sweep_L36
                 EOR     #$8000
 _div16_sweep_L36
@@ -483,10 +461,8 @@ _div16_sweep_L17
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _div16_sweep_L38
                 LDA     #42

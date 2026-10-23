@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _sizeof_deref_L0
                 LDA     #1
@@ -39,11 +37,7 @@ main_stkok        TCS
                 RTL
 _sizeof_deref_L0
                 LDA     #1
-                PHA
-                LDA     #1
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _sizeof_deref_L1
                 LDA     #2
@@ -58,11 +52,7 @@ _sizeof_deref_L0
                 RTL
 _sizeof_deref_L1
                 LDA     #4
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _sizeof_deref_L2
                 LDA     #3
@@ -77,11 +67,7 @@ _sizeof_deref_L1
                 RTL
 _sizeof_deref_L2
                 LDA     #4
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _sizeof_deref_L3
                 LDA     #4
@@ -96,11 +82,7 @@ _sizeof_deref_L2
                 RTL
 _sizeof_deref_L3
                 LDA     #16
-                PHA
-                LDA     #16
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _sizeof_deref_L4
                 LDA     #5

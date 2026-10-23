@@ -27,10 +27,8 @@ main_stkok        TCS
                 TYA
                 FGX2_FARCALL rand
                 TAX
-                LDA     #16838
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16838
                 BNE     *+5
                 BRL     _rnd_L0
                 LDA     #1
@@ -46,10 +44,8 @@ main_stkok        TCS
 _rnd_L0
                 FGX2_FARCALL rand
                 TAX
-                LDA     #5758
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5758
                 BNE     *+5
                 BRL     _rnd_L1
                 LDA     #2
@@ -65,10 +61,8 @@ _rnd_L0
 _rnd_L1
                 FGX2_FARCALL rand
                 TAX
-                LDA     #10113
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10113
                 BNE     *+5
                 BRL     _rnd_L2
                 LDA     #3
@@ -200,11 +194,9 @@ _rnd_L4
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 TAX
-                LDA     #80
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #80
                 BVC     _rnd_L6
                 EOR     #$8000
 _rnd_L6
@@ -221,19 +213,15 @@ _rnd_L6
                 TYA
                 RTL
 _rnd_L5
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 PHA
                 FGX2_FARCALL abs
                 TAY
                 PLA
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _rnd_L8
                 LDA     #7
@@ -243,10 +231,8 @@ _rnd_L5
                 PLA
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _rnd_L8
                 LDA     #0

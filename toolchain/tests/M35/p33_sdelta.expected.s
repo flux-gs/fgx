@@ -30,11 +30,8 @@ g_stkok        TCS
                 LDA     6+g_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 TAY
                 TSC
                 CLC
@@ -160,10 +157,8 @@ main_stkok        TCS
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #33
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #33
                 BNE     *+5
                 BRL     _p33_sdelta_L0
                 LDA     #1
@@ -201,10 +196,8 @@ _p33_sdelta_L0
                 ADC     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #44
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #44
                 BNE     *+5
                 BRL     _p33_sdelta_L1
                 LDA     #2
@@ -248,10 +241,8 @@ _p33_sdelta_L1
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #37
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #37
                 BNE     *+5
                 BRL     _p33_sdelta_L2
                 LDA     #3
@@ -267,18 +258,14 @@ _p33_sdelta_L1
 _p33_sdelta_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _p33_sdelta_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _p33_sdelta_L4
                 LDA     #0

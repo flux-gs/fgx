@@ -36,7 +36,6 @@ main_stkok        TCS
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
-                STA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_long_hi
                 STA     3,S   ; fccstk d=0 b=3
@@ -92,7 +91,6 @@ _long_member_rmw_L1
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$0000
-                STA     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_long_hi
                 STA     7,S   ; fccstk d=0 b=7
@@ -150,7 +148,6 @@ _long_member_rmw_L3
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0014
-                STA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_long_hi
                 STA     3,S   ; fccstk d=0 b=3
@@ -252,7 +249,6 @@ _long_member_rmw_L5
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0029
-                STA     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_long_hi
                 STA     7,S   ; fccstk d=0 b=7

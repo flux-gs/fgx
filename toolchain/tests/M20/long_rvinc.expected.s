@@ -69,11 +69,9 @@ _long_rvinc_L0
                 BRL     _long_rvinc_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _long_rvinc_L4
                 EOR     #$8000
 _long_rvinc_L4
@@ -151,11 +149,9 @@ _long_rvinc_L5
                 BRL     _long_rvinc_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _long_rvinc_L9
                 EOR     #$8000
 _long_rvinc_L9

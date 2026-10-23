@@ -55,10 +55,8 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #54
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #54
                 BNE     *+5
                 BRL     _strsub_L0
                 LDA     #1
@@ -74,10 +72,8 @@ main_stkok        TCS
 _strsub_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BNE     *+5
                 BRL     _strsub_L1
                 LDA     #2
@@ -107,10 +103,8 @@ _strsub_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BNE     *+5
                 BRL     _strsub_L2
                 LDA     #3
@@ -140,10 +134,8 @@ _strsub_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #122
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #122
                 BNE     *+5
                 BRL     _strsub_L3
                 LDA     #4
@@ -168,21 +160,16 @@ _strsub_L3
                 STA     _fcc_fpr0
                 LDA     idx
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #49
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #49
                 BNE     *+5
                 BRL     _strsub_L4
                 LDA     #5

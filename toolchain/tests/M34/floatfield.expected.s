@@ -338,10 +338,8 @@ _floatfield_L2
                 LDA     #7
                 STA     g+12
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _floatfield_L3
                 LDA     #4

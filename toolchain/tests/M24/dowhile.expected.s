@@ -29,11 +29,8 @@ _dowhile_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_img0
                 LDA     _fcc_img1
                 CLC
@@ -42,11 +39,9 @@ _dowhile_L0
 _dowhile_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 BVC     _dowhile_L3
                 EOR     #$8000
 _dowhile_L3

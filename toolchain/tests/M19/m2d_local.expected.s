@@ -28,10 +28,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #0
@@ -64,10 +63,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #1
@@ -100,10 +98,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2
@@ -136,10 +133,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -172,10 +167,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -208,10 +201,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -250,10 +241,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #0
@@ -279,10 +269,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #1
@@ -312,10 +301,9 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2
@@ -345,10 +333,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -378,10 +364,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -411,10 +395,8 @@ main_stkok        TCS
                 ADC     #0
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2

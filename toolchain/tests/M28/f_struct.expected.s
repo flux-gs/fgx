@@ -160,10 +160,8 @@ _f_struct_L1
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _f_struct_L2
                 LDA     #3
@@ -179,10 +177,8 @@ _f_struct_L1
 _f_struct_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _f_struct_L3
                 LDA     #4
@@ -244,10 +240,8 @@ _f_struct_L3
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_struct_L4
                 LDA     #5

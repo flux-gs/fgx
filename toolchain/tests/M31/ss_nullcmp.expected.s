@@ -69,11 +69,9 @@ _ss_nullcmp_L2
                 BRL     _ss_nullcmp_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _ss_nullcmp_L0
                 SEP     #$20
@@ -113,11 +111,9 @@ _ss_nullcmp_L5
                 BRL     _ss_nullcmp_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #100
                 STA     _fcc_img0
 _ss_nullcmp_L3
                 SEP     #$20
@@ -157,11 +153,9 @@ _ss_nullcmp_L8
                 BRL     _ss_nullcmp_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #41
                 STA     _fcc_img0
 _ss_nullcmp_L6
                 LDA     _fcc_img0

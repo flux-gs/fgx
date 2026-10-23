@@ -199,11 +199,9 @@ _m2d_row_L4
                 BRL     _m2d_row_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L2
                 SEP     #$20
@@ -373,11 +371,9 @@ _m2d_row_L7
                 BRL     _m2d_row_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L5
                 SEP     #$20
@@ -453,11 +449,9 @@ _m2d_row_L14
                 BRL     _m2d_row_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L12
                 SEP     #$20
@@ -548,11 +542,9 @@ _m2d_row_L17
                 BRL     _m2d_row_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L15
                 SEP     #$20
@@ -642,11 +634,9 @@ _m2d_row_L20
                 BRL     _m2d_row_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L18
                 SEP     #$20
@@ -705,19 +695,15 @@ _m2d_row_L18
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #113
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #113
                 BEQ     *+5
                 BRL     _m2d_row_L21
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L21
                 SEP     #$20
@@ -791,11 +777,9 @@ _m2d_row_L24
                 BRL     _m2d_row_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L22
                 SEP     #$20
@@ -889,10 +873,8 @@ _m2d_row_L22
                 INC
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -907,18 +889,14 @@ _m2d_row_L22
                 TCS
                 TYA
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _m2d_row_L26
                 LDA     #6
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _m2d_row_L26
                 LDA     #1
@@ -931,11 +909,9 @@ _m2d_row_L27
                 BRL     _m2d_row_L25
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     5,S   ; fccstk d=0 b=5
 _m2d_row_L25
                 LDA     5,S   ; fccstk d=0 b=5

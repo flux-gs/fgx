@@ -70,15 +70,11 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #27
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #27
                 BNE     *+5
                 BRL     _strescapes_L0
                 LDA     #1
@@ -104,10 +100,8 @@ _strescapes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #91
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #91
                 BNE     *+5
                 BRL     _strescapes_L1
                 LDA     #2
@@ -133,10 +127,8 @@ _strescapes_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BNE     *+5
                 BRL     _strescapes_L2
                 LDA     #3
@@ -162,10 +154,8 @@ _strescapes_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #74
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #74
                 BNE     *+5
                 BRL     _strescapes_L3
                 LDA     #4
@@ -191,15 +181,11 @@ _strescapes_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #27
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #27
                 BNE     *+5
                 BRL     _strescapes_L4
                 LDA     #5
@@ -225,10 +211,8 @@ _strescapes_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #91
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #91
                 BNE     *+5
                 BRL     _strescapes_L5
                 LDA     #6
@@ -254,10 +238,8 @@ _strescapes_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #72
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #72
                 BNE     *+5
                 BRL     _strescapes_L6
                 LDA     #7
@@ -283,10 +265,8 @@ _strescapes_L6
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _strescapes_L7
                 LDA     #8
@@ -312,15 +292,11 @@ _strescapes_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #27
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #27
                 BNE     *+5
                 BRL     _strescapes_L8
                 LDA     #9
@@ -346,10 +322,8 @@ _strescapes_L8
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #91
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #91
                 BNE     *+5
                 BRL     _strescapes_L9
                 LDA     #10
@@ -375,15 +349,11 @@ _strescapes_L9
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _strescapes_L10
                 LDA     #11
@@ -409,15 +379,11 @@ _strescapes_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _strescapes_L11
                 LDA     #12
@@ -443,15 +409,11 @@ _strescapes_L11
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #27
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #27
                 BNE     *+5
                 BRL     _strescapes_L12
                 LDA     #13
@@ -477,15 +439,11 @@ _strescapes_L12
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #220
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #220
                 BNE     *+5
                 BRL     _strescapes_L13
                 LDA     #14
@@ -511,10 +469,8 @@ _strescapes_L13
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _strescapes_L14
                 LDA     #15

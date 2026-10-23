@@ -1279,11 +1279,9 @@ _fnptr_vnodeops_L5
                 ADC     _fcc_tmp_b
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #57
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #57
                 TAY
                 TSC
                 CLC
