@@ -1622,9 +1622,42 @@ function fgxdebug.startplugin()
                     .. "active console", cb))
             end
         end
-        local block = content:match('"input_script"%s*:%s*(%b[])')
-        if block then
-            for frame, text in block:gmatch('%[%s*(%d+)%s*,%s*"([^"]*)"%s*%]') do
+        -- input_script: [[frame, "text"], ...], read with a scanner that knows
+        -- JSON strings.  A pattern cannot: `"([^"]*)"' stopped at the first
+        -- \" and dropped the whole entry without a word, so a command holding
+        -- a double quote was never typed and the run went to its frame cap;
+        -- and `%b[]' miscounts a [ or ] inside a command.
+        local function json_entries(s)
+            local out = {}
+            local p = select(2, s:find('"input_script"%s*:%s*%['))
+            if not p then return out end
+            p = p + 1
+            while true do
+                local _, e, num = s:find('^%s*,?%s*%[%s*(%d+)%s*,%s*"', p)
+                if not e then break end
+                local j, buf = e + 1, {}
+                while j <= #s do
+                    local c = s:sub(j, j)
+                    if c == '\\' then
+                        buf[#buf + 1] = s:sub(j, j + 1)
+                        j = j + 2
+                    elseif c == '"' then
+                        break
+                    else
+                        buf[#buf + 1] = c
+                        j = j + 1
+                    end
+                end
+                out[#out + 1] = { num, table.concat(buf) }
+                local _, close = s:find('^"%s*%]', j)
+                if not close then break end
+                p = close + 1
+            end
+            return out
+        end
+        do
+            for _, ent in ipairs(json_entries(content)) do
+                local frame, text = ent[1], ent[2]
                 local f_num = tonumber(frame)
                 -- Un-escape common JSON escapes so we can inject newlines etc.
                 -- ONE pass, so `\\' is a backslash rather than the first half
@@ -1632,7 +1665,8 @@ function fgxdebug.startplugin()
                 -- a command containing `\377' arrived as `\\377'.  An escape
                 -- not in the table is left as written.
                 text = text:gsub('\\(.)', { n = '\n', r = '\r', t = '\t',
-                                            e = '\27', ['\\'] = '\\' })
+                                            e = '\27', ['\\'] = '\\',
+                                            ['"'] = '"', ['/'] = '/' })
                 table.insert(input_script, { frame = f_num, text = text })
                 emu.print_info(string.format("fgxdebug: queued paste at frame %d: %q", f_num, text))
             end
