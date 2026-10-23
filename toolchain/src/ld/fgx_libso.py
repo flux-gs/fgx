@@ -999,10 +999,11 @@ def self_test():
     assert "_fcc_fadd" not in real[1] and any(
         r.startswith("_fcc_fadd") for r in real[1]["_fcc_fsub"])
     assert not any(r.split()[:1] == ["_fcc_stkoflow"] for r in real[0])
-    assert len(real[2]) == 67, len(real[2])
+    assert len(real[2]) == 69, len(real[2])
     rown = shared_owner(real[1], real[2])
     rdeps = shared_refs(real[1], real[2], rown)
-    assert rdeps["_fcc_long_mods"] == ["_fcc_long_divs"], rdeps["_fcc_long_mods"]
+    assert rdeps["_fcc_long_mods"] == ["_fcc_long_divs", "_fcc_long_udiv"], \
+        rdeps["_fcc_long_mods"]
     # A failed site pass leaves no output behind: make would call a
     # CSIT-less library up to date.
     global link_lib, add_sites
