@@ -196,10 +196,8 @@ _rnd_L4
                 TAY
                 PLA
                 TYA
-                TAX
-                LDA     #80
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #80
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 TAX
                 LDA     #80

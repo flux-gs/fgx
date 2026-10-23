@@ -216,10 +216,8 @@ _uchar_compound_L4
                 LDA     #600
                 EOR     #$FFFF
                 INC
-                TAX
-                LDA     #156
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #156
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 STA     _fcc_tmp_b
                 PLA

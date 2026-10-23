@@ -18267,10 +18267,8 @@ _namecache_L383
                 LDA     #97
                 PHA
                 LDA     25,S   ; fccstk d=4 b=21
-                TAX
-                LDA     #26
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #26
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 STA     _fcc_tmp_b
                 PLA

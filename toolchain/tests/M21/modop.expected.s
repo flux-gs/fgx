@@ -23,10 +23,8 @@ main_stkok        TCS
                 STA     _fcc_img0
                 PHA
                 LDA     #100
-                TAX
-                LDA     #7
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #7
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 STA     _fcc_tmp_b
                 PLA
@@ -35,10 +33,8 @@ main_stkok        TCS
                 STA     _fcc_img0
                 PHA
                 LDA     #7
-                TAX
-                LDA     #5
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #5
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 STA     _fcc_tmp_b
                 PLA

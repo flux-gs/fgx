@@ -1377,6 +1377,8 @@ int
 emit_inline_divmod_pow2(TokKind op, unsigned k);
 void
 emit_inline_divs_pow2(unsigned k);
+void
+emit_inline_mods_pow2(unsigned k);
 
 int  long_shift_inlineable(int is_lshift, int is_unsigned, unsigned k);
 void emit_inline_long_shl(unsigned k);
