@@ -54,14 +54,20 @@ a FILE moves with the table, so nothing could be split off.
   upstream file, `docs/PROVENANCE.md` rows), most verbatim in the body.
 * **`_doprnt` is FGX's transcription of `doprnt.s`**; it stages its output
   64 bytes at a time and hands it to the FILE with `fwrite`.
-* **An unbuffered stream borrows 128 bytes, not BUFSIZ**, in `fprintf`,
-  `vfprintf` and `fputs`: the bank-0 stack is shared by every process.
-* **`printf` returns the count**, as 2.11BSD's own `vfprintf` does.
+* **An unbuffered stream borrows BUFSIZ on the stack**, in `fprintf`,
+  `vfprintf` and `fputs`, as upstream does; the linker's stack measure
+  holds it.
+* **`printf` returns the count**, as 2.11BSD's own `vfprintf` does and as
+  2.11BSD's `more.c` and finger's `lprint.c` use it.
 * **`sscanf` builds upstream's `_IOSTRG` FILE**, and `doscan.c` loses the
   delta that stood in for it.
-* **`exit` still flushes through `_lc_flush_hook`**, which `_flsbuf` sets to
-  `_cleanup`, so a program that only calls `exit` does not link stdio.
-* **`popen` is still a stub**: a real one is a feature, not part of the swap.
+* **`exit` is upstream's** (`_cleanup(); _exit(code);`) and crt0 calls it
+  with main's value.  The flush hook that kept stdio out of programs that
+  never print is gone: with per-function linking, a static binary that
+  never prints grows 145 bytes (`sh` 1,929), and one that prints shrinks
+  70 to 154.
+* **`sprintf`, `vsprintf` and `popen` are upstream's**; `snprintf` and
+  `vsnprintf` keep the engine's buffer mode (netbsd-0-9's interface).
 * `sbuf` is pinned in the core: `_smallbuf`'s initialiser takes its address.
 
 The port found a compiler defect: `*(q)->p = c` stored into `q->p`

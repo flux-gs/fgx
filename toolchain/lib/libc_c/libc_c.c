@@ -42,6 +42,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/resource.h>    /* struct rusage (wait3) */
+#include <sys/wait.h>             /* union wait (pclose) */
 #include <sys/mount.h>          /* struct statfs, MNT_* (getmntinfo, df) */
 #include <sys/sysctl.h>         /* CTL_KERN, KERN_SECURELVL (sysctl) */
 #include <stdlib.h>             /* malloc/free -- PROTOTYPED, apple/fgx#327 */
@@ -101,10 +102,6 @@ extern char args_env[];
 extern char _libc_lstrBufA[];
 extern char _libc_lstrBufB[];
 
-/* stdio (<stdio.h>, 2.11BSD's): the buffer fprintf, vfprintf and fputs
- * borrow for one call on an unbuffered stream.  Upstream's is BUFSIZ on the
- * stack; this is the bank-0 stack, which every process shares. */
-#define _LC_LOCALBUF 128
 
 #include "syscall_misc.c"
 #include "uio.c"
@@ -157,10 +154,11 @@ extern char _libc_lstrBufB[];
 #include "strerror.c"
 #include "system.c"
 #include "time.c"
-#include "stdio_hook.c"
+#include "_exit.c"
 #include "findiop.c"
 #include "filbuf.c"
 #include "flsbuf.c"
+#include "exit.c"
 #include "fopen.c"
 #include "fdopen.c"
 #include "freopen.c"
@@ -209,6 +207,7 @@ extern char _libc_lstrBufB[];
 #include "vfprintf.c"
 #include "vprintf.c"
 #include "sprintf.c"
+#include "vsprintf.c"
 #include "fltpr.c"
 #include "vsnprintf.c"
 #include "inet.c"

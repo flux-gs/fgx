@@ -8,8 +8,9 @@
  * - The arguments arrive through <stdarg.h> rather than as `&args'; on this
  *   ABI the two are the same pointer, and the prototype in <stdio.h> is
  *   variadic.
- * - The count is returned, as 2.11BSD's own vfprintf.c returns it and as
- *   FGX's callers use it, where upstream's printf returns 0.
+ * - The count is returned, as 2.11BSD's own vfprintf.c returns it, where
+ *   upstream's printf returns 0.  2.11BSD's callers use it: more.c's
+ *   prompt and finger's lprint.c add it to a column.
  */
 int
 printf(char *fmt, ...)

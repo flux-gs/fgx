@@ -358,7 +358,8 @@ did not write, which this registry's preamble calls the worse error.
 | `toolchain/lib/libc_c/scanf.c`     | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/scanf.c` (5.2, 3/9/86) | scanf(3), fscanf(3), sscanf(3).  Upstream's, sscanf building its `_IOSTRG` FILE on the string; the arguments arrive by `va_start` where upstream takes `&args`. |
 | `toolchain/lib/libc_c/findiop.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/findiop.c` (5.6 3/9/86) | `_iob[NSTATIC]`, `_findiop`, `_f_morefiles`, `_fwalk`, `_cleanup`.  **VERBATIM in the body.**  `sbuf` is pinned in the core (`core.list`): `_smallbuf`'s initialiser takes its address. |
 | `toolchain/lib/libc_c/filbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/filbuf.c` (5.3 3/9/86) | `_filbuf`.  **VERBATIM in the body.** |
-| `toolchain/lib/libc_c/flsbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/flsbuf.c` (5.2 3/9/86) | `_flsbuf`, `fflush`, `fclose`.  Upstream's body; FGX delta: `_flsbuf` names `_cleanup` as the exit-time flush hook (stdio_hook.c) so that calling exit() does not link all of stdio. |
+| `toolchain/lib/libc_c/flsbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/flsbuf.c` (5.2 3/9/86) | `_flsbuf`, `fflush`, `fclose`.  **VERBATIM in the body.** |
+| `toolchain/lib/libc_c/exit.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/exit.c` (5.2 3/9/86) | exit(3): `_cleanup()` then `_exit()`.  **VERBATIM in the body.**  crt0 calls it with main's value, as 2.11BSD's crt0 does. |
 | `toolchain/lib/libc_c/fopen.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fopen.c` (5.2 3/9/86) | fopen(3).  **VERBATIM in the body**: "w" is `O_TRUNC|O_CREAT`, which is also what apple/fgx#323 required. |
 | `toolchain/lib/libc_c/fdopen.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fdopen.c` (5.2 3/9/86) | fdopen(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/freopen.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/freopen.c` (5.2 3/9/86) | freopen(3).  **VERBATIM in the body.** |
@@ -371,7 +372,7 @@ did not write, which this registry's preamble calls the worse error.
 | `toolchain/lib/libc_c/fgets.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fgets.c` (5.2 3/9/86) | fgets(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/gets.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/gets.c` (5.2 3/9/86) | gets(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/puts.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/puts.c` (5.2 3/9/86) | puts(3).  **VERBATIM in the body.** |
-| `toolchain/lib/libc_c/fputs.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fputs.c` (5.2 3/9/86) | fputs(3).  Upstream's body; an unbuffered stream borrows a 128-byte local buffer, not BUFSIZ (the bank-0 stack), and `_bufsiz = 0` where upstream assigns NULL. |
+| `toolchain/lib/libc_c/fputs.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fputs.c` (5.2 3/9/86) | fputs(3).  Upstream's body; `_bufsiz = 0` where upstream assigns NULL. |
 | `toolchain/lib/libc_c/getw.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/getw.c` (5.2.1 1/1/94) | getw(3), getlw.  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/putw.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/putw.c` (5.2.1 1/1/94) | putw(3), putlw.  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/ungetc.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/ungetc.c` (5.3 3/26/86) | ungetc(3).  **VERBATIM in the body.** |
@@ -383,8 +384,11 @@ did not write, which this registry's preamble calls the worse error.
 | `toolchain/lib/libc_c/setbuf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/setbuf.c` (8.1.1 1997/7/29) | setbuf(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/setbuffer.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/setbuffer.c` (8.1.1 1997/7/29) | setbuffer(3), setlinebuf(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/printf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/printf.c` (5.2 3/9/86) | printf(3).  Upstream's, over `<stdarg.h>`, returning the count as 2.11BSD's vfprintf.c does. |
-| `toolchain/lib/libc_c/fprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fprintf.c` (5.2 3/9/86) | fprintf(3).  Upstream's, over `<stdarg.h>`, returning the count; an unbuffered stream borrows 128 bytes, not BUFSIZ. |
+| `toolchain/lib/libc_c/fprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/fprintf.c` (5.2 3/9/86) | fprintf(3).  Upstream's, over `<stdarg.h>`, returning the count. |
 | `toolchain/lib/libc_c/vfprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/vfprintf.c` (5.2 6/27/88) | vfprintf(3).  Upstream's; the borrowed buffer's size is set (upstream leaves `_bufsiz` 0). |
+| `toolchain/lib/libc_c/sprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/sprintf.c` (5.2.1 1995/04/02) | sprintf(3) through an `_IOSTRG` FILE.  Upstream's, over `<stdarg.h>` as printf.c is. |
+| `toolchain/lib/libc_c/vsprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/vsprintf.c` (5.2.1 1995/04/02) | vsprintf(3).  **VERBATIM in the body.** |
+| `toolchain/lib/libc_c/popen.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/gen/popen.c` (5.15.1 1999/10/24) | popen(3), pclose(3): pipe, vfork, `/bin/sh -c`.  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/vprintf.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/stdio/vprintf.c` (5.2 6/27/88) | vprintf(3).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/perror.c` | 2.11BSD `vendor/2.11BSD/usr/lib/libc/gen/perror.c` (8.1, 6/4/93) | perror(3), one writev(2).  **VERBATIM in the body.** |
 | `toolchain/lib/libc_c/atof.c`      | 4.3BSD-Reno `vendor/4.3BSD-Reno/lib/libc/hp300/stdlib/atof.c` (5.1, 1990/05/12) | atof(3) (apple/fgx#447).  Ported from Reno's hp300 copy rather than 2.11BSD because it is the one written for IEEE doubles: `_twoemax` is 2^53 and `_exp5[]` runs to 5^256, where 2.11BSD's `pdp/gen/atof.c` stops at 2^56 and `LOGHUGE` 39, the PDP-11's range.  FGX deltas: the work is on long double with `__lc_ldexpl` (`ldexp.c`), `atof()` keeping the double interface; `_exp5[]` is Reno's "IEEE" decimal table with an L suffix, not hp300's big-endian bit-pattern struct; `_twoemax` and `_exp5` are static.  It replaces FGX's own single-precision atof |

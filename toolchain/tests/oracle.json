@@ -458,7 +458,7 @@
   "pidx_param": 42,
   "pidx_read": 23,
   "pollticks": 42,
-  "popen_stub": 42,
+  "popen": 42,
   "postinc_deref_lvalue": 42,
   "postinc_ptrarray_elem": 42,
   "postinc_ptrptr_member": 42,

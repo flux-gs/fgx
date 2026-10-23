@@ -1,35 +1,25 @@
 /* SPDX-License-Identifier: BSD-2-Clause
  * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD vendor/2.11BSD/usr/lib/libc/stdio/sprintf.c
+ *   Original work: vsprintf.c 5.2.1 (2.11BSD) 1995/04/02,
+ *	Copyright (c) 1988
+ *	Regents of the University of California.
  */
-/* sprintf.c -- sprintf(3) and vsprintf(3): the formatter (doprnt.c) into a
- * caller's buffer, unbounded.  2.11BSD's sprintf builds a FILE flagged
- * _IOSTRG on the string; the engine's buffer mode is the same thing without
- * the FILE, and is what snprintf (vsnprintf.c) needs for its bound. */
-int sprintf(char *buf, char *fmt, ...)
+/* Upstream's body.  FGX delta: the arguments arrive through <stdarg.h>
+ * rather than as `&args', as in printf.c: the prototype in <stdio.h> is
+ * variadic, and on this ABI the two are the same pointer. */
+int
+sprintf(char *str, char *fmt, ...)
 {
-    va_list ap;
-    int r;
+	FILE _strbuf;
+	va_list ap;
 
-    va_start(ap, fmt);
-    __lc_pf_mode = 1; __lc_pf_out = buf;
-    __lc_pf_lim = 0xFFFF; __lc_pf_n = 0;    /* unbounded (sprintf contract) */
-    r = __lc_vpf(fmt, ap);
-    buf[__lc_pf_n] = 0;
-    va_end(ap);
-    return r;
+	_strbuf._flag = _IOWRT+_IOSTRG;
+	_strbuf._ptr = str;
+	_strbuf._cnt = 32767;
+	va_start(ap, fmt);
+	_doprnt(fmt, ap, &_strbuf);
+	va_end(ap);
+	*_strbuf._ptr = 0;
+	return(_strbuf._ptr - str);
 }
-
-/* vsprintf: sprintf over a caller-built va_list (curses printw/_sprintw —
- * the 4.3BSD `&args` idiom is byte-identical to our va_list under the
- * uniform R-to-L stack ABI). */
-int vsprintf(char *buf, char *fmt, char *ap)
-{
-    int r;
-
-    __lc_pf_mode = 1; __lc_pf_out = buf;
-    __lc_pf_lim = 0xFFFF; __lc_pf_n = 0;    /* unbounded (sprintf contract) */
-    r = __lc_vpf(fmt, ap);
-    buf[__lc_pf_n] = 0;
-    return r;
-}
-

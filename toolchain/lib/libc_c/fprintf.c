@@ -6,15 +6,11 @@
  */
 /* Upstream's body.  FGX deltas:
  * - <stdarg.h> arguments, and the count returned: see printf.c.
- * - An unbuffered stream borrows a 128-byte local buffer for the one
- *   conversion, where upstream borrows BUFSIZ.  A full buffer drains
- *   through _flsbuf whatever its size, so the output is the same; the
- *   difference is 896 bytes of the bank-0 stack every process shares.
  */
 int
 fprintf(FILE *iop, char *fmt, ...)
 {
-	char localbuf[_LC_LOCALBUF];
+	char localbuf[BUFSIZ];
 	va_list ap;
 	int len;
 
@@ -22,7 +18,7 @@ fprintf(FILE *iop, char *fmt, ...)
 	if (iop->_flag & _IONBF) {
 		iop->_flag &= ~_IONBF;
 		iop->_ptr = iop->_base = localbuf;
-		iop->_bufsiz = _LC_LOCALBUF;
+		iop->_bufsiz = BUFSIZ;
 		len = _doprnt(fmt, ap, iop);
 		fflush(iop);
 		iop->_flag |= _IONBF;

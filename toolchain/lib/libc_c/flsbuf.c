@@ -5,16 +5,7 @@
  *	Copyright (c) 1980
  *	Regents of the University of California.
  */
-/* Upstream's body.  FGX delta:
- * - _flsbuf names _cleanup as the exit-time flush (stdio_hook.c), the
- *   first time anything is written through a stream.  Upstream's exit calls
- *   _cleanup by name; here that name would pull all of stdio into every
- *   program that calls exit, and the M37 vreclaim fixture, which prints
- *   nothing, overflowed its 64 KB code segment on that alone.
- * The #include lines are the aggregate's (libc_c.c).
- */
-extern void (*_lc_flush_hook)();
-int _cleanup();
+/* Upstream's body.  The #include lines are the aggregate's (libc_c.c). */
 _flsbuf(c, iop)
 unsigned char c;
 register FILE *iop;
@@ -32,7 +23,6 @@ register FILE *iop;
 
 	if ((iop->_flag&_IOWRT)==0)
 		return(EOF);
-	_lc_flush_hook = _cleanup;
 tryagain:
 	if (iop->_flag&_IOLBF) {
 		base = iop->_base;

@@ -5,9 +5,7 @@
  *	Copyright (c) 1984
  *	Regents of the University of California.
  */
-/* Upstream's body.  FGX deltas:
- * - An unbuffered stream borrows fprintf.c's 128-byte local buffer, not
- *   BUFSIZ: the bank-0 stack's bytes, and the output is the same.
+/* Upstream's body.  FGX delta:
  * - `_bufsiz = 0', where upstream assigns NULL, which is a pointer here.
  * The #include lines are the aggregate's (libc_c.c).
  */
@@ -18,13 +16,13 @@ register FILE *iop;
 	register r = 0;
 	register c;
 	int unbuffered;
-	char localbuf[_LC_LOCALBUF];
+	char localbuf[BUFSIZ];
 
 	unbuffered = iop->_flag & _IONBF;
 	if (unbuffered) {
 		iop->_flag &= ~_IONBF;
 		iop->_ptr = iop->_base = localbuf;
-		iop->_bufsiz = _LC_LOCALBUF;
+		iop->_bufsiz = BUFSIZ;
 	}
 
 	while (c = *s++)
