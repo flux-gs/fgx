@@ -288,6 +288,8 @@
   "inline_spec": 42,
   "inline_ident": 42,
   "mods_pow2": 42,
+  "div16_sweep": 42,
+  "ldiv_sweep": 42,
   "instruct_chain": 42,
   "int_const_ladder": 42,
   "int_to_ptr_implicit": 42,
