@@ -288,6 +288,10 @@ int main(void)
           "L1                 SEP     #$20\n                REP     #$20\n                LDA     #0\n",
           "L1                 SEP     #$20\n                REP     #$20\n                LDA     #0\n");
 
+    /* the INC fold keeps an ADC whose V a BVC reads */
+    check("clcadc_keep_v_read",
+          "                CLC\n                ADC     #1\n                BVC     L5\n", "                CLC\n                ADC     #1\n                BVC     L5\n");
+
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 
     printf("\n%d/%d passed\n", g_tests - g_fails, g_tests);

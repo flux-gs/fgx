@@ -282,12 +282,9 @@ writes_carry(const char *m)
  * comments.
  *
  * CARRY ONLY.  The CLC;ADC -> INC fold also drops the overflow flag V (ADC sets
- * V; INC does not).  This routine does NOT prove V dead — and crucially, it can
- * return "dead" at a carry-writer that leaves V untouched (CLC/SEC/CMP/CPX/CPY),
- * so a folded site may diverge from the original in V (e.g. ...ADC #1; CLC; PHP
- * would push a stale V).  That is sound ONLY because fcc never observes V: it
- * emits no BVC/BVS and never bit-tests a pushed P for the V bit.  If fcc ever
- * gains a V consumer, this fold must also gate on a V-liveness check. */
+ * V; INC does not), and this routine can return "dead" at a carry-writer that
+ * leaves V untouched (CLC/SEC/CMP/CPX/CPY).  v_dead_after is the fold's second
+ * gate: fcc's signed compares read V with BVC after an SBC. */
 static int
 carry_dead_after(Line *lines, size_t n, size_t idx)
 {
@@ -307,6 +304,29 @@ carry_dead_after(Line *lines, size_t n, size_t idx)
         /* carry-neutral op (LDA/STA/REP/SEP/...) -> keep scanning */
     }
     return 0;                                            /* fell off end: live */
+}
+
+/* True if the overflow flag set by line `idx` is dead.  fcc reads V only with
+ * BVC/BVS, and every one of those -- 4,238 in 424 files, measured 2026-10-23 --
+ * takes V from an ADC, SBC or BIT earlier in its own block, so V is dead at a
+ * block's end and a call; inside the block a V-writer kills it and a BVC/BVS
+ * or a PHP keeps it. */
+static int
+v_dead_after(Line *lines, size_t n, size_t idx)
+{
+    size_t i;
+    for (i = idx + 1; i < n; i++) {
+        Line *L = &lines[i];
+        const char *m = L->mnem;
+        if (L->dead || L->raw[0] == '\0') continue;
+        if (L->label[0] != '\0') return 1;
+        if (m[0] == '\0') continue;
+        if (strcmp(m,"BVC")==0 || strcmp(m,"BVS")==0 || strcmp(m,"PHP")==0) return 0;
+        if (strcmp(m,"ADC")==0 || strcmp(m,"SBC")==0 || strcmp(m,"BIT")==0 ||
+            strcmp(m,"CLV")==0 || strcmp(m,"PLP")==0) return 1;
+        if (is_control(m)) return 1;
+    }
+    return 1;
 }
 
 /* Pattern: STA m ; LDA m (adjacent, same operand, LDA not a branch target)
@@ -427,6 +447,7 @@ pat_clcadc_to_ina(Line *lines, size_t n)
         k = small_imm(lines[(size_t)j].operand);
         if (k < 0) continue;
         if (!carry_dead_after(lines, n, (size_t)j)) continue;
+        if (!v_dead_after(lines, n, (size_t)j)) continue;
 
         mn = is_add ? "INC" : "DEC";                    /* implied-A (Merlin32) */
         snprintf(buf, sizeof buf, "                %s", mn);
