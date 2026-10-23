@@ -72,6 +72,7 @@ extern int  kc_curpid();
 extern int  root_status;    /* root_mount.c -- 1 once the root is ours */
 static int  root_stat_1();  /* stat/lstat's shared body; follow is the flag */
 int         vn_stat();      /* Reno kern/vfs_vnops.c: a vnode -> struct stat */
+int         fp_isvn();      /* a vnode descriptor: f_ops == &vnops */
 extern int  falloc();
 extern int  fdrelease();
 extern int  vn_open();
@@ -1461,12 +1462,18 @@ int
 ld_fd_is_vnode(fd)
 int fd;
 {
-    struct file *fp;
+    return (fp_isvn(getf(kc_curpid(), fd)));
+}
 
-    fp = getf(kc_curpid(), fd);
-    if (fp == (struct file *)0)
-        return (0);
-    return (fp->f_ops == &vnops);
+/* fp_isvn -- is this descriptor a vnode's?  `f_ops == &vnops', the one vector
+ * vfs_openat installs, and NOT `f_type == DTYPE_VNODE': a descriptor the core
+ * made (kdesc_alloc: a pipe end, among others) is DTYPE_VNODE provisionally
+ * with an FCB in f_data.  _Sys_VnodeFp makes the same test in the core. */
+int
+fp_isvn(fp)
+struct file *fp;
+{
+    return (fp != (struct file *)0 && fp->f_ops == &vnops);
 }
 
 int
@@ -1823,10 +1830,13 @@ char *sb;
     if (fp == (struct file *)0)
         return (EBADF);
 
-    if (fp->f_type == DTYPE_VNODE)
+    /* fp_isvn, not f_type: vn_stat on a provisional descriptor's FCB is a
+     * wild jump -- `echo hi | cat' took the machine down the moment cat
+     * fstat'd its stdin.  Such a descriptor answers as a pipe does, below. */
+    if (fp_isvn(fp))
         return (vn_stat((struct vnode *)fp->f_data, sb));
 
-    if (fp->f_type == DTYPE_SOCKET || fp->f_type == DTYPE_PIPE) {
+    if (fp->f_type >= DTYPE_VNODE && fp->f_type <= DTYPE_PIPE) {
         /* soo_stat: `bzero((caddr_t)ub, sizeof (*ub))' and then PRU_SENSE.
          * Nothing in this tree answers PRU_SENSE, so the zeroing is the whole
          * of it -- which is upstream's answer for a socket whose protocol
