@@ -21,11 +21,20 @@ main_stkok        TCS
                 INC     _fcc_fb
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0

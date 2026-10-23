@@ -5,8 +5,6 @@
  * export.  Thin delegations — a user program may still override any of them and
  * win at link time (archive-emulation weak/strong).
  * ------------------------------------------------------------------------- */
-int getc(char *fp)                     { return fgetc(fp); }
-int putc(int c, char *fp)              { return fputc(c, fp); }
 /* lstat(2) IS ITS OWN SYSCALL NOW (SYS_LSTAT=111, 2026-09-05).  It was this
  * alias, which made every symlink report its target -- and ls(1) shows a link
  * as a link only because upstream stats with lstat BY DEFAULT

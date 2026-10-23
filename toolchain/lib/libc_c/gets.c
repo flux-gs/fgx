@@ -1,19 +1,22 @@
-/* gets(s) — read a line from stdin (fd 0) into s, dropping the '\n'.  No size
- * limit (caller-sized buffer); unsafe by spec but 2.11BSD telnet's command mode
- * uses it.  Returns s, or NULL at EOF with nothing read. */
-char *gets(char *s)
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 2.11BSD vendor/2.11BSD/usr/lib/libc/stdio/gets.c
+ *   Original work: gets.c 5.2 (Berkeley) 3/9/86,
+ *	The Regents of the University of California.
+ */
+/* Upstream's body.  The #include lines are the aggregate's (libc_c.c). */
+char *
+gets(s)
+char *s;
 {
-    int i = 0, ch;
+	register c;
+	register char *cs;
 
-    for (;;) {
-        ch = getchar();                          /* NOT read(0, ...): a raw
-                                                  * read beside a buffered one
-                                                  * skips what the buffer holds */
-        if (ch < 0) { if (i == 0) return (char *)0; break; }
-        if (ch == 10) break;                     /* '\n' ends the line */
-        s[i] = ch;
-        i++;
-    }
-    s[i] = 0;
-    return s;
+	cs = s;
+	while ((c = getchar()) != '\n' && c != EOF)
+		*cs++ = c;
+	if (c == EOF && cs==s)
+		return(NULL);
+	*cs++ = '\0';
+	return(s);
 }

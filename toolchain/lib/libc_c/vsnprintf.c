@@ -32,3 +32,20 @@ int vsnprintf(char *buf, int sz, char *fmt, char *ap)
         buf[(__lc_pf_n < __lc_pf_lim) ? __lc_pf_n : __lc_pf_lim] = 0;
     return r;
 }
+
+int snprintf(char *buf, int sz, char *fmt, ...)
+{
+    va_list ap;
+    int r;
+
+    va_start(ap, fmt);
+    __lc_pf_mode = 1; __lc_pf_out = buf;
+    __lc_pf_lim = (sz > 0) ? (unsigned)(sz - 1) : 0;
+    __lc_pf_n = 0;
+    r = __lc_vpf(fmt, ap);
+    if (sz > 0)
+        buf[(__lc_pf_n < __lc_pf_lim) ? __lc_pf_n : __lc_pf_lim] = 0;
+    va_end(ap);
+    return r;
+}
+

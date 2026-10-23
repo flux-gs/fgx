@@ -2346,15 +2346,74 @@ _scanf_L78
                 STA     _fcc_fpr0+2
                 LDA     39,S   ; fccstk d=0 b=39
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                STA     _fcc_ptr
+                LDA     [_fcc_ptr]
+                DEC
+                STA     [_fcc_ptr]
+                TAX
+                TXA
+                SEC
+                SBC     #0
+                BVC     _scanf_L86
+                EOR     #$8000
+_scanf_L86
+                BPL     *+5
+                BRL     _scanf_L84
+                LDA     41,S   ; fccstk d=0 b=41
+                STA     _fcc_fpr0+2
+                LDA     39,S   ; fccstk d=0 b=39
+                INC
+                INC
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                STA     _fcc_ptr
+                LDA     [_fcc_ptr]
+                STA     _fcc_tmp_b
+                CLC
+                ADC     #1
+                STA     [_fcc_ptr]
+                LDY     #2
+                LDA     [_fcc_ptr],Y
+                STA     _fcc_ptr+2
+                LDA     _fcc_tmp_b
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_ptr+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     [_fcc_fpr0]
+                AND     #$00FF
+                BRL     _scanf_L85
+_scanf_L84
+                LDA     41,S   ; fccstk d=0 b=41
+                STA     _fcc_fpr0+2
+                LDA     39,S   ; fccstk d=0 b=39
+                STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                FGX2_FARCALL getc
+                FGX2_FARCALL _filbuf
                 TAY
                 TSC
                 CLC
                 ADC     #4
                 TCS
                 TYA
+_scanf_L85
                 TAX
                 TXA
                 CMP     #10
@@ -2409,7 +2468,7 @@ _scanf_L83
                 TYA
                 CMP     #$FFFF
                 BNE     *+5
-                BRL     _scanf_L84
+                BRL     _scanf_L87
                 LDA     #21
                 TAY
                 TSC
@@ -2420,7 +2479,7 @@ _scanf_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_scanf_L84
+_scanf_L87
                 LDA     41,S   ; fccstk d=0 b=41
                 STA     _fcc_fpr0+2
                 LDA     39,S   ; fccstk d=0 b=39

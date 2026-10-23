@@ -63,8 +63,9 @@ instead of writing?").
 - **Temp files.** Ports that use scratch files (`ed`, `sed`, `sort`) should
   remove them on every exit path, including error exits and signals; FGX has no
   `/tmp` sweeper at boot.
-- **`stdin`/`stdout`/`stderr`** are `extern FILE *` objects
-  (`toolchain/include/stdio.h`) and work as in BSD.
+- **stdio is 2.11BSD's**: `stdin`/`stdout`/`stderr` are `&_iob[0..2]`,
+  `getc`/`putc` are macros on the FILE's count and pointer, and stdout is
+  line-buffered on a terminal (`toolchain/include/stdio.h`).
 
 ## Candidates not yet ported
 

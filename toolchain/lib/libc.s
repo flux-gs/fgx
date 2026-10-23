@@ -449,20 +449,6 @@ SYS_CLOSE_NUM   EQU     6
 SYS_LSEEK_NUM   EQU     19
 SYS_GETKEY_NUM  EQU     50
 
-; struct __sFILE { short _file; short _flag; } — 4 B per entry.
-; Field offsets accessed via DP-pointer (LIBC_DP_TMP),Y.
-__sFILE_file    EQU     0
-__sFILE_flag    EQU     2
-__sFILE_size    EQU     4
-LIBC_NFILE      EQU     8                        ; max simultaneous open FILEs
-
-; FILE _flag bits (4.3BSD-compatible subset; buffering bits reserved).
-_IOREAD         EQU     $0001
-_IOWRT          EQU     $0002
-_IONBF          EQU     $0004                    ; reserved — always unbuffered today
-_IOEOF          EQU     $0010
-_IOERR          EQU     $0020
-
 ; SEEK_SET / SEEK_CUR / SEEK_END — match kernel SYS_LSEEK whence values.
 SEEK_SET        EQU     0
 SEEK_CUR        EQU     1

@@ -50,7 +50,7 @@ int getopt(int argc, char **argv, char *ostr)
     oli = strchr(ostr, c);
     if (c == ':' || oli == 0) {
         if (opterr)
-            fprintf(__lc_fptr(2), "%s: illegal option -- %c\n",
+            fprintf(stderr, "%s: illegal option -- %c\n",
                       argv[0], c);
         __lc_optpos++;
         if (arg[__lc_optpos] == 0) { optind++; __lc_optpos = 0; }
@@ -63,7 +63,7 @@ int getopt(int argc, char **argv, char *ostr)
             optind++;
             if (optind >= argc) {
                 if (opterr)
-                    fprintf(__lc_fptr(2),
+                    fprintf(stderr,
                               "%s: option requires an argument -- %c\n",
                               argv[0], c);
                 __lc_optpos = 0;

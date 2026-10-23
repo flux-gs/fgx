@@ -114,16 +114,16 @@ def hello():
     check("_fcc_long_divs_far" in im and im["_fcc_long_divs_far"]["call"],
           "the far helper _fcc_long_divs_far is imported with a call site")
     check("_fcc_fdiv_far" not in im, "_fcc_fdiv_far is not (hello never divides floats)")
-    for n in ("errno", "stdout", "_libc_blktab"):
+    # stdout is <stdio.h>'s &_iob[1]: the program names libc's _iob table.
+    for n in ("errno", "_iob", "_libc_blktab"):
         check(n in im and im[n]["data"], "%s is imported with data sites" % n)
     segs, _end = segments(data)
-    if "stdout" in im:
-        addr = libc_data = {e[0]: e[3] for e in libc["exports"]}["stdout"]
-        vals = [struct.unpack_from("<H", segs[s], o)[0] for s, o, _v in im["stdout"]["data"]]
-        check(vals == [v for _s, _o, v in im["stdout"]["data"]],
+    if "_iob" in im:
+        addr = libc_data = {e[0]: e[3] for e in libc["exports"]}["_iob"]
+        vals = [struct.unpack_from("<H", segs[s], o)[0] for s, o, _v in im["_iob"]["data"]]
+        check(vals == [v for _s, _o, v in im["_iob"]["data"]],
               "each data site carries the word the link wrote there")
-        check(addr + 2 in vals and addr in vals,
-              "stdout's sites hold its address and its address + 2",
+        check(addr in vals, "_iob's sites hold its address",
               "%04X: %s" % (libc_data, ["%04X" % v for v in vals]))
     check("errno" in im and any(s == 1 for s, _o, _v in im["errno"]["data"]),
           "errno has a data site in segment 1 (ep's initialiser)")

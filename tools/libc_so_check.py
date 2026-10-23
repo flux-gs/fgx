@@ -11,8 +11,8 @@ section 8).
   - nothing points into a block template, and no template points into the
     core;
   - the templates tile their segment and every block cell is in the core;
-  - every fixup is in the core, and there is at least one (stdin, stdout,
-    stderr);
+  - every fixup is in the core, and there is at least one (libc:
+    findiop.c's _smallbuf);
   - the far helper entries are exactly lib/libc_so_helpers.s's, each a JSR
     to its own helper followed by RTL.
 
@@ -149,7 +149,7 @@ def check(data, d):
         if not 0 <= f < tr["core_size"]:
             errs.append("fixup %#06x is outside the core" % f)
     if NAME in ("libc", "libcurses") and not tr["fixups"]:
-        errs.append("no per-process fixups (libc: stdin, stdout, stderr; "
+        errs.append("no per-process fixups (libc: _smallbuf; "
                     "curses: sflags, sstrs)")
     labels = dict((n, a) for a, n in gen_seg1_layout.extract_labels(
         os.path.join(d, "core_Output.txt")))

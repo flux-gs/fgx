@@ -22,7 +22,6 @@
 
 /* fcc libc shims without a toolchain header. */
 int read(int fd, void *buf, int n);
-int fileno(FILE *fp);
 /* ^C arrives as SIGINT from the tty, not polled out of the kernel keyboard
  * ring.  pollkey() takes no fd, so over a pty it watched the PHYSICAL CONSOLE
  * and a remote user could not stop this (apple/fgx#151).  The tty discipline

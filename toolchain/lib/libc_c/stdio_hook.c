@@ -4,11 +4,12 @@
  * calling it.  That reference is unconditional, so whatever member holds the
  * flush is linked into EVERY binary.
  *
- * Holding it in stdio_core.c cost a program that prints nothing the whole
+ * Calling stdio's flush by name cost a program that prints nothing the whole
  * buffered-stdio subtree: `true' went from 19,642 to 38,794 bytes.  So the
- * entry point lives HERE, in a member with no imports of its own, and the
- * buffer registers itself the first time it allocates.  A binary that never
- * prints links this member and nothing else -- about thirty bytes.
+ * entry point lives HERE, in a member with no imports of its own, and
+ * _flsbuf (flsbuf.c) names _cleanup here the first time a stream is written.
+ * A binary that never prints links this member and nothing else -- about
+ * thirty bytes.
  *
  * The pointer is called by NAME rather than through (*p)(): that is the form
  * fcc supports, and the one qsort's comparator already uses. */
@@ -23,8 +24,7 @@ void __lc_stdio_flush()
 
 /* exit(2) AND _exit(2) LIVE HERE, not beside putchar.  Archive members are
  * whole files, so a program that only calls exit() would otherwise pull
- * everything stdio_out imports -- which is the read and write buffers and the
- * FILE table.  The M37 vreclaim fixture prints nothing, calls exit, and
+ * all of stdio -- the _iob table, _filbuf, _flsbuf and the printf engine.  The M37 vreclaim fixture prints nothing, calls exit, and
  * overflowed its 64 KB seg0 on exactly that.
  *
  * Their only libc dependency is the flush above, and it is a no-op until some
@@ -36,7 +36,7 @@ void exit(int code)
      * partial line dies with it, which is the failure mode that makes write
      * buffering look like data loss rather than a speed-up.
      *
-     * THROUGH THE HOOK, not __lc_wflushall directly: exit() is the one libc
+     * THROUGH THE HOOK, not _cleanup directly: exit() is the one libc
      * entry point that nearly every program reaches, and calling the buffer's
      * flush by name would make merely calling exit() drag in all of buffered
      * stdio.  It did -- the M37 vreclaim fixture prints nothing, calls exit,

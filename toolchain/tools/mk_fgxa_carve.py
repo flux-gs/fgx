@@ -11,7 +11,7 @@ to compile alone, because the one-TU aggregation is load-bearing --
     env.c                 needs args_env          (proc.c)
     stat.c, system.c      need _libc_lstrBufA/B   (popen.c)
     sigmask.c             needs _sig_disp         (signal.c)
-    stdio_out.c           needs _IOERR            (stdio_core.c, a MACRO)
+    fltpr.c               needs __lc_pfc          (doprnt.c, a static)
 
 ...and forcing them to compile alone would mean editing the members, which
 is exactly the coupling the umbrella exists to carry.

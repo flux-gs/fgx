@@ -21,11 +21,20 @@ main_stkok        TCS
                 INC     _fcc_fb
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
@@ -35,15 +44,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                AND     #$00FF
                 TAX
                 TXA
                 CMP     #1
@@ -66,11 +69,20 @@ _stdcells_L0
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob
+                STA     _fcc_fpr1
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr1
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
@@ -189,11 +201,20 @@ _stdcells_L4
                 PHA
                 SEP     #$20
                 MX      %10
-                LDA     stdout+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdout
+                LDA     #_iob
+                STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
@@ -291,21 +312,24 @@ _stdcells_L7
                 TCS
                 SEP     #$20
                 MX      %10
-                LDA     stderr+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stderr
+                LDA     #_iob
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                ASL
                 CLC
-                ADC     #4
-                TCS
-                TYA
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                AND     #$00FF
                 TAX
                 TXA
                 CMP     #2
@@ -324,21 +348,24 @@ _stdcells_L7
 _stdcells_L8
                 SEP     #$20
                 MX      %10
-                LDA     stdin+2
+                PHB
+                PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     stdin
+                LDA     #_iob
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                ASL
                 CLC
-                ADC     #4
-                TCS
-                TYA
+                ADC     _fcc_fpr0
+                STA     _fcc_fpr0
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                AND     #$00FF
                 TAX
                 TXA
                 CMP     #0
@@ -367,4 +394,4 @@ _stdcells_L9
                 RTL
 main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 11
+                FGX2_RELOC_COUNT 8

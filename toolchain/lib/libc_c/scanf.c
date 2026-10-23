@@ -7,9 +7,8 @@
 /* ---- scanf(3), fscanf(3), sscanf(3) --------------------------------------
  * Upstream's three wrappers over _doscan (doscan.c).  FGX deltas: each takes
  * its arguments with va_start where upstream takes `&args', the prototypes
- * in stdio.h being variadic; and sscanf hands _doscan its string through
- * __lc_scstr and a NULL FILE, where upstream builds an _IOSTRG FILE on the
- * stack (doscan.c says why).
+ * in stdio.h being variadic.  sscanf builds upstream's _IOSTRG FILE on the
+ * string, which _filbuf answers EOF at its end.
  */
 int
 scanf(char *fmt, ...)
@@ -40,10 +39,16 @@ sscanf(char *str, char *fmt, ...)
 {
 	va_list ap;
 	int r;
+	FILE _strbuf;
 
 	va_start(ap, fmt);
-	__lc_scstr = str;
-	r = _doscan((FILE *)NULL, fmt, (int **)ap);
+	_strbuf._flag = _IOREAD|_IOSTRG;
+	_strbuf._ptr = _strbuf._base = str;
+	_strbuf._cnt = 0;
+	while (*str++)
+		_strbuf._cnt++;
+	_strbuf._bufsiz = _strbuf._cnt;
+	r = _doscan(&_strbuf, fmt, (int **)ap);
 	va_end(ap);
 	return (r);
 }

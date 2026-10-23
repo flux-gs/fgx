@@ -97,7 +97,7 @@ carved()
     }
     return need > 0 && low == heaplim() && top - low == need &&
         top <= lo((char *)&errno) && top <= lo((char *)_libc_blktab) &&
-        top <= lo((char *)&stdout);
+        top <= lo((char *)stdout);
 }
 
 int
@@ -137,7 +137,7 @@ char **argv;
     qsort(words, 3, sizeof words[0], bystr);
     say("qsort", strcmp(words[0], "apple") == 0 && strcmp(words[2], "pear") == 0);
     say("pointer", (*cmpf)("fig", "fig") == 0 && (*cmpf)("a", "b") < 0);
-    say("stdout", fflush(stdout) == 0);     /* LDA stdout+2 / LDA stdout */
+    say("stdout", fflush(stdout) == 0);     /* &_iob[1], a core address */
     q = 1000000L;
     n = 7;
     say("ldiv", q / (long)n == 142857L && -q / (long)n == -142857L);

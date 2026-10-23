@@ -3,8 +3,6 @@
 ; segment, read and written DBR-relative by libc.s, crt0 and the C members.
 ;
 ; This file forward-references EQUs defined in libc.s:
-;   _IOREAD, _IOWRT  (FILE flag bits)
-;   LIBC_NFILE, __sFILE_*  (FILE table layout)
 ;
 ; For multi-bank seg1.link.s, define those EQUs inline at the top of
 ; the link file before PUT'ing libc_data.s.  See tools/fas/seg1.link.s
@@ -17,33 +15,6 @@
 _libc_lstrBufA  DS      128                     ; first string-arg scratch
 _libc_lstrBufB  DS      128                     ; second string-arg scratch
 
-
-;------------------------------------------------------------------------------
-; stdio state.
-;------------------------------------------------------------------------------
-
-; FILE table — LIBC_NFILE entries, 4 B each.  Layout:
-;   [0..1] _file  (fd; $FFFF = free slot)
-;   [2..3] _flag  (eof/err/mode bits)
-; First 3 slots are pre-initialised as stdin/stdout/stderr (fds 0/1/2,
-; flag = _IOREAD / _IOWRT / _IOWRT respectively).  Slots 3..7 start free.
-_libc_FILE_table
-                DA      0                       ; [0] _file = 0 (stdin)
-                DA      _IOREAD                 ; [0] _flag
-                DA      1                       ; [1] _file = 1 (stdout)
-                DA      _IOWRT                  ; [1] _flag
-                DA      2                       ; [2] _file = 2 (stderr)
-                DA      _IOWRT                  ; [2] _flag
-                DA      $FFFF                   ; [3] free
-                DA      0
-                DA      $FFFF                   ; [4] free
-                DA      0
-                DA      $FFFF                   ; [5] free
-                DA      0
-                DA      $FFFF                   ; [6] free
-                DA      0
-                DA      $FFFF                   ; [7] free
-                DA      0
 
 ;------------------------------------------------------------------------------
 ; LIBC_DATA_PTR - same-segment 4-byte far pointer (T5-C C6, stdio cells;
@@ -70,16 +41,8 @@ LIBC_DATA_PTR   MAC
                 DFB     $00
                 <<<
 
-; Predefined FILE * globals — 4-byte far pointers into _libc_FILE_table
-; (T5-C C6; were 2-byte DA cells, so a C read of the extern FILE* picked
-; up the adjacent cell as a junk bank — engines rebase the offset and
-; never noticed, but FILE* equality against an fopen() return was broken;
-; M37/stdcells pins the bank).  Offsets are baked: Merlin32 evaluates
-; left-to-right with no precedence, so `_libc_FILE_table+N*__sFILE_size`
-; would compute (TBL+N)*4 — wrong.
-stdin           LIBC_DATA_PTR io0;_libc_FILE_table          ; slot 0
-stdout          LIBC_DATA_PTR io1;_libc_FILE_table+4        ; slot 1
-stderr          LIBC_DATA_PTR io2;_libc_FILE_table+8        ; slot 2
+; stdio's state is 2.11BSD's _iob[] (libc_c/findiop.c), a C global in the
+; core; <stdio.h> names stdin, stdout and stderr as &_iob[0..2].
 
 
 ;------------------------------------------------------------------------------

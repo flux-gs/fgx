@@ -22,7 +22,7 @@
  *
  * THE INCLUDE ORDER IS THE ORIGINAL DEFINITION ORDER AND IS LOAD-BEARING.
  * One TU means file-scope statics and forward declarations cross member
- * boundaries: stdio_core.c defines __lc_fent() for stdio_out.c.  Reordering the list also reorders the
+ * boundaries: doprnt.c defines __lc_pfc() for fltpr.c.  Reordering the list also reorders the
  * emitted routines, so libc_c.s stops being byte-identical.  Add a new
  * member where its definitions belong, not at the end of the list.
  *
@@ -32,6 +32,7 @@
 #include <ctype.h>              /* isdigit (mktemp's name walk) */
 #include <errno.h>
 #include <fcntl.h>              /* O_CREAT/O_EXCL/O_RDWR (mkstemp) */
+#include <sys/file.h>           /* L_XTND (fopen, fdopen, freopen) */
 #include <stdarg.h>
 #include <string.h>
 #include <strings.h>             /* index (syslog) */
@@ -100,16 +101,10 @@ extern char args_env[];
 extern char _libc_lstrBufA[];
 extern char _libc_lstrBufB[];
 
-/* The stdio FILE table (libc_data's frozen prefix) and its flag bits.
- * stdio_core.c builds the entries; stdio_out.c, alias.c and the one-function
- * stdio members (fdopen.c, freopen.c, ...) read them. */
-extern int _libc_FILE_table[];       /* 8 x {fd, flag} word pairs */
-#define _IOREAD  0x01
-#define _IOWRT   0x02
-#define _IOEOF   0x10
-#define _IOERR   0x20
-#define _LC_FIRSTBUF 0               /* the first read-buffered slot: every
-                                      * slot is eligible; isatty decides */
+/* stdio (<stdio.h>, 2.11BSD's): the buffer fprintf, vfprintf and fputs
+ * borrow for one call on an unbuffered stream.  Upstream's is BUFSIZ on the
+ * stack; this is the bank-0 stack, which every process shares. */
+#define _LC_LOCALBUF 128
 
 #include "syscall_misc.c"
 #include "uio.c"
@@ -163,17 +158,33 @@ extern int _libc_FILE_table[];       /* 8 x {fd, flag} word pairs */
 #include "system.c"
 #include "time.c"
 #include "stdio_hook.c"
-#include "stdio_core.c"
+#include "findiop.c"
+#include "filbuf.c"
+#include "flsbuf.c"
+#include "fopen.c"
 #include "fdopen.c"
 #include "freopen.c"
 #include "fread.c"
 #include "fwrite.c"
 #include "fgetc.c"
-#include "ungetc.c"
+#include "fputc.c"
 #include "getchar.c"
+#include "putchar.c"
+#include "fgets.c"
+#include "fputs.c"
 #include "gets.c"
+#include "puts.c"
+#include "getw.c"
+#include "putw.c"
+#include "ungetc.c"
+#include "fseek.c"
+#include "ftell.c"
+#include "rew.c"
+#include "clrerr.c"
+#include "setvbuf.c"
 #include "setbuf.c"
 #include "setbuffer.c"
+#include "perror.c"
 #include "sigmask.c"
 #include "sigaction.c"
 #include "siglist.c"
@@ -192,8 +203,12 @@ extern int _libc_FILE_table[];       /* 8 x {fd, flag} word pairs */
 #include "ttyent.c"
 #include "utmp.c"
 #include "ftime.c"
-#include "stdio_out.c"
+#include "doprnt.c"
 #include "printf.c"
+#include "fprintf.c"
+#include "vfprintf.c"
+#include "vprintf.c"
+#include "sprintf.c"
 #include "fltpr.c"
 #include "vsnprintf.c"
 #include "inet.c"

@@ -355,15 +355,9 @@ _stdioops_L6
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL fileno
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDY     #14
+                LDA     [_fcc_fpr0],Y
+                AND     #$00FF
                 TAX
                 TXA
                 SEC
@@ -425,15 +419,16 @@ _stdioops_L19
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL feof
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                TAX
+                TXA
+                AND     #16
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                JSR     _fcc_ne16
                 TAX
                 TXA
                 CMP     #0
@@ -485,15 +480,16 @@ _stdioops_L20
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL feof
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                TAX
+                TXA
+                AND     #16
+                TAX
+                LDA     #0
+                STA     _fcc_tmp_b
+                TXA
+                JSR     _fcc_ne16
                 TAX
                 TXA
                 CMP     #0
@@ -830,4 +826,4 @@ _stdioops_L31
                 RTL
 main_FRAMESIZE   EQU     40
 main_STKGUARD    EQU     0
-                FGX2_RELOC_COUNT 25
+                FGX2_RELOC_COUNT 22

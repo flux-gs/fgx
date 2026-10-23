@@ -10,12 +10,6 @@
  * (printf.c's vsprintf note); scanf.c hands it over from va_start.
  *
  * FGX deltas:
- * - A NULL iop reads the string __lc_scstr instead of a stream, for
- *   sscanf.  Upstream's sscanf builds a FILE on the stack flagged _IOSTRG
- *   whose buffer is the string, and _filbuf answers EOF at its end; an FGX
- *   FILE is a slot in _libc_FILE_table and holds no buffer pointer, so there
- *   is no FILE to build.  _sc_getc and _sc_ungetc stand where upstream calls
- *   getc and ungetc, and do exactly those on a stream.
  * - %g is a floating conversion beside %e and %f, and an L prefix means
  *   double as l does.  K&R 2nd ed B.1.3: "The conversion characters e, f,
  *   and g may be preceded by l if a pointer to double rather than float is
@@ -39,7 +33,6 @@
 static char *_getccl();
 static int _innum(), _instr();
 
-static char *__lc_scstr;		/* sscanf's input; see _sc_getc */
 
 static char _sctab[256] = {
 	0,0,0,0,0,0,0,0,
@@ -51,31 +44,6 @@ static char _sctab[256] = {
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,
 };
-
-/* getc(iop), or the next character of sscanf's string: EOF at its end,
- * which it does not step past. */
-static int
-_sc_getc(iop)
-	FILE *iop;
-{
-	if (iop != NULL)
-		return (getc(iop));
-	if (*__lc_scstr == '\0')
-		return (EOF);
-	return (*__lc_scstr++ & 0377);
-}
-
-/* ungetc(c, iop), or one step back along sscanf's string. */
-static void
-_sc_ungetc(c, iop)
-	int c;
-	FILE *iop;
-{
-	if (iop != NULL)
-		ungetc(c, iop);
-	else if (c != EOF)
-		__lc_scstr--;
-}
 
 _doscan(iop, fmt, argp)
 FILE *iop;
@@ -130,19 +98,19 @@ register int **argp;
 	case ' ':
 	case '\n':
 	case '\t':
-		while ((ch1 = _sc_getc(iop))==' ' || ch1=='\t' || ch1=='\n')
+		while ((ch1 = getc(iop))==' ' || ch1=='\t' || ch1=='\n')
 			;
 		if (ch1 != EOF)
-			_sc_ungetc(ch1, iop);
+			ungetc(ch1, iop);
 		break;
 
 	default:
 	def:
-		ch1 = _sc_getc(iop);
+		ch1 = getc(iop);
 		if (ch1 != ch) {
 			if (ch1==EOF)
 				return(-1);
-			_sc_ungetc(ch1, iop);
+			ungetc(ch1, iop);
 			return(nmatch);
 		}
 	}
@@ -174,17 +142,17 @@ FILE *iop;
 	np = numbuf;
 	expseen = 0;
 	negflg = 0;
-	while ((c = _sc_getc(iop))==' ' || c=='\t' || c=='\n');
+	while ((c = getc(iop))==' ' || c=='\t' || c=='\n');
 	if (c=='-') {
 		negflg++;
 		*np++ = c;
-		c = _sc_getc(iop);
+		c = getc(iop);
 		len--;
 	} else if (c=='+') {
 		len--;
-		c = _sc_getc(iop);
+		c = getc(iop);
 	}
-	for ( ; --len>=0; *np++ = c, c = _sc_getc(iop)) {
+	for ( ; --len>=0; *np++ = c, c = getc(iop)) {
 		if (isdigit(c)
 		 || base==16 && ('a'<=c && c<='f' || 'A'<=c && c<='F')) {
 			ndigit++;
@@ -214,7 +182,7 @@ FILE *iop;
 				break;
 			expseen++;
 			*np++ = c;
-			c = _sc_getc(iop);
+			c = getc(iop);
 			if (c!='+'&&c!='-'&&('0'>c||c>'9'))
 				break;
 		} else
@@ -223,7 +191,7 @@ FILE *iop;
 	if (negflg)
 		lcval = -lcval;
 	if (c != EOF) {
-		_sc_ungetc(c, iop);
+		ungetc(c, iop);
 		*eofptr = 0;
 	} else
 		*eofptr = 1;
@@ -273,7 +241,7 @@ int *eofptr;
 	ignstp = 0;
 	if (type=='s')
 		ignstp = SPC;
-	while ((ch = _sc_getc(iop)) != EOF && _sctab[ch] & ignstp)
+	while ((ch = getc(iop)) != EOF && _sctab[ch] & ignstp)
 		;
 	ignstp = SPC;
 	if (type=='c')
@@ -285,11 +253,11 @@ int *eofptr;
 			*ptr++ = ch;
 		if (--len <= 0)
 			break;
-		ch = _sc_getc(iop);
+		ch = getc(iop);
 	}
 	if (ch != EOF) {
 		if (len > 0)
-			_sc_ungetc(ch, iop);
+			ungetc(ch, iop);
 		*eofptr = 0;
 	} else
 		*eofptr = 1;
