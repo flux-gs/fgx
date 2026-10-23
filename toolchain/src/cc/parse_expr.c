@@ -746,6 +746,7 @@ sizeof_paren_has_operator(void)
 }
 
 static int build_unary(void);
+static int build_unary_operand(void);
 
 /* A numeric or character constant: sized by the type its AST node carries
  * (A.2.5.1's ladder for an integer constant, A.2.5.3's suffix for a floating
@@ -2461,7 +2462,7 @@ build_unary(void)
                     lex_peek_restore(&pk_lp);
                 }
                 if (postfix) {
-                    int a = build_unary();
+                    int a = build_unary_operand();
                     int n = ast_new(N_DEREF_GENERAL, op_line, op_col);
                     g_ast[n].a = a;
                     if (g_ast[a].type == LT_FN_PTR) {
@@ -2528,7 +2529,7 @@ build_unary(void)
             }
         }
         /* General path. */
-        int a = build_unary();
+        int a = build_unary_operand();
         int n = ast_new(N_DEREF_GENERAL, op_line, op_col);
         g_ast[n].a = a;
         if (g_ast[a].type == LT_FN_PTR) {
@@ -2602,6 +2603,28 @@ value_chain_ends_in_compound_store(void)
     return is_compound_op(g_toks[i].kind);
 }
 
+/* Set while the operand of a prefix `*' is being parsed.  K&R A.7.4: a
+ * unary-expression is `unary-operator cast-expression', and A.7.17 puts the
+ * assignment operators below every unary one, so an `=' after the operand
+ * belongs to the expression the `*' heads: `*(q)->p = c' stores through
+ * (q)->p (A.7.4.3, "returns the object ... to which its operand points"),
+ * and A.7.2 makes the parenthesized `(q)' the same primary as `q'.  A store
+ * chain must not absorb that `=' into the operand.  build_assign clears the
+ * flag for every full expression nested inside the operand -- a parenthesized
+ * group, an argument, a subscript -- and puts it back. */
+static int g_unop_operand;
+
+static int
+build_unary_operand(void)
+{
+    int saved = g_unop_operand, r;
+
+    g_unop_operand = 1;
+    r = build_unary();
+    g_unop_operand = saved;
+    return r;
+}
+
 static int
 value_chain_ends_in_store(void)
 {
@@ -2621,6 +2644,8 @@ value_chain_ends_in_store(void)
         break;
     }
     TokKind fin = g_toks[i].kind;
+    if (g_unop_operand)
+        return 0;
     return (fin == TOK_EQ || is_compound_op(fin));
 }
 
@@ -6379,8 +6404,21 @@ peek_chain_dot_bridges(void)
 /* build_assign — parse_assign's expression-context store classifier (3a-F).
  * All lookahead rewinds are cursor checkpoints; the RHS recursion keeps the
  * right-associativity. */
+static int build_assign_body(void);
+
 static int
 build_assign(void)
+{
+    int saved = g_unop_operand, r;
+
+    g_unop_operand = 0;
+    r = build_assign_body();
+    g_unop_operand = saved;
+    return r;
+}
+
+static int
+build_assign_body(void)
 {
     /* --libso: a block static on the left goes to the lvalue walker, which
      * build_primary_ast enters for it (build_block_static), not to the
@@ -6524,7 +6562,7 @@ build_assign(void)
         lex_peek_restore(&ds_pk);
         next_tok();                                    /* consume '*' */
         {
-            int e = build_unary();                     /* the pointer value E */
+            int e = build_unary_operand();             /* the pointer value E */
             if (ISPTR(g_ast[e].type) && g_ast[e].type != LT_FN_PTR &&
                 (g_cur.kind == TOK_EQ || is_compound_op(g_cur.kind))) {
                 int head = ast_new(N_LV_CHAIN, op_line, op_col);
