@@ -1022,6 +1022,8 @@ int
 is_ident_cont(int c);
 int
 is_type_modifier_ident(const char *p, int n);
+int
+inline_is_specifier(void);
 long
 pp_apply_op(int op, long a, long b);
 void

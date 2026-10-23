@@ -177,7 +177,27 @@ is_type_modifier_ident(const char *p, int n)
         || (n == 8 && memcmp(p, "register", 8) == 0)
         || (n == 4 && memcmp(p, "auto",     4) == 0)
         || (n == 8 && memcmp(p, "volatile", 8) == 0)
-        || (n == 6 && memcmp(p, "inline",   6) == 0);
+        || (n == 6 && memcmp(p, "inline",   6) == 0 && inline_is_specifier());
+}
+
+/* `inline' is C99's function specifier, not a K&R keyword: A.2.4's list
+ * has no `inline', and its only allowance is that "Some implementations
+ * also reserve the words fortran and asm."  So it is a specifier only where
+ * the next token can carry the declaration on (`static inline int f',
+ * `inline int f'), and an ordinary name everywhere else -- 2.11BSD cat.c's
+ * `int ... inline;' and `inline = 0;'.  Every caller asks about g_cur, so
+ * the token after it is peek_tok(). */
+int
+inline_is_specifier(void)
+{
+    switch (peek_tok().kind) {
+    case TOK_IDENT:   case TOK_INT_KW:    case TOK_CHAR_KW:  case TOK_VOID_KW:
+    case TOK_LONG_KW: case TOK_FLOAT_KW:  case TOK_STATIC_KW:
+    case TOK_STRUCT_KW: case TOK_UNION_KW: case TOK_ENUM_KW: case TOK_TYPEDEF_KW:
+        return 1;
+    default:
+        return 0;
+    }
 }
 
 int
