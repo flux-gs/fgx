@@ -157,7 +157,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L3
+                BEQ     _wide_bump_L0
                 LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+6
@@ -179,14 +179,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L3
-                LDA     #1
-                BRA     _wide_bump_L4
-_wide_bump_L3
-                LDA     #0
-_wide_bump_L4
-                CMP     #0
-                BEQ     _wide_bump_L1
+                BEQ     _wide_bump_L0
                 LDA     _wide_bump_gobj+4
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+2
@@ -206,13 +199,6 @@ _wide_bump_L4
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _wide_bump_L1
-                LDA     #1
-                BRA     _wide_bump_L2
-_wide_bump_L1
-                LDA     #0
-_wide_bump_L2
                 CMP     #0
                 BEQ     _wide_bump_L0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -284,7 +270,7 @@ _wide_bump_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L6
+                BEQ     _wide_bump_L1
                 LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+6
@@ -306,20 +292,13 @@ _wide_bump_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L6
-                LDA     #1
-                BRA     _wide_bump_L7
-_wide_bump_L6
-                LDA     #0
-_wide_bump_L7
-                CMP     #0
-                BEQ     _wide_bump_L5
+                BEQ     _wide_bump_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L5
+_wide_bump_L1
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #1
@@ -482,7 +461,7 @@ _wide_bump_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L9
+                BEQ     _wide_bump_L2
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -527,20 +506,13 @@ _wide_bump_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L9
-                LDA     #1
-                BRA     _wide_bump_L10
-_wide_bump_L9
-                LDA     #0
-_wide_bump_L10
-                CMP     #0
-                BEQ     _wide_bump_L8
+                BEQ     _wide_bump_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L8
+_wide_bump_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -670,13 +642,13 @@ _wide_bump_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L11
+                BEQ     _wide_bump_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L11
+_wide_bump_L3
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -754,13 +726,13 @@ _wide_bump_L11
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L12
+                BEQ     _wide_bump_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L12
+_wide_bump_L4
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -833,7 +805,7 @@ _wide_bump_L12
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L16
+                BEQ     _wide_bump_L5
                 LDA     _wide_bump_gobj+12
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+10
@@ -855,31 +827,17 @@ _wide_bump_L12
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _wide_bump_L16
-                LDA     #1
-                BRA     _wide_bump_L17
-_wide_bump_L16
-                LDA     #0
-_wide_bump_L17
-                CMP     #0
-                BEQ     _wide_bump_L14
+                BEQ     _wide_bump_L5
                 LDA     _wide_bump_gobj+0
                 TAX
                 CMP     #1234
-                BNE     _wide_bump_L14
-                LDA     #1
-                BRA     _wide_bump_L15
-_wide_bump_L14
-                LDA     #0
-_wide_bump_L15
-                CMP     #0
-                BEQ     _wide_bump_L13
+                BNE     _wide_bump_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L13
+_wide_bump_L5
                 LDA     #16388
                 STA     _fcc_q3
                 LDA     #0
@@ -962,13 +920,13 @@ _wide_bump_L13
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L18
+                BEQ     _wide_bump_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L18
+_wide_bump_L6
                 SEP     #$20
                 MX      %10
                 LDA     _wide_bump_gp+2
@@ -1042,7 +1000,7 @@ _wide_bump_L18
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L20
+                BEQ     _wide_bump_L7
                 LDA     _wide_bump_gobj+16
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+14
@@ -1084,20 +1042,13 @@ _wide_bump_L18
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L20
-                LDA     #1
-                BRA     _wide_bump_L21
-_wide_bump_L20
-                LDA     #0
-_wide_bump_L21
-                CMP     #0
-                BEQ     _wide_bump_L19
+                BEQ     _wide_bump_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L19
+_wide_bump_L7
                 LDA     #0
                 ASL
                 ASL
@@ -1252,7 +1203,8 @@ _wide_bump_L19
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L25
+                BNE     *+5
+                BRL     _wide_bump_L8
                 LDA     _wide_bump_gobj+20
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+18
@@ -1294,14 +1246,8 @@ _wide_bump_L19
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L25
-                LDA     #1
-                BRA     _wide_bump_L26
-_wide_bump_L25
-                LDA     #0
-_wide_bump_L26
                 CMP     #0
-                BEQ     _wide_bump_L23
+                BEQ     _wide_bump_L8
                 LDA     _wide_bump_gobj+24
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+22
@@ -1343,20 +1289,13 @@ _wide_bump_L26
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L23
-                LDA     #1
-                BRA     _wide_bump_L24
-_wide_bump_L23
-                LDA     #0
-_wide_bump_L24
-                CMP     #0
-                BEQ     _wide_bump_L22
+                BEQ     _wide_bump_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L22
+_wide_bump_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1518,13 +1457,13 @@ _wide_bump_L22
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L27
+                BEQ     _wide_bump_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L27
+_wide_bump_L9
                 LDA     #16336
                 STA     _fcc_q3
                 LDA     #0
@@ -1633,7 +1572,7 @@ _wide_bump_L27
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L29
+                BEQ     _wide_bump_L10
                 LDA     _wide_bump_chain+16
                 STA     _fcc_long_hi
                 LDA     _wide_bump_chain+14
@@ -1675,20 +1614,13 @@ _wide_bump_L27
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L29
-                LDA     #1
-                BRA     _wide_bump_L30
-_wide_bump_L29
-                LDA     #0
-_wide_bump_L30
-                CMP     #0
-                BEQ     _wide_bump_L28
+                BEQ     _wide_bump_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L28
+_wide_bump_L10
                 LDA     #16410
                 STA     _fcc_q3
                 LDA     #0
@@ -1785,7 +1717,7 @@ _wide_bump_L28
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L32
+                BEQ     _wide_bump_L11
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_long_hi
                 LDA     13,S   ; fccstk d=0 b=13
@@ -1827,20 +1759,14 @@ _wide_bump_L28
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L32
-                LDA     #1
-                BRA     _wide_bump_L33
-_wide_bump_L32
-                LDA     #0
-_wide_bump_L33
                 CMP     #0
-                BEQ     _wide_bump_L31
+                BEQ     _wide_bump_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L31
+_wide_bump_L11
                 LDA     #16368
                 STA     _fcc_q3
                 LDA     #0
@@ -1955,7 +1881,7 @@ _wide_bump_L31
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _wide_bump_L35
+                BEQ     _wide_bump_L12
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_long_hi
                 LDA     9,S   ; fccstk d=0 b=9
@@ -1997,20 +1923,13 @@ _wide_bump_L31
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L35
-                LDA     #1
-                BRA     _wide_bump_L36
-_wide_bump_L35
-                LDA     #0
-_wide_bump_L36
-                CMP     #0
-                BEQ     _wide_bump_L34
+                BEQ     _wide_bump_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L34
+_wide_bump_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -2128,13 +2047,13 @@ _wide_bump_L34
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _wide_bump_L37
+                BEQ     _wide_bump_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
-_wide_bump_L37
+_wide_bump_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC

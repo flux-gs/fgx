@@ -214,65 +214,24 @@ _struct_manyfields_L2
                 TYA
                 LDA     M+8
                 AND     #$00FF
-                BNE     _struct_manyfields_L15
+                BNE     _struct_manyfields_L5
                 LDA     M+2
-                BNE     _struct_manyfields_L15
-                LDA     #0
-                BRA     _struct_manyfields_L16
-_struct_manyfields_L15
-                LDA     #1
-_struct_manyfields_L16
-                CMP     #0
-                BNE     _struct_manyfields_L13
+                BNE     _struct_manyfields_L5
                 LDA     M+6
                 STA     _fcc_long_hi
                 LDA     M+4
                 ORA     _fcc_long_hi
-                BNE     _struct_manyfields_L13
-                LDA     #0
-                BRA     _struct_manyfields_L14
-_struct_manyfields_L13
-                LDA     #1
-_struct_manyfields_L14
-                CMP     #0
-                BNE     _struct_manyfields_L11
+                BNE     _struct_manyfields_L5
                 LDA     M+80
                 AND     #$00FF
-                BNE     _struct_manyfields_L11
-                LDA     #0
-                BRA     _struct_manyfields_L12
-_struct_manyfields_L11
-                LDA     #1
-_struct_manyfields_L12
-                CMP     #0
-                BNE     _struct_manyfields_L9
+                BNE     _struct_manyfields_L5
                 LDA     M+90
-                BNE     _struct_manyfields_L9
-                LDA     #0
-                BRA     _struct_manyfields_L10
-_struct_manyfields_L9
-                LDA     #1
-_struct_manyfields_L10
-                CMP     #0
-                BNE     _struct_manyfields_L7
+                BNE     _struct_manyfields_L5
                 LDA     M+96
-                BNE     _struct_manyfields_L7
-                LDA     #0
-                BRA     _struct_manyfields_L8
-_struct_manyfields_L7
-                LDA     #1
-_struct_manyfields_L8
-                CMP     #0
                 BNE     _struct_manyfields_L5
                 LDA     M+100
-                BNE     _struct_manyfields_L5
-                LDA     #0
-                BRA     _struct_manyfields_L6
-_struct_manyfields_L5
-                LDA     #1
-_struct_manyfields_L6
-                CMP     #0
                 BEQ     _struct_manyfields_L4
+_struct_manyfields_L5
                 LDA     #0
                 TAY
                 TSC

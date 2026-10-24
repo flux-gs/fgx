@@ -99,7 +99,7 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BNE     _g54_fnfield_null_L5
+                BNE     _g54_fnfield_null_L1
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
@@ -111,14 +111,7 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BNE     _g54_fnfield_null_L5
-                LDA     #1
-                BRA     _g54_fnfield_null_L6
-_g54_fnfield_null_L5
-                LDA     #0
-_g54_fnfield_null_L6
-                CMP     #0
-                BEQ     _g54_fnfield_null_L3
+                BNE     _g54_fnfield_null_L1
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
@@ -130,14 +123,7 @@ _g54_fnfield_null_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BNE     _g54_fnfield_null_L3
-                LDA     #1
-                BRA     _g54_fnfield_null_L4
-_g54_fnfield_null_L3
-                LDA     #0
-_g54_fnfield_null_L4
-                CMP     #0
-                BEQ     _g54_fnfield_null_L1
+                BNE     _g54_fnfield_null_L1
                 LDA     #42
                 BRA     _g54_fnfield_null_L2
 _g54_fnfield_null_L1

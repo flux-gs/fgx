@@ -1123,14 +1123,8 @@ _ldouble_stmt_L10
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     _ldouble_stmt_L12
-                LDA     #0
-                BRA     _ldouble_stmt_L13
-_ldouble_stmt_L12
-                LDA     #1
-_ldouble_stmt_L13
-                CMP     #0
                 BEQ     _ldouble_stmt_L11
+_ldouble_stmt_L12
                 LDA     #12
                 TAY
                 TSC
@@ -1195,7 +1189,7 @@ _ldouble_stmt_L11
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     _ldouble_stmt_L15
+                BNE     _ldouble_stmt_L14
                 LDA     gs+4
                 STA     _fcc_long_hi
                 LDA     gs+2
@@ -1217,14 +1211,8 @@ _ldouble_stmt_L11
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     _ldouble_stmt_L15
-                LDA     #0
-                BRA     _ldouble_stmt_L16
-_ldouble_stmt_L15
-                LDA     #1
-_ldouble_stmt_L16
-                CMP     #0
-                BEQ     _ldouble_stmt_L14
+                BEQ     _ldouble_stmt_L13
+_ldouble_stmt_L14
                 LDA     #13
                 TAY
                 TSC
@@ -1235,7 +1223,7 @@ _ldouble_stmt_L16
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_stmt_L14
+_ldouble_stmt_L13
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5

@@ -188,35 +188,21 @@ _charasgval_L8
                 AND     #$00FF
                 TAX
                 CMP     #193
-                BNE     _charasgval_L12
+                BNE     _charasgval_L9
                 LDA     #0
                 TAX
                 LDA:    ga,X
                 AND     #$00FF
                 TAX
                 CMP     #193
-                BNE     _charasgval_L12
-                LDA     #1
-                BRA     _charasgval_L13
-_charasgval_L12
-                LDA     #0
-_charasgval_L13
-                CMP     #0
-                BEQ     _charasgval_L10
+                BNE     _charasgval_L9
                 LDA     #2
                 TAX
                 LDA:    ga,X
                 AND     #$00FF
                 TAX
                 CMP     #193
-                BNE     _charasgval_L10
-                LDA     #1
-                BRA     _charasgval_L11
-_charasgval_L10
-                LDA     #0
-_charasgval_L11
-                CMP     #0
-                BEQ     _charasgval_L9
+                BNE     _charasgval_L9
                 LDA     _fcc_img2
                 TAX
                 CLC

@@ -160,7 +160,7 @@ _popen_L3
                 AND     #$00FF
                 TAX
                 CMP     #104
-                BNE     _popen_L9
+                BNE     _popen_L7
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -180,13 +180,6 @@ _popen_L3
                 AND     #$00FF
                 TAX
                 CMP     #105
-                BNE     _popen_L9
-                LDA     #0
-                BRA     _popen_L10
-_popen_L9
-                LDA     #1
-_popen_L10
-                CMP     #0
                 BNE     _popen_L7
                 SEP     #$20
                 MX      %10
@@ -207,14 +200,8 @@ _popen_L10
                 AND     #$00FF
                 TAX
                 CMP     #10
-                BNE     _popen_L7
-                LDA     #0
-                BRA     _popen_L8
-_popen_L7
-                LDA     #1
-_popen_L8
-                CMP     #0
                 BEQ     _popen_L6
+_popen_L7
                 LDA     #3
                 TAY
                 TSC
@@ -258,21 +245,21 @@ _popen_L6
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _popen_L12
+                BNE     _popen_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _popen_L12
+                BNE     _popen_L9
                 LDA     #0
-                BRA     _popen_L13
-_popen_L12
+                BRA     _popen_L10
+_popen_L9
                 LDA     #1
-_popen_L13
+_popen_L10
                 CMP     #0
-                BEQ     _popen_L11
+                BEQ     _popen_L8
                 LDA     #4
                 TAY
                 TSC
@@ -283,7 +270,7 @@ _popen_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L11
+_popen_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -297,7 +284,7 @@ _popen_L11
                 ADC     #4
                 TCS
                 TYA
-                BEQ     _popen_L14
+                BEQ     _popen_L11
                 LDA     #5
                 TAY
                 TSC
@@ -308,7 +295,7 @@ _popen_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L14
+_popen_L11
                 SEP     #$20
                 MX      %10
                 PHB
@@ -347,21 +334,21 @@ _popen_L14
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _popen_L16
+                BNE     _popen_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _popen_L16
+                BNE     _popen_L13
                 LDA     #1
-                BRA     _popen_L17
-_popen_L16
+                BRA     _popen_L14
+_popen_L13
                 LDA     #0
-_popen_L17
+_popen_L14
                 CMP     #0
-                BEQ     _popen_L15
+                BEQ     _popen_L12
                 LDA     #6
                 TAY
                 TSC
@@ -372,7 +359,7 @@ _popen_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L15
+_popen_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -408,7 +395,7 @@ _popen_L15
                 ADC     #4
                 TCS
                 TYA
-                BEQ     _popen_L18
+                BEQ     _popen_L15
                 LDA     #7
                 TAY
                 TSC
@@ -419,7 +406,7 @@ _popen_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L18
+_popen_L15
                 SEP     #$20
                 MX      %10
                 PHB
@@ -458,21 +445,21 @@ _popen_L18
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _popen_L20
+                BNE     _popen_L17
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _popen_L20
+                BNE     _popen_L17
                 LDA     #1
-                BRA     _popen_L21
-_popen_L20
+                BRA     _popen_L18
+_popen_L17
                 LDA     #0
-_popen_L21
+_popen_L18
                 CMP     #0
-                BEQ     _popen_L19
+                BEQ     _popen_L16
                 LDA     #8
                 TAY
                 TSC
@@ -483,7 +470,7 @@ _popen_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L19
+_popen_L16
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -510,7 +497,7 @@ _popen_L19
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _popen_L22
+                BEQ     _popen_L19
                 LDA     #9
                 TAY
                 TSC
@@ -521,7 +508,7 @@ _popen_L19
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L22
+_popen_L19
                 PHA
                 SEP     #$20
                 MX      %10
@@ -543,7 +530,7 @@ _popen_L22
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     _popen_L23
+                BEQ     _popen_L20
                 LDA     #10
                 TAY
                 TSC
@@ -554,7 +541,7 @@ _popen_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_popen_L23
+_popen_L20
                 LDA     #42
                 TAY
                 TSC

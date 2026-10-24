@@ -80,7 +80,7 @@ _structval_take_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _structval_L2
+                BNE     _structval_L0
                 DO      8+_structval_take_FRAMESIZE/256
                 TSC
                 CLC
@@ -105,14 +105,7 @@ _structval_take_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _structval_L2
-                LDA     #1
-                BRA     _structval_L3
-_structval_L2
-                LDA     #0
-_structval_L3
-                CMP     #0
-                BEQ     _structval_L0
+                BNE     _structval_L0
                 DO      10+_structval_take_FRAMESIZE/256
                 TSC
                 CLC
@@ -206,7 +199,7 @@ _structval_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _structval_L6
+                BNE     _structval_L2
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -223,36 +216,7 @@ _structval_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _structval_L6
-                LDA     #1
-                BRA     _structval_L7
-_structval_L6
-                LDA     #0
-_structval_L7
-                CMP     #0
-                BEQ     _structval_L4
-                DO      8+_structval_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structval_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structval_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BNE     _structval_L2
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -269,12 +233,12 @@ _structval_L7
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _structval_L4
+                BNE     _structval_L2
                 LDA     #1
-                BRA     _structval_L5
-_structval_L4
+                BRA     _structval_L3
+_structval_L2
                 LDA     #0
-_structval_L5
+_structval_L3
                 TAY
                 TSC
                 CLC
@@ -634,12 +598,12 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L13
+_structval_L5
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L13
+                BPL     _structval_L5
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -647,7 +611,9 @@ _structval_L13
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L11
+                CMP     #0
+                BNE     *+5
+                BRL     _structval_L4
                 LDA     #22
                 PHA
                 LDA     #21
@@ -685,12 +651,12 @@ _structval_L13
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L14
+_structval_L6
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L14
+                BPL     _structval_L6
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -698,14 +664,7 @@ _structval_L14
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L11
-                LDA     #1
-                BRA     _structval_L12
-_structval_L11
-                LDA     #0
-_structval_L12
-                CMP     #0
-                BEQ     _structval_L9
+                BEQ     _structval_L4
                 LDA     #32
                 PHA
                 LDA     #31
@@ -726,12 +685,12 @@ _structval_L12
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L15
+_structval_L7
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L15
+                BPL     _structval_L7
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -739,20 +698,13 @@ _structval_L15
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L9
-                LDA     #1
-                BRA     _structval_L10
-_structval_L9
-                LDA     #0
-_structval_L10
-                CMP     #0
-                BEQ     _structval_L8
+                BEQ     _structval_L4
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L8
+_structval_L4
                 LDA     #15
                 PHA
                 LDA     #14
@@ -787,12 +739,12 @@ _structval_L8
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L23
+_structval_L9
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L23
+                BPL     _structval_L9
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -800,7 +752,9 @@ _structval_L23
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L21
+                CMP     #0
+                BNE     *+5
+                BRL     _structval_L8
                 LDA     #25
                 PHA
                 LDA     #24
@@ -840,12 +794,12 @@ _structval_L23
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L24
+_structval_L10
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L24
+                BPL     _structval_L10
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -853,14 +807,9 @@ _structval_L24
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L21
-                LDA     #1
-                BRA     _structval_L22
-_structval_L21
-                LDA     #0
-_structval_L22
                 CMP     #0
-                BEQ     _structval_L19
+                BNE     *+5
+                BRL     _structval_L8
                 LDA     #35
                 PHA
                 LDA     #34
@@ -890,12 +839,12 @@ _structval_L22
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L25
+_structval_L11
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L25
+                BPL     _structval_L11
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -903,14 +852,7 @@ _structval_L25
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L19
-                LDA     #1
-                BRA     _structval_L20
-_structval_L19
-                LDA     #0
-_structval_L20
-                CMP     #0
-                BEQ     _structval_L17
+                BEQ     _structval_L8
                 LDA     #45
                 PHA
                 LDA     #44
@@ -952,12 +894,12 @@ _structval_L20
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #4
-_structval_L26
+_structval_L12
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _structval_L26
+                BPL     _structval_L12
                 FGX2_FARCALL _structval_take
                 TAY
                 TSC
@@ -965,20 +907,13 @@ _structval_L26
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _structval_L17
-                LDA     #1
-                BRA     _structval_L18
-_structval_L17
-                LDA     #0
-_structval_L18
-                CMP     #0
-                BEQ     _structval_L16
+                BEQ     _structval_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L16
+_structval_L8
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -995,7 +930,8 @@ _structval_L16
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #12
-                BNE     _structval_L32
+                BEQ     *+5
+                BRL     _structval_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1023,14 +959,8 @@ _structval_L16
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #41
-                BNE     _structval_L32
-                LDA     #1
-                BRA     _structval_L33
-_structval_L32
-                LDA     #0
-_structval_L33
-                CMP     #0
-                BEQ     _structval_L30
+                BEQ     *+5
+                BRL     _structval_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1062,16 +992,9 @@ _structval_L33
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #44
-                BNE     _structval_L30
-                LDA     #1
-                BRA     _structval_L31
-_structval_L30
-                LDA     #0
-_structval_L31
-                CMP     #0
-                BEQ     _structval_L28
+                BNE     _structval_L13
                 LDA     1,S   ; fccstk d=0 b=1
-                BEQ     _structval_L34
+                BEQ     _structval_L14
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -1094,8 +1017,8 @@ _structval_L31
                 CLC
                 ADC     #2
                 STA     _fcc_fpr0
-                BRA     _structval_L35
-_structval_L34
+                BRA     _structval_L15
+_structval_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1117,24 +1040,17 @@ _structval_L34
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0
-_structval_L35
+_structval_L15
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #20
-                BNE     _structval_L28
-                LDA     #1
-                BRA     _structval_L29
-_structval_L28
-                LDA     #0
-_structval_L29
-                CMP     #0
-                BEQ     _structval_L27
+                BNE     _structval_L13
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L27
+_structval_L13
                 LDA     #1
                 STA     3,S   ; fccstk d=0 b=3
                 SEP     #$20
@@ -1171,16 +1087,16 @@ _structval_L27
                 STA     _fcc_fpr0
                 PLA
                 LDY     #4
-_structval_L36
+_structval_L16
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structval_L36
+                BPL     _structval_L16
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #1
-                BNE     _structval_L38
+                BNE     _structval_L17
                 LDA     #22
                 PHA
                 LDA     #21
@@ -1207,26 +1123,20 @@ _structval_L36
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L38
-                LDA     #1
-                BRA     _structval_L39
-_structval_L38
-                LDA     #0
-_structval_L39
                 CMP     #0
-                BEQ     _structval_L37
+                BEQ     _structval_L17
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L37
+_structval_L17
                 LDA     #0
                 STA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_img0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img1
-_structval_L40
+_structval_L18
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1234,12 +1144,12 @@ _structval_L40
                 TAX
                 SEC
                 SBC     #2
-                BVC     _structval_L43
+                BVC     _structval_L21
                 EOR     #$8000
-_structval_L43
-                BPL     _structval_L42
+_structval_L21
+                BPL     _structval_L20
                 INC     _fcc_img0
-_structval_L41
+_structval_L19
                 LDA     _fcc_img1
                 STA     _fcc_tmp_b
                 ASL
@@ -1273,14 +1183,14 @@ _structval_L41
                 STA     _fcc_fpr0
                 PLA
                 LDY     #4
-_structval_L44
+_structval_L22
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structval_L44
-                BRA     _structval_L40
-_structval_L42
+                BPL     _structval_L22
+                BRA     _structval_L18
+_structval_L20
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_img1
@@ -1288,7 +1198,7 @@ _structval_L42
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #2
-                BNE     _structval_L46
+                BNE     _structval_L23
                 LDA     #42
                 PHA
                 LDA     #41
@@ -1315,20 +1225,14 @@ _structval_L42
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L46
-                LDA     #1
-                BRA     _structval_L47
-_structval_L46
-                LDA     #0
-_structval_L47
                 CMP     #0
-                BEQ     _structval_L45
+                BEQ     _structval_L23
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L45
+_structval_L23
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1359,12 +1263,12 @@ _structval_L45
                 ADC     #2
                 STA     _fcc_fpr1
                 LDY     #4
-_structval_L48
+_structval_L24
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structval_L48
+                BPL     _structval_L24
                 LDA     #32
                 PHA
                 LDA     #31
@@ -1424,12 +1328,12 @@ _structval_L48
                 ADC     #6
                 STA     _fcc_fpr1
                 LDY     #4
-_structval_L49
+_structval_L25
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structval_L49
+                BPL     _structval_L25
                 LDA     #35
                 PHA
                 LDA     #34
@@ -1469,14 +1373,7 @@ _structval_L49
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
-                BEQ     _structval_L52
-                LDA     #0
-                BRA     _structval_L53
-_structval_L52
-                LDA     #1
-_structval_L53
-                CMP     #0
-                BEQ     _structval_L50
+                BNE     _structval_L26
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -1487,8 +1384,8 @@ _structval_L53
                 CLC
                 ADC     #2
                 STA     _fcc_fpr1
-                BRA     _structval_L51
-_structval_L50
+                BRA     _structval_L27
+_structval_L26
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL mk
@@ -1506,14 +1403,14 @@ _structval_L50
                 CLC
                 ADC     #2
                 STA     _fcc_fpr1
-_structval_L51
+_structval_L27
                 LDY     #4
-_structval_L54
+_structval_L28
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structval_L54
+                BPL     _structval_L28
                 FGX2_FARCALL mk
                 LDA     _fcc_fpr0
                 CLC
@@ -1522,16 +1419,9 @@ _structval_L54
                 LDA     #7
                 STA     [_fcc_fpr0]
                 LDA     5,S   ; fccstk d=0 b=5
-                BEQ     _structval_L60
+                BEQ     _structval_L29
                 LDA     3,S   ; fccstk d=0 b=3
-                BEQ     _structval_L60
-                LDA     #1
-                BRA     _structval_L61
-_structval_L60
-                LDA     #0
-_structval_L61
-                CMP     #0
-                BEQ     _structval_L58
+                BEQ     _structval_L29
                 LDA     #32
                 PHA
                 LDA     #31
@@ -1558,31 +1448,17 @@ _structval_L61
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L58
-                LDA     #1
-                BRA     _structval_L59
-_structval_L58
-                LDA     #0
-_structval_L59
-                CMP     #0
-                BEQ     _structval_L56
+                BEQ     _structval_L29
                 LDA     _structval_g2+20
                 TAX
                 CMP     #7
-                BNE     _structval_L56
-                LDA     #1
-                BRA     _structval_L57
-_structval_L56
-                LDA     #0
-_structval_L57
-                CMP     #0
-                BEQ     _structval_L55
+                BNE     _structval_L29
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L55
+_structval_L29
                 LDA     #12
                 PHA
                 LDA     #11
@@ -1609,7 +1485,8 @@ _structval_L55
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L69
+                CMP     #0
+                BEQ     _structval_L30
                 LDA     #25
                 PHA
                 LDA     #24
@@ -1640,14 +1517,7 @@ _structval_L55
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L69
-                LDA     #1
-                BRA     _structval_L70
-_structval_L69
-                LDA     #0
-_structval_L70
-                CMP     #0
-                BEQ     _structval_L67
+                BEQ     _structval_L30
                 LDA     #42
                 PHA
                 LDA     #41
@@ -1674,38 +1544,17 @@ _structval_L70
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _structval_L67
-                LDA     #1
-                BRA     _structval_L68
-_structval_L67
-                LDA     #0
-_structval_L68
-                CMP     #0
-                BEQ     _structval_L65
+                BEQ     _structval_L30
                 LDA     _structval_g0+0
-                BNE     _structval_L65
-                LDA     #1
-                BRA     _structval_L66
-_structval_L65
-                LDA     #0
-_structval_L66
-                CMP     #0
-                BEQ     _structval_L63
+                BNE     _structval_L30
                 LDA     _structval_g0+20
-                BNE     _structval_L63
-                LDA     #1
-                BRA     _structval_L64
-_structval_L63
-                LDA     #0
-_structval_L64
-                CMP     #0
-                BEQ     _structval_L62
+                BNE     _structval_L30
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
-_structval_L62
+_structval_L30
                 LDA     7,S   ; fccstk d=0 b=7
                 TAY
                 TSC

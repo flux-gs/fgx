@@ -148,18 +148,11 @@ _preincparen_L2
                 STA     13,S   ; fccstk d=0 b=13
                 TAX
                 CMP     #8
-                BNE     _preincparen_L4
+                BNE     _preincparen_L3
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #8
-                BNE     _preincparen_L4
-                LDA     #1
-                BRA     _preincparen_L5
-_preincparen_L4
-                LDA     #0
-_preincparen_L5
-                CMP     #0
-                BEQ     _preincparen_L3
+                BNE     _preincparen_L3
                 LDA     _fcc_img0
                 TAX
                 CLC

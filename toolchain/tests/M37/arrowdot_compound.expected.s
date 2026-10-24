@@ -74,40 +74,19 @@ main_stkok        TCS
                 LDA     g+2
                 TAX
                 CMP     #15
-                BNE     _arrowdot_compound_L5
+                BNE     _arrowdot_compound_L0
                 LDA     g+4
                 TAX
                 CMP     #4660
-                BNE     _arrowdot_compound_L5
-                LDA     #1
-                BRA     _arrowdot_compound_L6
-_arrowdot_compound_L5
-                LDA     #0
-_arrowdot_compound_L6
-                CMP     #0
-                BEQ     _arrowdot_compound_L3
+                BNE     _arrowdot_compound_L0
                 LDA     g+0
                 TAX
                 CMP     #43690
-                BNE     _arrowdot_compound_L3
-                LDA     #1
-                BRA     _arrowdot_compound_L4
-_arrowdot_compound_L3
-                LDA     #0
-_arrowdot_compound_L4
-                CMP     #0
-                BEQ     _arrowdot_compound_L1
+                BNE     _arrowdot_compound_L0
                 LDA     g+6
                 TAX
                 CMP     #21845
-                BNE     _arrowdot_compound_L1
-                LDA     #1
-                BRA     _arrowdot_compound_L2
-_arrowdot_compound_L1
-                LDA     #0
-_arrowdot_compound_L2
-                CMP     #0
-                BEQ     _arrowdot_compound_L0
+                BNE     _arrowdot_compound_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -146,46 +125,25 @@ _arrowdot_compound_L0
                 LDA     g+4
                 TAX
                 CMP     #4660
-                BNE     _arrowdot_compound_L12
+                BNE     _arrowdot_compound_L1
                 LDA     g+2
                 TAX
                 CMP     #15
-                BNE     _arrowdot_compound_L12
-                LDA     #1
-                BRA     _arrowdot_compound_L13
-_arrowdot_compound_L12
-                LDA     #0
-_arrowdot_compound_L13
-                CMP     #0
-                BEQ     _arrowdot_compound_L10
+                BNE     _arrowdot_compound_L1
                 LDA     g+0
                 TAX
                 CMP     #43690
-                BNE     _arrowdot_compound_L10
-                LDA     #1
-                BRA     _arrowdot_compound_L11
-_arrowdot_compound_L10
-                LDA     #0
-_arrowdot_compound_L11
-                CMP     #0
-                BEQ     _arrowdot_compound_L8
+                BNE     _arrowdot_compound_L1
                 LDA     g+6
                 TAX
                 CMP     #21845
-                BNE     _arrowdot_compound_L8
-                LDA     #1
-                BRA     _arrowdot_compound_L9
-_arrowdot_compound_L8
-                LDA     #0
-_arrowdot_compound_L9
-                CMP     #0
-                BEQ     _arrowdot_compound_L7
+                BNE     _arrowdot_compound_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_arrowdot_compound_L7
+_arrowdot_compound_L1
                 LDA     #100
                 STA     g+2
                 SEP     #$20
@@ -219,46 +177,25 @@ _arrowdot_compound_L7
                 LDA     g+2
                 TAX
                 CMP     #123
-                BNE     _arrowdot_compound_L19
+                BNE     _arrowdot_compound_L2
                 LDA     g+4
                 TAX
                 CMP     #4660
-                BNE     _arrowdot_compound_L19
-                LDA     #1
-                BRA     _arrowdot_compound_L20
-_arrowdot_compound_L19
-                LDA     #0
-_arrowdot_compound_L20
-                CMP     #0
-                BEQ     _arrowdot_compound_L17
+                BNE     _arrowdot_compound_L2
                 LDA     g+0
                 TAX
                 CMP     #43690
-                BNE     _arrowdot_compound_L17
-                LDA     #1
-                BRA     _arrowdot_compound_L18
-_arrowdot_compound_L17
-                LDA     #0
-_arrowdot_compound_L18
-                CMP     #0
-                BEQ     _arrowdot_compound_L15
+                BNE     _arrowdot_compound_L2
                 LDA     g+6
                 TAX
                 CMP     #21845
-                BNE     _arrowdot_compound_L15
-                LDA     #1
-                BRA     _arrowdot_compound_L16
-_arrowdot_compound_L15
-                LDA     #0
-_arrowdot_compound_L16
-                CMP     #0
-                BEQ     _arrowdot_compound_L14
+                BNE     _arrowdot_compound_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_arrowdot_compound_L14
+_arrowdot_compound_L2
                 LDA     _fcc_img0
                 TAY
                 TSC

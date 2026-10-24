@@ -312,7 +312,7 @@ _fconv_unsigned_L3
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _fconv_unsigned_L5
+                BEQ     _fconv_unsigned_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
@@ -354,12 +354,6 @@ _fconv_unsigned_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _fconv_unsigned_L5
-                LDA     #1
-                BRA     _fconv_unsigned_L6
-_fconv_unsigned_L5
-                LDA     #0
-_fconv_unsigned_L6
                 CMP     #0
                 BEQ     _fconv_unsigned_L4
                 LDA     1,S   ; fccstk d=0 b=1
@@ -414,13 +408,13 @@ _fconv_unsigned_L4
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_unsigned_L7
+                BEQ     _fconv_unsigned_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_unsigned_L7
+_fconv_unsigned_L5
                 LDA     #16870
                 STA     _fcc_q3
                 LDA     #23051
@@ -464,13 +458,13 @@ _fconv_unsigned_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_unsigned_L8
+                BEQ     _fconv_unsigned_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_unsigned_L8
+_fconv_unsigned_L6
                 LDA     U
                 JSR     _fcc_utof
                 TAY
@@ -504,13 +498,13 @@ _fconv_unsigned_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_unsigned_L9
+                BEQ     _fconv_unsigned_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_unsigned_L9
+_fconv_unsigned_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

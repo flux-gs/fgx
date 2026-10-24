@@ -117,14 +117,8 @@ main_stkok        TCS
                 LDA:    _derefrmw_s,X
                 TAX
                 CMP     #5
-                BNE     _derefrmw_L1
-                LDA     #0
-                BRA     _derefrmw_L2
-_derefrmw_L1
-                LDA     #1
-_derefrmw_L2
-                CMP     #0
                 BEQ     _derefrmw_L0
+_derefrmw_L1
                 LDA     #1
                 TAY
                 TSC
@@ -180,7 +174,7 @@ _derefrmw_L0
                 AND     #$00FF
                 TAX
                 CMP     #165
-                BEQ     _derefrmw_L3
+                BEQ     _derefrmw_L2
                 LDA     #2
                 TAY
                 TSC
@@ -191,7 +185,7 @@ _derefrmw_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L3
+_derefrmw_L2
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -213,7 +207,7 @@ _derefrmw_L3
                 AND     #$00FF
                 TAX
                 CMP     #168
-                BEQ     _derefrmw_L4
+                BEQ     _derefrmw_L3
                 LDA     #3
                 TAY
                 TSC
@@ -224,7 +218,7 @@ _derefrmw_L3
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L4
+_derefrmw_L3
                 LDA     #_derefrmw_s
                 PHA
                 LDA     #0
@@ -276,21 +270,15 @@ _derefrmw_L4
                 STA     _fcc_img0
                 TAX
                 CMP     #7
-                BNE     _derefrmw_L6
+                BNE     _derefrmw_L5
                 LDA     #0
                 ASL
                 TAX
                 LDA:    _derefrmw_s,X
                 TAX
                 CMP     #7
-                BNE     _derefrmw_L6
-                LDA     #0
-                BRA     _derefrmw_L7
-_derefrmw_L6
-                LDA     #1
-_derefrmw_L7
-                CMP     #0
-                BEQ     _derefrmw_L5
+                BEQ     _derefrmw_L4
+_derefrmw_L5
                 LDA     #4
                 TAY
                 TSC
@@ -301,7 +289,7 @@ _derefrmw_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_derefrmw_L5
+_derefrmw_L4
                 LDA     #42
                 TAY
                 TSC

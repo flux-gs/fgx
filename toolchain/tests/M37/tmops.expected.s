@@ -80,7 +80,7 @@ _tmops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _tmops_L2
+                BEQ     _tmops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _tmops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _tmops_L2
-                LDA     #1
-                BRA     _tmops_L3
-_tmops_L2
-                LDA     #0
-_tmops_L3
-                CMP     #0
-                BEQ     _tmops_L1
+                BNE     _tmops_L1
                 INC     _fcc_img0
                 BRA     _tmops_L0
 _tmops_L1
@@ -200,134 +193,50 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #126
-                BNE     _tmops_L19
+                BNE     _tmops_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #5
-                BNE     _tmops_L19
-                LDA     #1
-                BRA     _tmops_L20
-_tmops_L19
-                LDA     #0
-_tmops_L20
-                CMP     #0
-                BEQ     _tmops_L17
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #30
-                BNE     _tmops_L17
-                LDA     #1
-                BRA     _tmops_L18
-_tmops_L17
-                LDA     #0
-_tmops_L18
-                CMP     #0
-                BEQ     _tmops_L15
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #14
-                BNE     _tmops_L15
-                LDA     #1
-                BRA     _tmops_L16
-_tmops_L15
-                LDA     #0
-_tmops_L16
-                CMP     #0
-                BEQ     _tmops_L13
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #20
-                BNE     _tmops_L13
-                LDA     #1
-                BRA     _tmops_L14
-_tmops_L13
-                LDA     #0
-_tmops_L14
-                CMP     #0
-                BEQ     _tmops_L11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #7
-                BNE     _tmops_L11
-                LDA     #1
-                BRA     _tmops_L12
-_tmops_L11
-                LDA     #0
-_tmops_L12
-                CMP     #0
-                BEQ     _tmops_L9
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #2
-                BNE     _tmops_L9
-                LDA     #1
-                BRA     _tmops_L10
-_tmops_L9
-                LDA     #0
-_tmops_L10
-                CMP     #0
-                BEQ     _tmops_L7
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #180
-                BNE     _tmops_L7
-                LDA     #1
-                BRA     _tmops_L8
-_tmops_L7
-                LDA     #0
-_tmops_L8
-                CMP     #0
-                BEQ     _tmops_L5
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L2
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
-                BNE     _tmops_L5
-                LDA     #1
-                BRA     _tmops_L6
-_tmops_L5
-                LDA     #0
-_tmops_L6
-                CMP     #0
-                BEQ     _tmops_L4
+                BNE     _tmops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L4
+_tmops_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -361,13 +270,13 @@ _tmops_L4
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _tmops_L21
+                BEQ     _tmops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L21
+_tmops_L3
                 PHA
                 SEP     #$20
                 MX      %10
@@ -396,73 +305,33 @@ _tmops_L21
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #1
-                BNE     _tmops_L29
+                BNE     _tmops_L4
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #29
-                BNE     _tmops_L29
-                LDA     #1
-                BRA     _tmops_L30
-_tmops_L29
-                LDA     #0
-_tmops_L30
-                CMP     #0
-                BEQ     _tmops_L27
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #124
-                BNE     _tmops_L27
-                LDA     #1
-                BRA     _tmops_L28
-_tmops_L27
-                LDA     #0
-_tmops_L28
-                CMP     #0
-                BEQ     _tmops_L25
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #4
-                BNE     _tmops_L25
-                LDA     #1
-                BRA     _tmops_L26
-_tmops_L25
-                LDA     #0
-_tmops_L26
-                CMP     #0
-                BEQ     _tmops_L23
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BNE     _tmops_L4
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #59
-                BNE     _tmops_L23
-                LDA     #1
-                BRA     _tmops_L24
-_tmops_L23
-                LDA     #0
-_tmops_L24
-                CMP     #0
-                BEQ     _tmops_L22
+                BNE     _tmops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L22
+_tmops_L4
                 PHA
                 SEP     #$20
                 MX      %10
@@ -525,7 +394,7 @@ _tmops_L22
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _tmops_L31
+                BRL     _tmops_L5
                 LDA     #99
                 STA     gtz+0
                 PHA
@@ -562,7 +431,8 @@ _tmops_L22
                 TCS
                 TYA
                 CMP     #0
-                BNE     _tmops_L39
+                BEQ     *+5
+                BRL     _tmops_L6
                 LDA     gtv+2
                 STA     _fcc_long_hi
                 LDA     gtv+0
@@ -584,14 +454,7 @@ _tmops_L22
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _tmops_L39
-                LDA     #1
-                BRA     _tmops_L40
-_tmops_L39
-                LDA     #0
-_tmops_L40
-                CMP     #0
-                BEQ     _tmops_L37
+                BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
@@ -612,14 +475,7 @@ _tmops_L40
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BEQ     _tmops_L37
-                LDA     #1
-                BRA     _tmops_L38
-_tmops_L37
-                LDA     #0
-_tmops_L38
-                CMP     #0
-                BEQ     _tmops_L35
+                BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
@@ -641,32 +497,18 @@ _tmops_L38
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _tmops_L35
-                LDA     #1
-                BRA     _tmops_L36
-_tmops_L35
-                LDA     #0
-_tmops_L36
-                CMP     #0
-                BEQ     _tmops_L33
+                BEQ     _tmops_L6
                 LDA     gtz+0
                 TAX
                 CMP     #99
-                BEQ     _tmops_L33
-                LDA     #1
-                BRA     _tmops_L34
-_tmops_L33
-                LDA     #0
-_tmops_L34
-                CMP     #0
-                BEQ     _tmops_L32
+                BEQ     _tmops_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
                 ADC     #12
                 STA     5,S   ; fccstk d=0 b=5
-_tmops_L32
-_tmops_L31
+_tmops_L6
+_tmops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

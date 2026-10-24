@@ -162,7 +162,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ptrlong_cast_L6
+                BEQ     _ptrlong_cast_L2
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
@@ -182,14 +182,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _ptrlong_cast_L6
-                LDA     #1
-                BRA     _ptrlong_cast_L7
-_ptrlong_cast_L6
-                LDA     #0
-_ptrlong_cast_L7
-                CMP     #0
-                BEQ     _ptrlong_cast_L4
+                BEQ     _ptrlong_cast_L2
                 LDA     q+6
                 STA     _fcc_q3
                 LDA     q+4
@@ -214,13 +207,6 @@ _ptrlong_cast_L7
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _ptrlong_cast_L4
-                LDA     #1
-                BRA     _ptrlong_cast_L5
-_ptrlong_cast_L4
-                LDA     #0
-_ptrlong_cast_L5
                 CMP     #0
                 BEQ     _ptrlong_cast_L2
                 LDA     #42

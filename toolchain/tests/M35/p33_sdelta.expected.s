@@ -256,14 +256,8 @@ _p33_sdelta_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #3
-                BNE     _p33_sdelta_L4
-                LDA     #0
-                BRA     _p33_sdelta_L5
-_p33_sdelta_L4
-                LDA     #1
-_p33_sdelta_L5
-                CMP     #0
                 BEQ     _p33_sdelta_L3
+_p33_sdelta_L4
                 LDA     #4
                 TAY
                 TSC

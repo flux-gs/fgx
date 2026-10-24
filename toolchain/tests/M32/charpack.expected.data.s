@@ -2,7 +2,7 @@
 ; fcc 0.0 — data segment for charpack.c
 ;---------------------------------------
                 FGX2_MODE 2
-_charpack_FA24       FGX2_LONG_PTR _Fa;fret;0
+_charpack_FA16       FGX2_LONG_PTR _Fa;fret;0
 
 ;-------------------------------
 ; M7 globals

@@ -101,15 +101,8 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     np+2
                 LDA     3,S   ; fccstk d=0 b=3
-                BEQ     _knr_pun_dot_L2
+                BEQ     _knr_pun_dot_L0
                 LDA     5,S   ; fccstk d=0 b=5
-                BEQ     _knr_pun_dot_L2
-                LDA     #1
-                BRA     _knr_pun_dot_L3
-_knr_pun_dot_L2
-                LDA     #0
-_knr_pun_dot_L3
-                CMP     #0
                 BEQ     _knr_pun_dot_L0
                 SEP     #$20
                 MX      %10

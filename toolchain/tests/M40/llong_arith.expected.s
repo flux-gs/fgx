@@ -661,14 +661,7 @@ _llong_arith_run_stkok        TCS
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L5
-                LDA     #0
-                BRA     _llong_arith_L6
-_llong_arith_L5
-                LDA     #1
-_llong_arith_L6
-                CMP     #0
-                BEQ     _llong_arith_L4
+                BNE     _llong_arith_L4
                 LDA     #1
                 TAY
                 TSC
@@ -840,14 +833,7 @@ _llong_arith_L4
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L8
-                LDA     #0
-                BRA     _llong_arith_L9
-_llong_arith_L8
-                LDA     #1
-_llong_arith_L9
-                CMP     #0
-                BEQ     _llong_arith_L7
+                BNE     _llong_arith_L5
                 LDA     #2
                 TAY
                 TSC
@@ -858,7 +844,7 @@ _llong_arith_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L7
+_llong_arith_L5
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1019,14 +1005,7 @@ _llong_arith_L7
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L11
-                LDA     #0
-                BRA     _llong_arith_L12
-_llong_arith_L11
-                LDA     #1
-_llong_arith_L12
-                CMP     #0
-                BEQ     _llong_arith_L10
+                BNE     _llong_arith_L6
                 LDA     #3
                 TAY
                 TSC
@@ -1037,7 +1016,7 @@ _llong_arith_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L10
+_llong_arith_L6
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1198,14 +1177,7 @@ _llong_arith_L10
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L14
-                LDA     #0
-                BRA     _llong_arith_L15
-_llong_arith_L14
-                LDA     #1
-_llong_arith_L15
-                CMP     #0
-                BEQ     _llong_arith_L13
+                BNE     _llong_arith_L7
                 LDA     #4
                 TAY
                 TSC
@@ -1216,7 +1188,7 @@ _llong_arith_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L13
+_llong_arith_L7
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1377,14 +1349,7 @@ _llong_arith_L13
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L17
-                LDA     #0
-                BRA     _llong_arith_L18
-_llong_arith_L17
-                LDA     #1
-_llong_arith_L18
-                CMP     #0
-                BEQ     _llong_arith_L16
+                BNE     _llong_arith_L8
                 LDA     #5
                 TAY
                 TSC
@@ -1395,7 +1360,7 @@ _llong_arith_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L16
+_llong_arith_L8
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1524,14 +1489,7 @@ _llong_arith_L16
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L20
-                LDA     #0
-                BRA     _llong_arith_L21
-_llong_arith_L20
-                LDA     #1
-_llong_arith_L21
-                CMP     #0
-                BEQ     _llong_arith_L19
+                BNE     _llong_arith_L9
                 LDA     #6
                 TAY
                 TSC
@@ -1542,7 +1500,7 @@ _llong_arith_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L19
+_llong_arith_L9
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1671,14 +1629,7 @@ _llong_arith_L19
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L23
-                LDA     #0
-                BRA     _llong_arith_L24
-_llong_arith_L23
-                LDA     #1
-_llong_arith_L24
-                CMP     #0
-                BEQ     _llong_arith_L22
+                BNE     _llong_arith_L10
                 LDA     #7
                 TAY
                 TSC
@@ -1689,7 +1640,7 @@ _llong_arith_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L22
+_llong_arith_L10
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -1850,14 +1801,7 @@ _llong_arith_L22
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L26
-                LDA     #0
-                BRA     _llong_arith_L27
-_llong_arith_L26
-                LDA     #1
-_llong_arith_L27
-                CMP     #0
-                BEQ     _llong_arith_L25
+                BNE     _llong_arith_L11
                 LDA     #8
                 TAY
                 TSC
@@ -1868,7 +1812,7 @@ _llong_arith_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L25
+_llong_arith_L11
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2029,14 +1973,7 @@ _llong_arith_L25
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L29
-                LDA     #0
-                BRA     _llong_arith_L30
-_llong_arith_L29
-                LDA     #1
-_llong_arith_L30
-                CMP     #0
-                BEQ     _llong_arith_L28
+                BNE     _llong_arith_L12
                 LDA     #9
                 TAY
                 TSC
@@ -2047,7 +1984,7 @@ _llong_arith_L30
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L28
+_llong_arith_L12
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2208,14 +2145,7 @@ _llong_arith_L28
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L32
-                LDA     #0
-                BRA     _llong_arith_L33
-_llong_arith_L32
-                LDA     #1
-_llong_arith_L33
-                CMP     #0
-                BEQ     _llong_arith_L31
+                BNE     _llong_arith_L13
                 LDA     #10
                 TAY
                 TSC
@@ -2226,7 +2156,7 @@ _llong_arith_L33
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L31
+_llong_arith_L13
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2387,14 +2317,7 @@ _llong_arith_L31
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L35
-                LDA     #0
-                BRA     _llong_arith_L36
-_llong_arith_L35
-                LDA     #1
-_llong_arith_L36
-                CMP     #0
-                BEQ     _llong_arith_L34
+                BNE     _llong_arith_L14
                 LDA     #11
                 TAY
                 TSC
@@ -2405,7 +2328,7 @@ _llong_arith_L36
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L34
+_llong_arith_L14
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2566,14 +2489,7 @@ _llong_arith_L34
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L38
-                LDA     #0
-                BRA     _llong_arith_L39
-_llong_arith_L38
-                LDA     #1
-_llong_arith_L39
-                CMP     #0
-                BEQ     _llong_arith_L37
+                BNE     _llong_arith_L15
                 LDA     #12
                 TAY
                 TSC
@@ -2584,7 +2500,7 @@ _llong_arith_L39
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L37
+_llong_arith_L15
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2713,14 +2629,7 @@ _llong_arith_L37
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L41
-                LDA     #0
-                BRA     _llong_arith_L42
-_llong_arith_L41
-                LDA     #1
-_llong_arith_L42
-                CMP     #0
-                BEQ     _llong_arith_L40
+                BNE     _llong_arith_L16
                 LDA     #13
                 TAY
                 TSC
@@ -2731,7 +2640,7 @@ _llong_arith_L42
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L40
+_llong_arith_L16
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -2860,14 +2769,7 @@ _llong_arith_L40
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L44
-                LDA     #0
-                BRA     _llong_arith_L45
-_llong_arith_L44
-                LDA     #1
-_llong_arith_L45
-                CMP     #0
-                BEQ     _llong_arith_L43
+                BNE     _llong_arith_L17
                 LDA     #14
                 TAY
                 TSC
@@ -2878,7 +2780,7 @@ _llong_arith_L45
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L43
+_llong_arith_L17
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3039,14 +2941,7 @@ _llong_arith_L43
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L47
-                LDA     #0
-                BRA     _llong_arith_L48
-_llong_arith_L47
-                LDA     #1
-_llong_arith_L48
-                CMP     #0
-                BEQ     _llong_arith_L46
+                BNE     _llong_arith_L18
                 LDA     #15
                 TAY
                 TSC
@@ -3057,7 +2952,7 @@ _llong_arith_L48
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L46
+_llong_arith_L18
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3218,14 +3113,7 @@ _llong_arith_L46
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L50
-                LDA     #0
-                BRA     _llong_arith_L51
-_llong_arith_L50
-                LDA     #1
-_llong_arith_L51
-                CMP     #0
-                BEQ     _llong_arith_L49
+                BNE     _llong_arith_L19
                 LDA     #16
                 TAY
                 TSC
@@ -3236,7 +3124,7 @@ _llong_arith_L51
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L49
+_llong_arith_L19
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3397,14 +3285,7 @@ _llong_arith_L49
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L53
-                LDA     #0
-                BRA     _llong_arith_L54
-_llong_arith_L53
-                LDA     #1
-_llong_arith_L54
-                CMP     #0
-                BEQ     _llong_arith_L52
+                BNE     _llong_arith_L20
                 LDA     #17
                 TAY
                 TSC
@@ -3415,7 +3296,7 @@ _llong_arith_L54
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L52
+_llong_arith_L20
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3576,14 +3457,7 @@ _llong_arith_L52
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L56
-                LDA     #0
-                BRA     _llong_arith_L57
-_llong_arith_L56
-                LDA     #1
-_llong_arith_L57
-                CMP     #0
-                BEQ     _llong_arith_L55
+                BNE     _llong_arith_L21
                 LDA     #18
                 TAY
                 TSC
@@ -3594,7 +3468,7 @@ _llong_arith_L57
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L55
+_llong_arith_L21
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3755,14 +3629,7 @@ _llong_arith_L55
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L59
-                LDA     #0
-                BRA     _llong_arith_L60
-_llong_arith_L59
-                LDA     #1
-_llong_arith_L60
-                CMP     #0
-                BEQ     _llong_arith_L58
+                BNE     _llong_arith_L22
                 LDA     #19
                 TAY
                 TSC
@@ -3773,7 +3640,7 @@ _llong_arith_L60
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L58
+_llong_arith_L22
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3902,14 +3769,7 @@ _llong_arith_L58
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L62
-                LDA     #0
-                BRA     _llong_arith_L63
-_llong_arith_L62
-                LDA     #1
-_llong_arith_L63
-                CMP     #0
-                BEQ     _llong_arith_L61
+                BNE     _llong_arith_L23
                 LDA     #20
                 TAY
                 TSC
@@ -3920,7 +3780,7 @@ _llong_arith_L63
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L61
+_llong_arith_L23
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -4049,14 +3909,7 @@ _llong_arith_L61
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L65
-                LDA     #0
-                BRA     _llong_arith_L66
-_llong_arith_L65
-                LDA     #1
-_llong_arith_L66
-                CMP     #0
-                BEQ     _llong_arith_L64
+                BNE     _llong_arith_L24
                 LDA     #21
                 TAY
                 TSC
@@ -4067,7 +3920,7 @@ _llong_arith_L66
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L64
+_llong_arith_L24
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -4228,14 +4081,7 @@ _llong_arith_L64
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L68
-                LDA     #0
-                BRA     _llong_arith_L69
-_llong_arith_L68
-                LDA     #1
-_llong_arith_L69
-                CMP     #0
-                BEQ     _llong_arith_L67
+                BNE     _llong_arith_L25
                 LDA     #22
                 TAY
                 TSC
@@ -4246,7 +4092,7 @@ _llong_arith_L69
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L67
+_llong_arith_L25
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -4407,14 +4253,7 @@ _llong_arith_L67
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L71
-                LDA     #0
-                BRA     _llong_arith_L72
-_llong_arith_L71
-                LDA     #1
-_llong_arith_L72
-                CMP     #0
-                BEQ     _llong_arith_L70
+                BNE     _llong_arith_L26
                 LDA     #23
                 TAY
                 TSC
@@ -4425,7 +4264,7 @@ _llong_arith_L72
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L70
+_llong_arith_L26
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -4586,14 +4425,7 @@ _llong_arith_L70
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L74
-                LDA     #0
-                BRA     _llong_arith_L75
-_llong_arith_L74
-                LDA     #1
-_llong_arith_L75
-                CMP     #0
-                BEQ     _llong_arith_L73
+                BNE     _llong_arith_L27
                 LDA     #24
                 TAY
                 TSC
@@ -4604,7 +4436,7 @@ _llong_arith_L75
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L73
+_llong_arith_L27
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -4765,14 +4597,7 @@ _llong_arith_L73
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L77
-                LDA     #0
-                BRA     _llong_arith_L78
-_llong_arith_L77
-                LDA     #1
-_llong_arith_L78
-                CMP     #0
-                BEQ     _llong_arith_L76
+                BNE     _llong_arith_L28
                 LDA     #25
                 TAY
                 TSC
@@ -4783,7 +4608,7 @@ _llong_arith_L78
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L76
+_llong_arith_L28
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -4944,14 +4769,7 @@ _llong_arith_L76
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L80
-                LDA     #0
-                BRA     _llong_arith_L81
-_llong_arith_L80
-                LDA     #1
-_llong_arith_L81
-                CMP     #0
-                BEQ     _llong_arith_L79
+                BNE     _llong_arith_L29
                 LDA     #26
                 TAY
                 TSC
@@ -4962,7 +4780,7 @@ _llong_arith_L81
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L79
+_llong_arith_L29
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -5091,15 +4909,7348 @@ _llong_arith_L79
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L83
-                LDA     #0
-                BRA     _llong_arith_L84
-_llong_arith_L83
-                LDA     #1
-_llong_arith_L84
-                CMP     #0
-                BEQ     _llong_arith_L82
+                BNE     _llong_arith_L30
                 LDA     #27
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L30
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_neg
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L31
+                LDA     #28
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L31
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_add
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L32
+                LDA     #29
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L32
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_sub
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$7FFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L33
+                LDA     #30
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L33
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_and
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L34
+                LDA     #31
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L34
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_or
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L35
+                LDA     #32
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L35
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_xor
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L36
+                LDA     #33
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L36
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_com
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$7FFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L37
+                LDA     #34
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L37
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_neg
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L38
+                LDA     #35
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L38
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_add
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L39
+                LDA     #36
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L39
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_sub
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFD
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L40
+                LDA     #37
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L40
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_and
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L41
+                LDA     #38
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L41
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_or
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L42
+                LDA     #39
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L42
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_xor
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFD
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L43
+                LDA     #40
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L43
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_com
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L44
+                LDA     #41
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L44
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_neg
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L45
+                LDA     #43
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L45
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_add
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0002
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L46
+                LDA     #44
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L46
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_sub
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFE
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L47
+                LDA     #45
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L47
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_and
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L48
+                LDA     #46
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L48
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_or
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L49
+                LDA     #47
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L49
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_xor
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFE
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L50
+                LDA     #48
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L50
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_com
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFE
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L51
+                LDA     #49
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L51
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                FGX2_FARCALL _fcc_ll_neg
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFE
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L52
+                LDA     #50
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L52
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #1
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$1357
+                STA     _fcc_long_hi
+                LDA     #$9BDE
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0246
+                STA     _fcc_long_hi
+                LDA     #$8ACF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L53
+                LDA     #51
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L53
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #1
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$C4D5
+                STA     _fcc_long_hi
+                LDA     #$E6F7
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0091
+                STA     _fcc_long_hi
+                LDA     #$A2B3
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L54
+                LDA     #52
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L54
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #1
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$C4D5
+                STA     _fcc_long_hi
+                LDA     #$E6F7
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0091
+                STA     _fcc_long_hi
+                LDA     #$A2B3
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L55
+                LDA     #53
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L55
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #15
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$E6F7
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$A2B3
+                STA     _fcc_long_hi
+                LDA     #$C4D5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L56
+                LDA     #54
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L56
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #15
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$8ACF
+                STA     _fcc_long_hi
+                LDA     #$1357
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0246
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L57
+                LDA     #55
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L57
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #15
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$8ACF
+                STA     _fcc_long_hi
+                LDA     #$1357
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0246
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L58
+                LDA     #56
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L58
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #16
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$CDEF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$4567
+                STA     _fcc_long_hi
+                LDA     #$89AB
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L59
+                LDA     #57
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L59
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #16
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$4567
+                STA     _fcc_long_hi
+                LDA     #$89AB
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0123
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L60
+                LDA     #58
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L60
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #16
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$4567
+                STA     _fcc_long_hi
+                LDA     #$89AB
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0123
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L61
+                LDA     #59
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L61
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #17
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$9BDE
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8ACF
+                STA     _fcc_long_hi
+                LDA     #$1357
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L62
+                LDA     #60
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L62
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #17
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$A2B3
+                STA     _fcc_long_hi
+                LDA     #$C4D5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0091
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L63
+                LDA     #61
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L63
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #17
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$A2B3
+                STA     _fcc_long_hi
+                LDA     #$C4D5
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0091
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L64
+                LDA     #62
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L64
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #31
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$C4D5
+                STA     _fcc_long_hi
+                LDA     #$E6F7
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L65
+                LDA     #63
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L65
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #31
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0246
+                STA     _fcc_long_hi
+                LDA     #$8ACF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L66
+                LDA     #64
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L66
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #31
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0246
+                STA     _fcc_long_hi
+                LDA     #$8ACF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L67
+                LDA     #65
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L67
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #32
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L68
+                LDA     #66
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L68
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #32
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L69
+                LDA     #67
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L69
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #32
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L70
+                LDA     #68
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L70
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #33
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$1357
+                STA     _fcc_long_hi
+                LDA     #$9BDE
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L71
+                LDA     #69
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L71
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #33
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0091
+                STA     _fcc_long_hi
+                LDA     #$A2B3
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L72
+                LDA     #70
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L72
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #33
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0091
+                STA     _fcc_long_hi
+                LDA     #$A2B3
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L73
+                LDA     #71
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L73
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #47
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$E6F7
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L74
+                LDA     #72
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L74
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #47
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0246
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L75
+                LDA     #73
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L75
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #47
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0246
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L76
+                LDA     #74
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L76
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #48
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$CDEF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L77
+                LDA     #75
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L77
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #48
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0123
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L78
+                LDA     #76
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L78
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #48
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0123
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L79
+                LDA     #77
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L79
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L80
+                LDA     #78
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L80
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L81
+                LDA     #79
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L81
+                LDA     #$89AB
+                STA     _fcc_long_hi
+                LDA     #$CDEF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0123
+                STA     _fcc_long_hi
+                LDA     #$4567
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L82
+                LDA     #80
                 TAY
                 TSC
                 CLC
@@ -5118,9 +12269,9 @@ _llong_arith_L82
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$8000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5146,42 +12297,8 @@ _llong_arith_L82
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #1
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -5189,7 +12306,27 @@ _llong_arith_L82
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                FGX2_FARCALL _fcc_ll_neg
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -5199,9 +12336,9 @@ _llong_arith_L82
                 LDA     _fcc_q3
                 STA     r+6
                 TYA
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0002
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5238,15 +12375,260 @@ _llong_arith_L82
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L86
-                LDA     #0
-                BRA     _llong_arith_L87
-_llong_arith_L86
+                BNE     _llong_arith_L83
+                LDA     #81
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L83
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
                 LDA     #1
-_llong_arith_L87
-                CMP     #0
-                BEQ     _llong_arith_L85
-                LDA     #28
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$C000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L84
+                LDA     #82
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L84
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #1
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$4000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L85
+                LDA     #83
                 TAY
                 TSC
                 CLC
@@ -5259,7 +12641,7 @@ _llong_arith_L87
 _llong_arith_L85
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5293,42 +12675,8 @@ _llong_arith_L85
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #15
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -5345,20 +12693,8 @@ _llong_arith_L85
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -5368,7 +12704,7 @@ _llong_arith_L85
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_add
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -5380,13 +12716,13 @@ _llong_arith_L85
                 TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0001
+                LDA     #$8000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$8000
+                LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
                 TAY
@@ -5417,15 +12753,260 @@ _llong_arith_L85
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L89
-                LDA     #0
-                BRA     _llong_arith_L90
-_llong_arith_L89
-                LDA     #1
-_llong_arith_L90
-                CMP     #0
-                BEQ     _llong_arith_L88
-                LDA     #29
+                BNE     _llong_arith_L86
+                LDA     #84
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L86
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #15
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L87
+                LDA     #85
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L87
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #15
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L88
+                LDA     #86
                 TAY
                 TSC
                 CLC
@@ -5438,7 +13019,7 @@ _llong_arith_L90
 _llong_arith_L88
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5472,42 +13053,8 @@ _llong_arith_L88
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #16
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -5524,20 +13071,8 @@ _llong_arith_L88
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -5547,7 +13082,7 @@ _llong_arith_L88
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_sub
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -5557,17 +13092,17 @@ _llong_arith_L88
                 LDA     _fcc_q3
                 STA     r+6
                 TYA
-                LDA     #$FFFF
+                LDA     #$0001
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$7FFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5596,15 +13131,260 @@ _llong_arith_L88
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L92
-                LDA     #0
-                BRA     _llong_arith_L93
-_llong_arith_L92
-                LDA     #1
-_llong_arith_L93
-                CMP     #0
-                BEQ     _llong_arith_L91
-                LDA     #30
+                BNE     _llong_arith_L89
+                LDA     #87
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L89
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #16
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L90
+                LDA     #88
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L90
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #16
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L91
+                LDA     #89
                 TAY
                 TSC
                 CLC
@@ -5617,7 +13397,7 @@ _llong_arith_L93
 _llong_arith_L91
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5651,42 +13431,8 @@ _llong_arith_L91
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #17
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -5703,20 +13449,8 @@ _llong_arith_L91
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -5726,7 +13460,7 @@ _llong_arith_L91
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_and
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -5736,7 +13470,7 @@ _llong_arith_L91
                 LDA     _fcc_q3
                 STA     r+6
                 TYA
-                LDA     #$0000
+                LDA     #$0002
                 STA     _fcc_long_hi
                 LDA     #$0000
                 TAY
@@ -5775,15 +13509,260 @@ _llong_arith_L91
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L95
-                LDA     #0
-                BRA     _llong_arith_L96
-_llong_arith_L95
-                LDA     #1
-_llong_arith_L96
-                CMP     #0
-                BEQ     _llong_arith_L94
-                LDA     #31
+                BNE     _llong_arith_L92
+                LDA     #90
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L92
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #17
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$C000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L93
+                LDA     #91
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L93
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #17
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$4000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L94
+                LDA     #92
                 TAY
                 TSC
                 CLC
@@ -5796,7 +13775,7 @@ _llong_arith_L96
 _llong_arith_L94
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -5830,42 +13809,8 @@ _llong_arith_L94
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #31
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -5882,20 +13827,8 @@ _llong_arith_L94
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -5905,7 +13838,7 @@ _llong_arith_L94
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_or
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -5915,15 +13848,15 @@ _llong_arith_L94
                 LDA     _fcc_q3
                 STA     r+6
                 TYA
-                LDA     #$0000
+                LDA     #$8000
                 STA     _fcc_long_hi
-                LDA     #$0001
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$8000
+                LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
                 TAY
@@ -5954,15 +13887,260 @@ _llong_arith_L94
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L98
-                LDA     #0
-                BRA     _llong_arith_L99
-_llong_arith_L98
-                LDA     #1
-_llong_arith_L99
-                CMP     #0
-                BEQ     _llong_arith_L97
-                LDA     #32
+                BNE     _llong_arith_L95
+                LDA     #93
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L95
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #31
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L96
+                LDA     #94
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L96
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #31
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L97
+                LDA     #95
                 TAY
                 TSC
                 CLC
@@ -5975,7 +14153,7 @@ _llong_arith_L99
 _llong_arith_L97
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6009,42 +14187,8 @@ _llong_arith_L97
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #32
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -6061,20 +14205,8 @@ _llong_arith_L97
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -6084,7 +14216,7 @@ _llong_arith_L97
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_xor
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -6096,15 +14228,15 @@ _llong_arith_L97
                 TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0001
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
                 LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6133,15 +14265,260 @@ _llong_arith_L97
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L101
-                LDA     #0
-                BRA     _llong_arith_L102
-_llong_arith_L101
-                LDA     #1
-_llong_arith_L102
-                CMP     #0
-                BEQ     _llong_arith_L100
-                LDA     #33
+                BNE     _llong_arith_L98
+                LDA     #96
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L98
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #32
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L99
+                LDA     #97
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L99
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #32
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L100
+                LDA     #98
                 TAY
                 TSC
                 CLC
@@ -6154,7 +14531,7 @@ _llong_arith_L102
 _llong_arith_L100
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6188,6 +14565,96 @@ _llong_arith_L100
                 ADC     #12
                 TCS
                 TYA
+                LDA     #33
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0002
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L101
+                LDA     #99
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L101
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -6196,7 +14663,7 @@ _llong_arith_L100
                 PHA
                 TYA
                 PHA
-                LDA     #$0000
+                LDA     #$8000
                 STA     _fcc_long_hi
                 LDA     #$0000
                 TAY
@@ -6212,7 +14679,7 @@ _llong_arith_L100
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b
+                LDA     #a
                 STA     _fcc_fpr0
                 PLA
                 PEI     _fcc_fpr0+2
@@ -6224,6 +14691,8 @@ _llong_arith_L100
                 ADC     #12
                 TCS
                 TYA
+                LDA     #33
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -6231,7 +14700,27 @@ _llong_arith_L100
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                FGX2_FARCALL _fcc_ll_com
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -6241,15 +14730,15 @@ _llong_arith_L100
                 LDA     _fcc_q3
                 STA     r+6
                 TYA
-                LDA     #$FFFF
+                LDA     #$C000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$7FFF
+                LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
                 TAY
@@ -6280,15 +14769,134 @@ _llong_arith_L100
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L104
-                LDA     #0
-                BRA     _llong_arith_L105
-_llong_arith_L104
-                LDA     #1
-_llong_arith_L105
-                CMP     #0
-                BEQ     _llong_arith_L103
-                LDA     #34
+                BNE     _llong_arith_L102
+                LDA     #100
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L102
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #33
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$4000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L103
+                LDA     #101
                 TAY
                 TSC
                 CLC
@@ -6301,7 +14909,7 @@ _llong_arith_L105
 _llong_arith_L103
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6335,42 +14943,8 @@ _llong_arith_L103
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #47
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -6378,7 +14952,27 @@ _llong_arith_L103
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                FGX2_FARCALL _fcc_ll_neg
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -6396,9 +14990,9 @@ _llong_arith_L103
                 PHA
                 TYA
                 PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
                 LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$8000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6427,15 +15021,260 @@ _llong_arith_L103
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L107
-                LDA     #0
-                BRA     _llong_arith_L108
-_llong_arith_L107
-                LDA     #1
-_llong_arith_L108
-                CMP     #0
-                BEQ     _llong_arith_L106
-                LDA     #35
+                BNE     _llong_arith_L104
+                LDA     #102
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L104
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #47
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L105
+                LDA     #103
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L105
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #47
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L106
+                LDA     #104
                 TAY
                 TSC
                 CLC
@@ -6446,17 +15285,17 @@ _llong_arith_L108
                 TYA
                 RTL
 _llong_arith_L106
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$8000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6482,42 +15321,8 @@ _llong_arith_L106
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
+                LDA     #48
+                STA     n
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -6534,20 +15339,8 @@ _llong_arith_L106
                 PHA
                 TYA
                 PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
+                LDA     n
                 STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
                 PLA
                 TAY
                 PLA
@@ -6557,7 +15350,7 @@ _llong_arith_L106
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_add
+                FGX2_FARCALL _fcc_ll_shl
                 STA     r
                 TAY
                 LDA     _fcc_long_hi
@@ -6566,6 +15359,636 @@ _llong_arith_L106
                 STA     r+4
                 LDA     _fcc_q3
                 STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0001
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L107
+                LDA     #105
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L107
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #48
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L108
+                LDA     #106
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L108
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #48
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$8000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     u+6
+                STA     _fcc_q3
+                LDA     u+4
+                STA     _fcc_q2
+                LDA     u+2
+                STA     _fcc_long_hi
+                LDA     u
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_uis
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L109
+                LDA     #107
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L109
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shl
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L110
+                LDA     #108
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L110
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shr
+                STA     r
+                TAY
+                LDA     _fcc_long_hi
+                STA     r+2
+                LDA     _fcc_q2
+                STA     r+4
+                LDA     _fcc_q3
+                STA     r+6
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     r+6
+                STA     _fcc_q3
+                LDA     r+4
+                STA     _fcc_q2
+                LDA     r+2
+                STA     _fcc_long_hi
+                LDA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                FGX2_FARCALL _llong_arith_is
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                BNE     _llong_arith_L111
+                LDA     #109
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L111
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$8000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #63
+                STA     n
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     n
+                STA     _fcc_long_b_lo
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_shru
+                STA     u
+                TAY
+                LDA     _fcc_long_hi
+                STA     u+2
+                LDA     _fcc_q2
+                STA     u+4
+                LDA     _fcc_q3
+                STA     u+6
                 TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -6583,13 +16006,13 @@ _llong_arith_L106
                 PHA
                 TYA
                 PHA
-                LDA     r+6
+                LDA     u+6
                 STA     _fcc_q3
-                LDA     r+4
+                LDA     u+4
                 STA     _fcc_q2
-                LDA     r+2
+                LDA     u+2
                 STA     _fcc_long_hi
-                LDA     r
+                LDA     u
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -6599,201 +16022,15 @@ _llong_arith_L106
                 PHA
                 TYA
                 PHA
-                FGX2_FARCALL _llong_arith_is
+                FGX2_FARCALL _llong_arith_uis
                 TAY
                 TSC
                 CLC
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L110
-                LDA     #0
-                BRA     _llong_arith_L111
-_llong_arith_L110
-                LDA     #1
-_llong_arith_L111
-                CMP     #0
-                BEQ     _llong_arith_L109
-                LDA     #36
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L109
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_sub
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFD
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L113
-                LDA     #0
-                BRA     _llong_arith_L114
-_llong_arith_L113
-                LDA     #1
-_llong_arith_L114
-                CMP     #0
-                BEQ     _llong_arith_L112
-                LDA     #37
+                BNE     _llong_arith_L112
+                LDA     #110
                 TAY
                 TSC
                 CLC
@@ -6804,17 +16041,17 @@ _llong_arith_L114
                 TYA
                 RTL
 _llong_arith_L112
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6840,9 +16077,9 @@ _llong_arith_L112
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0002
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -6915,64 +16152,275 @@ _llong_arith_L112
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_and
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
+                FGX2_FARCALL _fcc_ll_cmps
+                BMI     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                BEQ     _llong_arith_L113
+                LDA     #111
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L113
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L116
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BMI     *+7
                 LDA     #0
-                BRA     _llong_arith_L117
-_llong_arith_L116
+                BRA     *+5
                 LDA     #1
-_llong_arith_L117
-                CMP     #0
+                STA     i
+                BEQ     _llong_arith_L114
+                LDA     #112
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L114
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmps
+                CMP     #1
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
                 BEQ     _llong_arith_L115
-                LDA     #38
+                LDA     #113
                 TAY
                 TSC
                 CLC
@@ -6983,6 +16431,42 @@ _llong_arith_L117
                 TYA
                 RTL
 _llong_arith_L115
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -6991,9 +16475,105 @@ _llong_arith_L115
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                CMP     #1
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L116
+                LDA     #114
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L116
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7019,9 +16599,9 @@ _llong_arith_L115
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0002
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7094,64 +16674,145 @@ _llong_arith_L115
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_or
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
+                FGX2_FARCALL _fcc_ll_cmps
+                CMP     #1
+                BNE     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                BEQ     _llong_arith_L117
+                LDA     #115
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L117
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L119
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                CMP     #1
+                BNE     *+7
                 LDA     #0
-                BRA     _llong_arith_L120
-_llong_arith_L119
+                BRA     *+5
                 LDA     #1
-_llong_arith_L120
-                CMP     #0
+                STA     i
                 BEQ     _llong_arith_L118
-                LDA     #39
+                LDA     #116
                 TAY
                 TSC
                 CLC
@@ -7162,17 +16823,17 @@ _llong_arith_L120
                 TYA
                 RTL
 _llong_arith_L118
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7198,9 +16859,9 @@ _llong_arith_L118
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0002
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7273,64 +16934,16 @@ _llong_arith_L118
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_xor
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFD
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L122
+                FGX2_FARCALL _fcc_ll_cmps
+                BPL     *+7
                 LDA     #0
-                BRA     _llong_arith_L123
-_llong_arith_L122
+                BRA     *+5
                 LDA     #1
-_llong_arith_L123
-                CMP     #0
-                BEQ     _llong_arith_L121
-                LDA     #40
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L119
+                LDA     #117
                 TAY
                 TSC
                 CLC
@@ -7340,7 +16953,43 @@ _llong_arith_L123
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L121
+_llong_arith_L119
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -7349,9 +16998,104 @@ _llong_arith_L121
                 PHA
                 TYA
                 PHA
-                LDA     #$FFFF
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BPL     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L120
+                LDA     #118
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L120
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7377,9 +17121,9 @@ _llong_arith_L121
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0000
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0002
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7420,64 +17164,437 @@ _llong_arith_L121
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                FGX2_FARCALL _fcc_ll_com
-                STA     r
                 TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
                 LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
+                PHA
+                LDA     _fcc_q2
+                PHA
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
+                LDA     b+6
                 STA     _fcc_q3
-                LDA     r+4
+                LDA     b+4
                 STA     _fcc_q2
-                LDA     r+2
+                LDA     b+2
                 STA     _fcc_long_hi
-                LDA     r
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
                 TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
                 TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
+                FGX2_FARCALL _fcc_ll_cmps
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                BEQ     _llong_arith_L121
+                LDA     #119
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L121
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L125
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BEQ     *+7
                 LDA     #0
-                BRA     _llong_arith_L126
-_llong_arith_L125
+                BRA     *+5
                 LDA     #1
-_llong_arith_L126
-                CMP     #0
+                STA     i
+                BEQ     _llong_arith_L122
+                LDA     #120
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L122
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmps
+                BNE     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L123
+                LDA     #121
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L123
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BNE     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
                 BEQ     _llong_arith_L124
-                LDA     #41
+                LDA     #122
                 TAY
                 TSC
                 CLC
@@ -7526,7 +17643,7 @@ _llong_arith_L124
                 TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$0002
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7567,15 +17684,93 @@ _llong_arith_L124
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                FGX2_FARCALL _fcc_ll_neg
-                STA     r
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmps
+                BMI     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L125
+                LDA     #123
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L125
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
                 TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -7593,13 +17788,33 @@ _llong_arith_L124
                 PHA
                 TYA
                 PHA
-                LDA     r+6
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
                 STA     _fcc_q3
-                LDA     r+4
+                LDA     ua+4
                 STA     _fcc_q2
-                LDA     r+2
+                LDA     ua+2
                 STA     _fcc_long_hi
-                LDA     r
+                LDA     ua
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -7609,22 +17824,167 @@ _llong_arith_L124
                 PHA
                 TYA
                 PHA
-                FGX2_FARCALL _llong_arith_is
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BMI     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                BEQ     _llong_arith_L126
+                LDA     #124
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L126
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L128
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmps
+                CMP     #1
+                BEQ     *+7
                 LDA     #0
-                BRA     _llong_arith_L129
-_llong_arith_L128
+                BRA     *+5
                 LDA     #1
-_llong_arith_L129
-                CMP     #0
+                STA     i
                 BEQ     _llong_arith_L127
-                LDA     #43
+                LDA     #125
                 TAY
                 TSC
                 CLC
@@ -7637,15 +17997,147 @@ _llong_arith_L129
 _llong_arith_L127
                 LDA     #$FFFF
                 STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
                 LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$0001
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                CMP     #1
+                BEQ     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L128
+                LDA     #126
+                TAY
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L128
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7671,9 +18163,9 @@ _llong_arith_L127
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
                 LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7681,7 +18173,7 @@ _llong_arith_L127
                 PHA
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7746,64 +18238,147 @@ _llong_arith_L127
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_add
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0002
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
+                FGX2_FARCALL _fcc_ll_cmps
+                CMP     #1
+                BNE     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L129
+                LDA     #127
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L129
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L131
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                CMP     #1
+                BNE     *+7
                 LDA     #0
-                BRA     _llong_arith_L132
-_llong_arith_L131
+                BRA     *+5
                 LDA     #1
-_llong_arith_L132
-                CMP     #0
+                STA     i
                 BEQ     _llong_arith_L130
-                LDA     #44
+                LDA     #128
                 TAY
                 TSC
                 CLC
@@ -7816,15 +18391,15 @@ _llong_arith_L132
 _llong_arith_L130
                 LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
-                LDA     #$0001
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7850,9 +18425,9 @@ _llong_arith_L130
                 ADC     #12
                 TCS
                 TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
                 LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7860,7 +18435,7 @@ _llong_arith_L130
                 PHA
                 LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     #$FFFF
+                LDA     #$0000
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -7925,24 +18500,60 @@ _llong_arith_L130
                 PLA
                 STA     _fcc_q3
                 TYA
-                FGX2_FARCALL _fcc_ll_sub
-                STA     r
+                FGX2_FARCALL _fcc_ll_cmps
+                BPL     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                BEQ     _llong_arith_L131
+                LDA     #129
                 TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
+                TSC
+                CLC
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
                 TYA
-                LDA     #$FFFE
+                RTL
+_llong_arith_L131
+                LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0000
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
                 PHA
                 TYA
                 PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ua
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -7951,13 +18562,41 @@ _llong_arith_L130
                 PHA
                 TYA
                 PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
+                LDA     #$0000
                 STA     _fcc_long_hi
-                LDA     r
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #ub
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     ua+6
+                STA     _fcc_q3
+                LDA     ua+4
+                STA     _fcc_q2
+                LDA     ua+2
+                STA     _fcc_long_hi
+                LDA     ua
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -7967,22 +18606,168 @@ _llong_arith_L130
                 PHA
                 TYA
                 PHA
-                FGX2_FARCALL _llong_arith_is
+                LDA     ub+6
+                STA     _fcc_q3
+                LDA     ub+4
+                STA     _fcc_q2
+                LDA     ub+2
+                STA     _fcc_long_hi
+                LDA     ub
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmpu
+                BPL     *+7
+                LDA     #0
+                BRA     *+5
+                LDA     #1
+                STA     i
+                TAX
+                CMP     #1
+                BEQ     _llong_arith_L132
+                LDA     #130
                 TAY
                 TSC
                 CLC
-                ADC     #16
+                ADC     #_llong_arith_run_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_llong_arith_L132
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$FFFF
+                STA     _fcc_long_hi
+                LDA     #$FFFF
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #a
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_arith_L134
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0001
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     #$0000
+                STA     _fcc_long_hi
+                LDA     #$0000
+                TAY
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #b
+                STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _llong_arith_put
+                TAY
+                TSC
+                CLC
+                ADC     #12
+                TCS
+                TYA
+                LDA     a+6
+                STA     _fcc_q3
+                LDA     a+4
+                STA     _fcc_q2
+                LDA     a+2
+                STA     _fcc_long_hi
+                LDA     a
+                TAY
+                LDA     _fcc_q3
+                PHA
+                LDA     _fcc_q2
+                PHA
+                LDA     _fcc_long_hi
+                PHA
+                TYA
+                PHA
+                LDA     b+6
+                STA     _fcc_q3
+                LDA     b+4
+                STA     _fcc_q2
+                LDA     b+2
+                STA     _fcc_long_hi
+                LDA     b
+                STA     _fcc_long_b_lo
+                LDX     _fcc_long_hi
+                STX     _fcc_long_b_hi
+                LDX     _fcc_q2
+                STX     _fcc_qb2
+                LDX     _fcc_q3
+                STX     _fcc_qb3
+                PLA
+                TAY
+                PLA
+                STA     _fcc_long_hi
+                PLA
+                STA     _fcc_q2
+                PLA
+                STA     _fcc_q3
+                TYA
+                FGX2_FARCALL _fcc_ll_cmps
+                BEQ     *+7
                 LDA     #0
-                BRA     _llong_arith_L135
-_llong_arith_L134
+                BRA     *+5
                 LDA     #1
-_llong_arith_L135
-                CMP     #0
+                STA     i
                 BEQ     _llong_arith_L133
-                LDA     #45
+                LDA     #131
                 TAY
                 TSC
                 CLC
@@ -7995,11554 +18780,6 @@ _llong_arith_L135
 _llong_arith_L133
                 LDA     #$FFFF
                 STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_and
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L137
-                LDA     #0
-                BRA     _llong_arith_L138
-_llong_arith_L137
-                LDA     #1
-_llong_arith_L138
-                CMP     #0
-                BEQ     _llong_arith_L136
-                LDA     #46
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L136
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_or
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L140
-                LDA     #0
-                BRA     _llong_arith_L141
-_llong_arith_L140
-                LDA     #1
-_llong_arith_L141
-                CMP     #0
-                BEQ     _llong_arith_L139
-                LDA     #47
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L139
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_xor
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFE
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L143
-                LDA     #0
-                BRA     _llong_arith_L144
-_llong_arith_L143
-                LDA     #1
-_llong_arith_L144
-                CMP     #0
-                BEQ     _llong_arith_L142
-                LDA     #48
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L142
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                FGX2_FARCALL _fcc_ll_com
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFE
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L146
-                LDA     #0
-                BRA     _llong_arith_L147
-_llong_arith_L146
-                LDA     #1
-_llong_arith_L147
-                CMP     #0
-                BEQ     _llong_arith_L145
-                LDA     #49
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L145
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                FGX2_FARCALL _fcc_ll_neg
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFE
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L149
-                LDA     #0
-                BRA     _llong_arith_L150
-_llong_arith_L149
-                LDA     #1
-_llong_arith_L150
-                CMP     #0
-                BEQ     _llong_arith_L148
-                LDA     #50
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L148
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$1357
-                STA     _fcc_long_hi
-                LDA     #$9BDE
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0246
-                STA     _fcc_long_hi
-                LDA     #$8ACF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L152
-                LDA     #0
-                BRA     _llong_arith_L153
-_llong_arith_L152
-                LDA     #1
-_llong_arith_L153
-                CMP     #0
-                BEQ     _llong_arith_L151
-                LDA     #51
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L151
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$C4D5
-                STA     _fcc_long_hi
-                LDA     #$E6F7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0091
-                STA     _fcc_long_hi
-                LDA     #$A2B3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L155
-                LDA     #0
-                BRA     _llong_arith_L156
-_llong_arith_L155
-                LDA     #1
-_llong_arith_L156
-                CMP     #0
-                BEQ     _llong_arith_L154
-                LDA     #52
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L154
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$C4D5
-                STA     _fcc_long_hi
-                LDA     #$E6F7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0091
-                STA     _fcc_long_hi
-                LDA     #$A2B3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L158
-                LDA     #0
-                BRA     _llong_arith_L159
-_llong_arith_L158
-                LDA     #1
-_llong_arith_L159
-                CMP     #0
-                BEQ     _llong_arith_L157
-                LDA     #53
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L157
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$E6F7
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$A2B3
-                STA     _fcc_long_hi
-                LDA     #$C4D5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L161
-                LDA     #0
-                BRA     _llong_arith_L162
-_llong_arith_L161
-                LDA     #1
-_llong_arith_L162
-                CMP     #0
-                BEQ     _llong_arith_L160
-                LDA     #54
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L160
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$8ACF
-                STA     _fcc_long_hi
-                LDA     #$1357
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0246
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L164
-                LDA     #0
-                BRA     _llong_arith_L165
-_llong_arith_L164
-                LDA     #1
-_llong_arith_L165
-                CMP     #0
-                BEQ     _llong_arith_L163
-                LDA     #55
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L163
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$8ACF
-                STA     _fcc_long_hi
-                LDA     #$1357
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0246
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L167
-                LDA     #0
-                BRA     _llong_arith_L168
-_llong_arith_L167
-                LDA     #1
-_llong_arith_L168
-                CMP     #0
-                BEQ     _llong_arith_L166
-                LDA     #56
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L166
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$CDEF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$4567
-                STA     _fcc_long_hi
-                LDA     #$89AB
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L170
-                LDA     #0
-                BRA     _llong_arith_L171
-_llong_arith_L170
-                LDA     #1
-_llong_arith_L171
-                CMP     #0
-                BEQ     _llong_arith_L169
-                LDA     #57
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L169
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$4567
-                STA     _fcc_long_hi
-                LDA     #$89AB
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0123
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L173
-                LDA     #0
-                BRA     _llong_arith_L174
-_llong_arith_L173
-                LDA     #1
-_llong_arith_L174
-                CMP     #0
-                BEQ     _llong_arith_L172
-                LDA     #58
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L172
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$4567
-                STA     _fcc_long_hi
-                LDA     #$89AB
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0123
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L176
-                LDA     #0
-                BRA     _llong_arith_L177
-_llong_arith_L176
-                LDA     #1
-_llong_arith_L177
-                CMP     #0
-                BEQ     _llong_arith_L175
-                LDA     #59
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L175
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$9BDE
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8ACF
-                STA     _fcc_long_hi
-                LDA     #$1357
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L179
-                LDA     #0
-                BRA     _llong_arith_L180
-_llong_arith_L179
-                LDA     #1
-_llong_arith_L180
-                CMP     #0
-                BEQ     _llong_arith_L178
-                LDA     #60
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L178
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$A2B3
-                STA     _fcc_long_hi
-                LDA     #$C4D5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0091
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L182
-                LDA     #0
-                BRA     _llong_arith_L183
-_llong_arith_L182
-                LDA     #1
-_llong_arith_L183
-                CMP     #0
-                BEQ     _llong_arith_L181
-                LDA     #61
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L181
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$A2B3
-                STA     _fcc_long_hi
-                LDA     #$C4D5
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0091
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L185
-                LDA     #0
-                BRA     _llong_arith_L186
-_llong_arith_L185
-                LDA     #1
-_llong_arith_L186
-                CMP     #0
-                BEQ     _llong_arith_L184
-                LDA     #62
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L184
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$C4D5
-                STA     _fcc_long_hi
-                LDA     #$E6F7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L188
-                LDA     #0
-                BRA     _llong_arith_L189
-_llong_arith_L188
-                LDA     #1
-_llong_arith_L189
-                CMP     #0
-                BEQ     _llong_arith_L187
-                LDA     #63
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L187
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0246
-                STA     _fcc_long_hi
-                LDA     #$8ACF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L191
-                LDA     #0
-                BRA     _llong_arith_L192
-_llong_arith_L191
-                LDA     #1
-_llong_arith_L192
-                CMP     #0
-                BEQ     _llong_arith_L190
-                LDA     #64
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L190
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0246
-                STA     _fcc_long_hi
-                LDA     #$8ACF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L194
-                LDA     #0
-                BRA     _llong_arith_L195
-_llong_arith_L194
-                LDA     #1
-_llong_arith_L195
-                CMP     #0
-                BEQ     _llong_arith_L193
-                LDA     #65
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L193
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L197
-                LDA     #0
-                BRA     _llong_arith_L198
-_llong_arith_L197
-                LDA     #1
-_llong_arith_L198
-                CMP     #0
-                BEQ     _llong_arith_L196
-                LDA     #66
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L196
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L200
-                LDA     #0
-                BRA     _llong_arith_L201
-_llong_arith_L200
-                LDA     #1
-_llong_arith_L201
-                CMP     #0
-                BEQ     _llong_arith_L199
-                LDA     #67
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L199
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L203
-                LDA     #0
-                BRA     _llong_arith_L204
-_llong_arith_L203
-                LDA     #1
-_llong_arith_L204
-                CMP     #0
-                BEQ     _llong_arith_L202
-                LDA     #68
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L202
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1357
-                STA     _fcc_long_hi
-                LDA     #$9BDE
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L206
-                LDA     #0
-                BRA     _llong_arith_L207
-_llong_arith_L206
-                LDA     #1
-_llong_arith_L207
-                CMP     #0
-                BEQ     _llong_arith_L205
-                LDA     #69
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L205
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0091
-                STA     _fcc_long_hi
-                LDA     #$A2B3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L209
-                LDA     #0
-                BRA     _llong_arith_L210
-_llong_arith_L209
-                LDA     #1
-_llong_arith_L210
-                CMP     #0
-                BEQ     _llong_arith_L208
-                LDA     #70
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L208
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0091
-                STA     _fcc_long_hi
-                LDA     #$A2B3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L212
-                LDA     #0
-                BRA     _llong_arith_L213
-_llong_arith_L212
-                LDA     #1
-_llong_arith_L213
-                CMP     #0
-                BEQ     _llong_arith_L211
-                LDA     #71
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L211
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$E6F7
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L215
-                LDA     #0
-                BRA     _llong_arith_L216
-_llong_arith_L215
-                LDA     #1
-_llong_arith_L216
-                CMP     #0
-                BEQ     _llong_arith_L214
-                LDA     #72
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L214
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0246
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L218
-                LDA     #0
-                BRA     _llong_arith_L219
-_llong_arith_L218
-                LDA     #1
-_llong_arith_L219
-                CMP     #0
-                BEQ     _llong_arith_L217
-                LDA     #73
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L217
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0246
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L221
-                LDA     #0
-                BRA     _llong_arith_L222
-_llong_arith_L221
-                LDA     #1
-_llong_arith_L222
-                CMP     #0
-                BEQ     _llong_arith_L220
-                LDA     #74
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L220
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$CDEF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L224
-                LDA     #0
-                BRA     _llong_arith_L225
-_llong_arith_L224
-                LDA     #1
-_llong_arith_L225
-                CMP     #0
-                BEQ     _llong_arith_L223
-                LDA     #75
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L223
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0123
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L227
-                LDA     #0
-                BRA     _llong_arith_L228
-_llong_arith_L227
-                LDA     #1
-_llong_arith_L228
-                CMP     #0
-                BEQ     _llong_arith_L226
-                LDA     #76
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L226
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0123
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L230
-                LDA     #0
-                BRA     _llong_arith_L231
-_llong_arith_L230
-                LDA     #1
-_llong_arith_L231
-                CMP     #0
-                BEQ     _llong_arith_L229
-                LDA     #77
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L229
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L233
-                LDA     #0
-                BRA     _llong_arith_L234
-_llong_arith_L233
-                LDA     #1
-_llong_arith_L234
-                CMP     #0
-                BEQ     _llong_arith_L232
-                LDA     #78
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L232
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L236
-                LDA     #0
-                BRA     _llong_arith_L237
-_llong_arith_L236
-                LDA     #1
-_llong_arith_L237
-                CMP     #0
-                BEQ     _llong_arith_L235
-                LDA     #79
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L235
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$4567
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L239
-                LDA     #0
-                BRA     _llong_arith_L240
-_llong_arith_L239
-                LDA     #1
-_llong_arith_L240
-                CMP     #0
-                BEQ     _llong_arith_L238
-                LDA     #80
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L238
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L242
-                LDA     #0
-                BRA     _llong_arith_L243
-_llong_arith_L242
-                LDA     #1
-_llong_arith_L243
-                CMP     #0
-                BEQ     _llong_arith_L241
-                LDA     #81
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L241
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$C000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L245
-                LDA     #0
-                BRA     _llong_arith_L246
-_llong_arith_L245
-                LDA     #1
-_llong_arith_L246
-                CMP     #0
-                BEQ     _llong_arith_L244
-                LDA     #82
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L244
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #1
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$4000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L248
-                LDA     #0
-                BRA     _llong_arith_L249
-_llong_arith_L248
-                LDA     #1
-_llong_arith_L249
-                CMP     #0
-                BEQ     _llong_arith_L247
-                LDA     #83
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L247
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L251
-                LDA     #0
-                BRA     _llong_arith_L252
-_llong_arith_L251
-                LDA     #1
-_llong_arith_L252
-                CMP     #0
-                BEQ     _llong_arith_L250
-                LDA     #84
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L250
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L254
-                LDA     #0
-                BRA     _llong_arith_L255
-_llong_arith_L254
-                LDA     #1
-_llong_arith_L255
-                CMP     #0
-                BEQ     _llong_arith_L253
-                LDA     #85
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L253
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #15
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L257
-                LDA     #0
-                BRA     _llong_arith_L258
-_llong_arith_L257
-                LDA     #1
-_llong_arith_L258
-                CMP     #0
-                BEQ     _llong_arith_L256
-                LDA     #86
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L256
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L260
-                LDA     #0
-                BRA     _llong_arith_L261
-_llong_arith_L260
-                LDA     #1
-_llong_arith_L261
-                CMP     #0
-                BEQ     _llong_arith_L259
-                LDA     #87
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L259
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L263
-                LDA     #0
-                BRA     _llong_arith_L264
-_llong_arith_L263
-                LDA     #1
-_llong_arith_L264
-                CMP     #0
-                BEQ     _llong_arith_L262
-                LDA     #88
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L262
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #16
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L266
-                LDA     #0
-                BRA     _llong_arith_L267
-_llong_arith_L266
-                LDA     #1
-_llong_arith_L267
-                CMP     #0
-                BEQ     _llong_arith_L265
-                LDA     #89
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L265
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0002
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L269
-                LDA     #0
-                BRA     _llong_arith_L270
-_llong_arith_L269
-                LDA     #1
-_llong_arith_L270
-                CMP     #0
-                BEQ     _llong_arith_L268
-                LDA     #90
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L268
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$C000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L272
-                LDA     #0
-                BRA     _llong_arith_L273
-_llong_arith_L272
-                LDA     #1
-_llong_arith_L273
-                CMP     #0
-                BEQ     _llong_arith_L271
-                LDA     #91
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L271
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #17
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$4000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L275
-                LDA     #0
-                BRA     _llong_arith_L276
-_llong_arith_L275
-                LDA     #1
-_llong_arith_L276
-                CMP     #0
-                BEQ     _llong_arith_L274
-                LDA     #92
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L274
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L278
-                LDA     #0
-                BRA     _llong_arith_L279
-_llong_arith_L278
-                LDA     #1
-_llong_arith_L279
-                CMP     #0
-                BEQ     _llong_arith_L277
-                LDA     #93
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L277
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L281
-                LDA     #0
-                BRA     _llong_arith_L282
-_llong_arith_L281
-                LDA     #1
-_llong_arith_L282
-                CMP     #0
-                BEQ     _llong_arith_L280
-                LDA     #94
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L280
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #31
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L284
-                LDA     #0
-                BRA     _llong_arith_L285
-_llong_arith_L284
-                LDA     #1
-_llong_arith_L285
-                CMP     #0
-                BEQ     _llong_arith_L283
-                LDA     #95
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L283
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L287
-                LDA     #0
-                BRA     _llong_arith_L288
-_llong_arith_L287
-                LDA     #1
-_llong_arith_L288
-                CMP     #0
-                BEQ     _llong_arith_L286
-                LDA     #96
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L286
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L290
-                LDA     #0
-                BRA     _llong_arith_L291
-_llong_arith_L290
-                LDA     #1
-_llong_arith_L291
-                CMP     #0
-                BEQ     _llong_arith_L289
-                LDA     #97
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L289
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #32
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L293
-                LDA     #0
-                BRA     _llong_arith_L294
-_llong_arith_L293
-                LDA     #1
-_llong_arith_L294
-                CMP     #0
-                BEQ     _llong_arith_L292
-                LDA     #98
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L292
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L296
-                LDA     #0
-                BRA     _llong_arith_L297
-_llong_arith_L296
-                LDA     #1
-_llong_arith_L297
-                CMP     #0
-                BEQ     _llong_arith_L295
-                LDA     #99
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L295
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$C000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L299
-                LDA     #0
-                BRA     _llong_arith_L300
-_llong_arith_L299
-                LDA     #1
-_llong_arith_L300
-                CMP     #0
-                BEQ     _llong_arith_L298
-                LDA     #100
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L298
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #33
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$4000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L302
-                LDA     #0
-                BRA     _llong_arith_L303
-_llong_arith_L302
-                LDA     #1
-_llong_arith_L303
-                CMP     #0
-                BEQ     _llong_arith_L301
-                LDA     #101
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L301
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L305
-                LDA     #0
-                BRA     _llong_arith_L306
-_llong_arith_L305
-                LDA     #1
-_llong_arith_L306
-                CMP     #0
-                BEQ     _llong_arith_L304
-                LDA     #102
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L304
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L308
-                LDA     #0
-                BRA     _llong_arith_L309
-_llong_arith_L308
-                LDA     #1
-_llong_arith_L309
-                CMP     #0
-                BEQ     _llong_arith_L307
-                LDA     #103
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L307
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #47
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L311
-                LDA     #0
-                BRA     _llong_arith_L312
-_llong_arith_L311
-                LDA     #1
-_llong_arith_L312
-                CMP     #0
-                BEQ     _llong_arith_L310
-                LDA     #104
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L310
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L314
-                LDA     #0
-                BRA     _llong_arith_L315
-_llong_arith_L314
-                LDA     #1
-_llong_arith_L315
-                CMP     #0
-                BEQ     _llong_arith_L313
-                LDA     #105
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L313
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L317
-                LDA     #0
-                BRA     _llong_arith_L318
-_llong_arith_L317
-                LDA     #1
-_llong_arith_L318
-                CMP     #0
-                BEQ     _llong_arith_L316
-                LDA     #106
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L316
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #48
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$8000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L320
-                LDA     #0
-                BRA     _llong_arith_L321
-_llong_arith_L320
-                LDA     #1
-_llong_arith_L321
-                CMP     #0
-                BEQ     _llong_arith_L319
-                LDA     #107
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L319
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shl
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L323
-                LDA     #0
-                BRA     _llong_arith_L324
-_llong_arith_L323
-                LDA     #1
-_llong_arith_L324
-                CMP     #0
-                BEQ     _llong_arith_L322
-                LDA     #108
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L322
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shr
-                STA     r
-                TAY
-                LDA     _fcc_long_hi
-                STA     r+2
-                LDA     _fcc_q2
-                STA     r+4
-                LDA     _fcc_q3
-                STA     r+6
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     r+6
-                STA     _fcc_q3
-                LDA     r+4
-                STA     _fcc_q2
-                LDA     r+2
-                STA     _fcc_long_hi
-                LDA     r
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_is
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L326
-                LDA     #0
-                BRA     _llong_arith_L327
-_llong_arith_L326
-                LDA     #1
-_llong_arith_L327
-                CMP     #0
-                BEQ     _llong_arith_L325
-                LDA     #109
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L325
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$8000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #63
-                STA     n
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     n
-                STA     _fcc_long_b_lo
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_shru
-                STA     u
-                TAY
-                LDA     _fcc_long_hi
-                STA     u+2
-                LDA     _fcc_q2
-                STA     u+4
-                LDA     _fcc_q3
-                STA     u+6
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     u+6
-                STA     _fcc_q3
-                LDA     u+4
-                STA     _fcc_q2
-                LDA     u+2
-                STA     _fcc_long_hi
-                LDA     u
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                FGX2_FARCALL _llong_arith_uis
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                BEQ     _llong_arith_L329
-                LDA     #0
-                BRA     _llong_arith_L330
-_llong_arith_L329
-                LDA     #1
-_llong_arith_L330
-                CMP     #0
-                BEQ     _llong_arith_L328
-                LDA     #110
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L328
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BMI     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L331
-                LDA     #111
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L331
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BMI     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L332
-                LDA     #112
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L332
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                CMP     #1
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L333
-                LDA     #113
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L333
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                CMP     #1
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L334
-                LDA     #114
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L334
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                CMP     #1
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L335
-                LDA     #115
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L335
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                CMP     #1
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L336
-                LDA     #116
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L336
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BPL     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L337
-                LDA     #117
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L337
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BPL     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L338
-                LDA     #118
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L338
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L339
-                LDA     #119
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L339
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L340
-                LDA     #120
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L340
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L341
-                LDA     #121
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L341
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L342
-                LDA     #122
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L342
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BMI     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L343
-                LDA     #123
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L343
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BMI     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L344
-                LDA     #124
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L344
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                CMP     #1
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L345
-                LDA     #125
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L345
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                CMP     #1
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L346
-                LDA     #126
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L346
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                CMP     #1
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L347
-                LDA     #127
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L347
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                CMP     #1
-                BNE     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L348
-                LDA     #128
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L348
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BPL     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L349
-                LDA     #129
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L349
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ua
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ub
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     ua+6
-                STA     _fcc_q3
-                LDA     ua+4
-                STA     _fcc_q2
-                LDA     ua+2
-                STA     _fcc_long_hi
-                LDA     ua
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     ub+6
-                STA     _fcc_q3
-                LDA     ub+4
-                STA     _fcc_q2
-                LDA     ub+2
-                STA     _fcc_long_hi
-                LDA     ub
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmpu
-                BPL     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                TAX
-                CMP     #1
-                BEQ     _llong_arith_L350
-                LDA     #130
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L350
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFF
-                STA     _fcc_long_hi
-                LDA     #$FFFF
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #a
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                PLA
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _llong_arith_put
-                TAY
-                TSC
-                CLC
-                ADC     #12
-                TCS
-                TYA
-                LDA     a+6
-                STA     _fcc_q3
-                LDA     a+4
-                STA     _fcc_q2
-                LDA     a+2
-                STA     _fcc_long_hi
-                LDA     a
-                TAY
-                LDA     _fcc_q3
-                PHA
-                LDA     _fcc_q2
-                PHA
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     b+6
-                STA     _fcc_q3
-                LDA     b+4
-                STA     _fcc_q2
-                LDA     b+2
-                STA     _fcc_long_hi
-                LDA     b
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
-                STX     _fcc_long_b_hi
-                LDX     _fcc_q2
-                STX     _fcc_qb2
-                LDX     _fcc_q3
-                STX     _fcc_qb3
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                PLA
-                STA     _fcc_q2
-                PLA
-                STA     _fcc_q3
-                TYA
-                FGX2_FARCALL _fcc_ll_cmps
-                BEQ     *+7
-                LDA     #0
-                BRA     *+5
-                LDA     #1
-                STA     i
-                BEQ     _llong_arith_L351
-                LDA     #131
-                TAY
-                TSC
-                CLC
-                ADC     #_llong_arith_run_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_llong_arith_L351
-                LDA     #$FFFF
-                STA     _fcc_long_hi
                 LDA     #$FFFF
                 TAY
                 LDA     _fcc_long_hi
@@ -19658,7 +18895,7 @@ _llong_arith_L351
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L352
+                BEQ     _llong_arith_L134
                 LDA     #132
                 TAY
                 TSC
@@ -19669,7 +18906,7 @@ _llong_arith_L351
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L352
+_llong_arith_L134
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -19789,7 +19026,7 @@ _llong_arith_L352
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L353
+                BEQ     _llong_arith_L135
                 LDA     #133
                 TAY
                 TSC
@@ -19800,7 +19037,7 @@ _llong_arith_L352
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L353
+_llong_arith_L135
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -19920,7 +19157,7 @@ _llong_arith_L353
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L354
+                BEQ     _llong_arith_L136
                 LDA     #134
                 TAY
                 TSC
@@ -19931,7 +19168,7 @@ _llong_arith_L353
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L354
+_llong_arith_L136
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20049,7 +19286,7 @@ _llong_arith_L354
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L355
+                BEQ     _llong_arith_L137
                 LDA     #135
                 TAY
                 TSC
@@ -20060,7 +19297,7 @@ _llong_arith_L354
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L355
+_llong_arith_L137
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20178,7 +19415,7 @@ _llong_arith_L355
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L356
+                BEQ     _llong_arith_L138
                 LDA     #136
                 TAY
                 TSC
@@ -20189,7 +19426,7 @@ _llong_arith_L355
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L356
+_llong_arith_L138
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20308,7 +19545,7 @@ _llong_arith_L356
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L357
+                BEQ     _llong_arith_L139
                 LDA     #137
                 TAY
                 TSC
@@ -20319,7 +19556,7 @@ _llong_arith_L356
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L357
+_llong_arith_L139
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20438,7 +19675,7 @@ _llong_arith_L357
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L358
+                BEQ     _llong_arith_L140
                 LDA     #138
                 TAY
                 TSC
@@ -20449,7 +19686,7 @@ _llong_arith_L357
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L358
+_llong_arith_L140
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20570,7 +19807,7 @@ _llong_arith_L358
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L359
+                BEQ     _llong_arith_L141
                 LDA     #139
                 TAY
                 TSC
@@ -20581,7 +19818,7 @@ _llong_arith_L358
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L359
+_llong_arith_L141
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20702,7 +19939,7 @@ _llong_arith_L359
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L360
+                BEQ     _llong_arith_L142
                 LDA     #140
                 TAY
                 TSC
@@ -20713,7 +19950,7 @@ _llong_arith_L359
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L360
+_llong_arith_L142
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20833,7 +20070,7 @@ _llong_arith_L360
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L361
+                BEQ     _llong_arith_L143
                 LDA     #141
                 TAY
                 TSC
@@ -20844,7 +20081,7 @@ _llong_arith_L360
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L361
+_llong_arith_L143
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -20964,7 +20201,7 @@ _llong_arith_L361
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L362
+                BEQ     _llong_arith_L144
                 LDA     #142
                 TAY
                 TSC
@@ -20975,7 +20212,7 @@ _llong_arith_L361
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L362
+_llong_arith_L144
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -21095,7 +20332,7 @@ _llong_arith_L362
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L363
+                BEQ     _llong_arith_L145
                 LDA     #143
                 TAY
                 TSC
@@ -21106,7 +20343,7 @@ _llong_arith_L362
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L363
+_llong_arith_L145
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -21226,7 +20463,7 @@ _llong_arith_L363
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L364
+                BEQ     _llong_arith_L146
                 LDA     #144
                 TAY
                 TSC
@@ -21237,7 +20474,7 @@ _llong_arith_L363
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L364
+_llong_arith_L146
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -21355,7 +20592,7 @@ _llong_arith_L364
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L365
+                BEQ     _llong_arith_L147
                 LDA     #145
                 TAY
                 TSC
@@ -21366,7 +20603,7 @@ _llong_arith_L364
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L365
+_llong_arith_L147
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -21484,7 +20721,7 @@ _llong_arith_L365
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L366
+                BEQ     _llong_arith_L148
                 LDA     #146
                 TAY
                 TSC
@@ -21495,7 +20732,7 @@ _llong_arith_L365
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L366
+_llong_arith_L148
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -21615,7 +20852,7 @@ _llong_arith_L366
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L367
+                BEQ     _llong_arith_L149
                 LDA     #147
                 TAY
                 TSC
@@ -21626,7 +20863,7 @@ _llong_arith_L366
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L367
+_llong_arith_L149
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -21744,7 +20981,7 @@ _llong_arith_L367
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L368
+                BEQ     _llong_arith_L150
                 LDA     #148
                 TAY
                 TSC
@@ -21755,7 +20992,7 @@ _llong_arith_L367
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L368
+_llong_arith_L150
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -21874,7 +21111,7 @@ _llong_arith_L368
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L369
+                BEQ     _llong_arith_L151
                 LDA     #149
                 TAY
                 TSC
@@ -21885,7 +21122,7 @@ _llong_arith_L368
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L369
+_llong_arith_L151
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22006,7 +21243,7 @@ _llong_arith_L369
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L370
+                BEQ     _llong_arith_L152
                 LDA     #150
                 TAY
                 TSC
@@ -22017,7 +21254,7 @@ _llong_arith_L369
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L370
+_llong_arith_L152
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22138,7 +21375,7 @@ _llong_arith_L370
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L371
+                BEQ     _llong_arith_L153
                 LDA     #151
                 TAY
                 TSC
@@ -22149,7 +21386,7 @@ _llong_arith_L370
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L371
+_llong_arith_L153
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22268,7 +21505,7 @@ _llong_arith_L371
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L372
+                BEQ     _llong_arith_L154
                 LDA     #152
                 TAY
                 TSC
@@ -22279,7 +21516,7 @@ _llong_arith_L371
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L372
+_llong_arith_L154
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22397,7 +21634,7 @@ _llong_arith_L372
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L373
+                BEQ     _llong_arith_L155
                 LDA     #153
                 TAY
                 TSC
@@ -22408,7 +21645,7 @@ _llong_arith_L372
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L373
+_llong_arith_L155
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22528,7 +21765,7 @@ _llong_arith_L373
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L374
+                BEQ     _llong_arith_L156
                 LDA     #154
                 TAY
                 TSC
@@ -22539,7 +21776,7 @@ _llong_arith_L373
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L374
+_llong_arith_L156
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22657,7 +21894,7 @@ _llong_arith_L374
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L375
+                BEQ     _llong_arith_L157
                 LDA     #155
                 TAY
                 TSC
@@ -22668,7 +21905,7 @@ _llong_arith_L374
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L375
+_llong_arith_L157
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22786,7 +22023,7 @@ _llong_arith_L375
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L376
+                BEQ     _llong_arith_L158
                 LDA     #156
                 TAY
                 TSC
@@ -22797,7 +22034,7 @@ _llong_arith_L375
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L376
+_llong_arith_L158
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -22917,7 +22154,7 @@ _llong_arith_L376
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L377
+                BEQ     _llong_arith_L159
                 LDA     #157
                 TAY
                 TSC
@@ -22928,7 +22165,7 @@ _llong_arith_L376
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L377
+_llong_arith_L159
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -23048,7 +22285,7 @@ _llong_arith_L377
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L378
+                BEQ     _llong_arith_L160
                 LDA     #158
                 TAY
                 TSC
@@ -23059,7 +22296,7 @@ _llong_arith_L377
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L378
+_llong_arith_L160
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23179,7 +22416,7 @@ _llong_arith_L378
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L379
+                BEQ     _llong_arith_L161
                 LDA     #159
                 TAY
                 TSC
@@ -23190,7 +22427,7 @@ _llong_arith_L378
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L379
+_llong_arith_L161
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23310,7 +22547,7 @@ _llong_arith_L379
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L380
+                BEQ     _llong_arith_L162
                 LDA     #160
                 TAY
                 TSC
@@ -23321,7 +22558,7 @@ _llong_arith_L379
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L380
+_llong_arith_L162
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23440,7 +22677,7 @@ _llong_arith_L380
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L381
+                BEQ     _llong_arith_L163
                 LDA     #161
                 TAY
                 TSC
@@ -23451,7 +22688,7 @@ _llong_arith_L380
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L381
+_llong_arith_L163
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23570,7 +22807,7 @@ _llong_arith_L381
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L382
+                BEQ     _llong_arith_L164
                 LDA     #162
                 TAY
                 TSC
@@ -23581,7 +22818,7 @@ _llong_arith_L381
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L382
+_llong_arith_L164
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23702,7 +22939,7 @@ _llong_arith_L382
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L383
+                BEQ     _llong_arith_L165
                 LDA     #163
                 TAY
                 TSC
@@ -23713,7 +22950,7 @@ _llong_arith_L382
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L383
+_llong_arith_L165
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23834,7 +23071,7 @@ _llong_arith_L383
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L384
+                BEQ     _llong_arith_L166
                 LDA     #164
                 TAY
                 TSC
@@ -23845,7 +23082,7 @@ _llong_arith_L383
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L384
+_llong_arith_L166
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -23963,7 +23200,7 @@ _llong_arith_L384
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L385
+                BEQ     _llong_arith_L167
                 LDA     #165
                 TAY
                 TSC
@@ -23974,7 +23211,7 @@ _llong_arith_L384
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L385
+_llong_arith_L167
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -24092,7 +23329,7 @@ _llong_arith_L385
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L386
+                BEQ     _llong_arith_L168
                 LDA     #166
                 TAY
                 TSC
@@ -24103,7 +23340,7 @@ _llong_arith_L385
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L386
+_llong_arith_L168
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -24221,7 +23458,7 @@ _llong_arith_L386
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L387
+                BEQ     _llong_arith_L169
                 LDA     #167
                 TAY
                 TSC
@@ -24232,7 +23469,7 @@ _llong_arith_L386
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L387
+_llong_arith_L169
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -24350,7 +23587,7 @@ _llong_arith_L387
                 BRA     *+5
                 LDA     #1
                 STA     i
-                BEQ     _llong_arith_L388
+                BEQ     _llong_arith_L170
                 LDA     #168
                 TAY
                 TSC
@@ -24361,7 +23598,7 @@ _llong_arith_L387
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L388
+_llong_arith_L170
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -24481,7 +23718,7 @@ _llong_arith_L388
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L389
+                BEQ     _llong_arith_L171
                 LDA     #169
                 TAY
                 TSC
@@ -24492,7 +23729,7 @@ _llong_arith_L388
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L389
+_llong_arith_L171
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0005
@@ -24612,7 +23849,7 @@ _llong_arith_L389
                 STA     i
                 TAX
                 CMP     #1
-                BEQ     _llong_arith_L390
+                BEQ     _llong_arith_L172
                 LDA     #170
                 TAY
                 TSC
@@ -24623,7 +23860,7 @@ _llong_arith_L389
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L390
+_llong_arith_L172
                 LDA     #0
                 TAY
                 TSC
@@ -24654,7 +23891,7 @@ main_stkok        TCS
                 FGX2_FARCALL _llong_arith_run
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BEQ     _llong_arith_L391
+                BEQ     _llong_arith_L173
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -24665,7 +23902,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L391
+_llong_arith_L173
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -24711,7 +23948,7 @@ _llong_arith_L391
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BNE     _llong_arith_L393
+                BNE     _llong_arith_L175
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_q3
                 LDA     7,S   ; fccstk d=0 b=7
@@ -24722,28 +23959,8 @@ _llong_arith_L391
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _llong_arith_L395
-                LDA     #0
-                BRA     _llong_arith_L396
-_llong_arith_L395
-                LDA     #1
-_llong_arith_L396
-                CMP     #0
-                BEQ     _llong_arith_L397
-                LDA     #0
-                BRA     _llong_arith_L398
-_llong_arith_L397
-                LDA     #1
-_llong_arith_L398
-                CMP     #0
-                BNE     _llong_arith_L393
-                LDA     #0
-                BRA     _llong_arith_L394
-_llong_arith_L393
-                LDA     #1
-_llong_arith_L394
-                CMP     #0
-                BEQ     _llong_arith_L392
+                BEQ     _llong_arith_L174
+_llong_arith_L175
                 LDA     #200
                 TAY
                 TSC
@@ -24754,7 +23971,7 @@ _llong_arith_L394
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L392
+_llong_arith_L174
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -24800,14 +24017,7 @@ _llong_arith_L392
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _llong_arith_L400
-                LDA     #0
-                BRA     _llong_arith_L401
-_llong_arith_L400
-                LDA     #1
-_llong_arith_L401
-                CMP     #0
-                BEQ     _llong_arith_L399
+                BNE     _llong_arith_L176
                 LDA     #201
                 TAY
                 TSC
@@ -24818,7 +24028,7 @@ _llong_arith_L401
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L399
+_llong_arith_L176
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -24946,14 +24156,8 @@ _llong_arith_L399
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L403
-                LDA     #0
-                BRA     _llong_arith_L404
-_llong_arith_L403
-                LDA     #1
-_llong_arith_L404
                 CMP     #0
-                BEQ     _llong_arith_L402
+                BNE     _llong_arith_L177
                 LDA     #202
                 TAY
                 TSC
@@ -24964,7 +24168,7 @@ _llong_arith_L404
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L402
+_llong_arith_L177
                 LDA     i
                 PHA
                 LDA     a+6
@@ -25039,14 +24243,8 @@ _llong_arith_L402
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L406
-                LDA     #0
-                BRA     _llong_arith_L407
-_llong_arith_L406
-                LDA     #1
-_llong_arith_L407
                 CMP     #0
-                BEQ     _llong_arith_L405
+                BNE     _llong_arith_L178
                 LDA     #203
                 TAY
                 TSC
@@ -25057,7 +24255,7 @@ _llong_arith_L407
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L405
+_llong_arith_L178
                 LDA     #$FFFF
                 STA     i
                 LDA     a+6
@@ -25149,14 +24347,7 @@ _llong_arith_L405
                 ADC     #16
                 TCS
                 TYA
-                BEQ     _llong_arith_L409
-                LDA     #0
-                BRA     _llong_arith_L410
-_llong_arith_L409
-                LDA     #1
-_llong_arith_L410
-                CMP     #0
-                BEQ     _llong_arith_L408
+                BNE     _llong_arith_L179
                 LDA     #204
                 TAY
                 TSC
@@ -25167,7 +24358,7 @@ _llong_arith_L410
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L408
+_llong_arith_L179
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -25229,7 +24420,7 @@ _llong_arith_L408
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _llong_arith_L412
+                BNE     _llong_arith_L181
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -25239,14 +24430,8 @@ _llong_arith_L408
                 LDA     a
                 TAX
                 CMP     #52719
-                BNE     _llong_arith_L412
-                LDA     #0
-                BRA     _llong_arith_L413
-_llong_arith_L412
-                LDA     #1
-_llong_arith_L413
-                CMP     #0
-                BEQ     _llong_arith_L411
+                BEQ     _llong_arith_L180
+_llong_arith_L181
                 LDA     #205
                 TAY
                 TSC
@@ -25257,7 +24442,7 @@ _llong_arith_L413
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_arith_L411
+_llong_arith_L180
                 LDA     #42
                 TAY
                 TSC

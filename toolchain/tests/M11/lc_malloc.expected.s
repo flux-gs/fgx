@@ -40,14 +40,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _lc_malloc_L1
-                LDA     #0
-                BRA     _lc_malloc_L2
-_lc_malloc_L1
-                LDA     #1
-_lc_malloc_L2
-                CMP     #0
-                BEQ     _lc_malloc_L0
+                BNE     _lc_malloc_L0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -186,14 +179,7 @@ _lc_malloc_L0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _lc_malloc_L4
-                LDA     #0
-                BRA     _lc_malloc_L5
-_lc_malloc_L4
-                LDA     #1
-_lc_malloc_L5
-                CMP     #0
-                BEQ     _lc_malloc_L3
+                BNE     _lc_malloc_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -220,7 +206,7 @@ _lc_malloc_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_lc_malloc_L3
+_lc_malloc_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -308,18 +294,12 @@ _lc_malloc_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #88
-                BNE     _lc_malloc_L7
+                BNE     _lc_malloc_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #89
-                BNE     _lc_malloc_L7
-                LDA     #0
-                BRA     _lc_malloc_L8
-_lc_malloc_L7
-                LDA     #1
-_lc_malloc_L8
-                CMP     #0
-                BEQ     _lc_malloc_L6
+                BEQ     _lc_malloc_L2
+_lc_malloc_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9
@@ -350,7 +330,7 @@ _lc_malloc_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_lc_malloc_L6
+_lc_malloc_L2
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9

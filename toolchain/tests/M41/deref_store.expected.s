@@ -628,14 +628,8 @@ _deref_store_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _deref_store_L4
-                LDA     #0
-                BRA     _deref_store_L5
-_deref_store_L4
-                LDA     #1
-_deref_store_L5
-                CMP     #0
                 BEQ     _deref_store_L3
+_deref_store_L4
                 LDA     #4
                 TAY
                 TSC
@@ -750,7 +744,7 @@ _deref_store_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _deref_store_L6
+                BEQ     _deref_store_L5
                 LDA     #5
                 TAY
                 TSC
@@ -761,7 +755,7 @@ _deref_store_L3
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L6
+_deref_store_L5
                 PHA
                 SEP     #$20
                 MX      %10
@@ -877,7 +871,7 @@ _deref_store_L6
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _deref_store_L7
+                BEQ     _deref_store_L6
                 LDA     #6
                 TAY
                 TSC
@@ -888,7 +882,7 @@ _deref_store_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L7
+_deref_store_L6
                 LDA     29,S   ; fccstk d=0 b=29
                 STA     _fcc_fpr0+2
                 LDA     27,S   ; fccstk d=0 b=27
@@ -973,7 +967,7 @@ _deref_store_L7
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _deref_store_L8
+                BEQ     _deref_store_L7
                 LDA     #7
                 TAY
                 TSC
@@ -984,7 +978,7 @@ _deref_store_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L8
+_deref_store_L7
                 LDA     #0
                 STA     _fcc_q3
                 LDA     #18
@@ -1084,7 +1078,7 @@ _deref_store_L8
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _deref_store_L9
+                BEQ     _deref_store_L8
                 LDA     #8
                 TAY
                 TSC
@@ -1095,7 +1089,7 @@ _deref_store_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L9
+_deref_store_L8
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_qp+2
@@ -1209,7 +1203,7 @@ _deref_store_L9
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _deref_store_L10
+                BEQ     _deref_store_L9
                 LDA     #9
                 TAY
                 TSC
@@ -1220,7 +1214,7 @@ _deref_store_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L10
+_deref_store_L9
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_ipp+2
@@ -1245,21 +1239,15 @@ _deref_store_L10
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
                 CMP     #7
-                BNE     _deref_store_L12
+                BNE     _deref_store_L11
                 LDA     #0
                 ASL
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
                 CMP     #7
-                BNE     _deref_store_L12
-                LDA     #0
-                BRA     _deref_store_L13
-_deref_store_L12
-                LDA     #1
-_deref_store_L13
-                CMP     #0
-                BEQ     _deref_store_L11
+                BEQ     _deref_store_L10
+_deref_store_L11
                 LDA     #10
                 TAY
                 TSC
@@ -1270,7 +1258,7 @@ _deref_store_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L11
+_deref_store_L10
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_ip+2
@@ -1289,21 +1277,15 @@ _deref_store_L11
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
                 CMP     #9
-                BNE     _deref_store_L15
+                BNE     _deref_store_L13
                 LDA     #1
                 ASL
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
                 CMP     #9
-                BNE     _deref_store_L15
-                LDA     #0
-                BRA     _deref_store_L16
-_deref_store_L15
-                LDA     #1
-_deref_store_L16
-                CMP     #0
-                BEQ     _deref_store_L14
+                BEQ     _deref_store_L12
+_deref_store_L13
                 LDA     #11
                 TAY
                 TSC
@@ -1314,7 +1296,7 @@ _deref_store_L16
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L14
+_deref_store_L12
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_lp+2
@@ -1363,7 +1345,7 @@ _deref_store_L14
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _deref_store_L17
+                BEQ     _deref_store_L14
                 LDA     #12
                 TAY
                 TSC
@@ -1374,7 +1356,7 @@ _deref_store_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L17
+_deref_store_L14
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_fp+2
@@ -1424,7 +1406,7 @@ _deref_store_L17
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     _deref_store_L19
+                BNE     _deref_store_L16
                 LDA     #1
                 ASL
                 ASL
@@ -1450,14 +1432,8 @@ _deref_store_L17
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     _deref_store_L19
-                LDA     #0
-                BRA     _deref_store_L20
-_deref_store_L19
-                LDA     #1
-_deref_store_L20
-                CMP     #0
-                BEQ     _deref_store_L18
+                BEQ     _deref_store_L15
+_deref_store_L16
                 LDA     #13
                 TAY
                 TSC
@@ -1468,7 +1444,7 @@ _deref_store_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L18
+_deref_store_L15
                 SEP     #$20
                 MX      %10
                 LDA     _deref_store_fp+2
@@ -1554,7 +1530,7 @@ _deref_store_L18
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     _deref_store_L21
+                BEQ     _deref_store_L17
                 LDA     #14
                 TAY
                 TSC
@@ -1565,7 +1541,7 @@ _deref_store_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_deref_store_L21
+_deref_store_L17
                 LDA     #42
                 TAY
                 TSC

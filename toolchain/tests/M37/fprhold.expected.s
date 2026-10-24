@@ -330,14 +330,8 @@ _fprhold_L7
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #30
-                BNE     _fprhold_L9
-                LDA     #0
-                BRA     _fprhold_L10
-_fprhold_L9
-                LDA     #1
-_fprhold_L10
-                CMP     #0
                 BEQ     _fprhold_L8
+_fprhold_L9
                 LDA     #2
                 TAY
                 TSC
@@ -422,7 +416,7 @@ _fprhold_L8
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #4
-                BEQ     _fprhold_L11
+                BEQ     _fprhold_L10
                 LDA     #3
                 TAY
                 TSC
@@ -433,7 +427,7 @@ _fprhold_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L11
+_fprhold_L10
                 PHA
                 SEP     #$20
                 MX      %10
@@ -486,7 +480,7 @@ _fprhold_L11
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #6
-                BEQ     _fprhold_L12
+                BEQ     _fprhold_L11
                 LDA     #4
                 TAY
                 TSC
@@ -497,7 +491,7 @@ _fprhold_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L12
+_fprhold_L11
                 PHA
                 SEP     #$20
                 MX      %10
@@ -557,7 +551,7 @@ _fprhold_L12
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #15
-                BEQ     _fprhold_L13
+                BEQ     _fprhold_L12
                 LDA     #5
                 TAY
                 TSC
@@ -568,7 +562,7 @@ _fprhold_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L13
+_fprhold_L12
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
                 PHA
@@ -588,7 +582,7 @@ _fprhold_L13
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_img1
-_fprhold_L14
+_fprhold_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -599,7 +593,7 @@ _fprhold_L14
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _fprhold_L16
+                BEQ     _fprhold_L15
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_fpr0]
@@ -609,30 +603,30 @@ _fprhold_L14
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _fprhold_L19
+                BVC     _fprhold_L18
                 EOR     #$8000
-_fprhold_L19
-                BPL     _fprhold_L17
+_fprhold_L18
+                BPL     _fprhold_L16
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BRA     _fprhold_L18
-_fprhold_L17
+                BRA     _fprhold_L17
+_fprhold_L16
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-_fprhold_L18
+_fprhold_L17
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 STA     _fcc_img1
-_fprhold_L15
+_fprhold_L14
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -653,13 +647,13 @@ _fprhold_L15
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRA     _fprhold_L14
-_fprhold_L16
+                BRA     _fprhold_L13
+_fprhold_L15
                 LDA     _fcc_img1
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #73
-                BEQ     _fprhold_L20
+                BEQ     _fprhold_L19
                 LDA     #6
                 TAY
                 TSC
@@ -670,7 +664,7 @@ _fprhold_L16
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L20
+_fprhold_L19
                 PHA
                 SEP     #$20
                 MX      %10
@@ -716,7 +710,7 @@ _fprhold_L20
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #11
-                BEQ     _fprhold_L21
+                BEQ     _fprhold_L20
                 LDA     #7
                 TAY
                 TSC
@@ -727,7 +721,7 @@ _fprhold_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L21
+_fprhold_L20
                 PHA
                 SEP     #$20
                 MX      %10
@@ -767,7 +761,7 @@ _fprhold_L21
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #33
-                BEQ     _fprhold_L22
+                BEQ     _fprhold_L21
                 LDA     #8
                 TAY
                 TSC
@@ -778,7 +772,7 @@ _fprhold_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_fprhold_L22
+_fprhold_L21
                 LDA     #42
                 TAY
                 TSC

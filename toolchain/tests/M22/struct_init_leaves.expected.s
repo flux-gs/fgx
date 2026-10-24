@@ -42,7 +42,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L1
+                BEQ     _struct_init_leaves_L0
                 LDA     _struct_init_leaves_zru+6
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_zru+4
@@ -63,13 +63,6 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _struct_init_leaves_L1
-                LDA     #1
-                BRA     _struct_init_leaves_L2
-_struct_init_leaves_L1
-                LDA     #0
-_struct_init_leaves_L2
                 CMP     #0
                 BEQ     _struct_init_leaves_L0
                 LDA     _fcc_img0
@@ -99,7 +92,7 @@ _struct_init_leaves_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L4
+                BEQ     _struct_init_leaves_L1
                 LDA     _struct_init_leaves_zru+14
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_zru+12
@@ -121,20 +114,13 @@ _struct_init_leaves_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L4
-                LDA     #1
-                BRA     _struct_init_leaves_L5
-_struct_init_leaves_L4
-                LDA     #0
-_struct_init_leaves_L5
-                CMP     #0
-                BEQ     _struct_init_leaves_L3
+                BEQ     _struct_init_leaves_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_struct_init_leaves_L3
+_struct_init_leaves_L1
                 LDA     _struct_init_leaves_zru+18
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_zru+16
@@ -156,24 +142,17 @@ _struct_init_leaves_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L7
+                BEQ     _struct_init_leaves_L2
                 LDA     _struct_init_leaves_zru+20
                 TAX
                 CMP     #6
-                BNE     _struct_init_leaves_L7
-                LDA     #1
-                BRA     _struct_init_leaves_L8
-_struct_init_leaves_L7
-                LDA     #0
-_struct_init_leaves_L8
-                CMP     #0
-                BEQ     _struct_init_leaves_L6
+                BNE     _struct_init_leaves_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_struct_init_leaves_L6
+_struct_init_leaves_L2
                 LDA     _struct_init_leaves_part+2
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_part+0
@@ -195,7 +174,7 @@ _struct_init_leaves_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L10
+                BEQ     _struct_init_leaves_L3
                 LDA     _struct_init_leaves_part+6
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_part+4
@@ -217,20 +196,13 @@ _struct_init_leaves_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L10
-                LDA     #1
-                BRA     _struct_init_leaves_L11
-_struct_init_leaves_L10
-                LDA     #0
-_struct_init_leaves_L11
-                CMP     #0
-                BEQ     _struct_init_leaves_L9
+                BEQ     _struct_init_leaves_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
-_struct_init_leaves_L9
+_struct_init_leaves_L3
                 LDA     _struct_init_leaves_part+10
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_part+8
@@ -252,7 +224,7 @@ _struct_init_leaves_L9
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L13
+                BEQ     _struct_init_leaves_L4
                 LDA     _struct_init_leaves_part+14
                 STA     _fcc_long_hi
                 LDA     _struct_init_leaves_part+12
@@ -274,20 +246,13 @@ _struct_init_leaves_L9
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _struct_init_leaves_L13
-                LDA     #1
-                BRA     _struct_init_leaves_L14
-_struct_init_leaves_L13
-                LDA     #0
-_struct_init_leaves_L14
-                CMP     #0
-                BEQ     _struct_init_leaves_L12
+                BEQ     _struct_init_leaves_L4
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
-_struct_init_leaves_L12
+_struct_init_leaves_L4
                 LDA     _struct_init_leaves_nulv+2
                 STA     _fcc_fpr0+2
                 LDA     _struct_init_leaves_nulv+0
@@ -305,21 +270,21 @@ _struct_init_leaves_L12
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _struct_init_leaves_L18
+                BNE     _struct_init_leaves_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _struct_init_leaves_L18
+                BNE     _struct_init_leaves_L6
                 LDA     #1
-                BRA     _struct_init_leaves_L19
-_struct_init_leaves_L18
+                BRA     _struct_init_leaves_L7
+_struct_init_leaves_L6
                 LDA     #0
-_struct_init_leaves_L19
+_struct_init_leaves_L7
                 CMP     #0
-                BEQ     _struct_init_leaves_L16
+                BEQ     _struct_init_leaves_L5
                 LDA     _struct_init_leaves_nulv+6
                 STA     _fcc_fpr0+2
                 LDA     _struct_init_leaves_nulv+4
@@ -337,34 +302,27 @@ _struct_init_leaves_L19
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _struct_init_leaves_L20
+                BNE     _struct_init_leaves_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _struct_init_leaves_L20
+                BNE     _struct_init_leaves_L8
                 LDA     #1
-                BRA     _struct_init_leaves_L21
-_struct_init_leaves_L20
+                BRA     _struct_init_leaves_L9
+_struct_init_leaves_L8
                 LDA     #0
-_struct_init_leaves_L21
+_struct_init_leaves_L9
                 CMP     #0
-                BEQ     _struct_init_leaves_L16
-                LDA     #1
-                BRA     _struct_init_leaves_L17
-_struct_init_leaves_L16
-                LDA     #0
-_struct_init_leaves_L17
-                CMP     #0
-                BEQ     _struct_init_leaves_L15
+                BEQ     _struct_init_leaves_L5
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
-_struct_init_leaves_L15
+_struct_init_leaves_L5
                 SEP     #$20
                 MX      %10
                 LDA     _struct_init_leaves_nulv+10
@@ -378,21 +336,21 @@ _struct_init_leaves_L15
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _struct_init_leaves_L29
+                BNE     _struct_init_leaves_L11
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _struct_init_leaves_L29
+                BNE     _struct_init_leaves_L11
                 LDA     #1
-                BRA     _struct_init_leaves_L30
-_struct_init_leaves_L29
+                BRA     _struct_init_leaves_L12
+_struct_init_leaves_L11
                 LDA     #0
-_struct_init_leaves_L30
+_struct_init_leaves_L12
                 CMP     #0
-                BEQ     _struct_init_leaves_L27
+                BEQ     _struct_init_leaves_L10
                 SEP     #$20
                 MX      %10
                 LDA     _struct_init_leaves_nulv+14
@@ -406,28 +364,21 @@ _struct_init_leaves_L30
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _struct_init_leaves_L31
+                BNE     _struct_init_leaves_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _struct_init_leaves_L31
+                BNE     _struct_init_leaves_L13
                 LDA     #1
-                BRA     _struct_init_leaves_L32
-_struct_init_leaves_L31
+                BRA     _struct_init_leaves_L14
+_struct_init_leaves_L13
                 LDA     #0
-_struct_init_leaves_L32
+_struct_init_leaves_L14
                 CMP     #0
-                BEQ     _struct_init_leaves_L27
-                LDA     #1
-                BRA     _struct_init_leaves_L28
-_struct_init_leaves_L27
-                LDA     #0
-_struct_init_leaves_L28
-                CMP     #0
-                BEQ     _struct_init_leaves_L25
+                BEQ     _struct_init_leaves_L10
                 SEP     #$20
                 MX      %10
                 LDA     _struct_init_leaves_nulv+18
@@ -441,43 +392,29 @@ _struct_init_leaves_L28
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _struct_init_leaves_L33
+                BNE     _struct_init_leaves_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _struct_init_leaves_L33
+                BNE     _struct_init_leaves_L15
                 LDA     #1
-                BRA     _struct_init_leaves_L34
-_struct_init_leaves_L33
+                BRA     _struct_init_leaves_L16
+_struct_init_leaves_L15
                 LDA     #0
-_struct_init_leaves_L34
+_struct_init_leaves_L16
                 CMP     #0
-                BEQ     _struct_init_leaves_L25
-                LDA     #1
-                BRA     _struct_init_leaves_L26
-_struct_init_leaves_L25
-                LDA     #0
-_struct_init_leaves_L26
-                CMP     #0
-                BEQ     _struct_init_leaves_L23
+                BEQ     _struct_init_leaves_L10
                 LDA     _struct_init_leaves_nulv+20
-                BNE     _struct_init_leaves_L23
-                LDA     #1
-                BRA     _struct_init_leaves_L24
-_struct_init_leaves_L23
-                LDA     #0
-_struct_init_leaves_L24
-                CMP     #0
-                BEQ     _struct_init_leaves_L22
+                BNE     _struct_init_leaves_L10
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
-_struct_init_leaves_L22
+_struct_init_leaves_L10
                 LDA     _fcc_img0
                 TAY
                 TSC

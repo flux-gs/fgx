@@ -80,7 +80,7 @@ _pf_long_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _pf_long_L2
+                BEQ     _pf_long_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _pf_long_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _pf_long_L2
-                LDA     #1
-                BRA     _pf_long_L3
-_pf_long_L2
-                LDA     #0
-_pf_long_L3
-                CMP     #0
-                BEQ     _pf_long_L1
+                BNE     _pf_long_L1
                 INC     _fcc_img0
                 BRA     _pf_long_L0
 _pf_long_L1
@@ -505,7 +498,9 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L13
+                CMP     #0
+                BNE     *+5
+                BRL     _pf_long_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -537,14 +532,9 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L13
-                LDA     #1
-                BRA     _pf_long_L14
-_pf_long_L13
-                LDA     #0
-_pf_long_L14
                 CMP     #0
-                BEQ     _pf_long_L11
+                BNE     *+5
+                BRL     _pf_long_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -576,14 +566,9 @@ _pf_long_L14
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L11
-                LDA     #1
-                BRA     _pf_long_L12
-_pf_long_L11
-                LDA     #0
-_pf_long_L12
                 CMP     #0
-                BEQ     _pf_long_L9
+                BNE     *+5
+                BRL     _pf_long_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -615,14 +600,7 @@ _pf_long_L12
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L9
-                LDA     #1
-                BRA     _pf_long_L10
-_pf_long_L9
-                LDA     #0
-_pf_long_L10
-                CMP     #0
-                BEQ     _pf_long_L7
+                BEQ     _pf_long_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -654,14 +632,7 @@ _pf_long_L10
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L7
-                LDA     #1
-                BRA     _pf_long_L8
-_pf_long_L7
-                LDA     #0
-_pf_long_L8
-                CMP     #0
-                BEQ     _pf_long_L5
+                BEQ     _pf_long_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -693,14 +664,7 @@ _pf_long_L8
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pf_long_L5
-                LDA     #1
-                BRA     _pf_long_L6
-_pf_long_L5
-                LDA     #0
-_pf_long_L6
-                CMP     #0
-                BEQ     _pf_long_L4
+                BEQ     _pf_long_L2
                 LDA     #42
                 TAY
                 TSC
@@ -711,7 +675,7 @@ _pf_long_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_pf_long_L4
+_pf_long_L2
                 LDA     #1
                 TAY
                 TSC

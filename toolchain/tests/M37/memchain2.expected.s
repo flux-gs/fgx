@@ -230,18 +230,11 @@ _memchain2_L2
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #3
-                BNE     _memchain2_L4
+                BNE     _memchain2_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #3
-                BNE     _memchain2_L4
-                LDA     #1
-                BRA     _memchain2_L5
-_memchain2_L4
-                LDA     #0
-_memchain2_L5
-                CMP     #0
-                BEQ     _memchain2_L3
+                BNE     _memchain2_L3
                 LDA     _fcc_img0
                 TAX
                 CLC

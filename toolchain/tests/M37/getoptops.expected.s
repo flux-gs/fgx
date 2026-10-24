@@ -80,7 +80,7 @@ _getoptops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _getoptops_L2
+                BEQ     _getoptops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _getoptops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _getoptops_L2
-                LDA     #1
-                BRA     _getoptops_L3
-_getoptops_L2
-                LDA     #0
-_getoptops_L3
-                CMP     #0
-                BEQ     _getoptops_L1
+                BNE     _getoptops_L1
                 INC     _fcc_img0
                 BRA     _getoptops_L0
 _getoptops_L1
@@ -481,7 +474,7 @@ main_stkok        TCS
                 PLA
                 LDA     #0
                 STA     opterr
-_getoptops_L4
+_getoptops_L2
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -521,31 +514,31 @@ _getoptops_L4
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #$FFFF
                 BNE     *+5
-                BRL     _getoptops_L5
+                BRL     _getoptops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #108
-                BNE     _getoptops_L6
+                BNE     _getoptops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 ORA     #1
+                STA     5,S   ; fccstk d=0 b=5
+                BRL     _getoptops_L5
+_getoptops_L4
+                LDA     3,S   ; fccstk d=0 b=3
+                TAX
+                CMP     #97
+                BNE     _getoptops_L6
+                LDA     5,S   ; fccstk d=0 b=5
+                TAX
+                ORA     #2
                 STA     5,S   ; fccstk d=0 b=5
                 BRL     _getoptops_L7
 _getoptops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                CMP     #97
-                BNE     _getoptops_L8
-                LDA     5,S   ; fccstk d=0 b=5
-                TAX
-                ORA     #2
-                STA     5,S   ; fccstk d=0 b=5
-                BRL     _getoptops_L9
-_getoptops_L8
-                LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CMP     #111
-                BNE     _getoptops_L10
+                BNE     _getoptops_L8
                 SEP     #$20
                 MX      %10
                 PHB
@@ -575,16 +568,16 @@ _getoptops_L8
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _getoptops_L11
+                BEQ     _getoptops_L9
                 LDA     #1
                 STA     9,S   ; fccstk d=0 b=9
-_getoptops_L11
-                BRA     _getoptops_L12
-_getoptops_L10
+_getoptops_L9
+                BRA     _getoptops_L10
+_getoptops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #102
-                BNE     _getoptops_L13
+                BNE     _getoptops_L11
                 SEP     #$20
                 MX      %10
                 PHB
@@ -614,45 +607,61 @@ _getoptops_L10
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _getoptops_L14
+                BEQ     _getoptops_L12
                 LDA     #1
                 STA     7,S   ; fccstk d=0 b=7
-_getoptops_L14
-                BRA     _getoptops_L15
-_getoptops_L13
+_getoptops_L12
+                BRA     _getoptops_L13
+_getoptops_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #63
-                BNE     _getoptops_L16
+                BNE     _getoptops_L14
                 LDA     optopt
                 TAX
                 CMP     #122
-                BNE     _getoptops_L17
+                BNE     _getoptops_L15
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
-_getoptops_L17
-                BRA     _getoptops_L18
-_getoptops_L16
+_getoptops_L15
+                BRA     _getoptops_L16
+_getoptops_L14
                 LDA     #$FFFF
                 STA     13,S   ; fccstk d=0 b=13
-_getoptops_L18
-_getoptops_L15
-_getoptops_L12
-_getoptops_L9
+_getoptops_L16
+_getoptops_L13
+_getoptops_L10
 _getoptops_L7
-                BRL     _getoptops_L4
 _getoptops_L5
+                BRL     _getoptops_L2
+_getoptops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #3
-                BNE     _getoptops_L19
+                BNE     _getoptops_L17
+                LDA     1,S   ; fccstk d=0 b=1
+                TAX
+                CLC
+                ADC     #6
+                STA     1,S   ; fccstk d=0 b=1
+_getoptops_L17
+                LDA     9,S   ; fccstk d=0 b=9
+                BEQ     _getoptops_L18
+                LDA     1,S   ; fccstk d=0 b=1
+                TAX
+                CLC
+                ADC     #6
+                STA     1,S   ; fccstk d=0 b=1
+_getoptops_L18
+                LDA     7,S   ; fccstk d=0 b=7
+                BEQ     _getoptops_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L19
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     11,S   ; fccstk d=0 b=11
                 BEQ     _getoptops_L20
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -660,40 +669,24 @@ _getoptops_L19
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L20
-                LDA     7,S   ; fccstk d=0 b=7
-                BEQ     _getoptops_L21
+                LDA     13,S   ; fccstk d=0 b=13
+                BNE     _getoptops_L21
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L21
-                LDA     11,S   ; fccstk d=0 b=11
-                BEQ     _getoptops_L22
+                LDA     optind
+                TAX
+                CMP     #6
+                BNE     _getoptops_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L22
-                LDA     13,S   ; fccstk d=0 b=13
-                BNE     _getoptops_L23
-                LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                CLC
-                ADC     #6
-                STA     1,S   ; fccstk d=0 b=1
-_getoptops_L23
-                LDA     optind
-                TAX
-                CMP     #6
-                BNE     _getoptops_L24
-                LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                CLC
-                ADC     #6
-                STA     1,S   ; fccstk d=0 b=1
-_getoptops_L24
                 SEP     #$20
                 MX      %10
                 PHB
@@ -727,13 +720,13 @@ _getoptops_L24
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _getoptops_L25
+                BEQ     _getoptops_L23
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
-_getoptops_L25
+_getoptops_L23
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

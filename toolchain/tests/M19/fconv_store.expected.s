@@ -156,7 +156,7 @@ _fconv_store_L1
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #2
-                BNE     _fconv_store_L3
+                BNE     _fconv_store_L2
                 LDA     GS+6
                 STA     _fcc_long_hi
                 LDA     GS+4
@@ -177,13 +177,6 @@ _fconv_store_L1
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _fconv_store_L3
-                LDA     #1
-                BRA     _fconv_store_L4
-_fconv_store_L3
-                LDA     #0
-_fconv_store_L4
                 CMP     #0
                 BEQ     _fconv_store_L2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -251,13 +244,13 @@ _fconv_store_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_store_L5
+                BEQ     _fconv_store_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_store_L5
+_fconv_store_L3
                 LDA     #3
                 STA     GI
                 LDA     GI
@@ -300,13 +293,13 @@ _fconv_store_L5
                 STA     GI
                 TAX
                 CMP     #4
-                BNE     _fconv_store_L6
+                BNE     _fconv_store_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_store_L6
+_fconv_store_L4
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$86A1
@@ -379,13 +372,13 @@ _fconv_store_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_store_L7
+                BEQ     _fconv_store_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_store_L7
+_fconv_store_L5
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$1170
@@ -450,13 +443,13 @@ _fconv_store_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_store_L8
+                BEQ     _fconv_store_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_store_L8
+_fconv_store_L6
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0003
@@ -501,13 +494,13 @@ _fconv_store_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _fconv_store_L9
+                BEQ     _fconv_store_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
-_fconv_store_L9
+_fconv_store_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

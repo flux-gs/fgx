@@ -328,6 +328,30 @@ fuse_cmp_branch(int n, int label, int want_true)
 void
 walk_cond_branch(int n, int label, int want_true)
 {
+    /* K&R A.7.14: "the first operand is evaluated, including all side
+     * effects; if it is equal to 0, the value of the expression is 0.
+     * Otherwise, the right operand is evaluated" -- and A.7.15 the same for
+     * || with "unequal".  In a condition that order is two branches; the 0/1
+     * the operator returns as a value is never built. */
+    if (g_ast[n].kind == N_LOGIC_AND || g_ast[n].kind == N_LOGIC_OR) {
+        int is_and = g_ast[n].kind == N_LOGIC_AND;
+        if (is_and != want_true) {        /* either operand decides alone */
+            walk_cond_branch(g_ast[n].a, label, want_true);
+            walk_cond_branch(g_ast[n].b, label, want_true);
+        } else {                          /* the first can only rule out */
+            int lab_skip = new_label();
+            walk_cond_branch(g_ast[n].a, lab_skip, !want_true);
+            walk_cond_branch(g_ast[n].b, label, want_true);
+            emit_label(lab_skip);
+        }
+        g_expr_type = LT_INT;
+        return;
+    }
+    if (g_ast[n].kind == N_LNOT) {
+        walk_cond_branch(g_ast[n].a, label, !want_true);
+        g_expr_type = LT_INT;
+        return;
+    }
     if (fuse_cmp_branch(n, label, want_true)) return;
     walk_cond(n);
     emit_bcond(want_true ? IRC_BNE : IRC_BEQ, label, 1);

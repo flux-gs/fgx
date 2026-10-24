@@ -274,14 +274,7 @@ main_stkok        TCS
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L3
-                LDA     #0
-                BRA     _ldouble_const_L4
-_ldouble_const_L3
-                LDA     #1
-_ldouble_const_L4
-                CMP     #0
-                BEQ     _ldouble_const_L2
+                BNE     _ldouble_const_L2
                 LDA     #1
                 TAY
                 TSC
@@ -344,14 +337,8 @@ _ldouble_const_L2
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L6
-                LDA     #0
-                BRA     _ldouble_const_L7
-_ldouble_const_L6
-                LDA     #1
-_ldouble_const_L7
                 CMP     #0
-                BEQ     _ldouble_const_L5
+                BNE     _ldouble_const_L3
                 LDA     #2
                 TAY
                 TSC
@@ -362,7 +349,7 @@ _ldouble_const_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L5
+_ldouble_const_L3
                 LDA     #16368
                 STA     _fcc_q3
                 LDA     #0
@@ -469,7 +456,7 @@ _ldouble_const_L5
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _ldouble_const_L8
+                BEQ     _ldouble_const_L4
                 LDA     #3
                 TAY
                 TSC
@@ -480,7 +467,7 @@ _ldouble_const_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L8
+_ldouble_const_L4
                 LDA     #16376
                 STA     _fcc_q3
                 LDA     #0
@@ -561,14 +548,7 @@ _ldouble_const_L8
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L10
-                LDA     #0
-                BRA     _ldouble_const_L11
-_ldouble_const_L10
-                LDA     #1
-_ldouble_const_L11
-                CMP     #0
-                BEQ     _ldouble_const_L9
+                BNE     _ldouble_const_L5
                 LDA     #4
                 TAY
                 TSC
@@ -579,7 +559,7 @@ _ldouble_const_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L9
+_ldouble_const_L5
                 LDA     #16313
                 STA     _fcc_q3
                 LDA     #39321
@@ -636,14 +616,7 @@ _ldouble_const_L9
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L13
-                LDA     #0
-                BRA     _ldouble_const_L14
-_ldouble_const_L13
-                LDA     #1
-_ldouble_const_L14
-                CMP     #0
-                BEQ     _ldouble_const_L12
+                BNE     _ldouble_const_L6
                 LDA     #5
                 TAY
                 TSC
@@ -654,7 +627,7 @@ _ldouble_const_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L12
+_ldouble_const_L6
                 LDA     #16313
                 STA     _fcc_q3
                 LDA     #39321
@@ -706,14 +679,7 @@ _ldouble_const_L12
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L16
-                LDA     #0
-                BRA     _ldouble_const_L17
-_ldouble_const_L16
-                LDA     #1
-_ldouble_const_L17
-                CMP     #0
-                BEQ     _ldouble_const_L15
+                BNE     _ldouble_const_L7
                 LDA     #6
                 TAY
                 TSC
@@ -724,7 +690,7 @@ _ldouble_const_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L15
+_ldouble_const_L7
                 LDA     #$3DCC
                 STA     _fcc_long_hi
                 LDA     #$CCCD
@@ -773,14 +739,8 @@ _ldouble_const_L15
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L19
-                LDA     #0
-                BRA     _ldouble_const_L20
-_ldouble_const_L19
-                LDA     #1
-_ldouble_const_L20
                 CMP     #0
-                BEQ     _ldouble_const_L18
+                BNE     _ldouble_const_L8
                 LDA     #31
                 TAY
                 TSC
@@ -791,7 +751,7 @@ _ldouble_const_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L18
+_ldouble_const_L8
                 LDA     #16352
                 STA     _fcc_q3
                 LDA     #0
@@ -826,7 +786,7 @@ _ldouble_const_L18
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     _ldouble_const_L21
+                BEQ     _ldouble_const_L9
                 LDA     #7
                 TAY
                 TSC
@@ -837,21 +797,15 @@ _ldouble_const_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L21
+_ldouble_const_L9
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _ldouble_const_L23
+                BNE     _ldouble_const_L11
                 LDA     #8
                 CMP     #8
-                BNE     _ldouble_const_L23
-                LDA     #0
-                BRA     _ldouble_const_L24
-_ldouble_const_L23
-                LDA     #1
-_ldouble_const_L24
-                CMP     #0
-                BEQ     _ldouble_const_L22
+                BEQ     _ldouble_const_L10
+_ldouble_const_L11
                 LDA     #8
                 TAY
                 TSC
@@ -862,11 +816,11 @@ _ldouble_const_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L22
+_ldouble_const_L10
                 LDA     #4
                 TAX
                 CMP     #4
-                BEQ     _ldouble_const_L25
+                BEQ     _ldouble_const_L12
                 LDA     #9
                 TAY
                 TSC
@@ -877,7 +831,7 @@ _ldouble_const_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L25
+_ldouble_const_L12
                 LDA     #$9999
                 STA     _fcc_long_hi
                 LDA     #$999A
@@ -914,14 +868,7 @@ _ldouble_const_L25
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L27
-                LDA     #0
-                BRA     _ldouble_const_L28
-_ldouble_const_L27
-                LDA     #1
-_ldouble_const_L28
-                CMP     #0
-                BEQ     _ldouble_const_L26
+                BNE     _ldouble_const_L13
                 LDA     #10
                 TAY
                 TSC
@@ -932,7 +879,7 @@ _ldouble_const_L28
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L26
+_ldouble_const_L13
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -969,14 +916,7 @@ _ldouble_const_L26
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L30
-                LDA     #0
-                BRA     _ldouble_const_L31
-_ldouble_const_L30
-                LDA     #1
-_ldouble_const_L31
-                CMP     #0
-                BEQ     _ldouble_const_L29
+                BNE     _ldouble_const_L14
                 LDA     #11
                 TAY
                 TSC
@@ -987,7 +927,7 @@ _ldouble_const_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L29
+_ldouble_const_L14
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1024,14 +964,7 @@ _ldouble_const_L29
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L33
-                LDA     #0
-                BRA     _ldouble_const_L34
-_ldouble_const_L33
-                LDA     #1
-_ldouble_const_L34
-                CMP     #0
-                BEQ     _ldouble_const_L32
+                BNE     _ldouble_const_L15
                 LDA     #12
                 TAY
                 TSC
@@ -1042,7 +975,7 @@ _ldouble_const_L34
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L32
+_ldouble_const_L15
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1079,14 +1012,7 @@ _ldouble_const_L32
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L36
-                LDA     #0
-                BRA     _ldouble_const_L37
-_ldouble_const_L36
-                LDA     #1
-_ldouble_const_L37
-                CMP     #0
-                BEQ     _ldouble_const_L35
+                BNE     _ldouble_const_L16
                 LDA     #13
                 TAY
                 TSC
@@ -1097,7 +1023,7 @@ _ldouble_const_L37
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L35
+_ldouble_const_L16
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1134,14 +1060,7 @@ _ldouble_const_L35
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L39
-                LDA     #0
-                BRA     _ldouble_const_L40
-_ldouble_const_L39
-                LDA     #1
-_ldouble_const_L40
-                CMP     #0
-                BEQ     _ldouble_const_L38
+                BNE     _ldouble_const_L17
                 LDA     #14
                 TAY
                 TSC
@@ -1152,7 +1071,7 @@ _ldouble_const_L40
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L38
+_ldouble_const_L17
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1189,14 +1108,7 @@ _ldouble_const_L38
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L42
-                LDA     #0
-                BRA     _ldouble_const_L43
-_ldouble_const_L42
-                LDA     #1
-_ldouble_const_L43
-                CMP     #0
-                BEQ     _ldouble_const_L41
+                BNE     _ldouble_const_L18
                 LDA     #15
                 TAY
                 TSC
@@ -1207,7 +1119,7 @@ _ldouble_const_L43
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L41
+_ldouble_const_L18
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1244,14 +1156,7 @@ _ldouble_const_L41
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L45
-                LDA     #0
-                BRA     _ldouble_const_L46
-_ldouble_const_L45
-                LDA     #1
-_ldouble_const_L46
-                CMP     #0
-                BEQ     _ldouble_const_L44
+                BNE     _ldouble_const_L19
                 LDA     #16
                 TAY
                 TSC
@@ -1262,7 +1167,7 @@ _ldouble_const_L46
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L44
+_ldouble_const_L19
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1299,14 +1204,7 @@ _ldouble_const_L44
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L48
-                LDA     #0
-                BRA     _ldouble_const_L49
-_ldouble_const_L48
-                LDA     #1
-_ldouble_const_L49
-                CMP     #0
-                BEQ     _ldouble_const_L47
+                BNE     _ldouble_const_L20
                 LDA     #17
                 TAY
                 TSC
@@ -1317,7 +1215,7 @@ _ldouble_const_L49
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L47
+_ldouble_const_L20
                 LDA     #$8800
                 STA     _fcc_long_hi
                 LDA     #$759C
@@ -1354,14 +1252,8 @@ _ldouble_const_L47
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L51
-                LDA     #0
-                BRA     _ldouble_const_L52
-_ldouble_const_L51
-                LDA     #1
-_ldouble_const_L52
                 CMP     #0
-                BEQ     _ldouble_const_L50
+                BNE     _ldouble_const_L21
                 LDA     #18
                 TAY
                 TSC
@@ -1372,7 +1264,7 @@ _ldouble_const_L52
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L50
+_ldouble_const_L21
                 LDA     #16313
                 STA     _fcc_q3
                 LDA     #39321
@@ -1433,7 +1325,7 @@ _ldouble_const_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _ldouble_const_L53
+                BEQ     _ldouble_const_L22
                 LDA     #19
                 TAY
                 TSC
@@ -1444,7 +1336,7 @@ _ldouble_const_L50
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L53
+_ldouble_const_L22
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1481,14 +1373,7 @@ _ldouble_const_L53
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L55
-                LDA     #0
-                BRA     _ldouble_const_L56
-_ldouble_const_L55
-                LDA     #1
-_ldouble_const_L56
-                CMP     #0
-                BEQ     _ldouble_const_L54
+                BNE     _ldouble_const_L23
                 LDA     #20
                 TAY
                 TSC
@@ -1499,7 +1384,7 @@ _ldouble_const_L56
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L54
+_ldouble_const_L23
                 LDA     #$9999
                 STA     _fcc_long_hi
                 LDA     #$999A
@@ -1536,14 +1421,7 @@ _ldouble_const_L54
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L58
-                LDA     #0
-                BRA     _ldouble_const_L59
-_ldouble_const_L58
-                LDA     #1
-_ldouble_const_L59
-                CMP     #0
-                BEQ     _ldouble_const_L57
+                BNE     _ldouble_const_L24
                 LDA     #21
                 TAY
                 TSC
@@ -1554,7 +1432,7 @@ _ldouble_const_L59
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L57
+_ldouble_const_L24
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1591,14 +1469,7 @@ _ldouble_const_L57
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L61
-                LDA     #0
-                BRA     _ldouble_const_L62
-_ldouble_const_L61
-                LDA     #1
-_ldouble_const_L62
-                CMP     #0
-                BEQ     _ldouble_const_L60
+                BNE     _ldouble_const_L25
                 LDA     #22
                 TAY
                 TSC
@@ -1609,7 +1480,7 @@ _ldouble_const_L62
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L60
+_ldouble_const_L25
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1660,14 +1531,7 @@ _ldouble_const_L60
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L64
-                LDA     #0
-                BRA     _ldouble_const_L65
-_ldouble_const_L64
-                LDA     #1
-_ldouble_const_L65
-                CMP     #0
-                BEQ     _ldouble_const_L63
+                BNE     _ldouble_const_L26
                 LDA     #23
                 TAY
                 TSC
@@ -1678,7 +1542,7 @@ _ldouble_const_L65
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L63
+_ldouble_const_L26
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1729,14 +1593,7 @@ _ldouble_const_L63
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L67
-                LDA     #0
-                BRA     _ldouble_const_L68
-_ldouble_const_L67
-                LDA     #1
-_ldouble_const_L68
-                CMP     #0
-                BEQ     _ldouble_const_L66
+                BNE     _ldouble_const_L27
                 LDA     #24
                 TAY
                 TSC
@@ -1747,11 +1604,11 @@ _ldouble_const_L68
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L66
+_ldouble_const_L27
                 LDA     #24
                 TAX
                 CMP     #24
-                BNE     _ldouble_const_L70
+                BNE     _ldouble_const_L29
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1788,21 +1645,8 @@ _ldouble_const_L66
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L72
-                LDA     #0
-                BRA     _ldouble_const_L73
-_ldouble_const_L72
-                LDA     #1
-_ldouble_const_L73
-                CMP     #0
-                BNE     _ldouble_const_L70
-                LDA     #0
-                BRA     _ldouble_const_L71
-_ldouble_const_L70
-                LDA     #1
-_ldouble_const_L71
-                CMP     #0
-                BEQ     _ldouble_const_L69
+                BNE     _ldouble_const_L28
+_ldouble_const_L29
                 LDA     #25
                 TAY
                 TSC
@@ -1813,11 +1657,11 @@ _ldouble_const_L71
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L69
+_ldouble_const_L28
                 LDA     gs+0
                 TAX
                 CMP     #5
-                BNE     _ldouble_const_L75
+                BNE     _ldouble_const_L31
                 LDA     #$9999
                 STA     _fcc_long_hi
                 LDA     #$999A
@@ -1854,21 +1698,8 @@ _ldouble_const_L69
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L77
-                LDA     #0
-                BRA     _ldouble_const_L78
-_ldouble_const_L77
-                LDA     #1
-_ldouble_const_L78
-                CMP     #0
-                BNE     _ldouble_const_L75
-                LDA     #0
-                BRA     _ldouble_const_L76
-_ldouble_const_L75
-                LDA     #1
-_ldouble_const_L76
-                CMP     #0
-                BEQ     _ldouble_const_L74
+                BNE     _ldouble_const_L30
+_ldouble_const_L31
                 LDA     #26
                 TAY
                 TSC
@@ -1879,7 +1710,7 @@ _ldouble_const_L76
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L74
+_ldouble_const_L30
                 FGX2_FARCALL _ldouble_const_local_static
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
@@ -1925,14 +1756,7 @@ _ldouble_const_L74
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L80
-                LDA     #0
-                BRA     _ldouble_const_L81
-_ldouble_const_L80
-                LDA     #1
-_ldouble_const_L81
-                CMP     #0
-                BEQ     _ldouble_const_L79
+                BNE     _ldouble_const_L32
                 LDA     #27
                 TAY
                 TSC
@@ -1943,11 +1767,11 @@ _ldouble_const_L81
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L79
+_ldouble_const_L32
                 LDA     gi
                 TAX
                 CMP     #2
-                BEQ     _ldouble_const_L82
+                BEQ     _ldouble_const_L33
                 LDA     #28
                 TAY
                 TSC
@@ -1958,7 +1782,7 @@ _ldouble_const_L79
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L82
+_ldouble_const_L33
                 LDA     gf+2
                 STA     _fcc_long_hi
                 LDA     gf
@@ -1980,7 +1804,7 @@ _ldouble_const_L82
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     _ldouble_const_L83
+                BEQ     _ldouble_const_L34
                 LDA     #29
                 TAY
                 TSC
@@ -1991,7 +1815,7 @@ _ldouble_const_L82
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L83
+_ldouble_const_L34
                 LDA     #$B505
                 STA     _fcc_long_hi
                 LDA     #$6E17
@@ -2028,14 +1852,7 @@ _ldouble_const_L83
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_const_L85
-                LDA     #0
-                BRA     _ldouble_const_L86
-_ldouble_const_L85
-                LDA     #1
-_ldouble_const_L86
-                CMP     #0
-                BEQ     _ldouble_const_L84
+                BNE     _ldouble_const_L35
                 LDA     #30
                 TAY
                 TSC
@@ -2046,7 +1863,7 @@ _ldouble_const_L86
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_const_L84
+_ldouble_const_L35
                 LDA     #42
                 TAY
                 TSC

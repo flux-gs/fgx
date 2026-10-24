@@ -36,18 +36,11 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #5
-                BNE     _commast_L1
+                BNE     _commast_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CMP     #7
-                BNE     _commast_L1
-                LDA     #1
-                BRA     _commast_L2
-_commast_L1
-                LDA     #0
-_commast_L2
-                CMP     #0
-                BEQ     _commast_L0
+                BNE     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
@@ -85,46 +78,25 @@ _commast_L0
                 LDA     _tty+0
                 TAX
                 CMP     #10
-                BNE     _commast_L8
+                BNE     _commast_L1
                 LDA     _rawmode
                 TAX
                 CMP     #1
-                BNE     _commast_L8
-                LDA     #1
-                BRA     _commast_L9
-_commast_L8
-                LDA     #0
-_commast_L9
-                CMP     #0
-                BEQ     _commast_L6
+                BNE     _commast_L1
                 LDA     nxstty
                 TAX
                 CMP     #1
-                BNE     _commast_L6
-                LDA     #1
-                BRA     _commast_L7
-_commast_L6
-                LDA     #0
-_commast_L7
-                CMP     #0
-                BEQ     _commast_L4
+                BNE     _commast_L1
                 LDA     seen_flags
                 TAX
                 CMP     #10
-                BNE     _commast_L4
-                LDA     #1
-                BRA     _commast_L5
-_commast_L4
-                LDA     #0
-_commast_L5
-                CMP     #0
-                BEQ     _commast_L3
+                BNE     _commast_L1
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L3
+_commast_L1
                 LDA     _tty+0
                 PHA
                 LDA     #2
@@ -160,44 +132,23 @@ _commast_L3
                 LDA     _tty+0
                 TAX
                 CMP     #8
-                BNE     _commast_L15
+                BNE     _commast_L2
                 LDA     _rawmode
-                BNE     _commast_L15
-                LDA     #1
-                BRA     _commast_L16
-_commast_L15
-                LDA     #0
-_commast_L16
-                CMP     #0
-                BEQ     _commast_L13
+                BNE     _commast_L2
                 LDA     nxstty
                 TAX
                 CMP     #2
-                BNE     _commast_L13
-                LDA     #1
-                BRA     _commast_L14
-_commast_L13
-                LDA     #0
-_commast_L14
-                CMP     #0
-                BEQ     _commast_L11
+                BNE     _commast_L2
                 LDA     seen_flags
                 TAX
                 CMP     #8
-                BNE     _commast_L11
-                LDA     #1
-                BRA     _commast_L12
-_commast_L11
-                LDA     #0
-_commast_L12
-                CMP     #0
-                BEQ     _commast_L10
+                BNE     _commast_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L10
+_commast_L2
                 LDA     #4
                 STA     gwin+0
                 LDA     #6
@@ -229,24 +180,17 @@ _commast_L10
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #4
-                BNE     _commast_L18
+                BNE     _commast_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #6
-                BNE     _commast_L18
-                LDA     #1
-                BRA     _commast_L19
-_commast_L18
-                LDA     #0
-_commast_L19
-                CMP     #0
-                BEQ     _commast_L17
+                BNE     _commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_commast_L17
+_commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC

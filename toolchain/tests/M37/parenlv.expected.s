@@ -59,7 +59,7 @@ main_stkok        TCS
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CMP     #40
-                BNE     _parenlv_L1
+                BNE     _parenlv_L0
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -79,14 +79,7 @@ main_stkok        TCS
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #1
-                BNE     _parenlv_L1
-                LDA     #1
-                BRA     _parenlv_L2
-_parenlv_L1
-                LDA     #0
-_parenlv_L2
-                CMP     #0
-                BEQ     _parenlv_L0
+                BNE     _parenlv_L0
                 LDA     _fcc_img0
                 CLC
                 ADC     _fcc_img1

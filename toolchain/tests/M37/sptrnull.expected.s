@@ -188,14 +188,8 @@ _sptrnull_L9
                 AND     #$00FF
                 TAX
                 CMP     #4
-                BNE     _sptrnull_L13
-                LDA     #0
-                BRA     _sptrnull_L14
-_sptrnull_L13
-                LDA     #1
-_sptrnull_L14
-                CMP     #0
                 BEQ     _sptrnull_L12
+_sptrnull_L13
                 LDA     #5
                 TAY
                 TSC

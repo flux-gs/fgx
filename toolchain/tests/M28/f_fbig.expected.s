@@ -80,7 +80,7 @@ _f_fbig_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _f_fbig_L2
+                BEQ     _f_fbig_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _f_fbig_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _f_fbig_L2
-                LDA     #1
-                BRA     _f_fbig_L3
-_f_fbig_L2
-                LDA     #0
-_f_fbig_L3
-                CMP     #0
-                BEQ     _f_fbig_L1
+                BNE     _f_fbig_L1
                 INC     _fcc_img0
                 BRA     _f_fbig_L0
 _f_fbig_L1
@@ -246,14 +239,7 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_fbig_L5
-                LDA     #0
-                BRA     _f_fbig_L6
-_f_fbig_L5
-                LDA     #1
-_f_fbig_L6
-                CMP     #0
-                BEQ     _f_fbig_L4
+                BNE     _f_fbig_L2
                 LDA     #1
                 TAY
                 TSC
@@ -264,7 +250,7 @@ _f_fbig_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_fbig_L4
+_f_fbig_L2
                 LDA     #16870
                 STA     _fcc_q3
                 LDA     #23051
@@ -341,14 +327,7 @@ _f_fbig_L4
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_fbig_L8
-                LDA     #0
-                BRA     _f_fbig_L9
-_f_fbig_L8
-                LDA     #1
-_f_fbig_L9
-                CMP     #0
-                BEQ     _f_fbig_L7
+                BNE     _f_fbig_L3
                 LDA     #2
                 TAY
                 TSC
@@ -359,7 +338,7 @@ _f_fbig_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_fbig_L7
+_f_fbig_L3
                 LDA     #16879
                 STA     _fcc_q3
                 LDA     #65535
@@ -436,14 +415,7 @@ _f_fbig_L7
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_fbig_L11
-                LDA     #0
-                BRA     _f_fbig_L12
-_f_fbig_L11
-                LDA     #1
-_f_fbig_L12
-                CMP     #0
-                BEQ     _f_fbig_L10
+                BNE     _f_fbig_L4
                 LDA     #3
                 TAY
                 TSC
@@ -454,7 +426,7 @@ _f_fbig_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_fbig_L10
+_f_fbig_L4
                 LDA     #42
                 TAY
                 TSC

@@ -293,7 +293,8 @@ _libso_shapes3_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #5
-                BNE     _libso_shapes3_L20
+                BEQ     *+5
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -308,14 +309,8 @@ _libso_shapes3_L6
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #10
-                BNE     _libso_shapes3_L20
-                LDA     #1
-                BRA     _libso_shapes3_L21
-_libso_shapes3_L20
-                LDA     #0
-_libso_shapes3_L21
-                CMP     #0
-                BEQ     _libso_shapes3_L18
+                BEQ     *+5
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -332,14 +327,8 @@ _libso_shapes3_L21
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #2
-                BNE     _libso_shapes3_L18
-                LDA     #1
-                BRA     _libso_shapes3_L19
-_libso_shapes3_L18
-                LDA     #0
-_libso_shapes3_L19
-                CMP     #0
-                BEQ     _libso_shapes3_L16
+                BEQ     *+5
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -371,7 +360,7 @@ _libso_shapes3_L19
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L22-1
+                PEA     _libso_shapes3_L12-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -382,7 +371,7 @@ _libso_shapes3_L19
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L22
+_libso_shapes3_L12
                 TAY
                 TSC
                 CLC
@@ -391,14 +380,8 @@ _libso_shapes3_L22
                 TYA
                 TAX
                 CMP     #5
-                BNE     _libso_shapes3_L16
-                LDA     #1
-                BRA     _libso_shapes3_L17
-_libso_shapes3_L16
-                LDA     #0
-_libso_shapes3_L17
-                CMP     #0
-                BEQ     _libso_shapes3_L14
+                BEQ     *+5
+                BRL     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -430,7 +413,7 @@ _libso_shapes3_L17
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L23-1
+                PEA     _libso_shapes3_L13-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -441,7 +424,7 @@ _libso_shapes3_L17
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L23
+_libso_shapes3_L13
                 TAY
                 TSC
                 CLC
@@ -450,14 +433,7 @@ _libso_shapes3_L23
                 TYA
                 TAX
                 CMP     #5
-                BNE     _libso_shapes3_L14
-                LDA     #1
-                BRA     _libso_shapes3_L15
-_libso_shapes3_L14
-                LDA     #0
-_libso_shapes3_L15
-                CMP     #0
-                BEQ     _libso_shapes3_L12
+                BNE     _libso_shapes3_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -487,7 +463,7 @@ _libso_shapes3_L15
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _libso_shapes3_L24-1
+                PEA     _libso_shapes3_L14-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -498,7 +474,7 @@ _libso_shapes3_L15
                 DEC
                 PHA
                 RTL
-_libso_shapes3_L24
+_libso_shapes3_L14
                 TAY
                 TSC
                 CLC
@@ -507,14 +483,7 @@ _libso_shapes3_L24
                 TYA
                 TAX
                 CMP     #5
-                BNE     _libso_shapes3_L12
-                LDA     #1
-                BRA     _libso_shapes3_L13
-_libso_shapes3_L12
-                LDA     #0
-_libso_shapes3_L13
-                CMP     #0
-                BEQ     _libso_shapes3_L10
+                BNE     _libso_shapes3_L10
                 LDA     #42
                 BRA     _libso_shapes3_L11
 _libso_shapes3_L10

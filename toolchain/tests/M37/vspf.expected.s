@@ -173,35 +173,21 @@ _vspf_L3
                 AND     #$00FF
                 TAX
                 CMP     #65
-                BNE     _vspf_L8
+                BNE     _vspf_L5
                 LDA     #6
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
                 CMP     #69
-                BNE     _vspf_L8
-                LDA     #1
-                BRA     _vspf_L9
-_vspf_L8
-                LDA     #0
-_vspf_L9
-                CMP     #0
-                BEQ     _vspf_L6
+                BNE     _vspf_L5
                 LDA     #7
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
                 CMP     #72
-                BNE     _vspf_L6
-                LDA     #1
-                BRA     _vspf_L7
-_vspf_L6
-                LDA     #0
-_vspf_L7
-                CMP     #0
-                BEQ     _vspf_L5
+                BNE     _vspf_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
@@ -248,27 +234,20 @@ _vspf_L5
                 AND     #$00FF
                 TAX
                 CMP     #68
-                BNE     _vspf_L11
+                BNE     _vspf_L6
                 LDA     #1
                 TAX
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
                 CMP     #69
-                BNE     _vspf_L11
-                LDA     #1
-                BRA     _vspf_L12
-_vspf_L11
-                LDA     #0
-_vspf_L12
-                CMP     #0
-                BEQ     _vspf_L10
+                BNE     _vspf_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
-_vspf_L10
+_vspf_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

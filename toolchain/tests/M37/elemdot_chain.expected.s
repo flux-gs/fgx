@@ -72,7 +72,7 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #22
-                BNE     _elemdot_chain_L1
+                BNE     _elemdot_chain_L0
                 LDA     #0
                 ASL
                 ASL
@@ -90,14 +90,7 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
-                BNE     _elemdot_chain_L1
-                LDA     #1
-                BRA     _elemdot_chain_L2
-_elemdot_chain_L1
-                LDA     #0
-_elemdot_chain_L2
-                CMP     #0
-                BEQ     _elemdot_chain_L0
+                BNE     _elemdot_chain_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -157,7 +150,7 @@ _elemdot_chain_L0
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #44
-                BNE     _elemdot_chain_L6
+                BNE     _elemdot_chain_L1
                 LDA     #1
                 ASL
                 ASL
@@ -175,14 +168,7 @@ _elemdot_chain_L0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #33
-                BNE     _elemdot_chain_L6
-                LDA     #1
-                BRA     _elemdot_chain_L7
-_elemdot_chain_L6
-                LDA     #0
-_elemdot_chain_L7
-                CMP     #0
-                BEQ     _elemdot_chain_L4
+                BNE     _elemdot_chain_L1
                 LDA     #0
                 ASL
                 ASL
@@ -201,20 +187,13 @@ _elemdot_chain_L7
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #22
-                BNE     _elemdot_chain_L4
-                LDA     #1
-                BRA     _elemdot_chain_L5
-_elemdot_chain_L4
-                LDA     #0
-_elemdot_chain_L5
-                CMP     #0
-                BEQ     _elemdot_chain_L3
+                BNE     _elemdot_chain_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L3
+_elemdot_chain_L1
                 LDA     _fcc_img1
                 ASL
                 ASL
@@ -273,7 +252,7 @@ _elemdot_chain_L3
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #47
-                BNE     _elemdot_chain_L9
+                BNE     _elemdot_chain_L2
                 LDA     #1
                 ASL
                 ASL
@@ -291,20 +270,13 @@ _elemdot_chain_L3
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #33
-                BNE     _elemdot_chain_L9
-                LDA     #1
-                BRA     _elemdot_chain_L10
-_elemdot_chain_L9
-                LDA     #0
-_elemdot_chain_L10
-                CMP     #0
-                BEQ     _elemdot_chain_L8
+                BNE     _elemdot_chain_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L8
+_elemdot_chain_L2
                 LDA     #1
                 ASL
                 ASL
@@ -387,7 +359,7 @@ _elemdot_chain_L8
                 AND     #$00FF
                 TAX
                 CMP     #65
-                BNE     _elemdot_chain_L14
+                BNE     _elemdot_chain_L3
                 LDA     #1
                 ASL
                 ASL
@@ -414,14 +386,7 @@ _elemdot_chain_L8
                 AND     #$00FF
                 TAX
                 CMP     #67
-                BNE     _elemdot_chain_L14
-                LDA     #1
-                BRA     _elemdot_chain_L15
-_elemdot_chain_L14
-                LDA     #0
-_elemdot_chain_L15
-                CMP     #0
-                BEQ     _elemdot_chain_L12
+                BNE     _elemdot_chain_L3
                 LDA     #1
                 ASL
                 ASL
@@ -440,20 +405,13 @@ _elemdot_chain_L15
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #47
-                BNE     _elemdot_chain_L12
-                LDA     #1
-                BRA     _elemdot_chain_L13
-_elemdot_chain_L12
-                LDA     #0
-_elemdot_chain_L13
-                CMP     #0
-                BEQ     _elemdot_chain_L11
+                BNE     _elemdot_chain_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L11
+_elemdot_chain_L3
                 LDA     #1
                 ASL
                 ASL
@@ -526,7 +484,7 @@ _elemdot_chain_L11
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #77
-                BNE     _elemdot_chain_L19
+                BNE     _elemdot_chain_L4
                 LDA     #1
                 ASL
                 ASL
@@ -546,14 +504,7 @@ _elemdot_chain_L11
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #66
-                BNE     _elemdot_chain_L19
-                LDA     #1
-                BRA     _elemdot_chain_L20
-_elemdot_chain_L19
-                LDA     #0
-_elemdot_chain_L20
-                CMP     #0
-                BEQ     _elemdot_chain_L17
+                BNE     _elemdot_chain_L4
                 LDA     #1
                 ASL
                 ASL
@@ -572,20 +523,13 @@ _elemdot_chain_L20
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #55
-                BNE     _elemdot_chain_L17
-                LDA     #1
-                BRA     _elemdot_chain_L18
-_elemdot_chain_L17
-                LDA     #0
-_elemdot_chain_L18
-                CMP     #0
-                BEQ     _elemdot_chain_L16
+                BNE     _elemdot_chain_L4
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L16
+_elemdot_chain_L4
                 LDA     #0
                 ASL
                 CLC
@@ -657,7 +601,7 @@ _elemdot_chain_L16
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #99
-                BNE     _elemdot_chain_L24
+                BNE     _elemdot_chain_L5
                 LDA     #0
                 ASL
                 CLC
@@ -676,14 +620,7 @@ _elemdot_chain_L16
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #88
-                BNE     _elemdot_chain_L24
-                LDA     #1
-                BRA     _elemdot_chain_L25
-_elemdot_chain_L24
-                LDA     #0
-_elemdot_chain_L25
-                CMP     #0
-                BEQ     _elemdot_chain_L22
+                BNE     _elemdot_chain_L5
                 LDA     #1
                 ASL
                 INC
@@ -702,20 +639,13 @@ _elemdot_chain_L25
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #100
-                BNE     _elemdot_chain_L22
-                LDA     #1
-                BRA     _elemdot_chain_L23
-_elemdot_chain_L22
-                LDA     #0
-_elemdot_chain_L23
-                CMP     #0
-                BEQ     _elemdot_chain_L21
+                BNE     _elemdot_chain_L5
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L21
+_elemdot_chain_L5
                 LDA     #123
                 STA     _elemdot_chain_src+0
                 LDA     #2
@@ -762,12 +692,12 @@ _elemdot_chain_L21
                 STA     _fcc_fpr1+2
                 LDA     _fcc_fpr1
                 LDY     #4
-_elemdot_chain_L26
+_elemdot_chain_L6
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _elemdot_chain_L26
+                BPL     _elemdot_chain_L6
                 LDA     #2
                 ASL
                 ASL
@@ -786,7 +716,7 @@ _elemdot_chain_L26
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #123
-                BNE     _elemdot_chain_L28
+                BNE     _elemdot_chain_L7
                 LDA     #2
                 ASL
                 ASL
@@ -804,20 +734,13 @@ _elemdot_chain_L26
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #121
-                BNE     _elemdot_chain_L28
-                LDA     #1
-                BRA     _elemdot_chain_L29
-_elemdot_chain_L28
-                LDA     #0
-_elemdot_chain_L29
-                CMP     #0
-                BEQ     _elemdot_chain_L27
+                BNE     _elemdot_chain_L7
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_elemdot_chain_L27
+_elemdot_chain_L7
                 LDA     _fcc_img0
                 TAY
                 TSC

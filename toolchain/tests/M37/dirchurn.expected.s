@@ -257,10 +257,10 @@ _dirchurn_L2
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L6
+                BVC     _dirchurn_L4
                 EOR     #$8000
-_dirchurn_L6
-                BPL     _dirchurn_L4
+_dirchurn_L4
+                BPL     _dirchurn_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -285,13 +285,6 @@ _dirchurn_L6
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L4
-                LDA     #1
-                BRA     _dirchurn_L5
-_dirchurn_L4
-                LDA     #0
-_dirchurn_L5
-                CMP     #0
                 BEQ     _dirchurn_L3
                 LDA     #$FFEC
                 TAY
@@ -326,10 +319,10 @@ _dirchurn_L3
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L10
+                BVC     _dirchurn_L6
                 EOR     #$8000
-_dirchurn_L10
-                BPL     _dirchurn_L8
+_dirchurn_L6
+                BPL     _dirchurn_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -354,14 +347,7 @@ _dirchurn_L10
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L8
-                LDA     #1
-                BRA     _dirchurn_L9
-_dirchurn_L8
-                LDA     #0
-_dirchurn_L9
-                CMP     #0
-                BEQ     _dirchurn_L7
+                BEQ     _dirchurn_L5
                 LDA     #$FFF3
                 TAY
                 TSC
@@ -372,7 +358,7 @@ _dirchurn_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L7
+_dirchurn_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -386,10 +372,10 @@ _dirchurn_L7
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L14
+                BVC     _dirchurn_L8
                 EOR     #$8000
-_dirchurn_L14
-                BPL     _dirchurn_L12
+_dirchurn_L8
+                BPL     _dirchurn_L7
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -414,14 +400,7 @@ _dirchurn_L14
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L12
-                LDA     #1
-                BRA     _dirchurn_L13
-_dirchurn_L12
-                LDA     #0
-_dirchurn_L13
-                CMP     #0
-                BEQ     _dirchurn_L11
+                BEQ     _dirchurn_L7
                 LDA     #$FFF1
                 TAY
                 TSC
@@ -432,7 +411,7 @@ _dirchurn_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L11
+_dirchurn_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -500,21 +479,21 @@ _dirchurn_L11
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dirchurn_L16
+                BNE     _dirchurn_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dirchurn_L16
+                BNE     _dirchurn_L10
                 LDA     #1
-                BRA     _dirchurn_L17
-_dirchurn_L16
+                BRA     _dirchurn_L11
+_dirchurn_L10
                 LDA     #0
-_dirchurn_L17
+_dirchurn_L11
                 CMP     #0
-                BEQ     _dirchurn_L15
+                BEQ     _dirchurn_L9
                 LDA     #$FFFE
                 TAY
                 TSC
@@ -525,7 +504,7 @@ _dirchurn_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L15
+_dirchurn_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 LDX     #0
@@ -533,10 +512,10 @@ _dirchurn_L15
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L21
+                BVC     _dirchurn_L13
                 EOR     #$8000
-_dirchurn_L21
-                BPL     _dirchurn_L19
+_dirchurn_L13
+                BPL     _dirchurn_L12
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -561,14 +540,7 @@ _dirchurn_L21
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L19
-                LDA     #1
-                BRA     _dirchurn_L20
-_dirchurn_L19
-                LDA     #0
-_dirchurn_L20
-                CMP     #0
-                BEQ     _dirchurn_L18
+                BEQ     _dirchurn_L12
                 LDA     #$FFF2
                 TAY
                 TSC
@@ -579,7 +551,7 @@ _dirchurn_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L18
+_dirchurn_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #28
@@ -632,22 +604,22 @@ _dirchurn_L18
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dirchurn_L23
+                BNE     _dirchurn_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dirchurn_L23
+                BNE     _dirchurn_L15
                 LDA     #1
-                BRA     _dirchurn_L24
-_dirchurn_L23
+                BRA     _dirchurn_L16
+_dirchurn_L15
                 LDA     #0
-_dirchurn_L24
+_dirchurn_L16
                 CMP     #0
                 BNE     *+5
-                BRL     _dirchurn_L22
+                BRL     _dirchurn_L14
                 DO      10+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -758,7 +730,7 @@ _dirchurn_L24
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L25
+                BEQ     _dirchurn_L17
                 LDA     #$FFF6
                 TAY
                 TSC
@@ -769,7 +741,7 @@ _dirchurn_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L25
+_dirchurn_L17
                 DO      12+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -924,21 +896,21 @@ _dirchurn_L25
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dirchurn_L27
+                BNE     _dirchurn_L19
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dirchurn_L27
+                BNE     _dirchurn_L19
                 LDA     #1
-                BRA     _dirchurn_L28
-_dirchurn_L27
+                BRA     _dirchurn_L20
+_dirchurn_L19
                 LDA     #0
-_dirchurn_L28
+_dirchurn_L20
                 CMP     #0
-                BEQ     _dirchurn_L26
+                BEQ     _dirchurn_L18
                 LDA     #$FFEE
                 TAY
                 TSC
@@ -949,7 +921,7 @@ _dirchurn_L28
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L26
+_dirchurn_L18
                 DO      10+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -994,21 +966,21 @@ _dirchurn_L26
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dirchurn_L30
+                BNE     _dirchurn_L22
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dirchurn_L30
+                BNE     _dirchurn_L22
                 LDA     #1
-                BRA     _dirchurn_L31
-_dirchurn_L30
+                BRA     _dirchurn_L23
+_dirchurn_L22
                 LDA     #0
-_dirchurn_L31
+_dirchurn_L23
                 CMP     #0
-                BEQ     _dirchurn_L29
+                BEQ     _dirchurn_L21
                 LDA     #$FFFD
                 TAY
                 TSC
@@ -1019,7 +991,7 @@ _dirchurn_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L29
+_dirchurn_L21
                 DO      10+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -1083,7 +1055,7 @@ _dirchurn_L29
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L32
+                BEQ     _dirchurn_L24
                 LDA     #$FFF5
                 TAY
                 TSC
@@ -1094,7 +1066,7 @@ _dirchurn_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L32
+_dirchurn_L24
                 DO      10+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -1170,21 +1142,21 @@ _dirchurn_L32
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dirchurn_L34
+                BNE     _dirchurn_L26
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dirchurn_L34
+                BNE     _dirchurn_L26
                 LDA     #0
-                BRA     _dirchurn_L35
-_dirchurn_L34
+                BRA     _dirchurn_L27
+_dirchurn_L26
                 LDA     #1
-_dirchurn_L35
+_dirchurn_L27
                 CMP     #0
-                BEQ     _dirchurn_L33
+                BEQ     _dirchurn_L25
                 LDA     #$FFF0
                 TAY
                 TSC
@@ -1195,7 +1167,7 @@ _dirchurn_L35
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L33
+_dirchurn_L25
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -1218,7 +1190,7 @@ _dirchurn_L33
                 STA     _fcc_img0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img1
-_dirchurn_L36
+_dirchurn_L28
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1239,10 +1211,10 @@ _dirchurn_L36
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L39
+                BVC     _dirchurn_L31
                 EOR     #$8000
-_dirchurn_L39
-                BPL     _dirchurn_L38
+_dirchurn_L31
+                BPL     _dirchurn_L30
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_ptr+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -1273,10 +1245,10 @@ _dirchurn_L39
                 PLA
                 PLA
                 TYA
-_dirchurn_L37
+_dirchurn_L29
                 INC     _fcc_img0
-                BRA     _dirchurn_L36
-_dirchurn_L38
+                BRA     _dirchurn_L28
+_dirchurn_L30
                 LDA     _fcc_img0
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_img1
@@ -1305,7 +1277,7 @@ _dirchurn_L38
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L40
+                BEQ     _dirchurn_L32
                 LDA     #$FFEF
                 TAY
                 TSC
@@ -1316,7 +1288,7 @@ _dirchurn_L38
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L40
+_dirchurn_L32
                 DO      16+getall_FRAMESIZE/256
                 TSC
                 CLC
@@ -1395,7 +1367,7 @@ _dirchurn_L40
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L41
+                BEQ     _dirchurn_L33
                 LDA     #$FFF4
                 TAY
                 TSC
@@ -1406,8 +1378,8 @@ _dirchurn_L40
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L41
-_dirchurn_L22
+_dirchurn_L33
+_dirchurn_L14
                 BRL     _dirchurn_L0
 _dirchurn_L1
                 DO      16+getall_FRAMESIZE/256
@@ -1515,8 +1487,120 @@ main_stkok        TCS
                 TYA
                 STA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF6
-                BNE     _dirchurn_L42
+                BNE     _dirchurn_L34
                 LDA     #50
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L34
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF5
+                BNE     _dirchurn_L35
+                LDA     #51
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L35
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF4
+                BNE     _dirchurn_L36
+                LDA     #52
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L36
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFEC
+                BNE     _dirchurn_L37
+                LDA     #53
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L37
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF3
+                BNE     _dirchurn_L38
+                LDA     #54
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L38
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF1
+                BNE     _dirchurn_L39
+                LDA     #55
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L39
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF2
+                BNE     _dirchurn_L40
+                LDA     #56
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L40
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFF0
+                BNE     _dirchurn_L41
+                LDA     #57
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_dirchurn_L41
+                LDA     13,S   ; fccstk d=0 b=13
+                CMP     #$FFEF
+                BNE     _dirchurn_L42
+                LDA     #58
                 TAY
                 TSC
                 CLC
@@ -1528,9 +1612,9 @@ main_stkok        TCS
                 RTL
 _dirchurn_L42
                 LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF5
+                CMP     #$FFEE
                 BNE     _dirchurn_L43
-                LDA     #51
+                LDA     #59
                 TAY
                 TSC
                 CLC
@@ -1542,9 +1626,8 @@ _dirchurn_L42
                 RTL
 _dirchurn_L43
                 LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF4
-                BNE     _dirchurn_L44
-                LDA     #52
+                BPL     _dirchurn_L44
+                LDA     #1
                 TAY
                 TSC
                 CLC
@@ -1556,124 +1639,13 @@ _dirchurn_L43
                 RTL
 _dirchurn_L44
                 LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFEC
-                BNE     _dirchurn_L45
-                LDA     #53
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L45
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF3
-                BNE     _dirchurn_L46
-                LDA     #54
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L46
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF1
-                BNE     _dirchurn_L47
-                LDA     #55
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L47
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF2
-                BNE     _dirchurn_L48
-                LDA     #56
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L48
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFF0
-                BNE     _dirchurn_L49
-                LDA     #57
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L49
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFEF
-                BNE     _dirchurn_L50
-                LDA     #58
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L50
-                LDA     13,S   ; fccstk d=0 b=13
-                CMP     #$FFEE
-                BNE     _dirchurn_L51
-                LDA     #59
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L51
-                LDA     13,S   ; fccstk d=0 b=13
-                BPL     _dirchurn_L52
-                LDA     #1
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_dirchurn_L52
-                LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 SEC
                 SBC     #20
-                BVC     _dirchurn_L54
+                BVC     _dirchurn_L46
                 EOR     #$8000
-_dirchurn_L54
-                BPL     _dirchurn_L53
+_dirchurn_L46
+                BPL     _dirchurn_L45
                 LDA     #60
                 CLC
                 ADC     13,S   ; fccstk d=0 b=13
@@ -1686,7 +1658,7 @@ _dirchurn_L54
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L53
+_dirchurn_L45
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1700,7 +1672,7 @@ _dirchurn_L53
                 STA     _fcc_img0
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_img1
-_dirchurn_L55
+_dirchurn_L47
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1711,11 +1683,11 @@ _dirchurn_L55
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L58
+                BVC     _dirchurn_L50
                 EOR     #$8000
-_dirchurn_L58
+_dirchurn_L50
                 BMI     *+5
-                BRL     _dirchurn_L57
+                BRL     _dirchurn_L49
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1726,7 +1698,7 @@ _dirchurn_L58
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     _dirchurn_L59
+                BEQ     _dirchurn_L51
                 LDA     #200
                 PHA
                 LDA     _fcc_img0
@@ -1736,15 +1708,15 @@ _dirchurn_L58
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L62
+                BVC     _dirchurn_L54
                 EOR     #$8000
-_dirchurn_L62
-                BPL     _dirchurn_L60
+_dirchurn_L54
+                BPL     _dirchurn_L52
                 LDA     #54
-                BRA     _dirchurn_L61
-_dirchurn_L60
+                BRA     _dirchurn_L53
+_dirchurn_L52
                 LDA     _fcc_img0
-_dirchurn_L61
+_dirchurn_L53
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1758,7 +1730,7 @@ _dirchurn_L61
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L59
+_dirchurn_L51
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1783,7 +1755,7 @@ _dirchurn_L59
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BEQ     _dirchurn_L63
+                BEQ     _dirchurn_L55
                 LDA     #100
                 PHA
                 LDA     _fcc_img0
@@ -1793,15 +1765,15 @@ _dirchurn_L59
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _dirchurn_L66
+                BVC     _dirchurn_L58
                 EOR     #$8000
-_dirchurn_L66
-                BPL     _dirchurn_L64
+_dirchurn_L58
+                BPL     _dirchurn_L56
                 LDA     #54
-                BRA     _dirchurn_L65
-_dirchurn_L64
+                BRA     _dirchurn_L57
+_dirchurn_L56
                 LDA     _fcc_img0
-_dirchurn_L65
+_dirchurn_L57
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1815,17 +1787,17 @@ _dirchurn_L65
                 STA     _fcc_fb
                 TYA
                 RTL
-_dirchurn_L63
+_dirchurn_L55
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     #28
                 STA     5,S   ; fccstk d=0 b=5
-_dirchurn_L56
+_dirchurn_L48
                 INC     _fcc_img0
-                BRL     _dirchurn_L55
-_dirchurn_L57
+                BRL     _dirchurn_L47
+_dirchurn_L49
                 LDA     _fcc_img0
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_img1

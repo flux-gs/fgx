@@ -192,18 +192,11 @@ _m2d_field_L5
                 LDA     F+0
                 TAX
                 CMP     #100
-                BNE     _m2d_field_L8
+                BNE     _m2d_field_L6
                 LDA     F+26
                 TAX
                 CMP     #200
-                BNE     _m2d_field_L8
-                LDA     #1
-                BRA     _m2d_field_L9
-_m2d_field_L8
-                LDA     #0
-_m2d_field_L9
-                CMP     #0
-                BEQ     _m2d_field_L6
+                BNE     _m2d_field_L6
                 LDA     #128
                 BRA     _m2d_field_L7
 _m2d_field_L6

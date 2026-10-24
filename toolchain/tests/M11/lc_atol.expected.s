@@ -40,14 +40,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _lc_atol_L1
-                LDA     #0
-                BRA     _lc_atol_L2
-_lc_atol_L1
-                LDA     #1
-_lc_atol_L2
-                CMP     #0
-                BEQ     _lc_atol_L0
+                BNE     _lc_atol_L0
                 LDA     #1
                 TAY
                 TSC
@@ -339,7 +332,7 @@ _lc_atol_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _lc_atol_L3
+                BEQ     _lc_atol_L1
                 LDA     #42
                 TAY
                 TSC
@@ -350,7 +343,7 @@ _lc_atol_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_lc_atol_L3
+_lc_atol_L1
                 LDA     #1
                 TAY
                 TSC

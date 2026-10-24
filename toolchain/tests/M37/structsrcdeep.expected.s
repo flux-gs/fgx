@@ -835,18 +835,11 @@ _structsrcdeep_L12
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #13058
-                BNE     _structsrcdeep_L16
+                BNE     _structsrcdeep_L13
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 CMP     #17410
-                BNE     _structsrcdeep_L16
-                LDA     #1
-                BRA     _structsrcdeep_L17
-_structsrcdeep_L16
-                LDA     #0
-_structsrcdeep_L17
-                CMP     #0
-                BEQ     _structsrcdeep_L14
+                BNE     _structsrcdeep_L13
                 LDA     #320
                 PHA
                 SEP     #$20
@@ -870,13 +863,6 @@ _structsrcdeep_L17
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L14
-                LDA     #1
-                BRA     _structsrcdeep_L15
-_structsrcdeep_L14
-                LDA     #0
-_structsrcdeep_L15
-                CMP     #0
                 BEQ     _structsrcdeep_L13
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -933,27 +919,20 @@ _structsrcdeep_L13
                 ADC     _fcc_fpr1
                 STA     _fcc_fpr1
                 LDY     #8
-_structsrcdeep_L18
+_structsrcdeep_L14
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structsrcdeep_L18
+                BPL     _structsrcdeep_L14
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #13056
-                BNE     _structsrcdeep_L22
+                BNE     _structsrcdeep_L15
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 CMP     #17408
-                BNE     _structsrcdeep_L22
-                LDA     #1
-                BRA     _structsrcdeep_L23
-_structsrcdeep_L22
-                LDA     #0
-_structsrcdeep_L23
-                CMP     #0
-                BEQ     _structsrcdeep_L20
+                BNE     _structsrcdeep_L15
                 LDA     #300
                 PHA
                 SEP     #$20
@@ -977,20 +956,13 @@ _structsrcdeep_L23
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L20
-                LDA     #1
-                BRA     _structsrcdeep_L21
-_structsrcdeep_L20
-                LDA     #0
-_structsrcdeep_L21
-                CMP     #0
-                BEQ     _structsrcdeep_L19
+                BEQ     _structsrcdeep_L15
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 CLC
                 ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
-_structsrcdeep_L19
+_structsrcdeep_L15
                 LDA     #1
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     #0
@@ -1061,12 +1033,12 @@ _structsrcdeep_L19
                 ADC     #2
                 STA     _fcc_fpr1
                 LDY     #4
-_structsrcdeep_L24
+_structsrcdeep_L16
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structsrcdeep_L24
+                BPL     _structsrcdeep_L16
                 LDA     #310
                 PHA
                 SEP     #$20
@@ -1088,13 +1060,13 @@ _structsrcdeep_L24
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L25
+                BEQ     _structsrcdeep_L17
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 CLC
                 ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
-_structsrcdeep_L25
+_structsrcdeep_L17
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     #0
@@ -1147,27 +1119,20 @@ _structsrcdeep_L25
                 ADC     #2
                 STA     _fcc_fpr1
                 LDY     #8
-_structsrcdeep_L26
+_structsrcdeep_L18
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structsrcdeep_L26
+                BPL     _structsrcdeep_L18
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CMP     #4369
-                BNE     _structsrcdeep_L30
+                BNE     _structsrcdeep_L19
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 CMP     #8738
-                BNE     _structsrcdeep_L30
-                LDA     #1
-                BRA     _structsrcdeep_L31
-_structsrcdeep_L30
-                LDA     #0
-_structsrcdeep_L31
-                CMP     #0
-                BEQ     _structsrcdeep_L28
+                BNE     _structsrcdeep_L19
                 LDA     #100
                 PHA
                 SEP     #$20
@@ -1191,20 +1156,14 @@ _structsrcdeep_L31
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L28
-                LDA     #1
-                BRA     _structsrcdeep_L29
-_structsrcdeep_L28
-                LDA     #0
-_structsrcdeep_L29
                 CMP     #0
-                BEQ     _structsrcdeep_L27
+                BEQ     _structsrcdeep_L19
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 CLC
                 ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
-_structsrcdeep_L27
+_structsrcdeep_L19
                 LDA     #0
                 STA     gt+12
                 PHA
@@ -1230,12 +1189,12 @@ _structsrcdeep_L27
                 STA     _fcc_fpr1
                 PLA
                 LDY     #4
-_structsrcdeep_L32
+_structsrcdeep_L20
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _structsrcdeep_L32
+                BPL     _structsrcdeep_L20
                 LDA     #400
                 PHA
                 PHA
@@ -1258,7 +1217,7 @@ _structsrcdeep_L32
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L38
+                BEQ     _structsrcdeep_L21
                 LDA     #400
                 PHA
                 PHA
@@ -1281,42 +1240,21 @@ _structsrcdeep_L32
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _structsrcdeep_L38
-                LDA     #1
-                BRA     _structsrcdeep_L39
-_structsrcdeep_L38
-                LDA     #0
-_structsrcdeep_L39
-                CMP     #0
-                BEQ     _structsrcdeep_L36
+                BEQ     _structsrcdeep_L21
                 LDA     gt+2
                 TAX
                 CMP     #4369
-                BNE     _structsrcdeep_L36
-                LDA     #1
-                BRA     _structsrcdeep_L37
-_structsrcdeep_L36
-                LDA     #0
-_structsrcdeep_L37
-                CMP     #0
-                BEQ     _structsrcdeep_L34
+                BNE     _structsrcdeep_L21
                 LDA     gt+0
                 TAX
                 CMP     #30583
-                BNE     _structsrcdeep_L34
-                LDA     #1
-                BRA     _structsrcdeep_L35
-_structsrcdeep_L34
-                LDA     #0
-_structsrcdeep_L35
-                CMP     #0
-                BEQ     _structsrcdeep_L33
+                BNE     _structsrcdeep_L21
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 CLC
                 ADC     #6
                 STA     17,S   ; fccstk d=0 b=17
-_structsrcdeep_L33
+_structsrcdeep_L21
                 LDA     17,S   ; fccstk d=0 b=17
                 TAY
                 TSC

@@ -78,7 +78,7 @@ _sysops_L0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #127
-                BNE     _sysops_L2
+                BNE     _sysops_L1
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -99,14 +99,7 @@ _sysops_L0
                 AND     #255
                 TAX
                 CMP     #1
-                BNE     _sysops_L2
-                LDA     #1
-                BRA     _sysops_L3
-_sysops_L2
-                LDA     #0
-_sysops_L3
-                CMP     #0
-                BEQ     _sysops_L1
+                BNE     _sysops_L1
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CLC
@@ -151,13 +144,13 @@ _sysops_L1
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _sysops_L4
+                BEQ     _sysops_L2
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11
-_sysops_L4
+_sysops_L2
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
@@ -203,7 +196,7 @@ _sysops_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BEQ     _sysops_L6
+                BEQ     _sysops_L3
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
@@ -241,20 +234,13 @@ _sysops_L4
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _sysops_L6
-                LDA     #1
-                BRA     _sysops_L7
-_sysops_L6
-                LDA     #0
-_sysops_L7
-                CMP     #0
-                BEQ     _sysops_L5
+                BEQ     _sysops_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11
-_sysops_L5
+_sysops_L3
                 LDA     11,S   ; fccstk d=0 b=11
                 TAY
                 TSC

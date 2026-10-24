@@ -24,66 +24,31 @@ main_stkok        TCS
                 LDA     braced+0
                 TAX
                 CMP     #4369
-                BNE     _struct_chararray_init_L9
+                BNE     _struct_chararray_init_L0
                 LDA     braced+6
                 TAX
                 CMP     #8738
-                BNE     _struct_chararray_init_L9
-                LDA     #1
-                BRA     _struct_chararray_init_L10
-_struct_chararray_init_L9
-                LDA     #0
-_struct_chararray_init_L10
-                CMP     #0
-                BEQ     _struct_chararray_init_L7
+                BNE     _struct_chararray_init_L0
                 LDA     braced+2
                 AND     #$00FF
                 TAX
                 CMP     #65
-                BNE     _struct_chararray_init_L7
-                LDA     #1
-                BRA     _struct_chararray_init_L8
-_struct_chararray_init_L7
-                LDA     #0
-_struct_chararray_init_L8
-                CMP     #0
-                BEQ     _struct_chararray_init_L5
+                BNE     _struct_chararray_init_L0
                 LDA     braced+3
                 AND     #$00FF
                 TAX
                 CMP     #66
-                BNE     _struct_chararray_init_L5
-                LDA     #1
-                BRA     _struct_chararray_init_L6
-_struct_chararray_init_L5
-                LDA     #0
-_struct_chararray_init_L6
-                CMP     #0
-                BEQ     _struct_chararray_init_L3
+                BNE     _struct_chararray_init_L0
                 LDA     braced+4
                 AND     #$00FF
                 TAX
                 CMP     #67
-                BNE     _struct_chararray_init_L3
-                LDA     #1
-                BRA     _struct_chararray_init_L4
-_struct_chararray_init_L3
-                LDA     #0
-_struct_chararray_init_L4
-                CMP     #0
-                BEQ     _struct_chararray_init_L1
+                BNE     _struct_chararray_init_L0
                 LDA     braced+5
                 AND     #$00FF
                 TAX
                 CMP     #68
-                BNE     _struct_chararray_init_L1
-                LDA     #1
-                BRA     _struct_chararray_init_L2
-_struct_chararray_init_L1
-                LDA     #0
-_struct_chararray_init_L2
-                CMP     #0
-                BEQ     _struct_chararray_init_L0
+                BNE     _struct_chararray_init_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -93,177 +58,79 @@ _struct_chararray_init_L0
                 LDA     shortb+0
                 TAX
                 CMP     #13107
-                BNE     _struct_chararray_init_L20
+                BNE     _struct_chararray_init_L1
                 LDA     shortb+6
                 TAX
                 CMP     #17476
-                BNE     _struct_chararray_init_L20
-                LDA     #1
-                BRA     _struct_chararray_init_L21
-_struct_chararray_init_L20
-                LDA     #0
-_struct_chararray_init_L21
-                CMP     #0
-                BEQ     _struct_chararray_init_L18
+                BNE     _struct_chararray_init_L1
                 LDA     shortb+2
                 AND     #$00FF
                 TAX
                 CMP     #88
-                BNE     _struct_chararray_init_L18
-                LDA     #1
-                BRA     _struct_chararray_init_L19
-_struct_chararray_init_L18
-                LDA     #0
-_struct_chararray_init_L19
-                CMP     #0
-                BEQ     _struct_chararray_init_L16
+                BNE     _struct_chararray_init_L1
                 LDA     shortb+3
                 AND     #$00FF
-                BNE     _struct_chararray_init_L16
-                LDA     #1
-                BRA     _struct_chararray_init_L17
-_struct_chararray_init_L16
-                LDA     #0
-_struct_chararray_init_L17
-                CMP     #0
-                BEQ     _struct_chararray_init_L14
+                BNE     _struct_chararray_init_L1
                 LDA     shortb+4
                 AND     #$00FF
-                BNE     _struct_chararray_init_L14
-                LDA     #1
-                BRA     _struct_chararray_init_L15
-_struct_chararray_init_L14
-                LDA     #0
-_struct_chararray_init_L15
-                CMP     #0
-                BEQ     _struct_chararray_init_L12
+                BNE     _struct_chararray_init_L1
                 LDA     shortb+5
                 AND     #$00FF
-                BNE     _struct_chararray_init_L12
-                LDA     #1
-                BRA     _struct_chararray_init_L13
-_struct_chararray_init_L12
-                LDA     #0
-_struct_chararray_init_L13
-                CMP     #0
-                BEQ     _struct_chararray_init_L11
+                BNE     _struct_chararray_init_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_struct_chararray_init_L11
+_struct_chararray_init_L1
                 LDA     fromstr+0
                 TAX
                 CMP     #21845
-                BNE     _struct_chararray_init_L39
+                BNE     _struct_chararray_init_L2
                 LDA     fromstr+6
                 TAX
                 CMP     #26214
-                BNE     _struct_chararray_init_L39
-                LDA     #1
-                BRA     _struct_chararray_init_L40
-_struct_chararray_init_L39
-                LDA     #0
-_struct_chararray_init_L40
-                CMP     #0
-                BEQ     _struct_chararray_init_L37
+                BNE     _struct_chararray_init_L2
                 LDA     fromstr+2
                 AND     #$00FF
                 TAX
                 CMP     #104
-                BNE     _struct_chararray_init_L37
-                LDA     #1
-                BRA     _struct_chararray_init_L38
-_struct_chararray_init_L37
-                LDA     #0
-_struct_chararray_init_L38
-                CMP     #0
-                BEQ     _struct_chararray_init_L35
+                BNE     _struct_chararray_init_L2
                 LDA     fromstr+3
                 AND     #$00FF
                 TAX
                 CMP     #105
-                BNE     _struct_chararray_init_L35
-                LDA     #1
-                BRA     _struct_chararray_init_L36
-_struct_chararray_init_L35
-                LDA     #0
-_struct_chararray_init_L36
-                CMP     #0
-                BEQ     _struct_chararray_init_L33
+                BNE     _struct_chararray_init_L2
                 LDA     fromstr+4
                 AND     #$00FF
-                BNE     _struct_chararray_init_L33
-                LDA     #1
-                BRA     _struct_chararray_init_L34
-_struct_chararray_init_L33
-                LDA     #0
-_struct_chararray_init_L34
-                CMP     #0
-                BEQ     _struct_chararray_init_L31
+                BNE     _struct_chararray_init_L2
                 LDA     fromstr+5
                 AND     #$00FF
-                BNE     _struct_chararray_init_L31
-                LDA     #1
-                BRA     _struct_chararray_init_L32
-_struct_chararray_init_L31
-                LDA     #0
-_struct_chararray_init_L32
-                CMP     #0
-                BEQ     _struct_chararray_init_L29
+                BNE     _struct_chararray_init_L2
                 LDA     exact+0
                 TAX
                 CMP     #30583
-                BNE     _struct_chararray_init_L29
-                LDA     #1
-                BRA     _struct_chararray_init_L30
-_struct_chararray_init_L29
-                LDA     #0
-_struct_chararray_init_L30
-                CMP     #0
-                BEQ     _struct_chararray_init_L27
+                BNE     _struct_chararray_init_L2
                 LDA     exact+6
                 TAX
                 CMP     #4660
-                BNE     _struct_chararray_init_L27
-                LDA     #1
-                BRA     _struct_chararray_init_L28
-_struct_chararray_init_L27
-                LDA     #0
-_struct_chararray_init_L28
-                CMP     #0
-                BEQ     _struct_chararray_init_L25
+                BNE     _struct_chararray_init_L2
                 LDA     exact+2
                 AND     #$00FF
                 TAX
                 CMP     #97
-                BNE     _struct_chararray_init_L25
-                LDA     #1
-                BRA     _struct_chararray_init_L26
-_struct_chararray_init_L25
-                LDA     #0
-_struct_chararray_init_L26
-                CMP     #0
-                BEQ     _struct_chararray_init_L23
+                BNE     _struct_chararray_init_L2
                 LDA     exact+5
                 AND     #$00FF
                 TAX
                 CMP     #100
-                BNE     _struct_chararray_init_L23
-                LDA     #1
-                BRA     _struct_chararray_init_L24
-_struct_chararray_init_L23
-                LDA     #0
-_struct_chararray_init_L24
-                CMP     #0
-                BEQ     _struct_chararray_init_L22
+                BNE     _struct_chararray_init_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_struct_chararray_init_L22
+_struct_chararray_init_L2
                 LDA     _fcc_img0
                 TAY
                 TSC

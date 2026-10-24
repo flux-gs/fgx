@@ -752,14 +752,8 @@ _arrmemberdecay_L14
                 LDA     [_fcc_ptr]
                 TAX
                 CMP     #40
-                BNE     _arrmemberdecay_L18
-                LDA     #0
-                BRA     _arrmemberdecay_L19
-_arrmemberdecay_L18
-                LDA     #1
-_arrmemberdecay_L19
-                CMP     #0
                 BEQ     _arrmemberdecay_L17
+_arrmemberdecay_L18
                 LDA     #8
                 TAY
                 TSC
@@ -794,7 +788,7 @@ _arrmemberdecay_L17
                 AND     #$00FF
                 TAX
                 CMP     #1
-                BNE     _arrmemberdecay_L21
+                BNE     _arrmemberdecay_L20
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -808,14 +802,8 @@ _arrmemberdecay_L17
                 AND     #$00FF
                 TAX
                 CMP     #4
-                BNE     _arrmemberdecay_L21
-                LDA     #0
-                BRA     _arrmemberdecay_L22
-_arrmemberdecay_L21
-                LDA     #1
-_arrmemberdecay_L22
-                CMP     #0
-                BEQ     _arrmemberdecay_L20
+                BEQ     _arrmemberdecay_L19
+_arrmemberdecay_L20
                 LDA     #9
                 TAY
                 TSC
@@ -826,7 +814,7 @@ _arrmemberdecay_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrmemberdecay_L20
+_arrmemberdecay_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -841,7 +829,7 @@ _arrmemberdecay_L20
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #30
-                BEQ     _arrmemberdecay_L23
+                BEQ     _arrmemberdecay_L21
                 LDA     #10
                 TAY
                 TSC
@@ -852,7 +840,7 @@ _arrmemberdecay_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrmemberdecay_L23
+_arrmemberdecay_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -867,7 +855,7 @@ _arrmemberdecay_L23
                 AND     #$00FF
                 TAX
                 CMP     #3
-                BEQ     _arrmemberdecay_L24
+                BEQ     _arrmemberdecay_L22
                 LDA     #11
                 TAY
                 TSC
@@ -878,11 +866,11 @@ _arrmemberdecay_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrmemberdecay_L24
+_arrmemberdecay_L22
                 LDA     o+0
                 TAX
                 CMP     #23130
-                BEQ     _arrmemberdecay_L25
+                BEQ     _arrmemberdecay_L23
                 LDA     #12
                 TAY
                 TSC
@@ -893,7 +881,7 @@ _arrmemberdecay_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrmemberdecay_L25
+_arrmemberdecay_L23
                 LDA     #42
                 TAY
                 TSC

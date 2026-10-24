@@ -113,7 +113,7 @@ main_stkok        TCS
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L9-1
+                PEA     _mixed_declarator_list_L3-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -124,7 +124,7 @@ main_stkok        TCS
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L9
+_mixed_declarator_list_L3
                 TAY
                 TSC
                 CLC
@@ -133,40 +133,19 @@ _mixed_declarator_list_L9
                 TYA
                 TAX
                 CMP     #11
-                BNE     _mixed_declarator_list_L7
+                BNE     _mixed_declarator_list_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #1
-                BNE     _mixed_declarator_list_L7
-                LDA     #1
-                BRA     _mixed_declarator_list_L8
-_mixed_declarator_list_L7
-                LDA     #0
-_mixed_declarator_list_L8
-                CMP     #0
-                BEQ     _mixed_declarator_list_L5
+                BNE     _mixed_declarator_list_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #2
-                BNE     _mixed_declarator_list_L5
-                LDA     #1
-                BRA     _mixed_declarator_list_L6
-_mixed_declarator_list_L5
-                LDA     #0
-_mixed_declarator_list_L6
-                CMP     #0
-                BEQ     _mixed_declarator_list_L3
+                BNE     _mixed_declarator_list_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #3
-                BNE     _mixed_declarator_list_L3
-                LDA     #1
-                BRA     _mixed_declarator_list_L4
-_mixed_declarator_list_L3
-                LDA     #0
-_mixed_declarator_list_L4
-                CMP     #0
-                BEQ     _mixed_declarator_list_L2
+                BNE     _mixed_declarator_list_L2
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CLC
@@ -188,7 +167,7 @@ _mixed_declarator_list_L2
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L15-1
+                PEA     _mixed_declarator_list_L5-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -199,7 +178,7 @@ _mixed_declarator_list_L2
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L15
+_mixed_declarator_list_L5
                 TAY
                 TSC
                 CLC
@@ -208,76 +187,62 @@ _mixed_declarator_list_L15
                 TYA
                 TAX
                 CMP     #7
-                BNE     _mixed_declarator_list_L13
+                BNE     _mixed_declarator_list_L4
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #4
-                BNE     _mixed_declarator_list_L13
-                LDA     #1
-                BRA     _mixed_declarator_list_L14
-_mixed_declarator_list_L13
-                LDA     #0
-_mixed_declarator_list_L14
-                CMP     #0
-                BEQ     _mixed_declarator_list_L11
+                BNE     _mixed_declarator_list_L4
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 CMP     #5
-                BNE     _mixed_declarator_list_L11
-                LDA     #1
-                BRA     _mixed_declarator_list_L12
-_mixed_declarator_list_L11
-                LDA     #0
-_mixed_declarator_list_L12
-                CMP     #0
-                BEQ     _mixed_declarator_list_L10
+                BNE     _mixed_declarator_list_L4
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CLC
                 ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
-_mixed_declarator_list_L10
+_mixed_declarator_list_L4
                 LDA     #6
                 STA     gplain
                 LDA     #8
                 STA     gplain2
                 SEP     #$20
                 MX      %10
-                LDA     _mixed_declarator_list_FA16+2
+                LDA     _mixed_declarator_list_FA6+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _mixed_declarator_list_FA16
+                LDA     _mixed_declarator_list_FA6
                 STA     gfp
                 LDA     _fcc_fpr0+2
                 STA     gfp+2
                 SEP     #$20
                 MX      %10
-                LDA     _mixed_declarator_list_FA17+2
+                LDA     _mixed_declarator_list_FA7+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _mixed_declarator_list_FA17
+                LDA     _mixed_declarator_list_FA7
                 STA     gfp2
                 LDA     _fcc_fpr0+2
                 STA     gfp2+2
                 SEP     #$20
                 MX      %10
-                LDA     _mixed_declarator_list_FA18+2
+                LDA     _mixed_declarator_list_FA8+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _mixed_declarator_list_FA18
+                LDA     _mixed_declarator_list_FA8
                 STA     gfa
                 LDA     _fcc_fpr0+2
                 STA     gfa+2
                 SEP     #$20
                 MX      %10
-                LDA     _mixed_declarator_list_FA19+2
+                LDA     _mixed_declarator_list_FA9+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _mixed_declarator_list_FA19
+                LDA     _mixed_declarator_list_FA9
                 STA     gfb
                 LDA     _fcc_fpr0+2
                 STA     gfb+2
@@ -296,7 +261,7 @@ _mixed_declarator_list_L10
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L31-1
+                PEA     _mixed_declarator_list_L11-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -307,7 +272,7 @@ _mixed_declarator_list_L10
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L31
+_mixed_declarator_list_L11
                 TAY
                 TSC
                 CLC
@@ -316,7 +281,8 @@ _mixed_declarator_list_L31
                 TYA
                 TAX
                 CMP     #7
-                BNE     _mixed_declarator_list_L29
+                BEQ     *+5
+                BRL     _mixed_declarator_list_L10
                 SEP     #$20
                 MX      %10
                 LDA     gfp2+2
@@ -332,7 +298,7 @@ _mixed_declarator_list_L31
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L32-1
+                PEA     _mixed_declarator_list_L12-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -343,7 +309,7 @@ _mixed_declarator_list_L31
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L32
+_mixed_declarator_list_L12
                 TAY
                 TSC
                 CLC
@@ -352,14 +318,8 @@ _mixed_declarator_list_L32
                 TYA
                 TAX
                 CMP     #11
-                BNE     _mixed_declarator_list_L29
-                LDA     #1
-                BRA     _mixed_declarator_list_L30
-_mixed_declarator_list_L29
-                LDA     #0
-_mixed_declarator_list_L30
-                CMP     #0
-                BEQ     _mixed_declarator_list_L27
+                BEQ     *+5
+                BRL     _mixed_declarator_list_L10
                 SEP     #$20
                 MX      %10
                 LDA     gfa+2
@@ -375,7 +335,7 @@ _mixed_declarator_list_L30
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L33-1
+                PEA     _mixed_declarator_list_L13-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -386,7 +346,7 @@ _mixed_declarator_list_L30
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L33
+_mixed_declarator_list_L13
                 TAY
                 TSC
                 CLC
@@ -395,14 +355,7 @@ _mixed_declarator_list_L33
                 TYA
                 TAX
                 CMP     #7
-                BNE     _mixed_declarator_list_L27
-                LDA     #1
-                BRA     _mixed_declarator_list_L28
-_mixed_declarator_list_L27
-                LDA     #0
-_mixed_declarator_list_L28
-                CMP     #0
-                BEQ     _mixed_declarator_list_L25
+                BNE     _mixed_declarator_list_L10
                 SEP     #$20
                 MX      %10
                 LDA     gfb+2
@@ -418,7 +371,7 @@ _mixed_declarator_list_L28
                 LDA     3,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _mixed_declarator_list_L34-1
+                PEA     _mixed_declarator_list_L14-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -429,7 +382,7 @@ _mixed_declarator_list_L28
                 DEC
                 PHA
                 RTL
-_mixed_declarator_list_L34
+_mixed_declarator_list_L14
                 TAY
                 TSC
                 CLC
@@ -438,42 +391,21 @@ _mixed_declarator_list_L34
                 TYA
                 TAX
                 CMP     #11
-                BNE     _mixed_declarator_list_L25
-                LDA     #1
-                BRA     _mixed_declarator_list_L26
-_mixed_declarator_list_L25
-                LDA     #0
-_mixed_declarator_list_L26
-                CMP     #0
-                BEQ     _mixed_declarator_list_L23
+                BNE     _mixed_declarator_list_L10
                 LDA     gplain
                 TAX
                 CMP     #6
-                BNE     _mixed_declarator_list_L23
-                LDA     #1
-                BRA     _mixed_declarator_list_L24
-_mixed_declarator_list_L23
-                LDA     #0
-_mixed_declarator_list_L24
-                CMP     #0
-                BEQ     _mixed_declarator_list_L21
+                BNE     _mixed_declarator_list_L10
                 LDA     gplain2
                 TAX
                 CMP     #8
-                BNE     _mixed_declarator_list_L21
-                LDA     #1
-                BRA     _mixed_declarator_list_L22
-_mixed_declarator_list_L21
-                LDA     #0
-_mixed_declarator_list_L22
-                CMP     #0
-                BEQ     _mixed_declarator_list_L20
+                BNE     _mixed_declarator_list_L10
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 CLC
                 ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
-_mixed_declarator_list_L20
+_mixed_declarator_list_L10
                 LDA     19,S   ; fccstk d=0 b=19
                 TAY
                 TSC

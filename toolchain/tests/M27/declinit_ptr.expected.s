@@ -145,21 +145,22 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _declinit_ptr_L6
+                BNE     _declinit_ptr_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _declinit_ptr_L6
+                BNE     _declinit_ptr_L3
                 LDA     #0
-                BRA     _declinit_ptr_L7
-_declinit_ptr_L6
+                BRA     _declinit_ptr_L4
+_declinit_ptr_L3
                 LDA     #1
-_declinit_ptr_L7
+_declinit_ptr_L4
                 CMP     #0
-                BNE     _declinit_ptr_L4
+                BEQ     *+5
+                BRL     _declinit_ptr_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -200,26 +201,19 @@ _declinit_ptr_L7
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _declinit_ptr_L8
+                BNE     _declinit_ptr_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _declinit_ptr_L8
+                BNE     _declinit_ptr_L5
                 LDA     #0
-                BRA     _declinit_ptr_L9
-_declinit_ptr_L8
-                LDA     #1
-_declinit_ptr_L9
-                CMP     #0
-                BNE     _declinit_ptr_L4
-                LDA     #0
-                BRA     _declinit_ptr_L5
-_declinit_ptr_L4
-                LDA     #1
+                BRA     _declinit_ptr_L6
 _declinit_ptr_L5
+                LDA     #1
+_declinit_ptr_L6
                 CMP     #0
                 BNE     _declinit_ptr_L2
                 SEP     #$20
@@ -254,28 +248,22 @@ _declinit_ptr_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _declinit_ptr_L10
+                BNE     _declinit_ptr_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _declinit_ptr_L10
+                BNE     _declinit_ptr_L7
                 LDA     #0
-                BRA     _declinit_ptr_L11
-_declinit_ptr_L10
+                BRA     _declinit_ptr_L8
+_declinit_ptr_L7
                 LDA     #1
-_declinit_ptr_L11
-                CMP     #0
-                BNE     _declinit_ptr_L2
-                LDA     #0
-                BRA     _declinit_ptr_L3
-_declinit_ptr_L2
-                LDA     #1
-_declinit_ptr_L3
+_declinit_ptr_L8
                 CMP     #0
                 BEQ     _declinit_ptr_L1
+_declinit_ptr_L2
                 LDA     #1
                 TAY
                 TSC
@@ -326,7 +314,7 @@ _declinit_ptr_L1
                 AND     #$00FF
                 TAX
                 CMP     #5
-                BEQ     _declinit_ptr_L12
+                BEQ     _declinit_ptr_L9
                 LDA     #2
                 TAY
                 TSC
@@ -337,7 +325,7 @@ _declinit_ptr_L1
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L12
+_declinit_ptr_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -355,32 +343,26 @@ _declinit_ptr_L12
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _declinit_ptr_L16
+                BNE     _declinit_ptr_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _declinit_ptr_L16
+                BNE     _declinit_ptr_L12
                 LDA     #0
-                BRA     _declinit_ptr_L17
-_declinit_ptr_L16
+                BRA     _declinit_ptr_L13
+_declinit_ptr_L12
                 LDA     #1
-_declinit_ptr_L17
+_declinit_ptr_L13
                 CMP     #0
-                BNE     _declinit_ptr_L14
+                BNE     _declinit_ptr_L11
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #7
-                BNE     _declinit_ptr_L14
-                LDA     #0
-                BRA     _declinit_ptr_L15
-_declinit_ptr_L14
-                LDA     #1
-_declinit_ptr_L15
-                CMP     #0
-                BEQ     _declinit_ptr_L13
+                BEQ     _declinit_ptr_L10
+_declinit_ptr_L11
                 LDA     #3
                 TAY
                 TSC
@@ -391,7 +373,7 @@ _declinit_ptr_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L13
+_declinit_ptr_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -408,7 +390,7 @@ _declinit_ptr_L13
                 AND     #$00FF
                 TAX
                 CMP     #9
-                BEQ     _declinit_ptr_L18
+                BEQ     _declinit_ptr_L14
                 LDA     #4
                 TAY
                 TSC
@@ -419,13 +401,13 @@ _declinit_ptr_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L18
+_declinit_ptr_L14
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr0+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0
                 PHK
-                PEA     _declinit_ptr_L20-1
+                PEA     _declinit_ptr_L16-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -436,10 +418,10 @@ _declinit_ptr_L18
                 DEC
                 PHA
                 RTL
-_declinit_ptr_L20
+_declinit_ptr_L16
                 TAX
                 CMP     #7
-                BEQ     _declinit_ptr_L19
+                BEQ     _declinit_ptr_L15
                 LDA     #5
                 TAY
                 TSC
@@ -450,7 +432,7 @@ _declinit_ptr_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L19
+_declinit_ptr_L15
                 LDA     #10
                 STA     gi
                 PHA
@@ -480,7 +462,7 @@ _declinit_ptr_L19
                 LDA     gi
                 TAX
                 CMP     #11
-                BEQ     _declinit_ptr_L21
+                BEQ     _declinit_ptr_L17
                 LDA     #6
                 TAY
                 TSC
@@ -491,7 +473,7 @@ _declinit_ptr_L19
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L21
+_declinit_ptr_L17
                 PHA
                 SEP     #$20
                 MX      %10
@@ -537,7 +519,7 @@ _declinit_ptr_L21
                 AND     #$00FF
                 TAX
                 CMP     #4
-                BEQ     _declinit_ptr_L22
+                BEQ     _declinit_ptr_L18
                 LDA     #7
                 TAY
                 TSC
@@ -548,7 +530,7 @@ _declinit_ptr_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L22
+_declinit_ptr_L18
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -602,21 +584,21 @@ _declinit_ptr_L22
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _declinit_ptr_L24
+                BNE     _declinit_ptr_L20
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _declinit_ptr_L24
+                BNE     _declinit_ptr_L20
                 LDA     #0
-                BRA     _declinit_ptr_L25
-_declinit_ptr_L24
+                BRA     _declinit_ptr_L21
+_declinit_ptr_L20
                 LDA     #1
-_declinit_ptr_L25
+_declinit_ptr_L21
                 CMP     #0
-                BEQ     _declinit_ptr_L23
+                BEQ     _declinit_ptr_L19
                 LDA     #8
                 TAY
                 TSC
@@ -627,7 +609,7 @@ _declinit_ptr_L25
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L23
+_declinit_ptr_L19
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -665,7 +647,7 @@ _declinit_ptr_L23
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _declinit_ptr_L26
+                BEQ     _declinit_ptr_L22
                 LDA     #9
                 TAY
                 TSC
@@ -676,7 +658,7 @@ _declinit_ptr_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L26
+_declinit_ptr_L22
                 LDA     #1
                 STA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_tmp_b
@@ -764,7 +746,7 @@ _declinit_ptr_L26
                 AND     #$00FF
                 TAX
                 CMP     #3
-                BNE     _declinit_ptr_L28
+                BNE     _declinit_ptr_L24
                 LDA     #1
                 ASL
                 INC
@@ -792,14 +774,8 @@ _declinit_ptr_L26
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #400
-                BNE     _declinit_ptr_L28
-                LDA     #0
-                BRA     _declinit_ptr_L29
-_declinit_ptr_L28
-                LDA     #1
-_declinit_ptr_L29
-                CMP     #0
-                BEQ     _declinit_ptr_L27
+                BEQ     _declinit_ptr_L23
+_declinit_ptr_L24
                 LDA     #10
                 TAY
                 TSC
@@ -810,7 +786,7 @@ _declinit_ptr_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L27
+_declinit_ptr_L23
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -896,7 +872,7 @@ _declinit_ptr_L27
                 AND     #$00FF
                 TAX
                 CMP     #8
-                BNE     _declinit_ptr_L31
+                BNE     _declinit_ptr_L26
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -925,14 +901,8 @@ _declinit_ptr_L27
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #250
-                BNE     _declinit_ptr_L31
-                LDA     #0
-                BRA     _declinit_ptr_L32
-_declinit_ptr_L31
-                LDA     #1
-_declinit_ptr_L32
-                CMP     #0
-                BEQ     _declinit_ptr_L30
+                BEQ     _declinit_ptr_L25
+_declinit_ptr_L26
                 LDA     #11
                 TAY
                 TSC
@@ -943,7 +913,7 @@ _declinit_ptr_L32
                 STA     _fcc_fb
                 TYA
                 RTL
-_declinit_ptr_L30
+_declinit_ptr_L25
                 LDA     #42
                 TAY
                 TSC

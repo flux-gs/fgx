@@ -205,7 +205,7 @@ _long_member_rmw_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _long_member_rmw_L6
+                BEQ     _long_member_rmw_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
@@ -226,13 +226,6 @@ _long_member_rmw_L3
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _long_member_rmw_L6
-                LDA     #1
-                BRA     _long_member_rmw_L7
-_long_member_rmw_L6
-                LDA     #0
-_long_member_rmw_L7
                 CMP     #0
                 BEQ     _long_member_rmw_L4
                 LDA     #10
@@ -295,12 +288,12 @@ _long_member_rmw_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _long_member_rmw_L8
+                BEQ     _long_member_rmw_L6
                 LDA     #12
-                BRA     _long_member_rmw_L9
-_long_member_rmw_L8
+                BRA     _long_member_rmw_L7
+_long_member_rmw_L6
                 LDA     #0
-_long_member_rmw_L9
+_long_member_rmw_L7
                 STA     27,S   ; fccstk d=0 b=27
                 LDA     21,S   ; fccstk d=0 b=21
                 CLC

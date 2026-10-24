@@ -213,14 +213,7 @@ _ptr_cmp_L3
                 PLA
                 JSR     _fcc_ltu16
                 CMP     #0
-                BEQ     _ptr_cmp_L5
-                LDA     #0
-                BRA     _ptr_cmp_L6
-_ptr_cmp_L5
-                LDA     #1
-_ptr_cmp_L6
-                CMP     #0
-                BEQ     _ptr_cmp_L4
+                BNE     _ptr_cmp_L4
                 LDA     #2
                 TAY
                 TSC
@@ -255,14 +248,7 @@ _ptr_cmp_L4
                 PLA
                 JSR     _fcc_gtu16
                 CMP     #0
-                BEQ     _ptr_cmp_L8
-                LDA     #0
-                BRA     _ptr_cmp_L9
-_ptr_cmp_L8
-                LDA     #1
-_ptr_cmp_L9
-                CMP     #0
-                BEQ     _ptr_cmp_L7
+                BNE     _ptr_cmp_L5
                 LDA     #3
                 TAY
                 TSC
@@ -273,7 +259,7 @@ _ptr_cmp_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L7
+_ptr_cmp_L5
                 SEP     #$20
                 MX      %10
                 LDA     hi+2
@@ -297,14 +283,7 @@ _ptr_cmp_L7
                 PLA
                 JSR     _fcc_geu16
                 CMP     #0
-                BEQ     _ptr_cmp_L11
-                LDA     #0
-                BRA     _ptr_cmp_L12
-_ptr_cmp_L11
-                LDA     #1
-_ptr_cmp_L12
-                CMP     #0
-                BEQ     _ptr_cmp_L10
+                BNE     _ptr_cmp_L6
                 LDA     #4
                 TAY
                 TSC
@@ -315,7 +294,7 @@ _ptr_cmp_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L10
+_ptr_cmp_L6
                 LDA     #5
                 PHA
                 LDA     #3
@@ -327,7 +306,7 @@ _ptr_cmp_L10
                 TYA
                 TAX
                 CMP     #1
-                BEQ     _ptr_cmp_L13
+                BEQ     _ptr_cmp_L7
                 LDA     #5
                 TAY
                 TSC
@@ -338,7 +317,7 @@ _ptr_cmp_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L13
+_ptr_cmp_L7
                 LDA     #0
                 PHA
                 LDA     #$FFFF
@@ -350,7 +329,7 @@ _ptr_cmp_L13
                 TYA
                 TAX
                 CMP     #1
-                BEQ     _ptr_cmp_L14
+                BEQ     _ptr_cmp_L8
                 LDA     #6
                 TAY
                 TSC
@@ -361,7 +340,7 @@ _ptr_cmp_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_cmp_L14
+_ptr_cmp_L8
                 LDA     #42
                 TAY
                 TSC

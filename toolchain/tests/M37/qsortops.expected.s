@@ -455,34 +455,20 @@ _qsortops_L3
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_img1
                 STA     5,S   ; fccstk d=0 b=5
-                BEQ     _qsortops_L10
+                BEQ     _qsortops_L7
                 LDA     #0
                 ASL
                 TAX
                 LDA:    iv,X
                 CMP     #0
-                BNE     _qsortops_L10
-                LDA     #1
-                BRA     _qsortops_L11
-_qsortops_L10
-                LDA     #0
-_qsortops_L11
-                CMP     #0
-                BEQ     _qsortops_L8
+                BNE     _qsortops_L7
                 LDA     #6
                 ASL
                 TAX
                 LDA:    iv,X
                 TAX
                 CMP     #9
-                BNE     _qsortops_L8
-                LDA     #1
-                BRA     _qsortops_L9
-_qsortops_L8
-                LDA     #0
-_qsortops_L9
-                CMP     #0
-                BEQ     _qsortops_L7
+                BNE     _qsortops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
@@ -615,11 +601,11 @@ _qsortops_L7
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
-                LDA     _qsortops_FA12+2
+                LDA     _qsortops_FA8+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _qsortops_FA12
+                LDA     _qsortops_FA8
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -660,7 +646,7 @@ _qsortops_L7
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BNE     _qsortops_L18
+                BNE     _qsortops_L9
                 LDA     #1
                 ASL
                 ASL
@@ -678,14 +664,7 @@ _qsortops_L7
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #10
-                BNE     _qsortops_L18
-                LDA     #1
-                BRA     _qsortops_L19
-_qsortops_L18
-                LDA     #0
-_qsortops_L19
-                CMP     #0
-                BEQ     _qsortops_L16
+                BNE     _qsortops_L9
                 LDA     #2
                 ASL
                 ASL
@@ -703,14 +682,7 @@ _qsortops_L19
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #20
-                BNE     _qsortops_L16
-                LDA     #1
-                BRA     _qsortops_L17
-_qsortops_L16
-                LDA     #0
-_qsortops_L17
-                CMP     #0
-                BEQ     _qsortops_L14
+                BNE     _qsortops_L9
                 LDA     #3
                 ASL
                 ASL
@@ -728,27 +700,20 @@ _qsortops_L17
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #30
-                BNE     _qsortops_L14
-                LDA     #1
-                BRA     _qsortops_L15
-_qsortops_L14
-                LDA     #0
-_qsortops_L15
-                CMP     #0
-                BEQ     _qsortops_L13
+                BNE     _qsortops_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #14
                 STA     1,S   ; fccstk d=0 b=1
-_qsortops_L13
+_qsortops_L9
                 SEP     #$20
                 MX      %10
-                LDA     _qsortops_FA20+2
+                LDA     _qsortops_FA10+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _qsortops_FA20
+                LDA     _qsortops_FA10
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -780,26 +745,19 @@ _qsortops_L13
                 LDA:    iv,X
                 TAX
                 CMP     #9
-                BNE     _qsortops_L22
+                BNE     _qsortops_L11
                 LDA     #6
                 ASL
                 TAX
                 LDA:    iv,X
                 CMP     #0
-                BNE     _qsortops_L22
-                LDA     #1
-                BRA     _qsortops_L23
-_qsortops_L22
-                LDA     #0
-_qsortops_L23
-                CMP     #0
-                BEQ     _qsortops_L21
+                BNE     _qsortops_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #14
                 STA     1,S   ; fccstk d=0 b=1
-_qsortops_L21
+_qsortops_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

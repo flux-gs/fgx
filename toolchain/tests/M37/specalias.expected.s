@@ -3943,18 +3943,11 @@ checkalias_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BEQ     _specalias_L59
+                BEQ     _specalias_L58
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #4
-                BEQ     _specalias_L59
-                LDA     #1
-                BRA     _specalias_L60
-_specalias_L59
-                LDA     #0
-_specalias_L60
-                CMP     #0
                 BEQ     _specalias_L58
                 LDA     #0
                 STA     _fcc_fpr0
@@ -4049,7 +4042,7 @@ checkalias_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L61
+_specalias_L59
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4061,7 +4054,7 @@ _specalias_L61
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L63
+                BRL     _specalias_L61
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4090,7 +4083,7 @@ _specalias_L61
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L65
+                BNE     _specalias_L63
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4125,23 +4118,17 @@ _specalias_L61
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L65
-                LDA     #0
-                BRA     _specalias_L66
-_specalias_L65
-                LDA     #1
-_specalias_L66
-                CMP     #0
-                BEQ     _specalias_L64
-                BRA     _specalias_L62
-_specalias_L64
+                BEQ     _specalias_L62
+_specalias_L63
+                BRA     _specalias_L60
+_specalias_L62
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BNE     _specalias_L67
+                BNE     _specalias_L64
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -4154,7 +4141,7 @@ _specalias_L64
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_specalias_L67
+_specalias_L64
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4169,14 +4156,14 @@ _specalias_L67
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _specalias_L68
+                BEQ     _specalias_L65
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_specalias_L68
-                BRA     _specalias_L63
-_specalias_L62
+_specalias_L65
+                BRA     _specalias_L61
+_specalias_L60
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4209,8 +4196,8 @@ _specalias_L62
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L61
-_specalias_L63
+                BRL     _specalias_L59
+_specalias_L61
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4220,36 +4207,31 @@ _specalias_L63
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L72
+                BNE     _specalias_L68
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L72
+                BNE     _specalias_L68
                 LDA     #1
-                BRA     _specalias_L73
-_specalias_L72
+                BRA     _specalias_L69
+_specalias_L68
                 LDA     #0
-_specalias_L73
+_specalias_L69
                 CMP     #0
-                BNE     _specalias_L70
+                BNE     _specalias_L67
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                BNE     _specalias_L70
-                LDA     #0
-                BRA     _specalias_L71
-_specalias_L70
-                LDA     #1
-_specalias_L71
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L69
+                BRL     _specalias_L66
+_specalias_L67
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4504,21 +4486,21 @@ _specalias_L71
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L75
+                BNE     _specalias_L71
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L75
+                BNE     _specalias_L71
                 LDA     #0
-                BRA     _specalias_L76
-_specalias_L75
+                BRA     _specalias_L72
+_specalias_L71
                 LDA     #1
-_specalias_L76
+_specalias_L72
                 CMP     #0
-                BEQ     _specalias_L74
+                BEQ     _specalias_L70
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4561,7 +4543,7 @@ _specalias_L76
                 CLC
                 ADC     #4
                 TCS
-_specalias_L74
+_specalias_L70
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -4574,7 +4556,7 @@ _specalias_L74
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L69
+_specalias_L66
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -4768,21 +4750,21 @@ bdevvp_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L78
+                BNE     _specalias_L74
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L78
+                BNE     _specalias_L74
                 LDA     #1
-                BRA     _specalias_L79
-_specalias_L78
+                BRA     _specalias_L75
+_specalias_L74
                 LDA     #0
-_specalias_L79
+_specalias_L75
                 CMP     #0
-                BEQ     _specalias_L77
+                BEQ     _specalias_L73
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4827,7 +4809,7 @@ _specalias_L79
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L77
+_specalias_L73
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -4865,7 +4847,7 @@ _specalias_L77
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                BEQ     _specalias_L80
+                BEQ     _specalias_L76
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4910,7 +4892,7 @@ _specalias_L77
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L80
+_specalias_L76
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -4962,7 +4944,7 @@ _specalias_L80
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L81
+                BEQ     _specalias_L77
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4982,7 +4964,7 @@ _specalias_L80
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L81
+_specalias_L77
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -5099,7 +5081,7 @@ vfinddev_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L82
+_specalias_L78
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5111,7 +5093,7 @@ _specalias_L82
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L84
+                BRL     _specalias_L80
                 LDA     _fcc_img0
                 PHA
                 LDY     #54
@@ -5131,7 +5113,7 @@ _specalias_L82
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L86
+                BNE     _specalias_L82
                 LDA     _fcc_img1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -5143,16 +5125,10 @@ _specalias_L82
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L86
-                LDA     #0
-                BRA     _specalias_L87
-_specalias_L86
-                LDA     #1
-_specalias_L87
-                CMP     #0
-                BEQ     _specalias_L85
-                BRA     _specalias_L83
-_specalias_L85
+                BEQ     _specalias_L81
+_specalias_L82
+                BRA     _specalias_L79
+_specalias_L81
                 DO      12+vfinddev_FRAMESIZE/256
                 TSC
                 CLC
@@ -5197,7 +5173,7 @@ _specalias_L85
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L83
+_specalias_L79
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5230,8 +5206,8 @@ _specalias_L83
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L82
-_specalias_L84
+                BRL     _specalias_L78
+_specalias_L80
                 LDA     #1
                 TAY
                 TSC
@@ -5263,10 +5239,10 @@ spec_securechr_stkok        TCS
                 TAX
                 SEC
                 SBC     #1
-                BVC     _specalias_L89
+                BVC     _specalias_L84
                 EOR     #$8000
-_specalias_L89
-                BPL     _specalias_L88
+_specalias_L84
+                BPL     _specalias_L83
                 LDA     #0
                 TAY
                 TSC
@@ -5277,7 +5253,7 @@ _specalias_L89
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L88
+_specalias_L83
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
                 CLC
@@ -5296,7 +5272,7 @@ _specalias_L88
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #65535
-                BNE     _specalias_L90
+                BNE     _specalias_L85
                 LDA     #0
                 TAY
                 TSC
@@ -5307,7 +5283,7 @@ _specalias_L88
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L90
+_specalias_L85
                 LDA     5,S   ; fccstk d=0 b=5
                 LSR
                 LSR
@@ -5343,7 +5319,7 @@ _specalias_L90
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_specalias_L91
+_specalias_L86
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5355,7 +5331,7 @@ _specalias_L91
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L93
+                BRL     _specalias_L88
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5375,7 +5351,7 @@ _specalias_L91
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L95
+                BNE     _specalias_L90
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5384,16 +5360,10 @@ _specalias_L91
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BNE     _specalias_L95
-                LDA     #0
-                BRA     _specalias_L96
-_specalias_L95
-                LDA     #1
-_specalias_L96
-                CMP     #0
-                BEQ     _specalias_L94
-                BRA     _specalias_L92
-_specalias_L94
+                BEQ     _specalias_L89
+_specalias_L90
+                BRA     _specalias_L87
+_specalias_L89
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5432,7 +5402,7 @@ _specalias_L94
                 TYA
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
-                BEQ     _specalias_L97
+                BEQ     _specalias_L91
                 LDA     #16
                 TAY
                 TSC
@@ -5443,8 +5413,8 @@ _specalias_L94
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L97
-_specalias_L92
+_specalias_L91
+_specalias_L87
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5477,8 +5447,8 @@ _specalias_L92
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L91
-_specalias_L93
+                BRL     _specalias_L86
+_specalias_L88
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
@@ -5551,10 +5521,10 @@ vfs_setsecurelevel_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L99
+                BVC     _specalias_L93
                 EOR     #$8000
-_specalias_L99
-                BPL     _specalias_L98
+_specalias_L93
+                BPL     _specalias_L92
                 LDA     #22
                 TAY
                 TSC
@@ -5565,7 +5535,7 @@ _specalias_L99
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L98
+_specalias_L92
                 DO      6+vfs_setsecurelevel_FRAMESIZE/256
                 TSC
                 CLC
@@ -5630,7 +5600,7 @@ vcount_stkok        TCS
                 TAX
                 AND     #2048
                 CMP     #0
-                BNE     _specalias_L100
+                BNE     _specalias_L94
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAY
@@ -5642,7 +5612,7 @@ vcount_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L100
+_specalias_L94
 vcount_uL_loop
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
@@ -5706,7 +5676,7 @@ vcount_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L101
+_specalias_L95
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5718,7 +5688,7 @@ _specalias_L101
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L103
+                BRL     _specalias_L97
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5773,7 +5743,7 @@ _specalias_L101
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L105
+                BNE     _specalias_L99
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5808,23 +5778,17 @@ _specalias_L101
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L105
-                LDA     #0
-                BRA     _specalias_L106
-_specalias_L105
-                LDA     #1
-_specalias_L106
-                CMP     #0
-                BEQ     _specalias_L104
-                BRA     _specalias_L102
-_specalias_L104
+                BEQ     _specalias_L98
+_specalias_L99
+                BRA     _specalias_L96
+_specalias_L98
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BNE     _specalias_L107
+                BNE     _specalias_L100
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -5837,7 +5801,7 @@ _specalias_L104
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
-_specalias_L107
+_specalias_L100
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -5851,7 +5815,7 @@ _specalias_L107
                 CLC
                 ADC     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
-_specalias_L102
+_specalias_L96
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5884,8 +5848,8 @@ _specalias_L102
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L101
-_specalias_L103
+                BRL     _specalias_L95
+_specalias_L97
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC
@@ -5990,7 +5954,7 @@ vput_stkok        TCS
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L108-1
+                PEA     _specalias_L101-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6001,7 +5965,7 @@ vput_stkok        TCS
                 DEC
                 PHA
                 RTL
-_specalias_L108
+_specalias_L101
                 TAY
                 TSC
                 CLC
@@ -6088,7 +6052,7 @@ vclean_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
-                BEQ     _specalias_L109
+                BEQ     _specalias_L102
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -6097,7 +6061,7 @@ vclean_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specalias_L109
+_specalias_L102
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6123,7 +6087,7 @@ _specalias_L109
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #256
-                BEQ     _specalias_L110
+                BEQ     _specalias_L103
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6140,7 +6104,7 @@ _specalias_L109
                 CLC
                 ADC     #4
                 TCS
-_specalias_L110
+_specalias_L103
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6222,7 +6186,7 @@ _specalias_L110
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L111-1
+                PEA     _specalias_L104-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6233,7 +6197,7 @@ _specalias_L110
                 DEC
                 PHA
                 RTL
-_specalias_L111
+_specalias_L104
                 TAY
                 TSC
                 CLC
@@ -6252,7 +6216,7 @@ _specalias_L111
                 FIN
                 TAX
                 AND     #4
-                BEQ     _specalias_L112
+                BEQ     _specalias_L105
                 LDA     #1
                 PHA
                 DO      10+vclean_FRAMESIZE/256
@@ -6284,7 +6248,7 @@ _specalias_L111
                 CLC
                 ADC     #6
                 TCS
-_specalias_L112
+_specalias_L105
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6439,7 +6403,7 @@ _specalias_L112
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L113-1
+                PEA     _specalias_L106-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6450,7 +6414,7 @@ _specalias_L112
                 DEC
                 PHA
                 RTL
-_specalias_L113
+_specalias_L106
                 TAY
                 TSC
                 CLC
@@ -6460,7 +6424,7 @@ _specalias_L113
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L114
+                BRL     _specalias_L107
                 DO      10+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6473,7 +6437,7 @@ _specalias_L113
                 FIN
                 TAX
                 AND     #4
-                BEQ     _specalias_L115
+                BEQ     _specalias_L108
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6528,7 +6492,7 @@ _specalias_L113
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L116-1
+                PEA     _specalias_L109-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6539,14 +6503,14 @@ _specalias_L113
                 DEC
                 PHA
                 RTL
-_specalias_L116
+_specalias_L109
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-_specalias_L115
+_specalias_L108
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6594,7 +6558,7 @@ _specalias_L115
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L117-1
+                PEA     _specalias_L110-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6605,14 +6569,14 @@ _specalias_L115
                 DEC
                 PHA
                 RTL
-_specalias_L117
+_specalias_L110
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_specalias_L114
+_specalias_L107
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6660,7 +6624,7 @@ _specalias_L114
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L119-1
+                PEA     _specalias_L112-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6671,14 +6635,14 @@ _specalias_L114
                 DEC
                 PHA
                 RTL
-_specalias_L119
+_specalias_L112
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _specalias_L118
+                BEQ     _specalias_L111
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6695,9 +6659,9 @@ _specalias_L119
                 CLC
                 ADC     #4
                 TCS
-_specalias_L118
+_specalias_L111
                 LDA     5,S   ; fccstk d=0 b=5
-                BEQ     _specalias_L120
+                BEQ     _specalias_L113
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6727,7 +6691,7 @@ _specalias_L118
                 CLC
                 ADC     #4
                 TCS
-_specalias_L120
+_specalias_L113
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6761,7 +6725,7 @@ _specalias_L120
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #512
-                BEQ     _specalias_L121
+                BEQ     _specalias_L114
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #512
@@ -6778,7 +6742,7 @@ _specalias_L120
                 CLC
                 ADC     #4
                 TCS
-_specalias_L121
+_specalias_L114
                 TAY
                 TSC
                 CLC
@@ -6830,7 +6794,7 @@ vgone_stkok        TCS
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #256
-                BEQ     _specalias_L122
+                BEQ     _specalias_L115
                 LDA     [_fcc_fpr0]
                 TAX
                 ORA     #512
@@ -6852,7 +6816,7 @@ vgone_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L122
+_specalias_L115
                 LDA     #4
                 PHA
                 DO      10+vgone_FRAMESIZE/256
@@ -6944,20 +6908,14 @@ _specalias_L122
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BEQ     _specalias_L124
+                BEQ     _specalias_L117
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #4
-                BEQ     _specalias_L124
-                LDA     #0
-                BRA     _specalias_L125
-_specalias_L124
-                LDA     #1
-_specalias_L125
-                CMP     #0
-                BNE     *+5
-                BRL     _specalias_L123
+                BEQ     *+5
+                BRL     _specalias_L116
+_specalias_L117
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -6997,21 +6955,21 @@ _specalias_L125
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L127
+                BNE     _specalias_L119
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L127
+                BNE     _specalias_L119
                 LDA     #1
-                BRA     _specalias_L128
-_specalias_L127
+                BRA     _specalias_L120
+_specalias_L119
                 LDA     #0
-_specalias_L128
+_specalias_L120
                 CMP     #0
-                BEQ     _specalias_L126
+                BEQ     _specalias_L118
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7028,7 +6986,7 @@ _specalias_L128
                 CLC
                 ADC     #4
                 TCS
-_specalias_L126
+_specalias_L118
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7109,22 +7067,22 @@ _specalias_L126
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L130
+                BNE     _specalias_L122
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L130
+                BNE     _specalias_L122
                 LDA     #1
-                BRA     _specalias_L131
-_specalias_L130
+                BRA     _specalias_L123
+_specalias_L122
                 LDA     #0
-_specalias_L131
+_specalias_L123
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L129
+                BRL     _specalias_L121
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7224,8 +7182,8 @@ _specalias_L131
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _specalias_L132
-_specalias_L129
+                BRL     _specalias_L124
+_specalias_L121
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7286,7 +7244,7 @@ _specalias_L129
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L133
+_specalias_L125
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7298,7 +7256,7 @@ _specalias_L133
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L135
+                BRL     _specalias_L127
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7347,23 +7305,23 @@ _specalias_L133
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L137
+                BNE     _specalias_L129
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L137
+                BNE     _specalias_L129
                 LDA     #0
-                BRA     _specalias_L138
-_specalias_L137
+                BRA     _specalias_L130
+_specalias_L129
                 LDA     #1
-_specalias_L138
+_specalias_L130
                 CMP     #0
-                BEQ     _specalias_L136
-                BRA     _specalias_L134
-_specalias_L136
+                BEQ     _specalias_L128
+                BRA     _specalias_L126
+_specalias_L128
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7435,8 +7393,8 @@ _specalias_L136
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRA     _specalias_L135
-_specalias_L134
+                BRA     _specalias_L127
+_specalias_L126
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7469,8 +7427,8 @@ _specalias_L134
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L133
-_specalias_L135
+                BRL     _specalias_L125
+_specalias_L127
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7480,21 +7438,21 @@ _specalias_L135
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L140
+                BNE     _specalias_L132
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L140
+                BNE     _specalias_L132
                 LDA     #1
-                BRA     _specalias_L141
-_specalias_L140
+                BRA     _specalias_L133
+_specalias_L132
                 LDA     #0
-_specalias_L141
+_specalias_L133
                 CMP     #0
-                BEQ     _specalias_L139
+                BEQ     _specalias_L131
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7511,8 +7469,8 @@ _specalias_L141
                 CLC
                 ADC     #4
                 TCS
-_specalias_L139
-_specalias_L132
+_specalias_L131
+_specalias_L124
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7540,7 +7498,7 @@ _specalias_L132
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L142
+                BRL     _specalias_L134
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
@@ -7587,7 +7545,7 @@ _specalias_L132
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_specalias_L143
+_specalias_L135
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7599,7 +7557,7 @@ _specalias_L143
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L145
+                BRL     _specalias_L137
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7654,7 +7612,7 @@ _specalias_L143
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L147
+                BNE     _specalias_L139
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7689,16 +7647,10 @@ _specalias_L143
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L147
-                LDA     #0
-                BRA     _specalias_L148
-_specalias_L147
-                LDA     #1
-_specalias_L148
-                CMP     #0
-                BEQ     _specalias_L146
-                BRA     _specalias_L144
-_specalias_L146
+                BEQ     _specalias_L138
+_specalias_L139
+                BRA     _specalias_L136
+_specalias_L138
                 INC     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -7708,7 +7660,7 @@ _specalias_L146
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_specalias_L144
+_specalias_L136
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7741,11 +7693,11 @@ _specalias_L144
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L143
-_specalias_L145
+                BRL     _specalias_L135
+_specalias_L137
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
-                BNE     _specalias_L149
+                BNE     _specalias_L140
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7762,11 +7714,11 @@ _specalias_L145
                 CLC
                 ADC     #4
                 TCS
-_specalias_L149
+_specalias_L140
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #1
-                BNE     _specalias_L150
+                BNE     _specalias_L141
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7779,7 +7731,7 @@ _specalias_L149
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_specalias_L150
+_specalias_L141
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7810,7 +7762,7 @@ _specalias_L150
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_specalias_L142
+_specalias_L134
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7891,7 +7843,7 @@ _specalias_L142
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specalias_L123
+_specalias_L116
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -7930,7 +7882,7 @@ _specalias_L123
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L151
+                BRL     _specalias_L142
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8055,7 +8007,7 @@ _specalias_L123
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L152
+                BEQ     _specalias_L143
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -8101,8 +8053,8 @@ _specalias_L123
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRA     _specalias_L153
-_specalias_L152
+                BRA     _specalias_L144
+_specalias_L143
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8130,7 +8082,7 @@ _specalias_L152
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_specalias_L153
+_specalias_L144
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8160,7 +8112,7 @@ _specalias_L153
                 CLC
                 ADC     #1
                 STA     freevnodes
-_specalias_L151
+_specalias_L142
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -8273,7 +8225,7 @@ vflush_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _specalias_L154
+                BEQ     _specalias_L145
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8290,7 +8242,7 @@ vflush_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specalias_L154
+_specalias_L145
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
 vflush_uL_loop
@@ -8332,7 +8284,7 @@ vflush_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L155
+_specalias_L146
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8344,7 +8296,7 @@ _specalias_L155
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specalias_L157
+                BRL     _specalias_L148
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8381,26 +8333,26 @@ _specalias_L155
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L159
+                BNE     _specalias_L150
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L159
+                BNE     _specalias_L150
                 LDA     #0
-                BRA     _specalias_L160
-_specalias_L159
+                BRA     _specalias_L151
+_specalias_L150
                 LDA     #1
-_specalias_L160
+_specalias_L151
                 CMP     #0
-                BEQ     _specalias_L158
+                BEQ     _specalias_L149
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflush_uL_loop
-_specalias_L158
+_specalias_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8449,23 +8401,23 @@ _specalias_L158
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L162
+                BNE     _specalias_L153
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L162
+                BNE     _specalias_L153
                 LDA     #1
-                BRA     _specalias_L163
-_specalias_L162
+                BRA     _specalias_L154
+_specalias_L153
                 LDA     #0
-_specalias_L163
+_specalias_L154
                 CMP     #0
-                BEQ     _specalias_L161
-                BRL     _specalias_L156
-_specalias_L161
+                BEQ     _specalias_L152
+                BRL     _specalias_L147
+_specalias_L152
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -8478,7 +8430,7 @@ _specalias_L161
                 FIN
                 TAX
                 AND     #1
-                BEQ     _specalias_L165
+                BEQ     _specalias_L155
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8486,23 +8438,17 @@ _specalias_L161
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #4
-                BEQ     _specalias_L165
-                LDA     #1
-                BRA     _specalias_L166
-_specalias_L165
-                LDA     #0
-_specalias_L166
                 CMP     #0
-                BEQ     _specalias_L164
-                BRL     _specalias_L156
-_specalias_L164
+                BEQ     _specalias_L155
+                BRL     _specalias_L147
+_specalias_L155
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BNE     _specalias_L167
+                BNE     _specalias_L156
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -8511,8 +8457,8 @@ _specalias_L164
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specalias_L156
-_specalias_L167
+                BRL     _specalias_L147
+_specalias_L156
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -8527,7 +8473,7 @@ _specalias_L167
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L168
+                BRL     _specalias_L157
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8536,23 +8482,13 @@ _specalias_L167
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BEQ     _specalias_L170
+                BEQ     _specalias_L158
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #4
-                BEQ     _specalias_L170
-                LDA     #1
-                BRA     _specalias_L171
-_specalias_L170
-                LDA     #0
-_specalias_L171
-                CMP     #0
-                BEQ     _specalias_L169
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _specalias_L158
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -8560,8 +8496,8 @@ _specalias_L171
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specalias_L172
-_specalias_L169
+                BRL     _specalias_L159
+_specalias_L158
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -8588,21 +8524,21 @@ _specalias_L169
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L174
+                BNE     _specalias_L161
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L174
+                BNE     _specalias_L161
                 LDA     #1
-                BRA     _specalias_L175
-_specalias_L174
+                BRA     _specalias_L162
+_specalias_L161
                 LDA     #0
-_specalias_L175
+_specalias_L162
                 CMP     #0
-                BEQ     _specalias_L173
+                BEQ     _specalias_L160
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8614,8 +8550,8 @@ _specalias_L175
                 CLC
                 ADC     #4
                 TCS
-                BRA     _specalias_L156
-_specalias_L173
+                BRA     _specalias_L147
+_specalias_L160
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8655,14 +8591,14 @@ _specalias_L173
                 CLC
                 ADC     #8
                 TCS
-_specalias_L172
-                BRA     _specalias_L156
-_specalias_L168
+_specalias_L159
+                BRA     _specalias_L147
+_specalias_L157
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-_specalias_L156
+_specalias_L147
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8671,10 +8607,10 @@ _specalias_L156
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L155
-_specalias_L157
+                BRL     _specalias_L146
+_specalias_L148
                 LDA     9,S   ; fccstk d=0 b=9
-                BEQ     _specalias_L176
+                BEQ     _specalias_L163
                 LDA     #16
                 TAY
                 TSC
@@ -8685,7 +8621,7 @@ _specalias_L157
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L176
+_specalias_L163
                 LDA     #0
                 TAY
                 TSC
@@ -8814,7 +8750,7 @@ ndslot_stkok        TCS
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 CMP     #0
-                BMI     _specalias_L178
+                BMI     _specalias_L165
                 DO      8+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -8828,17 +8764,11 @@ ndslot_stkok        TCS
                 TAX
                 SEC
                 SBC     #2
-                BVC     _specalias_L180
+                BVC     _specalias_L166
                 EOR     #$8000
-_specalias_L180
-                BPL     _specalias_L178
-                LDA     #0
-                BRA     _specalias_L179
-_specalias_L178
-                LDA     #1
-_specalias_L179
-                CMP     #0
-                BEQ     _specalias_L177
+_specalias_L166
+                BMI     _specalias_L164
+_specalias_L165
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8851,7 +8781,7 @@ _specalias_L179
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L177
+_specalias_L164
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -8865,10 +8795,10 @@ _specalias_L177
                 TAX
                 SEC
                 SBC     #1
-                BVC     _specalias_L184
+                BVC     _specalias_L169
                 EOR     #$8000
-_specalias_L184
-                BMI     _specalias_L182
+_specalias_L169
+                BMI     _specalias_L168
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -8885,17 +8815,11 @@ _specalias_L184
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L185
+                BVC     _specalias_L170
                 EOR     #$8000
-_specalias_L185
-                BMI     _specalias_L182
-                LDA     #0
-                BRA     _specalias_L183
-_specalias_L182
-                LDA     #1
-_specalias_L183
-                CMP     #0
-                BEQ     _specalias_L181
+_specalias_L170
+                BPL     _specalias_L167
+_specalias_L168
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8908,7 +8832,7 @@ _specalias_L183
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L181
+_specalias_L167
                 SEP     #$20
                 MX      %10
                 LDA     nd_pool+2
@@ -8922,21 +8846,21 @@ _specalias_L181
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L187
+                BNE     _specalias_L172
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L187
+                BNE     _specalias_L172
                 LDA     #1
-                BRA     _specalias_L188
-_specalias_L187
+                BRA     _specalias_L173
+_specalias_L172
                 LDA     #0
-_specalias_L188
+_specalias_L173
                 CMP     #0
-                BEQ     _specalias_L186
+                BEQ     _specalias_L171
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8949,7 +8873,7 @@ _specalias_L188
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L186
+_specalias_L171
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -9000,17 +8924,17 @@ _specalias_L186
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
-_specalias_L189
+_specalias_L174
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 SEC
                 SBC     #158
-                BVC     _specalias_L192
+                BVC     _specalias_L177
                 EOR     #$8000
-_specalias_L192
-                BPL     _specalias_L191
+_specalias_L177
+                BPL     _specalias_L176
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9025,10 +8949,10 @@ _specalias_L192
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_specalias_L190
+_specalias_L175
                 INC     _fcc_img0
-                BRA     _specalias_L189
-_specalias_L191
+                BRA     _specalias_L174
+_specalias_L176
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9262,21 +9186,21 @@ vfs_dounmount_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L196
+                BNE     _specalias_L180
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L196
+                BNE     _specalias_L180
                 LDA     #1
-                BRA     _specalias_L197
-_specalias_L196
+                BRA     _specalias_L181
+_specalias_L180
                 LDA     #0
-_specalias_L197
+_specalias_L181
                 CMP     #0
-                BNE     _specalias_L194
+                BNE     _specalias_L179
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9316,28 +9240,22 @@ _specalias_L197
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L198
+                BNE     _specalias_L182
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L198
+                BNE     _specalias_L182
                 LDA     #1
-                BRA     _specalias_L199
-_specalias_L198
+                BRA     _specalias_L183
+_specalias_L182
                 LDA     #0
-_specalias_L199
+_specalias_L183
                 CMP     #0
-                BNE     _specalias_L194
-                LDA     #0
-                BRA     _specalias_L195
-_specalias_L194
-                LDA     #1
-_specalias_L195
-                CMP     #0
-                BEQ     _specalias_L193
+                BEQ     _specalias_L178
+_specalias_L179
                 LDA     #22
                 TAY
                 TSC
@@ -9348,7 +9266,7 @@ _specalias_L195
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L193
+_specalias_L178
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9449,7 +9367,7 @@ _specalias_L193
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L200
+                BEQ     _specalias_L184
                 SEP     #$20
                 MX      %10
                 LDA     _specalias_vfs_cacheops+2
@@ -9501,7 +9419,7 @@ _specalias_L193
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L201-1
+                PEA     _specalias_L185-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9512,14 +9430,14 @@ _specalias_L193
                 DEC
                 PHA
                 RTL
-_specalias_L201
+_specalias_L185
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_specalias_L200
+_specalias_L184
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9608,7 +9526,7 @@ _specalias_L200
                 LDA     9,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specalias_L202-1
+                PEA     _specalias_L186-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9619,7 +9537,7 @@ _specalias_L200
                 DEC
                 PHA
                 RTL
-_specalias_L202
+_specalias_L186
                 TAY
                 TSC
                 CLC
@@ -9628,7 +9546,7 @@ _specalias_L202
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BEQ     _specalias_L203
+                BEQ     _specalias_L187
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9691,7 +9609,7 @@ _specalias_L202
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L203
+_specalias_L187
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9730,21 +9648,22 @@ _specalias_L203
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L207
+                BNE     _specalias_L189
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L207
+                BNE     _specalias_L189
                 LDA     #0
-                BRA     _specalias_L208
-_specalias_L207
+                BRA     _specalias_L190
+_specalias_L189
                 LDA     #1
-_specalias_L208
+_specalias_L190
                 CMP     #0
-                BEQ     _specalias_L205
+                BNE     *+5
+                BRL     _specalias_L188
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9784,29 +9703,22 @@ _specalias_L208
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L209
+                BNE     _specalias_L191
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L209
+                BNE     _specalias_L191
                 LDA     #0
-                BRA     _specalias_L210
-_specalias_L209
+                BRA     _specalias_L192
+_specalias_L191
                 LDA     #1
-_specalias_L210
-                CMP     #0
-                BEQ     _specalias_L205
-                LDA     #1
-                BRA     _specalias_L206
-_specalias_L205
-                LDA     #0
-_specalias_L206
+_specalias_L192
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L204
+                BRL     _specalias_L188
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10030,7 +9942,7 @@ _specalias_L206
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specalias_L204
+_specalias_L188
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -10040,21 +9952,21 @@ _specalias_L204
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L212
+                BNE     _specalias_L194
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L212
+                BNE     _specalias_L194
                 LDA     #0
-                BRA     _specalias_L213
-_specalias_L212
+                BRA     _specalias_L195
+_specalias_L194
                 LDA     #1
-_specalias_L213
+_specalias_L195
                 CMP     #0
-                BEQ     _specalias_L211
+                BEQ     _specalias_L193
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -10119,7 +10031,7 @@ _specalias_L213
                 CLC
                 ADC     #4
                 TCS
-_specalias_L211
+_specalias_L193
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -10737,21 +10649,21 @@ _specalias_nclru_totail_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L215
+                BNE     _specalias_L197
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L215
+                BNE     _specalias_L197
                 LDA     #1
-                BRA     _specalias_L216
-_specalias_L215
+                BRA     _specalias_L198
+_specalias_L197
                 LDA     #0
-_specalias_L216
+_specalias_L198
                 CMP     #0
-                BEQ     _specalias_L214
+                BEQ     _specalias_L196
                 TAY
                 TSC
                 CLC
@@ -10761,7 +10673,7 @@ _specalias_L216
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L214
+_specalias_L196
                 DO      8+_specalias_nclru_totail_FRAMESIZE/256
                 TSC
                 CLC
@@ -11193,7 +11105,7 @@ _specalias_nclru_remove_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L217
+                BEQ     _specalias_L199
                 DO      8+_specalias_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11271,8 +11183,8 @@ _specalias_nclru_remove_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRA     _specalias_L218
-_specalias_L217
+                BRA     _specalias_L200
+_specalias_L199
                 DO      8+_specalias_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11310,7 +11222,7 @@ _specalias_L217
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_specalias_L218
+_specalias_L200
                 TAY
                 TSC
                 CLC
@@ -11432,7 +11344,7 @@ _specalias_nclru_tohead_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L219
+                BEQ     _specalias_L201
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -11478,8 +11390,8 @@ _specalias_nclru_tohead_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRA     _specalias_L220
-_specalias_L219
+                BRA     _specalias_L202
+_specalias_L201
                 DO      8+_specalias_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -11507,7 +11419,7 @@ _specalias_L219
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_specalias_L220
+_specalias_L202
                 DO      8+_specalias_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -11795,7 +11707,7 @@ nchinit_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_specalias_L221
+_specalias_L203
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -11803,10 +11715,10 @@ _specalias_L221
                 TAX
                 SEC
                 SBC     #16
-                BVC     _specalias_L224
+                BVC     _specalias_L206
                 EOR     #$8000
-_specalias_L224
-                BPL     _specalias_L223
+_specalias_L206
+                BPL     _specalias_L205
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -11855,10 +11767,10 @@ _specalias_L224
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specalias_L222
+_specalias_L204
                 INC     _fcc_img0
-                BRA     _specalias_L221
-_specalias_L223
+                BRA     _specalias_L203
+_specalias_L205
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
@@ -11895,21 +11807,21 @@ _specalias_L223
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L226
+                BNE     _specalias_L208
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L226
+                BNE     _specalias_L208
                 LDA     #1
-                BRA     _specalias_L227
-_specalias_L226
+                BRA     _specalias_L209
+_specalias_L208
                 LDA     #0
-_specalias_L227
+_specalias_L209
                 CMP     #0
-                BEQ     _specalias_L225
+                BEQ     _specalias_L207
                 LDA     #0
                 STA     doingcache
                 LDA     #0
@@ -11924,20 +11836,20 @@ _specalias_L227
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L225
+_specalias_L207
                 LDA     #64
                 TAX
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L228
+_specalias_L210
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 CMP     #0
                 BPL     *+5
-                BRL     _specalias_L230
+                BRL     _specalias_L212
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -12064,13 +11976,13 @@ _specalias_L228
                 CLC
                 ADC     #4
                 TCS
-_specalias_L229
+_specalias_L211
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L228
-_specalias_L230
+                BRL     _specalias_L210
+_specalias_L212
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -12157,7 +12069,7 @@ namehash_stkok        TCS
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_specalias_L231
+_specalias_L213
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12168,11 +12080,11 @@ _specalias_L231
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L234
+                BVC     _specalias_L216
                 EOR     #$8000
-_specalias_L234
+_specalias_L216
                 BMI     *+5
-                BRL     _specalias_L233
+                BRL     _specalias_L215
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -12262,10 +12174,10 @@ _specalias_L234
                 LDA     _fcc_long_hi
                 STA     _fcc_img5
                 TYA
-_specalias_L232
+_specalias_L214
                 INC     _fcc_img0
-                BRL     _specalias_L231
-_specalias_L233
+                BRL     _specalias_L213
+_specalias_L215
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -12350,7 +12262,7 @@ _specalias_namecmp_stkok        TCS
                 LDA     12+_specalias_namecmp_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 STA     _fcc_img4
-_specalias_L235
+_specalias_L217
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12359,7 +12271,7 @@ _specalias_L235
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                BEQ     _specalias_L236
+                BEQ     _specalias_L218
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
                 AND     #$00FF
@@ -12370,7 +12282,7 @@ _specalias_L235
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _specalias_L237
+                BEQ     _specalias_L219
                 LDA     #1
                 TAY
                 TSC
@@ -12381,9 +12293,9 @@ _specalias_L235
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L237
-                BRA     _specalias_L235
-_specalias_L236
+_specalias_L219
+                BRA     _specalias_L217
+_specalias_L218
                 LDA     #0
                 TAY
                 TSC
@@ -12505,7 +12417,7 @@ cache_purge_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _specalias_L238
+                BEQ     _specalias_L220
                 TAY
                 TSC
                 CLC
@@ -12515,10 +12427,10 @@ cache_purge_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L238
+_specalias_L220
                 LDA     #0
                 STA     _fcc_img0
-_specalias_L239
+_specalias_L221
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12526,11 +12438,11 @@ _specalias_L239
                 TAX
                 SEC
                 SBC     #16
-                BVC     _specalias_L242
+                BVC     _specalias_L224
                 EOR     #$8000
-_specalias_L242
+_specalias_L224
                 BMI     *+5
-                BRL     _specalias_L241
+                BRL     _specalias_L223
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -12564,7 +12476,7 @@ _specalias_L242
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L243
+_specalias_L225
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12578,21 +12490,21 @@ _specalias_L243
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L246
+                BNE     _specalias_L228
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L246
+                BNE     _specalias_L228
                 LDA     #0
-                BRA     _specalias_L247
-_specalias_L246
+                BRA     _specalias_L229
+_specalias_L228
                 LDA     #1
-_specalias_L247
+_specalias_L229
                 CMP     #0
-                BEQ     _specalias_L245
+                BEQ     _specalias_L227
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12619,7 +12531,7 @@ _specalias_L247
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-_specalias_L244
+_specalias_L226
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12639,12 +12551,12 @@ _specalias_L244
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L243
-_specalias_L245
-_specalias_L240
+                BRL     _specalias_L225
+_specalias_L227
+_specalias_L222
                 INC     _fcc_img0
-                BRL     _specalias_L239
-_specalias_L241
+                BRL     _specalias_L221
+_specalias_L223
                 DO      8+cache_purge_FRAMESIZE/256
                 TSC
                 CLC
@@ -12723,7 +12635,7 @@ cache_purgevfs_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_specalias_L248
+_specalias_L230
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12731,11 +12643,11 @@ _specalias_L248
                 TAX
                 SEC
                 SBC     #16
-                BVC     _specalias_L251
+                BVC     _specalias_L233
                 EOR     #$8000
-_specalias_L251
+_specalias_L233
                 BMI     *+5
-                BRL     _specalias_L250
+                BRL     _specalias_L232
                 LDA     13,S   ; fccstk d=0 b=13
                 ASL
                 ASL
@@ -12769,7 +12681,7 @@ _specalias_L251
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L252
+_specalias_L234
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12783,22 +12695,22 @@ _specalias_L252
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L255
+                BNE     _specalias_L237
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L255
+                BNE     _specalias_L237
                 LDA     #0
-                BRA     _specalias_L256
-_specalias_L255
+                BRA     _specalias_L238
+_specalias_L237
                 LDA     #1
-_specalias_L256
+_specalias_L238
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L254
+                BRL     _specalias_L236
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12839,21 +12751,21 @@ _specalias_L256
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L260
+                BNE     _specalias_L241
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L260
+                BNE     _specalias_L241
                 LDA     #1
-                BRA     _specalias_L261
-_specalias_L260
+                BRA     _specalias_L242
+_specalias_L241
                 LDA     #0
-_specalias_L261
+_specalias_L242
                 CMP     #0
-                BNE     _specalias_L258
+                BNE     _specalias_L240
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12906,30 +12818,24 @@ _specalias_L261
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L262
+                BNE     _specalias_L243
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L262
+                BNE     _specalias_L243
                 LDA     #0
-                BRA     _specalias_L263
-_specalias_L262
+                BRA     _specalias_L244
+_specalias_L243
                 LDA     #1
-_specalias_L263
+_specalias_L244
                 CMP     #0
-                BNE     _specalias_L258
-                LDA     #0
-                BRA     _specalias_L259
-_specalias_L258
-                LDA     #1
-_specalias_L259
-                CMP     #0
-                BEQ     _specalias_L257
-                BRL     _specalias_L253
-_specalias_L257
+                BEQ     _specalias_L239
+_specalias_L240
+                BRL     _specalias_L235
+_specalias_L239
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13005,7 +12911,7 @@ _specalias_L257
                 CLC
                 ADC     #4
                 TCS
-_specalias_L253
+_specalias_L235
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13014,15 +12920,15 @@ _specalias_L253
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L252
-_specalias_L254
-_specalias_L249
+                BRL     _specalias_L234
+_specalias_L236
+_specalias_L231
                 LDA     13,S   ; fccstk d=0 b=13
                 CLC
                 ADC     #1
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _specalias_L248
-_specalias_L250
+                BRL     _specalias_L230
+_specalias_L232
                 TAY
                 TSC
                 CLC
@@ -13050,14 +12956,7 @@ cache_lookup_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                BEQ     _specalias_L265
-                LDA     #0
-                BRA     _specalias_L266
-_specalias_L265
-                LDA     #1
-_specalias_L266
-                CMP     #0
-                BEQ     _specalias_L264
+                BNE     _specalias_L245
                 LDA     #0
                 TAY
                 TSC
@@ -13068,7 +12967,7 @@ _specalias_L266
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L264
+_specalias_L245
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -13099,10 +12998,10 @@ _specalias_L264
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L268
+                BVC     _specalias_L247
                 EOR     #$8000
-_specalias_L268
-                BPL     _specalias_L267
+_specalias_L247
+                BPL     _specalias_L246
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13169,7 +13068,7 @@ _specalias_L268
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L267
+_specalias_L246
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -13266,7 +13165,7 @@ _specalias_L267
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L269
+_specalias_L248
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13280,22 +13179,22 @@ _specalias_L269
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L272
+                BNE     _specalias_L251
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L272
+                BNE     _specalias_L251
                 LDA     #0
-                BRA     _specalias_L273
-_specalias_L272
+                BRA     _specalias_L252
+_specalias_L251
                 LDA     #1
-_specalias_L273
+_specalias_L252
                 CMP     #0
                 BNE     *+5
-                BRL     _specalias_L271
+                BRL     _specalias_L250
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13318,21 +13217,22 @@ _specalias_L273
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L281
+                BNE     _specalias_L254
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L281
+                BNE     _specalias_L254
                 LDA     #1
-                BRA     _specalias_L282
-_specalias_L281
+                BRA     _specalias_L255
+_specalias_L254
                 LDA     #0
-_specalias_L282
+_specalias_L255
                 CMP     #0
-                BEQ     _specalias_L279
+                BNE     *+5
+                BRL     _specalias_L253
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13366,14 +13266,8 @@ _specalias_L282
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _specalias_L279
-                LDA     #1
-                BRA     _specalias_L280
-_specalias_L279
-                LDA     #0
-_specalias_L280
-                CMP     #0
-                BEQ     _specalias_L277
+                BNE     *+5
+                BRL     _specalias_L253
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13409,14 +13303,7 @@ _specalias_L280
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L277
-                LDA     #1
-                BRA     _specalias_L278
-_specalias_L277
-                LDA     #0
-_specalias_L278
-                CMP     #0
-                BEQ     _specalias_L275
+                BNE     _specalias_L253
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13476,17 +13363,11 @@ _specalias_L278
                 ADC     #10
                 TCS
                 TYA
-                BNE     _specalias_L275
-                LDA     #1
-                BRA     _specalias_L276
-_specalias_L275
-                LDA     #0
-_specalias_L276
                 CMP     #0
-                BEQ     _specalias_L274
-                BRA     _specalias_L271
-_specalias_L274
-_specalias_L270
+                BNE     _specalias_L253
+                BRA     _specalias_L250
+_specalias_L253
+_specalias_L249
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13506,8 +13387,8 @@ _specalias_L270
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L269
-_specalias_L271
+                BRL     _specalias_L248
+_specalias_L250
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13518,21 +13399,21 @@ _specalias_L271
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L284
+                BNE     _specalias_L257
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L284
+                BNE     _specalias_L257
                 LDA     #1
-                BRA     _specalias_L285
-_specalias_L284
+                BRA     _specalias_L258
+_specalias_L257
                 LDA     #0
-_specalias_L285
+_specalias_L258
                 CMP     #0
-                BEQ     _specalias_L283
+                BEQ     _specalias_L256
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13570,7 +13451,7 @@ _specalias_L285
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L283
+_specalias_L256
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -13596,14 +13477,8 @@ _specalias_L283
                 LDY     #46
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                BEQ     _specalias_L287
-                LDA     #0
-                BRA     _specalias_L288
-_specalias_L287
-                LDA     #1
-_specalias_L288
                 CMP     #0
-                BEQ     _specalias_L286
+                BNE     _specalias_L259
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13631,8 +13506,8 @@ _specalias_L288
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _specalias_L289
-_specalias_L286
+                BRL     _specalias_L260
+_specalias_L259
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13654,21 +13529,21 @@ _specalias_L286
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L291
+                BNE     _specalias_L262
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L291
+                BNE     _specalias_L262
                 LDA     #1
-                BRA     _specalias_L292
-_specalias_L291
+                BRA     _specalias_L263
+_specalias_L262
                 LDA     #0
-_specalias_L292
+_specalias_L263
                 CMP     #0
-                BEQ     _specalias_L290
+                BEQ     _specalias_L261
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13717,8 +13592,8 @@ _specalias_L292
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _specalias_L293
-_specalias_L290
+                BRL     _specalias_L264
+_specalias_L261
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13760,7 +13635,7 @@ _specalias_L290
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _specalias_L294
+                BEQ     _specalias_L265
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13788,8 +13663,8 @@ _specalias_L290
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _specalias_L295
-_specalias_L294
+                BRL     _specalias_L266
+_specalias_L265
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13889,9 +13764,9 @@ _specalias_L294
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L295
-_specalias_L293
-_specalias_L289
+_specalias_L266
+_specalias_L264
+_specalias_L260
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13953,14 +13828,7 @@ cache_enter_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                BEQ     _specalias_L297
-                LDA     #0
-                BRA     _specalias_L298
-_specalias_L297
-                LDA     #1
-_specalias_L298
-                CMP     #0
-                BEQ     _specalias_L296
+                BNE     _specalias_L267
                 TAY
                 TSC
                 CLC
@@ -13970,7 +13838,7 @@ _specalias_L298
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L296
+_specalias_L267
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -14001,10 +13869,10 @@ _specalias_L296
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L300
+                BVC     _specalias_L269
                 EOR     #$8000
-_specalias_L300
-                BPL     _specalias_L299
+_specalias_L269
+                BPL     _specalias_L268
                 TAY
                 TSC
                 CLC
@@ -14014,7 +13882,7 @@ _specalias_L300
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L299
+_specalias_L268
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -14032,21 +13900,21 @@ _specalias_L299
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L302
+                BNE     _specalias_L271
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L302
+                BNE     _specalias_L271
                 LDA     #1
-                BRA     _specalias_L303
-_specalias_L302
+                BRA     _specalias_L272
+_specalias_L271
                 LDA     #0
-_specalias_L303
+_specalias_L272
                 CMP     #0
-                BEQ     _specalias_L301
+                BEQ     _specalias_L270
                 TAY
                 TSC
                 CLC
@@ -14056,7 +13924,7 @@ _specalias_L303
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L301
+_specalias_L270
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14164,7 +14032,7 @@ _specalias_L301
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L304
+                BEQ     _specalias_L273
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14215,8 +14083,8 @@ _specalias_L301
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRA     _specalias_L305
-_specalias_L304
+                BRA     _specalias_L274
+_specalias_L273
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14230,7 +14098,7 @@ _specalias_L304
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-_specalias_L305
+_specalias_L274
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14364,7 +14232,7 @@ _specalias_L305
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_specalias_L306
+_specalias_L275
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14398,10 +14266,10 @@ _specalias_L306
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L309
+                BVC     _specalias_L278
                 EOR     #$8000
-_specalias_L309
-                BPL     _specalias_L308
+_specalias_L278
+                BPL     _specalias_L277
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14457,10 +14325,10 @@ _specalias_L309
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_specalias_L307
+_specalias_L276
                 INC     _fcc_img0
-                BRL     _specalias_L306
-_specalias_L308
+                BRL     _specalias_L275
+_specalias_L277
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
@@ -14612,7 +14480,7 @@ _specalias_spec_inuse_stkok        TCS
                 STA     _fcc_img1
                 LDA     #0
                 STA     _fcc_img0
-_specalias_L310
+_specalias_L279
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14620,10 +14488,10 @@ _specalias_L310
                 TAX
                 SEC
                 SBC     #64
-                BVC     _specalias_L313
+                BVC     _specalias_L282
                 EOR     #$8000
-_specalias_L313
-                BPL     _specalias_L312
+_specalias_L282
+                BPL     _specalias_L281
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -14660,27 +14528,27 @@ _specalias_L313
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L315
+                BNE     _specalias_L284
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L315
+                BNE     _specalias_L284
                 LDA     #0
-                BRA     _specalias_L316
-_specalias_L315
+                BRA     _specalias_L285
+_specalias_L284
                 LDA     #1
-_specalias_L316
+_specalias_L285
                 CMP     #0
-                BEQ     _specalias_L314
+                BEQ     _specalias_L283
                 INC     _fcc_img1
-_specalias_L314
-_specalias_L311
+_specalias_L283
+_specalias_L280
                 INC     _fcc_img0
-                BRA     _specalias_L310
-_specalias_L312
+                BRA     _specalias_L279
+_specalias_L281
                 LDA     _fcc_img1
                 TAY
                 TSC
@@ -14738,7 +14606,7 @@ _specalias_chainlen_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specalias_L317
+_specalias_L286
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14749,7 +14617,7 @@ _specalias_L317
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _specalias_L319
+                BEQ     _specalias_L288
                 LDA     _fcc_img0
                 INC
                 STA     _fcc_img0
@@ -14765,10 +14633,10 @@ _specalias_L317
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specalias_L321
+                BVC     _specalias_L290
                 EOR     #$8000
-_specalias_L321
-                BPL     _specalias_L320
+_specalias_L290
+                BPL     _specalias_L289
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -14779,8 +14647,8 @@ _specalias_L321
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L320
-_specalias_L318
+_specalias_L289
+_specalias_L287
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14813,8 +14681,8 @@ _specalias_L318
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specalias_L317
-_specalias_L319
+                BRL     _specalias_L286
+_specalias_L288
                 LDA     _fcc_img0
                 TAY
                 TSC
@@ -14961,7 +14829,7 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     _specalias_L322
+                BEQ     _specalias_L291
                 LDA     #51
                 TAY
                 TSC
@@ -14972,7 +14840,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L322
+_specalias_L291
                 LDA     #769
                 LSR
                 LSR
@@ -15010,7 +14878,7 @@ _specalias_L322
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     _specalias_L323
+                BNE     _specalias_L292
                 LDA     #52
                 TAY
                 TSC
@@ -15021,7 +14889,7 @@ _specalias_L322
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L323
+_specalias_L292
                 LDA     #769
                 LSR
                 LSR
@@ -15087,7 +14955,7 @@ _specalias_L323
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L324
+                BEQ     _specalias_L293
                 LDA     #53
                 TAY
                 TSC
@@ -15098,7 +14966,7 @@ _specalias_L323
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L324
+_specalias_L293
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15139,21 +15007,21 @@ _specalias_L324
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L326
+                BNE     _specalias_L295
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L326
+                BNE     _specalias_L295
                 LDA     #0
-                BRA     _specalias_L327
-_specalias_L326
+                BRA     _specalias_L296
+_specalias_L295
                 LDA     #1
-_specalias_L327
+_specalias_L296
                 CMP     #0
-                BEQ     _specalias_L325
+                BEQ     _specalias_L294
                 LDA     #54
                 TAY
                 TSC
@@ -15164,10 +15032,10 @@ _specalias_L327
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L325
+_specalias_L294
                 FGX2_FARCALL _specalias_spec_inuse
                 CMP     #0
-                BEQ     _specalias_L328
+                BEQ     _specalias_L297
                 LDA     #55
                 TAY
                 TSC
@@ -15178,7 +15046,7 @@ _specalias_L325
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L328
+_specalias_L297
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15226,7 +15094,7 @@ _specalias_L328
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L329
+                BEQ     _specalias_L298
                 LDA     #56
                 TAY
                 TSC
@@ -15237,7 +15105,7 @@ _specalias_L328
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L329
+_specalias_L298
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15278,21 +15146,21 @@ _specalias_L329
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L331
+                BNE     _specalias_L300
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L331
+                BNE     _specalias_L300
                 LDA     #0
-                BRA     _specalias_L332
-_specalias_L331
+                BRA     _specalias_L301
+_specalias_L300
                 LDA     #1
-_specalias_L332
+_specalias_L301
                 CMP     #0
-                BEQ     _specalias_L330
+                BEQ     _specalias_L299
                 LDA     #57
                 TAY
                 TSC
@@ -15303,11 +15171,11 @@ _specalias_L332
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L330
+_specalias_L299
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #1
-                BEQ     _specalias_L333
+                BEQ     _specalias_L302
                 LDA     #58
                 TAY
                 TSC
@@ -15318,7 +15186,7 @@ _specalias_L330
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L333
+_specalias_L302
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15339,7 +15207,7 @@ _specalias_L333
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #769
-                BEQ     _specalias_L334
+                BEQ     _specalias_L303
                 LDA     #59
                 TAY
                 TSC
@@ -15350,7 +15218,7 @@ _specalias_L333
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L334
+_specalias_L303
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15393,21 +15261,21 @@ _specalias_L334
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L336
+                BNE     _specalias_L305
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L336
+                BNE     _specalias_L305
                 LDA     #0
-                BRA     _specalias_L337
-_specalias_L336
+                BRA     _specalias_L306
+_specalias_L305
                 LDA     #1
-_specalias_L337
+_specalias_L306
                 CMP     #0
-                BEQ     _specalias_L335
+                BEQ     _specalias_L304
                 LDA     #60
                 TAY
                 TSC
@@ -15418,7 +15286,7 @@ _specalias_L337
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L335
+_specalias_L304
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -15438,21 +15306,21 @@ _specalias_L335
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L339
+                BNE     _specalias_L308
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L339
+                BNE     _specalias_L308
                 LDA     #0
-                BRA     _specalias_L340
-_specalias_L339
+                BRA     _specalias_L309
+_specalias_L308
                 LDA     #1
-_specalias_L340
+_specalias_L309
                 CMP     #0
-                BEQ     _specalias_L338
+                BEQ     _specalias_L307
                 LDA     #61
                 TAY
                 TSC
@@ -15463,7 +15331,7 @@ _specalias_L340
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L338
+_specalias_L307
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15497,21 +15365,21 @@ _specalias_L338
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L342
+                BNE     _specalias_L311
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L342
+                BNE     _specalias_L311
                 LDA     #0
-                BRA     _specalias_L343
-_specalias_L342
+                BRA     _specalias_L312
+_specalias_L311
                 LDA     #1
-_specalias_L343
+_specalias_L312
                 CMP     #0
-                BEQ     _specalias_L341
+                BEQ     _specalias_L310
                 LDA     #62
                 TAY
                 TSC
@@ -15522,7 +15390,7 @@ _specalias_L343
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L341
+_specalias_L310
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15531,7 +15399,7 @@ _specalias_L341
                 TAX
                 AND     #2048
                 CMP     #0
-                BEQ     _specalias_L344
+                BEQ     _specalias_L313
                 LDA     #63
                 TAY
                 TSC
@@ -15542,7 +15410,7 @@ _specalias_L341
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L344
+_specalias_L313
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15581,7 +15449,7 @@ _specalias_L344
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _specalias_L345
+                BEQ     _specalias_L314
                 LDA     #64
                 TAY
                 TSC
@@ -15592,7 +15460,7 @@ _specalias_L344
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L345
+_specalias_L314
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15640,7 +15508,7 @@ _specalias_L345
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L346
+                BEQ     _specalias_L315
                 LDA     #65
                 TAY
                 TSC
@@ -15651,7 +15519,7 @@ _specalias_L345
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L346
+_specalias_L315
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -15699,21 +15567,21 @@ _specalias_L346
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L348
+                BNE     _specalias_L317
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L348
+                BNE     _specalias_L317
                 LDA     #0
-                BRA     _specalias_L349
-_specalias_L348
+                BRA     _specalias_L318
+_specalias_L317
                 LDA     #1
-_specalias_L349
+_specalias_L318
                 CMP     #0
-                BEQ     _specalias_L347
+                BEQ     _specalias_L316
                 LDA     #66
                 TAY
                 TSC
@@ -15724,7 +15592,7 @@ _specalias_L349
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L347
+_specalias_L316
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15736,7 +15604,7 @@ _specalias_L347
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _specalias_L350
+                BEQ     _specalias_L319
                 LDA     #67
                 TAY
                 TSC
@@ -15747,7 +15615,7 @@ _specalias_L347
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L350
+_specalias_L319
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -15755,7 +15623,7 @@ _specalias_L350
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BNE     _specalias_L351
+                BNE     _specalias_L320
                 LDA     #68
                 TAY
                 TSC
@@ -15766,7 +15634,7 @@ _specalias_L350
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L351
+_specalias_L320
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -15774,7 +15642,7 @@ _specalias_L351
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BNE     _specalias_L352
+                BNE     _specalias_L321
                 LDA     #69
                 TAY
                 TSC
@@ -15785,7 +15653,7 @@ _specalias_L351
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L352
+_specalias_L321
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -15805,21 +15673,21 @@ _specalias_L352
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L354
+                BNE     _specalias_L323
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L354
+                BNE     _specalias_L323
                 LDA     #0
-                BRA     _specalias_L355
-_specalias_L354
+                BRA     _specalias_L324
+_specalias_L323
                 LDA     #1
-_specalias_L355
+_specalias_L324
                 CMP     #0
-                BEQ     _specalias_L353
+                BEQ     _specalias_L322
                 LDA     #70
                 TAY
                 TSC
@@ -15830,7 +15698,7 @@ _specalias_L355
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L353
+_specalias_L322
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -15865,21 +15733,21 @@ _specalias_L353
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L357
+                BNE     _specalias_L326
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L357
+                BNE     _specalias_L326
                 LDA     #0
-                BRA     _specalias_L358
-_specalias_L357
+                BRA     _specalias_L327
+_specalias_L326
                 LDA     #1
-_specalias_L358
+_specalias_L327
                 CMP     #0
-                BEQ     _specalias_L356
+                BEQ     _specalias_L325
                 LDA     #71
                 TAY
                 TSC
@@ -15890,11 +15758,11 @@ _specalias_L358
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L356
+_specalias_L325
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #2
-                BEQ     _specalias_L359
+                BEQ     _specalias_L328
                 LDA     #72
                 TAY
                 TSC
@@ -15905,7 +15773,7 @@ _specalias_L356
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L359
+_specalias_L328
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15953,7 +15821,7 @@ _specalias_L359
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L360
+                BEQ     _specalias_L329
                 LDA     #73
                 TAY
                 TSC
@@ -15964,7 +15832,7 @@ _specalias_L359
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L360
+_specalias_L329
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16005,21 +15873,21 @@ _specalias_L360
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L362
+                BNE     _specalias_L331
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L362
+                BNE     _specalias_L331
                 LDA     #0
-                BRA     _specalias_L363
-_specalias_L362
+                BRA     _specalias_L332
+_specalias_L331
                 LDA     #1
-_specalias_L363
+_specalias_L332
                 CMP     #0
-                BEQ     _specalias_L361
+                BEQ     _specalias_L330
                 LDA     #74
                 TAY
                 TSC
@@ -16030,7 +15898,7 @@ _specalias_L363
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L361
+_specalias_L330
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16038,7 +15906,7 @@ _specalias_L361
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L364
+                BEQ     _specalias_L333
                 LDA     #75
                 TAY
                 TSC
@@ -16049,7 +15917,7 @@ _specalias_L361
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L364
+_specalias_L333
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -16069,21 +15937,21 @@ _specalias_L364
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L366
+                BNE     _specalias_L335
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L366
+                BNE     _specalias_L335
                 LDA     #0
-                BRA     _specalias_L367
-_specalias_L366
+                BRA     _specalias_L336
+_specalias_L335
                 LDA     #1
-_specalias_L367
+_specalias_L336
                 CMP     #0
-                BEQ     _specalias_L365
+                BEQ     _specalias_L334
                 LDA     #76
                 TAY
                 TSC
@@ -16094,7 +15962,7 @@ _specalias_L367
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L365
+_specalias_L334
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -16129,21 +15997,21 @@ _specalias_L365
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L369
+                BNE     _specalias_L338
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L369
+                BNE     _specalias_L338
                 LDA     #0
-                BRA     _specalias_L370
-_specalias_L369
+                BRA     _specalias_L339
+_specalias_L338
                 LDA     #1
-_specalias_L370
+_specalias_L339
                 CMP     #0
-                BEQ     _specalias_L368
+                BEQ     _specalias_L337
                 LDA     #77
                 TAY
                 TSC
@@ -16154,7 +16022,7 @@ _specalias_L370
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L368
+_specalias_L337
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -16202,7 +16070,7 @@ _specalias_L368
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L371
+                BEQ     _specalias_L340
                 LDA     #78
                 TAY
                 TSC
@@ -16213,7 +16081,7 @@ _specalias_L368
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L371
+_specalias_L340
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -16254,21 +16122,21 @@ _specalias_L371
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L373
+                BNE     _specalias_L342
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L373
+                BNE     _specalias_L342
                 LDA     #0
-                BRA     _specalias_L374
-_specalias_L373
+                BRA     _specalias_L343
+_specalias_L342
                 LDA     #1
-_specalias_L374
+_specalias_L343
                 CMP     #0
-                BEQ     _specalias_L372
+                BEQ     _specalias_L341
                 LDA     #79
                 TAY
                 TSC
@@ -16279,7 +16147,7 @@ _specalias_L374
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L372
+_specalias_L341
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -16287,7 +16155,7 @@ _specalias_L372
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L375
+                BEQ     _specalias_L344
                 LDA     #80
                 TAY
                 TSC
@@ -16298,7 +16166,7 @@ _specalias_L372
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L375
+_specalias_L344
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -16318,21 +16186,21 @@ _specalias_L375
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L377
+                BNE     _specalias_L346
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L377
+                BNE     _specalias_L346
                 LDA     #0
-                BRA     _specalias_L378
-_specalias_L377
+                BRA     _specalias_L347
+_specalias_L346
                 LDA     #1
-_specalias_L378
+_specalias_L347
                 CMP     #0
-                BEQ     _specalias_L376
+                BEQ     _specalias_L345
                 LDA     #81
                 TAY
                 TSC
@@ -16343,7 +16211,7 @@ _specalias_L378
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L376
+_specalias_L345
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -16378,21 +16246,21 @@ _specalias_L376
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L380
+                BNE     _specalias_L349
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L380
+                BNE     _specalias_L349
                 LDA     #0
-                BRA     _specalias_L381
-_specalias_L380
+                BRA     _specalias_L350
+_specalias_L349
                 LDA     #1
-_specalias_L381
+_specalias_L350
                 CMP     #0
-                BEQ     _specalias_L379
+                BEQ     _specalias_L348
                 LDA     #99
                 TAY
                 TSC
@@ -16403,7 +16271,7 @@ _specalias_L381
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L379
+_specalias_L348
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
@@ -16412,7 +16280,7 @@ _specalias_L379
                 TYA
                 TAX
                 CMP     #4
-                BEQ     _specalias_L382
+                BEQ     _specalias_L351
                 LDA     #149
                 TAY
                 TSC
@@ -16423,7 +16291,7 @@ _specalias_L379
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L382
+_specalias_L351
                 LDA     #0
                 STA     21,S   ; fccstk d=0 b=21
                 LDA     #0
@@ -16452,7 +16320,7 @@ _specalias_L382
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _specalias_L383
+                BEQ     _specalias_L352
                 LDA     #82
                 TAY
                 TSC
@@ -16463,7 +16331,7 @@ _specalias_L382
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L383
+_specalias_L352
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -16474,21 +16342,21 @@ _specalias_L383
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L387
+                BNE     _specalias_L354
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L387
+                BNE     _specalias_L354
                 LDA     #0
-                BRA     _specalias_L388
-_specalias_L387
+                BRA     _specalias_L355
+_specalias_L354
                 LDA     #1
-_specalias_L388
+_specalias_L355
                 CMP     #0
-                BEQ     _specalias_L385
+                BEQ     _specalias_L353
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -16499,28 +16367,21 @@ _specalias_L388
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L389
+                BNE     _specalias_L356
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L389
+                BNE     _specalias_L356
                 LDA     #0
-                BRA     _specalias_L390
-_specalias_L389
+                BRA     _specalias_L357
+_specalias_L356
                 LDA     #1
-_specalias_L390
+_specalias_L357
                 CMP     #0
-                BEQ     _specalias_L385
-                LDA     #1
-                BRA     _specalias_L386
-_specalias_L385
-                LDA     #0
-_specalias_L386
-                CMP     #0
-                BEQ     _specalias_L384
+                BEQ     _specalias_L353
                 LDA     #83
                 TAY
                 TSC
@@ -16531,7 +16392,7 @@ _specalias_L386
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L384
+_specalias_L353
                 LDA     #0
                 STA     21,S   ; fccstk d=0 b=21
                 LDA     #0
@@ -16560,7 +16421,7 @@ _specalias_L384
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _specalias_L391
+                BEQ     _specalias_L358
                 LDA     #84
                 TAY
                 TSC
@@ -16571,7 +16432,7 @@ _specalias_L384
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L391
+_specalias_L358
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -16582,21 +16443,21 @@ _specalias_L391
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L393
+                BNE     _specalias_L360
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L393
+                BNE     _specalias_L360
                 LDA     #0
-                BRA     _specalias_L394
-_specalias_L393
+                BRA     _specalias_L361
+_specalias_L360
                 LDA     #1
-_specalias_L394
+_specalias_L361
                 CMP     #0
-                BEQ     _specalias_L392
+                BEQ     _specalias_L359
                 LDA     #85
                 TAY
                 TSC
@@ -16607,7 +16468,7 @@ _specalias_L394
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L392
+_specalias_L359
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -16633,7 +16494,7 @@ _specalias_L392
                 TYA
                 TAX
                 CMP     #1
-                BEQ     _specalias_L395
+                BEQ     _specalias_L362
                 LDA     #86
                 TAY
                 TSC
@@ -16644,7 +16505,7 @@ _specalias_L392
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L395
+_specalias_L362
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -16660,7 +16521,7 @@ _specalias_L395
                 TYA
                 TAX
                 CMP     #2
-                BEQ     _specalias_L396
+                BEQ     _specalias_L363
                 LDA     #87
                 TAY
                 TSC
@@ -16671,7 +16532,7 @@ _specalias_L395
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L396
+_specalias_L363
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16698,7 +16559,7 @@ _specalias_L396
                 TYA
                 TAX
                 CMP     #3
-                BEQ     _specalias_L397
+                BEQ     _specalias_L364
                 LDA     #88
                 TAY
                 TSC
@@ -16709,7 +16570,7 @@ _specalias_L396
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L397
+_specalias_L364
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16725,7 +16586,7 @@ _specalias_L397
                 TYA
                 TAX
                 CMP     #3
-                BEQ     _specalias_L398
+                BEQ     _specalias_L365
                 LDA     #89
                 TAY
                 TSC
@@ -16736,7 +16597,7 @@ _specalias_L397
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L398
+_specalias_L365
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16771,7 +16632,7 @@ _specalias_L398
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _specalias_L399
+                BEQ     _specalias_L366
                 LDA     #90
                 TAY
                 TSC
@@ -16782,7 +16643,7 @@ _specalias_L398
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L399
+_specalias_L366
                 FGX2_FARCALL _specalias_spec_inuse
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     11,S   ; fccstk d=0 b=11
@@ -16804,7 +16665,7 @@ _specalias_L399
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _specalias_L400
+                BEQ     _specalias_L367
                 LDA     #91
                 TAY
                 TSC
@@ -16815,7 +16676,7 @@ _specalias_L399
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L400
+_specalias_L367
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16837,21 +16698,21 @@ _specalias_L400
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L402
+                BNE     _specalias_L369
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L402
+                BNE     _specalias_L369
                 LDA     #0
-                BRA     _specalias_L403
-_specalias_L402
+                BRA     _specalias_L370
+_specalias_L369
                 LDA     #1
-_specalias_L403
+_specalias_L370
                 CMP     #0
-                BEQ     _specalias_L401
+                BEQ     _specalias_L368
                 LDA     #92
                 TAY
                 TSC
@@ -16862,7 +16723,7 @@ _specalias_L403
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L401
+_specalias_L368
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -16870,7 +16731,7 @@ _specalias_L401
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L404
+                BEQ     _specalias_L371
                 LDA     #93
                 TAY
                 TSC
@@ -16881,7 +16742,7 @@ _specalias_L401
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L404
+_specalias_L371
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -16889,7 +16750,7 @@ _specalias_L404
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L405
+                BEQ     _specalias_L372
                 LDA     #94
                 TAY
                 TSC
@@ -16900,7 +16761,7 @@ _specalias_L404
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L405
+_specalias_L372
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -16920,21 +16781,21 @@ _specalias_L405
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L407
+                BNE     _specalias_L374
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L407
+                BNE     _specalias_L374
                 LDA     #0
-                BRA     _specalias_L408
-_specalias_L407
+                BRA     _specalias_L375
+_specalias_L374
                 LDA     #1
-_specalias_L408
+_specalias_L375
                 CMP     #0
-                BEQ     _specalias_L406
+                BEQ     _specalias_L373
                 LDA     #95
                 TAY
                 TSC
@@ -16945,7 +16806,7 @@ _specalias_L408
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L406
+_specalias_L373
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -16980,21 +16841,21 @@ _specalias_L406
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L410
+                BNE     _specalias_L377
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L410
+                BNE     _specalias_L377
                 LDA     #0
-                BRA     _specalias_L411
-_specalias_L410
+                BRA     _specalias_L378
+_specalias_L377
                 LDA     #1
-_specalias_L411
+_specalias_L378
                 CMP     #0
-                BEQ     _specalias_L409
+                BEQ     _specalias_L376
                 LDA     #96
                 TAY
                 TSC
@@ -17005,7 +16866,7 @@ _specalias_L411
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L409
+_specalias_L376
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -17040,21 +16901,21 @@ _specalias_L409
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L413
+                BNE     _specalias_L380
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L413
+                BNE     _specalias_L380
                 LDA     #0
-                BRA     _specalias_L414
-_specalias_L413
+                BRA     _specalias_L381
+_specalias_L380
                 LDA     #1
-_specalias_L414
+_specalias_L381
                 CMP     #0
-                BEQ     _specalias_L412
+                BEQ     _specalias_L379
                 LDA     #97
                 TAY
                 TSC
@@ -17065,7 +16926,7 @@ _specalias_L414
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L412
+_specalias_L379
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -17099,21 +16960,21 @@ _specalias_L412
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L416
+                BNE     _specalias_L383
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L416
+                BNE     _specalias_L383
                 LDA     #0
-                BRA     _specalias_L417
-_specalias_L416
+                BRA     _specalias_L384
+_specalias_L383
                 LDA     #1
-_specalias_L417
+_specalias_L384
                 CMP     #0
-                BEQ     _specalias_L415
+                BEQ     _specalias_L382
                 LDA     #98
                 TAY
                 TSC
@@ -17124,7 +16985,7 @@ _specalias_L417
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L415
+_specalias_L382
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
@@ -17133,7 +16994,7 @@ _specalias_L415
                 TYA
                 TAX
                 CMP     #3
-                BEQ     _specalias_L418
+                BEQ     _specalias_L385
                 LDA     #100
                 TAY
                 TSC
@@ -17144,7 +17005,7 @@ _specalias_L415
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L418
+_specalias_L385
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -17153,7 +17014,7 @@ _specalias_L418
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #8
-                BEQ     _specalias_L419
+                BEQ     _specalias_L386
                 LDA     #101
                 TAY
                 TSC
@@ -17164,7 +17025,7 @@ _specalias_L418
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L419
+_specalias_L386
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -17195,21 +17056,21 @@ _specalias_L419
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L421
+                BNE     _specalias_L388
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L421
+                BNE     _specalias_L388
                 LDA     #0
-                BRA     _specalias_L422
-_specalias_L421
+                BRA     _specalias_L389
+_specalias_L388
                 LDA     #1
-_specalias_L422
+_specalias_L389
                 CMP     #0
-                BEQ     _specalias_L420
+                BEQ     _specalias_L387
                 LDA     #102
                 TAY
                 TSC
@@ -17220,7 +17081,7 @@ _specalias_L422
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L420
+_specalias_L387
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
@@ -17229,7 +17090,7 @@ _specalias_L420
                 TYA
                 TAX
                 CMP     #2
-                BEQ     _specalias_L423
+                BEQ     _specalias_L390
                 LDA     #103
                 TAY
                 TSC
@@ -17240,7 +17101,7 @@ _specalias_L420
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L423
+_specalias_L390
                 FGX2_FARCALL _specalias_reset
                 SEP     #$20
                 MX      %10
@@ -17263,7 +17124,7 @@ _specalias_L423
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _specalias_L424
+                BEQ     _specalias_L391
                 LDA     #104
                 TAY
                 TSC
@@ -17274,7 +17135,7 @@ _specalias_L423
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L424
+_specalias_L391
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17283,7 +17144,7 @@ _specalias_L424
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BEQ     _specalias_L425
+                BEQ     _specalias_L392
                 LDA     #105
                 TAY
                 TSC
@@ -17294,14 +17155,14 @@ _specalias_L424
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L425
+_specalias_L392
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                BEQ     _specalias_L426
+                BEQ     _specalias_L393
                 LDA     #106
                 TAY
                 TSC
@@ -17312,7 +17173,7 @@ _specalias_L425
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L426
+_specalias_L393
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17342,21 +17203,21 @@ _specalias_L426
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L428
+                BNE     _specalias_L395
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L428
+                BNE     _specalias_L395
                 LDA     #0
-                BRA     _specalias_L429
-_specalias_L428
+                BRA     _specalias_L396
+_specalias_L395
                 LDA     #1
-_specalias_L429
+_specalias_L396
                 CMP     #0
-                BEQ     _specalias_L427
+                BEQ     _specalias_L394
                 LDA     #107
                 TAY
                 TSC
@@ -17367,7 +17228,7 @@ _specalias_L429
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L427
+_specalias_L394
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17388,7 +17249,7 @@ _specalias_L427
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #770
-                BEQ     _specalias_L430
+                BEQ     _specalias_L397
                 LDA     #108
                 TAY
                 TSC
@@ -17399,7 +17260,7 @@ _specalias_L427
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L430
+_specalias_L397
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17421,21 +17282,21 @@ _specalias_L430
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L432
+                BNE     _specalias_L399
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L432
+                BNE     _specalias_L399
                 LDA     #0
-                BRA     _specalias_L433
-_specalias_L432
+                BRA     _specalias_L400
+_specalias_L399
                 LDA     #1
-_specalias_L433
+_specalias_L400
                 CMP     #0
-                BEQ     _specalias_L431
+                BEQ     _specalias_L398
                 LDA     #109
                 TAY
                 TSC
@@ -17446,11 +17307,11 @@ _specalias_L433
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L431
+_specalias_L398
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #1
-                BEQ     _specalias_L434
+                BEQ     _specalias_L401
                 LDA     #110
                 TAY
                 TSC
@@ -17461,7 +17322,7 @@ _specalias_L431
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L434
+_specalias_L401
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -17509,7 +17370,7 @@ _specalias_L434
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L435
+                BEQ     _specalias_L402
                 LDA     #111
                 TAY
                 TSC
@@ -17520,7 +17381,7 @@ _specalias_L434
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L435
+_specalias_L402
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -17572,21 +17433,21 @@ _specalias_L435
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L437
+                BNE     _specalias_L404
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L437
+                BNE     _specalias_L404
                 LDA     #0
-                BRA     _specalias_L438
-_specalias_L437
+                BRA     _specalias_L405
+_specalias_L404
                 LDA     #1
-_specalias_L438
+_specalias_L405
                 CMP     #0
-                BEQ     _specalias_L436
+                BEQ     _specalias_L403
                 LDA     #112
                 TAY
                 TSC
@@ -17597,14 +17458,14 @@ _specalias_L438
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L436
+_specalias_L403
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
-                BEQ     _specalias_L439
+                BEQ     _specalias_L406
                 LDA     #113
                 TAY
                 TSC
@@ -17615,7 +17476,7 @@ _specalias_L436
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L439
+_specalias_L406
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17645,21 +17506,21 @@ _specalias_L439
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L441
+                BNE     _specalias_L408
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L441
+                BNE     _specalias_L408
                 LDA     #0
-                BRA     _specalias_L442
-_specalias_L441
+                BRA     _specalias_L409
+_specalias_L408
                 LDA     #1
-_specalias_L442
+_specalias_L409
                 CMP     #0
-                BEQ     _specalias_L440
+                BEQ     _specalias_L407
                 LDA     #114
                 TAY
                 TSC
@@ -17670,7 +17531,7 @@ _specalias_L442
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L440
+_specalias_L407
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17679,7 +17540,7 @@ _specalias_L440
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #1
-                BEQ     _specalias_L443
+                BEQ     _specalias_L410
                 LDA     #115
                 TAY
                 TSC
@@ -17690,7 +17551,7 @@ _specalias_L440
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L443
+_specalias_L410
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17720,21 +17581,21 @@ _specalias_L443
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L445
+                BNE     _specalias_L412
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L445
+                BNE     _specalias_L412
                 LDA     #0
-                BRA     _specalias_L446
-_specalias_L445
+                BRA     _specalias_L413
+_specalias_L412
                 LDA     #1
-_specalias_L446
+_specalias_L413
                 CMP     #0
-                BEQ     _specalias_L444
+                BEQ     _specalias_L411
                 LDA     #116
                 TAY
                 TSC
@@ -17745,7 +17606,7 @@ _specalias_L446
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L444
+_specalias_L411
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17766,7 +17627,7 @@ _specalias_L444
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #770
-                BEQ     _specalias_L447
+                BEQ     _specalias_L414
                 LDA     #117
                 TAY
                 TSC
@@ -17777,11 +17638,11 @@ _specalias_L444
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L447
+_specalias_L414
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #1
-                BEQ     _specalias_L448
+                BEQ     _specalias_L415
                 LDA     #118
                 TAY
                 TSC
@@ -17792,7 +17653,7 @@ _specalias_L447
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L448
+_specalias_L415
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17800,7 +17661,7 @@ _specalias_L448
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L449
+                BEQ     _specalias_L416
                 LDA     #119
                 TAY
                 TSC
@@ -17811,14 +17672,14 @@ _specalias_L448
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L449
+_specalias_L416
                 LDA     #8
                 PHA
                 FGX2_FARCALL _specalias_saw
                 TAY
                 PLA
                 TYA
-                BNE     _specalias_L450
+                BNE     _specalias_L417
                 LDA     #120
                 TAY
                 TSC
@@ -17829,14 +17690,14 @@ _specalias_L449
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L450
+_specalias_L417
                 LDA     #4
                 PHA
                 FGX2_FARCALL _specalias_saw
                 TAY
                 PLA
                 TYA
-                BEQ     _specalias_L451
+                BEQ     _specalias_L418
                 LDA     #121
                 TAY
                 TSC
@@ -17847,9 +17708,9 @@ _specalias_L450
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L451
+_specalias_L418
                 LDA     _specalias_invalbufs
-                BEQ     _specalias_L452
+                BEQ     _specalias_L419
                 LDA     #122
                 TAY
                 TSC
@@ -17860,7 +17721,7 @@ _specalias_L451
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L452
+_specalias_L419
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -17920,7 +17781,7 @@ _specalias_L452
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L453
+                BEQ     _specalias_L420
                 LDA     #123
                 TAY
                 TSC
@@ -17931,7 +17792,7 @@ _specalias_L452
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L453
+_specalias_L420
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17972,21 +17833,21 @@ _specalias_L453
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L455
+                BNE     _specalias_L422
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L455
+                BNE     _specalias_L422
                 LDA     #0
-                BRA     _specalias_L456
-_specalias_L455
+                BRA     _specalias_L423
+_specalias_L422
                 LDA     #1
-_specalias_L456
+_specalias_L423
                 CMP     #0
-                BEQ     _specalias_L454
+                BEQ     _specalias_L421
                 LDA     #124
                 TAY
                 TSC
@@ -17997,7 +17858,7 @@ _specalias_L456
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L454
+_specalias_L421
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18028,21 +17889,21 @@ _specalias_L454
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L458
+                BNE     _specalias_L425
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L458
+                BNE     _specalias_L425
                 LDA     #0
-                BRA     _specalias_L459
-_specalias_L458
+                BRA     _specalias_L426
+_specalias_L425
                 LDA     #1
-_specalias_L459
+_specalias_L426
                 CMP     #0
-                BEQ     _specalias_L457
+                BEQ     _specalias_L424
                 LDA     #125
                 TAY
                 TSC
@@ -18053,7 +17914,7 @@ _specalias_L459
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L457
+_specalias_L424
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -18101,7 +17962,7 @@ _specalias_L457
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L460
+                BEQ     _specalias_L427
                 LDA     #126
                 TAY
                 TSC
@@ -18112,7 +17973,7 @@ _specalias_L457
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L460
+_specalias_L427
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -18123,21 +17984,21 @@ _specalias_L460
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L462
+                BNE     _specalias_L429
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L462
+                BNE     _specalias_L429
                 LDA     #1
-                BRA     _specalias_L463
-_specalias_L462
+                BRA     _specalias_L430
+_specalias_L429
                 LDA     #0
-_specalias_L463
+_specalias_L430
                 CMP     #0
-                BEQ     _specalias_L461
+                BEQ     _specalias_L428
                 LDA     #127
                 TAY
                 TSC
@@ -18148,7 +18009,7 @@ _specalias_L463
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L461
+_specalias_L428
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -18189,21 +18050,21 @@ _specalias_L461
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L465
+                BNE     _specalias_L432
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L465
+                BNE     _specalias_L432
                 LDA     #0
-                BRA     _specalias_L466
-_specalias_L465
+                BRA     _specalias_L433
+_specalias_L432
                 LDA     #1
-_specalias_L466
+_specalias_L433
                 CMP     #0
-                BEQ     _specalias_L464
+                BEQ     _specalias_L431
                 LDA     #128
                 TAY
                 TSC
@@ -18214,7 +18075,7 @@ _specalias_L466
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L464
+_specalias_L431
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18223,7 +18084,7 @@ _specalias_L464
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #8
-                BEQ     _specalias_L467
+                BEQ     _specalias_L434
                 LDA     #129
                 TAY
                 TSC
@@ -18234,7 +18095,7 @@ _specalias_L464
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L467
+_specalias_L434
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -18242,7 +18103,7 @@ _specalias_L467
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                BEQ     _specalias_L468
+                BEQ     _specalias_L435
                 LDA     #130
                 TAY
                 TSC
@@ -18253,7 +18114,7 @@ _specalias_L467
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L468
+_specalias_L435
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -18273,21 +18134,21 @@ _specalias_L468
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L470
+                BNE     _specalias_L437
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L470
+                BNE     _specalias_L437
                 LDA     #0
-                BRA     _specalias_L471
-_specalias_L470
+                BRA     _specalias_L438
+_specalias_L437
                 LDA     #1
-_specalias_L471
+_specalias_L438
                 CMP     #0
-                BEQ     _specalias_L469
+                BEQ     _specalias_L436
                 LDA     #131
                 TAY
                 TSC
@@ -18298,7 +18159,7 @@ _specalias_L471
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L469
+_specalias_L436
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -18332,21 +18193,21 @@ _specalias_L469
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L473
+                BNE     _specalias_L440
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L473
+                BNE     _specalias_L440
                 LDA     #0
-                BRA     _specalias_L474
-_specalias_L473
+                BRA     _specalias_L441
+_specalias_L440
                 LDA     #1
-_specalias_L474
+_specalias_L441
                 CMP     #0
-                BEQ     _specalias_L472
+                BEQ     _specalias_L439
                 LDA     #132
                 TAY
                 TSC
@@ -18357,11 +18218,11 @@ _specalias_L474
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L472
+_specalias_L439
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #1
-                BEQ     _specalias_L475
+                BEQ     _specalias_L442
                 LDA     #133
                 TAY
                 TSC
@@ -18372,7 +18233,7 @@ _specalias_L472
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L475
+_specalias_L442
                 FGX2_FARCALL _specalias_reset
                 LDA     #$0040
                 STA     _fcc_long_hi
@@ -18429,7 +18290,7 @@ _specalias_L475
                 ADC     #14
                 TCS
                 TYA
-                BEQ     _specalias_L476
+                BEQ     _specalias_L443
                 LDA     #134
                 TAY
                 TSC
@@ -18440,7 +18301,7 @@ _specalias_L475
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L476
+_specalias_L443
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18481,21 +18342,21 @@ _specalias_L476
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L478
+                BNE     _specalias_L445
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L478
+                BNE     _specalias_L445
                 LDA     #0
-                BRA     _specalias_L479
-_specalias_L478
+                BRA     _specalias_L446
+_specalias_L445
                 LDA     #1
-_specalias_L479
+_specalias_L446
                 CMP     #0
-                BEQ     _specalias_L477
+                BEQ     _specalias_L444
                 LDA     #135
                 TAY
                 TSC
@@ -18506,7 +18367,7 @@ _specalias_L479
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L477
+_specalias_L444
                 LDA     #0
                 PHA
                 LDA     #0
@@ -18536,7 +18397,7 @@ _specalias_L477
                 TYA
                 TAX
                 CMP     #16
-                BEQ     _specalias_L480
+                BEQ     _specalias_L447
                 LDA     #136
                 TAY
                 TSC
@@ -18547,7 +18408,7 @@ _specalias_L477
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L480
+_specalias_L447
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18577,21 +18438,21 @@ _specalias_L480
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L482
+                BNE     _specalias_L449
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L482
+                BNE     _specalias_L449
                 LDA     #0
-                BRA     _specalias_L483
-_specalias_L482
+                BRA     _specalias_L450
+_specalias_L449
                 LDA     #1
-_specalias_L483
+_specalias_L450
                 CMP     #0
-                BEQ     _specalias_L481
+                BEQ     _specalias_L448
                 LDA     #137
                 TAY
                 TSC
@@ -18602,7 +18463,7 @@ _specalias_L483
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L481
+_specalias_L448
                 LDA     #0
                 STA     _specalias_n_trace
                 LDA     #2
@@ -18632,7 +18493,7 @@ _specalias_L481
                 ADC     #10
                 TCS
                 TYA
-                BEQ     _specalias_L484
+                BEQ     _specalias_L451
                 LDA     #138
                 TAY
                 TSC
@@ -18643,7 +18504,7 @@ _specalias_L481
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L484
+_specalias_L451
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18652,7 +18513,7 @@ _specalias_L484
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #3
-                BEQ     _specalias_L485
+                BEQ     _specalias_L452
                 LDA     #139
                 TAY
                 TSC
@@ -18663,7 +18524,7 @@ _specalias_L484
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L485
+_specalias_L452
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18693,21 +18554,21 @@ _specalias_L485
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L487
+                BNE     _specalias_L454
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L487
+                BNE     _specalias_L454
                 LDA     #0
-                BRA     _specalias_L488
-_specalias_L487
+                BRA     _specalias_L455
+_specalias_L454
                 LDA     #1
-_specalias_L488
+_specalias_L455
                 CMP     #0
-                BEQ     _specalias_L486
+                BEQ     _specalias_L453
                 LDA     #140
                 TAY
                 TSC
@@ -18718,7 +18579,7 @@ _specalias_L488
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L486
+_specalias_L453
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18740,21 +18601,21 @@ _specalias_L486
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L490
+                BNE     _specalias_L457
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L490
+                BNE     _specalias_L457
                 LDA     #0
-                BRA     _specalias_L491
-_specalias_L490
+                BRA     _specalias_L458
+_specalias_L457
                 LDA     #1
-_specalias_L491
+_specalias_L458
                 CMP     #0
-                BEQ     _specalias_L489
+                BEQ     _specalias_L456
                 LDA     #141
                 TAY
                 TSC
@@ -18765,7 +18626,7 @@ _specalias_L491
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L489
+_specalias_L456
                 LDA     mnt_a+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_a+16
@@ -18775,21 +18636,21 @@ _specalias_L489
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L493
+                BNE     _specalias_L460
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L493
+                BNE     _specalias_L460
                 LDA     #0
-                BRA     _specalias_L494
-_specalias_L493
+                BRA     _specalias_L461
+_specalias_L460
                 LDA     #1
-_specalias_L494
+_specalias_L461
                 CMP     #0
-                BEQ     _specalias_L492
+                BEQ     _specalias_L459
                 LDA     #142
                 TAY
                 TSC
@@ -18800,7 +18661,7 @@ _specalias_L494
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L492
+_specalias_L459
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -18820,21 +18681,21 @@ _specalias_L492
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _specalias_L496
+                BNE     _specalias_L463
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _specalias_L496
+                BNE     _specalias_L463
                 LDA     #0
-                BRA     _specalias_L497
-_specalias_L496
+                BRA     _specalias_L464
+_specalias_L463
                 LDA     #1
-_specalias_L497
+_specalias_L464
                 CMP     #0
-                BEQ     _specalias_L495
+                BEQ     _specalias_L462
                 LDA     #143
                 TAY
                 TSC
@@ -18845,7 +18706,7 @@ _specalias_L497
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L495
+_specalias_L462
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18866,7 +18727,7 @@ _specalias_L495
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #769
-                BEQ     _specalias_L498
+                BEQ     _specalias_L465
                 LDA     #144
                 TAY
                 TSC
@@ -18877,11 +18738,11 @@ _specalias_L495
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L498
+_specalias_L465
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
                 CMP     #1
-                BEQ     _specalias_L499
+                BEQ     _specalias_L466
                 LDA     #145
                 TAY
                 TSC
@@ -18892,14 +18753,14 @@ _specalias_L498
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L499
+_specalias_L466
                 LDA     #1
                 PHA
                 FGX2_FARCALL _specalias_saw
                 TAY
                 PLA
                 TYA
-                BEQ     _specalias_L500
+                BEQ     _specalias_L467
                 LDA     #146
                 TAY
                 TSC
@@ -18910,14 +18771,14 @@ _specalias_L499
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L500
+_specalias_L467
                 LDA     #3
                 PHA
                 FGX2_FARCALL _specalias_saw
                 TAY
                 PLA
                 TYA
-                BNE     _specalias_L501
+                BNE     _specalias_L468
                 LDA     #147
                 TAY
                 TSC
@@ -18928,9 +18789,9 @@ _specalias_L500
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L501
+_specalias_L468
                 LDA     _specalias_nslept
-                BEQ     _specalias_L502
+                BEQ     _specalias_L469
                 LDA     #148
                 TAY
                 TSC
@@ -18941,7 +18802,7 @@ _specalias_L501
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_L502
+_specalias_L469
                 LDA     #42
                 TAY
                 TSC

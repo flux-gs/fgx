@@ -37,22 +37,15 @@ _macro_for_step_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     gv
-                BEQ     _macro_for_step_L3
+                BEQ     _macro_for_step_L2
                 LDA     gbody
                 TAX
                 SEC
                 SBC     #3
-                BVC     _macro_for_step_L5
+                BVC     _macro_for_step_L3
                 EOR     #$8000
-_macro_for_step_L5
-                BPL     _macro_for_step_L3
-                LDA     #1
-                BRA     _macro_for_step_L4
 _macro_for_step_L3
-                LDA     #0
-_macro_for_step_L4
-                CMP     #0
-                BEQ     _macro_for_step_L2
+                BPL     _macro_for_step_L2
                 LDA     gbody
                 TAX
                 CLC
@@ -71,7 +64,7 @@ _macro_for_step_L2
                 LDA     gbefore
                 TAX
                 CMP     #1
-                BEQ     _macro_for_step_L6
+                BEQ     _macro_for_step_L4
                 LDA     #1
                 TAY
                 TSC
@@ -82,11 +75,11 @@ _macro_for_step_L2
                 STA     _fcc_fb
                 TYA
                 RTL
-_macro_for_step_L6
+_macro_for_step_L4
                 LDA     gbody
                 TAX
                 CMP     #3
-                BEQ     _macro_for_step_L7
+                BEQ     _macro_for_step_L5
                 LDA     #2
                 TAY
                 TSC
@@ -97,11 +90,11 @@ _macro_for_step_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_macro_for_step_L7
+_macro_for_step_L5
                 LDA     gafter
                 TAX
                 CMP     #3
-                BEQ     _macro_for_step_L8
+                BEQ     _macro_for_step_L6
                 LDA     #3
                 TAY
                 TSC
@@ -112,7 +105,7 @@ _macro_for_step_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_macro_for_step_L8
+_macro_for_step_L6
                 LDA     #42
                 TAY
                 TSC

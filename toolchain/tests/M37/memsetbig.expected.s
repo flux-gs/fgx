@@ -366,14 +366,7 @@ _memsetbig_L7
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _memsetbig_L11
-                LDA     #0
-                BRA     _memsetbig_L12
-_memsetbig_L11
-                LDA     #1
-_memsetbig_L12
-                CMP     #0
-                BEQ     _memsetbig_L10
+                BNE     _memsetbig_L10
                 LDA     #44
                 TAY
                 TSC
@@ -402,7 +395,7 @@ _memsetbig_L10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L14
+                BNE     _memsetbig_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -422,14 +415,8 @@ _memsetbig_L10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L14
-                LDA     #0
-                BRA     _memsetbig_L15
-_memsetbig_L14
-                LDA     #1
-_memsetbig_L15
-                CMP     #0
-                BEQ     _memsetbig_L13
+                BEQ     _memsetbig_L11
+_memsetbig_L12
                 LDA     #45
                 TAY
                 TSC
@@ -440,7 +427,7 @@ _memsetbig_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L13
+_memsetbig_L11
                 LDA     #40000
                 TAX
                 INC
@@ -476,6 +463,117 @@ _memsetbig_L13
                 AND     #$00FF
                 PHA
                 LDA     #40000
+                PHA
+                LDA     11,S   ; fccstk d=4 b=7
+                STA     _fcc_fpr0+2
+                LDA     9,S   ; fccstk d=4 b=5
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _memsetbig_check
+                TAY
+                TSC
+                CLC
+                ADC     #8
+                TCS
+                TYA
+                BNE     _memsetbig_L13
+                LDA     #46
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_memsetbig_L13
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_ptr+2
+                LDA     1,S   ; fccstk d=0 b=1
+                PHA
+                LDA     #0
+                CLC
+                ADC     1,S
+                STA     _fcc_ptr
+                PLA
+                LDA     [_fcc_ptr]
+                AND     #$00FF
+                PHA
+                LDA     #165
+                AND     #$00FF
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BNE     _memsetbig_L15
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_ptr+2
+                LDA     1,S   ; fccstk d=0 b=1
+                PHA
+                LDA     #40000
+                TAX
+                INC
+                CLC
+                ADC     1,S
+                STA     _fcc_ptr
+                PLA
+                LDA     [_fcc_ptr]
+                AND     #$00FF
+                PHA
+                LDA     #165
+                AND     #$00FF
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     _memsetbig_L14
+_memsetbig_L15
+                LDA     #47
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_memsetbig_L14
+                LDA     #40000
+                TAX
+                INC
+                INC
+                PHA
+                LDA     5,S   ; fccstk d=2 b=3
+                STA     _fcc_fpr0+2
+                LDA     3,S   ; fccstk d=2 b=1
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL _memsetbig_poison
+                TSC
+                CLC
+                ADC     #6
+                TCS
+                LDA     #32766
+                PHA
+                LDA     #0
+                PHA
+                LDA     11,S   ; fccstk d=4 b=7
+                STA     _fcc_fpr0+2
+                LDA     9,S   ; fccstk d=4 b=5
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL memset
+                TSC
+                CLC
+                ADC     #8
+                TCS
+                LDA     #0
+                AND     #$00FF
+                PHA
+                LDA     #32766
                 PHA
                 LDA     11,S   ; fccstk d=4 b=7
                 STA     _fcc_fpr0+2
@@ -491,137 +589,6 @@ _memsetbig_L13
                 TCS
                 TYA
                 BEQ     _memsetbig_L17
-                LDA     #0
-                BRA     _memsetbig_L18
-_memsetbig_L17
-                LDA     #1
-_memsetbig_L18
-                CMP     #0
-                BEQ     _memsetbig_L16
-                LDA     #46
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_memsetbig_L16
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
-                PHA
-                LDA     #0
-                CLC
-                ADC     1,S
-                STA     _fcc_ptr
-                PLA
-                LDA     [_fcc_ptr]
-                AND     #$00FF
-                PHA
-                LDA     #165
-                AND     #$00FF
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BNE     _memsetbig_L20
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_ptr+2
-                LDA     1,S   ; fccstk d=0 b=1
-                PHA
-                LDA     #40000
-                TAX
-                INC
-                CLC
-                ADC     1,S
-                STA     _fcc_ptr
-                PLA
-                LDA     [_fcc_ptr]
-                AND     #$00FF
-                PHA
-                LDA     #165
-                AND     #$00FF
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BNE     _memsetbig_L20
-                LDA     #0
-                BRA     _memsetbig_L21
-_memsetbig_L20
-                LDA     #1
-_memsetbig_L21
-                CMP     #0
-                BEQ     _memsetbig_L19
-                LDA     #47
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_memsetbig_L19
-                LDA     #40000
-                TAX
-                INC
-                INC
-                PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                LDA     #32766
-                PHA
-                LDA     #0
-                PHA
-                LDA     11,S   ; fccstk d=4 b=7
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=4 b=5
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                LDA     #0
-                AND     #$00FF
-                PHA
-                LDA     #32766
-                PHA
-                LDA     11,S   ; fccstk d=4 b=7
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=4 b=5
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
-                BEQ     _memsetbig_L25
-                LDA     #0
-                BRA     _memsetbig_L26
-_memsetbig_L25
-                LDA     #1
-_memsetbig_L26
-                CMP     #0
-                BNE     _memsetbig_L23
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -639,14 +606,8 @@ _memsetbig_L26
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L23
-                LDA     #0
-                BRA     _memsetbig_L24
-_memsetbig_L23
-                LDA     #1
-_memsetbig_L24
-                CMP     #0
-                BEQ     _memsetbig_L22
+                BEQ     _memsetbig_L16
+_memsetbig_L17
                 LDA     #48
                 TAY
                 TSC
@@ -657,7 +618,7 @@ _memsetbig_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L22
+_memsetbig_L16
                 LDA     #40000
                 TAX
                 INC
@@ -711,14 +672,7 @@ _memsetbig_L22
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _memsetbig_L30
-                LDA     #0
-                BRA     _memsetbig_L31
-_memsetbig_L30
-                LDA     #1
-_memsetbig_L31
-                CMP     #0
-                BNE     _memsetbig_L28
+                BEQ     _memsetbig_L19
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -738,14 +692,8 @@ _memsetbig_L31
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L28
-                LDA     #0
-                BRA     _memsetbig_L29
-_memsetbig_L28
-                LDA     #1
-_memsetbig_L29
-                CMP     #0
-                BEQ     _memsetbig_L27
+                BEQ     _memsetbig_L18
+_memsetbig_L19
                 LDA     #49
                 TAY
                 TSC
@@ -756,7 +704,7 @@ _memsetbig_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L27
+_memsetbig_L18
                 LDA     #40000
                 TAX
                 INC
@@ -812,14 +760,7 @@ _memsetbig_L27
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _memsetbig_L35
-                LDA     #0
-                BRA     _memsetbig_L36
-_memsetbig_L35
-                LDA     #1
-_memsetbig_L36
-                CMP     #0
-                BNE     _memsetbig_L33
+                BEQ     _memsetbig_L21
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -840,14 +781,8 @@ _memsetbig_L36
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L33
-                LDA     #0
-                BRA     _memsetbig_L34
-_memsetbig_L33
-                LDA     #1
-_memsetbig_L34
-                CMP     #0
-                BEQ     _memsetbig_L32
+                BEQ     _memsetbig_L20
+_memsetbig_L21
                 LDA     #50
                 TAY
                 TSC
@@ -858,7 +793,7 @@ _memsetbig_L34
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L32
+_memsetbig_L20
                 LDA     #40000
                 TAX
                 INC
@@ -907,7 +842,7 @@ _memsetbig_L32
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _memsetbig_L37
+                BEQ     _memsetbig_L22
                 LDA     #51
                 TAY
                 TSC
@@ -918,7 +853,7 @@ _memsetbig_L32
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L37
+_memsetbig_L22
                 LDA     #40000
                 TAX
                 INC
@@ -966,14 +901,7 @@ _memsetbig_L37
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _memsetbig_L39
-                LDA     #0
-                BRA     _memsetbig_L40
-_memsetbig_L39
-                LDA     #1
-_memsetbig_L40
-                CMP     #0
-                BEQ     _memsetbig_L38
+                BNE     _memsetbig_L23
                 LDA     #52
                 TAY
                 TSC
@@ -984,7 +912,7 @@ _memsetbig_L40
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L38
+_memsetbig_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1002,7 +930,7 @@ _memsetbig_L38
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L42
+                BNE     _memsetbig_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1022,14 +950,8 @@ _memsetbig_L38
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _memsetbig_L42
-                LDA     #0
-                BRA     _memsetbig_L43
-_memsetbig_L42
-                LDA     #1
-_memsetbig_L43
-                CMP     #0
-                BEQ     _memsetbig_L41
+                BEQ     _memsetbig_L24
+_memsetbig_L25
                 LDA     #53
                 TAY
                 TSC
@@ -1040,7 +962,7 @@ _memsetbig_L43
                 STA     _fcc_fb
                 TYA
                 RTL
-_memsetbig_L41
+_memsetbig_L24
                 LDA     #42
                 TAY
                 TSC

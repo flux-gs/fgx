@@ -40,14 +40,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BEQ     _sprintf_farbuf_L1
-                LDA     #0
-                BRA     _sprintf_farbuf_L2
-_sprintf_farbuf_L1
-                LDA     #1
-_sprintf_farbuf_L2
-                CMP     #0
-                BEQ     _sprintf_farbuf_L0
+                BNE     _sprintf_farbuf_L0
                 LDA     #1
                 TAY
                 TSC
@@ -167,7 +160,7 @@ _sprintf_farbuf_L0
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _sprintf_farbuf_L3
+                BEQ     _sprintf_farbuf_L1
                 LDA     #1
                 TAY
                 TSC
@@ -178,7 +171,7 @@ _sprintf_farbuf_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_sprintf_farbuf_L3
+_sprintf_farbuf_L1
                 LDA     #42
                 TAY
                 TSC

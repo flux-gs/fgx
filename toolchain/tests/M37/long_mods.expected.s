@@ -1770,14 +1770,8 @@ _long_mods_L18
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     _long_mods_L20
-                LDA     #0
-                BRA     _long_mods_L21
-_long_mods_L20
-                LDA     #1
-_long_mods_L21
-                CMP     #0
                 BEQ     _long_mods_L19
+_long_mods_L20
                 LDA     #20
                 TAY
                 TSC
@@ -1852,7 +1846,7 @@ _long_mods_L19
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     _long_mods_L23
+                BNE     _long_mods_L22
                 LDA     r+2
                 STA     _fcc_long_hi
                 LDA     r
@@ -1874,14 +1868,8 @@ _long_mods_L19
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     _long_mods_L23
-                LDA     #0
-                BRA     _long_mods_L24
-_long_mods_L23
-                LDA     #1
-_long_mods_L24
-                CMP     #0
-                BEQ     _long_mods_L22
+                BEQ     _long_mods_L21
+_long_mods_L22
                 LDA     #21
                 TAY
                 TSC
@@ -1892,7 +1880,7 @@ _long_mods_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_long_mods_L22
+_long_mods_L21
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$E240
@@ -1955,7 +1943,7 @@ _long_mods_L22
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _long_mods_L25
+                BEQ     _long_mods_L23
                 LDA     #22
                 TAY
                 TSC
@@ -1966,7 +1954,7 @@ _long_mods_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_long_mods_L25
+_long_mods_L23
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$E240
@@ -2030,7 +2018,7 @@ _long_mods_L25
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _long_mods_L26
+                BEQ     _long_mods_L24
                 LDA     #23
                 TAY
                 TSC
@@ -2041,7 +2029,7 @@ _long_mods_L25
                 STA     _fcc_fb
                 TYA
                 RTL
-_long_mods_L26
+_long_mods_L24
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$E240
@@ -2104,7 +2092,7 @@ _long_mods_L26
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _long_mods_L27
+                BEQ     _long_mods_L25
                 LDA     #24
                 TAY
                 TSC
@@ -2115,7 +2103,7 @@ _long_mods_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_long_mods_L27
+_long_mods_L25
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$3039
@@ -2178,7 +2166,7 @@ _long_mods_L27
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _long_mods_L28
+                BEQ     _long_mods_L26
                 LDA     #25
                 TAY
                 TSC
@@ -2189,7 +2177,7 @@ _long_mods_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_long_mods_L28
+_long_mods_L26
                 LDA     #42
                 TAY
                 TSC

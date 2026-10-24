@@ -934,14 +934,8 @@ _arrptrarrread_L19
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #400
-                BNE     _arrptrarrread_L23
-                LDA     #0
-                BRA     _arrptrarrread_L24
-_arrptrarrread_L23
-                LDA     #1
-_arrptrarrread_L24
-                CMP     #0
                 BEQ     _arrptrarrread_L22
+_arrptrarrread_L23
                 LDA     #13
                 TAY
                 TSC

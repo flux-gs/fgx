@@ -65,22 +65,15 @@ _long_rvinc_L0
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BEQ     _long_rvinc_L2
+                BEQ     _long_rvinc_L1
                 LDA     _fcc_img0
                 TAX
                 SEC
                 SBC     #50
-                BVC     _long_rvinc_L4
+                BVC     _long_rvinc_L2
                 EOR     #$8000
-_long_rvinc_L4
-                BPL     _long_rvinc_L2
-                LDA     #1
-                BRA     _long_rvinc_L3
 _long_rvinc_L2
-                LDA     #0
-_long_rvinc_L3
-                CMP     #0
-                BEQ     _long_rvinc_L1
+                BPL     _long_rvinc_L1
                 INC     _fcc_img0
                 BRA     _long_rvinc_L0
 _long_rvinc_L1
@@ -97,7 +90,7 @@ _long_rvinc_L1
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_long_rvinc_L5
+_long_rvinc_L3
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -141,25 +134,18 @@ _long_rvinc_L5
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BEQ     _long_rvinc_L7
+                BEQ     _long_rvinc_L4
                 LDA     _fcc_img0
                 TAX
                 SEC
                 SBC     #50
-                BVC     _long_rvinc_L9
+                BVC     _long_rvinc_L5
                 EOR     #$8000
-_long_rvinc_L9
-                BPL     _long_rvinc_L7
-                LDA     #1
-                BRA     _long_rvinc_L8
-_long_rvinc_L7
-                LDA     #0
-_long_rvinc_L8
-                CMP     #0
-                BEQ     _long_rvinc_L6
+_long_rvinc_L5
+                BPL     _long_rvinc_L4
                 INC     _fcc_img0
-                BRA     _long_rvinc_L5
-_long_rvinc_L6
+                BRA     _long_rvinc_L3
+_long_rvinc_L4
                 LDA     _fcc_img1
                 TAX
                 LDA     _fcc_img0

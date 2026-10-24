@@ -714,14 +714,8 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                BNE     _arrfieldlong_L18
-                LDA     #0
-                BRA     _arrfieldlong_L19
-_arrfieldlong_L18
-                LDA     #1
-_arrfieldlong_L19
-                CMP     #0
                 BEQ     _arrfieldlong_L17
+_arrfieldlong_L18
                 LDA     #61
                 TAY
                 TSC
@@ -768,7 +762,7 @@ _arrfieldlong_L17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _arrfieldlong_L20
+                BEQ     _arrfieldlong_L19
                 LDA     #62
                 TAY
                 TSC
@@ -779,7 +773,7 @@ _arrfieldlong_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L20
+_arrfieldlong_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -798,7 +792,7 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _arrfieldlong_L22
+                BNE     _arrfieldlong_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -817,14 +811,8 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _arrfieldlong_L22
-                LDA     #0
-                BRA     _arrfieldlong_L23
-_arrfieldlong_L22
-                LDA     #1
-_arrfieldlong_L23
-                CMP     #0
-                BEQ     _arrfieldlong_L21
+                BEQ     _arrfieldlong_L20
+_arrfieldlong_L21
                 LDA     #63
                 TAY
                 TSC
@@ -835,7 +823,7 @@ _arrfieldlong_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L21
+_arrfieldlong_L20
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -862,7 +850,7 @@ _arrfieldlong_L21
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L24
+                BEQ     _arrfieldlong_L22
                 LDA     #64
                 TAY
                 TSC
@@ -873,7 +861,7 @@ _arrfieldlong_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L24
+_arrfieldlong_L22
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -901,7 +889,7 @@ _arrfieldlong_L24
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L25
+                BEQ     _arrfieldlong_L23
                 LDA     #65
                 TAY
                 TSC
@@ -912,7 +900,7 @@ _arrfieldlong_L24
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L25
+_arrfieldlong_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -947,7 +935,7 @@ _arrfieldlong_L25
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L26
+                BEQ     _arrfieldlong_L24
                 LDA     #66
                 TAY
                 TSC
@@ -958,7 +946,7 @@ _arrfieldlong_L25
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L26
+_arrfieldlong_L24
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -993,7 +981,7 @@ _arrfieldlong_L26
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L27
+                BEQ     _arrfieldlong_L25
                 LDA     #67
                 TAY
                 TSC
@@ -1004,7 +992,7 @@ _arrfieldlong_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L27
+_arrfieldlong_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1040,7 +1028,7 @@ _arrfieldlong_L27
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L28
+                BEQ     _arrfieldlong_L26
                 LDA     #68
                 TAY
                 TSC
@@ -1051,7 +1039,7 @@ _arrfieldlong_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L28
+_arrfieldlong_L26
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -1086,7 +1074,7 @@ _arrfieldlong_L28
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _arrfieldlong_L29
+                BEQ     _arrfieldlong_L27
                 LDA     #69
                 TAY
                 TSC
@@ -1097,7 +1085,7 @@ _arrfieldlong_L28
                 STA     _fcc_fb
                 TYA
                 RTL
-_arrfieldlong_L29
+_arrfieldlong_L27
                 LDA     #42
                 TAY
                 TSC

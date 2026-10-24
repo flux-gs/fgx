@@ -3108,7 +3108,8 @@ _softdouble_L45
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _softdouble_L50
+                BNE     *+5
+                BRL     _softdouble_L49
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -3154,16 +3155,10 @@ _softdouble_L45
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L50
-                LDA     #1
-                BRA     _softdouble_L51
-_softdouble_L50
-                LDA     #0
-_softdouble_L51
                 CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L49
-_softdouble_L52
+_softdouble_L50
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3208,7 +3203,7 @@ _softdouble_L52
                 SEC
                 SBC     #1
                 STA     33,S   ; fccstk d=0 b=33
-_softdouble_L53
+_softdouble_L51
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -3309,7 +3304,7 @@ _softdouble_L53
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _softdouble_L55
+                BEQ     _softdouble_L52
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -3355,16 +3350,10 @@ _softdouble_L53
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L55
-                LDA     #1
-                BRA     _softdouble_L56
-_softdouble_L55
-                LDA     #0
-_softdouble_L56
                 CMP     #0
-                BEQ     _softdouble_L54
-                BRL     _softdouble_L52
-_softdouble_L54
+                BEQ     _softdouble_L52
+                BRL     _softdouble_L50
+_softdouble_L52
 _softdouble_L49
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
@@ -3572,26 +3561,16 @@ _softdouble_L49
                 STA     83,S   ; fccstk d=0 b=83
                 TYA
                 LDA     101,S   ; fccstk d=0 b=101
-                BEQ     _softdouble_L58
-                LDA     103,S   ; fccstk d=0 b=103
-                BNE     _softdouble_L60
-                LDA     105,S   ; fccstk d=0 b=105
-                BNE     _softdouble_L60
-                LDA     #0
-                BRA     _softdouble_L61
-_softdouble_L60
-                LDA     #1
-_softdouble_L61
-                CMP     #0
-                BEQ     _softdouble_L58
-                LDA     #1
-                BRA     _softdouble_L59
-_softdouble_L58
-                LDA     #0
-_softdouble_L59
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L57
+                BRL     _softdouble_L53
+                LDA     103,S   ; fccstk d=0 b=103
+                BNE     _softdouble_L54
+                LDA     105,S   ; fccstk d=0 b=105
+                CMP     #0
+                BNE     *+5
+                BRL     _softdouble_L53
+_softdouble_L54
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -3700,7 +3679,7 @@ _softdouble_L59
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L62
+                BEQ     _softdouble_L55
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -3742,8 +3721,8 @@ _softdouble_L59
                 CLC
                 ADC     #1
                 STA     33,S   ; fccstk d=0 b=33
-_softdouble_L62
-_softdouble_L57
+_softdouble_L55
+_softdouble_L53
                 LDA     83,S   ; fccstk d=0 b=83
                 STA     _fcc_q3
                 LDA     81,S   ; fccstk d=0 b=81
@@ -4867,7 +4846,7 @@ _softdouble_mulhi64Aligned_stkok        TCS
                 ORA     _fcc_q2
                 ORA     _fcc_q3
                 BNE     *+5
-                BRL     _softdouble_L63
+                BRL     _softdouble_L56
                 DO      24+_softdouble_mulhi64Aligned_FRAMESIZE/256
                 TSC
                 CLC
@@ -5206,7 +5185,7 @@ _softdouble_mulhi64Aligned_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L63
+_softdouble_L56
                 DO      24+_softdouble_mulhi64Aligned_FRAMESIZE/256
                 TSC
                 CLC
@@ -5804,16 +5783,10 @@ __muldf3_stkok        TCS
                 STA     47,S   ; fccstk d=0 b=47
                 TYA
                 LDA     37,S   ; fccstk d=0 b=37
-                BEQ     _softdouble_L65
+                BEQ     _softdouble_L58
                 LDA     39,S   ; fccstk d=0 b=39
-                BEQ     _softdouble_L65
-                LDA     #0
-                BRA     _softdouble_L66
-_softdouble_L65
-                LDA     #1
-_softdouble_L66
-                CMP     #0
-                BEQ     _softdouble_L64
+                BNE     _softdouble_L57
+_softdouble_L58
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_q3
                 LDA     45,S   ; fccstk d=0 b=45
@@ -5830,7 +5803,7 @@ _softdouble_L66
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L64
+_softdouble_L57
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -5921,10 +5894,10 @@ _softdouble_L64
                 LDA     63,S   ; fccstk d=0 b=63
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L68
+                BRL     _softdouble_L59
                 LDA     65,S   ; fccstk d=0 b=65
                 CMP     #0
-                BNE     _softdouble_L70
+                BNE     _softdouble_L60
                 LDA     59,S   ; fccstk d=0 b=59
                 STA     _fcc_q3
                 LDA     57,S   ; fccstk d=0 b=57
@@ -5969,22 +5942,9 @@ _softdouble_L64
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BNE     _softdouble_L70
-                LDA     #0
-                BRA     _softdouble_L71
-_softdouble_L70
-                LDA     #1
-_softdouble_L71
-                CMP     #0
-                BEQ     _softdouble_L68
-                LDA     #1
-                BRA     _softdouble_L69
-_softdouble_L68
-                LDA     #0
-_softdouble_L69
-                CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L67
+                BRL     _softdouble_L59
+_softdouble_L60
                 LDA     59,S   ; fccstk d=0 b=59
                 STA     _fcc_q3
                 LDA     57,S   ; fccstk d=0 b=57
@@ -6093,7 +6053,7 @@ _softdouble_L69
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L72
+                BEQ     _softdouble_L61
                 LDA     59,S   ; fccstk d=0 b=59
                 STA     _fcc_q3
                 LDA     57,S   ; fccstk d=0 b=57
@@ -6135,8 +6095,8 @@ _softdouble_L69
                 CLC
                 ADC     #1
                 STA     61,S   ; fccstk d=0 b=61
-_softdouble_L72
-_softdouble_L67
+_softdouble_L61
+_softdouble_L59
                 LDA     59,S   ; fccstk d=0 b=59
                 STA     _fcc_q3
                 LDA     57,S   ; fccstk d=0 b=57
@@ -6446,7 +6406,7 @@ __divdf3_stkok        TCS
                 STA     47,S   ; fccstk d=0 b=47
                 TYA
                 LDA     37,S   ; fccstk d=0 b=37
-                BNE     _softdouble_L73
+                BNE     _softdouble_L62
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_q3
                 LDA     45,S   ; fccstk d=0 b=45
@@ -6463,9 +6423,9 @@ __divdf3_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L73
+_softdouble_L62
                 LDA     39,S   ; fccstk d=0 b=39
-                BNE     _softdouble_L74
+                BNE     _softdouble_L63
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_q3
                 LDA     45,S   ; fccstk d=0 b=45
@@ -6515,7 +6475,7 @@ _softdouble_L73
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L74
+_softdouble_L63
                 LDA     33,S   ; fccstk d=0 b=33
                 SEC
                 SBC     35,S   ; fccstk d=0 b=35
@@ -6565,7 +6525,7 @@ _softdouble_L74
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _softdouble_L75
+                BEQ     _softdouble_L64
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_q3
                 LDA     21,S   ; fccstk d=0 b=21
@@ -6607,7 +6567,7 @@ _softdouble_L74
                 SEC
                 SBC     #1
                 STA     49,S   ; fccstk d=0 b=49
-_softdouble_L75
+_softdouble_L64
                 LDA     #16
                 STA     _fcc_q3
                 LDA     #0
@@ -6675,14 +6635,14 @@ _softdouble_L75
                 TYA
                 LDA     #51
                 STA     67,S   ; fccstk d=0 b=67
-_softdouble_L76
+_softdouble_L65
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     67,S   ; fccstk d=0 b=67
                 CMP     #0
                 BPL     *+5
-                BRL     _softdouble_L78
+                BRL     _softdouble_L67
                 LDA     65,S   ; fccstk d=0 b=65
                 STA     _fcc_q3
                 LDA     63,S   ; fccstk d=0 b=63
@@ -6766,7 +6726,7 @@ _softdouble_L76
                 LDA     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L79
+                BRL     _softdouble_L68
                 LDA     65,S   ; fccstk d=0 b=65
                 STA     _fcc_q3
                 LDA     63,S   ; fccstk d=0 b=63
@@ -6886,14 +6846,14 @@ _softdouble_L76
                 LDA     _fcc_q3
                 STA     57,S   ; fccstk d=0 b=57
                 TYA
-_softdouble_L79
-_softdouble_L77
+_softdouble_L68
+_softdouble_L66
                 LDA     67,S   ; fccstk d=0 b=67
                 SEC
                 SBC     #1
                 STA     67,S   ; fccstk d=0 b=67
-                BRL     _softdouble_L76
-_softdouble_L78
+                BRL     _softdouble_L65
+_softdouble_L67
                 LDA     65,S   ; fccstk d=0 b=65
                 STA     _fcc_q3
                 LDA     63,S   ; fccstk d=0 b=63
@@ -6975,15 +6935,15 @@ _softdouble_L78
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L80
+                BEQ     _softdouble_L69
                 LDA     #1
-                BRA     _softdouble_L81
-_softdouble_L80
+                BRA     _softdouble_L70
+_softdouble_L69
                 LDA     #0
-_softdouble_L81
+_softdouble_L70
                 STA     69,S   ; fccstk d=0 b=69
                 CMP     #0
-                BEQ     _softdouble_L82
+                BEQ     _softdouble_L71
                 LDA     65,S   ; fccstk d=0 b=65
                 STA     _fcc_q3
                 LDA     63,S   ; fccstk d=0 b=63
@@ -7033,7 +6993,7 @@ _softdouble_L81
                 LDA     _fcc_q3
                 STA     65,S   ; fccstk d=0 b=65
                 TYA
-_softdouble_L82
+_softdouble_L71
                 LDA     65,S   ; fccstk d=0 b=65
                 STA     _fcc_q3
                 LDA     63,S   ; fccstk d=0 b=63
@@ -7079,20 +7039,20 @@ _softdouble_L82
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L83
+                BEQ     _softdouble_L72
                 LDA     #1
-                BRA     _softdouble_L84
-_softdouble_L83
+                BRA     _softdouble_L73
+_softdouble_L72
                 LDA     #0
-_softdouble_L84
+_softdouble_L73
                 STA     71,S   ; fccstk d=0 b=71
                 LDA     69,S   ; fccstk d=0 b=69
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L86
+                BRL     _softdouble_L74
                 LDA     71,S   ; fccstk d=0 b=71
                 CMP     #0
-                BNE     _softdouble_L88
+                BNE     _softdouble_L75
                 LDA     57,S   ; fccstk d=0 b=57
                 STA     _fcc_q3
                 LDA     55,S   ; fccstk d=0 b=55
@@ -7137,22 +7097,9 @@ _softdouble_L84
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BNE     _softdouble_L88
-                LDA     #0
-                BRA     _softdouble_L89
-_softdouble_L88
-                LDA     #1
-_softdouble_L89
-                CMP     #0
-                BEQ     _softdouble_L86
-                LDA     #1
-                BRA     _softdouble_L87
-_softdouble_L86
-                LDA     #0
-_softdouble_L87
-                CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L85
+                BRL     _softdouble_L74
+_softdouble_L75
                 LDA     57,S   ; fccstk d=0 b=57
                 STA     _fcc_q3
                 LDA     55,S   ; fccstk d=0 b=55
@@ -7261,7 +7208,7 @@ _softdouble_L87
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L90
+                BEQ     _softdouble_L76
                 LDA     57,S   ; fccstk d=0 b=57
                 STA     _fcc_q3
                 LDA     55,S   ; fccstk d=0 b=55
@@ -7303,8 +7250,8 @@ _softdouble_L87
                 CLC
                 ADC     #1
                 STA     49,S   ; fccstk d=0 b=49
-_softdouble_L90
-_softdouble_L85
+_softdouble_L76
+_softdouble_L74
                 LDA     57,S   ; fccstk d=0 b=57
                 STA     _fcc_q3
                 LDA     55,S   ; fccstk d=0 b=55
@@ -7588,7 +7535,7 @@ __cmpdf2_stkok        TCS
                 LDA     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L91
+                BRL     _softdouble_L77
                 DO      12+__cmpdf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -7760,7 +7707,7 @@ __cmpdf2_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L92
+                BEQ     _softdouble_L78
                 LDA     #0
                 TAY
                 TSC
@@ -7771,7 +7718,7 @@ __cmpdf2_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L92
+_softdouble_L78
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7782,12 +7729,12 @@ _softdouble_L92
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L93
+                BEQ     _softdouble_L79
                 LDA     #$FFFF
-                BRA     _softdouble_L94
-_softdouble_L93
+                BRA     _softdouble_L80
+_softdouble_L79
                 LDA     #1
-_softdouble_L94
+_softdouble_L80
                 TAY
                 TSC
                 CLC
@@ -7797,7 +7744,7 @@ _softdouble_L94
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L91
+_softdouble_L77
                 DO      12+__cmpdf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -7915,7 +7862,7 @@ _softdouble_L91
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _softdouble_L95
+                BEQ     _softdouble_L81
                 LDA     #0
                 TAY
                 TSC
@@ -7926,7 +7873,7 @@ _softdouble_L91
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L95
+_softdouble_L81
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7938,7 +7885,7 @@ _softdouble_L95
                 ORA     _fcc_q2
                 ORA     _fcc_q3
                 BNE     *+5
-                BRL     _softdouble_L96
+                BRL     _softdouble_L82
                 DO      12+__cmpdf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -8055,12 +8002,12 @@ _softdouble_L95
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L97
+                BEQ     _softdouble_L83
                 LDA     #1
-                BRA     _softdouble_L98
-_softdouble_L97
+                BRA     _softdouble_L84
+_softdouble_L83
                 LDA     #$FFFF
-_softdouble_L98
+_softdouble_L84
                 TAY
                 TSC
                 CLC
@@ -8070,7 +8017,7 @@ _softdouble_L98
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L96
+_softdouble_L82
                 DO      12+__cmpdf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -8187,12 +8134,12 @@ _softdouble_L96
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L99
+                BEQ     _softdouble_L85
                 LDA     #$FFFF
-                BRA     _softdouble_L100
-_softdouble_L99
+                BRA     _softdouble_L86
+_softdouble_L85
                 LDA     #1
-_softdouble_L100
+_softdouble_L86
                 TAY
                 TSC
                 CLC
@@ -8480,7 +8427,7 @@ __unorddf2_stkok        TCS
                 LDA     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L102
+                BRL     _softdouble_L87
                 DO      12+__unorddf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -8595,14 +8542,8 @@ __unorddf2_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L102
-                LDA     #1
-                BRA     _softdouble_L103
-_softdouble_L102
-                LDA     #0
-_softdouble_L103
                 CMP     #0
-                BEQ     _softdouble_L101
+                BEQ     _softdouble_L87
                 LDA     #1
                 TAY
                 TSC
@@ -8613,7 +8554,7 @@ _softdouble_L103
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L101
+_softdouble_L87
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -8661,7 +8602,7 @@ _softdouble_L101
                 LDA     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _softdouble_L105
+                BRL     _softdouble_L88
                 DO      20+__unorddf2_FRAMESIZE/256
                 TSC
                 CLC
@@ -8776,14 +8717,7 @@ _softdouble_L101
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L105
-                LDA     #1
-                BRA     _softdouble_L106
-_softdouble_L105
-                LDA     #0
-_softdouble_L106
-                CMP     #0
-                BEQ     _softdouble_L104
+                BEQ     _softdouble_L88
                 LDA     #1
                 TAY
                 TSC
@@ -8794,7 +8728,7 @@ _softdouble_L106
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L104
+_softdouble_L88
                 LDA     #0
                 TAY
                 TSC
@@ -9849,7 +9783,7 @@ __extendsfdf2_stkok        TCS
                 STA     13,S   ; fccstk d=0 b=13
                 TYA
                 LDA     9,S   ; fccstk d=0 b=9
-                BNE     _softdouble_L107
+                BNE     _softdouble_L89
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -9866,12 +9800,12 @@ __extendsfdf2_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L107
+_softdouble_L89
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #255
                 BEQ     *+5
-                BRL     _softdouble_L108
+                BRL     _softdouble_L90
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -9973,7 +9907,7 @@ _softdouble_L107
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L108
+_softdouble_L90
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 SEC
@@ -10389,7 +10323,7 @@ __truncdfsf2_stkok        TCS
                 STA     17,S   ; fccstk d=0 b=17
                 TYA
                 LDA     9,S   ; fccstk d=0 b=9
-                BNE     _softdouble_L109
+                BNE     _softdouble_L91
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10406,12 +10340,12 @@ __truncdfsf2_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L109
+_softdouble_L91
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #2047
                 BEQ     *+5
-                BRL     _softdouble_L110
+                BRL     _softdouble_L92
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_q3
                 LDA     15,S   ; fccstk d=0 b=15
@@ -10491,7 +10425,7 @@ _softdouble_L109
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _softdouble_L112
+                BEQ     _softdouble_L93
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
                 LDA     19,S   ; fccstk d=0 b=19
@@ -10512,14 +10446,7 @@ _softdouble_L109
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _softdouble_L112
-                LDA     #1
-                BRA     _softdouble_L113
-_softdouble_L112
-                LDA     #0
-_softdouble_L113
-                CMP     #0
-                BEQ     _softdouble_L111
+                BEQ     _softdouble_L93
                 LDA     #$0040
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -10528,7 +10455,7 @@ _softdouble_L113
                 LDA     _fcc_long_hi
                 STA     21,S   ; fccstk d=0 b=21
                 TYA
-_softdouble_L111
+_softdouble_L93
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10579,7 +10506,7 @@ _softdouble_L111
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L110
+_softdouble_L92
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 SEC
@@ -10595,10 +10522,10 @@ _softdouble_L110
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L115
+                BVC     _softdouble_L95
                 EOR     #$8000
-_softdouble_L115
-                BMI     _softdouble_L114
+_softdouble_L95
+                BMI     _softdouble_L94
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10615,7 +10542,7 @@ _softdouble_L115
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L114
+_softdouble_L94
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_q3
                 LDA     15,S   ; fccstk d=0 b=15
@@ -10699,7 +10626,7 @@ _softdouble_L114
                 TYA
                 JSR     _fcc_long_gtu
                 CMP     #0
-                BNE     _softdouble_L117
+                BNE     _softdouble_L97
                 LDA     33,S   ; fccstk d=0 b=33
                 STA     _fcc_long_hi
                 LDA     31,S   ; fccstk d=0 b=31
@@ -10721,7 +10648,8 @@ _softdouble_L114
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _softdouble_L119
+                BNE     *+5
+                BRL     _softdouble_L96
                 LDA     29,S   ; fccstk d=0 b=29
                 STA     _fcc_long_hi
                 LDA     27,S   ; fccstk d=0 b=27
@@ -10742,21 +10670,8 @@ _softdouble_L114
                 TYA
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
-                BEQ     _softdouble_L119
-                LDA     #1
-                BRA     _softdouble_L120
-_softdouble_L119
-                LDA     #0
-_softdouble_L120
-                CMP     #0
-                BNE     _softdouble_L117
-                LDA     #0
-                BRA     _softdouble_L118
-_softdouble_L117
-                LDA     #1
-_softdouble_L118
-                CMP     #0
-                BEQ     _softdouble_L116
+                BEQ     _softdouble_L96
+_softdouble_L97
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -10792,7 +10707,7 @@ _softdouble_L118
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _softdouble_L121
+                BEQ     _softdouble_L98
                 LDA     #0
                 STA     27,S   ; fccstk d=0 b=27
                 TAY
@@ -10804,16 +10719,16 @@ _softdouble_L118
                 CLC
                 ADC     #1
                 STA     25,S   ; fccstk d=0 b=25
-_softdouble_L121
-_softdouble_L116
+_softdouble_L98
+_softdouble_L96
                 LDA     25,S   ; fccstk d=0 b=25
                 TAX
                 SEC
                 SBC     #255
-                BVC     _softdouble_L123
+                BVC     _softdouble_L100
                 EOR     #$8000
-_softdouble_L123
-                BMI     _softdouble_L122
+_softdouble_L100
+                BMI     _softdouble_L99
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10847,7 +10762,7 @@ _softdouble_L123
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L122
+_softdouble_L99
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10961,7 +10876,7 @@ __floatsidf_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _softdouble_L124
+                BEQ     _softdouble_L101
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -10979,7 +10894,7 @@ __floatsidf_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L124
+_softdouble_L101
                 DO      8+__floatsidf_FRAMESIZE/256
                 TSC
                 CLC
@@ -11018,7 +10933,7 @@ _softdouble_L124
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _softdouble_L125
+                BEQ     _softdouble_L102
                 LDA     #32768
                 STA     _fcc_q3
                 LDA     #0
@@ -11026,8 +10941,8 @@ _softdouble_L124
                 LDA     #0
                 STA     _fcc_long_hi
                 LDA     #0
-                BRA     _softdouble_L126
-_softdouble_L125
+                BRA     _softdouble_L103
+_softdouble_L102
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -11036,7 +10951,7 @@ _softdouble_L125
                 LDX     #$FFFF
                 STX     _fcc_q2
                 STX     _fcc_q3
-_softdouble_L126
+_softdouble_L103
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi
@@ -11120,7 +11035,7 @@ _softdouble_L126
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _softdouble_L127
+                BEQ     _softdouble_L104
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -11138,10 +11053,10 @@ _softdouble_L126
                 LDA     _fcc_q3
                 STA     15,S   ; fccstk d=0 b=15
                 TYA
-_softdouble_L127
+_softdouble_L104
                 LDA     #0
                 STA     17,S   ; fccstk d=0 b=17
-_softdouble_L128
+_softdouble_L105
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -11223,7 +11138,7 @@ _softdouble_L128
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L129
+                BEQ     _softdouble_L106
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -11265,8 +11180,8 @@ _softdouble_L128
                 SEC
                 SBC     #1
                 STA     17,S   ; fccstk d=0 b=17
-                BRL     _softdouble_L128
-_softdouble_L129
+                BRL     _softdouble_L105
+_softdouble_L106
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 LDA     #31
@@ -11384,7 +11299,7 @@ __floatunsidf_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _softdouble_L130
+                BEQ     _softdouble_L107
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -11402,7 +11317,7 @@ __floatunsidf_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L130
+_softdouble_L107
                 DO      8+__floatunsidf_FRAMESIZE/256
                 TSC
                 CLC
@@ -11437,7 +11352,7 @@ _softdouble_L130
                 TYA
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
-_softdouble_L131
+_softdouble_L108
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -11519,7 +11434,7 @@ _softdouble_L131
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _softdouble_L132
+                BEQ     _softdouble_L109
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11561,8 +11476,8 @@ _softdouble_L131
                 SEC
                 SBC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _softdouble_L131
-_softdouble_L132
+                BRL     _softdouble_L108
+_softdouble_L109
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 LDA     #31
@@ -11828,7 +11743,7 @@ __fixdfsi_stkok        TCS
                 FGX2_FARCALL _fcc_ll_and
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BNE     _softdouble_L133
+                BNE     _softdouble_L110
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -11840,11 +11755,11 @@ __fixdfsi_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L133
+_softdouble_L110
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #2047
-                BNE     _softdouble_L134
+                BNE     _softdouble_L111
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11855,16 +11770,16 @@ _softdouble_L133
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L135
+                BEQ     _softdouble_L112
                 LDA     #$8000
                 STA     _fcc_long_hi
                 LDA     #$0000
-                BRA     _softdouble_L136
-_softdouble_L135
+                BRA     _softdouble_L113
+_softdouble_L112
                 LDA     #$7FFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
-_softdouble_L136
+_softdouble_L113
                 TAY
                 TSC
                 CLC
@@ -11874,14 +11789,14 @@ _softdouble_L136
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L134
+_softdouble_L111
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 SEC
                 SBC     #1023
                 STA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BPL     _softdouble_L137
+                BPL     _softdouble_L114
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -11893,7 +11808,7 @@ _softdouble_L134
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L137
+_softdouble_L114
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 LDX     #30
@@ -11901,10 +11816,10 @@ _softdouble_L137
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L139
+                BVC     _softdouble_L116
                 EOR     #$8000
-_softdouble_L139
-                BPL     _softdouble_L138
+_softdouble_L116
+                BPL     _softdouble_L115
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11915,16 +11830,16 @@ _softdouble_L139
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L140
+                BEQ     _softdouble_L117
                 LDA     #$8000
                 STA     _fcc_long_hi
                 LDA     #$0000
-                BRA     _softdouble_L141
-_softdouble_L140
+                BRA     _softdouble_L118
+_softdouble_L117
                 LDA     #$7FFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
-_softdouble_L141
+_softdouble_L118
                 TAY
                 TSC
                 CLC
@@ -11934,7 +11849,7 @@ _softdouble_L141
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L138
+_softdouble_L115
                 DO      12+__fixdfsi_FRAMESIZE/256
                 TSC
                 CLC
@@ -12058,7 +11973,7 @@ _softdouble_L138
                 SBC     11,S   ; fccstk d=0 b=11
                 STA     21,S   ; fccstk d=0 b=21
                 CMP     #0
-                BMI     _softdouble_L142
+                BMI     _softdouble_L119
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_q3
                 LDA     17,S   ; fccstk d=0 b=17
@@ -12096,8 +12011,8 @@ _softdouble_L138
                 LDA     _fcc_q3
                 STA     19,S   ; fccstk d=0 b=19
                 TYA
-                BRA     _softdouble_L143
-_softdouble_L142
+                BRA     _softdouble_L120
+_softdouble_L119
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_q3
                 LDA     17,S   ; fccstk d=0 b=17
@@ -12137,7 +12052,7 @@ _softdouble_L142
                 LDA     _fcc_q3
                 STA     19,S   ; fccstk d=0 b=19
                 TYA
-_softdouble_L143
+_softdouble_L120
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12148,7 +12063,7 @@ _softdouble_L143
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L144
+                BEQ     _softdouble_L121
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_q3
                 LDA     17,S   ; fccstk d=0 b=17
@@ -12157,8 +12072,8 @@ _softdouble_L143
                 STA     _fcc_long_hi
                 LDA     13,S   ; fccstk d=0 b=13
                 JSR     _fcc_long_neg
-                BRA     _softdouble_L145
-_softdouble_L144
+                BRA     _softdouble_L122
+_softdouble_L121
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_q3
                 LDA     17,S   ; fccstk d=0 b=17
@@ -12166,7 +12081,7 @@ _softdouble_L144
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_long_hi
                 LDA     13,S   ; fccstk d=0 b=13
-_softdouble_L145
+_softdouble_L122
                 TAY
                 TSC
                 CLC
@@ -12272,7 +12187,7 @@ __fixunsdfsi_stkok        TCS
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     _softdouble_L146
+                BEQ     _softdouble_L123
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -12284,7 +12199,7 @@ __fixunsdfsi_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L146
+_softdouble_L123
                 DO      12+__fixunsdfsi_FRAMESIZE/256
                 TSC
                 CLC
@@ -12385,7 +12300,7 @@ _softdouble_L146
                 FGX2_FARCALL _fcc_ll_and
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BNE     _softdouble_L147
+                BNE     _softdouble_L124
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -12397,11 +12312,11 @@ _softdouble_L146
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L147
+_softdouble_L124
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #2047
-                BNE     _softdouble_L148
+                BNE     _softdouble_L125
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -12414,14 +12329,14 @@ _softdouble_L147
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L148
+_softdouble_L125
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 SEC
                 SBC     #1023
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BPL     _softdouble_L149
+                BPL     _softdouble_L126
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -12433,7 +12348,7 @@ _softdouble_L148
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L149
+_softdouble_L126
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 LDX     #31
@@ -12441,10 +12356,10 @@ _softdouble_L149
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L151
+                BVC     _softdouble_L128
                 EOR     #$8000
-_softdouble_L151
-                BPL     _softdouble_L150
+_softdouble_L128
+                BPL     _softdouble_L127
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -12457,7 +12372,7 @@ _softdouble_L151
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L150
+_softdouble_L127
                 DO      12+__fixunsdfsi_FRAMESIZE/256
                 TSC
                 CLC
@@ -12580,10 +12495,10 @@ _softdouble_L150
                 TAX
                 SEC
                 SBC     #52
-                BVC     _softdouble_L153
+                BVC     _softdouble_L130
                 EOR     #$8000
-_softdouble_L153
-                BMI     _softdouble_L152
+_softdouble_L130
+                BMI     _softdouble_L129
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_q3
                 LDA     9,S   ; fccstk d=0 b=9
@@ -12624,8 +12539,8 @@ _softdouble_L153
                 LDA     _fcc_q3
                 STA     11,S   ; fccstk d=0 b=11
                 TYA
-                BRA     _softdouble_L154
-_softdouble_L152
+                BRA     _softdouble_L131
+_softdouble_L129
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_q3
                 LDA     9,S   ; fccstk d=0 b=9
@@ -12665,7 +12580,7 @@ _softdouble_L152
                 LDA     _fcc_q3
                 STA     11,S   ; fccstk d=0 b=11
                 TYA
-_softdouble_L154
+_softdouble_L131
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_q3
                 LDA     9,S   ; fccstk d=0 b=9
@@ -12701,7 +12616,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_softdouble_L155
+_softdouble_L132
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12717,11 +12632,11 @@ _softdouble_L155
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L158
+                BVC     _softdouble_L135
                 EOR     #$8000
-_softdouble_L158
+_softdouble_L135
                 BMI     *+5
-                BRL     _softdouble_L157
+                BRL     _softdouble_L134
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -12841,7 +12756,7 @@ _softdouble_L158
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _softdouble_L164
+                BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -12938,15 +12853,9 @@ _softdouble_L158
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _softdouble_L164
-                LDA     #0
-                BRA     _softdouble_L165
-_softdouble_L164
-                LDA     #1
-_softdouble_L165
                 CMP     #0
                 BEQ     *+5
-                BRL     _softdouble_L162
+                BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -13043,15 +12952,9 @@ _softdouble_L165
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _softdouble_L162
-                LDA     #0
-                BRA     _softdouble_L163
-_softdouble_L162
-                LDA     #1
-_softdouble_L163
                 CMP     #0
                 BEQ     *+5
-                BRL     _softdouble_L160
+                BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -13148,35 +13051,29 @@ _softdouble_L163
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _softdouble_L160
-                LDA     #0
-                BRA     _softdouble_L161
-_softdouble_L160
-                LDA     #1
-_softdouble_L161
-                CMP     #0
-                BEQ     _softdouble_L159
+                BEQ     _softdouble_L136
+_softdouble_L137
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 INC
                 TAX
                 SEC
                 SBC     #42
-                BVC     _softdouble_L168
+                BVC     _softdouble_L140
                 EOR     #$8000
-_softdouble_L168
-                BMI     _softdouble_L166
+_softdouble_L140
+                BMI     _softdouble_L138
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #2
-                BRA     _softdouble_L167
-_softdouble_L166
+                BRA     _softdouble_L139
+_softdouble_L138
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #1
-_softdouble_L167
+_softdouble_L139
                 TAY
                 TSC
                 CLC
@@ -13186,7 +13083,7 @@ _softdouble_L167
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L159
+_softdouble_L136
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -13248,7 +13145,7 @@ _softdouble_L159
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _softdouble_L169
+                BEQ     _softdouble_L141
                 LDA     #101
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
@@ -13261,17 +13158,17 @@ _softdouble_L159
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L169
-_softdouble_L156
+_softdouble_L141
+_softdouble_L133
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _softdouble_L155
-_softdouble_L157
+                BRL     _softdouble_L132
+_softdouble_L134
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_softdouble_L170
+_softdouble_L142
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13287,11 +13184,11 @@ _softdouble_L170
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L173
+                BVC     _softdouble_L145
                 EOR     #$8000
-_softdouble_L173
+_softdouble_L145
                 BMI     *+5
-                BRL     _softdouble_L172
+                BRL     _softdouble_L144
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
@@ -13381,7 +13278,7 @@ _softdouble_L173
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _softdouble_L175
+                BRL     _softdouble_L147
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
@@ -13459,14 +13356,8 @@ _softdouble_L173
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _softdouble_L175
-                LDA     #0
-                BRA     _softdouble_L176
-_softdouble_L175
-                LDA     #1
-_softdouble_L176
-                CMP     #0
-                BEQ     _softdouble_L174
+                BEQ     _softdouble_L146
+_softdouble_L147
                 LDA     #201
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
@@ -13479,17 +13370,17 @@ _softdouble_L176
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L174
-_softdouble_L171
+_softdouble_L146
+_softdouble_L143
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _softdouble_L170
-_softdouble_L172
+                BRL     _softdouble_L142
+_softdouble_L144
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_softdouble_L177
+_softdouble_L148
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13505,11 +13396,11 @@ _softdouble_L177
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _softdouble_L180
+                BVC     _softdouble_L151
                 EOR     #$8000
-_softdouble_L180
+_softdouble_L151
                 BMI     *+5
-                BRL     _softdouble_L179
+                BRL     _softdouble_L150
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
@@ -13599,7 +13490,7 @@ _softdouble_L180
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _softdouble_L182
+                BRL     _softdouble_L153
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
@@ -13677,14 +13568,8 @@ _softdouble_L180
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _softdouble_L182
-                LDA     #0
-                BRA     _softdouble_L183
-_softdouble_L182
-                LDA     #1
-_softdouble_L183
-                CMP     #0
-                BEQ     _softdouble_L181
+                BEQ     _softdouble_L152
+_softdouble_L153
                 LDA     #211
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
@@ -13697,14 +13582,14 @@ _softdouble_L183
                 STA     _fcc_fb
                 TYA
                 RTL
-_softdouble_L181
-_softdouble_L178
+_softdouble_L152
+_softdouble_L149
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _softdouble_L177
-_softdouble_L179
+                BRL     _softdouble_L148
+_softdouble_L150
                 LDA     #42
                 TAY
                 TSC

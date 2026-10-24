@@ -915,7 +915,7 @@ _llong_printf_L7
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_printf_L13
+                BRL     _llong_printf_L9
                 LDA     #32767
                 STA     _fcc_q3
                 LDA     #65535
@@ -995,15 +995,9 @@ _llong_printf_L7
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_printf_L13
-                LDA     #0
-                BRA     _llong_printf_L14
-_llong_printf_L13
-                LDA     #1
-_llong_printf_L14
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_printf_L11
+                BRL     _llong_printf_L9
                 LDA     #32767
                 STA     _fcc_q3
                 LDA     #65535
@@ -1116,12 +1110,6 @@ _llong_printf_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_printf_L11
-                LDA     #0
-                BRA     _llong_printf_L12
-_llong_printf_L11
-                LDA     #1
-_llong_printf_L12
                 CMP     #0
                 BNE     _llong_printf_L9
                 LDA     #65535
@@ -1168,14 +1156,8 @@ _llong_printf_L12
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_printf_L9
-                LDA     #0
-                BRA     _llong_printf_L10
-_llong_printf_L9
-                LDA     #1
-_llong_printf_L10
-                CMP     #0
                 BEQ     _llong_printf_L8
+_llong_printf_L9
                 LDA     #9
                 TAY
                 TSC

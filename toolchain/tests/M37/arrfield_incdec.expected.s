@@ -84,40 +84,19 @@ main_stkok        TCS
                 LDA     _arrfield_incdec_obj+8
                 TAX
                 CMP     #31
-                BNE     _arrfield_incdec_L5
+                BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+6
                 TAX
                 CMP     #20
-                BNE     _arrfield_incdec_L5
-                LDA     #1
-                BRA     _arrfield_incdec_L6
-_arrfield_incdec_L5
-                LDA     #0
-_arrfield_incdec_L6
-                CMP     #0
-                BEQ     _arrfield_incdec_L3
+                BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+10
                 TAX
                 CMP     #40
-                BNE     _arrfield_incdec_L3
-                LDA     #1
-                BRA     _arrfield_incdec_L4
-_arrfield_incdec_L3
-                LDA     #0
-_arrfield_incdec_L4
-                CMP     #0
-                BEQ     _arrfield_incdec_L1
+                BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+0
                 TAX
                 CMP     #10
-                BNE     _arrfield_incdec_L1
-                LDA     #1
-                BRA     _arrfield_incdec_L2
-_arrfield_incdec_L1
-                LDA     #0
-_arrfield_incdec_L2
-                CMP     #0
-                BEQ     _arrfield_incdec_L0
+                BNE     _arrfield_incdec_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -144,35 +123,21 @@ _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+10
                 TAX
                 CMP     #39
-                BNE     _arrfield_incdec_L10
+                BNE     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+8
                 TAX
                 CMP     #31
-                BNE     _arrfield_incdec_L10
-                LDA     #1
-                BRA     _arrfield_incdec_L11
-_arrfield_incdec_L10
-                LDA     #0
-_arrfield_incdec_L11
-                CMP     #0
-                BEQ     _arrfield_incdec_L8
+                BNE     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+6
                 TAX
                 CMP     #20
-                BNE     _arrfield_incdec_L8
-                LDA     #1
-                BRA     _arrfield_incdec_L9
-_arrfield_incdec_L8
-                LDA     #0
-_arrfield_incdec_L9
-                CMP     #0
-                BEQ     _arrfield_incdec_L7
+                BNE     _arrfield_incdec_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L7
+_arrfield_incdec_L1
                 LDA     #0
                 CLC
                 ADC     #_arrfield_incdec_obj+2
@@ -248,37 +213,23 @@ _arrfield_incdec_L7
                 AND     #$00FF
                 TAX
                 CMP     #99
-                BNE     _arrfield_incdec_L15
+                BNE     _arrfield_incdec_L2
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
                 CMP     #97
-                BNE     _arrfield_incdec_L15
-                LDA     #1
-                BRA     _arrfield_incdec_L16
-_arrfield_incdec_L15
-                LDA     #0
-_arrfield_incdec_L16
-                CMP     #0
-                BEQ     _arrfield_incdec_L13
+                BNE     _arrfield_incdec_L2
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
                 TAX
                 CMP     #99
-                BNE     _arrfield_incdec_L13
-                LDA     #1
-                BRA     _arrfield_incdec_L14
-_arrfield_incdec_L13
-                LDA     #0
-_arrfield_incdec_L14
-                CMP     #0
-                BEQ     _arrfield_incdec_L12
+                BNE     _arrfield_incdec_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L12
+_arrfield_incdec_L2
                 PHA
                 SEP     #$20
                 MX      %10
@@ -310,24 +261,17 @@ _arrfield_incdec_L12
                 LDA     _arrfield_incdec_obj+6
                 TAX
                 CMP     #21
-                BNE     _arrfield_incdec_L18
+                BNE     _arrfield_incdec_L3
                 LDA     _arrfield_incdec_obj+8
                 TAX
                 CMP     #31
-                BNE     _arrfield_incdec_L18
-                LDA     #1
-                BRA     _arrfield_incdec_L19
-_arrfield_incdec_L18
-                LDA     #0
-_arrfield_incdec_L19
-                CMP     #0
-                BEQ     _arrfield_incdec_L17
+                BNE     _arrfield_incdec_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L17
+_arrfield_incdec_L3
                 LDA     #2
                 STA     _fcc_img1
                 LDA     3,S   ; fccstk d=0 b=3
@@ -353,37 +297,23 @@ _arrfield_incdec_L17
                 AND     #$00FF
                 TAX
                 CMP     #98
-                BNE     _arrfield_incdec_L23
+                BNE     _arrfield_incdec_L4
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
                 TAX
                 CMP     #99
-                BNE     _arrfield_incdec_L23
-                LDA     #1
-                BRA     _arrfield_incdec_L24
-_arrfield_incdec_L23
-                LDA     #0
-_arrfield_incdec_L24
-                CMP     #0
-                BEQ     _arrfield_incdec_L21
+                BNE     _arrfield_incdec_L4
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
                 CMP     #97
-                BNE     _arrfield_incdec_L21
-                LDA     #1
-                BRA     _arrfield_incdec_L22
-_arrfield_incdec_L21
-                LDA     #0
-_arrfield_incdec_L22
-                CMP     #0
-                BEQ     _arrfield_incdec_L20
+                BNE     _arrfield_incdec_L4
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L20
+_arrfield_incdec_L4
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -510,7 +440,8 @@ _arrfield_incdec_L20
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #107
-                BNE     _arrfield_incdec_L28
+                BEQ     *+5
+                BRL     _arrfield_incdec_L5
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -542,14 +473,7 @@ _arrfield_incdec_L20
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #200
-                BNE     _arrfield_incdec_L28
-                LDA     #1
-                BRA     _arrfield_incdec_L29
-_arrfield_incdec_L28
-                LDA     #0
-_arrfield_incdec_L29
-                CMP     #0
-                BEQ     _arrfield_incdec_L26
+                BNE     _arrfield_incdec_L5
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -581,20 +505,13 @@ _arrfield_incdec_L29
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #300
-                BNE     _arrfield_incdec_L26
-                LDA     #1
-                BRA     _arrfield_incdec_L27
-_arrfield_incdec_L26
-                LDA     #0
-_arrfield_incdec_L27
-                CMP     #0
-                BEQ     _arrfield_incdec_L25
+                BNE     _arrfield_incdec_L5
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L25
+_arrfield_incdec_L5
                 LDA     #1
                 STA     _fcc_img1
                 STA     _fcc_tmp_b
@@ -657,7 +574,7 @@ _arrfield_incdec_L25
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #250
-                BNE     _arrfield_incdec_L31
+                BNE     _arrfield_incdec_L6
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -689,20 +606,13 @@ _arrfield_incdec_L25
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #107
-                BNE     _arrfield_incdec_L31
-                LDA     #1
-                BRA     _arrfield_incdec_L32
-_arrfield_incdec_L31
-                LDA     #0
-_arrfield_incdec_L32
-                CMP     #0
-                BEQ     _arrfield_incdec_L30
+                BNE     _arrfield_incdec_L6
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
-_arrfield_incdec_L30
+_arrfield_incdec_L6
                 LDA     _fcc_img0
                 TAY
                 TSC

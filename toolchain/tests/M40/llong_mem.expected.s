@@ -345,14 +345,8 @@ main_stkok        TCS
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L3
-                LDA     #0
-                BRA     _llong_mem_L4
-_llong_mem_L3
-                LDA     #1
-_llong_mem_L4
                 CMP     #0
-                BEQ     _llong_mem_L2
+                BNE     _llong_mem_L2
                 LDA     #1
                 TAY
                 TSC
@@ -417,14 +411,7 @@ _llong_mem_L2
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L6
-                LDA     #0
-                BRA     _llong_mem_L7
-_llong_mem_L6
-                LDA     #1
-_llong_mem_L7
-                CMP     #0
-                BEQ     _llong_mem_L5
+                BNE     _llong_mem_L3
                 LDA     #2
                 TAY
                 TSC
@@ -435,7 +422,7 @@ _llong_mem_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L5
+_llong_mem_L3
                 LDA     #0
                 STA     _fcc_q3
                 LDA     #1
@@ -487,14 +474,7 @@ _llong_mem_L5
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L9
-                LDA     #0
-                BRA     _llong_mem_L10
-_llong_mem_L9
-                LDA     #1
-_llong_mem_L10
-                CMP     #0
-                BEQ     _llong_mem_L8
+                BNE     _llong_mem_L4
                 LDA     #3
                 TAY
                 TSC
@@ -505,7 +485,7 @@ _llong_mem_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L8
+_llong_mem_L4
                 LDA     #0
                 STA     _fcc_q3
                 LDA     #0
@@ -578,14 +558,8 @@ _llong_mem_L8
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L14
-                LDA     #0
-                BRA     _llong_mem_L15
-_llong_mem_L14
-                LDA     #1
-_llong_mem_L15
                 CMP     #0
-                BNE     _llong_mem_L12
+                BEQ     _llong_mem_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -630,14 +604,8 @@ _llong_mem_L15
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L12
-                LDA     #0
-                BRA     _llong_mem_L13
-_llong_mem_L12
-                LDA     #1
-_llong_mem_L13
-                CMP     #0
-                BEQ     _llong_mem_L11
+                BEQ     _llong_mem_L5
+_llong_mem_L6
                 LDA     #4
                 TAY
                 TSC
@@ -648,22 +616,16 @@ _llong_mem_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L11
+_llong_mem_L5
                 LDA     #12
                 TAX
                 CMP     #12
-                BNE     _llong_mem_L17
+                BNE     _llong_mem_L8
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _llong_mem_L17
-                LDA     #0
-                BRA     _llong_mem_L18
-_llong_mem_L17
-                LDA     #1
-_llong_mem_L18
-                CMP     #0
-                BEQ     _llong_mem_L16
+                BEQ     _llong_mem_L7
+_llong_mem_L8
                 LDA     #5
                 TAY
                 TSC
@@ -674,7 +636,7 @@ _llong_mem_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L16
+_llong_mem_L7
                 PHA
                 SEP     #$20
                 MX      %10
@@ -770,14 +732,8 @@ _llong_mem_L16
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L20
-                LDA     #0
-                BRA     _llong_mem_L21
-_llong_mem_L20
-                LDA     #1
-_llong_mem_L21
                 CMP     #0
-                BEQ     _llong_mem_L19
+                BNE     _llong_mem_L9
                 LDA     #6
                 TAY
                 TSC
@@ -788,7 +744,7 @@ _llong_mem_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L19
+_llong_mem_L9
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -861,7 +817,7 @@ _llong_mem_L19
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L22
+                BEQ     _llong_mem_L10
                 LDA     #7
                 TAY
                 TSC
@@ -872,7 +828,7 @@ _llong_mem_L19
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L22
+_llong_mem_L10
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -973,14 +929,7 @@ _llong_mem_L22
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L24
-                LDA     #0
-                BRA     _llong_mem_L25
-_llong_mem_L24
-                LDA     #1
-_llong_mem_L25
-                CMP     #0
-                BEQ     _llong_mem_L23
+                BNE     _llong_mem_L11
                 LDA     #8
                 TAY
                 TSC
@@ -991,7 +940,7 @@ _llong_mem_L25
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L23
+_llong_mem_L11
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -1105,7 +1054,7 @@ _llong_mem_L23
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L26
+                BEQ     _llong_mem_L12
                 LDA     #9
                 TAY
                 TSC
@@ -1116,7 +1065,7 @@ _llong_mem_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L26
+_llong_mem_L12
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1186,14 +1135,7 @@ _llong_mem_L26
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L28
-                LDA     #0
-                BRA     _llong_mem_L29
-_llong_mem_L28
-                LDA     #1
-_llong_mem_L29
-                CMP     #0
-                BEQ     _llong_mem_L27
+                BNE     _llong_mem_L13
                 LDA     #10
                 TAY
                 TSC
@@ -1204,7 +1146,7 @@ _llong_mem_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L27
+_llong_mem_L13
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1288,7 +1230,7 @@ _llong_mem_L27
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L30
+                BEQ     _llong_mem_L14
                 LDA     #11
                 TAY
                 TSC
@@ -1299,7 +1241,7 @@ _llong_mem_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L30
+_llong_mem_L14
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1368,14 +1310,7 @@ _llong_mem_L30
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L32
-                LDA     #0
-                BRA     _llong_mem_L33
-_llong_mem_L32
-                LDA     #1
-_llong_mem_L33
-                CMP     #0
-                BEQ     _llong_mem_L31
+                BNE     _llong_mem_L15
                 LDA     #12
                 TAY
                 TSC
@@ -1386,7 +1321,7 @@ _llong_mem_L33
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L31
+_llong_mem_L15
                 LDA     n
                 TAX
                 INC
@@ -1468,7 +1403,7 @@ _llong_mem_L31
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L34
+                BEQ     _llong_mem_L16
                 LDA     #13
                 TAY
                 TSC
@@ -1479,7 +1414,7 @@ _llong_mem_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L34
+_llong_mem_L16
                 LDA     #7
                 STA     63,S   ; fccstk d=0 b=63
                 LDA     #9
@@ -1553,14 +1488,7 @@ _llong_mem_L34
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L36
-                LDA     #0
-                BRA     _llong_mem_L37
-_llong_mem_L36
-                LDA     #1
-_llong_mem_L37
-                CMP     #0
-                BEQ     _llong_mem_L35
+                BNE     _llong_mem_L17
                 LDA     #14
                 TAY
                 TSC
@@ -1571,22 +1499,16 @@ _llong_mem_L37
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L35
+_llong_mem_L17
                 LDA     63,S   ; fccstk d=0 b=63
                 TAX
                 CMP     #7
-                BNE     _llong_mem_L39
+                BNE     _llong_mem_L19
                 LDA     73,S   ; fccstk d=0 b=73
                 TAX
                 CMP     #9
-                BNE     _llong_mem_L39
-                LDA     #0
-                BRA     _llong_mem_L40
-_llong_mem_L39
-                LDA     #1
-_llong_mem_L40
-                CMP     #0
-                BEQ     _llong_mem_L38
+                BEQ     _llong_mem_L18
+_llong_mem_L19
                 LDA     #15
                 TAY
                 TSC
@@ -1597,7 +1519,7 @@ _llong_mem_L40
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L38
+_llong_mem_L18
                 LDA     71,S   ; fccstk d=0 b=71
                 STA     _fcc_q3
                 LDA     69,S   ; fccstk d=0 b=69
@@ -1658,7 +1580,7 @@ _llong_mem_L38
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L41
+                BEQ     _llong_mem_L20
                 LDA     #16
                 TAY
                 TSC
@@ -1669,7 +1591,7 @@ _llong_mem_L38
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L41
+_llong_mem_L20
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1750,14 +1672,8 @@ _llong_mem_L41
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L43
-                LDA     #0
-                BRA     _llong_mem_L44
-_llong_mem_L43
-                LDA     #1
-_llong_mem_L44
                 CMP     #0
-                BEQ     _llong_mem_L42
+                BNE     _llong_mem_L21
                 LDA     #17
                 TAY
                 TSC
@@ -1768,7 +1684,7 @@ _llong_mem_L44
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L42
+_llong_mem_L21
                 LDA     27,S   ; fccstk d=0 b=27
                 STA     _fcc_fpr0+2
                 LDA     25,S   ; fccstk d=0 b=25
@@ -1839,7 +1755,7 @@ _llong_mem_L42
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _llong_mem_L45
+                BEQ     _llong_mem_L22
                 LDA     #18
                 TAY
                 TSC
@@ -1850,7 +1766,7 @@ _llong_mem_L42
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L45
+_llong_mem_L22
                 LDA     gs+8
                 STA     _fcc_q3
                 LDA     gs+6
@@ -1913,7 +1829,7 @@ _llong_mem_L45
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     _llong_mem_L46
+                BEQ     _llong_mem_L23
                 LDA     #19
                 TAY
                 TSC
@@ -1924,7 +1840,7 @@ _llong_mem_L45
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L46
+_llong_mem_L23
                 SEP     #$20
                 MX      %10
                 LDA     p+2
@@ -2079,7 +1995,7 @@ _llong_mem_L46
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L47
+                BEQ     _llong_mem_L24
                 LDA     #20
                 TAY
                 TSC
@@ -2090,7 +2006,7 @@ _llong_mem_L46
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L47
+_llong_mem_L24
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -2287,7 +2203,7 @@ _llong_mem_L47
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L48
+                BEQ     _llong_mem_L25
                 LDA     #21
                 TAY
                 TSC
@@ -2298,7 +2214,7 @@ _llong_mem_L47
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L48
+_llong_mem_L25
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -2447,7 +2363,7 @@ _llong_mem_L48
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L49
+                BEQ     _llong_mem_L26
                 LDA     #22
                 TAY
                 TSC
@@ -2458,7 +2374,7 @@ _llong_mem_L48
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L49
+_llong_mem_L26
                 LDA     garr+14
                 STA     _fcc_q3
                 LDA     garr+12
@@ -2559,14 +2475,7 @@ _llong_mem_L49
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L51
-                LDA     #0
-                BRA     _llong_mem_L52
-_llong_mem_L51
-                LDA     #1
-_llong_mem_L52
-                CMP     #0
-                BEQ     _llong_mem_L50
+                BNE     _llong_mem_L27
                 LDA     #23
                 TAY
                 TSC
@@ -2577,7 +2486,7 @@ _llong_mem_L52
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L50
+_llong_mem_L27
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -2720,7 +2629,7 @@ _llong_mem_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L53
+                BEQ     _llong_mem_L28
                 LDA     #24
                 TAY
                 TSC
@@ -2731,7 +2640,7 @@ _llong_mem_L50
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L53
+_llong_mem_L28
                 LDA     #0
                 STA     _fcc_q3
                 LDA     #0
@@ -2849,7 +2758,7 @@ _llong_mem_L53
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     _llong_mem_L55
+                BNE     _llong_mem_L30
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -2894,14 +2803,8 @@ _llong_mem_L53
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L55
-                LDA     #0
-                BRA     _llong_mem_L56
-_llong_mem_L55
-                LDA     #1
-_llong_mem_L56
-                CMP     #0
-                BEQ     _llong_mem_L54
+                BEQ     _llong_mem_L29
+_llong_mem_L30
                 LDA     #25
                 TAY
                 TSC
@@ -2912,7 +2815,7 @@ _llong_mem_L56
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L54
+_llong_mem_L29
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -2996,7 +2899,7 @@ _llong_mem_L54
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     _llong_mem_L58
+                BNE     _llong_mem_L32
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3041,14 +2944,9 @@ _llong_mem_L54
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L58
-                LDA     #0
-                BRA     _llong_mem_L59
-_llong_mem_L58
-                LDA     #1
-_llong_mem_L59
                 CMP     #0
-                BEQ     _llong_mem_L57
+                BEQ     _llong_mem_L31
+_llong_mem_L32
                 LDA     #26
                 TAY
                 TSC
@@ -3059,7 +2957,7 @@ _llong_mem_L59
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L57
+_llong_mem_L31
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -3166,7 +3064,7 @@ _llong_mem_L57
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L60
+                BEQ     _llong_mem_L33
                 LDA     #27
                 TAY
                 TSC
@@ -3177,7 +3075,7 @@ _llong_mem_L57
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L60
+_llong_mem_L33
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -3252,7 +3150,7 @@ _llong_mem_L60
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L61
+                BEQ     _llong_mem_L34
                 LDA     #28
                 TAY
                 TSC
@@ -3263,7 +3161,7 @@ _llong_mem_L60
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L61
+_llong_mem_L34
                 LDA     #0
                 STA     _fcc_q3
                 LDA     #65535
@@ -3399,7 +3297,7 @@ _llong_mem_L61
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L62
+                BEQ     _llong_mem_L35
                 LDA     #29
                 TAY
                 TSC
@@ -3410,7 +3308,7 @@ _llong_mem_L61
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L62
+_llong_mem_L35
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -3569,7 +3467,7 @@ _llong_mem_L62
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BEQ     _llong_mem_L63
+                BEQ     _llong_mem_L36
                 LDA     #30
                 TAY
                 TSC
@@ -3580,7 +3478,7 @@ _llong_mem_L62
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L63
+_llong_mem_L36
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -3716,14 +3614,8 @@ _llong_mem_L63
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L65
-                LDA     #0
-                BRA     _llong_mem_L66
-_llong_mem_L65
-                LDA     #1
-_llong_mem_L66
                 CMP     #0
-                BEQ     _llong_mem_L64
+                BNE     _llong_mem_L37
                 LDA     #31
                 TAY
                 TSC
@@ -3734,7 +3626,7 @@ _llong_mem_L66
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L64
+_llong_mem_L37
                 LDA     #30000
                 STA     29,S   ; fccstk d=0 b=29
                 LDA     #0
@@ -3796,7 +3688,7 @@ _llong_mem_L64
                 FGX2_FARCALL _fcc_ll_divs
                 STA     29,S   ; fccstk d=0 b=29
                 CMP     #0
-                BEQ     _llong_mem_L67
+                BEQ     _llong_mem_L38
                 LDA     #32
                 TAY
                 TSC
@@ -3807,7 +3699,7 @@ _llong_mem_L64
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L67
+_llong_mem_L38
                 LDA     #7
                 STA     29,S   ; fccstk d=0 b=29
                 LDA     29,S   ; fccstk d=0 b=29
@@ -3854,7 +3746,7 @@ _llong_mem_L67
                 STA     29,S   ; fccstk d=0 b=29
                 TAX
                 CMP     #7
-                BEQ     _llong_mem_L68
+                BEQ     _llong_mem_L39
                 LDA     #33
                 TAY
                 TSC
@@ -3865,7 +3757,7 @@ _llong_mem_L67
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L68
+_llong_mem_L39
                 LDA     #$89AB
                 STA     _fcc_long_hi
                 LDA     #$CDEF
@@ -3902,14 +3794,8 @@ _llong_mem_L68
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L72
-                LDA     #0
-                BRA     _llong_mem_L73
-_llong_mem_L72
-                LDA     #1
-_llong_mem_L73
                 CMP     #0
-                BNE     _llong_mem_L70
+                BEQ     _llong_mem_L41
                 LDA     gi2+6
                 STA     _fcc_q3
                 LDA     gi2+4
@@ -3955,14 +3841,9 @@ _llong_mem_L73
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L70
-                LDA     #0
-                BRA     _llong_mem_L71
-_llong_mem_L70
-                LDA     #1
-_llong_mem_L71
                 CMP     #0
-                BEQ     _llong_mem_L69
+                BEQ     _llong_mem_L40
+_llong_mem_L41
                 LDA     #34
                 TAY
                 TSC
@@ -3973,7 +3854,7 @@ _llong_mem_L71
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L69
+_llong_mem_L40
                 LDA     gi3+6
                 STA     _fcc_q3
                 LDA     gi3+4
@@ -4020,7 +3901,8 @@ _llong_mem_L69
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     _llong_mem_L79
+                BEQ     *+5
+                BRL     _llong_mem_L43
                 LDA     gi3+14
                 STA     _fcc_q3
                 LDA     gi3+12
@@ -4066,14 +3948,9 @@ _llong_mem_L69
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L79
-                LDA     #0
-                BRA     _llong_mem_L80
-_llong_mem_L79
-                LDA     #1
-_llong_mem_L80
                 CMP     #0
-                BNE     _llong_mem_L77
+                BEQ     *+5
+                BRL     _llong_mem_L43
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -4110,21 +3987,8 @@ _llong_mem_L80
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L81
-                LDA     #0
-                BRA     _llong_mem_L82
-_llong_mem_L81
-                LDA     #1
-_llong_mem_L82
                 CMP     #0
-                BNE     _llong_mem_L77
-                LDA     #0
-                BRA     _llong_mem_L78
-_llong_mem_L77
-                LDA     #1
-_llong_mem_L78
-                CMP     #0
-                BNE     _llong_mem_L75
+                BEQ     _llong_mem_L43
                 LDA     gi3+30
                 STA     _fcc_q3
                 LDA     gi3+28
@@ -4170,14 +4034,8 @@ _llong_mem_L78
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L75
-                LDA     #0
-                BRA     _llong_mem_L76
-_llong_mem_L75
-                LDA     #1
-_llong_mem_L76
-                CMP     #0
-                BEQ     _llong_mem_L74
+                BEQ     _llong_mem_L42
+_llong_mem_L43
                 LDA     #35
                 TAY
                 TSC
@@ -4188,7 +4046,7 @@ _llong_mem_L76
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L74
+_llong_mem_L42
                 LDA     #$2A05
                 STA     _fcc_long_hi
                 LDA     #$F200
@@ -4225,14 +4083,7 @@ _llong_mem_L74
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L84
-                LDA     #0
-                BRA     _llong_mem_L85
-_llong_mem_L84
-                LDA     #1
-_llong_mem_L85
-                CMP     #0
-                BEQ     _llong_mem_L83
+                BNE     _llong_mem_L44
                 LDA     #36
                 TAY
                 TSC
@@ -4243,11 +4094,11 @@ _llong_mem_L85
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L83
+_llong_mem_L44
                 LDA     gsi+0
                 TAX
                 CMP     #7
-                BNE     _llong_mem_L89
+                BNE     _llong_mem_L46
                 LDA     #$5566
                 STA     _fcc_long_hi
                 LDA     #$7788
@@ -4284,32 +4135,12 @@ _llong_mem_L83
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _llong_mem_L91
-                LDA     #0
-                BRA     _llong_mem_L92
-_llong_mem_L91
-                LDA     #1
-_llong_mem_L92
-                CMP     #0
-                BNE     _llong_mem_L89
-                LDA     #0
-                BRA     _llong_mem_L90
-_llong_mem_L89
-                LDA     #1
-_llong_mem_L90
-                CMP     #0
-                BNE     _llong_mem_L87
+                BEQ     _llong_mem_L46
                 LDA     gsi+10
                 TAX
                 CMP     #9
-                BNE     _llong_mem_L87
-                LDA     #0
-                BRA     _llong_mem_L88
-_llong_mem_L87
-                LDA     #1
-_llong_mem_L88
-                CMP     #0
-                BEQ     _llong_mem_L86
+                BEQ     _llong_mem_L45
+_llong_mem_L46
                 LDA     #37
                 TAY
                 TSC
@@ -4320,7 +4151,7 @@ _llong_mem_L88
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L86
+_llong_mem_L45
                 SEP     #$20
                 MX      %10
                 LDA     gip+2
@@ -4378,7 +4209,7 @@ _llong_mem_L86
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     _llong_mem_L94
+                BNE     _llong_mem_L48
                 LDA     main_sl_sl+6
                 STA     _fcc_q3
                 LDA     main_sl_sl+4
@@ -4424,14 +4255,8 @@ _llong_mem_L86
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L94
-                LDA     #0
-                BRA     _llong_mem_L95
-_llong_mem_L94
-                LDA     #1
-_llong_mem_L95
-                CMP     #0
-                BEQ     _llong_mem_L93
+                BEQ     _llong_mem_L47
+_llong_mem_L48
                 LDA     #38
                 TAY
                 TSC
@@ -4442,7 +4267,7 @@ _llong_mem_L95
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L93
+_llong_mem_L47
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -4504,7 +4329,7 @@ _llong_mem_L93
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_mem_L99
+                BRL     _llong_mem_L50
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -4566,15 +4391,9 @@ _llong_mem_L93
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L99
-                LDA     #0
-                BRA     _llong_mem_L100
-_llong_mem_L99
-                LDA     #1
-_llong_mem_L100
                 CMP     #0
                 BEQ     *+5
-                BRL     _llong_mem_L97
+                BRL     _llong_mem_L50
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -4636,14 +4455,8 @@ _llong_mem_L100
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L97
-                LDA     #0
-                BRA     _llong_mem_L98
-_llong_mem_L97
-                LDA     #1
-_llong_mem_L98
-                CMP     #0
-                BEQ     _llong_mem_L96
+                BEQ     _llong_mem_L49
+_llong_mem_L50
                 LDA     #39
                 TAY
                 TSC
@@ -4654,11 +4467,11 @@ _llong_mem_L98
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L96
+_llong_mem_L49
                 LDA     99,S   ; fccstk d=0 b=99
                 TAX
                 CMP     #1
-                BNE     _llong_mem_L104
+                BNE     _llong_mem_L52
                 LDA     107,S   ; fccstk d=0 b=107
                 STA     _fcc_q3
                 LDA     105,S   ; fccstk d=0 b=105
@@ -4704,25 +4517,12 @@ _llong_mem_L96
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _llong_mem_L104
-                LDA     #0
-                BRA     _llong_mem_L105
-_llong_mem_L104
-                LDA     #1
-_llong_mem_L105
-                CMP     #0
-                BNE     _llong_mem_L102
+                BNE     _llong_mem_L52
                 LDA     109,S   ; fccstk d=0 b=109
                 TAX
                 CMP     #2
-                BNE     _llong_mem_L102
-                LDA     #0
-                BRA     _llong_mem_L103
-_llong_mem_L102
-                LDA     #1
-_llong_mem_L103
-                CMP     #0
-                BEQ     _llong_mem_L101
+                BEQ     _llong_mem_L51
+_llong_mem_L52
                 LDA     #40
                 TAY
                 TSC
@@ -4733,7 +4533,7 @@ _llong_mem_L103
                 STA     _fcc_fb
                 TYA
                 RTL
-_llong_mem_L101
+_llong_mem_L51
                 LDA     #42
                 TAY
                 TSC

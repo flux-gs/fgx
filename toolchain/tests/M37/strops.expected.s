@@ -291,19 +291,12 @@ _strops_L3
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                BNE     _strops_L5
+                BNE     _strops_L4
                 LDA     #7
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                BNE     _strops_L5
-                LDA     #1
-                BRA     _strops_L6
-_strops_L5
-                LDA     #0
-_strops_L6
-                CMP     #0
-                BEQ     _strops_L4
+                BNE     _strops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
@@ -345,13 +338,13 @@ _strops_L4
                 ADC     #10
                 TCS
                 TYA
-                BNE     _strops_L7
+                BNE     _strops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L7
+_strops_L5
                 LDA     #108
                 PHA
                 PHA
@@ -387,27 +380,27 @@ _strops_L7
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _strops_L9
+                BNE     _strops_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _strops_L9
+                BNE     _strops_L7
                 LDA     #1
-                BRA     _strops_L10
-_strops_L9
+                BRA     _strops_L8
+_strops_L7
                 LDA     #0
-_strops_L10
+_strops_L8
                 CMP     #0
-                BEQ     _strops_L8
+                BEQ     _strops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L8
+_strops_L6
                 LDA     #108
                 PHA
                 PHA
@@ -443,27 +436,27 @@ _strops_L8
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _strops_L12
+                BNE     _strops_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _strops_L12
+                BNE     _strops_L10
                 LDA     #1
-                BRA     _strops_L13
-_strops_L12
+                BRA     _strops_L11
+_strops_L10
                 LDA     #0
-_strops_L13
+_strops_L11
                 CMP     #0
-                BEQ     _strops_L11
+                BEQ     _strops_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L11
+_strops_L9
                 LDA     #122
                 PHA
                 PHA
@@ -491,27 +484,27 @@ _strops_L11
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _strops_L15
+                BNE     _strops_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _strops_L15
+                BNE     _strops_L13
                 LDA     #1
-                BRA     _strops_L16
-_strops_L15
+                BRA     _strops_L14
+_strops_L13
                 LDA     #0
-_strops_L16
+_strops_L14
                 CMP     #0
-                BEQ     _strops_L14
+                BEQ     _strops_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L14
+_strops_L12
                 LDA     #0
                 PHA
                 PHA
@@ -547,27 +540,27 @@ _strops_L14
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _strops_L18
+                BNE     _strops_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _strops_L18
+                BNE     _strops_L16
                 LDA     #1
-                BRA     _strops_L19
-_strops_L18
+                BRA     _strops_L17
+_strops_L16
                 LDA     #0
-_strops_L19
+_strops_L17
                 CMP     #0
-                BEQ     _strops_L17
+                BEQ     _strops_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L17
+_strops_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

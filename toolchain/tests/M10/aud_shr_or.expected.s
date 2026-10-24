@@ -112,14 +112,8 @@ _aud_shr_or_L0
                 ADC     #4
                 TCS
                 TYA
-                BNE     _aud_shr_or_L2
-                LDA     #0
-                BRA     _aud_shr_or_L3
-_aud_shr_or_L2
-                LDA     #1
-_aud_shr_or_L3
-                CMP     #0
                 BEQ     _aud_shr_or_L1
+_aud_shr_or_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
@@ -127,13 +121,13 @@ _aud_shr_or_L3
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L1
                 LDA     3,S   ; fccstk d=0 b=3
-                BNE     _aud_shr_or_L4
+                BNE     _aud_shr_or_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC
                 ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
-_aud_shr_or_L4
+_aud_shr_or_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

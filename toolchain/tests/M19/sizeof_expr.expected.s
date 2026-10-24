@@ -50,29 +50,15 @@ main_stkok        TCS
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L3
+                BNE     _sizeof_expr_L0
                 LDA     #4
                 TAX
                 CMP     #4
-                BNE     _sizeof_expr_L3
-                LDA     #1
-                BRA     _sizeof_expr_L4
-_sizeof_expr_L3
-                LDA     #0
-_sizeof_expr_L4
-                CMP     #0
-                BEQ     _sizeof_expr_L1
+                BNE     _sizeof_expr_L0
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L1
-                LDA     #1
-                BRA     _sizeof_expr_L2
-_sizeof_expr_L1
-                LDA     #0
-_sizeof_expr_L2
-                CMP     #0
-                BEQ     _sizeof_expr_L0
+                BNE     _sizeof_expr_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -82,77 +68,49 @@ _sizeof_expr_L0
                 LDA     #4
                 TAX
                 CMP     #4
-                BNE     _sizeof_expr_L8
+                BNE     _sizeof_expr_L1
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L8
-                LDA     #1
-                BRA     _sizeof_expr_L9
-_sizeof_expr_L8
-                LDA     #0
-_sizeof_expr_L9
-                CMP     #0
-                BEQ     _sizeof_expr_L6
+                BNE     _sizeof_expr_L1
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L6
-                LDA     #1
-                BRA     _sizeof_expr_L7
-_sizeof_expr_L6
-                LDA     #0
-_sizeof_expr_L7
-                CMP     #0
-                BEQ     _sizeof_expr_L5
+                BNE     _sizeof_expr_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
-_sizeof_expr_L5
+_sizeof_expr_L1
                 LDA     #4
                 TAX
                 CMP     #4
-                BNE     _sizeof_expr_L11
+                BNE     _sizeof_expr_L2
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L11
-                LDA     #1
-                BRA     _sizeof_expr_L12
-_sizeof_expr_L11
-                LDA     #0
-_sizeof_expr_L12
-                CMP     #0
-                BEQ     _sizeof_expr_L10
+                BNE     _sizeof_expr_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #11
                 STA     _fcc_img0
-_sizeof_expr_L10
+_sizeof_expr_L2
                 LDA     #2
                 TAX
                 CMP     #2
-                BNE     _sizeof_expr_L14
+                BNE     _sizeof_expr_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #5
-                BNE     _sizeof_expr_L14
-                LDA     #1
-                BRA     _sizeof_expr_L15
-_sizeof_expr_L14
-                LDA     #0
-_sizeof_expr_L15
-                CMP     #0
-                BEQ     _sizeof_expr_L13
+                BNE     _sizeof_expr_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #11
                 STA     _fcc_img0
-_sizeof_expr_L13
+_sizeof_expr_L3
                 LDA     _fcc_img0
                 TAY
                 TSC

@@ -86,7 +86,7 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #120
-                BNE     _derefparen_L1
+                BNE     _derefparen_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -116,21 +116,14 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _derefparen_L3
+                BNE     _derefparen_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _derefparen_L3
-                LDA     #1
-                BRA     _derefparen_L4
-_derefparen_L3
-                LDA     #0
-_derefparen_L4
-                CMP     #0
-                BEQ     _derefparen_L1
+                BNE     _derefparen_L1
                 LDA     #1
                 BRA     _derefparen_L2
 _derefparen_L1
@@ -175,21 +168,14 @@ _derefparen_L0
                 STA     _fcc_img1
                 TAX
                 CMP     #1
-                BNE     _derefparen_L8
+                BNE     _derefparen_L3
                 LDA     #0
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
                 CMP     #121
-                BNE     _derefparen_L8
-                LDA     #1
-                BRA     _derefparen_L9
-_derefparen_L8
-                LDA     #0
-_derefparen_L9
-                CMP     #0
-                BEQ     _derefparen_L6
+                BNE     _derefparen_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -219,34 +205,27 @@ _derefparen_L9
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _derefparen_L10
+                BNE     _derefparen_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _derefparen_L10
+                BNE     _derefparen_L4
                 LDA     #1
-                BRA     _derefparen_L11
-_derefparen_L10
+                BRA     _derefparen_L5
+_derefparen_L4
                 LDA     #0
-_derefparen_L11
+_derefparen_L5
                 CMP     #0
-                BEQ     _derefparen_L6
-                LDA     #1
-                BRA     _derefparen_L7
-_derefparen_L6
-                LDA     #0
-_derefparen_L7
-                CMP     #0
-                BEQ     _derefparen_L5
+                BEQ     _derefparen_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
-_derefparen_L5
+_derefparen_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -277,27 +256,20 @@ _derefparen_L5
                 JSR     _fcc_ne16
                 STA     _fcc_img1
                 CMP     #0
-                BNE     _derefparen_L13
+                BNE     _derefparen_L6
                 LDA     #0
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
                 CMP     #10
-                BNE     _derefparen_L13
-                LDA     #1
-                BRA     _derefparen_L14
-_derefparen_L13
-                LDA     #0
-_derefparen_L14
-                CMP     #0
-                BEQ     _derefparen_L12
+                BNE     _derefparen_L6
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
-_derefparen_L12
+_derefparen_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -362,41 +334,34 @@ _derefparen_L12
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _derefparen_L18
+                BNE     _derefparen_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _derefparen_L18
+                BNE     _derefparen_L8
                 LDA     #1
-                BRA     _derefparen_L19
-_derefparen_L18
+                BRA     _derefparen_L9
+_derefparen_L8
                 LDA     #0
-_derefparen_L19
+_derefparen_L9
                 CMP     #0
-                BEQ     _derefparen_L16
+                BEQ     _derefparen_L7
                 LDA     #0
                 TAX
                 LDA:    buf2,X
                 AND     #$00FF
                 TAX
                 CMP     #122
-                BNE     _derefparen_L16
-                LDA     #1
-                BRA     _derefparen_L17
-_derefparen_L16
-                LDA     #0
-_derefparen_L17
-                CMP     #0
-                BEQ     _derefparen_L15
+                BNE     _derefparen_L7
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
-_derefparen_L15
+_derefparen_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -430,7 +395,7 @@ _derefparen_L15
                 AND     #$00FF
                 TAX
                 CMP     #119
-                BNE     _derefparen_L21
+                BNE     _derefparen_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -460,43 +425,36 @@ _derefparen_L15
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _derefparen_L23
+                BNE     _derefparen_L11
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _derefparen_L23
+                BNE     _derefparen_L11
                 LDA     #1
-                BRA     _derefparen_L24
-_derefparen_L23
+                BRA     _derefparen_L12
+_derefparen_L11
                 LDA     #0
-_derefparen_L24
+_derefparen_L12
                 CMP     #0
-                BEQ     _derefparen_L21
-                LDA     #1
-                BRA     _derefparen_L22
-_derefparen_L21
-                LDA     #0
-_derefparen_L22
-                CMP     #0
-                BEQ     _derefparen_L20
+                BEQ     _derefparen_L10
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #12
                 STA     _fcc_img0
-_derefparen_L20
+_derefparen_L10
                 LDA     _fcc_img0
                 TAX
                 CMP     #42
-                BNE     _derefparen_L25
+                BNE     _derefparen_L13
                 LDA     #42
-                BRA     _derefparen_L26
-_derefparen_L25
+                BRA     _derefparen_L14
+_derefparen_L13
                 LDA     _fcc_img0
-_derefparen_L26
+_derefparen_L14
                 TAY
                 TSC
                 CLC

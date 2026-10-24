@@ -80,7 +80,7 @@ _mkstemp_uniq_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _mkstemp_uniq_L2
+                BEQ     _mkstemp_uniq_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _mkstemp_uniq_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _mkstemp_uniq_L2
-                LDA     #1
-                BRA     _mkstemp_uniq_L3
-_mkstemp_uniq_L2
-                LDA     #0
-_mkstemp_uniq_L3
-                CMP     #0
-                BEQ     _mkstemp_uniq_L1
+                BNE     _mkstemp_uniq_L1
                 INC     _fcc_img0
                 BRA     _mkstemp_uniq_L0
 _mkstemp_uniq_L1
@@ -192,18 +185,18 @@ hasx_stkok        TCS
                 LDA     8+hasx_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 STA     _fcc_img1
-_mkstemp_uniq_L4
+_mkstemp_uniq_L2
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                BEQ     _mkstemp_uniq_L5
+                BEQ     _mkstemp_uniq_L3
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
                 CMP     #88
-                BNE     _mkstemp_uniq_L6
+                BNE     _mkstemp_uniq_L4
                 LDA     #1
                 TAY
                 TSC
@@ -214,15 +207,15 @@ _mkstemp_uniq_L4
                 STA     _fcc_fb
                 TYA
                 RTL
-_mkstemp_uniq_L6
+_mkstemp_uniq_L4
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRA     _mkstemp_uniq_L4
-_mkstemp_uniq_L5
+                BRA     _mkstemp_uniq_L2
+_mkstemp_uniq_L3
                 LDA     #0
                 TAY
                 TSC
@@ -328,7 +321,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                BMI     _mkstemp_uniq_L8
+                BMI     _mkstemp_uniq_L5
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -348,31 +341,17 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                BEQ     _mkstemp_uniq_L10
-                LDA     #0
-                BRA     _mkstemp_uniq_L11
-_mkstemp_uniq_L10
-                LDA     #1
-_mkstemp_uniq_L11
-                CMP     #0
-                BEQ     _mkstemp_uniq_L8
-                LDA     #1
-                BRA     _mkstemp_uniq_L9
-_mkstemp_uniq_L8
-                LDA     #0
-_mkstemp_uniq_L9
-                CMP     #0
-                BEQ     _mkstemp_uniq_L7
+                BNE     _mkstemp_uniq_L5
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
-_mkstemp_uniq_L7
+_mkstemp_uniq_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 CMP     #0
                 BPL     *+5
-                BRL     _mkstemp_uniq_L12
+                BRL     _mkstemp_uniq_L6
                 LDA     #4
                 PHA
                 SEP     #$20
@@ -397,7 +376,8 @@ _mkstemp_uniq_L7
                 TYA
                 TAX
                 CMP     #4
-                BNE     _mkstemp_uniq_L20
+                BEQ     *+5
+                BRL     _mkstemp_uniq_L7
                 LDA     #0
                 PHA
                 LDA     #$0000
@@ -435,14 +415,8 @@ _mkstemp_uniq_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _mkstemp_uniq_L20
-                LDA     #1
-                BRA     _mkstemp_uniq_L21
-_mkstemp_uniq_L20
-                LDA     #0
-_mkstemp_uniq_L21
-                CMP     #0
-                BEQ     _mkstemp_uniq_L18
+                BNE     *+5
+                BRL     _mkstemp_uniq_L7
                 LDA     #4
                 PHA
                 SEP     #$20
@@ -468,14 +442,7 @@ _mkstemp_uniq_L21
                 TYA
                 TAX
                 CMP     #4
-                BNE     _mkstemp_uniq_L18
-                LDA     #1
-                BRA     _mkstemp_uniq_L19
-_mkstemp_uniq_L18
-                LDA     #0
-_mkstemp_uniq_L19
-                CMP     #0
-                BEQ     _mkstemp_uniq_L16
+                BNE     _mkstemp_uniq_L7
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -495,14 +462,7 @@ _mkstemp_uniq_L19
                 AND     #$00FF
                 TAX
                 CMP     #110
-                BNE     _mkstemp_uniq_L16
-                LDA     #1
-                BRA     _mkstemp_uniq_L17
-_mkstemp_uniq_L16
-                LDA     #0
-_mkstemp_uniq_L17
-                CMP     #0
-                BEQ     _mkstemp_uniq_L14
+                BNE     _mkstemp_uniq_L7
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -522,21 +482,14 @@ _mkstemp_uniq_L17
                 AND     #$00FF
                 TAX
                 CMP     #105
-                BNE     _mkstemp_uniq_L14
-                LDA     #1
-                BRA     _mkstemp_uniq_L15
-_mkstemp_uniq_L14
-                LDA     #0
-_mkstemp_uniq_L15
-                CMP     #0
-                BEQ     _mkstemp_uniq_L13
+                BNE     _mkstemp_uniq_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_mkstemp_uniq_L13
-_mkstemp_uniq_L12
+_mkstemp_uniq_L7
+_mkstemp_uniq_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -557,7 +510,7 @@ _mkstemp_uniq_L12
                 TCS
                 TYA
                 STA     11,S   ; fccstk d=0 b=11
-                BMI     _mkstemp_uniq_L23
+                BMI     _mkstemp_uniq_L8
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -589,29 +542,15 @@ _mkstemp_uniq_L12
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _mkstemp_uniq_L25
-                LDA     #0
-                BRA     _mkstemp_uniq_L26
-_mkstemp_uniq_L25
-                LDA     #1
-_mkstemp_uniq_L26
-                CMP     #0
-                BEQ     _mkstemp_uniq_L23
-                LDA     #1
-                BRA     _mkstemp_uniq_L24
-_mkstemp_uniq_L23
-                LDA     #0
-_mkstemp_uniq_L24
-                CMP     #0
-                BEQ     _mkstemp_uniq_L22
+                BNE     _mkstemp_uniq_L8
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #20
                 STA     13,S   ; fccstk d=0 b=13
-_mkstemp_uniq_L22
+_mkstemp_uniq_L8
                 LDA     9,S   ; fccstk d=0 b=9
-                BMI     _mkstemp_uniq_L27
+                BMI     _mkstemp_uniq_L9
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
@@ -635,9 +574,9 @@ _mkstemp_uniq_L22
                 CLC
                 ADC     #4
                 TCS
-_mkstemp_uniq_L27
+_mkstemp_uniq_L9
                 LDA     11,S   ; fccstk d=0 b=11
-                BMI     _mkstemp_uniq_L28
+                BMI     _mkstemp_uniq_L10
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 FGX2_FARCALL close
@@ -661,7 +600,7 @@ _mkstemp_uniq_L27
                 CLC
                 ADC     #4
                 TCS
-_mkstemp_uniq_L28
+_mkstemp_uniq_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC

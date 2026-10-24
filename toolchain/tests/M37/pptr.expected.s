@@ -459,19 +459,19 @@ _pptr_L8
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _pptr_L12
+                BNE     _pptr_L11
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _pptr_L12
+                BNE     _pptr_L11
                 LDA     #1
-                BRA     _pptr_L13
-_pptr_L12
+                BRA     _pptr_L12
+_pptr_L11
                 LDA     #0
-_pptr_L13
+_pptr_L12
                 CMP     #0
                 BNE     _pptr_L10
                 LDA     3,S   ; fccstk d=0 b=3
@@ -481,14 +481,8 @@ _pptr_L13
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #7
-                BNE     _pptr_L10
-                LDA     #0
-                BRA     _pptr_L11
-_pptr_L10
-                LDA     #1
-_pptr_L11
-                CMP     #0
                 BEQ     _pptr_L9
+_pptr_L10
                 LDA     #2
                 TAY
                 TSC
@@ -537,7 +531,7 @@ _pptr_L9
                 ADC     #4
                 TCS
                 TYA
-                BEQ     _pptr_L14
+                BEQ     _pptr_L13
                 LDA     #1
                 TAY
                 TSC
@@ -548,7 +542,7 @@ _pptr_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_pptr_L14
+_pptr_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -556,7 +550,7 @@ _pptr_L14
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #7
-                BEQ     _pptr_L15
+                BEQ     _pptr_L14
                 LDA     #4
                 TAY
                 TSC
@@ -567,7 +561,7 @@ _pptr_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_pptr_L15
+_pptr_L14
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -589,21 +583,21 @@ _pptr_L15
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _pptr_L17
+                BNE     _pptr_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _pptr_L17
+                BNE     _pptr_L16
                 LDA     #1
-                BRA     _pptr_L18
-_pptr_L17
+                BRA     _pptr_L17
+_pptr_L16
                 LDA     #0
-_pptr_L18
+_pptr_L17
                 CMP     #0
-                BEQ     _pptr_L16
+                BEQ     _pptr_L15
                 LDA     #5
                 TAY
                 TSC
@@ -614,7 +608,7 @@ _pptr_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_pptr_L16
+_pptr_L15
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -641,7 +635,7 @@ _pptr_L16
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #9
-                BEQ     _pptr_L19
+                BEQ     _pptr_L18
                 LDA     #6
                 TAY
                 TSC
@@ -652,7 +646,7 @@ _pptr_L16
                 STA     _fcc_fb
                 TYA
                 RTL
-_pptr_L19
+_pptr_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1

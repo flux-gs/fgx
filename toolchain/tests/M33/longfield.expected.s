@@ -298,14 +298,8 @@ _longfield_L4
                 LDA     gt+4
                 TAX
                 CMP     #5
-                BNE     _longfield_L6
-                LDA     #0
-                BRA     _longfield_L7
-_longfield_L6
-                LDA     #1
-_longfield_L7
-                CMP     #0
                 BEQ     _longfield_L5
+_longfield_L6
                 LDA     #6
                 TAY
                 TSC
@@ -353,7 +347,7 @@ _longfield_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _longfield_L9
+                BNE     _longfield_L8
                 LDA     #1
                 ASL
                 INC
@@ -372,14 +366,8 @@ _longfield_L5
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #4
-                BNE     _longfield_L9
-                LDA     #0
-                BRA     _longfield_L10
-_longfield_L9
-                LDA     #1
-_longfield_L10
-                CMP     #0
-                BEQ     _longfield_L8
+                BEQ     _longfield_L7
+_longfield_L8
                 LDA     #7
                 TAY
                 TSC
@@ -390,7 +378,7 @@ _longfield_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_longfield_L8
+_longfield_L7
                 LDA     #0
                 ASL
                 CLC
@@ -427,7 +415,7 @@ _longfield_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _longfield_L12
+                BNE     _longfield_L10
                 LDA     #0
                 ASL
                 CLC
@@ -447,14 +435,8 @@ _longfield_L8
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #2
-                BNE     _longfield_L12
-                LDA     #0
-                BRA     _longfield_L13
-_longfield_L12
-                LDA     #1
-_longfield_L13
-                CMP     #0
-                BEQ     _longfield_L11
+                BEQ     _longfield_L9
+_longfield_L10
                 LDA     #8
                 TAY
                 TSC
@@ -465,7 +447,7 @@ _longfield_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_longfield_L11
+_longfield_L9
                 LDA     #42
                 TAY
                 TSC

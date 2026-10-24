@@ -201,14 +201,8 @@ _charpack_L4
                 AND     #$00FF
                 TAX
                 CMP     #34
-                BNE     _charpack_L6
-                LDA     #0
-                BRA     _charpack_L7
-_charpack_L6
-                LDA     #1
-_charpack_L7
-                CMP     #0
                 BEQ     _charpack_L5
+_charpack_L6
                 LDA     #6
                 TAY
                 TSC
@@ -230,7 +224,7 @@ _charpack_L5
                 AND     #$00FF
                 TAX
                 CMP     #17
-                BEQ     _charpack_L8
+                BEQ     _charpack_L7
                 LDA     #7
                 TAY
                 TSC
@@ -241,24 +235,18 @@ _charpack_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L8
+_charpack_L7
                 LDA     gcc+0
                 AND     #$00FF
                 TAX
                 CMP     #11
-                BNE     _charpack_L10
+                BNE     _charpack_L9
                 LDA     gcc+1
                 AND     #$00FF
                 TAX
                 CMP     #22
-                BNE     _charpack_L10
-                LDA     #0
-                BRA     _charpack_L11
-_charpack_L10
-                LDA     #1
-_charpack_L11
-                CMP     #0
-                BEQ     _charpack_L9
+                BEQ     _charpack_L8
+_charpack_L9
                 LDA     #8
                 TAY
                 TSC
@@ -269,7 +257,7 @@ _charpack_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L9
+_charpack_L8
                 LDA     #1
                 SEP     #$20
                 MX      %10
@@ -300,31 +288,18 @@ _charpack_L9
                 AND     #$00FF
                 TAX
                 CMP     #1
-                BNE     _charpack_L15
+                BNE     _charpack_L11
                 LDA     gb+1
                 AND     #$00FF
                 TAX
                 CMP     #2
-                BNE     _charpack_L15
-                LDA     #0
-                BRA     _charpack_L16
-_charpack_L15
-                LDA     #1
-_charpack_L16
-                CMP     #0
-                BNE     _charpack_L13
+                BNE     _charpack_L11
                 LDA     gb+6
                 AND     #$00FF
                 TAX
                 CMP     #3
-                BNE     _charpack_L13
-                LDA     #0
-                BRA     _charpack_L14
-_charpack_L13
-                LDA     #1
-_charpack_L14
-                CMP     #0
-                BEQ     _charpack_L12
+                BEQ     _charpack_L10
+_charpack_L11
                 LDA     #8
                 TAY
                 TSC
@@ -335,7 +310,7 @@ _charpack_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L12
+_charpack_L10
                 LDA     gb+4
                 STA     _fcc_long_hi
                 LDA     gb+2
@@ -357,7 +332,7 @@ _charpack_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _charpack_L17
+                BEQ     _charpack_L12
                 LDA     #9
                 TAY
                 TSC
@@ -368,7 +343,7 @@ _charpack_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L17
+_charpack_L12
                 LDA     #0
                 ASL
                 CLC
@@ -478,7 +453,7 @@ _charpack_L17
                 AND     #$00FF
                 TAX
                 CMP     #2
-                BNE     _charpack_L21
+                BNE     _charpack_L14
                 LDA     #1
                 ASL
                 CLC
@@ -495,14 +470,7 @@ _charpack_L17
                 AND     #$00FF
                 TAX
                 CMP     #3
-                BNE     _charpack_L21
-                LDA     #0
-                BRA     _charpack_L22
-_charpack_L21
-                LDA     #1
-_charpack_L22
-                CMP     #0
-                BNE     _charpack_L19
+                BNE     _charpack_L14
                 LDA     #2
                 ASL
                 CLC
@@ -519,14 +487,8 @@ _charpack_L22
                 AND     #$00FF
                 TAX
                 CMP     #5
-                BNE     _charpack_L19
-                LDA     #0
-                BRA     _charpack_L20
-_charpack_L19
-                LDA     #1
-_charpack_L20
-                CMP     #0
-                BEQ     _charpack_L18
+                BEQ     _charpack_L13
+_charpack_L14
                 LDA     #10
                 TAY
                 TSC
@@ -537,7 +499,7 @@ _charpack_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L18
+_charpack_L13
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -565,7 +527,7 @@ _charpack_L18
                 SBC     _fcc_fpr1
                 TAX
                 CMP     #2
-                BEQ     _charpack_L23
+                BEQ     _charpack_L15
                 LDA     #11
                 TAY
                 TSC
@@ -576,16 +538,16 @@ _charpack_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L23
+_charpack_L15
                 LDA     #9
                 SEP     #$20
                 MX      %10
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     _charpack_FA24+2
+                LDA     _charpack_FA16+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _charpack_FA24
+                LDA     _charpack_FA16
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -602,7 +564,7 @@ _charpack_L23
                 AND     #$00FF
                 TAX
                 CMP     #9
-                BEQ     _charpack_L25
+                BEQ     _charpack_L17
                 LDA     #12
                 TAY
                 TSC
@@ -613,13 +575,13 @@ _charpack_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L25
+_charpack_L17
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 PHK
-                PEA     _charpack_L26-1
+                PEA     _charpack_L18-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -630,11 +592,11 @@ _charpack_L25
                 DEC
                 PHA
                 RTL
-_charpack_L26
+_charpack_L18
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #7
-                BEQ     _charpack_L27
+                BEQ     _charpack_L19
                 LDA     #12
                 TAY
                 TSC
@@ -645,7 +607,7 @@ _charpack_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L27
+_charpack_L19
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -671,12 +633,12 @@ _charpack_L27
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDY     #0
-_charpack_L29
+_charpack_L21
                 LDA     [_fcc_fpr0],Y
                 STA     [_fcc_fpr1],Y
                 DEY
                 DEY
-                BPL     _charpack_L29
+                BPL     _charpack_L21
                 FGX2_FARCALL take
                 TAY
                 PLA
@@ -694,7 +656,7 @@ _charpack_L29
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _charpack_L28
+                BEQ     _charpack_L20
                 LDA     #13
                 TAY
                 TSC
@@ -705,7 +667,7 @@ _charpack_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_charpack_L28
+_charpack_L20
                 LDA     #42
                 TAY
                 TSC

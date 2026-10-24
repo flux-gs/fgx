@@ -508,19 +508,19 @@ _ampderefmember_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _ampderefmember_L8
+                BNE     _ampderefmember_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _ampderefmember_L8
+                BNE     _ampderefmember_L7
                 LDA     #0
-                BRA     _ampderefmember_L9
-_ampderefmember_L8
+                BRA     _ampderefmember_L8
+_ampderefmember_L7
                 LDA     #1
-_ampderefmember_L9
+_ampderefmember_L8
                 CMP     #0
                 BNE     _ampderefmember_L6
                 LDA     7,S   ; fccstk d=0 b=7
@@ -546,28 +546,22 @@ _ampderefmember_L9
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _ampderefmember_L10
+                BNE     _ampderefmember_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _ampderefmember_L10
+                BNE     _ampderefmember_L9
                 LDA     #1
-                BRA     _ampderefmember_L11
+                BRA     _ampderefmember_L10
+_ampderefmember_L9
+                LDA     #0
 _ampderefmember_L10
-                LDA     #0
-_ampderefmember_L11
-                CMP     #0
-                BNE     _ampderefmember_L6
-                LDA     #0
-                BRA     _ampderefmember_L7
-_ampderefmember_L6
-                LDA     #1
-_ampderefmember_L7
                 CMP     #0
                 BEQ     _ampderefmember_L5
+_ampderefmember_L6
                 LDA     #6
                 TAY
                 TSC
@@ -634,7 +628,7 @@ _ampderefmember_L5
                 AND     #$00FF
                 TAX
                 CMP     #77
-                BEQ     _ampderefmember_L12
+                BEQ     _ampderefmember_L11
                 LDA     #7
                 TAY
                 TSC
@@ -645,7 +639,7 @@ _ampderefmember_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_ampderefmember_L12
+_ampderefmember_L11
                 LDA     #42
                 TAY
                 TSC

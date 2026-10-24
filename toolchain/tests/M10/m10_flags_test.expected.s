@@ -70,7 +70,7 @@ _m10_flags_test_L1
                 FIN
                 TAX
                 AND     #4
-                BEQ     _m10_flags_test_L3
+                BEQ     _m10_flags_test_L2
                 DO      6+score_FRAMESIZE/256
                 TSC
                 CLC
@@ -83,21 +83,8 @@ _m10_flags_test_L1
                 FIN
                 TAX
                 AND     #8
-                BEQ     _m10_flags_test_L5
-                LDA     #0
-                BRA     _m10_flags_test_L6
-_m10_flags_test_L5
-                LDA     #1
-_m10_flags_test_L6
                 CMP     #0
-                BEQ     _m10_flags_test_L3
-                LDA     #1
-                BRA     _m10_flags_test_L4
-_m10_flags_test_L3
-                LDA     #0
-_m10_flags_test_L4
-                CMP     #0
-                BEQ     _m10_flags_test_L2
+                BNE     _m10_flags_test_L2
                 LDA     _fcc_img0
                 TAX
                 LDA     #1
@@ -140,7 +127,7 @@ main_stkok        TCS
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     3,S   ; fccstk d=0 b=3
-_m10_flags_test_L7
+_m10_flags_test_L3
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -148,10 +135,10 @@ _m10_flags_test_L7
                 TAX
                 SEC
                 SBC     #4
-                BVC     _m10_flags_test_L10
+                BVC     _m10_flags_test_L6
                 EOR     #$8000
-_m10_flags_test_L10
-                BPL     _m10_flags_test_L9
+_m10_flags_test_L6
+                BPL     _m10_flags_test_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     #1
@@ -171,14 +158,14 @@ _m10_flags_test_L10
                 CLC
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
-_m10_flags_test_L8
+_m10_flags_test_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CLC
                 ADC     #1
                 STA     3,S   ; fccstk d=0 b=3
-                BRA     _m10_flags_test_L7
-_m10_flags_test_L9
+                BRA     _m10_flags_test_L3
+_m10_flags_test_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 TAY

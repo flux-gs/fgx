@@ -175,14 +175,8 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #4
-                BNE     _p33_localagg_L1
-                LDA     #0
-                BRA     _p33_localagg_L2
-_p33_localagg_L1
-                LDA     #1
-_p33_localagg_L2
-                CMP     #0
                 BEQ     _p33_localagg_L0
+_p33_localagg_L1
                 LDA     #1
                 TAY
                 TSC
@@ -215,7 +209,7 @@ _p33_localagg_L0
                 TYA
                 TAX
                 CMP     #7
-                BEQ     _p33_localagg_L3
+                BEQ     _p33_localagg_L2
                 LDA     #2
                 TAY
                 TSC
@@ -226,14 +220,14 @@ _p33_localagg_L0
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_localagg_L3
+_p33_localagg_L2
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_img0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img1
-_p33_localagg_L4
+_p33_localagg_L3
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -241,13 +235,13 @@ _p33_localagg_L4
                 TAX
                 SEC
                 SBC     #3
-                BVC     _p33_localagg_L7
+                BVC     _p33_localagg_L6
                 EOR     #$8000
-_p33_localagg_L7
-                BPL     _p33_localagg_L6
+_p33_localagg_L6
+                BPL     _p33_localagg_L5
                 LDA     #0
                 STA     _fcc_img0
-_p33_localagg_L8
+_p33_localagg_L7
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -255,10 +249,10 @@ _p33_localagg_L8
                 TAX
                 SEC
                 SBC     #2
-                BVC     _p33_localagg_L11
+                BVC     _p33_localagg_L10
                 EOR     #$8000
-_p33_localagg_L11
-                BPL     _p33_localagg_L10
+_p33_localagg_L10
+                BPL     _p33_localagg_L9
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -304,14 +298,14 @@ _p33_localagg_L11
                 TYA
                 STA     [_fcc_ptr]
                 PLA
-_p33_localagg_L9
+_p33_localagg_L8
                 INC     _fcc_img0
-                BRA     _p33_localagg_L8
-_p33_localagg_L10
-_p33_localagg_L5
+                BRA     _p33_localagg_L7
+_p33_localagg_L9
+_p33_localagg_L4
                 INC     _fcc_img1
-                BRA     _p33_localagg_L4
-_p33_localagg_L6
+                BRA     _p33_localagg_L3
+_p33_localagg_L5
                 LDA     _fcc_img0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_img1
@@ -341,7 +335,7 @@ _p33_localagg_L6
                 STA     _fcc_ptr
                 PLA
                 LDA     [_fcc_ptr]
-                BEQ     _p33_localagg_L12
+                BEQ     _p33_localagg_L11
                 LDA     #3
                 TAY
                 TSC
@@ -352,7 +346,7 @@ _p33_localagg_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_localagg_L12
+_p33_localagg_L11
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -380,7 +374,7 @@ _p33_localagg_L12
                 LDA     [_fcc_ptr]
                 TAX
                 CMP     #21
-                BEQ     _p33_localagg_L13
+                BEQ     _p33_localagg_L12
                 LDA     #4
                 TAY
                 TSC
@@ -391,7 +385,7 @@ _p33_localagg_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_localagg_L13
+_p33_localagg_L12
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -419,7 +413,7 @@ _p33_localagg_L13
                 LDA     [_fcc_ptr]
                 TAX
                 CMP     #10
-                BEQ     _p33_localagg_L14
+                BEQ     _p33_localagg_L13
                 LDA     #5
                 TAY
                 TSC
@@ -430,7 +424,7 @@ _p33_localagg_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_localagg_L14
+_p33_localagg_L13
                 LDA     #42
                 TAY
                 TSC

@@ -227,14 +227,8 @@ parse_stkok        TCS
                 PLA
                 JSR     _fcc_gtu16
                 CMP     #0
-                BNE     _gptr_heap_L3
-                LDA     #0
-                BRA     _gptr_heap_L4
-_gptr_heap_L3
-                LDA     #1
-_gptr_heap_L4
-                CMP     #0
                 BEQ     _gptr_heap_L2
+_gptr_heap_L3
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -345,21 +339,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _gptr_heap_L6
+                BNE     _gptr_heap_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _gptr_heap_L6
+                BNE     _gptr_heap_L5
                 LDA     #1
-                BRA     _gptr_heap_L7
-_gptr_heap_L6
+                BRA     _gptr_heap_L6
+_gptr_heap_L5
                 LDA     #0
-_gptr_heap_L7
+_gptr_heap_L6
                 CMP     #0
-                BEQ     _gptr_heap_L5
+                BEQ     _gptr_heap_L4
                 LDA     #9
                 TAY
                 TSC
@@ -370,7 +364,7 @@ _gptr_heap_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_gptr_heap_L5
+_gptr_heap_L4
                 SEP     #$20
                 MX      %10
                 LDA     zero+2
@@ -437,6 +431,34 @@ _gptr_heap_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
+                BNE     _gptr_heap_L9
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                CMP     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                BNE     _gptr_heap_L9
+                LDA     #1
+                BRA     _gptr_heap_L10
+_gptr_heap_L9
+                LDA     #0
+_gptr_heap_L10
+                CMP     #0
+                BNE     _gptr_heap_L8
+                SEP     #$20
+                MX      %10
+                LDA     addr2+2
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     addr2
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDA     _fcc_fpr0
+                CMP     _fcc_fpr1
                 BNE     _gptr_heap_L11
                 SEP     #$20
                 MX      %10
@@ -451,42 +473,8 @@ _gptr_heap_L11
                 LDA     #0
 _gptr_heap_L12
                 CMP     #0
-                BNE     _gptr_heap_L9
-                SEP     #$20
-                MX      %10
-                LDA     addr2+2
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     addr2
-                STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr1
-                STZ     _fcc_fpr1+2
-                LDA     _fcc_fpr0
-                CMP     _fcc_fpr1
-                BNE     _gptr_heap_L13
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                CMP     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                BNE     _gptr_heap_L13
-                LDA     #1
-                BRA     _gptr_heap_L14
-_gptr_heap_L13
-                LDA     #0
-_gptr_heap_L14
-                CMP     #0
-                BNE     _gptr_heap_L9
-                LDA     #0
-                BRA     _gptr_heap_L10
-_gptr_heap_L9
-                LDA     #1
-_gptr_heap_L10
-                CMP     #0
-                BEQ     _gptr_heap_L8
+                BEQ     _gptr_heap_L7
+_gptr_heap_L8
                 LDA     #8
                 TAY
                 TSC
@@ -497,7 +485,7 @@ _gptr_heap_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_gptr_heap_L8
+_gptr_heap_L7
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 SEP     #$20
@@ -512,7 +500,7 @@ _gptr_heap_L8
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_gptr_heap_L15
+_gptr_heap_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -538,7 +526,7 @@ _gptr_heap_L15
                 CLC
                 ADC     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
-_gptr_heap_L16
+_gptr_heap_L14
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -558,13 +546,13 @@ _gptr_heap_L16
                 PLA
                 JSR     _fcc_leu16
                 CMP     #0
-                BEQ     _gptr_heap_L17
-                BRA     _gptr_heap_L15
-_gptr_heap_L17
+                BEQ     _gptr_heap_L15
+                BRA     _gptr_heap_L13
+_gptr_heap_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #18
-                BEQ     _gptr_heap_L18
+                BEQ     _gptr_heap_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 AND     #255
@@ -577,7 +565,7 @@ _gptr_heap_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_gptr_heap_L18
+_gptr_heap_L16
                 LDA     #42
                 TAY
                 TSC

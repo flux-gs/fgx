@@ -355,7 +355,7 @@ _renameover_L4
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #3
-                BNE     _renameover_L11
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -375,14 +375,7 @@ _renameover_L4
                 AND     #$00FF
                 TAX
                 CMP     #78
-                BNE     _renameover_L11
-                LDA     #1
-                BRA     _renameover_L12
-_renameover_L11
-                LDA     #0
-_renameover_L12
-                CMP     #0
-                BEQ     _renameover_L9
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -402,14 +395,7 @@ _renameover_L12
                 AND     #$00FF
                 TAX
                 CMP     #69
-                BNE     _renameover_L9
-                LDA     #1
-                BRA     _renameover_L10
-_renameover_L9
-                LDA     #0
-_renameover_L10
-                CMP     #0
-                BEQ     _renameover_L7
+                BNE     _renameover_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -429,14 +415,7 @@ _renameover_L10
                 AND     #$00FF
                 TAX
                 CMP     #87
-                BNE     _renameover_L7
-                LDA     #1
-                BRA     _renameover_L8
-_renameover_L7
-                LDA     #0
-_renameover_L8
-                CMP     #0
-                BEQ     _renameover_L6
+                BNE     _renameover_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
@@ -465,21 +444,21 @@ _renameover_L5
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                BPL     _renameover_L13
+                BPL     _renameover_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #8
                 STA     13,S   ; fccstk d=0 b=13
-                BRA     _renameover_L14
-_renameover_L13
+                BRA     _renameover_L8
+_renameover_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
                 FGX2_FARCALL close
                 TAY
                 PLA
                 TYA
-_renameover_L14
+_renameover_L8
                 LDA     #1
                 PHA
                 SEP     #$20
@@ -511,7 +490,7 @@ _renameover_L14
                 ADC     #10
                 TCS
                 TYA
-                BNE     _renameover_L15
+                BNE     _renameover_L9
                 SEP     #$20
                 MX      %10
                 PHB
@@ -541,13 +520,13 @@ _renameover_L14
                 ADC     #8
                 TCS
                 TYA
-                BNE     _renameover_L16
+                BNE     _renameover_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
-_renameover_L16
+_renameover_L10
                 SEP     #$20
                 MX      %10
                 PHB
@@ -580,7 +559,7 @@ _renameover_L16
                 CLC
                 ADC     #4
                 TCS
-_renameover_L15
+_renameover_L9
                 SEP     #$20
                 MX      %10
                 PHB

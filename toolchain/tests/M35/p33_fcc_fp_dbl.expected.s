@@ -213,14 +213,8 @@ _p33_fcc_fp_dbl_L5
                 LDA     [_fcc_fp]
                 TAX
                 CMP     #800
-                BNE     _p33_fcc_fp_dbl_L7
-                LDA     #0
-                BRA     _p33_fcc_fp_dbl_L8
-_p33_fcc_fp_dbl_L7
-                LDA     #1
-_p33_fcc_fp_dbl_L8
-                CMP     #0
                 BEQ     _p33_fcc_fp_dbl_L6
+_p33_fcc_fp_dbl_L7
                 LDA     #3
                 TAY
                 TSC
@@ -233,7 +227,7 @@ _p33_fcc_fp_dbl_L8
                 RTL
 _p33_fcc_fp_dbl_L6
                 LDA     3,S   ; fccstk d=0 b=3
-                BNE     _p33_fcc_fp_dbl_L12
+                BNE     _p33_fcc_fp_dbl_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -248,14 +242,7 @@ _p33_fcc_fp_dbl_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                BNE     _p33_fcc_fp_dbl_L12
-                LDA     #0
-                BRA     _p33_fcc_fp_dbl_L13
-_p33_fcc_fp_dbl_L12
-                LDA     #1
-_p33_fcc_fp_dbl_L13
-                CMP     #0
-                BNE     _p33_fcc_fp_dbl_L10
+                BNE     _p33_fcc_fp_dbl_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -272,14 +259,8 @@ _p33_fcc_fp_dbl_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                BNE     _p33_fcc_fp_dbl_L10
-                LDA     #0
-                BRA     _p33_fcc_fp_dbl_L11
-_p33_fcc_fp_dbl_L10
-                LDA     #1
-_p33_fcc_fp_dbl_L11
-                CMP     #0
-                BEQ     _p33_fcc_fp_dbl_L9
+                BEQ     _p33_fcc_fp_dbl_L8
+_p33_fcc_fp_dbl_L9
                 LDA     #4
                 TAY
                 TSC
@@ -290,7 +271,7 @@ _p33_fcc_fp_dbl_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_p33_fcc_fp_dbl_L9
+_p33_fcc_fp_dbl_L8
                 LDA     #42
                 TAY
                 TSC

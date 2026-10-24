@@ -901,76 +901,20 @@ _cmp_branch_L48
                 STA     b
                 FGX2_FARCALL lt
                 CMP     #0
-                BEQ     _cmp_branch_L58
+                BEQ     _cmp_branch_L49
                 FGX2_FARCALL gt
                 CMP     #0
-                BEQ     _cmp_branch_L60
-                LDA     #0
-                BRA     _cmp_branch_L61
-_cmp_branch_L60
-                LDA     #1
-_cmp_branch_L61
-                CMP     #0
-                BEQ     _cmp_branch_L58
-                LDA     #1
-                BRA     _cmp_branch_L59
-_cmp_branch_L58
-                LDA     #0
-_cmp_branch_L59
-                CMP     #0
-                BEQ     _cmp_branch_L56
+                BNE     _cmp_branch_L49
                 FGX2_FARCALL le
                 CMP     #0
-                BEQ     _cmp_branch_L56
-                LDA     #1
-                BRA     _cmp_branch_L57
-_cmp_branch_L56
-                LDA     #0
-_cmp_branch_L57
-                CMP     #0
-                BEQ     _cmp_branch_L54
+                BEQ     _cmp_branch_L49
                 FGX2_FARCALL ge
                 CMP     #0
-                BEQ     _cmp_branch_L62
-                LDA     #0
-                BRA     _cmp_branch_L63
-_cmp_branch_L62
-                LDA     #1
-_cmp_branch_L63
-                CMP     #0
-                BEQ     _cmp_branch_L54
-                LDA     #1
-                BRA     _cmp_branch_L55
-_cmp_branch_L54
-                LDA     #0
-_cmp_branch_L55
-                CMP     #0
-                BEQ     _cmp_branch_L52
+                BNE     _cmp_branch_L49
                 FGX2_FARCALL eq
                 CMP     #0
-                BEQ     _cmp_branch_L64
-                LDA     #0
-                BRA     _cmp_branch_L65
-_cmp_branch_L64
-                LDA     #1
-_cmp_branch_L65
-                CMP     #0
-                BEQ     _cmp_branch_L52
-                LDA     #1
-                BRA     _cmp_branch_L53
-_cmp_branch_L52
-                LDA     #0
-_cmp_branch_L53
-                CMP     #0
-                BEQ     _cmp_branch_L50
+                BNE     _cmp_branch_L49
                 FGX2_FARCALL ne
-                CMP     #0
-                BEQ     _cmp_branch_L50
-                LDA     #1
-                BRA     _cmp_branch_L51
-_cmp_branch_L50
-                LDA     #0
-_cmp_branch_L51
                 CMP     #0
                 BEQ     _cmp_branch_L49
                 LDA     1,S   ; fccstk d=0 b=1
@@ -985,57 +929,22 @@ _cmp_branch_L49
                 STA     ub
                 FGX2_FARCALL ult
                 CMP     #0
-                BEQ     _cmp_branch_L73
-                LDA     #0
-                BRA     _cmp_branch_L74
-_cmp_branch_L73
-                LDA     #1
-_cmp_branch_L74
-                CMP     #0
-                BEQ     _cmp_branch_L71
+                BNE     _cmp_branch_L50
                 FGX2_FARCALL ugt
                 CMP     #0
-                BEQ     _cmp_branch_L71
-                LDA     #1
-                BRA     _cmp_branch_L72
-_cmp_branch_L71
-                LDA     #0
-_cmp_branch_L72
-                CMP     #0
-                BEQ     _cmp_branch_L69
+                BEQ     _cmp_branch_L50
                 FGX2_FARCALL ule
                 CMP     #0
-                BEQ     _cmp_branch_L75
-                LDA     #0
-                BRA     _cmp_branch_L76
-_cmp_branch_L75
-                LDA     #1
-_cmp_branch_L76
-                CMP     #0
-                BEQ     _cmp_branch_L69
-                LDA     #1
-                BRA     _cmp_branch_L70
-_cmp_branch_L69
-                LDA     #0
-_cmp_branch_L70
-                CMP     #0
-                BEQ     _cmp_branch_L67
+                BNE     _cmp_branch_L50
                 FGX2_FARCALL uge
                 CMP     #0
-                BEQ     _cmp_branch_L67
-                LDA     #1
-                BRA     _cmp_branch_L68
-_cmp_branch_L67
-                LDA     #0
-_cmp_branch_L68
-                CMP     #0
-                BEQ     _cmp_branch_L66
+                BEQ     _cmp_branch_L50
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #4096
                 STA     1,S   ; fccstk d=0 b=1
-_cmp_branch_L66
+_cmp_branch_L50
                 LDA     #1
                 STA     a
                 LDA     #2
@@ -1049,10 +958,10 @@ _cmp_branch_L66
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _cmp_branch_L80
+                BVC     _cmp_branch_L53
                 EOR     #$8000
-_cmp_branch_L80
-                BMI     _cmp_branch_L78
+_cmp_branch_L53
+                BMI     _cmp_branch_L52
                 LDA     a
                 TAX
                 LDA     b
@@ -1063,23 +972,17 @@ _cmp_branch_L80
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _cmp_branch_L81
+                BVC     _cmp_branch_L54
                 EOR     #$8000
-_cmp_branch_L81
-                BMI     _cmp_branch_L78
-                LDA     #0
-                BRA     _cmp_branch_L79
-_cmp_branch_L78
-                LDA     #1
-_cmp_branch_L79
-                CMP     #0
-                BEQ     _cmp_branch_L77
+_cmp_branch_L54
+                BPL     _cmp_branch_L51
+_cmp_branch_L52
                 LDA     hits
                 TAX
                 CLC
                 ADC     #1
                 STA     hits
-_cmp_branch_L77
+_cmp_branch_L51
                 LDA     a
                 TAX
                 LDA     b
@@ -1087,31 +990,24 @@ _cmp_branch_L77
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _cmp_branch_L85
+                BVC     _cmp_branch_L56
                 EOR     #$8000
-_cmp_branch_L85
-                BPL     _cmp_branch_L83
+_cmp_branch_L56
+                BPL     _cmp_branch_L55
                 LDA     b
                 TAX
                 SEC
                 SBC     #3
-                BVC     _cmp_branch_L86
+                BVC     _cmp_branch_L57
                 EOR     #$8000
-_cmp_branch_L86
-                BPL     _cmp_branch_L83
-                LDA     #1
-                BRA     _cmp_branch_L84
-_cmp_branch_L83
-                LDA     #0
-_cmp_branch_L84
-                CMP     #0
-                BEQ     _cmp_branch_L82
+_cmp_branch_L57
+                BPL     _cmp_branch_L55
                 LDA     hits
                 TAX
                 CLC
                 ADC     #2
                 STA     hits
-_cmp_branch_L82
+_cmp_branch_L55
                 LDA     a
                 TAX
                 LDA     b
@@ -1122,41 +1018,34 @@ _cmp_branch_L82
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _cmp_branch_L90
+                BVC     _cmp_branch_L59
                 EOR     #$8000
-_cmp_branch_L90
-                BPL     _cmp_branch_L88
+_cmp_branch_L59
+                BPL     _cmp_branch_L58
                 LDA     b
                 TAX
                 SEC
                 SBC     #3
-                BVC     _cmp_branch_L91
+                BVC     _cmp_branch_L60
                 EOR     #$8000
-_cmp_branch_L91
-                BPL     _cmp_branch_L88
-                LDA     #1
-                BRA     _cmp_branch_L89
-_cmp_branch_L88
-                LDA     #0
-_cmp_branch_L89
-                CMP     #0
-                BEQ     _cmp_branch_L87
+_cmp_branch_L60
+                BPL     _cmp_branch_L58
                 LDA     hits
                 TAX
                 CLC
                 ADC     #4
                 STA     hits
-_cmp_branch_L87
+_cmp_branch_L58
                 LDA     hits
                 TAX
                 CMP     #3
-                BNE     _cmp_branch_L92
+                BNE     _cmp_branch_L61
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #8192
                 STA     1,S   ; fccstk d=0 b=1
-_cmp_branch_L92
+_cmp_branch_L61
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
@@ -1164,7 +1053,7 @@ _cmp_branch_L92
                 STA     _fcc_img0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img1
-_cmp_branch_L93
+_cmp_branch_L62
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1172,22 +1061,22 @@ _cmp_branch_L93
                 TAX
                 SEC
                 SBC     #10
-                BVC     _cmp_branch_L96
+                BVC     _cmp_branch_L65
                 EOR     #$8000
-_cmp_branch_L96
-                BPL     _cmp_branch_L95
+_cmp_branch_L65
+                BPL     _cmp_branch_L64
                 INC     _fcc_img1
-_cmp_branch_L94
+_cmp_branch_L63
                 INC     _fcc_img0
-                BRA     _cmp_branch_L93
-_cmp_branch_L95
+                BRA     _cmp_branch_L62
+_cmp_branch_L64
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_img1
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     a
-_cmp_branch_L97
+_cmp_branch_L66
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1195,47 +1084,40 @@ _cmp_branch_L97
                 CLC
                 ADC     #1
                 STA     a
-_cmp_branch_L98
+_cmp_branch_L67
                 LDA     a
                 TAX
                 SEC
                 SBC     #4
-                BVC     _cmp_branch_L100
+                BVC     _cmp_branch_L69
                 EOR     #$8000
-_cmp_branch_L100
-                BPL     _cmp_branch_L99
-                BRA     _cmp_branch_L97
-_cmp_branch_L99
+_cmp_branch_L69
+                BPL     _cmp_branch_L68
+                BRA     _cmp_branch_L66
+_cmp_branch_L68
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #10
-                BNE     _cmp_branch_L102
+                BNE     _cmp_branch_L70
                 LDA     a
                 TAX
                 CMP     #4
-                BNE     _cmp_branch_L102
-                LDA     #1
-                BRA     _cmp_branch_L103
-_cmp_branch_L102
-                LDA     #0
-_cmp_branch_L103
-                CMP     #0
-                BEQ     _cmp_branch_L101
+                BNE     _cmp_branch_L70
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #16384
                 STA     1,S   ; fccstk d=0 b=1
-_cmp_branch_L101
+_cmp_branch_L70
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #32767
-                BNE     _cmp_branch_L104
+                BNE     _cmp_branch_L71
                 LDA     #42
-                BRA     _cmp_branch_L105
-_cmp_branch_L104
+                BRA     _cmp_branch_L72
+_cmp_branch_L71
                 LDA     1,S   ; fccstk d=0 b=1
-_cmp_branch_L105
+_cmp_branch_L72
                 TAY
                 TSC
                 CLC

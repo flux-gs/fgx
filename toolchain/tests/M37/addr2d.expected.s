@@ -281,21 +281,14 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #81
-                BNE     _addr2d_L1
+                BNE     _addr2d_L0
                 LDA     #2
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
                 CMP     #81
-                BNE     _addr2d_L1
-                LDA     #1
-                BRA     _addr2d_L2
-_addr2d_L1
-                LDA     #0
-_addr2d_L2
-                CMP     #0
-                BEQ     _addr2d_L0
+                BNE     _addr2d_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -394,27 +387,20 @@ _addr2d_L0
                 AND     #$00FF
                 TAX
                 CMP     #90
-                BNE     _addr2d_L4
+                BNE     _addr2d_L1
                 LDA     #2
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
                 CMP     #90
-                BNE     _addr2d_L4
-                LDA     #1
-                BRA     _addr2d_L5
-_addr2d_L4
-                LDA     #0
-_addr2d_L5
-                CMP     #0
-                BEQ     _addr2d_L3
+                BNE     _addr2d_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_addr2d_L3
+_addr2d_L1
                 LDA     #0
                 ASL
                 ASL
@@ -480,40 +466,26 @@ _addr2d_L3
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #4242
-                BNE     _addr2d_L9
+                BNE     _addr2d_L2
                 LDA     #2
                 ASL
                 TAX
                 LDA:    i0,X
                 TAX
                 CMP     #4242
-                BNE     _addr2d_L9
-                LDA     #1
-                BRA     _addr2d_L10
-_addr2d_L9
-                LDA     #0
-_addr2d_L10
-                CMP     #0
-                BEQ     _addr2d_L7
+                BNE     _addr2d_L2
                 LDA     #1
                 ASL
                 TAX
                 LDA:    i0,X
                 CMP     #0
-                BNE     _addr2d_L7
-                LDA     #1
-                BRA     _addr2d_L8
-_addr2d_L7
-                LDA     #0
-_addr2d_L8
-                CMP     #0
-                BEQ     _addr2d_L6
+                BNE     _addr2d_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-_addr2d_L6
+_addr2d_L2
                 LDA     _fcc_img0
                 TAY
                 TSC

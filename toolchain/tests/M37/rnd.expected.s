@@ -220,14 +220,8 @@ _rnd_L5
                 TYA
                 TAX
                 CMP     #7
-                BNE     _rnd_L8
-                LDA     #0
-                BRA     _rnd_L9
-_rnd_L8
-                LDA     #1
-_rnd_L9
-                CMP     #0
                 BEQ     _rnd_L7
+_rnd_L8
                 LDA     #7
                 TAY
                 TSC

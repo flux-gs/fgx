@@ -550,19 +550,11 @@ _dot_ptrfield_subscript_rea_L4
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
+                LDX     #100
                 STA     _fcc_tmp_b
                 TXA
-                JSR     _fcc_gtu16
-                CMP     #0
-                BEQ     _dot_ptrfield_subscript_rea_L6
-                LDA     #0
-                BRA     _dot_ptrfield_subscript_rea_L7
-_dot_ptrfield_subscript_rea_L6
-                LDA     #1
-_dot_ptrfield_subscript_rea_L7
-                CMP     #0
-                BEQ     _dot_ptrfield_subscript_rea_L5
+                CMP     _fcc_tmp_b
+                BCC     _dot_ptrfield_subscript_rea_L5
                 LDA     #6
                 TAY
                 TSC
@@ -600,21 +592,21 @@ _dot_ptrfield_subscript_rea_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _dot_ptrfield_subscript_rea_L9
+                BNE     _dot_ptrfield_subscript_rea_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _dot_ptrfield_subscript_rea_L9
+                BNE     _dot_ptrfield_subscript_rea_L7
                 LDA     #0
-                BRA     _dot_ptrfield_subscript_rea_L10
-_dot_ptrfield_subscript_rea_L9
+                BRA     _dot_ptrfield_subscript_rea_L8
+_dot_ptrfield_subscript_rea_L7
                 LDA     #1
-_dot_ptrfield_subscript_rea_L10
+_dot_ptrfield_subscript_rea_L8
                 CMP     #0
-                BEQ     _dot_ptrfield_subscript_rea_L8
+                BEQ     _dot_ptrfield_subscript_rea_L6
                 LDA     #7
                 TAY
                 TSC
@@ -625,7 +617,7 @@ _dot_ptrfield_subscript_rea_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_dot_ptrfield_subscript_rea_L8
+_dot_ptrfield_subscript_rea_L6
                 PHA
                 SEP     #$20
                 MX      %10
@@ -674,7 +666,7 @@ _dot_ptrfield_subscript_rea_L8
                 AND     #$00FF
                 TAX
                 CMP     #66
-                BEQ     _dot_ptrfield_subscript_rea_L11
+                BEQ     _dot_ptrfield_subscript_rea_L9
                 LDA     #8
                 TAY
                 TSC
@@ -685,7 +677,7 @@ _dot_ptrfield_subscript_rea_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_dot_ptrfield_subscript_rea_L11
+_dot_ptrfield_subscript_rea_L9
                 LDA     #42
                 TAY
                 TSC

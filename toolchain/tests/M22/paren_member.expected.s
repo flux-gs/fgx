@@ -61,18 +61,7 @@ _paren_member_L1
                 TAX
                 AND     #240
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
-                TXA
-                JSR     _fcc_eq16
-                CMP     #0
-                BEQ     _paren_member_L3
-                LDA     #0
-                BRA     _paren_member_L4
-_paren_member_L3
-                LDA     #1
-_paren_member_L4
-                CMP     #0
+                CMP     #64
                 BEQ     _paren_member_L2
                 LDA     #3
                 TAY
@@ -88,7 +77,7 @@ _paren_member_L2
                 LDA     g+2
                 TAX
                 CMP     #2
-                BEQ     _paren_member_L5
+                BEQ     _paren_member_L3
                 LDA     #4
                 TAY
                 TSC
@@ -99,7 +88,7 @@ _paren_member_L2
                 STA     _fcc_fb
                 TYA
                 RTL
-_paren_member_L5
+_paren_member_L3
                 LDA     #42
                 STA     5,S   ; fccstk d=0 b=5
                 TAY

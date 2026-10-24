@@ -105,7 +105,7 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #101
-                BNE     _bracescalar_L3
+                BNE     _bracescalar_L0
                 LDA     #4
                 TAX
                 STA     _fcc_tmp_b
@@ -123,14 +123,7 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #116
-                BNE     _bracescalar_L3
-                LDA     #1
-                BRA     _bracescalar_L4
-_bracescalar_L3
-                LDA     #0
-_bracescalar_L4
-                CMP     #0
-                BEQ     _bracescalar_L1
+                BNE     _bracescalar_L0
                 LDA     #5
                 TAX
                 STA     _fcc_tmp_b
@@ -146,14 +139,8 @@ _bracescalar_L4
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BNE     _bracescalar_L1
-                LDA     #1
-                BRA     _bracescalar_L2
-_bracescalar_L1
-                LDA     #0
-_bracescalar_L2
                 CMP     #0
-                BEQ     _bracescalar_L0
+                BNE     _bracescalar_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
@@ -181,22 +168,22 @@ _bracescalar_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _bracescalar_L5
+                BEQ     _bracescalar_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L5
+_bracescalar_L1
                 LDA     gi
                 CMP     #$FFFD
-                BNE     _bracescalar_L6
+                BNE     _bracescalar_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L6
+_bracescalar_L2
                 LDA     #1
                 PHA
                 FGX2_FARCALL f
@@ -213,13 +200,13 @@ _bracescalar_L6
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _bracescalar_L7
+                BNE     _bracescalar_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
-_bracescalar_L7
+_bracescalar_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

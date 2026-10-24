@@ -260,14 +260,8 @@ _chainincdec_L0
                 LDA     L+10
                 TAX
                 CMP     #2
-                BNE     _chainincdec_L2
-                LDA     #0
-                BRA     _chainincdec_L3
-_chainincdec_L2
-                LDA     #1
-_chainincdec_L3
-                CMP     #0
                 BEQ     _chainincdec_L1
+_chainincdec_L2
                 LDA     #51
                 TAY
                 TSC
@@ -303,7 +297,7 @@ _chainincdec_L1
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
-                BEQ     _chainincdec_L4
+                BEQ     _chainincdec_L3
                 LDA     #52
                 TAY
                 TSC
@@ -314,7 +308,7 @@ _chainincdec_L1
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L4
+_chainincdec_L3
                 SEP     #$20
                 MX      %10
                 LDA     M+2
@@ -328,7 +322,7 @@ _chainincdec_L4
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
-                BEQ     _chainincdec_L5
+                BEQ     _chainincdec_L4
                 LDA     #53
                 TAY
                 TSC
@@ -339,7 +333,7 @@ _chainincdec_L4
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L5
+_chainincdec_L4
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -391,7 +385,7 @@ _chainincdec_L5
                 LDA     L+2
                 TAX
                 CMP     #12
-                BEQ     _chainincdec_L6
+                BEQ     _chainincdec_L5
                 LDA     #54
                 TAY
                 TSC
@@ -402,7 +396,7 @@ _chainincdec_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L6
+_chainincdec_L5
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -502,7 +496,7 @@ _chainincdec_L6
                 LDA     L+2
                 TAX
                 CMP     #10
-                BEQ     _chainincdec_L7
+                BEQ     _chainincdec_L6
                 LDA     #55
                 TAY
                 TSC
@@ -513,22 +507,16 @@ _chainincdec_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L7
+_chainincdec_L6
                 LDA     L+0
                 TAX
                 CMP     #1
-                BNE     _chainincdec_L9
+                BNE     _chainincdec_L8
                 LDA     L+10
                 TAX
                 CMP     #2
-                BNE     _chainincdec_L9
-                LDA     #0
-                BRA     _chainincdec_L10
-_chainincdec_L9
-                LDA     #1
-_chainincdec_L10
-                CMP     #0
-                BEQ     _chainincdec_L8
+                BEQ     _chainincdec_L7
+_chainincdec_L8
                 LDA     #56
                 TAY
                 TSC
@@ -539,7 +527,7 @@ _chainincdec_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L8
+_chainincdec_L7
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -630,7 +618,7 @@ _chainincdec_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _chainincdec_L11
+                BEQ     _chainincdec_L9
                 LDA     #57
                 TAY
                 TSC
@@ -641,7 +629,7 @@ _chainincdec_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L11
+_chainincdec_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -724,7 +712,7 @@ _chainincdec_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _chainincdec_L12
+                BEQ     _chainincdec_L10
                 LDA     #58
                 TAY
                 TSC
@@ -735,7 +723,7 @@ _chainincdec_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L12
+_chainincdec_L10
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -818,7 +806,7 @@ _chainincdec_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _chainincdec_L13
+                BEQ     _chainincdec_L11
                 LDA     #59
                 TAY
                 TSC
@@ -829,7 +817,7 @@ _chainincdec_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L13
+_chainincdec_L11
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -887,7 +875,7 @@ _chainincdec_L13
                 AND     #$00FF
                 TAX
                 CMP     #66
-                BEQ     _chainincdec_L14
+                BEQ     _chainincdec_L12
                 LDA     #60
                 TAY
                 TSC
@@ -898,12 +886,84 @@ _chainincdec_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L14
+_chainincdec_L12
                 LDA     L+2
                 TAX
                 CMP     #10
-                BEQ     _chainincdec_L15
+                BEQ     _chainincdec_L13
                 LDA     #61
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_chainincdec_L13
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #0
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                CLC
+                ADC     #6
+                STA     _fcc_fpr0
+                LDA     [_fcc_fpr0]
+                INC
+                STA     [_fcc_fpr0]
+                LDA     M+6
+                TAX
+                CMP     #21
+                BEQ     _chainincdec_L14
+                LDA     #62
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_chainincdec_L14
+                LDA     M+4
+                TAX
+                CMP     #3
+                BNE     _chainincdec_L16
+                LDA     M+14
+                TAX
+                CMP     #4
+                BEQ     _chainincdec_L15
+_chainincdec_L16
+                LDA     #63
                 TAY
                 TSC
                 CLC
@@ -953,86 +1013,8 @@ _chainincdec_L15
                 STA     [_fcc_fpr0]
                 LDA     M+6
                 TAX
-                CMP     #21
-                BEQ     _chainincdec_L16
-                LDA     #62
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L16
-                LDA     M+4
-                TAX
-                CMP     #3
-                BNE     _chainincdec_L18
-                LDA     M+14
-                TAX
-                CMP     #4
-                BNE     _chainincdec_L18
-                LDA     #0
-                BRA     _chainincdec_L19
-_chainincdec_L18
-                LDA     #1
-_chainincdec_L19
-                CMP     #0
-                BEQ     _chainincdec_L17
-                LDA     #63
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_chainincdec_L17
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
-                LDA     M+6
-                TAX
                 CMP     #22
-                BEQ     _chainincdec_L20
+                BEQ     _chainincdec_L17
                 LDA     #64
                 TAY
                 TSC
@@ -1043,7 +1025,7 @@ _chainincdec_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L20
+_chainincdec_L17
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1085,7 +1067,7 @@ _chainincdec_L20
                 LDA     L+2
                 TAX
                 CMP     #11
-                BEQ     _chainincdec_L21
+                BEQ     _chainincdec_L18
                 LDA     #65
                 TAY
                 TSC
@@ -1096,13 +1078,13 @@ _chainincdec_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L21
+_chainincdec_L18
                 LDA     T+8
                 INC
                 STA     T+8
                 TAX
                 CMP     #6
-                BEQ     _chainincdec_L22
+                BEQ     _chainincdec_L19
                 LDA     #66
                 TAY
                 TSC
@@ -1113,11 +1095,11 @@ _chainincdec_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L22
+_chainincdec_L19
                 LDA     T+10
                 TAX
                 CMP     #30
-                BEQ     _chainincdec_L23
+                BEQ     _chainincdec_L20
                 LDA     #72
                 TAY
                 TSC
@@ -1128,7 +1110,7 @@ _chainincdec_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L23
+_chainincdec_L20
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1184,7 +1166,7 @@ _chainincdec_L23
                 LDA     L+2
                 TAX
                 CMP     #12
-                BEQ     _chainincdec_L24
+                BEQ     _chainincdec_L21
                 LDA     #67
                 TAY
                 TSC
@@ -1195,14 +1177,14 @@ _chainincdec_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L24
+_chainincdec_L21
                 LDA     #0
                 STA     L+2
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_chainincdec_L25
+_chainincdec_L22
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -1210,10 +1192,10 @@ _chainincdec_L25
                 TAX
                 SEC
                 SBC     #5
-                BVC     _chainincdec_L28
+                BVC     _chainincdec_L25
                 EOR     #$8000
-_chainincdec_L28
-                BPL     _chainincdec_L27
+_chainincdec_L25
+                BPL     _chainincdec_L24
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1263,16 +1245,16 @@ _chainincdec_L28
                 CLC
                 ADC     #1
                 STA     [_fcc_fpr0]
-_chainincdec_L26
+_chainincdec_L23
                 INC     _fcc_img0
-                BRA     _chainincdec_L25
-_chainincdec_L27
+                BRA     _chainincdec_L22
+_chainincdec_L24
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     L+2
                 TAX
                 CMP     #5
-                BEQ     _chainincdec_L29
+                BEQ     _chainincdec_L26
                 LDA     #68
                 TAY
                 TSC
@@ -1283,22 +1265,16 @@ _chainincdec_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L29
+_chainincdec_L26
                 LDA     L+0
                 TAX
                 CMP     #1
-                BNE     _chainincdec_L31
+                BNE     _chainincdec_L28
                 LDA     L+10
                 TAX
                 CMP     #2
-                BNE     _chainincdec_L31
-                LDA     #0
-                BRA     _chainincdec_L32
-_chainincdec_L31
-                LDA     #1
-_chainincdec_L32
-                CMP     #0
-                BEQ     _chainincdec_L30
+                BEQ     _chainincdec_L27
+_chainincdec_L28
                 LDA     #69
                 TAY
                 TSC
@@ -1309,7 +1285,7 @@ _chainincdec_L32
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L30
+_chainincdec_L27
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1342,7 +1318,7 @@ _chainincdec_L30
                 STA     M+6
                 TAX
                 CMP     #1
-                BEQ     _chainincdec_L33
+                BEQ     _chainincdec_L29
                 LDA     #70
                 TAY
                 TSC
@@ -1353,7 +1329,7 @@ _chainincdec_L30
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L33
+_chainincdec_L29
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1394,7 +1370,7 @@ _chainincdec_L33
                 LDA     L+2
                 TAX
                 CMP     #1
-                BEQ     _chainincdec_L34
+                BEQ     _chainincdec_L30
                 LDA     #71
                 TAY
                 TSC
@@ -1405,7 +1381,7 @@ _chainincdec_L33
                 STA     _fcc_fb
                 TYA
                 RTL
-_chainincdec_L34
+_chainincdec_L30
                 LDA     #42
                 TAY
                 TSC

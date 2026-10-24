@@ -326,7 +326,7 @@ _mods_pow2_L36
                 STA     a
                 LDA     #0
                 CMP     #0
-                BNE     _mods_pow2_L40
+                BNE     _mods_pow2_L39
                 LDA     a
                 TAX
                 LDA     m1
@@ -334,14 +334,7 @@ _mods_pow2_L36
                 TXA
                 JSR     _fcc_mods16
                 CMP     #0
-                BNE     _mods_pow2_L40
-                LDA     #1
-                BRA     _mods_pow2_L41
-_mods_pow2_L40
-                LDA     #0
-_mods_pow2_L41
-                CMP     #0
-                BEQ     _mods_pow2_L39
+                BNE     _mods_pow2_L39
                 LDA     _fcc_img1
                 TAX
                 CLC
@@ -349,6 +342,33 @@ _mods_pow2_L41
                 STA     _fcc_img1
 _mods_pow2_L39
                 LDA     #2024
+                STA     a
+                CMP     #$8000
+                BCC     _mods_pow2_L41
+                EOR     #$FFFF
+                INC
+                AND     #3
+                EOR     #$FFFF
+                INC
+                BRA     _mods_pow2_L42
+_mods_pow2_L41
+                AND     #3
+_mods_pow2_L42
+                CMP     #0
+                BNE     _mods_pow2_L40
+                LDA     a
+                LDX     #100
+                STX     _fcc_tmp_b
+                JSR     _fcc_mods16
+                CMP     #0
+                BEQ     _mods_pow2_L40
+                LDA     _fcc_img1
+                TAX
+                CLC
+                ADC     #1024
+                STA     _fcc_img1
+_mods_pow2_L40
+                LDA     #1900
                 STA     a
                 CMP     #$8000
                 BCC     _mods_pow2_L45
@@ -362,89 +382,35 @@ _mods_pow2_L45
                 AND     #3
 _mods_pow2_L46
                 CMP     #0
+                BNE     _mods_pow2_L44
+                LDA     a
+                LDX     #100
+                STX     _fcc_tmp_b
+                JSR     _fcc_mods16
+                CMP     #0
                 BNE     _mods_pow2_L43
-                LDA     a
-                LDX     #100
-                STX     _fcc_tmp_b
-                JSR     _fcc_mods16
-                CMP     #0
-                BEQ     _mods_pow2_L43
-                LDA     #1
-                BRA     _mods_pow2_L44
-_mods_pow2_L43
-                LDA     #0
 _mods_pow2_L44
-                CMP     #0
-                BEQ     _mods_pow2_L42
-                LDA     _fcc_img1
-                TAX
-                CLC
-                ADC     #1024
-                STA     _fcc_img1
-_mods_pow2_L42
-                LDA     #1900
-                STA     a
-                CMP     #$8000
-                BCC     _mods_pow2_L52
-                EOR     #$FFFF
-                INC
-                AND     #3
-                EOR     #$FFFF
-                INC
-                BRA     _mods_pow2_L53
-_mods_pow2_L52
-                AND     #3
-_mods_pow2_L53
-                CMP     #0
-                BNE     _mods_pow2_L50
-                LDA     a
-                LDX     #100
-                STX     _fcc_tmp_b
-                JSR     _fcc_mods16
-                CMP     #0
-                BEQ     _mods_pow2_L50
-                LDA     #1
-                BRA     _mods_pow2_L51
-_mods_pow2_L50
-                LDA     #0
-_mods_pow2_L51
-                CMP     #0
-                BNE     _mods_pow2_L48
                 LDA     a
                 LDX     #400
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 CMP     #0
-                BEQ     _mods_pow2_L48
-                LDA     #0
-                BRA     _mods_pow2_L49
-_mods_pow2_L48
-                LDA     #1
-_mods_pow2_L49
-                CMP     #0
-                BEQ     _mods_pow2_L54
-                LDA     #0
-                BRA     _mods_pow2_L55
-_mods_pow2_L54
-                LDA     #1
-_mods_pow2_L55
-                CMP     #0
-                BEQ     _mods_pow2_L47
+                BEQ     _mods_pow2_L43
                 LDA     _fcc_img1
                 TAX
                 CLC
                 ADC     #2048
                 STA     _fcc_img1
-_mods_pow2_L47
+_mods_pow2_L43
                 LDA     _fcc_img1
                 TAX
                 CMP     #4095
-                BNE     _mods_pow2_L56
+                BNE     _mods_pow2_L47
                 LDA     #42
-                BRA     _mods_pow2_L57
-_mods_pow2_L56
+                BRA     _mods_pow2_L48
+_mods_pow2_L47
                 LDA     _fcc_img1
-_mods_pow2_L57
+_mods_pow2_L48
                 TAY
                 TSC
                 CLC

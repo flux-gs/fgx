@@ -142,21 +142,14 @@ _dot_member_store_incdec_L2
                 AND     #$00FF
                 TAX
                 CMP     #1
-                BNE     _dot_member_store_incdec_L5
+                BNE     _dot_member_store_incdec_L4
                 LDA     #3
                 TAX
                 LDA:    row,X
                 AND     #$00FF
                 TAX
                 CMP     #4
-                BNE     _dot_member_store_incdec_L5
-                LDA     #1
-                BRA     _dot_member_store_incdec_L6
-_dot_member_store_incdec_L5
-                LDA     #0
-_dot_member_store_incdec_L6
-                CMP     #0
-                BEQ     _dot_member_store_incdec_L4
+                BNE     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
                 TAX
                 CLC
@@ -180,13 +173,13 @@ _dot_member_store_incdec_L4
                 LDA     B+6
                 TAX
                 CMP     #5
-                BNE     _dot_member_store_incdec_L7
+                BNE     _dot_member_store_incdec_L5
                 LDA     _fcc_img1
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img1
-_dot_member_store_incdec_L7
+_dot_member_store_incdec_L5
                 LDA     #9
                 STA     B+10
                 INC
@@ -195,13 +188,13 @@ _dot_member_store_incdec_L7
                 STA     B+10
                 TAX
                 CMP     #11
-                BNE     _dot_member_store_incdec_L8
+                BNE     _dot_member_store_incdec_L6
                 LDA     _fcc_img1
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img1
-_dot_member_store_incdec_L8
+_dot_member_store_incdec_L6
                 LDA     #65535
                 STA     B+12
                 TAY
@@ -256,13 +249,13 @@ _dot_member_store_incdec_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _dot_member_store_incdec_L9
+                BEQ     _dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img1
-_dot_member_store_incdec_L9
+_dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAY
                 TSC

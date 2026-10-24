@@ -147,18 +147,11 @@ _amp_call_chain_L1
                 LDA     slot+2
                 TAX
                 CMP     #6
-                BNE     _amp_call_chain_L3
+                BNE     _amp_call_chain_L2
                 LDA     slot+4
                 TAX
                 CMP     #12
-                BNE     _amp_call_chain_L3
-                LDA     #1
-                BRA     _amp_call_chain_L4
-_amp_call_chain_L3
-                LDA     #0
-_amp_call_chain_L4
-                CMP     #0
-                BEQ     _amp_call_chain_L2
+                BNE     _amp_call_chain_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 CLC

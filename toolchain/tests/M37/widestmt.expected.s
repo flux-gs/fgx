@@ -344,21 +344,21 @@ _widestmt_L2
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _widestmt_L6
+                BNE     _widestmt_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _widestmt_L6
+                BNE     _widestmt_L4
                 LDA     #1
-                BRA     _widestmt_L7
-_widestmt_L6
+                BRA     _widestmt_L5
+_widestmt_L4
                 LDA     #0
-_widestmt_L7
+_widestmt_L5
                 CMP     #0
-                BEQ     _widestmt_L4
+                BEQ     _widestmt_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_ptr
                 LDA     3,S   ; fccstk d=0 b=3
@@ -384,13 +384,6 @@ _widestmt_L7
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_eq
-                CMP     #0
-                BEQ     _widestmt_L4
-                LDA     #1
-                BRA     _widestmt_L5
-_widestmt_L4
-                LDA     #0
-_widestmt_L5
                 CMP     #0
                 BEQ     _widestmt_L3
                 LDA     _fcc_img0
@@ -464,13 +457,13 @@ _widestmt_L3
                 AND     #$00FF
                 TAX
                 CMP     #90
-                BNE     _widestmt_L8
+                BNE     _widestmt_L6
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img0
-_widestmt_L8
+_widestmt_L6
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -516,13 +509,13 @@ _widestmt_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _widestmt_L9
+                BEQ     _widestmt_L7
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img0
-_widestmt_L9
+_widestmt_L7
                 LDA     _fcc_img0
                 TAY
                 TSC

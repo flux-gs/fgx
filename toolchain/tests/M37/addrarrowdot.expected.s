@@ -358,95 +358,39 @@ _addrarrowdot_L10
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _addrarrowdot_L26
+                BEQ     _addrarrowdot_L11
                 LDA     gt+4
                 TAX
                 CMP     #8224
-                BNE     _addrarrowdot_L26
-                LDA     #1
-                BRA     _addrarrowdot_L27
-_addrarrowdot_L26
-                LDA     #0
-_addrarrowdot_L27
-                CMP     #0
-                BEQ     _addrarrowdot_L24
+                BNE     _addrarrowdot_L11
                 LDA     gt+10
                 TAX
                 CMP     #8225
-                BNE     _addrarrowdot_L24
-                LDA     #1
-                BRA     _addrarrowdot_L25
-_addrarrowdot_L24
-                LDA     #0
-_addrarrowdot_L25
-                CMP     #0
-                BEQ     _addrarrowdot_L22
+                BNE     _addrarrowdot_L11
                 LDA     gt+2
                 TAX
                 CMP     #4112
-                BNE     _addrarrowdot_L22
-                LDA     #1
-                BRA     _addrarrowdot_L23
-_addrarrowdot_L22
-                LDA     #0
-_addrarrowdot_L23
-                CMP     #0
-                BEQ     _addrarrowdot_L20
+                BNE     _addrarrowdot_L11
                 LDA     gt+12
                 TAX
                 CMP     #4114
-                BNE     _addrarrowdot_L20
-                LDA     #1
-                BRA     _addrarrowdot_L21
-_addrarrowdot_L20
-                LDA     #0
-_addrarrowdot_L21
-                CMP     #0
-                BEQ     _addrarrowdot_L18
+                BNE     _addrarrowdot_L11
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L18
-                LDA     #1
-                BRA     _addrarrowdot_L19
-_addrarrowdot_L18
-                LDA     #0
-_addrarrowdot_L19
-                CMP     #0
-                BEQ     _addrarrowdot_L16
+                BNE     _addrarrowdot_L11
                 LDA     gt+0
                 TAX
                 CMP     #31354
-                BNE     _addrarrowdot_L16
-                LDA     #1
-                BRA     _addrarrowdot_L17
-_addrarrowdot_L16
-                LDA     #0
-_addrarrowdot_L17
-                CMP     #0
-                BEQ     _addrarrowdot_L14
+                BNE     _addrarrowdot_L11
                 LDA     gt+20
                 TAX
                 CMP     #31868
-                BNE     _addrarrowdot_L14
-                LDA     #1
-                BRA     _addrarrowdot_L15
-_addrarrowdot_L14
-                LDA     #0
-_addrarrowdot_L15
-                CMP     #0
-                BEQ     _addrarrowdot_L12
+                BNE     _addrarrowdot_L11
                 LDA     gt+76
                 TAX
                 CMP     #31611
-                BNE     _addrarrowdot_L12
-                LDA     #1
-                BRA     _addrarrowdot_L13
-_addrarrowdot_L12
-                LDA     #0
-_addrarrowdot_L13
-                CMP     #0
-                BEQ     _addrarrowdot_L11
+                BNE     _addrarrowdot_L11
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
@@ -496,22 +440,21 @@ _addrarrowdot_L8
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L29
+                BNE     _addrarrowdot_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L29
+                BNE     _addrarrowdot_L13
                 LDA     #1
-                BRA     _addrarrowdot_L30
-_addrarrowdot_L29
+                BRA     _addrarrowdot_L14
+_addrarrowdot_L13
                 LDA     #0
-_addrarrowdot_L30
+_addrarrowdot_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L28
+                BEQ     _addrarrowdot_L12
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -521,70 +464,35 @@ _addrarrowdot_L30
                 LDA     gt+12
                 TAX
                 CMP     #2989
-                BNE     _addrarrowdot_L40
+                BNE     _addrarrowdot_L15
                 LDA     gt+2
                 TAX
                 CMP     #4112
-                BNE     _addrarrowdot_L40
-                LDA     #1
-                BRA     _addrarrowdot_L41
-_addrarrowdot_L40
-                LDA     #0
-_addrarrowdot_L41
-                CMP     #0
-                BEQ     _addrarrowdot_L38
+                BNE     _addrarrowdot_L15
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L38
-                LDA     #1
-                BRA     _addrarrowdot_L39
-_addrarrowdot_L38
-                LDA     #0
-_addrarrowdot_L39
-                CMP     #0
-                BEQ     _addrarrowdot_L36
+                BNE     _addrarrowdot_L15
                 LDA     gt+10
                 TAX
                 CMP     #8225
-                BNE     _addrarrowdot_L36
-                LDA     #1
-                BRA     _addrarrowdot_L37
-_addrarrowdot_L36
-                LDA     #0
-_addrarrowdot_L37
-                CMP     #0
-                BEQ     _addrarrowdot_L34
+                BNE     _addrarrowdot_L15
                 LDA     gt+14
                 AND     #$00FF
                 TAX
                 CMP     #48
-                BNE     _addrarrowdot_L34
-                LDA     #1
-                BRA     _addrarrowdot_L35
-_addrarrowdot_L34
-                LDA     #0
-_addrarrowdot_L35
-                CMP     #0
-                BEQ     _addrarrowdot_L32
+                BNE     _addrarrowdot_L15
                 LDA     gt+20
                 TAX
                 CMP     #31868
-                BNE     _addrarrowdot_L32
-                LDA     #1
-                BRA     _addrarrowdot_L33
-_addrarrowdot_L32
-                LDA     #0
-_addrarrowdot_L33
-                CMP     #0
-                BEQ     _addrarrowdot_L31
+                BNE     _addrarrowdot_L15
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L31
-_addrarrowdot_L28
+_addrarrowdot_L15
+_addrarrowdot_L12
                 FGX2_FARCALL _addrarrowdot_clear
                 SEP     #$20
                 MX      %10
@@ -627,22 +535,21 @@ _addrarrowdot_L28
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L43
+                BNE     _addrarrowdot_L17
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L43
+                BNE     _addrarrowdot_L17
                 LDA     #1
-                BRA     _addrarrowdot_L44
-_addrarrowdot_L43
+                BRA     _addrarrowdot_L18
+_addrarrowdot_L17
                 LDA     #0
-_addrarrowdot_L44
+_addrarrowdot_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L42
+                BEQ     _addrarrowdot_L16
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -677,47 +584,26 @@ _addrarrowdot_L44
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _addrarrowdot_L50
+                BEQ     _addrarrowdot_L19
                 LDA     gt+4
                 TAX
                 CMP     #8224
-                BNE     _addrarrowdot_L50
-                LDA     #1
-                BRA     _addrarrowdot_L51
-_addrarrowdot_L50
-                LDA     #0
-_addrarrowdot_L51
-                CMP     #0
-                BEQ     _addrarrowdot_L48
+                BNE     _addrarrowdot_L19
                 LDA     gt+10
                 TAX
                 CMP     #8225
-                BNE     _addrarrowdot_L48
-                LDA     #1
-                BRA     _addrarrowdot_L49
-_addrarrowdot_L48
-                LDA     #0
-_addrarrowdot_L49
-                CMP     #0
-                BEQ     _addrarrowdot_L46
+                BNE     _addrarrowdot_L19
                 LDA     gt+12
                 TAX
                 CMP     #4114
-                BNE     _addrarrowdot_L46
-                LDA     #1
-                BRA     _addrarrowdot_L47
-_addrarrowdot_L46
-                LDA     #0
-_addrarrowdot_L47
-                CMP     #0
-                BEQ     _addrarrowdot_L45
+                BNE     _addrarrowdot_L19
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L45
-_addrarrowdot_L42
+_addrarrowdot_L19
+_addrarrowdot_L16
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #2
                 STA     27,S   ; fccstk d=0 b=27
@@ -765,22 +651,21 @@ _addrarrowdot_L42
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L53
+                BNE     _addrarrowdot_L21
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L53
+                BNE     _addrarrowdot_L21
                 LDA     #1
-                BRA     _addrarrowdot_L54
-_addrarrowdot_L53
+                BRA     _addrarrowdot_L22
+_addrarrowdot_L21
                 LDA     #0
-_addrarrowdot_L54
+_addrarrowdot_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L52
+                BEQ     _addrarrowdot_L20
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -795,60 +680,32 @@ _addrarrowdot_L54
                 AND     #$00FF
                 TAX
                 CMP     #95
-                BNE     _addrarrowdot_L62
+                BNE     _addrarrowdot_L23
                 LDA     gt+15
                 AND     #$00FF
                 TAX
                 CMP     #49
-                BNE     _addrarrowdot_L62
-                LDA     #1
-                BRA     _addrarrowdot_L63
-_addrarrowdot_L62
-                LDA     #0
-_addrarrowdot_L63
-                CMP     #0
-                BEQ     _addrarrowdot_L60
+                BNE     _addrarrowdot_L23
                 LDA     gt+17
                 AND     #$00FF
                 TAX
                 CMP     #51
-                BNE     _addrarrowdot_L60
-                LDA     #1
-                BRA     _addrarrowdot_L61
-_addrarrowdot_L60
-                LDA     #0
-_addrarrowdot_L61
-                CMP     #0
-                BEQ     _addrarrowdot_L58
+                BNE     _addrarrowdot_L23
                 LDA     gt+12
                 TAX
                 CMP     #4114
-                BNE     _addrarrowdot_L58
-                LDA     #1
-                BRA     _addrarrowdot_L59
-_addrarrowdot_L58
-                LDA     #0
-_addrarrowdot_L59
-                CMP     #0
-                BEQ     _addrarrowdot_L56
+                BNE     _addrarrowdot_L23
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L56
-                LDA     #1
-                BRA     _addrarrowdot_L57
-_addrarrowdot_L56
-                LDA     #0
-_addrarrowdot_L57
-                CMP     #0
-                BEQ     _addrarrowdot_L55
+                BNE     _addrarrowdot_L23
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L55
-_addrarrowdot_L52
+_addrarrowdot_L23
+_addrarrowdot_L20
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #1
                 STA     25,S   ; fccstk d=0 b=25
@@ -906,22 +763,21 @@ _addrarrowdot_L52
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L65
+                BNE     _addrarrowdot_L25
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L65
+                BNE     _addrarrowdot_L25
                 LDA     #1
-                BRA     _addrarrowdot_L66
-_addrarrowdot_L65
+                BRA     _addrarrowdot_L26
+_addrarrowdot_L25
                 LDA     #0
-_addrarrowdot_L66
+_addrarrowdot_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L64
+                BEQ     _addrarrowdot_L24
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -931,80 +787,38 @@ _addrarrowdot_L66
                 LDA     gt+50
                 TAX
                 CMP     #3084
-                BNE     _addrarrowdot_L78
+                BNE     _addrarrowdot_L27
                 LDA     gt+32
                 TAX
                 CMP     #16480
-                BNE     _addrarrowdot_L78
-                LDA     #1
-                BRA     _addrarrowdot_L79
-_addrarrowdot_L78
-                LDA     #0
-_addrarrowdot_L79
-                CMP     #0
-                BEQ     _addrarrowdot_L76
+                BNE     _addrarrowdot_L27
                 LDA     gt+68
                 TAX
                 CMP     #16482
-                BNE     _addrarrowdot_L76
-                LDA     #1
-                BRA     _addrarrowdot_L77
-_addrarrowdot_L76
-                LDA     #0
-_addrarrowdot_L77
-                CMP     #0
-                BEQ     _addrarrowdot_L74
+                BNE     _addrarrowdot_L27
                 LDA     gt+40
                 TAX
                 CMP     #16449
-                BNE     _addrarrowdot_L74
-                LDA     #1
-                BRA     _addrarrowdot_L75
-_addrarrowdot_L74
-                LDA     #0
-_addrarrowdot_L75
-                CMP     #0
-                BEQ     _addrarrowdot_L72
+                BNE     _addrarrowdot_L27
                 LDA     gt+56
                 TAX
                 CMP     #16465
-                BNE     _addrarrowdot_L72
-                LDA     #1
-                BRA     _addrarrowdot_L73
-_addrarrowdot_L72
-                LDA     #0
-_addrarrowdot_L73
-                CMP     #0
-                BEQ     _addrarrowdot_L70
+                BNE     _addrarrowdot_L27
                 LDA     gt+38
                 TAX
                 CMP     #16464
-                BNE     _addrarrowdot_L70
-                LDA     #1
-                BRA     _addrarrowdot_L71
-_addrarrowdot_L70
-                LDA     #0
-_addrarrowdot_L71
-                CMP     #0
-                BEQ     _addrarrowdot_L68
+                BNE     _addrarrowdot_L27
                 LDA     gt+58
                 TAX
                 CMP     #16450
-                BNE     _addrarrowdot_L68
-                LDA     #1
-                BRA     _addrarrowdot_L69
-_addrarrowdot_L68
-                LDA     #0
-_addrarrowdot_L69
-                CMP     #0
-                BEQ     _addrarrowdot_L67
+                BNE     _addrarrowdot_L27
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L67
-_addrarrowdot_L64
+_addrarrowdot_L27
+_addrarrowdot_L24
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #2
                 STA     25,S   ; fccstk d=0 b=25
@@ -1062,22 +876,21 @@ _addrarrowdot_L64
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L81
+                BNE     _addrarrowdot_L29
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L81
+                BNE     _addrarrowdot_L29
                 LDA     #1
-                BRA     _addrarrowdot_L82
-_addrarrowdot_L81
+                BRA     _addrarrowdot_L30
+_addrarrowdot_L29
                 LDA     #0
-_addrarrowdot_L82
+_addrarrowdot_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L80
+                BEQ     _addrarrowdot_L28
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -1112,47 +925,26 @@ _addrarrowdot_L82
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _addrarrowdot_L88
+                BEQ     _addrarrowdot_L31
                 LDA     gt+68
                 TAX
                 CMP     #16482
-                BNE     _addrarrowdot_L88
-                LDA     #1
-                BRA     _addrarrowdot_L89
-_addrarrowdot_L88
-                LDA     #0
-_addrarrowdot_L89
-                CMP     #0
-                BEQ     _addrarrowdot_L86
+                BNE     _addrarrowdot_L31
                 LDA     gt+58
                 TAX
                 CMP     #16450
-                BNE     _addrarrowdot_L86
-                LDA     #1
-                BRA     _addrarrowdot_L87
-_addrarrowdot_L86
-                LDA     #0
-_addrarrowdot_L87
-                CMP     #0
-                BEQ     _addrarrowdot_L84
+                BNE     _addrarrowdot_L31
                 LDA     gt+56
                 TAX
                 CMP     #16465
-                BNE     _addrarrowdot_L84
-                LDA     #1
-                BRA     _addrarrowdot_L85
-_addrarrowdot_L84
-                LDA     #0
-_addrarrowdot_L85
-                CMP     #0
-                BEQ     _addrarrowdot_L83
+                BNE     _addrarrowdot_L31
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L83
-_addrarrowdot_L80
+_addrarrowdot_L31
+_addrarrowdot_L28
                 FGX2_FARCALL _addrarrowdot_clear
                 SEP     #$20
                 MX      %10
@@ -1207,21 +999,21 @@ _addrarrowdot_L80
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L91
+                BNE     _addrarrowdot_L33
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L91
+                BNE     _addrarrowdot_L33
                 LDA     #1
-                BRA     _addrarrowdot_L92
-_addrarrowdot_L91
+                BRA     _addrarrowdot_L34
+_addrarrowdot_L33
                 LDA     #0
-_addrarrowdot_L92
+_addrarrowdot_L34
                 CMP     #0
-                BEQ     _addrarrowdot_L90
+                BEQ     _addrarrowdot_L32
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1231,58 +1023,30 @@ _addrarrowdot_L92
                 LDA     gt+20
                 TAX
                 CMP     #3501
-                BNE     _addrarrowdot_L100
+                BNE     _addrarrowdot_L35
                 LDA     gt+0
                 TAX
                 CMP     #31354
-                BNE     _addrarrowdot_L100
-                LDA     #1
-                BRA     _addrarrowdot_L101
-_addrarrowdot_L100
-                LDA     #0
-_addrarrowdot_L101
-                CMP     #0
-                BEQ     _addrarrowdot_L98
+                BNE     _addrarrowdot_L35
                 LDA     gt+76
                 TAX
                 CMP     #31611
-                BNE     _addrarrowdot_L98
-                LDA     #1
-                BRA     _addrarrowdot_L99
-_addrarrowdot_L98
-                LDA     #0
-_addrarrowdot_L99
-                CMP     #0
-                BEQ     _addrarrowdot_L96
+                BNE     _addrarrowdot_L35
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L96
-                LDA     #1
-                BRA     _addrarrowdot_L97
-_addrarrowdot_L96
-                LDA     #0
-_addrarrowdot_L97
-                CMP     #0
-                BEQ     _addrarrowdot_L94
+                BNE     _addrarrowdot_L35
                 LDA     gt+22
                 TAX
                 CMP     #16448
-                BNE     _addrarrowdot_L94
-                LDA     #1
-                BRA     _addrarrowdot_L95
-_addrarrowdot_L94
-                LDA     #0
-_addrarrowdot_L95
-                CMP     #0
-                BEQ     _addrarrowdot_L93
+                BNE     _addrarrowdot_L35
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L93
-_addrarrowdot_L90
+_addrarrowdot_L35
+_addrarrowdot_L32
                 FGX2_FARCALL _addrarrowdot_clear
                 SEP     #$20
                 MX      %10
@@ -1337,21 +1101,21 @@ _addrarrowdot_L90
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L103
+                BNE     _addrarrowdot_L37
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L103
+                BNE     _addrarrowdot_L37
                 LDA     #1
-                BRA     _addrarrowdot_L104
-_addrarrowdot_L103
+                BRA     _addrarrowdot_L38
+_addrarrowdot_L37
                 LDA     #0
-_addrarrowdot_L104
+_addrarrowdot_L38
                 CMP     #0
-                BEQ     _addrarrowdot_L102
+                BEQ     _addrarrowdot_L36
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1361,47 +1125,26 @@ _addrarrowdot_L104
                 LDA     gt+12
                 TAX
                 CMP     #3598
-                BNE     _addrarrowdot_L110
+                BNE     _addrarrowdot_L39
                 LDA     gt+2
                 TAX
                 CMP     #4112
-                BNE     _addrarrowdot_L110
-                LDA     #1
-                BRA     _addrarrowdot_L111
-_addrarrowdot_L110
-                LDA     #0
-_addrarrowdot_L111
-                CMP     #0
-                BEQ     _addrarrowdot_L108
+                BNE     _addrarrowdot_L39
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L108
-                LDA     #1
-                BRA     _addrarrowdot_L109
-_addrarrowdot_L108
-                LDA     #0
-_addrarrowdot_L109
-                CMP     #0
-                BEQ     _addrarrowdot_L106
+                BNE     _addrarrowdot_L39
                 LDA     gt+20
                 TAX
                 CMP     #31868
-                BNE     _addrarrowdot_L106
-                LDA     #1
-                BRA     _addrarrowdot_L107
-_addrarrowdot_L106
-                LDA     #0
-_addrarrowdot_L107
-                CMP     #0
-                BEQ     _addrarrowdot_L105
+                BNE     _addrarrowdot_L39
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L105
-_addrarrowdot_L102
+_addrarrowdot_L39
+_addrarrowdot_L36
                 FGX2_FARCALL _addrarrowdot_clear
                 SEP     #$20
                 MX      %10
@@ -1444,22 +1187,22 @@ _addrarrowdot_L102
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L113
+                BNE     _addrarrowdot_L41
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L113
+                BNE     _addrarrowdot_L41
                 LDA     #1
-                BRA     _addrarrowdot_L114
-_addrarrowdot_L113
+                BRA     _addrarrowdot_L42
+_addrarrowdot_L41
                 LDA     #0
-_addrarrowdot_L114
+_addrarrowdot_L42
                 CMP     #0
                 BNE     *+5
-                BRL     _addrarrowdot_L112
+                BRL     _addrarrowdot_L40
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1469,51 +1212,23 @@ _addrarrowdot_L114
                 LDA     gh+16
                 TAX
                 CMP     #3855
-                BNE     _addrarrowdot_L124
+                BNE     _addrarrowdot_L43
                 LDA     gh+6
                 TAX
                 CMP     #24672
-                BNE     _addrarrowdot_L124
-                LDA     #1
-                BRA     _addrarrowdot_L125
-_addrarrowdot_L124
-                LDA     #0
-_addrarrowdot_L125
-                CMP     #0
-                BEQ     _addrarrowdot_L122
+                BNE     _addrarrowdot_L43
                 LDA     gh+22
                 TAX
                 CMP     #24673
-                BNE     _addrarrowdot_L122
-                LDA     #1
-                BRA     _addrarrowdot_L123
-_addrarrowdot_L122
-                LDA     #0
-_addrarrowdot_L123
-                CMP     #0
-                BEQ     _addrarrowdot_L120
+                BNE     _addrarrowdot_L43
                 LDA     gh+0
                 TAX
                 CMP     #23130
-                BNE     _addrarrowdot_L120
-                LDA     #1
-                BRA     _addrarrowdot_L121
-_addrarrowdot_L120
-                LDA     #0
-_addrarrowdot_L121
-                CMP     #0
-                BEQ     _addrarrowdot_L118
+                BNE     _addrarrowdot_L43
                 LDA     gh+24
                 TAX
                 CMP     #23387
-                BNE     _addrarrowdot_L118
-                LDA     #1
-                BRA     _addrarrowdot_L119
-_addrarrowdot_L118
-                LDA     #0
-_addrarrowdot_L119
-                CMP     #0
-                BEQ     _addrarrowdot_L116
+                BNE     _addrarrowdot_L43
                 LDA     gh+4
                 STA     _fcc_fpr0+2
                 LDA     gh+2
@@ -1531,35 +1246,28 @@ _addrarrowdot_L119
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L126
+                BNE     _addrarrowdot_L44
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L126
+                BNE     _addrarrowdot_L44
                 LDA     #1
-                BRA     _addrarrowdot_L127
-_addrarrowdot_L126
+                BRA     _addrarrowdot_L45
+_addrarrowdot_L44
                 LDA     #0
-_addrarrowdot_L127
+_addrarrowdot_L45
                 CMP     #0
-                BEQ     _addrarrowdot_L116
-                LDA     #1
-                BRA     _addrarrowdot_L117
-_addrarrowdot_L116
-                LDA     #0
-_addrarrowdot_L117
-                CMP     #0
-                BEQ     _addrarrowdot_L115
+                BEQ     _addrarrowdot_L43
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L115
-_addrarrowdot_L112
+_addrarrowdot_L43
+_addrarrowdot_L40
                 FGX2_FARCALL _addrarrowdot_clear
                 LDA     #2
                 STA     25,S   ; fccstk d=0 b=25
@@ -1593,68 +1301,33 @@ _addrarrowdot_L112
                 LDA     gt+68
                 TAX
                 CMP     #6682
-                BNE     _addrarrowdot_L137
+                BNE     _addrarrowdot_L46
                 LDA     gt+50
                 TAX
                 CMP     #16481
-                BNE     _addrarrowdot_L137
-                LDA     #1
-                BRA     _addrarrowdot_L138
-_addrarrowdot_L137
-                LDA     #0
-_addrarrowdot_L138
-                CMP     #0
-                BEQ     _addrarrowdot_L135
+                BNE     _addrarrowdot_L46
                 LDA     gt+32
                 TAX
                 CMP     #16480
-                BNE     _addrarrowdot_L135
-                LDA     #1
-                BRA     _addrarrowdot_L136
-_addrarrowdot_L135
-                LDA     #0
-_addrarrowdot_L136
-                CMP     #0
-                BEQ     _addrarrowdot_L133
+                BNE     _addrarrowdot_L46
                 LDA     gt+58
                 TAX
                 CMP     #16450
-                BNE     _addrarrowdot_L133
-                LDA     #1
-                BRA     _addrarrowdot_L134
-_addrarrowdot_L133
-                LDA     #0
-_addrarrowdot_L134
-                CMP     #0
-                BEQ     _addrarrowdot_L131
+                BNE     _addrarrowdot_L46
                 LDA     gt+74
                 TAX
                 CMP     #16466
-                BNE     _addrarrowdot_L131
-                LDA     #1
-                BRA     _addrarrowdot_L132
-_addrarrowdot_L131
-                LDA     #0
-_addrarrowdot_L132
-                CMP     #0
-                BEQ     _addrarrowdot_L129
+                BNE     _addrarrowdot_L46
                 LDA     gt+56
                 TAX
                 CMP     #16465
-                BNE     _addrarrowdot_L129
-                LDA     #1
-                BRA     _addrarrowdot_L130
-_addrarrowdot_L129
-                LDA     #0
-_addrarrowdot_L130
-                CMP     #0
-                BEQ     _addrarrowdot_L128
+                BNE     _addrarrowdot_L46
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #3
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L128
+_addrarrowdot_L46
                 FGX2_FARCALL _addrarrowdot_clear
                 SEP     #$20
                 MX      %10
@@ -1684,21 +1357,21 @@ _addrarrowdot_L128
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _addrarrowdot_L140
+                BNE     _addrarrowdot_L48
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _addrarrowdot_L140
+                BNE     _addrarrowdot_L48
                 LDA     #1
-                BRA     _addrarrowdot_L141
-_addrarrowdot_L140
+                BRA     _addrarrowdot_L49
+_addrarrowdot_L48
                 LDA     #0
-_addrarrowdot_L141
+_addrarrowdot_L49
                 CMP     #0
-                BEQ     _addrarrowdot_L139
+                BEQ     _addrarrowdot_L47
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1708,58 +1381,30 @@ _addrarrowdot_L141
                 LDA     gt+20
                 TAX
                 CMP     #6939
-                BNE     _addrarrowdot_L149
+                BNE     _addrarrowdot_L50
                 LDA     gt+0
                 TAX
                 CMP     #31354
-                BNE     _addrarrowdot_L149
-                LDA     #1
-                BRA     _addrarrowdot_L150
-_addrarrowdot_L149
-                LDA     #0
-_addrarrowdot_L150
-                CMP     #0
-                BEQ     _addrarrowdot_L147
+                BNE     _addrarrowdot_L50
                 LDA     gt+76
                 TAX
                 CMP     #31611
-                BNE     _addrarrowdot_L147
-                LDA     #1
-                BRA     _addrarrowdot_L148
-_addrarrowdot_L147
-                LDA     #0
-_addrarrowdot_L148
-                CMP     #0
-                BEQ     _addrarrowdot_L145
+                BNE     _addrarrowdot_L50
                 LDA     gt+18
                 TAX
                 CMP     #4113
-                BNE     _addrarrowdot_L145
-                LDA     #1
-                BRA     _addrarrowdot_L146
-_addrarrowdot_L145
-                LDA     #0
-_addrarrowdot_L146
-                CMP     #0
-                BEQ     _addrarrowdot_L143
+                BNE     _addrarrowdot_L50
                 LDA     gh+0
                 TAX
                 CMP     #23130
-                BNE     _addrarrowdot_L143
-                LDA     #1
-                BRA     _addrarrowdot_L144
-_addrarrowdot_L143
-                LDA     #0
-_addrarrowdot_L144
-                CMP     #0
-                BEQ     _addrarrowdot_L142
+                BNE     _addrarrowdot_L50
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 CLC
                 ADC     #3
                 STA     29,S   ; fccstk d=0 b=29
-_addrarrowdot_L142
-_addrarrowdot_L139
+_addrarrowdot_L50
+_addrarrowdot_L47
                 LDA     29,S   ; fccstk d=0 b=29
                 TAY
                 TSC

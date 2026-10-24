@@ -4,10 +4,10 @@
                 FGX2_MODE 2
 _mixed_declarator_list_FA0       FGX2_LONG_PTR _Fa;seven;0
 _mixed_declarator_list_FA1       FGX2_LONG_PTR _Fa;eleven;0
-_mixed_declarator_list_FA16       FGX2_LONG_PTR _Fa;seven;0
-_mixed_declarator_list_FA17       FGX2_LONG_PTR _Fa;eleven;0
-_mixed_declarator_list_FA18       FGX2_LONG_PTR _Fa;seven;0
-_mixed_declarator_list_FA19       FGX2_LONG_PTR _Fa;eleven;0
+_mixed_declarator_list_FA6       FGX2_LONG_PTR _Fa;seven;0
+_mixed_declarator_list_FA7       FGX2_LONG_PTR _Fa;eleven;0
+_mixed_declarator_list_FA8       FGX2_LONG_PTR _Fa;seven;0
+_mixed_declarator_list_FA9       FGX2_LONG_PTR _Fa;eleven;0
 
 ;-------------------------------
 ; M7 globals

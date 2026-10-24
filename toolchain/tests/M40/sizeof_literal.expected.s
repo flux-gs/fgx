@@ -24,14 +24,8 @@ main_stkok        TCS
                 BNE     _sizeof_literal_L1
                 LDA     #2
                 CMP     #2
-                BNE     _sizeof_literal_L1
-                LDA     #0
-                BRA     _sizeof_literal_L2
-_sizeof_literal_L1
-                LDA     #1
-_sizeof_literal_L2
-                CMP     #0
                 BEQ     _sizeof_literal_L0
+_sizeof_literal_L1
                 LDA     #1
                 TAY
                 TSC
@@ -45,17 +39,11 @@ _sizeof_literal_L2
 _sizeof_literal_L0
                 LDA     #4
                 CMP     #4
-                BNE     _sizeof_literal_L4
+                BNE     _sizeof_literal_L3
                 LDA     #4
                 CMP     #4
-                BNE     _sizeof_literal_L4
-                LDA     #0
-                BRA     _sizeof_literal_L5
-_sizeof_literal_L4
-                LDA     #1
-_sizeof_literal_L5
-                CMP     #0
-                BEQ     _sizeof_literal_L3
+                BEQ     _sizeof_literal_L2
+_sizeof_literal_L3
                 LDA     #2
                 TAY
                 TSC
@@ -66,20 +54,14 @@ _sizeof_literal_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_sizeof_literal_L3
+_sizeof_literal_L2
                 LDA     #2
                 CMP     #2
-                BNE     _sizeof_literal_L7
+                BNE     _sizeof_literal_L5
                 LDA     #2
                 CMP     #2
-                BNE     _sizeof_literal_L7
-                LDA     #0
-                BRA     _sizeof_literal_L8
-_sizeof_literal_L7
-                LDA     #1
-_sizeof_literal_L8
-                CMP     #0
-                BEQ     _sizeof_literal_L6
+                BEQ     _sizeof_literal_L4
+_sizeof_literal_L5
                 LDA     #3
                 TAY
                 TSC
@@ -90,20 +72,14 @@ _sizeof_literal_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_sizeof_literal_L6
+_sizeof_literal_L4
                 LDA     #8
                 CMP     #8
-                BNE     _sizeof_literal_L10
+                BNE     _sizeof_literal_L7
                 LDA     #4
                 CMP     #4
-                BNE     _sizeof_literal_L10
-                LDA     #0
-                BRA     _sizeof_literal_L11
-_sizeof_literal_L10
-                LDA     #1
-_sizeof_literal_L11
-                CMP     #0
-                BEQ     _sizeof_literal_L9
+                BEQ     _sizeof_literal_L6
+_sizeof_literal_L7
                 LDA     #4
                 TAY
                 TSC
@@ -114,7 +90,7 @@ _sizeof_literal_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_sizeof_literal_L9
+_sizeof_literal_L6
                 LDA     #42
                 TAY
                 TSC

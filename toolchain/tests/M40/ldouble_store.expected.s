@@ -644,29 +644,16 @@ main_stkok        TCS
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _ldouble_store_L7
+                BNE     _ldouble_store_L5
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _ldouble_store_L7
-                LDA     #0
-                BRA     _ldouble_store_L8
-_ldouble_store_L7
-                LDA     #1
-_ldouble_store_L8
-                CMP     #0
                 BNE     _ldouble_store_L5
                 LDA     #32
                 TAX
                 CMP     #32
-                BNE     _ldouble_store_L5
-                LDA     #0
-                BRA     _ldouble_store_L6
-_ldouble_store_L5
-                LDA     #1
-_ldouble_store_L6
-                CMP     #0
                 BEQ     _ldouble_store_L4
+_ldouble_store_L5
                 LDA     #1
                 TAY
                 TSC
@@ -681,18 +668,12 @@ _ldouble_store_L4
                 LDA     #12
                 TAX
                 CMP     #12
-                BNE     _ldouble_store_L10
+                BNE     _ldouble_store_L7
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _ldouble_store_L10
-                LDA     #0
-                BRA     _ldouble_store_L11
-_ldouble_store_L10
-                LDA     #1
-_ldouble_store_L11
-                CMP     #0
-                BEQ     _ldouble_store_L9
+                BEQ     _ldouble_store_L6
+_ldouble_store_L7
                 LDA     #2
                 TAY
                 TSC
@@ -703,7 +684,7 @@ _ldouble_store_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L9
+_ldouble_store_L6
                 LDA     #$51EB
                 STA     _fcc_long_hi
                 LDA     #$851F
@@ -790,14 +771,7 @@ _ldouble_store_L9
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L13
-                LDA     #0
-                BRA     _ldouble_store_L14
-_ldouble_store_L13
-                LDA     #1
-_ldouble_store_L14
-                CMP     #0
-                BEQ     _ldouble_store_L12
+                BNE     _ldouble_store_L8
                 LDA     #3
                 TAY
                 TSC
@@ -808,7 +782,7 @@ _ldouble_store_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L12
+_ldouble_store_L8
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -861,14 +835,7 @@ _ldouble_store_L12
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L16
-                LDA     #0
-                BRA     _ldouble_store_L17
-_ldouble_store_L16
-                LDA     #1
-_ldouble_store_L17
-                CMP     #0
-                BEQ     _ldouble_store_L15
+                BNE     _ldouble_store_L9
                 LDA     #4
                 TAY
                 TSC
@@ -879,7 +846,7 @@ _ldouble_store_L17
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L15
+_ldouble_store_L9
                 LDA     #$1234
                 STA     _fcc_long_hi
                 LDA     #$5678
@@ -966,14 +933,7 @@ _ldouble_store_L15
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L19
-                LDA     #0
-                BRA     _ldouble_store_L20
-_ldouble_store_L19
-                LDA     #1
-_ldouble_store_L20
-                CMP     #0
-                BEQ     _ldouble_store_L18
+                BNE     _ldouble_store_L10
                 LDA     #5
                 TAY
                 TSC
@@ -984,7 +944,7 @@ _ldouble_store_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L18
+_ldouble_store_L10
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1054,14 +1014,7 @@ _ldouble_store_L18
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L22
-                LDA     #0
-                BRA     _ldouble_store_L23
-_ldouble_store_L22
-                LDA     #1
-_ldouble_store_L23
-                CMP     #0
-                BEQ     _ldouble_store_L21
+                BNE     _ldouble_store_L11
                 LDA     #6
                 TAY
                 TSC
@@ -1072,7 +1025,7 @@ _ldouble_store_L23
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L21
+_ldouble_store_L11
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1147,14 +1100,7 @@ _ldouble_store_L21
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L25
-                LDA     #0
-                BRA     _ldouble_store_L26
-_ldouble_store_L25
-                LDA     #1
-_ldouble_store_L26
-                CMP     #0
-                BEQ     _ldouble_store_L24
+                BNE     _ldouble_store_L12
                 LDA     #7
                 TAY
                 TSC
@@ -1165,7 +1111,7 @@ _ldouble_store_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L24
+_ldouble_store_L12
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -1233,14 +1179,7 @@ _ldouble_store_L24
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L28
-                LDA     #0
-                BRA     _ldouble_store_L29
-_ldouble_store_L28
-                LDA     #1
-_ldouble_store_L29
-                CMP     #0
-                BEQ     _ldouble_store_L27
+                BNE     _ldouble_store_L13
                 LDA     #8
                 TAY
                 TSC
@@ -1251,7 +1190,7 @@ _ldouble_store_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L27
+_ldouble_store_L13
                 LDA     25,S   ; fccstk d=0 b=25
                 ASL
                 ASL
@@ -1321,14 +1260,7 @@ _ldouble_store_L27
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L31
-                LDA     #0
-                BRA     _ldouble_store_L32
-_ldouble_store_L31
-                LDA     #1
-_ldouble_store_L32
-                CMP     #0
-                BEQ     _ldouble_store_L30
+                BNE     _ldouble_store_L14
                 LDA     #9
                 TAY
                 TSC
@@ -1339,7 +1271,7 @@ _ldouble_store_L32
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L30
+_ldouble_store_L14
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1417,14 +1349,7 @@ _ldouble_store_L30
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L34
-                LDA     #0
-                BRA     _ldouble_store_L35
-_ldouble_store_L34
-                LDA     #1
-_ldouble_store_L35
-                CMP     #0
-                BEQ     _ldouble_store_L33
+                BNE     _ldouble_store_L15
                 LDA     #10
                 TAY
                 TSC
@@ -1435,7 +1360,7 @@ _ldouble_store_L35
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L33
+_ldouble_store_L15
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1516,14 +1441,7 @@ _ldouble_store_L33
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L37
-                LDA     #0
-                BRA     _ldouble_store_L38
-_ldouble_store_L37
-                LDA     #1
-_ldouble_store_L38
-                CMP     #0
-                BEQ     _ldouble_store_L36
+                BNE     _ldouble_store_L16
                 LDA     #11
                 TAY
                 TSC
@@ -1534,7 +1452,7 @@ _ldouble_store_L38
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L36
+_ldouble_store_L16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1618,14 +1536,7 @@ _ldouble_store_L36
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L40
-                LDA     #0
-                BRA     _ldouble_store_L41
-_ldouble_store_L40
-                LDA     #1
-_ldouble_store_L41
-                CMP     #0
-                BEQ     _ldouble_store_L39
+                BNE     _ldouble_store_L17
                 LDA     #12
                 TAY
                 TSC
@@ -1636,7 +1547,7 @@ _ldouble_store_L41
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L39
+_ldouble_store_L17
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1726,14 +1637,7 @@ _ldouble_store_L39
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L43
-                LDA     #0
-                BRA     _ldouble_store_L44
-_ldouble_store_L43
-                LDA     #1
-_ldouble_store_L44
-                CMP     #0
-                BEQ     _ldouble_store_L42
+                BNE     _ldouble_store_L18
                 LDA     #13
                 TAY
                 TSC
@@ -1744,7 +1648,7 @@ _ldouble_store_L44
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L42
+_ldouble_store_L18
                 LDA     #7
                 STA     59,S   ; fccstk d=0 b=59
                 LDA     #9
@@ -1818,14 +1722,7 @@ _ldouble_store_L42
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L46
-                LDA     #0
-                BRA     _ldouble_store_L47
-_ldouble_store_L46
-                LDA     #1
-_ldouble_store_L47
-                CMP     #0
-                BEQ     _ldouble_store_L45
+                BNE     _ldouble_store_L19
                 LDA     #14
                 TAY
                 TSC
@@ -1836,22 +1733,16 @@ _ldouble_store_L47
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L45
+_ldouble_store_L19
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
                 CMP     #7
-                BNE     _ldouble_store_L49
+                BNE     _ldouble_store_L21
                 LDA     69,S   ; fccstk d=0 b=69
                 TAX
                 CMP     #9
-                BNE     _ldouble_store_L49
-                LDA     #0
-                BRA     _ldouble_store_L50
-_ldouble_store_L49
-                LDA     #1
-_ldouble_store_L50
-                CMP     #0
-                BEQ     _ldouble_store_L48
+                BEQ     _ldouble_store_L20
+_ldouble_store_L21
                 LDA     #15
                 TAY
                 TSC
@@ -1862,7 +1753,7 @@ _ldouble_store_L50
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L48
+_ldouble_store_L20
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1957,14 +1848,8 @@ _ldouble_store_L48
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L52
-                LDA     #0
-                BRA     _ldouble_store_L53
-_ldouble_store_L52
-                LDA     #1
-_ldouble_store_L53
                 CMP     #0
-                BEQ     _ldouble_store_L51
+                BNE     _ldouble_store_L22
                 LDA     #16
                 TAY
                 TSC
@@ -1975,7 +1860,7 @@ _ldouble_store_L53
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L51
+_ldouble_store_L22
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2001,12 +1886,12 @@ _ldouble_store_L51
                 STA     _fcc_fpr1+2
                 LDA     _fcc_fpr1
                 LDY     #10
-_ldouble_store_L54
+_ldouble_store_L23
                 LDA     [_fcc_fpr1],Y
                 STA     [_fcc_fpr0],Y
                 DEY
                 DEY
-                BPL     _ldouble_store_L54
+                BPL     _ldouble_store_L23
                 LDA     #$1234
                 STA     _fcc_long_hi
                 LDA     #$5678
@@ -2043,14 +1928,7 @@ _ldouble_store_L54
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L56
-                LDA     #0
-                BRA     _ldouble_store_L57
-_ldouble_store_L56
-                LDA     #1
-_ldouble_store_L57
-                CMP     #0
-                BEQ     _ldouble_store_L55
+                BNE     _ldouble_store_L24
                 LDA     #17
                 TAY
                 TSC
@@ -2061,7 +1939,7 @@ _ldouble_store_L57
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L55
+_ldouble_store_L24
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_fpr0+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -2121,14 +1999,7 @@ _ldouble_store_L55
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L59
-                LDA     #0
-                BRA     _ldouble_store_L60
-_ldouble_store_L59
-                LDA     #1
-_ldouble_store_L60
-                CMP     #0
-                BEQ     _ldouble_store_L58
+                BNE     _ldouble_store_L25
                 LDA     #18
                 TAY
                 TSC
@@ -2139,7 +2010,7 @@ _ldouble_store_L60
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L58
+_ldouble_store_L25
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -2207,14 +2078,7 @@ _ldouble_store_L58
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L62
-                LDA     #0
-                BRA     _ldouble_store_L63
-_ldouble_store_L62
-                LDA     #1
-_ldouble_store_L63
-                CMP     #0
-                BEQ     _ldouble_store_L61
+                BNE     _ldouble_store_L26
                 LDA     #19
                 TAY
                 TSC
@@ -2225,7 +2089,7 @@ _ldouble_store_L63
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L61
+_ldouble_store_L26
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -2293,14 +2157,7 @@ _ldouble_store_L61
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L65
-                LDA     #0
-                BRA     _ldouble_store_L66
-_ldouble_store_L65
-                LDA     #1
-_ldouble_store_L66
-                CMP     #0
-                BEQ     _ldouble_store_L64
+                BNE     _ldouble_store_L27
                 LDA     #20
                 TAY
                 TSC
@@ -2311,7 +2168,7 @@ _ldouble_store_L66
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L64
+_ldouble_store_L27
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -2397,14 +2254,7 @@ _ldouble_store_L64
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L68
-                LDA     #0
-                BRA     _ldouble_store_L69
-_ldouble_store_L68
-                LDA     #1
-_ldouble_store_L69
-                CMP     #0
-                BEQ     _ldouble_store_L67
+                BNE     _ldouble_store_L28
                 LDA     #21
                 TAY
                 TSC
@@ -2415,7 +2265,7 @@ _ldouble_store_L69
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L67
+_ldouble_store_L28
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -2501,14 +2351,7 @@ _ldouble_store_L67
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L71
-                LDA     #0
-                BRA     _ldouble_store_L72
-_ldouble_store_L71
-                LDA     #1
-_ldouble_store_L72
-                CMP     #0
-                BEQ     _ldouble_store_L70
+                BNE     _ldouble_store_L29
                 LDA     #22
                 TAY
                 TSC
@@ -2519,9 +2362,9 @@ _ldouble_store_L72
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L70
+_ldouble_store_L29
                 LDA     25,S   ; fccstk d=0 b=25
-                BEQ     _ldouble_store_L73
+                BEQ     _ldouble_store_L30
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -2529,8 +2372,8 @@ _ldouble_store_L70
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_long_hi
                 LDA     9,S   ; fccstk d=0 b=9
-                BRA     _ldouble_store_L74
-_ldouble_store_L73
+                BRA     _ldouble_store_L31
+_ldouble_store_L30
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -2538,7 +2381,7 @@ _ldouble_store_L73
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-_ldouble_store_L74
+_ldouble_store_L31
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi
@@ -2583,14 +2426,7 @@ _ldouble_store_L74
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L76
-                LDA     #0
-                BRA     _ldouble_store_L77
-_ldouble_store_L76
-                LDA     #1
-_ldouble_store_L77
-                CMP     #0
-                BEQ     _ldouble_store_L75
+                BNE     _ldouble_store_L32
                 LDA     #23
                 TAY
                 TSC
@@ -2601,7 +2437,7 @@ _ldouble_store_L77
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L75
+_ldouble_store_L32
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -2653,14 +2489,7 @@ _ldouble_store_L75
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L79
-                LDA     #0
-                BRA     _ldouble_store_L80
-_ldouble_store_L79
-                LDA     #1
-_ldouble_store_L80
-                CMP     #0
-                BEQ     _ldouble_store_L78
+                BNE     _ldouble_store_L33
                 LDA     #24
                 TAY
                 TSC
@@ -2671,7 +2500,7 @@ _ldouble_store_L80
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L78
+_ldouble_store_L33
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -2748,14 +2577,7 @@ _ldouble_store_L78
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L84
-                LDA     #0
-                BRA     _ldouble_store_L85
-_ldouble_store_L84
-                LDA     #1
-_ldouble_store_L85
-                CMP     #0
-                BNE     _ldouble_store_L82
+                BEQ     _ldouble_store_L35
                 LDA     #$51EB
                 STA     _fcc_long_hi
                 LDA     #$851F
@@ -2793,21 +2615,8 @@ _ldouble_store_L85
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L86
-                LDA     #0
-                BRA     _ldouble_store_L87
-_ldouble_store_L86
-                LDA     #1
-_ldouble_store_L87
-                CMP     #0
-                BNE     _ldouble_store_L82
-                LDA     #0
-                BRA     _ldouble_store_L83
-_ldouble_store_L82
-                LDA     #1
-_ldouble_store_L83
-                CMP     #0
-                BEQ     _ldouble_store_L81
+                BNE     _ldouble_store_L34
+_ldouble_store_L35
                 LDA     #25
                 TAY
                 TSC
@@ -2818,11 +2627,11 @@ _ldouble_store_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L81
+_ldouble_store_L34
                 LDA     71,S   ; fccstk d=0 b=71
                 TAX
                 CMP     #1
-                BNE     _ldouble_store_L91
+                BNE     _ldouble_store_L37
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -2860,30 +2669,10 @@ _ldouble_store_L81
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _ldouble_store_L93
-                LDA     #0
-                BRA     _ldouble_store_L94
-_ldouble_store_L93
-                LDA     #1
-_ldouble_store_L94
-                CMP     #0
-                BNE     _ldouble_store_L91
-                LDA     #0
-                BRA     _ldouble_store_L92
-_ldouble_store_L91
-                LDA     #1
-_ldouble_store_L92
-                CMP     #0
-                BNE     _ldouble_store_L89
+                BEQ     _ldouble_store_L37
                 LDA     81,S   ; fccstk d=0 b=81
-                BNE     _ldouble_store_L89
-                LDA     #0
-                BRA     _ldouble_store_L90
-_ldouble_store_L89
-                LDA     #1
-_ldouble_store_L90
-                CMP     #0
-                BEQ     _ldouble_store_L88
+                BEQ     _ldouble_store_L36
+_ldouble_store_L37
                 LDA     #26
                 TAY
                 TSC
@@ -2894,7 +2683,7 @@ _ldouble_store_L90
                 STA     _fcc_fb
                 TYA
                 RTL
-_ldouble_store_L88
+_ldouble_store_L36
                 LDA     #42
                 TAY
                 TSC

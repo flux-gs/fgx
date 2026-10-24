@@ -533,7 +533,8 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #98
-                BNE     _pstore1_L3
+                BEQ     *+5
+                BRL     _pstore1_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -574,14 +575,7 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #99
-                BNE     _pstore1_L3
-                LDA     #1
-                BRA     _pstore1_L4
-_pstore1_L3
-                LDA     #0
-_pstore1_L4
-                CMP     #0
-                BEQ     _pstore1_L1
+                BNE     _pstore1_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -622,14 +616,7 @@ _pstore1_L4
                 AND     #$00FF
                 TAX
                 CMP     #97
-                BNE     _pstore1_L1
-                LDA     #1
-                BRA     _pstore1_L2
-_pstore1_L1
-                LDA     #0
-_pstore1_L2
-                CMP     #0
-                BEQ     _pstore1_L0
+                BNE     _pstore1_L0
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
                 CLC
@@ -737,13 +724,13 @@ _pstore1_L0
                 AND     #$00FF
                 TAX
                 CMP     #120
-                BNE     _pstore1_L5
+                BNE     _pstore1_L1
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
                 CLC
                 ADC     #10
                 STA     15,S   ; fccstk d=0 b=15
-_pstore1_L5
+_pstore1_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -849,13 +836,13 @@ _pstore1_L5
                 AND     #$00FF
                 TAX
                 CMP     #120
-                BNE     _pstore1_L6
+                BNE     _pstore1_L2
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
                 CLC
                 ADC     #10
                 STA     15,S   ; fccstk d=0 b=15
-_pstore1_L6
+_pstore1_L2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -947,7 +934,7 @@ _pstore1_L6
                 AND     #$00FF
                 TAX
                 CMP     #90
-                BNE     _pstore1_L8
+                BNE     _pstore1_L3
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -988,20 +975,13 @@ _pstore1_L6
                 AND     #$00FF
                 TAX
                 CMP     #99
-                BNE     _pstore1_L8
-                LDA     #1
-                BRA     _pstore1_L9
-_pstore1_L8
-                LDA     #0
-_pstore1_L9
-                CMP     #0
-                BEQ     _pstore1_L7
+                BNE     _pstore1_L3
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
                 CLC
                 ADC     #12
                 STA     15,S   ; fccstk d=0 b=15
-_pstore1_L7
+_pstore1_L3
                 LDA     15,S   ; fccstk d=0 b=15
                 TAY
                 TSC

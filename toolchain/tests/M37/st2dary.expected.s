@@ -614,49 +614,28 @@ main_stkok        TCS
                 AND     #$00FF
                 TAX
                 CMP     #65
-                BNE     _st2dary_L5
+                BNE     _st2dary_L0
                 LDA     #1
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
                 CMP     #66
-                BNE     _st2dary_L5
-                LDA     #1
-                BRA     _st2dary_L6
-_st2dary_L5
-                LDA     #0
-_st2dary_L6
-                CMP     #0
-                BEQ     _st2dary_L3
+                BNE     _st2dary_L0
                 LDA     #2
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
                 CMP     #67
-                BNE     _st2dary_L3
-                LDA     #1
-                BRA     _st2dary_L4
-_st2dary_L3
-                LDA     #0
-_st2dary_L4
-                CMP     #0
-                BEQ     _st2dary_L1
+                BNE     _st2dary_L0
                 LDA     #3
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
                 CMP     #68
-                BNE     _st2dary_L1
-                LDA     #1
-                BRA     _st2dary_L2
-_st2dary_L1
-                LDA     #0
-_st2dary_L2
-                CMP     #0
-                BEQ     _st2dary_L0
+                BNE     _st2dary_L0
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -666,69 +645,41 @@ _st2dary_L0
                 LDA     _fcc_img1
                 TAX
                 CMP     #1
-                BNE     _st2dary_L14
+                BNE     _st2dary_L1
                 LDA     #0
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
                 CMP     #8
-                BNE     _st2dary_L14
-                LDA     #1
-                BRA     _st2dary_L15
-_st2dary_L14
-                LDA     #0
-_st2dary_L15
-                CMP     #0
-                BEQ     _st2dary_L12
+                BNE     _st2dary_L1
                 LDA     #1
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
                 CMP     #7
-                BNE     _st2dary_L12
-                LDA     #1
-                BRA     _st2dary_L13
-_st2dary_L12
-                LDA     #0
-_st2dary_L13
-                CMP     #0
-                BEQ     _st2dary_L10
+                BNE     _st2dary_L1
                 LDA     #2
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
                 CMP     #8
-                BNE     _st2dary_L10
-                LDA     #1
-                BRA     _st2dary_L11
-_st2dary_L10
-                LDA     #0
-_st2dary_L11
-                CMP     #0
-                BEQ     _st2dary_L8
+                BNE     _st2dary_L1
                 LDA     #3
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
                 CMP     #20
-                BNE     _st2dary_L8
-                LDA     #1
-                BRA     _st2dary_L9
-_st2dary_L8
-                LDA     #0
-_st2dary_L9
-                CMP     #0
-                BEQ     _st2dary_L7
+                BNE     _st2dary_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #30
                 STA     _fcc_img0
-_st2dary_L7
+_st2dary_L1
                 LDA     _fcc_img0
                 TAY
                 TSC

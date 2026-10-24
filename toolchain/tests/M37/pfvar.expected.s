@@ -80,7 +80,7 @@ _pfvar_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _pfvar_L2
+                BEQ     _pfvar_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _pfvar_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _pfvar_L2
-                LDA     #1
-                BRA     _pfvar_L3
-_pfvar_L2
-                LDA     #0
-_pfvar_L3
-                CMP     #0
-                BEQ     _pfvar_L1
+                BNE     _pfvar_L1
                 INC     _fcc_img0
                 BRA     _pfvar_L0
 _pfvar_L1
@@ -282,13 +275,13 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L4
+                BEQ     _pfvar_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L4
+_pfvar_L2
                 LDA     #12345
                 PHA
                 SEP     #$20
@@ -356,24 +349,17 @@ _pfvar_L4
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L6
+                BEQ     _pfvar_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #5
-                BNE     _pfvar_L6
-                LDA     #1
-                BRA     _pfvar_L7
-_pfvar_L6
-                LDA     #0
-_pfvar_L7
-                CMP     #0
-                BEQ     _pfvar_L5
+                BNE     _pfvar_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L5
+_pfvar_L3
                 LDA     #7
                 PHA
                 LDA     #4
@@ -442,13 +428,13 @@ _pfvar_L5
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L8
+                BEQ     _pfvar_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L8
+_pfvar_L4
                 SEP     #$20
                 MX      %10
                 PHB
@@ -520,13 +506,13 @@ _pfvar_L8
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L9
+                BEQ     _pfvar_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L9
+_pfvar_L5
                 LDA     #122
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
@@ -592,13 +578,13 @@ _pfvar_L9
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L10
+                BEQ     _pfvar_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L10
+_pfvar_L6
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_long_hi
                 LDA     7,S   ; fccstk d=0 b=7
@@ -672,13 +658,13 @@ _pfvar_L10
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L11
+                BEQ     _pfvar_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L11
+_pfvar_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_long_hi
                 LDA     11,S   ; fccstk d=0 b=11
@@ -752,13 +738,13 @@ _pfvar_L11
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _pfvar_L12
+                BEQ     _pfvar_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #3
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L12
+_pfvar_L8
                 LDA     #7
                 PHA
                 SEP     #$20
@@ -795,13 +781,13 @@ _pfvar_L12
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #4
-                BNE     _pfvar_L13
+                BNE     _pfvar_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #3
                 STA     1,S   ; fccstk d=0 b=1
-_pfvar_L13
+_pfvar_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

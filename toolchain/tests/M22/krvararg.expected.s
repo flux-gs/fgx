@@ -66,7 +66,7 @@ knr_stkok        TCS
                 FIN
                 TAX
                 CMP     #42
-                BNE     _krvararg_L1
+                BNE     _krvararg_L0
                 DO      8+knr_FRAMESIZE/256
                 TSC
                 CLC
@@ -79,14 +79,7 @@ knr_stkok        TCS
                 FIN
                 TAX
                 CMP     #99
-                BNE     _krvararg_L1
-                LDA     #1
-                BRA     _krvararg_L2
-_krvararg_L1
-                LDA     #0
-_krvararg_L2
-                CMP     #0
-                BEQ     _krvararg_L0
+                BNE     _krvararg_L0
                 LDA     #42
                 TAY
                 TSC

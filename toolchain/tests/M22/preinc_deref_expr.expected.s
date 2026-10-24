@@ -79,28 +79,22 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L2
                 LDA     #0
-                BRA     _preinc_deref_expr_L4
-_preinc_deref_expr_L3
-                LDA     #1
-_preinc_deref_expr_L4
-                CMP     #0
-                BNE     _preinc_deref_expr_L1
-                LDA     #0
-                BRA     _preinc_deref_expr_L2
-_preinc_deref_expr_L1
-                LDA     #1
+                BRA     _preinc_deref_expr_L3
 _preinc_deref_expr_L2
+                LDA     #1
+_preinc_deref_expr_L3
                 CMP     #0
                 BEQ     _preinc_deref_expr_L0
+_preinc_deref_expr_L1
                 LDA     #1
                 TAY
                 TSC
@@ -139,7 +133,7 @@ _preinc_deref_expr_L0
                 AND     #$00FF
                 TAX
                 CMP     #56
-                BNE     _preinc_deref_expr_L6
+                BNE     _preinc_deref_expr_L5
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -157,20 +151,13 @@ _preinc_deref_expr_L0
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _preinc_deref_expr_L8
+                BNE     _preinc_deref_expr_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _preinc_deref_expr_L8
-                LDA     #0
-                BRA     _preinc_deref_expr_L9
-_preinc_deref_expr_L8
-                LDA     #1
-_preinc_deref_expr_L9
-                CMP     #0
                 BNE     _preinc_deref_expr_L6
                 LDA     #0
                 BRA     _preinc_deref_expr_L7
@@ -178,7 +165,8 @@ _preinc_deref_expr_L6
                 LDA     #1
 _preinc_deref_expr_L7
                 CMP     #0
-                BEQ     _preinc_deref_expr_L5
+                BEQ     _preinc_deref_expr_L4
+_preinc_deref_expr_L5
                 LDA     #2
                 TAY
                 TSC
@@ -189,7 +177,7 @@ _preinc_deref_expr_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_preinc_deref_expr_L5
+_preinc_deref_expr_L4
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -210,7 +198,7 @@ _preinc_deref_expr_L5
                 AND     #$00FF
                 TAX
                 CMP     #50
-                BNE     _preinc_deref_expr_L11
+                BNE     _preinc_deref_expr_L9
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -228,28 +216,22 @@ _preinc_deref_expr_L5
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L10
                 LDA     #0
-                BRA     _preinc_deref_expr_L14
-_preinc_deref_expr_L13
+                BRA     _preinc_deref_expr_L11
+_preinc_deref_expr_L10
                 LDA     #1
-_preinc_deref_expr_L14
-                CMP     #0
-                BNE     _preinc_deref_expr_L11
-                LDA     #0
-                BRA     _preinc_deref_expr_L12
 _preinc_deref_expr_L11
-                LDA     #1
-_preinc_deref_expr_L12
                 CMP     #0
-                BEQ     _preinc_deref_expr_L10
+                BEQ     _preinc_deref_expr_L8
+_preinc_deref_expr_L9
                 LDA     #3
                 TAY
                 TSC
@@ -260,7 +242,7 @@ _preinc_deref_expr_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_preinc_deref_expr_L10
+_preinc_deref_expr_L8
                 LDA     #42
                 TAY
                 TSC

@@ -548,7 +548,7 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 PHK
-                PEA     _libso_shapes2_L21-1
+                PEA     _libso_shapes2_L3-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -559,10 +559,11 @@ main_stkok        TCS
                 DEC
                 PHA
                 RTL
-_libso_shapes2_L21
+_libso_shapes2_L3
                 TAX
                 CMP     #7
-                BNE     _libso_shapes2_L19
+                BEQ     *+5
+                BRL     _libso_shapes2_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_ptr
                 LDA     3,S   ; fccstk d=0 b=3
@@ -570,14 +571,8 @@ _libso_shapes2_L21
                 LDA     [_fcc_ptr]
                 TAX
                 CMP     #3
-                BNE     _libso_shapes2_L19
-                LDA     #1
-                BRA     _libso_shapes2_L20
-_libso_shapes2_L19
-                LDA     #0
-_libso_shapes2_L20
-                CMP     #0
-                BEQ     _libso_shapes2_L17
+                BEQ     *+5
+                BRL     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -613,14 +608,8 @@ _libso_shapes2_L20
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _libso_shapes2_L17
-                LDA     #1
-                BRA     _libso_shapes2_L18
-_libso_shapes2_L17
-                LDA     #0
-_libso_shapes2_L18
-                CMP     #0
-                BEQ     _libso_shapes2_L15
+                BNE     *+5
+                BRL     _libso_shapes2_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_ptr
                 LDA     7,S   ; fccstk d=0 b=7
@@ -628,14 +617,8 @@ _libso_shapes2_L18
                 LDA     [_fcc_ptr]
                 TAX
                 CMP     #5
-                BNE     _libso_shapes2_L15
-                LDA     #1
-                BRA     _libso_shapes2_L16
-_libso_shapes2_L15
-                LDA     #0
-_libso_shapes2_L16
-                CMP     #0
-                BEQ     _libso_shapes2_L13
+                BEQ     *+5
+                BRL     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -654,14 +637,8 @@ _libso_shapes2_L16
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #4
-                BNE     _libso_shapes2_L13
-                LDA     #1
-                BRA     _libso_shapes2_L14
-_libso_shapes2_L13
-                LDA     #0
-_libso_shapes2_L14
-                CMP     #0
-                BEQ     _libso_shapes2_L11
+                BEQ     *+5
+                BRL     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -687,14 +664,8 @@ _libso_shapes2_L14
                 FGX2_FARCALL _fcc_dtol
                 TAX
                 CMP     #3
-                BNE     _libso_shapes2_L11
-                LDA     #1
-                BRA     _libso_shapes2_L12
-_libso_shapes2_L11
-                LDA     #0
-_libso_shapes2_L12
-                CMP     #0
-                BEQ     _libso_shapes2_L9
+                BEQ     *+5
+                BRL     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -719,14 +690,7 @@ _libso_shapes2_L12
                 LDA     [_fcc_fpr0],Y
                 TAX
                 CMP     #15
-                BNE     _libso_shapes2_L9
-                LDA     #1
-                BRA     _libso_shapes2_L10
-_libso_shapes2_L9
-                LDA     #0
-_libso_shapes2_L10
-                CMP     #0
-                BEQ     _libso_shapes2_L7
+                BNE     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -754,14 +718,7 @@ _libso_shapes2_L10
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #11
-                BNE     _libso_shapes2_L7
-                LDA     #1
-                BRA     _libso_shapes2_L8
-_libso_shapes2_L7
-                LDA     #0
-_libso_shapes2_L8
-                CMP     #0
-                BEQ     _libso_shapes2_L5
+                BNE     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -777,14 +734,7 @@ _libso_shapes2_L8
                 AND     #$00FF
                 TAX
                 CMP     #7
-                BNE     _libso_shapes2_L5
-                LDA     #1
-                BRA     _libso_shapes2_L6
-_libso_shapes2_L5
-                LDA     #0
-_libso_shapes2_L6
-                CMP     #0
-                BEQ     _libso_shapes2_L3
+                BNE     _libso_shapes2_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -797,19 +747,12 @@ _libso_shapes2_L6
                 ADC     #63
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                BEQ     _libso_shapes2_L22
+                BEQ     _libso_shapes2_L4
                 LDA     #0
-                BRA     _libso_shapes2_L23
-_libso_shapes2_L22
-                LDA     #1
-_libso_shapes2_L23
-                CMP     #0
-                BEQ     _libso_shapes2_L3
-                LDA     #1
-                BRA     _libso_shapes2_L4
-_libso_shapes2_L3
-                LDA     #0
+                BRA     _libso_shapes2_L5
 _libso_shapes2_L4
+                LDA     #1
+_libso_shapes2_L5
                 CMP     #0
                 BEQ     _libso_shapes2_L1
                 LDA     #42

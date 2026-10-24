@@ -87,14 +87,8 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _init_md_wide_L1
-                LDA     #0
-                BRA     _init_md_wide_L2
-_init_md_wide_L1
-                LDA     #1
-_init_md_wide_L2
-                CMP     #0
                 BEQ     _init_md_wide_L0
+_init_md_wide_L1
                 LDA     #1
                 TAY
                 TSC
@@ -141,7 +135,7 @@ _init_md_wide_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _init_md_wide_L4
+                BNE     _init_md_wide_L3
                 LDA     #1
                 ASL
                 ASL
@@ -175,14 +169,8 @@ _init_md_wide_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _init_md_wide_L4
-                LDA     #0
-                BRA     _init_md_wide_L5
-_init_md_wide_L4
-                LDA     #1
-_init_md_wide_L5
-                CMP     #0
-                BEQ     _init_md_wide_L3
+                BEQ     _init_md_wide_L2
+_init_md_wide_L3
                 LDA     #2
                 TAY
                 TSC
@@ -193,7 +181,7 @@ _init_md_wide_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_init_md_wide_L3
+_init_md_wide_L2
                 LDA     #0
                 ASL
                 ASL
@@ -250,7 +238,7 @@ _init_md_wide_L3
                 LDA     #1
                 CMP     #0
                 BEQ     *+5
-                BRL     _init_md_wide_L7
+                BRL     _init_md_wide_L5
                 LDA     #0
                 ASL
                 ASL
@@ -310,14 +298,8 @@ _init_md_wide_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _init_md_wide_L7
-                LDA     #0
-                BRA     _init_md_wide_L8
-_init_md_wide_L7
-                LDA     #1
-_init_md_wide_L8
-                CMP     #0
-                BEQ     _init_md_wide_L6
+                BEQ     _init_md_wide_L4
+_init_md_wide_L5
                 LDA     #3
                 TAY
                 TSC
@@ -328,7 +310,7 @@ _init_md_wide_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_init_md_wide_L6
+_init_md_wide_L4
                 LDA     #1
                 ASL
                 ASL
@@ -383,8 +365,7 @@ _init_md_wide_L6
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     _init_md_wide_L10
+                BNE     _init_md_wide_L7
                 LDA     #1
                 ASL
                 ASL
@@ -439,14 +420,8 @@ _init_md_wide_L6
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                BNE     _init_md_wide_L10
-                LDA     #0
-                BRA     _init_md_wide_L11
-_init_md_wide_L10
-                LDA     #1
-_init_md_wide_L11
-                CMP     #0
-                BEQ     _init_md_wide_L9
+                BEQ     _init_md_wide_L6
+_init_md_wide_L7
                 LDA     #4
                 TAY
                 TSC
@@ -457,7 +432,7 @@ _init_md_wide_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_init_md_wide_L9
+_init_md_wide_L6
                 LDA     #42
                 TAY
                 TSC

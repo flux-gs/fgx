@@ -67,17 +67,10 @@ main_stkok        TCS
 _specorder_L0
                 LDA     #4
                 CMP     #4
-                BNE     _specorder_L2
+                BNE     _specorder_L1
                 LDA     #4
                 CMP     #4
-                BNE     _specorder_L2
-                LDA     #1
-                BRA     _specorder_L3
-_specorder_L2
-                LDA     #0
-_specorder_L3
-                CMP     #0
-                BEQ     _specorder_L1
+                BNE     _specorder_L1
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -103,13 +96,13 @@ _specorder_L1
                 TYA
                 JSR     _fcc_long_gtu
                 CMP     #0
-                BEQ     _specorder_L4
+                BEQ     _specorder_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
-_specorder_L4
+_specorder_L2
                 LDA     #$FFFF
                 LDX     #0
                 STX     _fcc_long_hi
@@ -131,13 +124,13 @@ _specorder_L4
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _specorder_L5
+                BEQ     _specorder_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #5
                 STA     _fcc_img0
-_specorder_L5
+_specorder_L3
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -178,13 +171,13 @@ _specorder_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BEQ     _specorder_L6
+                BEQ     _specorder_L4
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img0
-_specorder_L6
+_specorder_L4
                 LDA     _fcc_img0
                 TAY
                 TSC

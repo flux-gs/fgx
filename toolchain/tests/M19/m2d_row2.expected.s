@@ -185,18 +185,11 @@ _m2d_row2_L1
                 LDA     #6
                 TAX
                 CMP     #6
-                BNE     _m2d_row2_L3
+                BNE     _m2d_row2_L2
                 LDA     #6
                 TAX
                 CMP     #6
-                BNE     _m2d_row2_L3
-                LDA     #1
-                BRA     _m2d_row2_L4
-_m2d_row2_L3
-                LDA     #0
-_m2d_row2_L4
-                CMP     #0
-                BEQ     _m2d_row2_L2
+                BNE     _m2d_row2_L2
                 LDA     _fcc_img0
                 TAX
                 CLC
@@ -206,24 +199,17 @@ _m2d_row2_L2
                 LDA     #1
                 TAX
                 CMP     #1
-                BNE     _m2d_row2_L6
+                BNE     _m2d_row2_L3
                 LDA     #1
                 TAX
                 CMP     #1
-                BNE     _m2d_row2_L6
-                LDA     #1
-                BRA     _m2d_row2_L7
-_m2d_row2_L6
-                LDA     #0
-_m2d_row2_L7
-                CMP     #0
-                BEQ     _m2d_row2_L5
+                BNE     _m2d_row2_L3
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
-_m2d_row2_L5
+_m2d_row2_L3
                 LDA     #2
                 CLC
                 ADC     #S3
@@ -277,13 +263,13 @@ _m2d_row2_L5
                 AND     #$00FF
                 TAX
                 CMP     #104
-                BNE     _m2d_row2_L8
+                BNE     _m2d_row2_L4
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
-_m2d_row2_L8
+_m2d_row2_L4
                 SEP     #$20
                 MX      %10
                 LDA     ph+2
@@ -322,13 +308,13 @@ _m2d_row2_L8
                 AND     #$00FF
                 TAX
                 CMP     #104
-                BNE     _m2d_row2_L9
+                BNE     _m2d_row2_L5
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #32
                 STA     _fcc_img0
-_m2d_row2_L9
+_m2d_row2_L5
                 LDA     _fcc_img1
                 STA     _fcc_tmp_b
                 ASL
@@ -376,13 +362,13 @@ _m2d_row2_L9
                 AND     #$00FF
                 TAX
                 CMP     #122
-                BNE     _m2d_row2_L10
+                BNE     _m2d_row2_L6
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #64
                 STA     _fcc_img0
-_m2d_row2_L10
+_m2d_row2_L6
                 SEP     #$20
                 MX      %10
                 LDA     pf+2
@@ -435,27 +421,27 @@ _m2d_row2_L10
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _m2d_row2_L12
+                BNE     _m2d_row2_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _m2d_row2_L12
+                BNE     _m2d_row2_L8
                 LDA     #1
-                BRA     _m2d_row2_L13
-_m2d_row2_L12
+                BRA     _m2d_row2_L9
+_m2d_row2_L8
                 LDA     #0
-_m2d_row2_L13
+_m2d_row2_L9
                 CMP     #0
-                BEQ     _m2d_row2_L11
+                BEQ     _m2d_row2_L7
                 LDA     _fcc_img0
                 TAX
                 CLC
                 ADC     #128
                 STA     _fcc_img0
-_m2d_row2_L11
+_m2d_row2_L7
                 LDA     _fcc_img0
                 TAY
                 TSC

@@ -4095,17 +4095,11 @@ _ufssb_L27
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _ufssb_L31
+                BVC     _ufssb_L30
                 EOR     #$8000
-_ufssb_L31
-                BMI     _ufssb_L29
-                LDA     #0
-                BRA     _ufssb_L30
-_ufssb_L29
-                LDA     #1
 _ufssb_L30
-                CMP     #0
-                BEQ     _ufssb_L28
+                BPL     _ufssb_L28
+_ufssb_L29
                 LDA     #0
                 TAY
                 TSC
@@ -4141,7 +4135,7 @@ _ufssb_L28
                 STA     _fcc_fpr0
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
-                BMI     _ufssb_L33
+                BMI     _ufssb_L32
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -4150,17 +4144,11 @@ _ufssb_L28
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _ufssb_L35
+                BVC     _ufssb_L33
                 EOR     #$8000
-_ufssb_L35
-                BMI     _ufssb_L33
-                LDA     #0
-                BRA     _ufssb_L34
 _ufssb_L33
-                LDA     #1
-_ufssb_L34
-                CMP     #0
-                BEQ     _ufssb_L32
+                BPL     _ufssb_L31
+_ufssb_L32
                 LDA     #0
                 TAY
                 TSC
@@ -4171,7 +4159,7 @@ _ufssb_L34
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L32
+_ufssb_L31
                 DO      8+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4219,7 +4207,7 @@ _ufssb_L32
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _ufssb_L36
+                BEQ     _ufssb_L34
                 LDA     #0
                 TAY
                 TSC
@@ -4230,7 +4218,7 @@ _ufssb_L32
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L36
+_ufssb_L34
                 DO      12+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4269,7 +4257,7 @@ _ufssb_L36
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ufssb_L38
+                BEQ     _ufssb_L35
                 DO      8+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4333,14 +4321,7 @@ _ufssb_L36
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BEQ     _ufssb_L38
-                LDA     #1
-                BRA     _ufssb_L39
-_ufssb_L38
-                LDA     #0
-_ufssb_L39
-                CMP     #0
-                BEQ     _ufssb_L37
+                BEQ     _ufssb_L35
                 LDA     #0
                 TAY
                 TSC
@@ -4351,7 +4332,7 @@ _ufssb_L39
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L37
+_ufssb_L35
                 LDA     #1
                 TAY
                 TSC
@@ -4412,7 +4393,7 @@ main_stkok        TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #126
-                BEQ     _ufssb_L40
+                BEQ     _ufssb_L36
                 LDA     #1
                 TAY
                 TSC
@@ -4423,11 +4404,11 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L40
+_ufssb_L36
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 CMP     #40
-                BEQ     _ufssb_L41
+                BEQ     _ufssb_L37
                 LDA     #2
                 TAY
                 TSC
@@ -4438,11 +4419,11 @@ _ufssb_L40
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L41
+_ufssb_L37
                 LDA     209,S   ; fccstk d=0 b=209
                 TAX
                 CMP     #92
-                BEQ     _ufssb_L42
+                BEQ     _ufssb_L38
                 LDA     #3
                 TAY
                 TSC
@@ -4453,7 +4434,7 @@ _ufssb_L41
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L42
+_ufssb_L38
                 TSC
                 CLC
                 ADC     #419
@@ -4462,7 +4443,7 @@ _ufssb_L42
                 LDA     [_fcc_fp]
                 TAX
                 CMP     #1368
-                BEQ     _ufssb_L43
+                BEQ     _ufssb_L39
                 LDA     #4
                 TAY
                 TSC
@@ -4473,7 +4454,7 @@ _ufssb_L42
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L43
+_ufssb_L39
                 TSC
                 CLC
                 ADC     #421
@@ -4482,7 +4463,7 @@ _ufssb_L43
                 LDA     [_fcc_fp]
                 TAX
                 CMP     #7
-                BEQ     _ufssb_L44
+                BEQ     _ufssb_L40
                 LDA     #5
                 TAY
                 TSC
@@ -4493,7 +4474,7 @@ _ufssb_L43
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L44
+_ufssb_L40
                 TSC
                 CLC
                 ADC     #423
@@ -4502,7 +4483,7 @@ _ufssb_L44
                 LDA     [_fcc_fp]
                 TAX
                 CMP     #400
-                BEQ     _ufssb_L45
+                BEQ     _ufssb_L41
                 LDA     #6
                 TAY
                 TSC
@@ -4513,7 +4494,7 @@ _ufssb_L44
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L45
+_ufssb_L41
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4535,7 +4516,7 @@ _ufssb_L45
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ufssb_L46
+                BEQ     _ufssb_L42
                 LDA     #7
                 TAY
                 TSC
@@ -4546,7 +4527,7 @@ _ufssb_L45
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L46
+_ufssb_L42
                 TSC
                 CLC
                 ADC     #417
@@ -4578,7 +4559,7 @@ _ufssb_L46
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ufssb_L47
+                BEQ     _ufssb_L43
                 LDA     #8
                 TAY
                 TSC
@@ -4589,7 +4570,7 @@ _ufssb_L46
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L47
+_ufssb_L43
                 TSC
                 CLC
                 ADC     #413
@@ -4621,7 +4602,7 @@ _ufssb_L47
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ufssb_L48
+                BEQ     _ufssb_L44
                 LDA     #9
                 TAY
                 TSC
@@ -4632,7 +4613,7 @@ _ufssb_L47
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L48
+_ufssb_L44
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -4659,14 +4640,8 @@ _ufssb_L48
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ufssb_L50
-                LDA     #0
-                BRA     _ufssb_L51
-_ufssb_L50
-                LDA     #1
-_ufssb_L51
                 CMP     #0
-                BEQ     _ufssb_L49
+                BNE     _ufssb_L45
                 LDA     #10
                 TAY
                 TSC
@@ -4677,7 +4652,7 @@ _ufssb_L51
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L49
+_ufssb_L45
                 LDA     #7942
                 JSR     _fcc_long_from_int
                 TAY
@@ -4704,14 +4679,8 @@ _ufssb_L49
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ufssb_L53
-                LDA     #0
-                BRA     _ufssb_L54
-_ufssb_L53
-                LDA     #1
-_ufssb_L54
                 CMP     #0
-                BEQ     _ufssb_L52
+                BNE     _ufssb_L46
                 LDA     #11
                 TAY
                 TSC
@@ -4722,7 +4691,7 @@ _ufssb_L54
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L52
+_ufssb_L46
                 LDA     #100
                 JSR     _fcc_long_from_int
                 TAY
@@ -4749,7 +4718,7 @@ _ufssb_L52
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ufssb_L55
+                BEQ     _ufssb_L47
                 LDA     #12
                 TAY
                 TSC
@@ -4760,7 +4729,7 @@ _ufssb_L52
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L55
+_ufssb_L47
                 LDA     #42
                 TAY
                 TSC

@@ -80,7 +80,7 @@ _ctimeops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _ctimeops_L2
+                BEQ     _ctimeops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _ctimeops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _ctimeops_L2
-                LDA     #1
-                BRA     _ctimeops_L3
-_ctimeops_L2
-                LDA     #0
-_ctimeops_L3
-                CMP     #0
-                BEQ     _ctimeops_L1
+                BNE     _ctimeops_L1
                 INC     _fcc_img0
                 BRA     _ctimeops_L0
 _ctimeops_L1
@@ -241,13 +234,13 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ctimeops_L4
+                BEQ     _ctimeops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
-_ctimeops_L4
+_ctimeops_L2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -288,13 +281,13 @@ _ctimeops_L4
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ctimeops_L5
+                BEQ     _ctimeops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
-_ctimeops_L5
+_ctimeops_L3
                 SEP     #$20
                 MX      %10
                 PHB
@@ -335,13 +328,13 @@ _ctimeops_L5
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ctimeops_L6
+                BEQ     _ctimeops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
-_ctimeops_L6
+_ctimeops_L4
                 SEP     #$20
                 MX      %10
                 PHB
@@ -382,13 +375,13 @@ _ctimeops_L6
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _ctimeops_L7
+                BEQ     _ctimeops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CLC
                 ADC     #12
                 STA     1,S   ; fccstk d=0 b=1
-_ctimeops_L7
+_ctimeops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

@@ -717,7 +717,7 @@ _longptr_L18
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _longptr_L22
+                BEQ     _longptr_L21
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
                 LDA     19,S   ; fccstk d=0 b=19
@@ -739,21 +739,14 @@ _longptr_L18
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _longptr_L24
+                BNE     _longptr_L22
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _longptr_L24
-                LDA     #1
-                BRA     _longptr_L25
-_longptr_L24
-                LDA     #0
-_longptr_L25
-                CMP     #0
-                BEQ     _longptr_L22
+                BNE     _longptr_L22
                 LDA     #1
                 BRA     _longptr_L23
 _longptr_L22

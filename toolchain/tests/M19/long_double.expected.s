@@ -401,32 +401,18 @@ _long_double_L2
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _long_double_L6
+                BNE     _long_double_L3
                 LDA     #8
                 TAX
                 CMP     #8
-                BNE     _long_double_L6
-                LDA     #1
-                BRA     _long_double_L7
-_long_double_L6
-                LDA     #0
-_long_double_L7
-                CMP     #0
-                BEQ     _long_double_L4
+                BNE     _long_double_L3
                 LDA     #8
                 SEC
                 SBC     #8
-                BVC     _long_double_L8
+                BVC     _long_double_L4
                 EOR     #$8000
-_long_double_L8
-                BMI     _long_double_L4
-                LDA     #1
-                BRA     _long_double_L5
 _long_double_L4
-                LDA     #0
-_long_double_L5
-                CMP     #0
-                BEQ     _long_double_L3
+                BMI     _long_double_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
@@ -500,7 +486,7 @@ _long_double_L3
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _long_double_L10
+                BEQ     _long_double_L5
                 LDA     #10
                 PHA
                 LDA     #2
@@ -510,20 +496,13 @@ _long_double_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _long_double_L10
-                LDA     #1
-                BRA     _long_double_L11
-_long_double_L10
-                LDA     #0
-_long_double_L11
-                CMP     #0
-                BEQ     _long_double_L9
+                BNE     _long_double_L5
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #11
                 STA     13,S   ; fccstk d=0 b=13
-_long_double_L9
+_long_double_L5
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -591,13 +570,13 @@ _long_double_L9
                 ADC     #12
                 TCS
                 TYA
-                BEQ     _long_double_L12
+                BEQ     _long_double_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 CLC
                 ADC     #11
                 STA     13,S   ; fccstk d=0 b=13
-_long_double_L12
+_long_double_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC

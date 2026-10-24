@@ -62,14 +62,8 @@ _strblob_L2
                 AND     #$00FF
                 TAX
                 CMP     #65
-                BNE     _strblob_L4
-                LDA     #0
-                BRA     _strblob_L5
-_strblob_L4
-                LDA     #1
-_strblob_L5
-                CMP     #0
                 BEQ     _strblob_L3
+_strblob_L4
                 LDA     #2
                 TAY
                 TSC
@@ -87,7 +81,7 @@ _strblob_L3
                 AND     #$00FF
                 TAX
                 CMP     #66
-                BEQ     _strblob_L6
+                BEQ     _strblob_L5
                 LDA     #3
                 TAY
                 TSC
@@ -98,14 +92,14 @@ _strblob_L3
                 STA     _fcc_fb
                 TYA
                 RTL
-_strblob_L6
+_strblob_L5
                 LDA     #2108
                 TAX
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
                 CMP     #64
-                BEQ     _strblob_L7
+                BEQ     _strblob_L6
                 LDA     #4
                 TAY
                 TSC
@@ -116,12 +110,12 @@ _strblob_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_strblob_L7
+_strblob_L6
                 LDA     #2109
                 TAX
                 LDA:    _strblob_big,X
                 AND     #$00FF
-                BEQ     _strblob_L8
+                BEQ     _strblob_L7
                 LDA     #5
                 TAY
                 TSC
@@ -132,7 +126,7 @@ _strblob_L7
                 STA     _fcc_fb
                 TYA
                 RTL
-_strblob_L8
+_strblob_L7
                 LDA     #42
                 TAY
                 TSC

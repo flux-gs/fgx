@@ -251,19 +251,11 @@ _typedefunsigned_L3
 _typedefunsigned_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
+                LDX     #10
                 STA     _fcc_tmp_b
                 TXA
-                JSR     _fcc_gtu16
-                CMP     #0
-                BEQ     _typedefunsigned_L6
-                LDA     #0
-                BRA     _typedefunsigned_L7
-_typedefunsigned_L6
-                LDA     #1
-_typedefunsigned_L7
-                CMP     #0
-                BEQ     _typedefunsigned_L5
+                CMP     _fcc_tmp_b
+                BCC     _typedefunsigned_L5
                 LDA     #48
                 TAY
                 TSC
@@ -293,7 +285,7 @@ _typedefunsigned_L5
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _typedefunsigned_L8
+                BEQ     _typedefunsigned_L6
                 LDA     #49
                 TAY
                 TSC
@@ -304,14 +296,14 @@ _typedefunsigned_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L8
+_typedefunsigned_L6
                 LDA     _fcc_img0
                 LDX     #100
                 STX     _fcc_tmp_b
                 JSR     _fcc_divu16
                 TAX
                 CMP     #400
-                BEQ     _typedefunsigned_L9
+                BEQ     _typedefunsigned_L7
                 LDA     #50
                 TAY
                 TSC
@@ -322,7 +314,7 @@ _typedefunsigned_L8
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L9
+_typedefunsigned_L7
                 LDA     #32768
                 STA     _fcc_img0
                 LDA     #32768
@@ -341,7 +333,7 @@ _typedefunsigned_L9
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     _typedefunsigned_L10
+                BEQ     _typedefunsigned_L8
                 LDA     #51
                 TAY
                 TSC
@@ -352,7 +344,7 @@ _typedefunsigned_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L10
+_typedefunsigned_L8
                 LDA     _fcc_img0
                 LSR
                 LSR
@@ -360,7 +352,7 @@ _typedefunsigned_L10
                 LSR
                 TAX
                 CMP     #2048
-                BEQ     _typedefunsigned_L11
+                BEQ     _typedefunsigned_L9
                 LDA     #52
                 TAY
                 TSC
@@ -371,7 +363,7 @@ _typedefunsigned_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L11
+_typedefunsigned_L9
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$9C40
@@ -388,7 +380,7 @@ _typedefunsigned_L11
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _typedefunsigned_L12
+                BEQ     _typedefunsigned_L10
                 LDA     #53
                 TAY
                 TSC
@@ -399,7 +391,7 @@ _typedefunsigned_L11
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L12
+_typedefunsigned_L10
                 LDA     #$9C40
                 STA     _fcc_img2
                 LDA     #$0000
@@ -427,7 +419,7 @@ _typedefunsigned_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _typedefunsigned_L13
+                BEQ     _typedefunsigned_L11
                 LDA     #54
                 TAY
                 TSC
@@ -438,7 +430,7 @@ _typedefunsigned_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L13
+_typedefunsigned_L11
                 LDA     _fcc_img2
                 LDX     #0
                 STX     _fcc_long_hi
@@ -460,7 +452,7 @@ _typedefunsigned_L13
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _typedefunsigned_L14
+                BEQ     _typedefunsigned_L12
                 LDA     #55
                 TAY
                 TSC
@@ -471,7 +463,7 @@ _typedefunsigned_L13
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L14
+_typedefunsigned_L12
                 LDA     #200
                 STA     _fcc_img3
                 LDA     #200
@@ -484,7 +476,7 @@ _typedefunsigned_L14
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     _typedefunsigned_L15
+                BEQ     _typedefunsigned_L13
                 LDA     #56
                 TAY
                 TSC
@@ -495,12 +487,12 @@ _typedefunsigned_L14
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L15
+_typedefunsigned_L13
                 LDA     _fcc_img3
                 AND     #$00FF
                 TAX
                 CMP     #200
-                BEQ     _typedefunsigned_L16
+                BEQ     _typedefunsigned_L14
                 LDA     #57
                 TAY
                 TSC
@@ -511,7 +503,7 @@ _typedefunsigned_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_typedefunsigned_L16
+_typedefunsigned_L14
                 LDA     #42
                 TAY
                 TSC

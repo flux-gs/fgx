@@ -263,10 +263,10 @@ _spawnops_L4
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _spawnops_L8
+                BVC     _spawnops_L6
                 EOR     #$8000
-_spawnops_L8
-                BPL     _spawnops_L6
+_spawnops_L6
+                BPL     _spawnops_L5
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -295,14 +295,7 @@ _spawnops_L8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _spawnops_L6
-                LDA     #1
-                BRA     _spawnops_L7
-_spawnops_L6
-                LDA     #0
-_spawnops_L7
-                CMP     #0
-                BEQ     _spawnops_L5
+                BNE     _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 CLC

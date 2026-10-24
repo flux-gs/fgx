@@ -80,7 +80,7 @@ _f_sci_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                BEQ     _f_sci_L2
+                BEQ     _f_sci_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -107,14 +107,7 @@ _f_sci_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     _f_sci_L2
-                LDA     #1
-                BRA     _f_sci_L3
-_f_sci_L2
-                LDA     #0
-_f_sci_L3
-                CMP     #0
-                BEQ     _f_sci_L1
+                BNE     _f_sci_L1
                 INC     _fcc_img0
                 BRA     _f_sci_L0
 _f_sci_L1
@@ -246,14 +239,7 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_sci_L5
-                LDA     #0
-                BRA     _f_sci_L6
-_f_sci_L5
-                LDA     #1
-_f_sci_L6
-                CMP     #0
-                BEQ     _f_sci_L4
+                BNE     _f_sci_L2
                 LDA     #1
                 TAY
                 TSC
@@ -264,7 +250,7 @@ _f_sci_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_sci_L4
+_f_sci_L2
                 LDA     #16384
                 STA     _fcc_q3
                 LDA     #0
@@ -341,14 +327,7 @@ _f_sci_L4
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_sci_L8
-                LDA     #0
-                BRA     _f_sci_L9
-_f_sci_L8
-                LDA     #1
-_f_sci_L9
-                CMP     #0
-                BEQ     _f_sci_L7
+                BNE     _f_sci_L3
                 LDA     #2
                 TAY
                 TSC
@@ -359,7 +338,7 @@ _f_sci_L9
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_sci_L7
+_f_sci_L3
                 LDA     #16352
                 STA     _fcc_q3
                 LDA     #0
@@ -436,14 +415,7 @@ _f_sci_L7
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_sci_L11
-                LDA     #0
-                BRA     _f_sci_L12
-_f_sci_L11
-                LDA     #1
-_f_sci_L12
-                CMP     #0
-                BEQ     _f_sci_L10
+                BNE     _f_sci_L4
                 LDA     #3
                 TAY
                 TSC
@@ -454,7 +426,7 @@ _f_sci_L12
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_sci_L10
+_f_sci_L4
                 LDA     #16473
                 STA     _fcc_q3
                 LDA     #0
@@ -531,14 +503,7 @@ _f_sci_L10
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_sci_L14
-                LDA     #0
-                BRA     _f_sci_L15
-_f_sci_L14
-                LDA     #1
-_f_sci_L15
-                CMP     #0
-                BEQ     _f_sci_L13
+                BNE     _f_sci_L5
                 LDA     #4
                 TAY
                 TSC
@@ -549,7 +514,7 @@ _f_sci_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_sci_L13
+_f_sci_L5
                 LDA     #16336
                 STA     _fcc_q3
                 LDA     #0
@@ -626,14 +591,7 @@ _f_sci_L13
                 ADC     #8
                 TCS
                 TYA
-                BEQ     _f_sci_L17
-                LDA     #0
-                BRA     _f_sci_L18
-_f_sci_L17
-                LDA     #1
-_f_sci_L18
-                CMP     #0
-                BEQ     _f_sci_L16
+                BNE     _f_sci_L6
                 LDA     #5
                 TAY
                 TSC
@@ -644,7 +602,7 @@ _f_sci_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_f_sci_L16
+_f_sci_L6
                 LDA     #42
                 TAY
                 TSC

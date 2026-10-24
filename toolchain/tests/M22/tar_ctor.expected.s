@@ -123,21 +123,22 @@ nullslot_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L4
+                BNE     _tar_ctor_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L4
+                BNE     _tar_ctor_L2
                 LDA     #0
-                BRA     _tar_ctor_L5
-_tar_ctor_L4
+                BRA     _tar_ctor_L3
+_tar_ctor_L2
                 LDA     #1
-_tar_ctor_L5
+_tar_ctor_L3
                 CMP     #0
-                BEQ     _tar_ctor_L2
+                BNE     *+5
+                BRL     _tar_ctor_L0
                 DO      8+nullslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -178,26 +179,19 @@ _tar_ctor_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L6
+                BNE     _tar_ctor_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L6
+                BNE     _tar_ctor_L4
                 LDA     #0
-                BRA     _tar_ctor_L7
-_tar_ctor_L6
+                BRA     _tar_ctor_L5
+_tar_ctor_L4
                 LDA     #1
-_tar_ctor_L7
-                CMP     #0
-                BEQ     _tar_ctor_L2
-                LDA     #1
-                BRA     _tar_ctor_L3
-_tar_ctor_L2
-                LDA     #0
-_tar_ctor_L3
+_tar_ctor_L5
                 CMP     #0
                 BEQ     _tar_ctor_L0
                 DO      8+nullslot_FRAMESIZE/256
@@ -240,19 +234,19 @@ _tar_ctor_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L8
+                BNE     _tar_ctor_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L8
+                BNE     _tar_ctor_L6
                 LDA     #0
-                BRA     _tar_ctor_L9
-_tar_ctor_L8
+                BRA     _tar_ctor_L7
+_tar_ctor_L6
                 LDA     #1
-_tar_ctor_L9
+_tar_ctor_L7
                 CMP     #0
                 BEQ     _tar_ctor_L0
                 LDA     #1
@@ -309,7 +303,7 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #20
-                BNE     _tar_ctor_L11
+                BNE     _tar_ctor_L9
                 LDA     #1
                 ASL
                 ASL
@@ -331,25 +325,19 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #30
-                BNE     _tar_ctor_L11
-                LDA     #0
-                BRA     _tar_ctor_L12
-_tar_ctor_L11
-                LDA     #1
-_tar_ctor_L12
-                CMP     #0
-                BEQ     _tar_ctor_L10
+                BEQ     _tar_ctor_L8
+_tar_ctor_L9
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L10
+_tar_ctor_L8
                 LDA     #8
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #8
-                BEQ     _tar_ctor_L13
+                BEQ     _tar_ctor_L10
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L13
+_tar_ctor_L10
                 PHA
                 SEP     #$20
                 MX      %10
@@ -365,7 +353,7 @@ _tar_ctor_L13
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_tar_ctor_L14
+_tar_ctor_L11
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -391,7 +379,7 @@ _tar_ctor_L14
                 PLA
                 JSR     _fcc_ltu16
                 CMP     #0
-                BEQ     _tar_ctor_L16
+                BEQ     _tar_ctor_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -402,47 +390,34 @@ _tar_ctor_L14
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_tar_ctor_L15
+_tar_ctor_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRA     _tar_ctor_L14
-_tar_ctor_L16
+                BRA     _tar_ctor_L11
+_tar_ctor_L13
                 LDA     blk+4
                 AND     #$00FF
                 TAX
                 CMP     #42
-                BNE     _tar_ctor_L20
+                BNE     _tar_ctor_L15
                 LDA     blk+11
                 AND     #$00FF
                 TAX
                 CMP     #42
-                BNE     _tar_ctor_L20
-                LDA     #0
-                BRA     _tar_ctor_L21
-_tar_ctor_L20
-                LDA     #1
-_tar_ctor_L21
-                CMP     #0
-                BNE     _tar_ctor_L18
+                BNE     _tar_ctor_L15
                 LDA     blk+4
                 AND     #$00FF
                 TAX
                 CMP     #42
-                BNE     _tar_ctor_L18
-                LDA     #0
-                BRA     _tar_ctor_L19
-_tar_ctor_L18
-                LDA     #1
-_tar_ctor_L19
-                CMP     #0
-                BEQ     _tar_ctor_L17
+                BEQ     _tar_ctor_L14
+_tar_ctor_L15
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L17
+_tar_ctor_L14
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -532,7 +507,7 @@ _tar_ctor_L17
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _tar_ctor_L23
+                BNE     _tar_ctor_L17
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -572,17 +547,11 @@ _tar_ctor_L17
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _tar_ctor_L23
-                LDA     #0
-                BRA     _tar_ctor_L24
-_tar_ctor_L23
-                LDA     #1
-_tar_ctor_L24
-                CMP     #0
-                BEQ     _tar_ctor_L22
+                BEQ     _tar_ctor_L16
+_tar_ctor_L17
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L22
+_tar_ctor_L16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -669,7 +638,7 @@ _tar_ctor_L22
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _tar_ctor_L26
+                BNE     _tar_ctor_L19
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -708,17 +677,11 @@ _tar_ctor_L22
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     _tar_ctor_L26
-                LDA     #0
-                BRA     _tar_ctor_L27
-_tar_ctor_L26
-                LDA     #1
-_tar_ctor_L27
-                CMP     #0
-                BEQ     _tar_ctor_L25
+                BEQ     _tar_ctor_L18
+_tar_ctor_L19
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L25
+_tar_ctor_L18
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -984,125 +947,119 @@ _tar_ctor_L25
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L29
+                BNE     _tar_ctor_L21
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L29
+                BNE     _tar_ctor_L21
                 LDA     #0
-                BRA     _tar_ctor_L30
-_tar_ctor_L29
+                BRA     _tar_ctor_L22
+_tar_ctor_L21
                 LDA     #1
-_tar_ctor_L30
+_tar_ctor_L22
                 CMP     #0
-                BEQ     _tar_ctor_L28
+                BEQ     _tar_ctor_L20
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
+_tar_ctor_L20
+                SEP     #$20
+                MX      %10
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #24
+                PHA
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     1,S
+                STA     _fcc_ptr
+                PLA
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDY     #2
+                LDA     [_fcc_ptr],Y
+                AND     #$00FF
+                STA     _fcc_fpr0+2
+                LDA     [_fcc_ptr]
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDA     _fcc_fpr0
+                CMP     _fcc_fpr1
+                BNE     _tar_ctor_L25
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                CMP     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                BNE     _tar_ctor_L25
+                LDA     #1
+                BRA     _tar_ctor_L26
+_tar_ctor_L25
+                LDA     #0
+_tar_ctor_L26
+                CMP     #0
+                BEQ     *+5
+                BRL     _tar_ctor_L24
+                SEP     #$20
+                MX      %10
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
+                CLC
+                ADC     #24
+                PHA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     1,S
+                STA     _fcc_ptr
+                PLA
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_ptr+2
+                REP     #$20
+                MX      %00
+                LDY     #2
+                LDA     [_fcc_ptr],Y
+                AND     #$00FF
+                STA     _fcc_fpr0+2
+                LDA     [_fcc_ptr]
+                STA     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                LDA     _fcc_fpr0
+                CMP     _fcc_fpr1
+                BNE     _tar_ctor_L27
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                CMP     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                BNE     _tar_ctor_L27
+                LDA     #1
+                BRA     _tar_ctor_L28
+_tar_ctor_L27
+                LDA     #0
 _tar_ctor_L28
-                SEP     #$20
-                MX      %10
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #24
-                PHA
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     1,S
-                STA     _fcc_ptr
-                PLA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDY     #2
-                LDA     [_fcc_ptr],Y
-                AND     #$00FF
-                STA     _fcc_fpr0+2
-                LDA     [_fcc_ptr]
-                STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr1
-                STZ     _fcc_fpr1+2
-                LDA     _fcc_fpr0
-                CMP     _fcc_fpr1
-                BNE     _tar_ctor_L36
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                CMP     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                BNE     _tar_ctor_L36
-                LDA     #1
-                BRA     _tar_ctor_L37
-_tar_ctor_L36
-                LDA     #0
-_tar_ctor_L37
                 CMP     #0
-                BNE     _tar_ctor_L34
-                SEP     #$20
-                MX      %10
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #24
-                PHA
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     1,S
-                STA     _fcc_ptr
-                PLA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDY     #2
-                LDA     [_fcc_ptr],Y
-                AND     #$00FF
-                STA     _fcc_fpr0+2
-                LDA     [_fcc_ptr]
-                STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr1
-                STZ     _fcc_fpr1+2
-                LDA     _fcc_fpr0
-                CMP     _fcc_fpr1
-                BNE     _tar_ctor_L38
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                CMP     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                BNE     _tar_ctor_L38
-                LDA     #1
-                BRA     _tar_ctor_L39
-_tar_ctor_L38
-                LDA     #0
-_tar_ctor_L39
-                CMP     #0
-                BNE     _tar_ctor_L34
-                LDA     #0
-                BRA     _tar_ctor_L35
-_tar_ctor_L34
-                LDA     #1
-_tar_ctor_L35
-                CMP     #0
-                BNE     _tar_ctor_L32
+                BNE     _tar_ctor_L24
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -1135,31 +1092,25 @@ _tar_ctor_L35
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L40
+                BNE     _tar_ctor_L29
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L40
+                BNE     _tar_ctor_L29
                 LDA     #1
-                BRA     _tar_ctor_L41
-_tar_ctor_L40
+                BRA     _tar_ctor_L30
+_tar_ctor_L29
                 LDA     #0
-_tar_ctor_L41
+_tar_ctor_L30
                 CMP     #0
-                BNE     _tar_ctor_L32
-                LDA     #0
-                BRA     _tar_ctor_L33
-_tar_ctor_L32
-                LDA     #1
-_tar_ctor_L33
-                CMP     #0
-                BEQ     _tar_ctor_L31
+                BEQ     _tar_ctor_L23
+_tar_ctor_L24
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L31
+_tar_ctor_L23
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -1377,17 +1328,10 @@ _tar_ctor_L31
                 ADC     #6
                 TCS
                 TYA
-                BEQ     _tar_ctor_L43
-                LDA     #0
-                BRA     _tar_ctor_L44
-_tar_ctor_L43
-                LDA     #1
-_tar_ctor_L44
-                CMP     #0
-                BEQ     _tar_ctor_L42
+                BNE     _tar_ctor_L31
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L42
+_tar_ctor_L31
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -1420,31 +1364,31 @@ _tar_ctor_L42
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BNE     _tar_ctor_L46
+                BNE     _tar_ctor_L33
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BNE     _tar_ctor_L46
+                BNE     _tar_ctor_L33
                 LDA     #0
-                BRA     _tar_ctor_L47
-_tar_ctor_L46
+                BRA     _tar_ctor_L34
+_tar_ctor_L33
                 LDA     #1
-_tar_ctor_L47
+_tar_ctor_L34
                 CMP     #0
-                BEQ     _tar_ctor_L45
+                BEQ     _tar_ctor_L32
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-_tar_ctor_L45
+_tar_ctor_L32
                 LDA     7,S   ; fccstk d=0 b=7
-                BEQ     _tar_ctor_L48
+                BEQ     _tar_ctor_L35
                 LDA     #42
-                BRA     _tar_ctor_L49
-_tar_ctor_L48
+                BRA     _tar_ctor_L36
+_tar_ctor_L35
                 LDA     #1
-_tar_ctor_L49
+_tar_ctor_L36
                 TAY
                 TSC
                 CLC

@@ -397,7 +397,7 @@ _ldiv_sweep_L18
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L20
+                BEQ     _ldiv_sweep_L19
                 LDA     _fcc_img8
                 STA     _fcc_long_hi
                 LDA     _fcc_img7
@@ -440,13 +440,6 @@ _ldiv_sweep_L18
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     _ldiv_sweep_L20
-                LDA     #1
-                BRA     _ldiv_sweep_L21
-_ldiv_sweep_L20
-                LDA     #0
-_ldiv_sweep_L21
-                CMP     #0
                 BEQ     _ldiv_sweep_L19
                 INC     _fcc_img2
 _ldiv_sweep_L19
@@ -470,17 +463,17 @@ _ldiv_sweep_L19
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _ldiv_sweep_L23
+                BEQ     _ldiv_sweep_L21
                 LDA     _fcc_img8
                 STA     _fcc_long_hi
                 LDA     _fcc_img7
                 JSR     _fcc_long_neg
-                BRA     _ldiv_sweep_L24
-_ldiv_sweep_L23
+                BRA     _ldiv_sweep_L22
+_ldiv_sweep_L21
                 LDA     _fcc_img8
                 STA     _fcc_long_hi
                 LDA     _fcc_img7
-_ldiv_sweep_L24
+_ldiv_sweep_L22
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -506,17 +499,17 @@ _ldiv_sweep_L24
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BEQ     _ldiv_sweep_L25
+                BEQ     _ldiv_sweep_L23
                 LDA     _fcc_img6
                 STA     _fcc_long_hi
                 LDA     _fcc_img5
                 JSR     _fcc_long_neg
-                BRA     _ldiv_sweep_L26
-_ldiv_sweep_L25
+                BRA     _ldiv_sweep_L24
+_ldiv_sweep_L23
                 LDA     _fcc_img6
                 STA     _fcc_long_hi
                 LDA     _fcc_img5
-_ldiv_sweep_L26
+_ldiv_sweep_L24
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -527,9 +520,9 @@ _ldiv_sweep_L26
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BEQ     _ldiv_sweep_L22
+                BEQ     _ldiv_sweep_L20
                 INC     _fcc_img2
-_ldiv_sweep_L22
+_ldiv_sweep_L20
 _ldiv_sweep_L15
                 INC     _fcc_img1
                 BRL     _ldiv_sweep_L14
@@ -584,9 +577,9 @@ _ldiv_sweep_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L27
+                BEQ     _ldiv_sweep_L25
                 INC     _fcc_img2
-_ldiv_sweep_L27
+_ldiv_sweep_L25
                 LDA     #$FFFF
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -625,9 +618,9 @@ _ldiv_sweep_L27
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L28
+                BEQ     _ldiv_sweep_L26
                 INC     _fcc_img2
-_ldiv_sweep_L28
+_ldiv_sweep_L26
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$5180
@@ -674,9 +667,9 @@ _ldiv_sweep_L28
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L29
+                BEQ     _ldiv_sweep_L27
                 INC     _fcc_img2
-_ldiv_sweep_L29
+_ldiv_sweep_L27
                 LDA     #$670E
                 STA     _fcc_long_hi
                 LDA     #$7240
@@ -715,9 +708,9 @@ _ldiv_sweep_L29
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L30
+                BEQ     _ldiv_sweep_L28
                 INC     _fcc_img2
-_ldiv_sweep_L30
+_ldiv_sweep_L28
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$003C
@@ -766,9 +759,9 @@ _ldiv_sweep_L30
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L31
+                BEQ     _ldiv_sweep_L29
                 INC     _fcc_img2
-_ldiv_sweep_L31
+_ldiv_sweep_L29
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$517F
@@ -809,16 +802,16 @@ _ldiv_sweep_L31
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     _ldiv_sweep_L32
+                BEQ     _ldiv_sweep_L30
                 INC     _fcc_img2
-_ldiv_sweep_L32
+_ldiv_sweep_L30
                 LDA     _fcc_img2
-                BNE     _ldiv_sweep_L33
+                BNE     _ldiv_sweep_L31
                 LDA     #42
-                BRA     _ldiv_sweep_L34
-_ldiv_sweep_L33
+                BRA     _ldiv_sweep_L32
+_ldiv_sweep_L31
                 LDA     _fcc_img2
-_ldiv_sweep_L34
+_ldiv_sweep_L32
                 TAY
                 TSC
                 CLC

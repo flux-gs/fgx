@@ -163,33 +163,20 @@ _uderef_L1
                 AND     #$00FF
                 TAX
                 CMP     #54
-                BNE     _uderef_L5
+                BNE     _uderef_L3
                 LDA     #4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
                 CMP     #56
-                BNE     _uderef_L5
-                LDA     #0
-                BRA     _uderef_L6
-_uderef_L5
-                LDA     #1
-_uderef_L6
-                CMP     #0
                 BNE     _uderef_L3
                 LDA     #5
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                BNE     _uderef_L3
-                LDA     #0
-                BRA     _uderef_L4
-_uderef_L3
-                LDA     #1
-_uderef_L4
-                CMP     #0
                 BEQ     _uderef_L2
+_uderef_L3
                 LDA     #3
                 TAY
                 TSC
