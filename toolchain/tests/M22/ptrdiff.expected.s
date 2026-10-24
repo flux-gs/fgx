@@ -130,7 +130,6 @@ main_stkok        TCS
                 LSR
                 LSR
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _ptrdiff_L0
                 LDA     #1
@@ -159,7 +158,6 @@ _ptrdiff_L0
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _ptrdiff_L1
                 LDA     #2
@@ -186,7 +184,6 @@ _ptrdiff_L1
                 SBC     _fcc_fpr1
                 LSR
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _ptrdiff_L2
                 LDA     #3

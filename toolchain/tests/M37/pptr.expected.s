@@ -160,7 +160,6 @@ _pptr_L0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _pptr_L3
                 LDA     #3
@@ -423,7 +422,6 @@ main_stkok        TCS
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #1
                 BNE     _pptr_L7
                 LDA     #1
@@ -439,7 +437,6 @@ main_stkok        TCS
 _pptr_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #3
                 BNE     _pptr_L8
                 LDA     #3
@@ -483,7 +480,6 @@ _pptr_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BNE     _pptr_L10
                 LDA     #0
@@ -541,7 +537,6 @@ _pptr_L9
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _pptr_L14
                 LDA     #1
                 TAY
@@ -560,7 +555,6 @@ _pptr_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _pptr_L15
                 LDA     #4
@@ -646,7 +640,6 @@ _pptr_L16
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _pptr_L19
                 LDA     #6

@@ -152,7 +152,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _sigsfwd_L0
                 LDA     #6
@@ -199,7 +198,6 @@ _sigsfwd_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _sigsfwd_L1
                 LDA     #7

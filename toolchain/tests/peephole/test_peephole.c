@@ -351,6 +351,31 @@ int main(void)
           "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n",
           "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n");
 
+    /* CMP #0 after LDA: N and Z are already A's, and no path reads C */
+    check("cmp0_after_lda",
+          "                LDA     x\n                CMP     #0\n                BNE     L6\n                RTL\nL6                 CLC\n                RTL\n",
+          "                LDA     x\n                BNE     L6\n                RTL\nL6                 CLC\n                RTL\n");
+    /* the taken path reads the compare's carry: kept */
+    check("cmp0_keep_carry_at_label",
+          "                LDA     x\n                CMP     #0\n                BNE     L7\n                RTL\nL7                 ADC     #1\n                RTL\n",
+          "                LDA     x\n                CMP     #0\n                BNE     L7\n                RTL\nL7                 ADC     #1\n                RTL\n");
+    /* a DO whose one arm writes C and the other does not: kept */
+    check("cmp0_keep_do_one_arm",
+          "                LDA     x\n                CMP     #0\n                DO      k\n                CLC\n                ELSE\n                NOP\n                FIN\n                ROL\n",
+          "                LDA     x\n                CMP     #0\n                DO      k\n                CLC\n                ELSE\n                NOP\n                FIN\n                ROL\n");
+    /* STA leaves N and Z from an earlier value: kept */
+    check("cmp0_keep_after_sta",
+          "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n",
+          "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n");
+    /* a store between leaves A, N and Z as DEC set them */
+    check("cmp0_after_store",
+          "                DEC\n                STA     [_fcc_fpr0]\n                CMP     #0\n                BMI     L9\n                RTL\nL9                 RTL\n",
+          "                DEC\n                STA     [_fcc_fpr0]\n                BMI     L9\n                RTL\nL9                 RTL\n");
+    /* TAX ; TXA puts back what A holds */
+    check("tax_txa",
+          "                TAX\n                TXA\n                AND     #128\n",
+          "                TAX\n                AND     #128\n");
+
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 
     printf("\n%d/%d passed\n", g_tests - g_fails, g_tests);

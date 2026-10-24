@@ -24,7 +24,6 @@ main_stkok        TCS
                 TAX
                 LDA:    a,X
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _biginit_L0
                 LDA     #1
@@ -43,7 +42,6 @@ _biginit_L0
                 TAX
                 LDA:    a,X
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _biginit_L1
                 LDA     #2
@@ -71,11 +69,9 @@ _biginit_L1
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
@@ -106,11 +102,9 @@ _biginit_L2
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
@@ -141,11 +135,9 @@ _biginit_L3
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA

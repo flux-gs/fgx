@@ -173,7 +173,6 @@ _char_walk_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _char_walk_L2
@@ -206,7 +205,6 @@ _char_walk_L2
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

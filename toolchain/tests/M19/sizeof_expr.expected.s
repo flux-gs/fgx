@@ -49,12 +49,10 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L3
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_expr_L3
                 LDA     #1
@@ -66,7 +64,6 @@ _sizeof_expr_L4
                 BEQ     _sizeof_expr_L1
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L1
                 LDA     #1
@@ -78,19 +75,16 @@ _sizeof_expr_L2
                 BEQ     _sizeof_expr_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _sizeof_expr_L0
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_expr_L8
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L8
                 LDA     #1
@@ -102,7 +96,6 @@ _sizeof_expr_L9
                 BEQ     _sizeof_expr_L6
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L6
                 LDA     #1
@@ -114,19 +107,16 @@ _sizeof_expr_L7
                 BEQ     _sizeof_expr_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _sizeof_expr_L5
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_expr_L11
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L11
                 LDA     #1
@@ -138,19 +128,16 @@ _sizeof_expr_L12
                 BEQ     _sizeof_expr_L10
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
 _sizeof_expr_L10
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_expr_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
                 BNE     _sizeof_expr_L14
                 LDA     #1
@@ -162,7 +149,6 @@ _sizeof_expr_L15
                 BEQ     _sizeof_expr_L13
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0

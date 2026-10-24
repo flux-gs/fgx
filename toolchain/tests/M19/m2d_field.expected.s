@@ -90,7 +90,6 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 INC
                 INC
                 CLC
@@ -131,7 +130,6 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     _fcc_fpr0
@@ -147,7 +145,6 @@ main_stkok        TCS
                 LDA     F+25
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
                 BNE     _m2d_field_L0
                 LDA     #16
@@ -164,7 +161,6 @@ _m2d_field_L1
                 LDA     F+15
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #4
                 BNE     _m2d_field_L2
                 LDA     #32
@@ -180,7 +176,6 @@ _m2d_field_L3
                 PHA
                 LDA     #24
                 TAX
-                TXA
                 CMP     #24
                 BNE     _m2d_field_L4
                 LDA     #64
@@ -196,12 +191,10 @@ _m2d_field_L5
                 PHA
                 LDA     F+0
                 TAX
-                TXA
                 CMP     #100
                 BNE     _m2d_field_L8
                 LDA     F+26
                 TAX
-                TXA
                 CMP     #200
                 BNE     _m2d_field_L8
                 LDA     #1

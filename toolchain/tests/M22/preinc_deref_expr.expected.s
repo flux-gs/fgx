@@ -60,7 +60,6 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #58
                 BNE     _preinc_deref_expr_L1
                 LDA     _fcc_img1
@@ -139,7 +138,6 @@ _preinc_deref_expr_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #56
                 BNE     _preinc_deref_expr_L6
                 LDA     _fcc_img1
@@ -211,7 +209,6 @@ _preinc_deref_expr_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BNE     _preinc_deref_expr_L11
                 LDA     _fcc_img1

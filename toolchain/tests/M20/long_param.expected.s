@@ -136,7 +136,6 @@ _long_param_L3
 _long_param_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

@@ -328,7 +328,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _f_knr_L0
                 LDA     #1
@@ -368,7 +367,6 @@ _f_knr_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_knr_L1
                 LDA     #2
@@ -406,7 +404,6 @@ _f_knr_L1
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _f_knr_L2
                 LDA     #3

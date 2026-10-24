@@ -216,7 +216,6 @@ _argvloop_L3
                 LDA     [_fcc_img1]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #47
                 BEQ     _argvloop_L6
                 LDA     #3

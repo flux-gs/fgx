@@ -39,7 +39,6 @@ main_stkok        TCS
                 LDA     #3
                 STA     _fcc_img0
                 TAX
-                TXA
                 ASL
                 CLC
                 ADC     #arr
@@ -57,7 +56,6 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     [_fcc_img1]
                 TAX
-                TXA
                 CMP     #40
                 BEQ     _iplusp_scale_L0
                 LDA     #1
@@ -91,7 +89,6 @@ _iplusp_scale_L0
                 SBC     _fcc_fpr1
                 LSR
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _iplusp_scale_L1
                 LDA     #2
@@ -130,7 +127,6 @@ _iplusp_scale_L1
                 LDA     #2
                 STA     _fcc_img0
                 TAX
-                TXA
                 ASL
                 ASL
                 CLC
@@ -186,7 +182,6 @@ _iplusp_scale_L1
 _iplusp_scale_L2
                 LDA     #2
                 TAX
-                TXA
                 ASL
                 CLC
                 ADC     #arr

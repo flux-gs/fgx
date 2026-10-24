@@ -123,7 +123,6 @@ _preinc_dot_rvalue_L0
                 CLC
                 ADC     _fcc_img3
                 TAX
-                TXA
                 DEC
                 DEC
                 TAY

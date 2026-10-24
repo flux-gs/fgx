@@ -388,7 +388,6 @@ _arraymemberdecay_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _arraymemberdecay_L3
                 LDA     #46
                 TAY
@@ -539,7 +538,6 @@ _arraymemberdecay_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #4242
                 BEQ     _arraymemberdecay_L7
                 LDA     #48
@@ -591,7 +589,6 @@ _arraymemberdecay_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _arraymemberdecay_L8
                 LDA     #49

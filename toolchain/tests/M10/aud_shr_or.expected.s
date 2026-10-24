@@ -83,18 +83,15 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                TXA
                 CMP     #42
                 BNE     _aud_shr_or_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #40
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L0
                 LDA     #1
-                CMP     #0
                 BNE     _aud_shr_or_L2
                 SEP     #$20
                 MX      %10
@@ -115,7 +112,6 @@ _aud_shr_or_L0
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BNE     _aud_shr_or_L2
                 LDA     #0
                 BRA     _aud_shr_or_L3
@@ -126,17 +122,14 @@ _aud_shr_or_L3
                 BEQ     _aud_shr_or_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L1
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BNE     _aud_shr_or_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     5,S   ; fccstk d=0 b=5

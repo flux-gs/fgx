@@ -643,12 +643,10 @@ main_stkok        TCS
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _ldouble_store_L7
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _ldouble_store_L7
                 LDA     #0
@@ -660,7 +658,6 @@ _ldouble_store_L8
                 BNE     _ldouble_store_L5
                 LDA     #32
                 TAX
-                TXA
                 CMP     #32
                 BNE     _ldouble_store_L5
                 LDA     #0
@@ -683,12 +680,10 @@ _ldouble_store_L6
 _ldouble_store_L4
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BNE     _ldouble_store_L10
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _ldouble_store_L10
                 LDA     #0
@@ -795,7 +790,6 @@ _ldouble_store_L9
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L13
                 LDA     #0
                 BRA     _ldouble_store_L14
@@ -867,7 +861,6 @@ _ldouble_store_L12
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L16
                 LDA     #0
                 BRA     _ldouble_store_L17
@@ -973,7 +966,6 @@ _ldouble_store_L15
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L19
                 LDA     #0
                 BRA     _ldouble_store_L20
@@ -1062,7 +1054,6 @@ _ldouble_store_L18
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L22
                 LDA     #0
                 BRA     _ldouble_store_L23
@@ -1094,7 +1085,6 @@ _ldouble_store_L21
                 STA     _fcc_fpr0
                 LDA     25,S   ; fccstk d=0 b=25
                 TAX
-                TXA
                 INC
                 ASL
                 ASL
@@ -1157,7 +1147,6 @@ _ldouble_store_L21
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L25
                 LDA     #0
                 BRA     _ldouble_store_L26
@@ -1244,7 +1233,6 @@ _ldouble_store_L24
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L28
                 LDA     #0
                 BRA     _ldouble_store_L29
@@ -1333,7 +1321,6 @@ _ldouble_store_L27
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L31
                 LDA     #0
                 BRA     _ldouble_store_L32
@@ -1430,7 +1417,6 @@ _ldouble_store_L30
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L34
                 LDA     #0
                 BRA     _ldouble_store_L35
@@ -1530,7 +1516,6 @@ _ldouble_store_L33
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L37
                 LDA     #0
                 BRA     _ldouble_store_L38
@@ -1633,7 +1618,6 @@ _ldouble_store_L36
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L40
                 LDA     #0
                 BRA     _ldouble_store_L41
@@ -1743,7 +1727,6 @@ _ldouble_store_L39
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L43
                 LDA     #0
                 BRA     _ldouble_store_L44
@@ -1836,7 +1819,6 @@ _ldouble_store_L42
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L46
                 LDA     #0
                 BRA     _ldouble_store_L47
@@ -1858,12 +1840,10 @@ _ldouble_store_L47
 _ldouble_store_L45
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
-                TXA
                 CMP     #7
                 BNE     _ldouble_store_L49
                 LDA     69,S   ; fccstk d=0 b=69
                 TAX
-                TXA
                 CMP     #9
                 BNE     _ldouble_store_L49
                 LDA     #0
@@ -1978,7 +1958,6 @@ _ldouble_store_L48
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L52
                 LDA     #0
                 BRA     _ldouble_store_L53
@@ -2065,7 +2044,6 @@ _ldouble_store_L54
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L56
                 LDA     #0
                 BRA     _ldouble_store_L57
@@ -2144,7 +2122,6 @@ _ldouble_store_L55
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L59
                 LDA     #0
                 BRA     _ldouble_store_L60
@@ -2231,7 +2208,6 @@ _ldouble_store_L58
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L62
                 LDA     #0
                 BRA     _ldouble_store_L63
@@ -2318,7 +2294,6 @@ _ldouble_store_L61
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L65
                 LDA     #0
                 BRA     _ldouble_store_L66
@@ -2423,7 +2398,6 @@ _ldouble_store_L64
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L68
                 LDA     #0
                 BRA     _ldouble_store_L69
@@ -2528,7 +2502,6 @@ _ldouble_store_L67
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L71
                 LDA     #0
                 BRA     _ldouble_store_L72
@@ -2549,7 +2522,6 @@ _ldouble_store_L72
                 RTL
 _ldouble_store_L70
                 LDA     25,S   ; fccstk d=0 b=25
-                CMP     #0
                 BEQ     _ldouble_store_L73
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
@@ -2612,7 +2584,6 @@ _ldouble_store_L74
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L76
                 LDA     #0
                 BRA     _ldouble_store_L77
@@ -2683,7 +2654,6 @@ _ldouble_store_L75
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L79
                 LDA     #0
                 BRA     _ldouble_store_L80
@@ -2779,7 +2749,6 @@ _ldouble_store_L78
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L84
                 LDA     #0
                 BRA     _ldouble_store_L85
@@ -2825,7 +2794,6 @@ _ldouble_store_L85
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L86
                 LDA     #0
                 BRA     _ldouble_store_L87
@@ -2854,7 +2822,6 @@ _ldouble_store_L83
 _ldouble_store_L81
                 LDA     71,S   ; fccstk d=0 b=71
                 TAX
-                TXA
                 CMP     #1
                 BNE     _ldouble_store_L91
                 LDA     #$0000
@@ -2894,7 +2861,6 @@ _ldouble_store_L81
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_store_L93
                 LDA     #0
                 BRA     _ldouble_store_L94
@@ -2911,7 +2877,6 @@ _ldouble_store_L92
                 CMP     #0
                 BNE     _ldouble_store_L89
                 LDA     81,S   ; fccstk d=0 b=81
-                CMP     #0
                 BNE     _ldouble_store_L89
                 LDA     #0
                 BRA     _ldouble_store_L90

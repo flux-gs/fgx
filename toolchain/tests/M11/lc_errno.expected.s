@@ -57,7 +57,6 @@ main_stkok        TCS
 _lc_errno_L0
                 LDA     errno
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _lc_errno_L1
                 LDA     #2
@@ -103,7 +102,6 @@ _lc_errno_L1
                 TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BEQ     _lc_errno_L2
                 LDA     #3
                 TAY
@@ -118,7 +116,6 @@ _lc_errno_L1
 _lc_errno_L2
                 LDA     errno
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _lc_errno_L3
                 LDA     #4
@@ -158,7 +155,6 @@ _lc_errno_L3
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _lc_errno_L4
                 LDA     #5
                 TAY
@@ -197,7 +193,6 @@ _lc_errno_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _lc_errno_L5
                 LDA     #6
                 TAY
@@ -236,7 +231,6 @@ _lc_errno_L5
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _lc_errno_L6
                 LDA     #7
                 TAY

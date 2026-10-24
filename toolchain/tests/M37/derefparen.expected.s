@@ -85,7 +85,6 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BNE     _derefparen_L1
                 LDA     3,S   ; fccstk d=0 b=3
@@ -141,7 +140,6 @@ _derefparen_L2
                 BEQ     _derefparen_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -175,7 +173,6 @@ _derefparen_L0
                 JSR     _fcc_ne16
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _derefparen_L8
                 LDA     #0
@@ -183,7 +180,6 @@ _derefparen_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
                 BNE     _derefparen_L8
                 LDA     #1
@@ -246,7 +242,6 @@ _derefparen_L7
                 BEQ     _derefparen_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -286,7 +281,6 @@ _derefparen_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #10
                 BNE     _derefparen_L13
                 LDA     #1
@@ -298,7 +292,6 @@ _derefparen_L14
                 BEQ     _derefparen_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -387,7 +380,6 @@ _derefparen_L19
                 LDA:    buf2,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
                 BNE     _derefparen_L16
                 LDA     #1
@@ -399,7 +391,6 @@ _derefparen_L17
                 BEQ     _derefparen_L15
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -436,7 +427,6 @@ _derefparen_L15
                 LDA:    buf2,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #119
                 BNE     _derefparen_L21
                 LDA     3,S   ; fccstk d=0 b=3
@@ -492,14 +482,12 @@ _derefparen_L22
                 BEQ     _derefparen_L20
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0
 _derefparen_L20
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #42
                 BNE     _derefparen_L25
                 LDA     #42

@@ -162,7 +162,6 @@ _f_ptrderef_L1
                 LDA     [_fcc_ptr]
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _f_ptrderef_L2
                 LDA     #3
@@ -220,7 +219,6 @@ _f_ptrderef_L2
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_ptrderef_L3
                 LDA     #4
@@ -265,7 +263,6 @@ _f_ptrderef_L3
                 LDA     gf
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _f_ptrderef_L4
                 LDA     #5
@@ -412,7 +409,6 @@ _f_ptrderef_L5
                 LDA     _fcc_long_b_lo
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_ptrderef_L6
                 LDA     #7

@@ -198,7 +198,6 @@ _cfield_gaddr_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BEQ     _cfield_gaddr_L6
                 LDA     #3

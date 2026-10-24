@@ -107,7 +107,6 @@ add4_stkok        TCS
                 LDA     6+add4_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAY

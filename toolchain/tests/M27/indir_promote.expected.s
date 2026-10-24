@@ -51,7 +51,6 @@ _indir_promote_L3
                 BPL     _indir_promote_L2
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img1
@@ -108,7 +107,6 @@ _indir_promote_L5
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _indir_promote_L8

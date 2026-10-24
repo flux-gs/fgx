@@ -29,7 +29,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #235
                 BNE     _krvarencl_L0
                 LDA     #42

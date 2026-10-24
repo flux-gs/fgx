@@ -514,7 +514,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 ORA     #3
                 SEP     #$20
                 MX      %10
@@ -566,7 +565,6 @@ main_stkok        TCS
                 RTL
 _libso_shapes2_L21
                 TAX
-                TXA
                 CMP     #7
                 BNE     _libso_shapes2_L19
                 LDA     1,S   ; fccstk d=0 b=1
@@ -575,7 +573,6 @@ _libso_shapes2_L21
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _libso_shapes2_L19
                 LDA     #1
@@ -634,7 +631,6 @@ _libso_shapes2_L18
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_shapes2_L15
                 LDA     #1
@@ -661,7 +657,6 @@ _libso_shapes2_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4
                 BNE     _libso_shapes2_L13
                 LDA     #1
@@ -695,7 +690,6 @@ _libso_shapes2_L14
                 LDA     [_fcc_fpr0],Y
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #3
                 BNE     _libso_shapes2_L11
                 LDA     #1
@@ -728,7 +722,6 @@ _libso_shapes2_L12
                 LDY     #0
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #15
                 BNE     _libso_shapes2_L9
                 LDA     #1
@@ -764,7 +757,6 @@ _libso_shapes2_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BNE     _libso_shapes2_L7
                 LDA     #1
@@ -788,7 +780,6 @@ _libso_shapes2_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BNE     _libso_shapes2_L5
                 LDA     #1
@@ -810,7 +801,6 @@ _libso_shapes2_L6
                 ADC     #63
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _libso_shapes2_L22
                 LDA     #0
                 BRA     _libso_shapes2_L23

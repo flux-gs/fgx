@@ -85,12 +85,10 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _knr_strconcat_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -106,11 +104,9 @@ _knr_strconcat_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _knr_strconcat_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -127,12 +123,10 @@ _knr_strconcat_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #33
                 BEQ     _knr_strconcat_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -149,12 +143,10 @@ _knr_strconcat_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _knr_strconcat_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -171,12 +163,10 @@ _knr_strconcat_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _knr_strconcat_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -193,12 +183,10 @@ _knr_strconcat_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BEQ     _knr_strconcat_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -214,17 +202,14 @@ _knr_strconcat_L5
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _knr_strconcat_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
 _knr_strconcat_L6
                 LDA     _fcc_img0
-                CMP     #0
                 BEQ     _knr_strconcat_L7
                 LDA     _fcc_img0
                 TAY

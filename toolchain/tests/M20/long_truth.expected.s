@@ -117,7 +117,6 @@ _long_truth_L2
                 STA     1,S   ; fccstk d=0 b=1
 _long_truth_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BEQ     _long_truth_L7
                 LDA     #0
                 BRA     _long_truth_L8
@@ -148,7 +147,6 @@ _long_truth_L10
                 LDA     #0
 _long_truth_L11
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L9
                 LDA     #5
@@ -266,7 +264,6 @@ _long_truth_L25
                 STA     1,S   ; fccstk d=0 b=1
 _long_truth_L23
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BEQ     _long_truth_L27
                 LDA     #0
                 BRA     _long_truth_L28
@@ -418,7 +415,6 @@ _long_truth_L42
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L43
                 LDA     #14
@@ -468,7 +464,6 @@ _long_truth_L45
 _long_truth_L46
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L47
                 LDA     #15
@@ -518,7 +513,6 @@ _long_truth_L49
 _long_truth_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L51
                 LDA     #16
@@ -555,7 +549,6 @@ _long_truth_L52
                 INC
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 LDX     #3
                 STA     _fcc_tmp_b
                 TXA
@@ -627,7 +620,6 @@ _long_truth_L56
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _long_truth_L57
                 LDA     #18
                 TAY
@@ -760,7 +752,6 @@ _long_truth_L68
                 LDA     #0
 _long_truth_L69
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L67
                 LDA     #22
@@ -834,7 +825,6 @@ _long_truth_L75
                 LDA     #0
 _long_truth_L76
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _long_truth_L74
                 LDA     #25

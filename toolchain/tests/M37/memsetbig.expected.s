@@ -319,7 +319,6 @@ _memsetbig_L7
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -367,7 +366,6 @@ _memsetbig_L7
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L11
                 LDA     #0
                 BRA     _memsetbig_L12
@@ -411,7 +409,6 @@ _memsetbig_L10
                 PHA
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     1,S
@@ -446,7 +443,6 @@ _memsetbig_L15
 _memsetbig_L13
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -494,7 +490,6 @@ _memsetbig_L13
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L17
                 LDA     #0
                 BRA     _memsetbig_L18
@@ -538,7 +533,6 @@ _memsetbig_L16
                 PHA
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     1,S
@@ -573,7 +567,6 @@ _memsetbig_L21
 _memsetbig_L19
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -621,7 +614,6 @@ _memsetbig_L19
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L25
                 LDA     #0
                 BRA     _memsetbig_L26
@@ -668,7 +660,6 @@ _memsetbig_L24
 _memsetbig_L22
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -685,7 +676,6 @@ _memsetbig_L22
                 TCS
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #0
@@ -706,7 +696,6 @@ _memsetbig_L22
                 PHA
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     11,S   ; fccstk d=4 b=7
@@ -722,7 +711,6 @@ _memsetbig_L22
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L30
                 LDA     #0
                 BRA     _memsetbig_L31
@@ -737,7 +725,6 @@ _memsetbig_L31
                 PHA
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     1,S
@@ -772,7 +759,6 @@ _memsetbig_L29
 _memsetbig_L27
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -789,7 +775,6 @@ _memsetbig_L27
                 TCS
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -811,7 +796,6 @@ _memsetbig_L27
                 PHA
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -828,7 +812,6 @@ _memsetbig_L27
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L35
                 LDA     #0
                 BRA     _memsetbig_L36
@@ -843,7 +826,6 @@ _memsetbig_L36
                 PHA
                 LDA     #32766
                 TAX
-                TXA
                 INC
                 INC
                 CLC
@@ -879,7 +861,6 @@ _memsetbig_L34
 _memsetbig_L32
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -940,7 +921,6 @@ _memsetbig_L32
 _memsetbig_L37
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 INC
                 PHA
@@ -986,7 +966,6 @@ _memsetbig_L37
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _memsetbig_L39
                 LDA     #0
                 BRA     _memsetbig_L40
@@ -1030,7 +1009,6 @@ _memsetbig_L38
                 PHA
                 LDA     #40000
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     1,S

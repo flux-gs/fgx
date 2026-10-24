@@ -36,7 +36,6 @@ _strblob_L0
 _strblob_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #2109
                 BEQ     _strblob_L2
                 LDA     #1
@@ -55,7 +54,6 @@ _strblob_L2
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _strblob_L4
                 LDA     #61
@@ -63,7 +61,6 @@ _strblob_L2
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _strblob_L4
                 LDA     #0
@@ -89,7 +86,6 @@ _strblob_L3
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _strblob_L6
                 LDA     #3
@@ -108,7 +104,6 @@ _strblob_L6
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #64
                 BEQ     _strblob_L7
                 LDA     #4
@@ -126,7 +121,6 @@ _strblob_L7
                 TAX
                 LDA:    _strblob_big,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strblob_L8
                 LDA     #5
                 TAY

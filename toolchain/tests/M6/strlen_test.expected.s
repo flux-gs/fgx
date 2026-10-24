@@ -97,7 +97,6 @@ _strlen_test_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -159,7 +158,6 @@ _strlen_test_L3
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img1]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strlen_test_L4
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -168,7 +166,6 @@ _strlen_test_L3
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

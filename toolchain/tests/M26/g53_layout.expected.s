@@ -38,7 +38,6 @@ _g53_layout_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #300
                 BVC     _g53_layout_L3
@@ -62,7 +61,6 @@ _g53_layout_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -93,7 +91,6 @@ _g53_layout_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #100
                 BVC     _g53_layout_L7
@@ -150,7 +147,6 @@ _g53_layout_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #130
                 BVC     _g53_layout_L11
@@ -279,7 +275,6 @@ _g53_layout_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA
@@ -296,7 +291,6 @@ _g53_layout_L10
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #30
                 CLC

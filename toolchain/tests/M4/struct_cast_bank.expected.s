@@ -84,7 +84,6 @@ _struct_cast_bank_L0
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

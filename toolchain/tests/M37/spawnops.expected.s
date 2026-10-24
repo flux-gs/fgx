@@ -121,7 +121,6 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -133,7 +132,6 @@ _spawnops_L1
                 BPL     _spawnops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -169,17 +167,14 @@ _spawnops_L0
                 BNE     _spawnops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L2
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BNE     _spawnops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
@@ -219,7 +214,6 @@ _spawnops_L3
                 BNE     _spawnops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -264,7 +258,6 @@ _spawnops_L4
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -312,7 +305,6 @@ _spawnops_L7
                 BEQ     _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5

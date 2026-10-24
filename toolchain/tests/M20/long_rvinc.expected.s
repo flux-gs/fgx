@@ -68,7 +68,6 @@ _long_rvinc_L0
                 BEQ     _long_rvinc_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #50
                 BVC     _long_rvinc_L4
@@ -145,7 +144,6 @@ _long_rvinc_L5
                 BEQ     _long_rvinc_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #50
                 BVC     _long_rvinc_L9

@@ -27,11 +27,9 @@ _dowhile_brk_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #3
                 BNE     _dowhile_brk_L3
                 BRA     _dowhile_brk_L2
@@ -39,7 +37,6 @@ _dowhile_brk_L3
 _dowhile_brk_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _dowhile_brk_L4

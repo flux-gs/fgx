@@ -60,7 +60,6 @@ _ptr_promote_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

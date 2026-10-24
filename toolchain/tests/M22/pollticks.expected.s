@@ -63,7 +63,6 @@ _pollticks_L3
                 SEC
                 SBC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BPL     _pollticks_L4
                 LDA     #3
                 TAY

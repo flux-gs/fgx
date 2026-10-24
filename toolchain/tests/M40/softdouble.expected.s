@@ -100,7 +100,6 @@ _softdouble_dpack_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L0
                 DO      12+_softdouble_dpack_FRAMESIZE/256
                 TSC
@@ -166,12 +165,10 @@ _softdouble_L0
                 LDA     14+_softdouble_dpack_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #1023
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -236,7 +233,6 @@ _softdouble_L2
 _softdouble_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #2047
                 BVC     _softdouble_L4
@@ -932,7 +928,6 @@ _softdouble_dclass_stkok        TCS
 _softdouble_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #2047
                 BEQ     *+5
                 BRL     _softdouble_L6
@@ -1047,7 +1042,6 @@ _softdouble_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L7
                 LDA     #2
                 BRA     _softdouble_L8
@@ -1088,7 +1082,6 @@ _softdouble_L6
                 STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #1023
                 STA     [_fcc_fpr0]
@@ -1387,7 +1380,6 @@ __adddf3_stkok        TCS
                 TYA
                 STA     39,S   ; fccstk d=0 b=39
                 LDA     37,S   ; fccstk d=0 b=37
-                CMP     #0
                 BNE     _softdouble_L9
                 DO      20+__adddf3_FRAMESIZE/256
                 TSC
@@ -1443,7 +1435,6 @@ __adddf3_stkok        TCS
                 RTL
 _softdouble_L9
                 LDA     39,S   ; fccstk d=0 b=39
-                CMP     #0
                 BNE     _softdouble_L10
                 DO      12+__adddf3_FRAMESIZE/256
                 TSC
@@ -1592,7 +1583,6 @@ _softdouble_L12
                 SBC     35,S   ; fccstk d=0 b=35
                 STA     41,S   ; fccstk d=0 b=41
                 TAX
-                TXA
                 LDX     #56
                 STA     _fcc_tmp_b
                 TXA
@@ -1674,7 +1664,6 @@ _softdouble_L13
                 TYA
                 LDA     41,S   ; fccstk d=0 b=41
                 TAX
-                TXA
                 LDX     #3
                 STA     _fcc_tmp_b
                 TXA
@@ -1687,7 +1676,6 @@ _softdouble_L16
                 BRL     _softdouble_L15
                 LDA     41,S   ; fccstk d=0 b=41
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _softdouble_L19
@@ -1844,7 +1832,6 @@ _softdouble_L21
 _softdouble_L15
                 LDA     41,S   ; fccstk d=0 b=41
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _softdouble_L24
@@ -1972,7 +1959,6 @@ _softdouble_L27
                 SBC     33,S   ; fccstk d=0 b=33
                 STA     59,S   ; fccstk d=0 b=59
                 TAX
-                TXA
                 LDX     #56
                 STA     _fcc_tmp_b
                 TXA
@@ -2054,7 +2040,6 @@ _softdouble_L28
                 TYA
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
-                TXA
                 LDX     #3
                 STA     _fcc_tmp_b
                 TXA
@@ -2067,7 +2052,6 @@ _softdouble_L31
                 BRL     _softdouble_L30
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _softdouble_L34
@@ -2224,7 +2208,6 @@ _softdouble_L36
 _softdouble_L30
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _softdouble_L39
@@ -3171,7 +3154,6 @@ _softdouble_L45
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L50
                 LDA     #1
                 BRA     _softdouble_L51
@@ -3373,7 +3355,6 @@ _softdouble_L53
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L55
                 LDA     #1
                 BRA     _softdouble_L56
@@ -3591,13 +3572,10 @@ _softdouble_L49
                 STA     83,S   ; fccstk d=0 b=83
                 TYA
                 LDA     101,S   ; fccstk d=0 b=101
-                CMP     #0
                 BEQ     _softdouble_L58
                 LDA     103,S   ; fccstk d=0 b=103
-                CMP     #0
                 BNE     _softdouble_L60
                 LDA     105,S   ; fccstk d=0 b=105
-                CMP     #0
                 BNE     _softdouble_L60
                 LDA     #0
                 BRA     _softdouble_L61
@@ -5826,10 +5804,8 @@ __muldf3_stkok        TCS
                 STA     47,S   ; fccstk d=0 b=47
                 TYA
                 LDA     37,S   ; fccstk d=0 b=37
-                CMP     #0
                 BEQ     _softdouble_L65
                 LDA     39,S   ; fccstk d=0 b=39
-                CMP     #0
                 BEQ     _softdouble_L65
                 LDA     #0
                 BRA     _softdouble_L66
@@ -5936,12 +5912,10 @@ _softdouble_L64
                 LDA     51,S   ; fccstk d=0 b=51
                 LSR
                 TAX
-                TXA
                 AND     #1
                 STA     63,S   ; fccstk d=0 b=63
                 LDA     51,S   ; fccstk d=0 b=51
                 TAX
-                TXA
                 AND     #1
                 STA     65,S   ; fccstk d=0 b=65
                 LDA     63,S   ; fccstk d=0 b=63
@@ -6472,7 +6446,6 @@ __divdf3_stkok        TCS
                 STA     47,S   ; fccstk d=0 b=47
                 TYA
                 LDA     37,S   ; fccstk d=0 b=37
-                CMP     #0
                 BNE     _softdouble_L73
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_q3
@@ -6492,7 +6465,6 @@ __divdf3_stkok        TCS
                 RTL
 _softdouble_L73
                 LDA     39,S   ; fccstk d=0 b=39
-                CMP     #0
                 BNE     _softdouble_L74
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_q3
@@ -7003,7 +6975,6 @@ _softdouble_L78
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L80
                 LDA     #1
                 BRA     _softdouble_L81
@@ -7108,7 +7079,6 @@ _softdouble_L82
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L83
                 LDA     #1
                 BRA     _softdouble_L84
@@ -7790,7 +7760,6 @@ __cmpdf2_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L92
                 LDA     #0
                 TAY
@@ -8086,7 +8055,6 @@ _softdouble_L95
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L97
                 LDA     #1
                 BRA     _softdouble_L98
@@ -8219,7 +8187,6 @@ _softdouble_L96
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L99
                 LDA     #$FFFF
                 BRA     _softdouble_L100
@@ -8628,7 +8595,6 @@ __unorddf2_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L102
                 LDA     #1
                 BRA     _softdouble_L103
@@ -8810,7 +8776,6 @@ _softdouble_L101
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L105
                 LDA     #1
                 BRA     _softdouble_L106
@@ -9884,7 +9849,6 @@ __extendsfdf2_stkok        TCS
                 STA     13,S   ; fccstk d=0 b=13
                 TYA
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BNE     _softdouble_L107
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
@@ -9905,7 +9869,6 @@ __extendsfdf2_stkok        TCS
 _softdouble_L107
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #255
                 BEQ     *+5
                 BRL     _softdouble_L108
@@ -10013,7 +9976,6 @@ _softdouble_L107
 _softdouble_L108
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #127
                 STA     15,S   ; fccstk d=0 b=15
@@ -10427,7 +10389,6 @@ __truncdfsf2_stkok        TCS
                 STA     17,S   ; fccstk d=0 b=17
                 TYA
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BNE     _softdouble_L109
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
@@ -10448,7 +10409,6 @@ __truncdfsf2_stkok        TCS
 _softdouble_L109
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #2047
                 BEQ     *+5
                 BRL     _softdouble_L110
@@ -10622,17 +10582,14 @@ _softdouble_L111
 _softdouble_L110
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #1023
                 STA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #127
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -10851,7 +10808,6 @@ _softdouble_L121
 _softdouble_L116
                 LDA     25,S   ; fccstk d=0 b=25
                 TAX
-                TXA
                 SEC
                 SBC     #255
                 BVC     _softdouble_L123
@@ -11267,7 +11223,6 @@ _softdouble_L128
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L129
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
@@ -11564,7 +11519,6 @@ _softdouble_L131
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _softdouble_L132
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
@@ -11889,7 +11843,6 @@ __fixdfsi_stkok        TCS
 _softdouble_L133
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #2047
                 BNE     _softdouble_L134
                 LDA     7,S   ; fccstk d=0 b=7
@@ -11924,7 +11877,6 @@ _softdouble_L136
 _softdouble_L134
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #1023
                 STA     11,S   ; fccstk d=0 b=11
@@ -11944,7 +11896,6 @@ _softdouble_L134
 _softdouble_L137
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 LDX     #30
                 STA     _fcc_tmp_b
                 TXA
@@ -12449,7 +12400,6 @@ _softdouble_L146
 _softdouble_L147
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #2047
                 BNE     _softdouble_L148
                 LDA     #$FFFF
@@ -12467,7 +12417,6 @@ _softdouble_L147
 _softdouble_L148
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #1023
                 STA     3,S   ; fccstk d=0 b=3
@@ -12487,7 +12436,6 @@ _softdouble_L148
 _softdouble_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -12630,7 +12578,6 @@ _softdouble_L150
                 TYA
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #52
                 BVC     _softdouble_L153
@@ -12655,7 +12602,6 @@ _softdouble_L153
                 PHA
                 LDA     11,S   ; fccstk d=8 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #52
                 STA     _fcc_long_b_lo
@@ -12992,7 +12938,6 @@ _softdouble_L158
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _softdouble_L164
                 LDA     #0
                 BRA     _softdouble_L165
@@ -13098,7 +13043,6 @@ _softdouble_L165
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _softdouble_L162
                 LDA     #0
                 BRA     _softdouble_L163
@@ -13204,7 +13148,6 @@ _softdouble_L163
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _softdouble_L160
                 LDA     #0
                 BRA     _softdouble_L161
@@ -13215,10 +13158,8 @@ _softdouble_L161
                 BEQ     _softdouble_L159
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 TAX
-                TXA
                 SEC
                 SBC     #42
                 BVC     _softdouble_L168
@@ -13227,14 +13168,12 @@ _softdouble_L168
                 BMI     _softdouble_L166
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 BRA     _softdouble_L167
 _softdouble_L166
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
 _softdouble_L167

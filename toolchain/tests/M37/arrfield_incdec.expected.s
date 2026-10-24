@@ -79,17 +79,14 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+8
                 TAX
-                TXA
                 CMP     #31
                 BNE     _arrfield_incdec_L5
                 LDA     _arrfield_incdec_obj+6
                 TAX
-                TXA
                 CMP     #20
                 BNE     _arrfield_incdec_L5
                 LDA     #1
@@ -101,7 +98,6 @@ _arrfield_incdec_L6
                 BEQ     _arrfield_incdec_L3
                 LDA     _arrfield_incdec_obj+10
                 TAX
-                TXA
                 CMP     #40
                 BNE     _arrfield_incdec_L3
                 LDA     #1
@@ -113,7 +109,6 @@ _arrfield_incdec_L4
                 BEQ     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+0
                 TAX
-                TXA
                 CMP     #10
                 BNE     _arrfield_incdec_L1
                 LDA     #1
@@ -125,7 +120,6 @@ _arrfield_incdec_L2
                 BEQ     _arrfield_incdec_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -145,17 +139,14 @@ _arrfield_incdec_L0
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 DEC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+10
                 TAX
-                TXA
                 CMP     #39
                 BNE     _arrfield_incdec_L10
                 LDA     _arrfield_incdec_obj+8
                 TAX
-                TXA
                 CMP     #31
                 BNE     _arrfield_incdec_L10
                 LDA     #1
@@ -167,7 +158,6 @@ _arrfield_incdec_L11
                 BEQ     _arrfield_incdec_L8
                 LDA     _arrfield_incdec_obj+6
                 TAX
-                TXA
                 CMP     #20
                 BNE     _arrfield_incdec_L8
                 LDA     #1
@@ -179,7 +169,6 @@ _arrfield_incdec_L9
                 BEQ     _arrfield_incdec_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -249,7 +238,6 @@ _arrfield_incdec_L7
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 INC
                 SEP     #$20
                 MX      %10
@@ -259,13 +247,11 @@ _arrfield_incdec_L7
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _arrfield_incdec_L15
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _arrfield_incdec_L15
                 LDA     #1
@@ -278,7 +264,6 @@ _arrfield_incdec_L16
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _arrfield_incdec_L13
                 LDA     #1
@@ -290,7 +275,6 @@ _arrfield_incdec_L14
                 BEQ     _arrfield_incdec_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -321,17 +305,14 @@ _arrfield_incdec_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+6
                 TAX
-                TXA
                 CMP     #21
                 BNE     _arrfield_incdec_L18
                 LDA     _arrfield_incdec_obj+8
                 TAX
-                TXA
                 CMP     #31
                 BNE     _arrfield_incdec_L18
                 LDA     #1
@@ -343,7 +324,6 @@ _arrfield_incdec_L19
                 BEQ     _arrfield_incdec_L17
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -363,7 +343,6 @@ _arrfield_incdec_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 DEC
                 SEP     #$20
                 MX      %10
@@ -373,13 +352,11 @@ _arrfield_incdec_L17
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _arrfield_incdec_L23
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _arrfield_incdec_L23
                 LDA     #1
@@ -392,7 +369,6 @@ _arrfield_incdec_L24
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _arrfield_incdec_L21
                 LDA     #1
@@ -404,7 +380,6 @@ _arrfield_incdec_L22
                 BEQ     _arrfield_incdec_L20
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -501,7 +476,6 @@ _arrfield_incdec_L20
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_vs+8
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _arrfield_incdec_vs+8
@@ -535,7 +509,6 @@ _arrfield_incdec_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #107
                 BNE     _arrfield_incdec_L28
                 LDA     #0
@@ -568,7 +541,6 @@ _arrfield_incdec_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #200
                 BNE     _arrfield_incdec_L28
                 LDA     #1
@@ -608,7 +580,6 @@ _arrfield_incdec_L29
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #300
                 BNE     _arrfield_incdec_L26
                 LDA     #1
@@ -620,7 +591,6 @@ _arrfield_incdec_L27
                 BEQ     _arrfield_incdec_L25
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -653,7 +623,6 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #50
                 STA     [_fcc_fpr0]
@@ -687,7 +656,6 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #250
                 BNE     _arrfield_incdec_L31
                 LDA     #0
@@ -720,7 +688,6 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #107
                 BNE     _arrfield_incdec_L31
                 LDA     #1
@@ -732,7 +699,6 @@ _arrfield_incdec_L32
                 BEQ     _arrfield_incdec_L30
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0

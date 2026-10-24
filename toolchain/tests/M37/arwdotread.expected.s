@@ -164,7 +164,6 @@ _arwdotread_L2
                 BEQ     _arwdotread_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     _fcc_img0
@@ -176,12 +175,10 @@ _arwdotread_L0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #44
                 BNE     _arwdotread_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #22
                 STA     _fcc_img0

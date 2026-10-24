@@ -148,7 +148,6 @@ rec_stkok        TCS
                 LDA     6+rec_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -169,7 +168,6 @@ _stkfloor_L1
                 LDA     6+rec_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA

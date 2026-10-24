@@ -391,23 +391,19 @@ main_stkok        TCS
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _long_double_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L2
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _long_double_L6
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _long_double_L6
                 LDA     #1
@@ -433,7 +429,6 @@ _long_double_L5
                 BEQ     _long_double_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
@@ -505,13 +500,11 @@ _long_double_L3
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _long_double_L10
                 LDA     #10
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_tmp_b
@@ -527,7 +520,6 @@ _long_double_L11
                 BEQ     _long_double_L9
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     13,S   ; fccstk d=0 b=13
@@ -599,11 +591,9 @@ _long_double_L9
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _long_double_L12
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     13,S   ; fccstk d=0 b=13

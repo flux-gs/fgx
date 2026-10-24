@@ -145,7 +145,6 @@ _heap_intptr_L0
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _heap_intptr_L3
                 LDA     #1
@@ -170,7 +169,6 @@ _heap_intptr_L3
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _heap_intptr_L4
                 LDA     #2
@@ -190,7 +188,6 @@ _heap_intptr_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _heap_intptr_L5
                 LDA     #3
@@ -306,7 +303,6 @@ _heap_intptr_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _heap_intptr_L6
                 LDA     #4
@@ -332,7 +328,6 @@ _heap_intptr_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _heap_intptr_L7
                 LDA     #5

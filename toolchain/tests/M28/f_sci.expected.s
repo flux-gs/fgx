@@ -80,7 +80,6 @@ _f_sci_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _f_sci_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -247,7 +246,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_sci_L5
                 LDA     #0
                 BRA     _f_sci_L6
@@ -343,7 +341,6 @@ _f_sci_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_sci_L8
                 LDA     #0
                 BRA     _f_sci_L9
@@ -439,7 +436,6 @@ _f_sci_L7
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_sci_L11
                 LDA     #0
                 BRA     _f_sci_L12
@@ -535,7 +531,6 @@ _f_sci_L10
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_sci_L14
                 LDA     #0
                 BRA     _f_sci_L15
@@ -631,7 +626,6 @@ _f_sci_L13
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_sci_L17
                 LDA     #0
                 BRA     _f_sci_L18

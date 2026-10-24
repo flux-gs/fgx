@@ -569,7 +569,6 @@ _od_probe4_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CLC
                 ADC     #25
                 TAY

@@ -370,7 +370,6 @@ main_stkok        TCS
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BNE     _longparamseed_L11
                 LDA     #1
@@ -378,7 +377,6 @@ main_stkok        TCS
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #86
                 BNE     _longparamseed_L11
                 LDA     #0
@@ -404,7 +402,6 @@ _longparamseed_L10
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #52
                 BNE     _longparamseed_L14
                 LDA     #3
@@ -412,7 +409,6 @@ _longparamseed_L10
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #18
                 BNE     _longparamseed_L14
                 LDA     #0
@@ -455,7 +451,6 @@ _longparamseed_L13
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #186
                 BNE     _longparamseed_L19
                 LDA     #1
@@ -463,7 +458,6 @@ _longparamseed_L13
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #254
                 BNE     _longparamseed_L19
                 LDA     #0
@@ -478,7 +472,6 @@ _longparamseed_L20
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #202
                 BNE     _longparamseed_L17
                 LDA     #0
@@ -521,7 +514,6 @@ _longparamseed_L16
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #240
                 BNE     _longparamseed_L24
                 LDA     #1
@@ -529,7 +521,6 @@ _longparamseed_L16
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #222
                 BNE     _longparamseed_L24
                 LDA     #0
@@ -544,7 +535,6 @@ _longparamseed_L25
                 LDA:    img,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #188
                 BNE     _longparamseed_L22
                 LDA     #0
@@ -583,7 +573,6 @@ _longparamseed_L21
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #18
                 BEQ     _longparamseed_L26
                 LDA     #5
@@ -615,7 +604,6 @@ _longparamseed_L26
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #14
                 BEQ     _longparamseed_L27
                 LDA     #6

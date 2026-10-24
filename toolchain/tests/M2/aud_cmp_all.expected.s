@@ -27,7 +27,6 @@ main_stkok        TCS
                 STA     _fcc_img2
                 LDA     #0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     _fcc_img3
@@ -44,7 +43,6 @@ _aud_cmp_all_L1
                 BPL     _aud_cmp_all_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -65,7 +63,6 @@ _aud_cmp_all_L3
                 BPL     _aud_cmp_all_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -86,7 +83,6 @@ _aud_cmp_all_L5
                 BMI     _aud_cmp_all_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -104,7 +100,6 @@ _aud_cmp_all_L7
                 BMI     _aud_cmp_all_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -118,7 +113,6 @@ _aud_cmp_all_L6
                 BNE     _aud_cmp_all_L8
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -132,7 +126,6 @@ _aud_cmp_all_L8
                 BEQ     _aud_cmp_all_L9
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -150,7 +143,6 @@ _aud_cmp_all_L11
                 BPL     _aud_cmp_all_L10
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -171,7 +163,6 @@ _aud_cmp_all_L13
                 BPL     _aud_cmp_all_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     _fcc_img0

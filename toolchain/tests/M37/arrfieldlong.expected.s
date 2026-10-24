@@ -61,7 +61,6 @@ _arrfieldlong_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrfieldlong_L3
@@ -304,7 +303,6 @@ _arrfieldlong_L6
 _arrfieldlong_L8
                 STX     _fcc_long_hi
                 TAX
-                TXA
                 CMP     #2571
                 BEQ     _arrfieldlong_L7
                 LDA     #53
@@ -352,7 +350,6 @@ _arrfieldlong_L7
                 TYA
                 JSR     _fcc_long_and
                 TAX
-                TXA
                 CMP     #3085
                 BEQ     _arrfieldlong_L9
                 LDA     #54
@@ -679,7 +676,6 @@ _arrfieldlong_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #17185
                 BEQ     _arrfieldlong_L16
                 LDA     #60
@@ -705,7 +701,6 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BNE     _arrfieldlong_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -719,7 +714,6 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BNE     _arrfieldlong_L18
                 LDA     #0
                 BRA     _arrfieldlong_L19

@@ -108,7 +108,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #32
                 STA     [_fcc_fpr0]
                 LDA     #1
@@ -123,7 +122,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 INC
                 STA     [_fcc_fpr0]

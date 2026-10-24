@@ -104,7 +104,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _arrow_dot_L0
                 LDA     #1
@@ -131,7 +130,6 @@ _arrow_dot_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _arrow_dot_L1
                 LDA     #2
@@ -158,7 +156,6 @@ _arrow_dot_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _arrow_dot_L2
                 LDA     #3
@@ -191,7 +188,6 @@ _arrow_dot_L2
                 LDA     gb+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _arrow_dot_L3
                 LDA     #4
@@ -235,7 +231,6 @@ _arrow_dot_L3
                 LDA     gb+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _arrow_dot_L4
                 LDA     #5

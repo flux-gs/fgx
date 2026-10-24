@@ -40,14 +40,12 @@ main_stkok        TCS
                 LDA:    arr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
                 BNE     _static_ptr_disp_L3
                 LDA     #13
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _static_ptr_disp_L3
                 LDA     #1
                 BRA     _static_ptr_disp_L4
@@ -60,7 +58,6 @@ _static_ptr_disp_L4
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _static_ptr_disp_L1
                 LDA     #1
                 BRA     _static_ptr_disp_L2
@@ -71,7 +68,6 @@ _static_ptr_disp_L2
                 BEQ     _static_ptr_disp_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -91,7 +87,6 @@ _static_ptr_disp_L0
                 TAX
                 LDA:    iarr,X
                 TAX
-                TXA
                 CMP     #4660
                 BNE     _static_ptr_disp_L10
                 LDA     #1
@@ -162,7 +157,6 @@ _static_ptr_disp_L7
                 BEQ     _static_ptr_disp_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -181,12 +175,10 @@ _static_ptr_disp_L5
                 STA     [_fcc_fpr0]
                 LDA     obj+0
                 TAX
-                TXA
                 CMP     #4369
                 BNE     _static_ptr_disp_L17
                 LDA     obj+2
                 TAX
-                TXA
                 CMP     #8738
                 BNE     _static_ptr_disp_L17
                 LDA     #1
@@ -241,7 +233,6 @@ _static_ptr_disp_L16
                 BEQ     _static_ptr_disp_L14
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

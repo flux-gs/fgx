@@ -157,7 +157,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #111
                 STA     _fcc_tmp_b
@@ -206,7 +205,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #100
                 BNE     _strinit_L0
                 LDA     #5
@@ -237,7 +235,6 @@ _strinit_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #104
                 STA     _fcc_tmp_b
@@ -286,7 +283,6 @@ _strinit_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #105
                 BNE     _strinit_L2
                 LDA     #3

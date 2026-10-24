@@ -83,7 +83,6 @@ _heapchurn_L3
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #46
                 BVC     _heapchurn_L6
@@ -355,7 +354,6 @@ _heapchurn_L14
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #46
                 BVC     _heapchurn_L17
@@ -431,7 +429,6 @@ _heapchurn_L19
                 TAX
                 LDA:    nbuf,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _heapchurn_L21
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
@@ -507,7 +504,6 @@ _heapchurn_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _heapchurn_L23
                 LDA     #100
                 CLC
@@ -551,7 +547,6 @@ _heapchurn_L24
                 JSR     _fcc_safepoint
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #46
                 BVC     _heapchurn_L27

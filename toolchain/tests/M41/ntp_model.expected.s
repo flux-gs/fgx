@@ -578,7 +578,6 @@ _ntp_model_mag_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _ntp_model_L0
                 DO      12+_ntp_model_mag_FRAMESIZE/256
                 TSC
@@ -708,7 +707,6 @@ _ntp_model_L2
                 JSR     _fcc_safepoint
                 LDA     93,S   ; fccstk d=0 b=93
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _ntp_model_L5
@@ -1556,7 +1554,6 @@ _ntp_model_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _ntp_model_L6
                 LDA     #1
                 TAY

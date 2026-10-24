@@ -117,7 +117,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _callchain_stmt_L0
                 LDA     #1
@@ -143,12 +142,10 @@ _callchain_stmt_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #16
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #20
                 BEQ     _callchain_stmt_L1
                 LDA     #2
@@ -174,12 +171,10 @@ _callchain_stmt_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _callchain_stmt_L2
                 LDA     #3
@@ -206,7 +201,6 @@ _callchain_stmt_L2
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _callchain_stmt_L3
                 LDA     #4
@@ -227,7 +221,6 @@ _callchain_stmt_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     [_fcc_fpr0]
@@ -236,7 +229,6 @@ _callchain_stmt_L3
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _callchain_stmt_L4
                 LDA     #5
@@ -252,7 +244,6 @@ _callchain_stmt_L3
 _callchain_stmt_L4
                 LDA     calls
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _callchain_stmt_L5
                 LDA     #6

@@ -307,7 +307,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA
@@ -315,7 +314,6 @@ main_stkok        TCS
                 BCS     _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #0
                 STA     _fcc_img0
@@ -323,7 +321,6 @@ main_stkok        TCS
 _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #100
                 STA     _fcc_img0
@@ -489,7 +486,6 @@ _chain_index_arrow_read_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA
@@ -497,7 +493,6 @@ _chain_index_arrow_read_L1
                 BCS     _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #0
                 STA     _fcc_img0
@@ -505,7 +500,6 @@ _chain_index_arrow_read_L1
 _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #100
                 STA     _fcc_img0

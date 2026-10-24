@@ -175,7 +175,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _aoptr_field_L0
                 LDA     #1
@@ -226,7 +225,6 @@ _aoptr_field_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _aoptr_field_L1
                 LDA     #2
@@ -279,7 +277,6 @@ _aoptr_field_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _aoptr_field_L2
                 LDA     #3
@@ -300,7 +297,6 @@ _aoptr_field_L2
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _aoptr_field_L3
                 LDA     #4
@@ -421,7 +417,6 @@ _aoptr_field_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _aoptr_field_L7
                 LDA     #6

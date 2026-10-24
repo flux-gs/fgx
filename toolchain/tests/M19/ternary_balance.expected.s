@@ -78,11 +78,9 @@ _ternary_balance_L1
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _ternary_balance_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -144,11 +142,9 @@ _ternary_balance_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _ternary_balance_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -193,7 +189,6 @@ _ternary_balance_L7
                 BEQ     _ternary_balance_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     9,S   ; fccstk d=0 b=9
@@ -237,7 +232,6 @@ _ternary_balance_L10
                 BEQ     _ternary_balance_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     9,S   ; fccstk d=0 b=9

@@ -61,7 +61,6 @@ _statbig_L1
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #66
                 BVC     _statbig_L4
@@ -133,7 +132,6 @@ _statbig_L3
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _statbig_L5
                 SEP     #$20
                 MX      %10

@@ -27,7 +27,6 @@ _addrarrfieldidx_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _addrarrfieldidx_L3
@@ -84,7 +83,6 @@ _addrarrfieldidx_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _addrarrfieldidx_L7
@@ -501,7 +499,6 @@ _addrarrfieldidx_L12
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _addrarrfieldidx_L13
                 LDA     #7
@@ -534,7 +531,6 @@ _addrarrfieldidx_L13
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _addrarrfieldidx_L14
                 LDA     #8
@@ -673,7 +669,6 @@ _addrarrfieldidx_L15
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _addrarrfieldidx_L16
                 LDA     #11
@@ -813,7 +808,6 @@ _addrarrfieldidx_L17
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _addrarrfieldidx_L18
                 LDA     #13
@@ -930,7 +924,6 @@ _addrarrfieldidx_L22
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _addrarrfieldidx_L25
@@ -981,7 +974,6 @@ _addrarrfieldidx_L26
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _addrarrfieldidx_L29
@@ -1087,7 +1079,6 @@ _addrarrfieldidx_L24
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21845
                 BEQ     _addrarrfieldidx_L30
                 LDA     #30
@@ -1108,7 +1099,6 @@ _addrarrfieldidx_L30
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #26214
                 BEQ     _addrarrfieldidx_L31
                 LDA     #31
@@ -1140,7 +1130,6 @@ _addrarrfieldidx_L31
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _addrarrfieldidx_L32
                 LDA     #32
                 TAY
@@ -1171,7 +1160,6 @@ _addrarrfieldidx_L32
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _addrarrfieldidx_L33
                 LDA     #33
                 TAY
@@ -1202,7 +1190,6 @@ _addrarrfieldidx_L33
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _addrarrfieldidx_L34
                 LDA     #34
                 TAY
@@ -1232,7 +1219,6 @@ _addrarrfieldidx_L34
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #13107
                 BEQ     _addrarrfieldidx_L35
                 LDA     #35
@@ -1264,7 +1250,6 @@ _addrarrfieldidx_L35
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #17476
                 BEQ     _addrarrfieldidx_L36
                 LDA     #36

@@ -324,11 +324,9 @@ _chain_structcopy_L4
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L8
                 LDA     _chain_structcopy_g1+0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _chain_structcopy_L8
                 LDA     #1
@@ -340,7 +338,6 @@ _chain_structcopy_L9
                 BEQ     _chain_structcopy_L6
                 LDA     _chain_structcopy_g1+8
                 TAX
-                TXA
                 CMP     #6
                 BNE     _chain_structcopy_L6
                 LDA     #1
@@ -352,7 +349,6 @@ _chain_structcopy_L7
                 BEQ     _chain_structcopy_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -438,11 +434,9 @@ _chain_structcopy_L10
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L14
                 LDA     _chain_structcopy_g3+0
                 TAX
-                TXA
                 CMP     #9
                 BNE     _chain_structcopy_L14
                 LDA     #1
@@ -454,7 +448,6 @@ _chain_structcopy_L15
                 BEQ     _chain_structcopy_L12
                 LDA     _chain_structcopy_g3+8
                 TAX
-                TXA
                 CMP     #10
                 BNE     _chain_structcopy_L12
                 LDA     #1
@@ -466,7 +459,6 @@ _chain_structcopy_L13
                 BEQ     _chain_structcopy_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -540,11 +532,9 @@ _chain_structcopy_L16
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L18
                 LDA     _chain_structcopy_g1+8
                 TAX
-                TXA
                 CMP     #6
                 BNE     _chain_structcopy_L18
                 LDA     #1
@@ -556,7 +546,6 @@ _chain_structcopy_L19
                 BEQ     _chain_structcopy_L17
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -613,11 +602,9 @@ _chain_structcopy_L20
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L24
                 LDA     _chain_structcopy_g2+0
                 TAX
-                TXA
                 CMP     #7
                 BNE     _chain_structcopy_L24
                 LDA     #1
@@ -629,7 +616,6 @@ _chain_structcopy_L25
                 BEQ     _chain_structcopy_L22
                 LDA     _chain_structcopy_g2+8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _chain_structcopy_L22
                 LDA     #1
@@ -641,7 +627,6 @@ _chain_structcopy_L23
                 BEQ     _chain_structcopy_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -705,7 +690,6 @@ _chain_structcopy_L26
                 BPL     _chain_structcopy_L26
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _chain_structcopy_L30
                 LDA     #66
@@ -734,7 +718,6 @@ _chain_structcopy_L26
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L30
                 LDA     #1
                 BRA     _chain_structcopy_L31
@@ -745,7 +728,6 @@ _chain_structcopy_L31
                 BEQ     _chain_structcopy_L28
                 LDA     _chain_structcopy_g3+8
                 TAX
-                TXA
                 CMP     #10
                 BNE     _chain_structcopy_L28
                 LDA     #1
@@ -757,7 +739,6 @@ _chain_structcopy_L29
                 BEQ     _chain_structcopy_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -809,7 +790,6 @@ _chain_structcopy_L32
                 BPL     _chain_structcopy_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #2
                 BNE     _chain_structcopy_L34
                 LDA     #66
@@ -838,7 +818,6 @@ _chain_structcopy_L32
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L34
                 LDA     #1
                 BRA     _chain_structcopy_L35
@@ -849,7 +828,6 @@ _chain_structcopy_L35
                 BEQ     _chain_structcopy_L33
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
@@ -880,11 +858,9 @@ _chain_structcopy_L33
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _chain_structcopy_L36
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     3,S   ; fccstk d=0 b=3

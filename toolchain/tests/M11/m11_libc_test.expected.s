@@ -92,7 +92,6 @@ main_stkok        TCS
                 ASL
                 ASL
                 TAX
-                TXA
                 INC
                 INC
                 STA     5,S   ; fccstk d=0 b=5

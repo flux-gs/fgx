@@ -140,7 +140,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
                 BEQ     _parensubidx_L0
                 LDA     #1
@@ -182,7 +181,6 @@ _parensubidx_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
                 BEQ     _parensubidx_L1
                 LDA     #2
@@ -233,7 +231,6 @@ _parensubidx_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
                 BEQ     _parensubidx_L2
                 LDA     #3

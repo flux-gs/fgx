@@ -27,7 +27,6 @@ main_stkok        TCS
                 STA     gbody
                 LDA     gbefore
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     gbefore
@@ -38,11 +37,9 @@ _macro_for_step_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     gv
-                CMP     #0
                 BEQ     _macro_for_step_L3
                 LDA     gbody
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _macro_for_step_L5
@@ -58,14 +55,12 @@ _macro_for_step_L4
                 BEQ     _macro_for_step_L2
                 LDA     gbody
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     gbody
 _macro_for_step_L1
                 LDA     gafter
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     gafter
@@ -75,7 +70,6 @@ _macro_for_step_L1
 _macro_for_step_L2
                 LDA     gbefore
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _macro_for_step_L6
                 LDA     #1
@@ -91,7 +85,6 @@ _macro_for_step_L2
 _macro_for_step_L6
                 LDA     gbody
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _macro_for_step_L7
                 LDA     #2
@@ -107,7 +100,6 @@ _macro_for_step_L6
 _macro_for_step_L7
                 LDA     gafter
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _macro_for_step_L8
                 LDA     #3

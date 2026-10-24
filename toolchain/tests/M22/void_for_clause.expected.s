@@ -21,7 +21,6 @@ vbefore_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                TXA
                 INC
                 STA     gtrace
                 TAY
@@ -52,7 +51,6 @@ vafter_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     gtrace
@@ -94,11 +92,9 @@ _void_for_clause_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     bavar
-                CMP     #0
                 BEQ     _void_for_clause_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -110,7 +106,6 @@ _void_for_clause_L1
 _void_for_clause_L2
                 LDA     gtrace
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _void_for_clause_L3
                 LDA     #1
@@ -126,7 +121,6 @@ _void_for_clause_L2
 _void_for_clause_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _void_for_clause_L4
                 LDA     #2

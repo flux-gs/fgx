@@ -25,7 +25,6 @@ main_stkok        TCS
                 CLC
                 ADC     #12
                 TAX
-                TXA
                 CLC
                 ADC     #18
                 TAY

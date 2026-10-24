@@ -642,7 +642,6 @@ scalarfar_stkok        TCS
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 PHA
@@ -1762,7 +1761,6 @@ scalarfar_stkok        TCS
                 TYA
                 FGX2_FARCALL _fcc_ll_add
                 TAX
-                TXA
                 SEC
                 SBC     #528
                 PHA

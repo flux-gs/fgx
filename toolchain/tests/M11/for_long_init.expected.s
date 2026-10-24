@@ -86,7 +86,6 @@ _for_long_init_L0
                 BEQ     _for_long_init_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0

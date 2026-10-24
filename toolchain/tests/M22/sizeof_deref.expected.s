@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _sizeof_deref_L0
                 LDA     #1

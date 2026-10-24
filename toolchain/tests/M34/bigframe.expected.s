@@ -285,7 +285,6 @@ main_stkok        TCS
                 LDA     8+main_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _bigframe_L2

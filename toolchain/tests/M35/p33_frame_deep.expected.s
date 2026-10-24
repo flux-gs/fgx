@@ -27,7 +27,6 @@ _p33_frame_deep_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #260
                 BVC     _p33_frame_deep_L3
@@ -51,7 +50,6 @@ _p33_frame_deep_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -93,7 +91,6 @@ _p33_frame_deep_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _p33_frame_deep_L4
                 LDA     #1
                 TAY
@@ -126,7 +123,6 @@ _p33_frame_deep_L4
                 PHA
                 LDA     #255
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -164,7 +160,6 @@ _p33_frame_deep_L5
                 PHA
                 LDA     #256
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -202,7 +197,6 @@ _p33_frame_deep_L6
                 PHA
                 LDA     #259
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -222,7 +216,6 @@ _p33_frame_deep_L6
 _p33_frame_deep_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #12345
                 BEQ     _p33_frame_deep_L8
                 LDA     #5
@@ -246,7 +239,6 @@ _p33_frame_deep_L9
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #260
                 BVC     _p33_frame_deep_L12
@@ -283,7 +275,6 @@ _p33_frame_deep_L10
 _p33_frame_deep_L11
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #16262
                 BEQ     _p33_frame_deep_L13
                 LDA     #6

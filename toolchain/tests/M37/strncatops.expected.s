@@ -118,11 +118,9 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strncatops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -161,7 +159,6 @@ _strncatops_L3
                 BEQ     _strncatops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -257,11 +254,9 @@ _strncatops_L1
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strncatops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -270,11 +265,9 @@ _strncatops_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _strncatops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -361,11 +354,9 @@ _strncatops_L5
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strncatops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -461,11 +452,9 @@ _strncatops_L6
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strncatops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1

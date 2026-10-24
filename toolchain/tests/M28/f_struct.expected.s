@@ -158,7 +158,6 @@ _f_struct_L1
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _f_struct_L2
                 LDA     #3
@@ -174,7 +173,6 @@ _f_struct_L1
 _f_struct_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _f_struct_L3
                 LDA     #4
@@ -236,7 +234,6 @@ _f_struct_L3
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_struct_L4
                 LDA     #5

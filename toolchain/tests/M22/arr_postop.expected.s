@@ -55,7 +55,6 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _arr_postop_L0
                 LDA     #1
@@ -74,7 +73,6 @@ _arr_postop_L0
                 TAX
                 LDA:    giw,X
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _arr_postop_L1
                 LDA     #2
@@ -139,7 +137,6 @@ _arr_postop_L1
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _arr_postop_L2
                 LDA     #3
@@ -171,7 +168,6 @@ _arr_postop_L2
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _arr_postop_L3
                 LDA     #4
@@ -228,7 +224,6 @@ _arr_postop_L3
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #200
                 BEQ     _arr_postop_L4
                 LDA     #5
@@ -247,7 +242,6 @@ _arr_postop_L4
                 LDA:    gcb,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #199
                 BEQ     _arr_postop_L5
                 LDA     #6
@@ -302,7 +296,6 @@ _arr_postop_L6
                 STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -317,7 +310,6 @@ _arr_postop_L8
 _arr_postop_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _arr_postop_L9
                 LDA     #7

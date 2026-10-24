@@ -69,7 +69,6 @@ _strcopy_test_L0
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strcopy_test_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
@@ -161,7 +160,6 @@ _strcopy_test_L2
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strcopy_test_L3
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2

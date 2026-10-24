@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L0
                 LDA     #1
@@ -37,7 +36,6 @@ main_stkok        TCS
 _pdplayout_L0
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L1
                 LDA     #2
@@ -53,7 +51,6 @@ _pdplayout_L0
 _pdplayout_L1
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L2
                 LDA     #3
@@ -69,7 +66,6 @@ _pdplayout_L1
 _pdplayout_L2
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L3
                 LDA     #4
@@ -85,7 +81,6 @@ _pdplayout_L2
 _pdplayout_L3
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L4
                 LDA     #5
@@ -125,7 +120,6 @@ _pdplayout_L4
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L5
                 LDA     #6
@@ -165,7 +159,6 @@ _pdplayout_L5
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _pdplayout_L6
                 LDA     #7
@@ -205,7 +198,6 @@ _pdplayout_L6
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _pdplayout_L7
                 LDA     #8
@@ -245,7 +237,6 @@ _pdplayout_L7
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _pdplayout_L8
                 LDA     #9
@@ -285,7 +276,6 @@ _pdplayout_L8
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #20
                 BEQ     _pdplayout_L9
                 LDA     #10
@@ -301,7 +291,6 @@ _pdplayout_L8
 _pdplayout_L9
                 LDA     #24
                 TAX
-                TXA
                 CMP     #24
                 BEQ     _pdplayout_L10
                 LDA     #11
@@ -317,7 +306,6 @@ _pdplayout_L9
 _pdplayout_L10
                 LDA     #64
                 TAX
-                TXA
                 CMP     #64
                 BEQ     _pdplayout_L11
                 LDA     #12
@@ -356,7 +344,6 @@ _pdplayout_L11
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                CMP     #0
                 BEQ     _pdplayout_L12
                 LDA     #13
                 TAY
@@ -395,7 +382,6 @@ _pdplayout_L12
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L13
                 LDA     #14
@@ -435,7 +421,6 @@ _pdplayout_L13
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L14
                 LDA     #15
@@ -475,7 +460,6 @@ _pdplayout_L14
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _pdplayout_L15
                 LDA     #16
@@ -515,7 +499,6 @@ _pdplayout_L15
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _pdplayout_L16
                 LDA     #17
@@ -555,7 +538,6 @@ _pdplayout_L16
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _pdplayout_L17
                 LDA     #18
@@ -595,7 +577,6 @@ _pdplayout_L17
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #40
                 BEQ     _pdplayout_L18
                 LDA     #19
@@ -635,7 +616,6 @@ _pdplayout_L18
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #50
                 BEQ     _pdplayout_L19
                 LDA     #20
@@ -675,7 +655,6 @@ _pdplayout_L19
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #52
                 BEQ     _pdplayout_L20
                 LDA     #21
@@ -715,7 +694,6 @@ _pdplayout_L20
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #60
                 BEQ     _pdplayout_L21
                 LDA     #22
@@ -731,7 +709,6 @@ _pdplayout_L20
 _pdplayout_L21
                 LDA     #70
                 TAX
-                TXA
                 CMP     #70
                 BEQ     _pdplayout_L22
                 LDA     #23
@@ -771,7 +748,6 @@ _pdplayout_L22
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L23
                 LDA     #24
@@ -811,7 +787,6 @@ _pdplayout_L23
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L24
                 LDA     #25
@@ -851,7 +826,6 @@ _pdplayout_L24
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _pdplayout_L25
                 LDA     #26
@@ -867,7 +841,6 @@ _pdplayout_L24
 _pdplayout_L25
                 LDA     #446
                 TAX
-                TXA
                 CMP     #446
                 BEQ     _pdplayout_L26
                 LDA     #27
@@ -907,7 +880,6 @@ _pdplayout_L26
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L27
                 LDA     #28
@@ -947,7 +919,6 @@ _pdplayout_L27
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _pdplayout_L28
                 LDA     #29
@@ -987,7 +958,6 @@ _pdplayout_L28
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _pdplayout_L29
                 LDA     #30
@@ -1027,7 +997,6 @@ _pdplayout_L29
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #208
                 BEQ     _pdplayout_L30
                 LDA     #31
@@ -1067,7 +1036,6 @@ _pdplayout_L30
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #210
                 BEQ     _pdplayout_L31
                 LDA     #32
@@ -1107,7 +1075,6 @@ _pdplayout_L31
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #410
                 BEQ     _pdplayout_L32
                 LDA     #33
@@ -1147,7 +1114,6 @@ _pdplayout_L32
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #414
                 BEQ     _pdplayout_L33
                 LDA     #34
@@ -1187,7 +1153,6 @@ _pdplayout_L33
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #418
                 BEQ     _pdplayout_L34
                 LDA     #35
@@ -1227,7 +1192,6 @@ _pdplayout_L34
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #422
                 BEQ     _pdplayout_L35
                 LDA     #36
@@ -1267,7 +1231,6 @@ _pdplayout_L35
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #428
                 BEQ     _pdplayout_L36
                 LDA     #37
@@ -1307,7 +1270,6 @@ _pdplayout_L36
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #440
                 BEQ     _pdplayout_L37
                 LDA     #38
@@ -1347,7 +1309,6 @@ _pdplayout_L37
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #444
                 BEQ     _pdplayout_L38
                 LDA     #39
@@ -1391,7 +1352,6 @@ _pdplayout_L38
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L39
                 LDA     #40
@@ -1433,7 +1393,6 @@ _pdplayout_L39
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L40
                 LDA     #41
@@ -1477,12 +1436,10 @@ _pdplayout_L40
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L41
                 LDA     #42
                 TAX
-                TXA
                 INC
                 TAY
                 TSC
@@ -1528,10 +1485,8 @@ _pdplayout_L41
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _pdplayout_L42
                 LDA     #44
@@ -1557,10 +1512,8 @@ _pdplayout_L42
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _pdplayout_L43
                 LDA     #45
@@ -1586,10 +1539,8 @@ _pdplayout_L43
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _pdplayout_L44
                 LDA     #46
@@ -1615,10 +1566,8 @@ _pdplayout_L44
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _pdplayout_L45
                 LDA     #47

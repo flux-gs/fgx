@@ -160,7 +160,6 @@ _arrmemberdecay_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrmemberdecay_L7
@@ -183,7 +182,6 @@ _arrmemberdecay_L7
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 JSR     _fcc_long_from_int
@@ -224,7 +222,6 @@ _arrmemberdecay_L7
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -246,7 +243,6 @@ _arrmemberdecay_L7
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 AND     #$00FF
                 SEP     #$20
@@ -742,7 +738,6 @@ _arrmemberdecay_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #10
                 BNE     _arrmemberdecay_L18
                 LDA     11,S   ; fccstk d=0 b=11
@@ -757,7 +752,6 @@ _arrmemberdecay_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #40
                 BNE     _arrmemberdecay_L18
                 LDA     #0
@@ -800,7 +794,6 @@ _arrmemberdecay_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _arrmemberdecay_L21
                 LDA     15,S   ; fccstk d=0 b=15
@@ -815,7 +808,6 @@ _arrmemberdecay_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #4
                 BNE     _arrmemberdecay_L21
                 LDA     #0
@@ -849,7 +841,6 @@ _arrmemberdecay_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #30
                 BEQ     _arrmemberdecay_L23
                 LDA     #10
@@ -876,7 +867,6 @@ _arrmemberdecay_L23
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _arrmemberdecay_L24
                 LDA     #11
@@ -892,7 +882,6 @@ _arrmemberdecay_L23
 _arrmemberdecay_L24
                 LDA     o+0
                 TAX
-                TXA
                 CMP     #23130
                 BEQ     _arrmemberdecay_L25
                 LDA     #12

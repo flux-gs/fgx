@@ -85,7 +85,6 @@ main_stkok        TCS
                 BNE     _vspf_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -100,7 +99,6 @@ _vspf_L1
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _vspf_L4
@@ -174,7 +172,6 @@ _vspf_L3
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _vspf_L8
                 LDA     #6
@@ -182,7 +179,6 @@ _vspf_L3
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
                 BNE     _vspf_L8
                 LDA     #1
@@ -197,7 +193,6 @@ _vspf_L9
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #72
                 BNE     _vspf_L6
                 LDA     #1
@@ -209,7 +204,6 @@ _vspf_L7
                 BEQ     _vspf_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
@@ -253,7 +247,6 @@ _vspf_L5
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #68
                 BNE     _vspf_L11
                 LDA     #1
@@ -261,7 +254,6 @@ _vspf_L5
                 LDA:    ov,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
                 BNE     _vspf_L11
                 LDA     #1
@@ -273,7 +265,6 @@ _vspf_L12
                 BEQ     _vspf_L10
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1

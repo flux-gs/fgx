@@ -92,7 +92,6 @@ _m2d_partial_L3
 _m2d_partial_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

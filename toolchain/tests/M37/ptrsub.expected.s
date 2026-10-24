@@ -87,7 +87,6 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 ORA     #16
                 TAY
                 LDA     1,S
@@ -138,7 +137,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #15
                 TAY
                 LDA     1,S
@@ -159,12 +157,10 @@ main_stkok        TCS
                 TAX
                 LDA:    wtab,X
                 TAX
-                TXA
                 CMP     #19
                 BNE     _ptrsub_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -174,19 +170,16 @@ _ptrsub_L0
                 LDA:    ctab,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _ptrsub_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
 _ptrsub_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -198,7 +191,6 @@ _ptrsub_L3
                 BPL     _ptrsub_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0

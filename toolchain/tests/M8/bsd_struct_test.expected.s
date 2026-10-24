@@ -219,7 +219,6 @@ _bsd_struct_test_L2
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

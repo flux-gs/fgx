@@ -20,10 +20,8 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     _struct_partial_init_g+0
-                CMP     #0
                 BNE     _struct_partial_init_L1
                 LDA     _struct_partial_init_g+2
-                CMP     #0
                 BNE     _struct_partial_init_L1
                 LDA     #0
                 BRA     _struct_partial_init_L2
@@ -58,7 +56,6 @@ _struct_partial_init_L0
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1
                 BNE     _struct_partial_init_L4
                 LDA     #0
@@ -77,7 +74,6 @@ _struct_partial_init_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
                 BNE     _struct_partial_init_L4
                 LDA     #0
@@ -113,7 +109,6 @@ _struct_partial_init_L3
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _struct_partial_init_L7
                 LDA     #1
@@ -131,7 +126,6 @@ _struct_partial_init_L3
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _struct_partial_init_L7
                 LDA     #0
                 BRA     _struct_partial_init_L8

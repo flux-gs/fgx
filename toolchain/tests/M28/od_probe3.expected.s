@@ -208,7 +208,6 @@ main_stkok        TCS
                 TCS
                 LDA     a+0
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _od_probe3_L0
                 LDA     #1
@@ -224,7 +223,6 @@ main_stkok        TCS
 _od_probe3_L0
                 LDA     a+2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _od_probe3_L1
                 LDA     #2
@@ -240,7 +238,6 @@ _od_probe3_L0
 _od_probe3_L1
                 LDA     a+4
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _od_probe3_L2
                 LDA     #3
@@ -255,7 +252,6 @@ _od_probe3_L1
                 RTL
 _od_probe3_L2
                 LDA     a+10
-                CMP     #0
                 BEQ     _od_probe3_L3
                 LDA     #4
                 TAY
@@ -418,7 +414,6 @@ _od_probe3_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _od_probe3_L7
                 LDA     #6
@@ -439,7 +434,6 @@ _od_probe3_L7
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _od_probe3_L8
                 LDA     #7
@@ -517,7 +511,6 @@ _od_probe3_L10
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #16
                 BEQ     _od_probe3_L9
                 LDA     #8

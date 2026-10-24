@@ -188,7 +188,6 @@ main_stkok        TCS
                 TYA
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _call_postfix_L2
                 LDA     #1
@@ -222,7 +221,6 @@ _call_postfix_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #30
                 BEQ     _call_postfix_L3
                 LDA     #2
@@ -253,7 +251,6 @@ _call_postfix_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _call_postfix_L4
                 LDA     #3
@@ -275,7 +272,6 @@ _call_postfix_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _call_postfix_L5
                 LDA     #4

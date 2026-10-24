@@ -51,7 +51,6 @@ _ss_recurse_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #256
                 BVC     _ss_recurse_L3
@@ -99,7 +98,6 @@ _ss_recurse_L2
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -112,12 +110,10 @@ _ss_recurse_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA

@@ -56,7 +56,6 @@ jump_from_deep_stkok        TCS
                 LDA     8+jump_from_deep_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 PLX
                 FGX2_FARCALL longjmp
@@ -120,7 +119,6 @@ main_stkok        TCS
 _setjmp_jump_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #41
                 BEQ     _setjmp_jump_L1
                 LDA     #2
@@ -136,7 +134,6 @@ _setjmp_jump_L0
 _setjmp_jump_L1
                 LDA     marker
                 TAX
-                TXA
                 CMP     #40
                 BEQ     _setjmp_jump_L2
                 LDA     #3
@@ -188,7 +185,6 @@ _setjmp_jump_L2
 _setjmp_jump_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _setjmp_jump_L4
                 LDA     #5

@@ -152,7 +152,6 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #26
                 TAY

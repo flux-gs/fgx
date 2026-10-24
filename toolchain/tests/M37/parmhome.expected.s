@@ -244,7 +244,6 @@ kinds_stkok        TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BNE     _parmhome_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -303,7 +302,6 @@ _parmhome_L0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     3,S   ; fccstk d=0 b=3
@@ -353,12 +351,10 @@ _parmhome_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
                 BNE     _parmhome_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #5
                 BNE     _parmhome_L8
                 LDA     #0
@@ -420,7 +416,6 @@ _parmhome_L10
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _parmhome_L11
                 LDA     _fcc_img0
                 PHA
@@ -465,7 +460,6 @@ _parmhome_L11
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _parmhome_L13
                 LDA     #0
@@ -497,7 +491,6 @@ _parmhome_L15
                 LDA     [_fcc_ptr]
                 DEC
                 STA     [_fcc_ptr]
-                CMP     #0
                 BMI     _parmhome_L16
                 LDA     17,S   ; fccstk d=0 b=17
                 PHA
@@ -690,7 +683,6 @@ addr_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -707,7 +699,6 @@ addr_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -724,7 +715,6 @@ addr_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -943,7 +933,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     11,S   ; fccstk d=0 b=11
-                CMP     #0
                 BEQ     _parmhome_L24
                 LDA     11,S   ; fccstk d=0 b=11
                 TAY
@@ -1012,7 +1001,6 @@ _parmhome_L25
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #37
                 BEQ     _parmhome_L28
                 LDA     #7

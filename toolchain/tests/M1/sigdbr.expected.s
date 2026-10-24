@@ -73,7 +73,6 @@ churn_stkok        TCS
                 LDA     6+churn_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
@@ -153,7 +152,6 @@ _sigdbr_L0
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _sigdbr_L2
                 LDA     #2
@@ -178,7 +176,6 @@ _sigdbr_L2
                 TYA
                 LDA     sig_flag
                 TAX
-                TXA
                 CMP     #16898
                 BEQ     _sigdbr_L3
                 LDA     #3

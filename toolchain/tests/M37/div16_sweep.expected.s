@@ -101,7 +101,6 @@ _div16_sweep_L2
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _div16_sweep_L5
@@ -117,7 +116,6 @@ _div16_sweep_L6
                 JSR     _fcc_safepoint
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _div16_sweep_L9
@@ -136,7 +134,6 @@ _div16_sweep_L9
                 LDA:    dv,X
                 STA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 LDX     #1000
                 STA     _fcc_tmp_b
                 TXA
@@ -241,7 +238,6 @@ _div16_sweep_L15
                 JSR     _fcc_safepoint
                 LDA     _fcc_img4
                 TAX
-                TXA
                 SEC
                 SBC     #14
                 BVC     _div16_sweep_L18
@@ -257,7 +253,6 @@ _div16_sweep_L19
                 JSR     _fcc_safepoint
                 LDA     _fcc_img3
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _div16_sweep_L22
@@ -377,7 +372,6 @@ _div16_sweep_L29
                 INC     _fcc_img5
 _div16_sweep_L27
                 LDA     _fcc_img1
-                CMP     #0
                 BPL     _div16_sweep_L31
                 LDA     _fcc_img1
                 EOR     #$FFFF
@@ -388,7 +382,6 @@ _div16_sweep_L31
 _div16_sweep_L32
                 PHA
                 LDA     _fcc_img0
-                CMP     #0
                 BPL     _div16_sweep_L33
                 LDA     _fcc_img0
                 EOR     #$FFFF
@@ -430,7 +423,6 @@ _div16_sweep_L17
                 LDA     _fcc_img6
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     _div16_sweep_L36
                 LDA     #42
                 BRA     _div16_sweep_L37

@@ -70,10 +70,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
                 BEQ     _strescapes_L0
                 LDA     #1
@@ -99,7 +97,6 @@ _strescapes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
                 BEQ     _strescapes_L1
                 LDA     #2
@@ -125,7 +122,6 @@ _strescapes_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BEQ     _strescapes_L2
                 LDA     #3
@@ -151,7 +147,6 @@ _strescapes_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #74
                 BEQ     _strescapes_L3
                 LDA     #4
@@ -177,10 +172,8 @@ _strescapes_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
                 BEQ     _strescapes_L4
                 LDA     #5
@@ -206,7 +199,6 @@ _strescapes_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
                 BEQ     _strescapes_L5
                 LDA     #6
@@ -232,7 +224,6 @@ _strescapes_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #72
                 BEQ     _strescapes_L6
                 LDA     #7
@@ -257,7 +248,6 @@ _strescapes_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strescapes_L7
                 LDA     #8
                 TAY
@@ -282,10 +272,8 @@ _strescapes_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
                 BEQ     _strescapes_L8
                 LDA     #9
@@ -311,7 +299,6 @@ _strescapes_L8
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #91
                 BEQ     _strescapes_L9
                 LDA     #10
@@ -337,10 +324,8 @@ _strescapes_L9
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _strescapes_L10
                 LDA     #11
@@ -366,10 +351,8 @@ _strescapes_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _strescapes_L11
                 LDA     #12
@@ -395,10 +378,8 @@ _strescapes_L11
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #27
                 BEQ     _strescapes_L12
                 LDA     #13
@@ -424,10 +405,8 @@ _strescapes_L12
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #220
                 BEQ     _strescapes_L13
                 LDA     #14
@@ -452,7 +431,6 @@ _strescapes_L13
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _strescapes_L14
                 LDA     #15
                 TAY

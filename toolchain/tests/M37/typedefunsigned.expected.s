@@ -310,7 +310,6 @@ _typedefunsigned_L8
                 STX     _fcc_tmp_b
                 JSR     _fcc_divu16
                 TAX
-                TXA
                 CMP     #400
                 BEQ     _typedefunsigned_L9
                 LDA     #50
@@ -360,7 +359,6 @@ _typedefunsigned_L10
                 LSR
                 LSR
                 TAX
-                TXA
                 CMP     #2048
                 BEQ     _typedefunsigned_L11
                 LDA     #52
@@ -501,7 +499,6 @@ _typedefunsigned_L15
                 LDA     _fcc_img3
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #200
                 BEQ     _typedefunsigned_L16
                 LDA     #57

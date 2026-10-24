@@ -80,7 +80,6 @@ _getoptops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _getoptops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -525,31 +524,26 @@ _getoptops_L4
                 BRL     _getoptops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #108
                 BNE     _getoptops_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 ORA     #1
                 STA     5,S   ; fccstk d=0 b=5
                 BRL     _getoptops_L7
 _getoptops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #97
                 BNE     _getoptops_L8
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 ORA     #2
                 STA     5,S   ; fccstk d=0 b=5
                 BRL     _getoptops_L9
 _getoptops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #111
                 BNE     _getoptops_L10
                 SEP     #$20
@@ -589,7 +583,6 @@ _getoptops_L11
 _getoptops_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #102
                 BNE     _getoptops_L13
                 SEP     #$20
@@ -629,12 +622,10 @@ _getoptops_L14
 _getoptops_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #63
                 BNE     _getoptops_L16
                 LDA     optopt
                 TAX
-                TXA
                 CMP     #122
                 BNE     _getoptops_L17
                 LDA     #1
@@ -653,64 +644,52 @@ _getoptops_L7
 _getoptops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #3
                 BNE     _getoptops_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L19
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BEQ     _getoptops_L20
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L20
                 LDA     7,S   ; fccstk d=0 b=7
-                CMP     #0
                 BEQ     _getoptops_L21
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L21
                 LDA     11,S   ; fccstk d=0 b=11
-                CMP     #0
                 BEQ     _getoptops_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L22
                 LDA     13,S   ; fccstk d=0 b=13
-                CMP     #0
                 BNE     _getoptops_L23
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L23
                 LDA     optind
                 TAX
-                TXA
                 CMP     #6
                 BNE     _getoptops_L24
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -748,11 +727,9 @@ _getoptops_L24
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _getoptops_L25
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1

@@ -85,7 +85,6 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 TAY

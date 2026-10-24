@@ -78,7 +78,6 @@ _realloc_grow_L3
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _realloc_grow_L6
@@ -102,7 +101,6 @@ _realloc_grow_L6
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 AND     #$00FF
@@ -189,7 +187,6 @@ _realloc_grow_L10
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _realloc_grow_L13
@@ -208,12 +205,10 @@ _realloc_grow_L13
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 PLA
@@ -245,7 +240,6 @@ _realloc_grow_L15
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #200
                 BVC     _realloc_grow_L18
@@ -269,7 +263,6 @@ _realloc_grow_L18
                 PHA
                 LDA     9,S   ; fccstk d=4 b=5
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -301,7 +294,6 @@ _realloc_grow_L19
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _realloc_grow_L22
@@ -320,12 +312,10 @@ _realloc_grow_L22
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 PLA
@@ -412,7 +402,6 @@ _realloc_grow_L27
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _realloc_grow_L30
@@ -431,12 +420,10 @@ _realloc_grow_L30
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 PLA
@@ -597,10 +584,8 @@ _realloc_grow_L32
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _realloc_grow_L35
                 LDA     #8
@@ -626,10 +611,8 @@ _realloc_grow_L35
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #13
                 BEQ     _realloc_grow_L36
                 LDA     #9

@@ -214,10 +214,8 @@ _struct_manyfields_L2
                 TYA
                 LDA     M+8
                 AND     #$00FF
-                CMP     #0
                 BNE     _struct_manyfields_L15
                 LDA     M+2
-                CMP     #0
                 BNE     _struct_manyfields_L15
                 LDA     #0
                 BRA     _struct_manyfields_L16
@@ -240,7 +238,6 @@ _struct_manyfields_L14
                 BNE     _struct_manyfields_L11
                 LDA     M+80
                 AND     #$00FF
-                CMP     #0
                 BNE     _struct_manyfields_L11
                 LDA     #0
                 BRA     _struct_manyfields_L12
@@ -250,7 +247,6 @@ _struct_manyfields_L12
                 CMP     #0
                 BNE     _struct_manyfields_L9
                 LDA     M+90
-                CMP     #0
                 BNE     _struct_manyfields_L9
                 LDA     #0
                 BRA     _struct_manyfields_L10
@@ -260,7 +256,6 @@ _struct_manyfields_L10
                 CMP     #0
                 BNE     _struct_manyfields_L7
                 LDA     M+96
-                CMP     #0
                 BNE     _struct_manyfields_L7
                 LDA     #0
                 BRA     _struct_manyfields_L8
@@ -270,7 +265,6 @@ _struct_manyfields_L8
                 CMP     #0
                 BNE     _struct_manyfields_L5
                 LDA     M+100
-                CMP     #0
                 BNE     _struct_manyfields_L5
                 LDA     #0
                 BRA     _struct_manyfields_L6
@@ -294,7 +288,6 @@ _struct_manyfields_L4
                 STA     _fcc_long_hi
                 LDA     _fcc_img3
                 TAX
-                TXA
                 SEC
                 SBC     #6
                 TAY

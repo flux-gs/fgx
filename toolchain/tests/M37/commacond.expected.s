@@ -75,7 +75,6 @@ _commacond_L0
 _commacond_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -88,7 +87,6 @@ _commacond_L1
                 BEQ     _commacond_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -106,7 +104,6 @@ _commacond_L3
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #100
                 STA     _fcc_img2
@@ -120,7 +117,6 @@ _commacond_L3
                 BEQ     _commacond_L5
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img1
@@ -138,12 +134,10 @@ _commacond_L5
                 LDA     _fcc_img2
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #104
                 BNE     _commacond_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     5,S   ; fccstk d=0 b=5

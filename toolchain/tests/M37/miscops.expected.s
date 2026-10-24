@@ -43,7 +43,6 @@ main_stkok        TCS
                 BNE     _miscops_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -87,7 +86,6 @@ _miscops_L0
                 BEQ     _miscops_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -132,7 +130,6 @@ _miscops_L4
                 BEQ     _miscops_L2
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -150,7 +147,6 @@ _miscops_L2
                 BNE     _miscops_L5
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -182,7 +178,6 @@ _miscops_L5
                 BNE     _miscops_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -213,7 +208,6 @@ _miscops_L6
                 TCS
                 TYA
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _miscops_L8
@@ -222,7 +216,6 @@ _miscops_L8
                 BMI     _miscops_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -231,11 +224,9 @@ _miscops_L7
                 STA     5,S   ; fccstk d=0 b=5
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BMI     _miscops_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7

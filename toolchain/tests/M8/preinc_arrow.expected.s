@@ -43,13 +43,11 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -62,7 +60,6 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 TAY

@@ -39,7 +39,6 @@ _struct_ecopy_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _struct_ecopy_L3
@@ -170,7 +169,6 @@ _struct_ecopy_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -199,7 +197,6 @@ _struct_ecopy_L7
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 DEC
                 STA     _fcc_tmp_b
                 ASL
@@ -246,7 +243,6 @@ _struct_ecopy_L6
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _struct_ecopy_L9
                 LDA     #1
                 TAY
@@ -275,7 +271,6 @@ _struct_ecopy_L9
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     _struct_ecopy_L10
                 LDA     #2
                 TAY
@@ -306,7 +301,6 @@ _struct_ecopy_L10
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _struct_ecopy_L11
                 LDA     #3
@@ -338,7 +332,6 @@ _struct_ecopy_L11
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #20
                 BEQ     _struct_ecopy_L12
                 LDA     #4
@@ -435,7 +428,6 @@ _struct_ecopy_L13
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #104
                 BEQ     _struct_ecopy_L14
                 LDA     #6
@@ -484,7 +476,6 @@ _struct_ecopy_L14
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #105
                 BEQ     _struct_ecopy_L15
                 LDA     #7

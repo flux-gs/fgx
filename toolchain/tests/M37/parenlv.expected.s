@@ -38,7 +38,6 @@ main_stkok        TCS
                 STA     _fcc_img2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #40
                 STA     _fcc_img0
@@ -59,7 +58,6 @@ main_stkok        TCS
                 STA     _fcc_img2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CMP     #40
                 BNE     _parenlv_L1
                 LDA     _fcc_img3
@@ -80,7 +78,6 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _parenlv_L1
                 LDA     #1

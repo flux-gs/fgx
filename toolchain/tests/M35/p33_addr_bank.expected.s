@@ -148,7 +148,6 @@ main_stkok        TCS
                 TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #777
                 BEQ     _p33_addr_bank_L0
                 LDA     #1
@@ -182,7 +181,6 @@ _p33_addr_bank_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #777
                 BEQ     _p33_addr_bank_L1
                 LDA     #2
@@ -235,7 +233,6 @@ _p33_addr_bank_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #555
                 BEQ     _p33_addr_bank_L2
                 LDA     #3
@@ -267,7 +264,6 @@ _p33_addr_bank_L2
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #888
                 BEQ     _p33_addr_bank_L3
                 LDA     #4
@@ -320,7 +316,6 @@ _p33_addr_bank_L3
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #999
                 BEQ     _p33_addr_bank_L4
                 LDA     #5

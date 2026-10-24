@@ -42,7 +42,6 @@ _glptrvar_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #600
                 BVC     _glptrvar_L3
@@ -98,7 +97,6 @@ _glptrvar_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #600
                 BVC     _glptrvar_L7
@@ -109,7 +107,6 @@ _glptrvar_L7
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -215,7 +212,6 @@ _glptrvar_L6
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -302,7 +298,6 @@ _glptrvar_L10
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

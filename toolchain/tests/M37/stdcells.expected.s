@@ -38,7 +38,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _stdcells_L0
                 LDA     #1
@@ -279,7 +278,6 @@ _stdcells_L7
                 LDA     _iob+46
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _stdcells_L8
                 LDA     #5
@@ -295,7 +293,6 @@ _stdcells_L7
 _stdcells_L8
                 LDA     _iob+14
                 AND     #$00FF
-                CMP     #0
                 BEQ     _stdcells_L9
                 LDA     #6
                 TAY

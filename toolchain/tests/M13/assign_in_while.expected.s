@@ -21,14 +21,11 @@ feed_stkok        TCS
                 INC     _fcc_fb
                 LDA     g_n
                 TAX
-                TXA
                 DEC
                 STA     g_n
-                CMP     #0
                 BPL     _assign_in_while_L0
                 LDA     #0
                 TAX
-                TXA
                 DEC
                 TAY
                 TSC

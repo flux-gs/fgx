@@ -381,7 +381,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #30
                 BEQ     _ppstride_L0
                 LDA     #1
@@ -415,7 +414,6 @@ _ppstride_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _ppstride_L1
                 LDA     #2
@@ -431,7 +429,6 @@ _ppstride_L0
 _ppstride_L1
                 FGX2_FARCALL floc
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _ppstride_L2
                 LDA     #3

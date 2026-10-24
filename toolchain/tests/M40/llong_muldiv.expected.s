@@ -661,7 +661,6 @@ main_stkok        TCS
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L5
                 LDA     #0
                 BRA     _llong_muldiv_L6
@@ -841,7 +840,6 @@ _llong_muldiv_L4
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L8
                 LDA     #0
                 BRA     _llong_muldiv_L9
@@ -1021,7 +1019,6 @@ _llong_muldiv_L7
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L11
                 LDA     #0
                 BRA     _llong_muldiv_L12
@@ -1201,7 +1198,6 @@ _llong_muldiv_L10
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L14
                 LDA     #0
                 BRA     _llong_muldiv_L15
@@ -1381,7 +1377,6 @@ _llong_muldiv_L13
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L17
                 LDA     #0
                 BRA     _llong_muldiv_L18
@@ -1561,7 +1556,6 @@ _llong_muldiv_L16
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L20
                 LDA     #0
                 BRA     _llong_muldiv_L21
@@ -1741,7 +1735,6 @@ _llong_muldiv_L19
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L23
                 LDA     #0
                 BRA     _llong_muldiv_L24
@@ -1921,7 +1914,6 @@ _llong_muldiv_L22
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L26
                 LDA     #0
                 BRA     _llong_muldiv_L27
@@ -2101,7 +2093,6 @@ _llong_muldiv_L25
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L29
                 LDA     #0
                 BRA     _llong_muldiv_L30
@@ -2281,7 +2272,6 @@ _llong_muldiv_L28
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L32
                 LDA     #0
                 BRA     _llong_muldiv_L33
@@ -2461,7 +2451,6 @@ _llong_muldiv_L31
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L35
                 LDA     #0
                 BRA     _llong_muldiv_L36
@@ -2641,7 +2630,6 @@ _llong_muldiv_L34
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L38
                 LDA     #0
                 BRA     _llong_muldiv_L39
@@ -2821,7 +2809,6 @@ _llong_muldiv_L37
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L41
                 LDA     #0
                 BRA     _llong_muldiv_L42
@@ -3001,7 +2988,6 @@ _llong_muldiv_L40
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L44
                 LDA     #0
                 BRA     _llong_muldiv_L45
@@ -3181,7 +3167,6 @@ _llong_muldiv_L43
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L47
                 LDA     #0
                 BRA     _llong_muldiv_L48
@@ -3361,7 +3346,6 @@ _llong_muldiv_L46
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L50
                 LDA     #0
                 BRA     _llong_muldiv_L51
@@ -3541,7 +3525,6 @@ _llong_muldiv_L49
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L53
                 LDA     #0
                 BRA     _llong_muldiv_L54
@@ -3721,7 +3704,6 @@ _llong_muldiv_L52
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L56
                 LDA     #0
                 BRA     _llong_muldiv_L57
@@ -3901,7 +3883,6 @@ _llong_muldiv_L55
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L59
                 LDA     #0
                 BRA     _llong_muldiv_L60
@@ -4081,7 +4062,6 @@ _llong_muldiv_L58
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L62
                 LDA     #0
                 BRA     _llong_muldiv_L63
@@ -4261,7 +4241,6 @@ _llong_muldiv_L61
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L65
                 LDA     #0
                 BRA     _llong_muldiv_L66
@@ -4441,7 +4420,6 @@ _llong_muldiv_L64
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L68
                 LDA     #0
                 BRA     _llong_muldiv_L69
@@ -4621,7 +4599,6 @@ _llong_muldiv_L67
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L71
                 LDA     #0
                 BRA     _llong_muldiv_L72
@@ -4801,7 +4778,6 @@ _llong_muldiv_L70
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L74
                 LDA     #0
                 BRA     _llong_muldiv_L75
@@ -4981,7 +4957,6 @@ _llong_muldiv_L73
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L77
                 LDA     #0
                 BRA     _llong_muldiv_L78
@@ -5161,7 +5136,6 @@ _llong_muldiv_L76
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L80
                 LDA     #0
                 BRA     _llong_muldiv_L81
@@ -5341,7 +5315,6 @@ _llong_muldiv_L79
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L83
                 LDA     #0
                 BRA     _llong_muldiv_L84
@@ -5521,7 +5494,6 @@ _llong_muldiv_L82
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L86
                 LDA     #0
                 BRA     _llong_muldiv_L87
@@ -5701,7 +5673,6 @@ _llong_muldiv_L85
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L89
                 LDA     #0
                 BRA     _llong_muldiv_L90
@@ -5881,7 +5852,6 @@ _llong_muldiv_L88
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L92
                 LDA     #0
                 BRA     _llong_muldiv_L93
@@ -6061,7 +6031,6 @@ _llong_muldiv_L91
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L95
                 LDA     #0
                 BRA     _llong_muldiv_L96
@@ -6241,7 +6210,6 @@ _llong_muldiv_L94
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L98
                 LDA     #0
                 BRA     _llong_muldiv_L99
@@ -6421,7 +6389,6 @@ _llong_muldiv_L97
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L101
                 LDA     #0
                 BRA     _llong_muldiv_L102
@@ -6601,7 +6568,6 @@ _llong_muldiv_L100
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L104
                 LDA     #0
                 BRA     _llong_muldiv_L105
@@ -6781,7 +6747,6 @@ _llong_muldiv_L103
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L107
                 LDA     #0
                 BRA     _llong_muldiv_L108
@@ -6961,7 +6926,6 @@ _llong_muldiv_L106
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L110
                 LDA     #0
                 BRA     _llong_muldiv_L111
@@ -7141,7 +7105,6 @@ _llong_muldiv_L109
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L113
                 LDA     #0
                 BRA     _llong_muldiv_L114
@@ -7321,7 +7284,6 @@ _llong_muldiv_L112
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L116
                 LDA     #0
                 BRA     _llong_muldiv_L117
@@ -7501,7 +7463,6 @@ _llong_muldiv_L115
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L119
                 LDA     #0
                 BRA     _llong_muldiv_L120
@@ -7681,7 +7642,6 @@ _llong_muldiv_L118
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L122
                 LDA     #0
                 BRA     _llong_muldiv_L123
@@ -7861,7 +7821,6 @@ _llong_muldiv_L121
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L125
                 LDA     #0
                 BRA     _llong_muldiv_L126
@@ -8160,7 +8119,6 @@ _llong_muldiv_L124
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_muldiv_L130
                 LDA     #0
                 BRA     _llong_muldiv_L131
@@ -8232,7 +8190,6 @@ _llong_muldiv_L131
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_muldiv_L128
                 LDA     #0
                 BRA     _llong_muldiv_L129
@@ -8324,7 +8281,6 @@ _llong_muldiv_L127
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_muldiv_L133
                 LDA     #0
                 BRA     _llong_muldiv_L134
@@ -8551,7 +8507,6 @@ _llong_muldiv_L132
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_muldiv_L138
                 LDA     #0
                 BRA     _llong_muldiv_L139
@@ -8705,7 +8660,6 @@ _llong_muldiv_L139
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_muldiv_L136
                 LDA     #0
                 BRA     _llong_muldiv_L137

@@ -164,7 +164,6 @@ _wait3ops_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _wait3ops_L8
                 LDA     #1
@@ -179,11 +178,9 @@ _wait3ops_L5
 _wait3ops_L6
                 LDA     _fcc_img1
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BEQ     _wait3ops_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -225,7 +222,6 @@ _wait3ops_L9
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -237,7 +233,6 @@ _wait3ops_L11
                 BPL     _wait3ops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -283,7 +278,6 @@ _wait3ops_L10
                 BNE     _wait3ops_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -293,7 +287,6 @@ _wait3ops_L12
                 BNE     _wait3ops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -324,7 +317,6 @@ _wait3ops_L17
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _wait3ops_L18
                 LDA     #0
                 STA     _fcc_img2
@@ -338,11 +330,9 @@ _wait3ops_L15
 _wait3ops_L16
                 LDA     _fcc_img2
                 STA     11,S   ; fccstk d=0 b=11
-                CMP     #0
                 BEQ     _wait3ops_L19
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5

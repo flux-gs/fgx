@@ -23,7 +23,6 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BNE     _char_cmp_L0
                 LDA     #42

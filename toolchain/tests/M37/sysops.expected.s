@@ -39,11 +39,9 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BNE     _sysops_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     11,S   ; fccstk d=0 b=11
@@ -79,9 +77,7 @@ _sysops_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #127
-                CMP     #0
                 BNE     _sysops_L2
                 SEP     #$20
                 MX      %10
@@ -100,10 +96,8 @@ _sysops_L0
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #1
                 BNE     _sysops_L2
                 LDA     #1
@@ -115,7 +109,6 @@ _sysops_L3
                 BEQ     _sysops_L1
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     11,S   ; fccstk d=0 b=11
@@ -161,7 +154,6 @@ _sysops_L1
                 BEQ     _sysops_L4
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11
@@ -259,7 +251,6 @@ _sysops_L7
                 BEQ     _sysops_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     11,S   ; fccstk d=0 b=11

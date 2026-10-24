@@ -51,7 +51,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #109
                 BEQ     _partial_sinit_L0
                 LDA     #1
@@ -82,7 +81,6 @@ _partial_sinit_L0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _partial_sinit_L1
                 LDA     #2
@@ -113,7 +111,6 @@ _partial_sinit_L1
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _partial_sinit_L2
                 LDA     #3
@@ -199,7 +196,6 @@ _partial_sinit_L3
                 MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     _partial_sinit_L6
                 LDA     #5
                 TAY
@@ -228,7 +224,6 @@ _partial_sinit_L6
                 MX      %00
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     _partial_sinit_L7
                 LDA     #6
                 TAY

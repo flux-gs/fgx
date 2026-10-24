@@ -30,7 +30,6 @@ fib_stkok        TCS
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _p33_recurse_L1
@@ -68,7 +67,6 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 PHA
                 FGX2_FARCALL fib
@@ -87,7 +85,6 @@ _p33_recurse_L0
                 LDA     6+fib_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 DEC
                 PHA
@@ -136,7 +133,6 @@ fact_stkok        TCS
                 LDA     6+fact_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -180,7 +176,6 @@ _p33_recurse_L2
                 LDA     8+fact_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA
@@ -224,7 +219,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #55
                 BEQ     _p33_recurse_L4
                 LDA     #1
@@ -245,7 +239,6 @@ _p33_recurse_L4
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #120
                 BEQ     _p33_recurse_L5
                 LDA     #2
@@ -266,7 +259,6 @@ _p33_recurse_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #610
                 BEQ     _p33_recurse_L6
                 LDA     #3

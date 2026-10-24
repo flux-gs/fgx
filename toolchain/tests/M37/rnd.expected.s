@@ -27,7 +27,6 @@ main_stkok        TCS
                 TYA
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #16838
                 BEQ     _rnd_L0
                 LDA     #1
@@ -43,7 +42,6 @@ main_stkok        TCS
 _rnd_L0
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #5758
                 BEQ     _rnd_L1
                 LDA     #2
@@ -59,7 +57,6 @@ _rnd_L0
 _rnd_L1
                 FGX2_FARCALL rand
                 TAX
-                TXA
                 CMP     #10113
                 BEQ     _rnd_L2
                 LDA     #3
@@ -189,7 +186,6 @@ _rnd_L4
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 TAX
-                TXA
                 SEC
                 SBC     #80
                 BVC     _rnd_L6
@@ -214,7 +210,6 @@ _rnd_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _rnd_L8
                 LDA     #7
@@ -224,7 +219,6 @@ _rnd_L5
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _rnd_L8
                 LDA     #0

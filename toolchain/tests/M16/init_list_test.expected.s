@@ -117,7 +117,6 @@ main_stkok        TCS
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _init_list_test_L0
                 LDA     #1
@@ -133,7 +132,6 @@ main_stkok        TCS
 _init_list_test_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _init_list_test_L1
                 LDA     #2
@@ -149,7 +147,6 @@ _init_list_test_L0
 _init_list_test_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _init_list_test_L2
                 LDA     #3

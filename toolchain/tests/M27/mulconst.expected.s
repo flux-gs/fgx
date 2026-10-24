@@ -111,7 +111,6 @@ _mulconst_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _mulconst_L3
@@ -137,7 +136,6 @@ _mulconst_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 LDY     #10
@@ -158,7 +156,6 @@ _mulconst_L4
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _mulconst_L7
@@ -223,7 +220,6 @@ _mulconst_L6
                 ADC     _fcc_tmp_b
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 AND     #255
                 TAY
                 TSC

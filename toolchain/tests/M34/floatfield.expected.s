@@ -163,7 +163,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _floatfield_L0
                 LDA     #1
                 TAY
@@ -236,7 +235,6 @@ _floatfield_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _floatfield_L1
                 LDA     #2
                 TAY
@@ -301,7 +299,6 @@ _floatfield_L1
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _floatfield_L2
                 LDA     #3
                 TAY
@@ -317,7 +314,6 @@ _floatfield_L2
                 LDA     #7
                 STA     g+12
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _floatfield_L3
                 LDA     #4
@@ -372,7 +368,6 @@ _floatfield_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _floatfield_L4
                 LDA     #5
                 TAY
@@ -462,7 +457,6 @@ _floatfield_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _floatfield_L5
                 LDA     #6
                 TAY

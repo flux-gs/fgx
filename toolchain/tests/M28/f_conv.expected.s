@@ -32,7 +32,6 @@ main_stkok        TCS
                 JSR     _fcc_ftoi
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _f_conv_L0
                 LDA     #1
@@ -55,7 +54,6 @@ _f_conv_L0
                 LDA     #0
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _f_conv_L1
                 LDA     #2
@@ -78,7 +76,6 @@ _f_conv_L1
                 LDA     #0
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _f_conv_L2
                 LDA     #3
@@ -104,11 +101,9 @@ _f_conv_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 INC
                 INC
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_conv_L3
                 LDA     #4

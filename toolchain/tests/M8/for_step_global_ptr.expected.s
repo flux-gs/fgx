@@ -130,11 +130,9 @@ _for_step_global_ptr_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _for_step_global_ptr_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

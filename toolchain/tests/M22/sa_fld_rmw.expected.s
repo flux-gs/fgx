@@ -27,7 +27,6 @@ _sa_fld_rmw_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _sa_fld_rmw_L3
@@ -138,7 +137,6 @@ _sa_fld_rmw_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 LDY     #8
@@ -162,7 +160,6 @@ _sa_fld_rmw_L2
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 LDY     #8

@@ -99,7 +99,6 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _g54_fnfield_null_L5
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
@@ -112,7 +111,6 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _g54_fnfield_null_L5
                 LDA     #1
                 BRA     _g54_fnfield_null_L6
@@ -132,7 +130,6 @@ _g54_fnfield_null_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _g54_fnfield_null_L3
                 LDA     #1
                 BRA     _g54_fnfield_null_L4

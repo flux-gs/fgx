@@ -27,7 +27,6 @@ _selfchain_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _selfchain_L3
@@ -166,7 +165,6 @@ _selfchain_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _selfchain_L7

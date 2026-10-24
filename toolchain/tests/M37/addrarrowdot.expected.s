@@ -51,7 +51,6 @@ _addrarrowdot_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _addrarrowdot_L3
@@ -89,7 +88,6 @@ _addrarrowdot_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _addrarrowdot_L7
@@ -363,7 +361,6 @@ _addrarrowdot_L10
                 BEQ     _addrarrowdot_L26
                 LDA     gt+4
                 TAX
-                TXA
                 CMP     #8224
                 BNE     _addrarrowdot_L26
                 LDA     #1
@@ -375,7 +372,6 @@ _addrarrowdot_L27
                 BEQ     _addrarrowdot_L24
                 LDA     gt+10
                 TAX
-                TXA
                 CMP     #8225
                 BNE     _addrarrowdot_L24
                 LDA     #1
@@ -387,7 +383,6 @@ _addrarrowdot_L25
                 BEQ     _addrarrowdot_L22
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #4112
                 BNE     _addrarrowdot_L22
                 LDA     #1
@@ -399,7 +394,6 @@ _addrarrowdot_L23
                 BEQ     _addrarrowdot_L20
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #4114
                 BNE     _addrarrowdot_L20
                 LDA     #1
@@ -411,7 +405,6 @@ _addrarrowdot_L21
                 BEQ     _addrarrowdot_L18
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L18
                 LDA     #1
@@ -423,7 +416,6 @@ _addrarrowdot_L19
                 BEQ     _addrarrowdot_L16
                 LDA     gt+0
                 TAX
-                TXA
                 CMP     #31354
                 BNE     _addrarrowdot_L16
                 LDA     #1
@@ -435,7 +427,6 @@ _addrarrowdot_L17
                 BEQ     _addrarrowdot_L14
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #31868
                 BNE     _addrarrowdot_L14
                 LDA     #1
@@ -447,7 +438,6 @@ _addrarrowdot_L15
                 BEQ     _addrarrowdot_L12
                 LDA     gt+76
                 TAX
-                TXA
                 CMP     #31611
                 BNE     _addrarrowdot_L12
                 LDA     #1
@@ -459,7 +449,6 @@ _addrarrowdot_L13
                 BEQ     _addrarrowdot_L11
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -531,12 +520,10 @@ _addrarrowdot_L30
                 STA     [_fcc_fpr0]
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #2989
                 BNE     _addrarrowdot_L40
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #4112
                 BNE     _addrarrowdot_L40
                 LDA     #1
@@ -548,7 +535,6 @@ _addrarrowdot_L41
                 BEQ     _addrarrowdot_L38
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L38
                 LDA     #1
@@ -560,7 +546,6 @@ _addrarrowdot_L39
                 BEQ     _addrarrowdot_L36
                 LDA     gt+10
                 TAX
-                TXA
                 CMP     #8225
                 BNE     _addrarrowdot_L36
                 LDA     #1
@@ -573,7 +558,6 @@ _addrarrowdot_L37
                 LDA     gt+14
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #48
                 BNE     _addrarrowdot_L34
                 LDA     #1
@@ -585,7 +569,6 @@ _addrarrowdot_L35
                 BEQ     _addrarrowdot_L32
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #31868
                 BNE     _addrarrowdot_L32
                 LDA     #1
@@ -597,7 +580,6 @@ _addrarrowdot_L33
                 BEQ     _addrarrowdot_L31
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -698,7 +680,6 @@ _addrarrowdot_L44
                 BEQ     _addrarrowdot_L50
                 LDA     gt+4
                 TAX
-                TXA
                 CMP     #8224
                 BNE     _addrarrowdot_L50
                 LDA     #1
@@ -710,7 +691,6 @@ _addrarrowdot_L51
                 BEQ     _addrarrowdot_L48
                 LDA     gt+10
                 TAX
-                TXA
                 CMP     #8225
                 BNE     _addrarrowdot_L48
                 LDA     #1
@@ -722,7 +702,6 @@ _addrarrowdot_L49
                 BEQ     _addrarrowdot_L46
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #4114
                 BNE     _addrarrowdot_L46
                 LDA     #1
@@ -734,7 +713,6 @@ _addrarrowdot_L47
                 BEQ     _addrarrowdot_L45
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -816,13 +794,11 @@ _addrarrowdot_L54
                 LDA     gt+16
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #95
                 BNE     _addrarrowdot_L62
                 LDA     gt+15
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #49
                 BNE     _addrarrowdot_L62
                 LDA     #1
@@ -835,7 +811,6 @@ _addrarrowdot_L63
                 LDA     gt+17
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #51
                 BNE     _addrarrowdot_L60
                 LDA     #1
@@ -847,7 +822,6 @@ _addrarrowdot_L61
                 BEQ     _addrarrowdot_L58
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #4114
                 BNE     _addrarrowdot_L58
                 LDA     #1
@@ -859,7 +833,6 @@ _addrarrowdot_L59
                 BEQ     _addrarrowdot_L56
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L56
                 LDA     #1
@@ -871,7 +844,6 @@ _addrarrowdot_L57
                 BEQ     _addrarrowdot_L55
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -958,12 +930,10 @@ _addrarrowdot_L66
                 STA     [_fcc_fpr0]
                 LDA     gt+50
                 TAX
-                TXA
                 CMP     #3084
                 BNE     _addrarrowdot_L78
                 LDA     gt+32
                 TAX
-                TXA
                 CMP     #16480
                 BNE     _addrarrowdot_L78
                 LDA     #1
@@ -975,7 +945,6 @@ _addrarrowdot_L79
                 BEQ     _addrarrowdot_L76
                 LDA     gt+68
                 TAX
-                TXA
                 CMP     #16482
                 BNE     _addrarrowdot_L76
                 LDA     #1
@@ -987,7 +956,6 @@ _addrarrowdot_L77
                 BEQ     _addrarrowdot_L74
                 LDA     gt+40
                 TAX
-                TXA
                 CMP     #16449
                 BNE     _addrarrowdot_L74
                 LDA     #1
@@ -999,7 +967,6 @@ _addrarrowdot_L75
                 BEQ     _addrarrowdot_L72
                 LDA     gt+56
                 TAX
-                TXA
                 CMP     #16465
                 BNE     _addrarrowdot_L72
                 LDA     #1
@@ -1011,7 +978,6 @@ _addrarrowdot_L73
                 BEQ     _addrarrowdot_L70
                 LDA     gt+38
                 TAX
-                TXA
                 CMP     #16464
                 BNE     _addrarrowdot_L70
                 LDA     #1
@@ -1023,7 +989,6 @@ _addrarrowdot_L71
                 BEQ     _addrarrowdot_L68
                 LDA     gt+58
                 TAX
-                TXA
                 CMP     #16450
                 BNE     _addrarrowdot_L68
                 LDA     #1
@@ -1035,7 +1000,6 @@ _addrarrowdot_L69
                 BEQ     _addrarrowdot_L67
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -1151,7 +1115,6 @@ _addrarrowdot_L82
                 BEQ     _addrarrowdot_L88
                 LDA     gt+68
                 TAX
-                TXA
                 CMP     #16482
                 BNE     _addrarrowdot_L88
                 LDA     #1
@@ -1163,7 +1126,6 @@ _addrarrowdot_L89
                 BEQ     _addrarrowdot_L86
                 LDA     gt+58
                 TAX
-                TXA
                 CMP     #16450
                 BNE     _addrarrowdot_L86
                 LDA     #1
@@ -1175,7 +1137,6 @@ _addrarrowdot_L87
                 BEQ     _addrarrowdot_L84
                 LDA     gt+56
                 TAX
-                TXA
                 CMP     #16465
                 BNE     _addrarrowdot_L84
                 LDA     #1
@@ -1187,7 +1148,6 @@ _addrarrowdot_L85
                 BEQ     _addrarrowdot_L83
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -1261,8 +1221,7 @@ _addrarrowdot_L91
                 LDA     #0
 _addrarrowdot_L92
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L90
+                BEQ     _addrarrowdot_L90
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1271,12 +1230,10 @@ _addrarrowdot_L92
                 STA     [_fcc_fpr0]
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #3501
                 BNE     _addrarrowdot_L100
                 LDA     gt+0
                 TAX
-                TXA
                 CMP     #31354
                 BNE     _addrarrowdot_L100
                 LDA     #1
@@ -1288,7 +1245,6 @@ _addrarrowdot_L101
                 BEQ     _addrarrowdot_L98
                 LDA     gt+76
                 TAX
-                TXA
                 CMP     #31611
                 BNE     _addrarrowdot_L98
                 LDA     #1
@@ -1300,7 +1256,6 @@ _addrarrowdot_L99
                 BEQ     _addrarrowdot_L96
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L96
                 LDA     #1
@@ -1312,7 +1267,6 @@ _addrarrowdot_L97
                 BEQ     _addrarrowdot_L94
                 LDA     gt+22
                 TAX
-                TXA
                 CMP     #16448
                 BNE     _addrarrowdot_L94
                 LDA     #1
@@ -1324,7 +1278,6 @@ _addrarrowdot_L95
                 BEQ     _addrarrowdot_L93
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -1407,12 +1360,10 @@ _addrarrowdot_L104
                 STA     [_fcc_fpr0]
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #3598
                 BNE     _addrarrowdot_L110
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #4112
                 BNE     _addrarrowdot_L110
                 LDA     #1
@@ -1424,7 +1375,6 @@ _addrarrowdot_L111
                 BEQ     _addrarrowdot_L108
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L108
                 LDA     #1
@@ -1436,7 +1386,6 @@ _addrarrowdot_L109
                 BEQ     _addrarrowdot_L106
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #31868
                 BNE     _addrarrowdot_L106
                 LDA     #1
@@ -1448,7 +1397,6 @@ _addrarrowdot_L107
                 BEQ     _addrarrowdot_L105
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -1520,12 +1468,10 @@ _addrarrowdot_L114
                 STA     [_fcc_fpr0]
                 LDA     gh+16
                 TAX
-                TXA
                 CMP     #3855
                 BNE     _addrarrowdot_L124
                 LDA     gh+6
                 TAX
-                TXA
                 CMP     #24672
                 BNE     _addrarrowdot_L124
                 LDA     #1
@@ -1537,7 +1483,6 @@ _addrarrowdot_L125
                 BEQ     _addrarrowdot_L122
                 LDA     gh+22
                 TAX
-                TXA
                 CMP     #24673
                 BNE     _addrarrowdot_L122
                 LDA     #1
@@ -1549,7 +1494,6 @@ _addrarrowdot_L123
                 BEQ     _addrarrowdot_L120
                 LDA     gh+0
                 TAX
-                TXA
                 CMP     #23130
                 BNE     _addrarrowdot_L120
                 LDA     #1
@@ -1561,7 +1505,6 @@ _addrarrowdot_L121
                 BEQ     _addrarrowdot_L118
                 LDA     gh+24
                 TAX
-                TXA
                 CMP     #23387
                 BNE     _addrarrowdot_L118
                 LDA     #1
@@ -1612,7 +1555,6 @@ _addrarrowdot_L117
                 BEQ     _addrarrowdot_L115
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     29,S   ; fccstk d=0 b=29
@@ -1650,12 +1592,10 @@ _addrarrowdot_L112
                 STA     [_fcc_fpr0]
                 LDA     gt+68
                 TAX
-                TXA
                 CMP     #6682
                 BNE     _addrarrowdot_L137
                 LDA     gt+50
                 TAX
-                TXA
                 CMP     #16481
                 BNE     _addrarrowdot_L137
                 LDA     #1
@@ -1667,7 +1607,6 @@ _addrarrowdot_L138
                 BEQ     _addrarrowdot_L135
                 LDA     gt+32
                 TAX
-                TXA
                 CMP     #16480
                 BNE     _addrarrowdot_L135
                 LDA     #1
@@ -1679,7 +1618,6 @@ _addrarrowdot_L136
                 BEQ     _addrarrowdot_L133
                 LDA     gt+58
                 TAX
-                TXA
                 CMP     #16450
                 BNE     _addrarrowdot_L133
                 LDA     #1
@@ -1691,7 +1629,6 @@ _addrarrowdot_L134
                 BEQ     _addrarrowdot_L131
                 LDA     gt+74
                 TAX
-                TXA
                 CMP     #16466
                 BNE     _addrarrowdot_L131
                 LDA     #1
@@ -1703,7 +1640,6 @@ _addrarrowdot_L132
                 BEQ     _addrarrowdot_L129
                 LDA     gt+56
                 TAX
-                TXA
                 CMP     #16465
                 BNE     _addrarrowdot_L129
                 LDA     #1
@@ -1715,7 +1651,6 @@ _addrarrowdot_L130
                 BEQ     _addrarrowdot_L128
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     29,S   ; fccstk d=0 b=29
@@ -1763,8 +1698,7 @@ _addrarrowdot_L140
                 LDA     #0
 _addrarrowdot_L141
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L139
+                BEQ     _addrarrowdot_L139
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr0+2
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1773,12 +1707,10 @@ _addrarrowdot_L141
                 STA     [_fcc_fpr0]
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #6939
                 BNE     _addrarrowdot_L149
                 LDA     gt+0
                 TAX
-                TXA
                 CMP     #31354
                 BNE     _addrarrowdot_L149
                 LDA     #1
@@ -1790,7 +1722,6 @@ _addrarrowdot_L150
                 BEQ     _addrarrowdot_L147
                 LDA     gt+76
                 TAX
-                TXA
                 CMP     #31611
                 BNE     _addrarrowdot_L147
                 LDA     #1
@@ -1802,7 +1733,6 @@ _addrarrowdot_L148
                 BEQ     _addrarrowdot_L145
                 LDA     gt+18
                 TAX
-                TXA
                 CMP     #4113
                 BNE     _addrarrowdot_L145
                 LDA     #1
@@ -1814,7 +1744,6 @@ _addrarrowdot_L146
                 BEQ     _addrarrowdot_L143
                 LDA     gh+0
                 TAX
-                TXA
                 CMP     #23130
                 BNE     _addrarrowdot_L143
                 LDA     #1
@@ -1826,7 +1755,6 @@ _addrarrowdot_L144
                 BEQ     _addrarrowdot_L142
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     29,S   ; fccstk d=0 b=29

@@ -27,7 +27,6 @@ _ss_bigbuf_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #2048
                 BVC     _ss_bigbuf_L3

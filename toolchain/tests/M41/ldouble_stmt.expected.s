@@ -755,7 +755,6 @@ _ldouble_stmt_L5
                 FGX2_FARCALL _fcc_dtol
                 STA     33,S   ; fccstk d=0 b=33
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _ldouble_stmt_L6
                 LDA     #7

@@ -112,7 +112,6 @@ main_stkok        TCS
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ampcastmember_L0
                 LDA     #1
@@ -133,7 +132,6 @@ _ampcastmember_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #22
                 BEQ     _ampcastmember_L1
                 LDA     #2
@@ -234,7 +232,6 @@ _ampcastmember_L3
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _ampcastmember_L6
                 LDA     #5
@@ -260,7 +257,6 @@ _ampcastmember_L6
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _ampcastmember_L7
                 LDA     #6
@@ -297,7 +293,6 @@ _ampcastmember_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #99
                 BEQ     _ampcastmember_L8
                 LDA     #7
@@ -317,7 +312,6 @@ _ampcastmember_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ampcastmember_L9
                 LDA     #8
@@ -369,7 +363,6 @@ _ampcastmember_L9
                 LDA     [_fcc_img4]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #77
                 BEQ     _ampcastmember_L10
                 LDA     #9

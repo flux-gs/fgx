@@ -272,12 +272,10 @@ _memchain3_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4
                 BNE     _memchain3_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -318,12 +316,10 @@ _memchain3_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _memchain3_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -365,12 +361,10 @@ _memchain3_L2
                 AND     #$00FF
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #90
                 BNE     _memchain3_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -483,12 +477,10 @@ _memchain3_L3
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #6
                 BNE     _memchain3_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0

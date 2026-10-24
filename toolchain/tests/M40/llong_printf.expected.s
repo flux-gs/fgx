@@ -113,7 +113,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L0
                 LDA     #1
                 TAY
@@ -238,7 +237,6 @@ _llong_printf_L0
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L1
                 LDA     #2
                 TAY
@@ -329,7 +327,6 @@ _llong_printf_L1
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L2
                 LDA     #3
                 TAY
@@ -436,7 +433,6 @@ _llong_printf_L2
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L3
                 LDA     #4
                 TAY
@@ -527,7 +523,6 @@ _llong_printf_L3
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L4
                 LDA     #5
                 TAY
@@ -635,7 +630,6 @@ _llong_printf_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L5
                 LDA     #6
                 TAY
@@ -760,7 +754,6 @@ _llong_printf_L5
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_printf_L6
                 LDA     #7
                 TAY
@@ -1002,7 +995,6 @@ _llong_printf_L7
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_printf_L13
                 LDA     #0
                 BRA     _llong_printf_L14
@@ -1124,7 +1116,6 @@ _llong_printf_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_printf_L11
                 LDA     #0
                 BRA     _llong_printf_L12
@@ -1177,7 +1168,6 @@ _llong_printf_L12
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_printf_L9
                 LDA     #0
                 BRA     _llong_printf_L10

@@ -97,7 +97,6 @@ main_stkok        TCS
                 STA     _fcc_img0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _drefpreinc_L0
                 LDA     #1
@@ -203,7 +202,6 @@ _drefpreinc_L1
                 STA     _fcc_img0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _drefpreinc_L4
                 LDA     #3
@@ -267,11 +265,9 @@ _drefpreinc_L5
                 LDA     _fcc_img0
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #65
                 TAX
-                TXA
                 CLC
                 ADC     #42
                 TAY

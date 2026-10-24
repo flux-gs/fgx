@@ -87,7 +87,6 @@ main_stkok        TCS
                 TAX
                 LDA:    garr,X
                 TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -95,14 +94,12 @@ main_stkok        TCS
                 BCS     _u_track_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L0
                 FGX2_FARCALL uret
                 TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -110,7 +107,6 @@ _u_track_L0
                 BCS     _u_track_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     9,S   ; fccstk d=0 b=9
@@ -125,7 +121,6 @@ _u_track_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -133,7 +128,6 @@ _u_track_L1
                 BCS     _u_track_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     9,S   ; fccstk d=0 b=9
@@ -141,7 +135,6 @@ _u_track_L2
                 LDA     #36864
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -149,7 +142,6 @@ _u_track_L2
                 BCS     _u_track_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -204,14 +196,12 @@ _u_track_L3
                 BEQ     _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #31
                 BNE     _u_track_L5
                 LDA     #42

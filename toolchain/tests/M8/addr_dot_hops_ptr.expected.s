@@ -173,7 +173,6 @@ main_stkok        TCS
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 INC
                 LDY     #16
                 STA     [_fcc_fpr0],Y

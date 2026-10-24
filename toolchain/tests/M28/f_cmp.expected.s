@@ -734,7 +734,6 @@ _f_cmp_L34
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _f_cmp_L35
                 LDA     #16
                 TAY

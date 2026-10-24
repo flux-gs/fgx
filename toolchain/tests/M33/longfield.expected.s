@@ -227,7 +227,6 @@ _longfield_L2
                 LDA     #7
                 STA     g+12
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _longfield_L3
                 LDA     #4
@@ -298,7 +297,6 @@ _longfield_L4
                 BNE     _longfield_L6
                 LDA     gt+4
                 TAX
-                TXA
                 CMP     #5
                 BNE     _longfield_L6
                 LDA     #0
@@ -373,7 +371,6 @@ _longfield_L5
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
                 BNE     _longfield_L9
                 LDA     #0
@@ -449,7 +446,6 @@ _longfield_L8
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
                 BNE     _longfield_L12
                 LDA     #0

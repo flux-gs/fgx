@@ -29,7 +29,6 @@ _p33_setjmp_local_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _p33_setjmp_local_L3
@@ -166,7 +165,6 @@ main_stkok        TCS
 _p33_setjmp_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #314
                 BEQ     _p33_setjmp_local_L5
                 LDA     #1
@@ -186,7 +184,6 @@ _p33_setjmp_local_L5
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #314
                 BEQ     _p33_setjmp_local_L6
                 LDA     #2
@@ -202,7 +199,6 @@ _p33_setjmp_local_L5
 _p33_setjmp_local_L6
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _p33_setjmp_local_L7
                 LDA     #3
@@ -218,7 +214,6 @@ _p33_setjmp_local_L6
 _p33_setjmp_local_L7
                 LDA     marker
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _p33_setjmp_local_L8
                 LDA     #4
@@ -284,7 +279,6 @@ _p33_setjmp_local_L9
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #314
                 BEQ     _p33_setjmp_local_L12
                 LDA     #6

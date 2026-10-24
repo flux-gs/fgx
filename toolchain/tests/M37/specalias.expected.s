@@ -165,7 +165,6 @@ _specalias_note_stkok        TCS
                 INC     _fcc_fb
                 LDA     _specalias_n_trace
                 TAX
-                TXA
                 SEC
                 SBC     #24
                 BVC     _specalias_L1
@@ -611,7 +610,6 @@ chrtoblk_stkok        TCS
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #10
                 BNE     _specalias_L7
                 LDA     #0
@@ -636,7 +634,6 @@ _specalias_L7
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #11
                 BNE     _specalias_L8
                 LDA     #1
@@ -661,7 +658,6 @@ _specalias_L8
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #12
                 BNE     _specalias_L9
                 LDA     #2
@@ -686,7 +682,6 @@ _specalias_L9
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #13
                 BNE     _specalias_L10
                 LDA     #3
@@ -711,7 +706,6 @@ _specalias_L10
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #14
                 BNE     _specalias_L11
                 LDA     #4
@@ -736,7 +730,6 @@ _specalias_L11
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #15
                 BNE     _specalias_L12
                 LDA     #5
@@ -761,7 +754,6 @@ _specalias_L12
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #16
                 BNE     _specalias_L13
                 LDA     #6
@@ -786,7 +778,6 @@ _specalias_L13
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CMP     #17
                 BNE     _specalias_L14
                 LDA     #7
@@ -972,7 +963,6 @@ _specalias_L15
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -1055,7 +1045,6 @@ _specalias_L17
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _specalias_L20
@@ -1159,7 +1148,6 @@ _specalias_L21
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _specalias_L24
@@ -1236,7 +1224,6 @@ _specalias_L23
                 STA     _fcc_fpr0
                 LDA     #10496
                 TAX
-                TXA
                 CLC
                 ADC     #896
                 CLC
@@ -1856,7 +1843,6 @@ _specalias_L27
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     _specalias_L30
                 SEP     #$20
                 MX      %10
@@ -1893,7 +1879,6 @@ _specalias_L30
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _specalias_L31
                 LDA     _fcc_fpr0
@@ -2239,7 +2224,6 @@ vref_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2343,13 +2327,10 @@ vget_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
                 BEQ     _specalias_L36
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
                 LDA     _fcc_fpr0
@@ -2395,7 +2376,6 @@ _specalias_L36
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _specalias_L37
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -2485,7 +2465,6 @@ vrele_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2542,7 +2521,6 @@ _specalias_L38
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2790,7 +2768,6 @@ holdrele_stkok        TCS
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -3601,7 +3578,6 @@ _specalias_L51
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _specalias_L54
@@ -3966,13 +3942,11 @@ checkalias_stkok        TCS
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L59
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _specalias_L59
                 LDA     #1
@@ -4167,7 +4141,6 @@ _specalias_L64
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _specalias_L67
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -4268,7 +4241,6 @@ _specalias_L73
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _specalias_L70
                 LDA     #0
                 BRA     _specalias_L71
@@ -4571,7 +4543,6 @@ _specalias_L76
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4580,7 +4551,6 @@ _specalias_L76
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     _fcc_fpr0
@@ -4895,7 +4865,6 @@ _specalias_L77
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BEQ     _specalias_L80
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
@@ -5292,7 +5261,6 @@ spec_securechr_stkok        TCS
                 INC     _fcc_fb
                 LDA     securelevel
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _specalias_L89
@@ -5327,7 +5295,6 @@ _specalias_L88
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #65535
                 BNE     _specalias_L90
                 LDA     #0
@@ -5416,7 +5383,6 @@ _specalias_L91
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BNE     _specalias_L95
                 LDA     #0
@@ -5580,7 +5546,6 @@ vfs_setsecurelevel_stkok        TCS
                 LDA     6+vfs_setsecurelevel_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -5663,7 +5628,6 @@ vcount_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
                 CMP     #0
                 BNE     _specalias_L100
@@ -5860,7 +5824,6 @@ _specalias_L104
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _specalias_L107
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6125,7 +6088,6 @@ vclean_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BEQ     _specalias_L109
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -6160,9 +6122,7 @@ _specalias_L109
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
                 BEQ     _specalias_L110
                 SEP     #$20
                 MX      %10
@@ -6205,7 +6165,6 @@ _specalias_L110
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
                 LDY     #22
@@ -6292,9 +6251,7 @@ _specalias_L111
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
                 BEQ     _specalias_L112
                 LDA     #1
                 PHA
@@ -6515,9 +6472,7 @@ _specalias_L113
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
                 BEQ     _specalias_L115
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -6723,7 +6678,6 @@ _specalias_L119
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L118
                 SEP     #$20
                 MX      %10
@@ -6743,7 +6697,6 @@ _specalias_L119
                 TCS
 _specalias_L118
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BEQ     _specalias_L120
                 DO      8+vclean_FRAMESIZE/256
                 TSC
@@ -6807,9 +6760,7 @@ _specalias_L120
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #512
-                CMP     #0
                 BEQ     _specalias_L121
                 LDA     [_fcc_fpr0]
                 PHA
@@ -6878,13 +6829,10 @@ vgone_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #256
-                CMP     #0
                 BEQ     _specalias_L122
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
                 LDA     _fcc_fpr0
@@ -6995,13 +6943,11 @@ _specalias_L122
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L124
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _specalias_L124
                 LDA     #0
@@ -7591,7 +7537,6 @@ _specalias_L132
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
                 CMP     #0
                 BNE     *+5
@@ -7800,7 +7745,6 @@ _specalias_L144
 _specalias_L145
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BNE     _specalias_L149
                 SEP     #$20
                 MX      %10
@@ -7821,7 +7765,6 @@ _specalias_L145
 _specalias_L149
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #1
                 BNE     _specalias_L150
                 LDA     7,S   ; fccstk d=0 b=7
@@ -8534,9 +8477,7 @@ _specalias_L161
                 LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 TAX
-                TXA
                 AND     #1
-                CMP     #0
                 BEQ     _specalias_L165
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -8544,9 +8485,7 @@ _specalias_L161
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
                 BEQ     _specalias_L165
                 LDA     #1
                 BRA     _specalias_L166
@@ -8563,7 +8502,6 @@ _specalias_L164
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _specalias_L167
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -8586,7 +8524,6 @@ _specalias_L167
                 LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 TAX
-                TXA
                 AND     #2
                 CMP     #0
                 BNE     *+5
@@ -8598,13 +8535,11 @@ _specalias_L167
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L170
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _specalias_L170
                 LDA     #1
@@ -8739,7 +8674,6 @@ _specalias_L156
                 BRL     _specalias_L155
 _specalias_L157
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BEQ     _specalias_L176
                 LDA     #16
                 TAY
@@ -8892,7 +8826,6 @@ ndslot_stkok        TCS
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _specalias_L180
@@ -8930,7 +8863,6 @@ _specalias_L177
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _specalias_L184
@@ -8948,7 +8880,6 @@ _specalias_L184
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #32
                 STA     _fcc_tmp_b
                 TXA
@@ -9030,7 +8961,6 @@ _specalias_L186
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 ASL
                 TAX
@@ -9154,7 +9084,6 @@ _specalias_L191
                 ASL
                 ASL
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 CLC
@@ -10298,7 +10227,6 @@ _specalias_nchbucket_stkok        TCS
                 PHA
                 LDA     #16
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 JSR     _fcc_long_from_int
@@ -11873,7 +11801,6 @@ _specalias_L221
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _specalias_L224
@@ -12000,7 +11927,6 @@ _specalias_L227
 _specalias_L225
                 LDA     #64
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -12433,7 +12359,6 @@ _specalias_L235
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                CMP     #0
                 BEQ     _specalias_L236
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
@@ -12599,7 +12524,6 @@ _specalias_L239
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _specalias_L242
@@ -12805,7 +12729,6 @@ _specalias_L248
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 SEC
                 SBC     #16
                 BVC     _specalias_L251
@@ -13127,7 +13050,6 @@ cache_lookup_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                CMP     #0
                 BEQ     _specalias_L265
                 LDA     #0
                 BRA     _specalias_L266
@@ -13172,7 +13094,6 @@ _specalias_L264
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -13555,7 +13476,6 @@ _specalias_L278
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BNE     _specalias_L275
                 LDA     #1
                 BRA     _specalias_L276
@@ -13676,7 +13596,6 @@ _specalias_L283
                 LDY     #46
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                CMP     #0
                 BEQ     _specalias_L287
                 LDA     #0
                 BRA     _specalias_L288
@@ -14034,7 +13953,6 @@ cache_enter_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     doingcache
-                CMP     #0
                 BEQ     _specalias_L297
                 LDA     #0
                 BRA     _specalias_L298
@@ -14078,7 +13996,6 @@ _specalias_L296
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -14701,7 +14618,6 @@ _specalias_L310
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #64
                 BVC     _specalias_L313
@@ -14840,7 +14756,6 @@ _specalias_L317
                 PHA
                 LDA     #64
                 TAX
-                TXA
                 INC
                 INC
                 STA     _fcc_tmp_b
@@ -15016,7 +14931,6 @@ main_stkok        TCS
                 LSR
                 LSR
                 TAX
-                TXA
                 CLC
                 ADC     #769
                 TAX
@@ -15066,7 +14980,6 @@ _specalias_L322
                 LSR
                 LSR
                 TAX
-                TXA
                 CLC
                 ADC     #769
                 TAX
@@ -15116,7 +15029,6 @@ _specalias_L323
                 LSR
                 LSR
                 TAX
-                TXA
                 CLC
                 ADC     #769
                 TAX
@@ -15175,7 +15087,6 @@ _specalias_L323
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L324
                 LDA     #53
                 TAY
@@ -15315,7 +15226,6 @@ _specalias_L328
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L329
                 LDA     #56
                 TAY
@@ -15396,7 +15306,6 @@ _specalias_L332
 _specalias_L330
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L333
                 LDA     #58
@@ -15429,7 +15338,6 @@ _specalias_L333
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #769
                 BEQ     _specalias_L334
                 LDA     #59
@@ -15621,7 +15529,6 @@ _specalias_L341
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
                 CMP     #0
                 BEQ     _specalias_L344
@@ -15733,7 +15640,6 @@ _specalias_L345
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L346
                 LDA     #65
                 TAY
@@ -15848,9 +15754,7 @@ _specalias_L350
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BNE     _specalias_L351
                 LDA     #68
                 TAY
@@ -15869,9 +15773,7 @@ _specalias_L351
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BNE     _specalias_L352
                 LDA     #69
                 TAY
@@ -15991,7 +15893,6 @@ _specalias_L358
 _specalias_L356
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _specalias_L359
                 LDA     #72
@@ -16052,7 +15953,6 @@ _specalias_L359
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L360
                 LDA     #73
                 TAY
@@ -16137,9 +16037,7 @@ _specalias_L361
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L364
                 LDA     #75
                 TAY
@@ -16304,7 +16202,6 @@ _specalias_L368
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L371
                 LDA     #78
                 TAY
@@ -16389,9 +16286,7 @@ _specalias_L372
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L375
                 LDA     #80
                 TAY
@@ -16516,7 +16411,6 @@ _specalias_L379
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _specalias_L382
                 LDA     #149
@@ -16558,7 +16452,6 @@ _specalias_L382
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L383
                 LDA     #82
                 TAY
@@ -16667,7 +16560,6 @@ _specalias_L384
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L391
                 LDA     #84
                 TAY
@@ -16740,7 +16632,6 @@ _specalias_L392
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L395
                 LDA     #86
@@ -16768,7 +16659,6 @@ _specalias_L395
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _specalias_L396
                 LDA     #87
@@ -16807,7 +16697,6 @@ _specalias_L396
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L397
                 LDA     #88
@@ -16835,7 +16724,6 @@ _specalias_L397
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L398
                 LDA     #89
@@ -16912,7 +16800,6 @@ _specalias_L399
                 PHA
                 LDA     27,S   ; fccstk d=2 b=25
                 TAX
-                TXA
                 DEC
                 STA     _fcc_tmp_b
                 PLA
@@ -16982,9 +16869,7 @@ _specalias_L401
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L404
                 LDA     #93
                 TAY
@@ -17003,9 +16888,7 @@ _specalias_L404
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L405
                 LDA     #94
                 TAY
@@ -17249,7 +17132,6 @@ _specalias_L415
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L418
                 LDA     #100
@@ -17270,7 +17152,6 @@ _specalias_L418
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _specalias_L419
                 LDA     #101
@@ -17347,7 +17228,6 @@ _specalias_L420
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _specalias_L423
                 LDA     #103
@@ -17383,7 +17263,6 @@ _specalias_L423
                 ADC     #6
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L424
                 LDA     #104
                 TAY
@@ -17403,7 +17282,6 @@ _specalias_L424
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L425
                 LDA     #105
@@ -17423,7 +17301,6 @@ _specalias_L425
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     _specalias_L426
                 LDA     #106
                 TAY
@@ -17510,7 +17387,6 @@ _specalias_L427
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #770
                 BEQ     _specalias_L430
                 LDA     #108
@@ -17573,7 +17449,6 @@ _specalias_L433
 _specalias_L431
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L434
                 LDA     #110
@@ -17634,7 +17509,6 @@ _specalias_L434
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L435
                 LDA     #111
                 TAY
@@ -17730,7 +17604,6 @@ _specalias_L436
                 STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     _specalias_L439
                 LDA     #113
                 TAY
@@ -17805,7 +17678,6 @@ _specalias_L440
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L443
                 LDA     #115
@@ -17893,7 +17765,6 @@ _specalias_L444
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #770
                 BEQ     _specalias_L447
                 LDA     #117
@@ -17909,7 +17780,6 @@ _specalias_L444
 _specalias_L447
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L448
                 LDA     #118
@@ -17929,9 +17799,7 @@ _specalias_L448
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L449
                 LDA     #119
                 TAY
@@ -17950,7 +17818,6 @@ _specalias_L449
                 TAY
                 PLA
                 TYA
-                CMP     #0
                 BNE     _specalias_L450
                 LDA     #120
                 TAY
@@ -17969,7 +17836,6 @@ _specalias_L450
                 TAY
                 PLA
                 TYA
-                CMP     #0
                 BEQ     _specalias_L451
                 LDA     #121
                 TAY
@@ -17983,7 +17849,6 @@ _specalias_L450
                 RTL
 _specalias_L451
                 LDA     _specalias_invalbufs
-                CMP     #0
                 BEQ     _specalias_L452
                 LDA     #122
                 TAY
@@ -18055,7 +17920,6 @@ _specalias_L452
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L453
                 LDA     #123
                 TAY
@@ -18237,7 +18101,6 @@ _specalias_L457
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L460
                 LDA     #126
                 TAY
@@ -18359,7 +18222,6 @@ _specalias_L464
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _specalias_L467
                 LDA     #129
@@ -18379,9 +18241,7 @@ _specalias_L467
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #2048
-                CMP     #0
                 BEQ     _specalias_L468
                 LDA     #130
                 TAY
@@ -18500,7 +18360,6 @@ _specalias_L474
 _specalias_L472
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L475
                 LDA     #133
@@ -18570,7 +18429,6 @@ _specalias_L475
                 ADC     #14
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L476
                 LDA     #134
                 TAY
@@ -18677,7 +18535,6 @@ _specalias_L477
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #16
                 BEQ     _specalias_L480
                 LDA     #136
@@ -18775,7 +18632,6 @@ _specalias_L481
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _specalias_L484
                 LDA     #138
                 TAY
@@ -18795,7 +18651,6 @@ _specalias_L484
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _specalias_L485
                 LDA     #139
@@ -19010,7 +18865,6 @@ _specalias_L495
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #769
                 BEQ     _specalias_L498
                 LDA     #144
@@ -19026,7 +18880,6 @@ _specalias_L495
 _specalias_L498
                 FGX2_FARCALL _specalias_spec_inuse
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _specalias_L499
                 LDA     #145
@@ -19046,7 +18899,6 @@ _specalias_L499
                 TAY
                 PLA
                 TYA
-                CMP     #0
                 BEQ     _specalias_L500
                 LDA     #146
                 TAY
@@ -19065,7 +18917,6 @@ _specalias_L500
                 TAY
                 PLA
                 TYA
-                CMP     #0
                 BNE     _specalias_L501
                 LDA     #147
                 TAY
@@ -19079,7 +18930,6 @@ _specalias_L500
                 RTL
 _specalias_L501
                 LDA     _specalias_nslept
-                CMP     #0
                 BEQ     _specalias_L502
                 LDA     #148
                 TAY

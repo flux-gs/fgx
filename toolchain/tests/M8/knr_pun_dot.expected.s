@@ -40,7 +40,6 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     np
                 TAX
-                TXA
                 EOR     #1
                 STA     np
                 SEP     #$20
@@ -59,7 +58,6 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     np
                 TAX
-                TXA
                 EOR     #1
                 STA     np
                 SEP     #$20
@@ -78,7 +76,6 @@ main_stkok        TCS
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     np
                 TAX
-                TXA
                 ORA     #1
                 STA     np
                 PHA
@@ -104,10 +101,8 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     np+2
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BEQ     _knr_pun_dot_L2
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BEQ     _knr_pun_dot_L2
                 LDA     #1
                 BRA     _knr_pun_dot_L3

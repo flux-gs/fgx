@@ -252,12 +252,10 @@ _struct_arg_member_L3
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _struct_arg_member_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 ORA     #1
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L2
@@ -298,12 +296,10 @@ _struct_arg_member_L5
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _struct_arg_member_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 ORA     #2
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L4
@@ -353,12 +349,10 @@ _struct_arg_member_L7
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _struct_arg_member_L6
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 ORA     #4
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L6
@@ -408,17 +402,14 @@ _struct_arg_member_L9
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 ORA     #8
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BEQ     _struct_arg_member_L10
                 LDA     9,S   ; fccstk d=0 b=9
                 BRA     _struct_arg_member_L11

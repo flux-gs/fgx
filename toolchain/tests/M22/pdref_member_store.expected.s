@@ -309,7 +309,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     a
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _pdref_member_store_L0
                 LDA     #1
@@ -339,7 +338,6 @@ _pdref_member_store_L0
 _pdref_member_store_L1
                 LDA     c
                 TAX
-                TXA
                 CMP     #33
                 BEQ     _pdref_member_store_L2
                 LDA     #3

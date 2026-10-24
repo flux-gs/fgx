@@ -325,7 +325,6 @@ _declinit_ptr_L1
                 LDA:    gs2,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _declinit_ptr_L12
                 LDA     #2
@@ -373,7 +372,6 @@ _declinit_ptr_L17
                 BNE     _declinit_ptr_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #7
                 BNE     _declinit_ptr_L14
                 LDA     #0
@@ -409,7 +407,6 @@ _declinit_ptr_L13
                 LDA:    gs1,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _declinit_ptr_L18
                 LDA     #4
@@ -441,7 +438,6 @@ _declinit_ptr_L18
                 RTL
 _declinit_ptr_L20
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _declinit_ptr_L19
                 LDA     #5
@@ -483,7 +479,6 @@ _declinit_ptr_L19
                 STA     [_fcc_fpr0]
                 LDA     gi
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _declinit_ptr_L21
                 LDA     #6
@@ -541,7 +536,6 @@ _declinit_ptr_L21
                 LDA:    gs2,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _declinit_ptr_L22
                 LDA     #7
@@ -769,7 +763,6 @@ _declinit_ptr_L26
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
                 BNE     _declinit_ptr_L28
                 LDA     #1
@@ -798,7 +791,6 @@ _declinit_ptr_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #400
                 BNE     _declinit_ptr_L28
                 LDA     #0
@@ -903,7 +895,6 @@ _declinit_ptr_L27
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #8
                 BNE     _declinit_ptr_L31
                 SEP     #$20
@@ -933,7 +924,6 @@ _declinit_ptr_L27
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #250
                 BNE     _declinit_ptr_L31
                 LDA     #0

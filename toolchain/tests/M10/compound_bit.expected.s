@@ -21,13 +21,10 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 TAX
-                TXA
                 ORA     #8
                 TAX
-                TXA
                 ORA     #32
                 TAX
-                TXA
                 ORA     #2
                 STA     _fcc_img0
                 TAY

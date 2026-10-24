@@ -177,7 +177,6 @@ main_stkok        TCS
                 FGX2_FARCALL pcount
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _ptr_cmp_L3
                 LDA     #1
@@ -327,7 +326,6 @@ _ptr_cmp_L10
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _ptr_cmp_L13
                 LDA     #5
@@ -351,7 +349,6 @@ _ptr_cmp_L13
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _ptr_cmp_L14
                 LDA     #6

@@ -159,7 +159,6 @@ _popen_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #104
                 BNE     _popen_L9
                 SEP     #$20
@@ -180,7 +179,6 @@ _popen_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #105
                 BNE     _popen_L9
                 LDA     #0
@@ -208,7 +206,6 @@ _popen_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #10
                 BNE     _popen_L7
                 LDA     #0
@@ -300,7 +297,6 @@ _popen_L11
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _popen_L14
                 LDA     #5
                 TAY
@@ -412,7 +408,6 @@ _popen_L15
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _popen_L18
                 LDA     #7
                 TAY

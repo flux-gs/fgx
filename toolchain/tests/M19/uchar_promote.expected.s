@@ -75,7 +75,6 @@ _uchar_promote_L2
                 BEQ     _uchar_promote_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -98,7 +97,6 @@ _uchar_promote_L5
                 BEQ     _uchar_promote_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -114,7 +112,6 @@ _uchar_promote_L3
                 BNE     _uchar_promote_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -139,7 +136,6 @@ _uchar_promote_L9
                 BEQ     _uchar_promote_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -162,7 +158,6 @@ _uchar_promote_L12
                 BEQ     _uchar_promote_L10
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -175,12 +170,10 @@ _uchar_promote_L10
                 PLA
                 JSR     _fcc_mods16
                 TAX
-                TXA
                 CMP     #4
                 BNE     _uchar_promote_L13
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -193,12 +186,10 @@ _uchar_promote_L13
                 TXA
                 JSR     _fcc_gts16
                 TAX
-                TXA
                 CMP     #1
                 BNE     _uchar_promote_L14
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
@@ -207,11 +198,9 @@ _uchar_promote_L14
                 AND     #$00FF
                 EOR     #$FFFF
                 INC
-                CMP     #0
                 BPL     _uchar_promote_L15
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img0

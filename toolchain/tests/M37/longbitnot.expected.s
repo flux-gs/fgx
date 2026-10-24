@@ -481,7 +481,6 @@ _longbitnot_L7
                 AND     _fcc_tmp_b
                 STA     sh
                 TAX
-                TXA
                 CMP     #240
                 BEQ     _longbitnot_L8
                 LDA     #40

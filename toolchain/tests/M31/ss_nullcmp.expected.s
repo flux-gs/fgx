@@ -70,7 +70,6 @@ _ss_nullcmp_L2
                 BEQ     _ss_nullcmp_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -109,7 +108,6 @@ _ss_nullcmp_L5
                 BEQ     _ss_nullcmp_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #100
                 STA     _fcc_img0
@@ -148,7 +146,6 @@ _ss_nullcmp_L8
                 BEQ     _ss_nullcmp_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #41
                 STA     _fcc_img0

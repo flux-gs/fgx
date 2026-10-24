@@ -27,7 +27,6 @@ _arrelemdeepstore_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _arrelemdeepstore_L3
@@ -309,7 +308,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     gt+24
                 TAX
-                TXA
                 CMP     #21930
                 BEQ     _arrelemdeepstore_L4
                 LDA     #1
@@ -325,7 +323,6 @@ main_stkok        TCS
 _arrelemdeepstore_L4
                 LDA     gt+4
                 TAX
-                TXA
                 CMP     #12288
                 BEQ     _arrelemdeepstore_L5
                 LDA     #2
@@ -341,7 +338,6 @@ _arrelemdeepstore_L4
 _arrelemdeepstore_L5
                 LDA     gt+44
                 TAX
-                TXA
                 CMP     #12290
                 BEQ     _arrelemdeepstore_L6
                 LDA     #3
@@ -357,7 +353,6 @@ _arrelemdeepstore_L5
 _arrelemdeepstore_L6
                 LDA     gt+22
                 TAX
-                TXA
                 CMP     #8193
                 BEQ     _arrelemdeepstore_L7
                 LDA     #4
@@ -373,7 +368,6 @@ _arrelemdeepstore_L6
 _arrelemdeepstore_L7
                 LDA     gt+20
                 TAX
-                TXA
                 CMP     #4097
                 BEQ     _arrelemdeepstore_L8
                 LDA     #5
@@ -389,7 +383,6 @@ _arrelemdeepstore_L7
 _arrelemdeepstore_L8
                 LDA     gt+64
                 TAX
-                TXA
                 CMP     #32768
                 BEQ     _arrelemdeepstore_L9
                 LDA     #6
@@ -431,7 +424,6 @@ _arrelemdeepstore_L9
                 STA     [_fcc_fpr0]
                 LDA     gt+44
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _arrelemdeepstore_L10
                 LDA     #10
@@ -447,7 +439,6 @@ _arrelemdeepstore_L9
 _arrelemdeepstore_L10
                 LDA     gt+24
                 TAX
-                TXA
                 CMP     #12289
                 BEQ     _arrelemdeepstore_L11
                 LDA     #11
@@ -463,7 +454,6 @@ _arrelemdeepstore_L10
 _arrelemdeepstore_L11
                 LDA     gt+42
                 TAX
-                TXA
                 CMP     #8194
                 BEQ     _arrelemdeepstore_L12
                 LDA     #12
@@ -479,7 +469,6 @@ _arrelemdeepstore_L11
 _arrelemdeepstore_L12
                 LDA     gt+40
                 TAX
-                TXA
                 CMP     #4098
                 BEQ     _arrelemdeepstore_L13
                 LDA     #13
@@ -521,7 +510,6 @@ _arrelemdeepstore_L13
                 STA     [_fcc_fpr0]
                 LDA     gt+14
                 TAX
-                TXA
                 CMP     #3855
                 BEQ     _arrelemdeepstore_L14
                 LDA     #20
@@ -537,7 +525,6 @@ _arrelemdeepstore_L13
 _arrelemdeepstore_L14
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #24576
                 BEQ     _arrelemdeepstore_L15
                 LDA     #21
@@ -553,7 +540,6 @@ _arrelemdeepstore_L14
 _arrelemdeepstore_L15
                 LDA     gt+10
                 TAX
-                TXA
                 CMP     #20480
                 BEQ     _arrelemdeepstore_L16
                 LDA     #22
@@ -569,7 +555,6 @@ _arrelemdeepstore_L15
 _arrelemdeepstore_L16
                 LDA     gt+4
                 TAX
-                TXA
                 CMP     #12288
                 BEQ     _arrelemdeepstore_L17
                 LDA     #23
@@ -585,7 +570,6 @@ _arrelemdeepstore_L16
 _arrelemdeepstore_L17
                 LDA     gt+34
                 TAX
-                TXA
                 CMP     #28673
                 BEQ     _arrelemdeepstore_L18
                 LDA     #24
@@ -700,7 +684,6 @@ _arrelemdeepstore_L19
 _arrelemdeepstore_L20
                 LDA     gt+44
                 TAX
-                TXA
                 CMP     #12290
                 BEQ     _arrelemdeepstore_L21
                 LDA     #32
@@ -764,7 +747,6 @@ _arrelemdeepstore_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #32382
                 BEQ     _arrelemdeepstore_L22
                 LDA     #50

@@ -21,19 +21,15 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #8
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1

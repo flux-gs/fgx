@@ -49,7 +49,6 @@ _float_promote_vsum_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -94,7 +93,6 @@ _float_promote_L0
                 FIN
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -127,7 +125,6 @@ _float_promote_L2
                 STA     _fcc_fpr0
                 LDA     #8
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -144,7 +141,6 @@ _float_promote_L2
                 STA     9,S   ; fccstk d=8 b=1
                 LDA     #8
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1

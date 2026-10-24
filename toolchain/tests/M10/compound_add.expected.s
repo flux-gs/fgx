@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #21
                 TAX
-                TXA
                 CLC
                 ADC     #21
                 STA     _fcc_img0

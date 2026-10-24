@@ -49,7 +49,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #42
                 STA     [_fcc_fpr0]
                 LDA     #1

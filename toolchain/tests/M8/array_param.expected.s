@@ -159,7 +159,6 @@ _array_param_pick_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #48
                 TAY

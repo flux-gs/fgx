@@ -167,7 +167,6 @@ _charptr_arr_global_L5
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #26
                 TAY

@@ -29,7 +29,6 @@ main_stkok        TCS
                 STA     g+2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _paren_member_L0
                 LDA     #1
@@ -45,7 +44,6 @@ main_stkok        TCS
 _paren_member_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #64
                 BEQ     _paren_member_L1
                 LDA     #2
@@ -61,7 +59,6 @@ _paren_member_L0
 _paren_member_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 AND     #240
                 TAX
                 LDA     #64
@@ -90,7 +87,6 @@ _paren_member_L4
 _paren_member_L2
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _paren_member_L5
                 LDA     #4

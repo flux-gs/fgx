@@ -55,7 +55,6 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #54
                 BEQ     _strsub_L0
                 LDA     #1
@@ -71,7 +70,6 @@ main_stkok        TCS
 _strsub_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #48
                 BEQ     _strsub_L1
                 LDA     #2
@@ -101,7 +99,6 @@ _strsub_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BEQ     _strsub_L2
                 LDA     #3
@@ -131,7 +128,6 @@ _strsub_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
                 BEQ     _strsub_L3
                 LDA     #4
@@ -156,7 +152,6 @@ _strsub_L3
                 STA     _fcc_fpr0
                 LDA     idx
                 TAX
-                TXA
                 INC
                 CLC
                 ADC     _fcc_fpr0
@@ -164,7 +159,6 @@ _strsub_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #49
                 BEQ     _strsub_L4
                 LDA     #5

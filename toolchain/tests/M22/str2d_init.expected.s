@@ -32,7 +32,6 @@ main_stkok        TCS
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BEQ     _str2d_init_L0
                 LDA     #1
@@ -59,7 +58,6 @@ _str2d_init_L0
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #44
                 BEQ     _str2d_init_L1
                 LDA     #2
@@ -86,7 +84,6 @@ _str2d_init_L1
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _str2d_init_L2
                 LDA     #3
@@ -112,7 +109,6 @@ _str2d_init_L2
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _str2d_init_L3
                 LDA     #4
                 TAY
@@ -138,7 +134,6 @@ _str2d_init_L3
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BEQ     _str2d_init_L4
                 LDA     #5
@@ -164,7 +159,6 @@ _str2d_init_L4
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _str2d_init_L5
                 LDA     #6
                 TAY
@@ -189,7 +183,6 @@ _str2d_init_L5
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _str2d_init_L6
                 LDA     #7
                 TAY

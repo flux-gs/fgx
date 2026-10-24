@@ -442,7 +442,6 @@ _cmp_branch_L25
                 BPL     _cmp_branch_L24
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -463,7 +462,6 @@ _cmp_branch_L27
                 BPL     _cmp_branch_L26
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -484,7 +482,6 @@ _cmp_branch_L29
                 BMI     _cmp_branch_L28
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -502,7 +499,6 @@ _cmp_branch_L31
                 BMI     _cmp_branch_L30
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -516,7 +512,6 @@ _cmp_branch_L30
                 BNE     _cmp_branch_L32
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -530,7 +525,6 @@ _cmp_branch_L32
                 BEQ     _cmp_branch_L33
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -573,7 +567,6 @@ uallrel_stkok        TCS
                 BCS     _cmp_branch_L34
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -590,7 +583,6 @@ _cmp_branch_L34
                 BCS     _cmp_branch_L35
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -607,7 +599,6 @@ _cmp_branch_L35
                 BCC     _cmp_branch_L36
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -621,7 +612,6 @@ _cmp_branch_L36
                 BCC     _cmp_branch_L37
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -663,11 +653,9 @@ main_stkok        TCS
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -676,7 +664,6 @@ main_stkok        TCS
                 BNE     _cmp_branch_L38
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -689,11 +676,9 @@ _cmp_branch_L38
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -702,7 +687,6 @@ _cmp_branch_L38
                 BNE     _cmp_branch_L39
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -715,11 +699,9 @@ _cmp_branch_L39
                 PHA
                 LDA     #4
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_tmp_b
@@ -728,7 +710,6 @@ _cmp_branch_L39
                 BNE     _cmp_branch_L40
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -744,11 +725,9 @@ _cmp_branch_L40
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -757,7 +736,6 @@ _cmp_branch_L40
                 BNE     _cmp_branch_L41
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -770,11 +748,9 @@ _cmp_branch_L41
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -783,7 +759,6 @@ _cmp_branch_L41
                 BNE     _cmp_branch_L42
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
@@ -796,11 +771,9 @@ _cmp_branch_L42
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -809,7 +782,6 @@ _cmp_branch_L42
                 BNE     _cmp_branch_L43
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
@@ -825,11 +797,9 @@ _cmp_branch_L43
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -838,7 +808,6 @@ _cmp_branch_L43
                 BNE     _cmp_branch_L44
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
@@ -851,11 +820,9 @@ _cmp_branch_L44
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_tmp_b
@@ -864,7 +831,6 @@ _cmp_branch_L44
                 BNE     _cmp_branch_L45
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
@@ -877,7 +843,6 @@ _cmp_branch_L45
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_tmp_b
@@ -886,7 +851,6 @@ _cmp_branch_L45
                 BNE     _cmp_branch_L46
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #256
                 STA     1,S   ; fccstk d=0 b=1
@@ -899,7 +863,6 @@ _cmp_branch_L46
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_tmp_b
@@ -908,7 +871,6 @@ _cmp_branch_L46
                 BNE     _cmp_branch_L47
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #512
                 STA     1,S   ; fccstk d=0 b=1
@@ -921,7 +883,6 @@ _cmp_branch_L47
                 PHA
                 LDA     #4
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_tmp_b
@@ -930,7 +891,6 @@ _cmp_branch_L47
                 BNE     _cmp_branch_L48
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1024
                 STA     1,S   ; fccstk d=0 b=1
@@ -1015,7 +975,6 @@ _cmp_branch_L51
                 BEQ     _cmp_branch_L49
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2048
                 STA     1,S   ; fccstk d=0 b=1
@@ -1073,7 +1032,6 @@ _cmp_branch_L68
                 BEQ     _cmp_branch_L66
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4096
                 STA     1,S   ; fccstk d=0 b=1
@@ -1118,7 +1076,6 @@ _cmp_branch_L79
                 BEQ     _cmp_branch_L77
                 LDA     hits
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     hits
@@ -1136,7 +1093,6 @@ _cmp_branch_L85
                 BPL     _cmp_branch_L83
                 LDA     b
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _cmp_branch_L86
@@ -1152,7 +1108,6 @@ _cmp_branch_L84
                 BEQ     _cmp_branch_L82
                 LDA     hits
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     hits
@@ -1173,7 +1128,6 @@ _cmp_branch_L90
                 BPL     _cmp_branch_L88
                 LDA     b
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _cmp_branch_L91
@@ -1189,19 +1143,16 @@ _cmp_branch_L89
                 BEQ     _cmp_branch_L87
                 LDA     hits
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     hits
 _cmp_branch_L87
                 LDA     hits
                 TAX
-                TXA
                 CMP     #3
                 BNE     _cmp_branch_L92
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8192
                 STA     1,S   ; fccstk d=0 b=1
@@ -1219,7 +1170,6 @@ _cmp_branch_L93
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _cmp_branch_L96
@@ -1248,7 +1198,6 @@ _cmp_branch_L97
 _cmp_branch_L98
                 LDA     a
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _cmp_branch_L100
@@ -1259,12 +1208,10 @@ _cmp_branch_L100
 _cmp_branch_L99
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #10
                 BNE     _cmp_branch_L102
                 LDA     a
                 TAX
-                TXA
                 CMP     #4
                 BNE     _cmp_branch_L102
                 LDA     #1
@@ -1276,14 +1223,12 @@ _cmp_branch_L103
                 BEQ     _cmp_branch_L101
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #16384
                 STA     1,S   ; fccstk d=0 b=1
 _cmp_branch_L101
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #32767
                 BNE     _cmp_branch_L104
                 LDA     #42

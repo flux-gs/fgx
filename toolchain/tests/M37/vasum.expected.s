@@ -39,7 +39,6 @@ vsum_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -84,7 +83,6 @@ _vasum_L0
                 FIN
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -102,7 +100,6 @@ _vasum_L2
                 STA     _fcc_fpr0
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -119,7 +116,6 @@ _vasum_L2
                 STA     _fcc_img1
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -146,7 +142,6 @@ _vasum_L1
                 STA     _fcc_fpr0
                 LDA     #4
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -163,7 +158,6 @@ _vasum_L1
                 STA     _fcc_img1
                 LDA     #4
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -191,7 +185,6 @@ _vasum_L1
                 STA     _fcc_fpr0
                 LDA     #4
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -208,7 +201,6 @@ _vasum_L1
                 STA     _fcc_img1
                 LDA     #4
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -264,12 +256,10 @@ _vasum_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _vasum_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0

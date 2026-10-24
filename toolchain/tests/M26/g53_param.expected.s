@@ -38,7 +38,6 @@ _g53_param_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #300
                 BVC     _g53_param_L3
@@ -62,7 +61,6 @@ _g53_param_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -109,7 +107,6 @@ _g53_param_L2
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #12
                 TAY

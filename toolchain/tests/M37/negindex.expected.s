@@ -27,7 +27,6 @@ _negindex_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #6
                 BVC     _negindex_L3
@@ -107,7 +106,6 @@ _negindex_L2
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _negindex_L4
                 LDA     #50
@@ -133,7 +131,6 @@ _negindex_L4
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #256
                 BEQ     _negindex_L5
                 LDA     #51
@@ -161,7 +158,6 @@ _negindex_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _negindex_L6
                 LDA     #52
@@ -189,7 +185,6 @@ _negindex_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #259
                 BEQ     _negindex_L7
                 LDA     #53
@@ -215,7 +210,6 @@ _negindex_L7
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #259
                 BEQ     _negindex_L8
                 LDA     #54
@@ -241,7 +235,6 @@ _negindex_L8
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #258
                 BEQ     _negindex_L9
                 LDA     #55
@@ -268,7 +261,6 @@ _negindex_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _negindex_L10
                 LDA     #56
@@ -293,7 +285,6 @@ _negindex_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #259
                 BEQ     _negindex_L11
                 LDA     #57
@@ -339,7 +330,6 @@ _negindex_L11
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #1911
                 BEQ     _negindex_L12
                 LDA     #58
@@ -358,7 +348,6 @@ _negindex_L12
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #256
                 BEQ     _negindex_L13
                 LDA     #59
@@ -377,7 +366,6 @@ _negindex_L13
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                TXA
                 CMP     #258
                 BEQ     _negindex_L14
                 LDA     #60

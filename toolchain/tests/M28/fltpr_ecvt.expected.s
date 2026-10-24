@@ -80,7 +80,6 @@ _fltpr_ecvt_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _fltpr_ecvt_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -248,7 +247,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L9
                 LDA     #0
                 BRA     _fltpr_ecvt_L10
@@ -259,7 +257,6 @@ _fltpr_ecvt_L10
                 BNE     _fltpr_ecvt_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _fltpr_ecvt_L7
                 LDA     #0
@@ -270,7 +267,6 @@ _fltpr_ecvt_L8
                 CMP     #0
                 BNE     _fltpr_ecvt_L5
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BNE     _fltpr_ecvt_L5
                 LDA     #0
                 BRA     _fltpr_ecvt_L6
@@ -367,7 +363,6 @@ _fltpr_ecvt_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L16
                 LDA     #0
                 BRA     _fltpr_ecvt_L17
@@ -378,7 +373,6 @@ _fltpr_ecvt_L17
                 BNE     _fltpr_ecvt_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #4
                 BNE     _fltpr_ecvt_L14
                 LDA     #0
@@ -389,7 +383,6 @@ _fltpr_ecvt_L15
                 CMP     #0
                 BNE     _fltpr_ecvt_L12
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BNE     _fltpr_ecvt_L12
                 LDA     #0
                 BRA     _fltpr_ecvt_L13
@@ -491,7 +484,6 @@ _fltpr_ecvt_L11
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L23
                 LDA     #0
                 BRA     _fltpr_ecvt_L24
@@ -512,7 +504,6 @@ _fltpr_ecvt_L22
                 BNE     _fltpr_ecvt_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #1
                 BNE     _fltpr_ecvt_L19
                 LDA     #0
@@ -609,7 +600,6 @@ _fltpr_ecvt_L18
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L26
                 LDA     #0
                 BRA     _fltpr_ecvt_L27
@@ -705,7 +695,6 @@ _fltpr_ecvt_L25
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L29
                 LDA     #0
                 BRA     _fltpr_ecvt_L30
@@ -801,7 +790,6 @@ _fltpr_ecvt_L28
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L32
                 LDA     #0
                 BRA     _fltpr_ecvt_L33
@@ -897,7 +885,6 @@ _fltpr_ecvt_L31
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L35
                 LDA     #0
                 BRA     _fltpr_ecvt_L36
@@ -993,7 +980,6 @@ _fltpr_ecvt_L34
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L38
                 LDA     #0
                 BRA     _fltpr_ecvt_L39
@@ -1089,7 +1075,6 @@ _fltpr_ecvt_L37
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L41
                 LDA     #0
                 BRA     _fltpr_ecvt_L42
@@ -1185,7 +1170,6 @@ _fltpr_ecvt_L40
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L44
                 LDA     #0
                 BRA     _fltpr_ecvt_L45
@@ -1297,7 +1281,6 @@ _fltpr_ecvt_L43
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L47
                 LDA     #0
                 BRA     _fltpr_ecvt_L48
@@ -1391,7 +1374,6 @@ _fltpr_ecvt_L46
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L50
                 LDA     #0
                 BRA     _fltpr_ecvt_L51
@@ -1466,7 +1448,6 @@ _fltpr_ecvt_L49
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _fltpr_ecvt_L52
                 LDA     #13
                 TAY
@@ -1530,7 +1511,6 @@ _fltpr_ecvt_L52
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _fltpr_ecvt_L53
                 LDA     #14
                 TAY
@@ -1603,7 +1583,6 @@ _fltpr_ecvt_L53
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _fltpr_ecvt_L54
                 LDA     #15
                 TAY
@@ -1699,8 +1678,7 @@ _fltpr_ecvt_L54
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _fltpr_ecvt_L56
+                BNE     _fltpr_ecvt_L56
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -1750,7 +1728,6 @@ _fltpr_ecvt_L54
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _fltpr_ecvt_L56
                 LDA     #0
                 BRA     _fltpr_ecvt_L57
@@ -1832,7 +1809,6 @@ _fltpr_ecvt_L55
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _fltpr_ecvt_L58
                 LDA     #17
                 TAY
@@ -1921,7 +1897,6 @@ _fltpr_ecvt_L58
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L60
                 LDA     #0
                 BRA     _fltpr_ecvt_L61
@@ -2017,7 +1992,6 @@ _fltpr_ecvt_L59
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _fltpr_ecvt_L63
                 LDA     #0
                 BRA     _fltpr_ecvt_L64

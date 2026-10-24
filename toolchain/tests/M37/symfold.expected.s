@@ -307,7 +307,6 @@ main_stkok        TCS
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                CMP     #0
                 BMI     _symfold_L0
                 LDA     tab+18
                 STA     _fcc_tmp_b
@@ -332,7 +331,6 @@ _symfold_L0
 _symfold_L1
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #97
                 BEQ     _symfold_L2
                 LDA     #1
@@ -349,7 +347,6 @@ _symfold_L2
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                CMP     #0
                 BMI     _symfold_L3
                 LDA     tab+18
                 STA     _fcc_tmp_b
@@ -374,7 +371,6 @@ _symfold_L3
 _symfold_L4
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #98
                 BEQ     _symfold_L5
                 LDA     #2
@@ -405,7 +401,6 @@ _symfold_L5
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1
                 BNE     _symfold_L7
                 LDA     #1
@@ -487,7 +482,6 @@ _symfold_L6
                 STA     tab+16
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #1
                 BNE     _symfold_L12
                 LDA     #1
@@ -506,7 +500,6 @@ _symfold_L6
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BNE     _symfold_L12
                 LDA     #0
                 BRA     _symfold_L13
@@ -529,7 +522,6 @@ _symfold_L11
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                CMP     #0
                 BMI     _symfold_L15
                 LDA     tab+18
                 STA     _fcc_tmp_b
@@ -597,7 +589,6 @@ _symfold_L14
                 MX      %00
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
                 BEQ     _symfold_L17
                 LDA     #6
@@ -627,7 +618,6 @@ _symfold_L17
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                CMP     #0
                 BEQ     _symfold_L18
                 LDA     #7
                 TAY
@@ -676,7 +666,6 @@ _symfold_L18
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _symfold_L19
                 LDA     #8
@@ -713,7 +702,6 @@ _symfold_L19
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _symfold_L20
                 LDA     #9
@@ -743,7 +731,6 @@ _symfold_L20
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BPL     _symfold_L21
                 LDA     #2
                 BRA     _symfold_L22
@@ -773,7 +760,6 @@ _symfold_L22
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _symfold_L23
                 LDA     #10
@@ -806,7 +792,6 @@ _symfold_L23
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                CMP     #0
                 BEQ     _symfold_L24
                 LDA     #11
                 TAY
@@ -851,7 +836,6 @@ _symfold_L27
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _symfold_L25
                 LDA     #16
@@ -1110,7 +1094,6 @@ _symfold_L30
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _symfold_L34
                 LDA     #0
                 BRA     _symfold_L35
@@ -1145,7 +1128,6 @@ _symfold_L35
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _symfold_L32
                 LDA     #0
                 BRA     _symfold_L33
@@ -1190,7 +1172,6 @@ _symfold_L31
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _symfold_L36
                 LDA     #15

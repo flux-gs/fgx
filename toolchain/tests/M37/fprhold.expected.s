@@ -146,7 +146,6 @@ _fprhold_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _fprhold_L3
@@ -170,7 +169,6 @@ _fprhold_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _fcc_img0
@@ -189,7 +187,6 @@ _fprhold_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -215,7 +212,6 @@ _fprhold_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _fprhold_L6
@@ -224,7 +220,6 @@ _fprhold_L6
                 BPL     _fprhold_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 ASL
                 ASL
@@ -304,7 +299,6 @@ _fprhold_L2
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _fprhold_L7
                 LDA     #1
@@ -330,13 +324,11 @@ _fprhold_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _fprhold_L9
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #30
                 BNE     _fprhold_L9
                 LDA     #0
@@ -429,7 +421,6 @@ _fprhold_L8
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _fprhold_L11
                 LDA     #3
@@ -494,7 +485,6 @@ _fprhold_L11
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _fprhold_L12
                 LDA     #4
@@ -566,7 +556,6 @@ _fprhold_L12
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #15
                 BEQ     _fprhold_L13
                 LDA     #5
@@ -615,7 +604,6 @@ _fprhold_L14
                 PHA
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 LDX     #2
                 STA     _fcc_tmp_b
                 TXA
@@ -670,7 +658,6 @@ _fprhold_L16
                 LDA     _fcc_img1
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #73
                 BEQ     _fprhold_L20
                 LDA     #6
@@ -728,7 +715,6 @@ _fprhold_L20
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _fprhold_L21
                 LDA     #7
@@ -780,7 +766,6 @@ _fprhold_L21
                 ADC     _fcc_tmp_b
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CMP     #33
                 BEQ     _fprhold_L22
                 LDA     #8

@@ -27,7 +27,6 @@ _g53_bigframe_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #300
                 BVC     _g53_bigframe_L3
@@ -51,7 +50,6 @@ _g53_bigframe_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 AND     #127
                 AND     #$00FF
                 TAY
@@ -110,14 +108,12 @@ _g53_bigframe_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #127
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 TAY

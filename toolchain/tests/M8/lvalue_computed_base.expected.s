@@ -120,7 +120,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 INC
                 STA     [_fcc_fpr0]

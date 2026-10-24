@@ -271,7 +271,6 @@ _mul_var_L3
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #24464
                 BEQ     _mul_var_L4
                 LDA     #5
@@ -302,7 +301,6 @@ _mul_var_L4
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _mul_var_L5
                 LDA     #6
@@ -391,7 +389,6 @@ _mul_var_L7
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _mul_var_L8
                 LDA     #9
@@ -424,7 +421,6 @@ _mul_var_L8
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #28393
                 BEQ     _mul_var_L9
                 LDA     #10
@@ -457,7 +453,6 @@ _mul_var_L9
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #28393
                 BEQ     _mul_var_L10
                 LDA     #11
@@ -546,7 +541,6 @@ _mul_var_L12
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #65025
                 BEQ     _mul_var_L13
                 LDA     #14
@@ -577,7 +571,6 @@ _mul_var_L13
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #32761
                 BEQ     _mul_var_L14
                 LDA     #15
@@ -608,7 +601,6 @@ _mul_var_L14
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #32765
                 BEQ     _mul_var_L15
                 LDA     #16
@@ -643,7 +635,6 @@ _mul_var_L15
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #4096
                 BEQ     _mul_var_L16
                 LDA     #17

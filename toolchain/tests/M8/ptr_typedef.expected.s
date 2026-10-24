@@ -98,7 +98,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _ptr_typedef_L0
                 LDA     #1
@@ -247,7 +246,6 @@ _ptr_typedef_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _ptr_typedef_L1
                 LDA     #2

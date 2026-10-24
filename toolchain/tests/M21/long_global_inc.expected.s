@@ -59,7 +59,6 @@ _long_global_inc_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _long_global_inc_L3
@@ -78,7 +77,6 @@ _long_global_inc_L3
 _long_global_inc_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

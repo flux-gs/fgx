@@ -1168,6 +1168,166 @@ label_line(const char *name)
     return (long)r->line;
 }
 
+/* What a stretch of code does to the carry first: C_READ, C_WRITE, or
+ * C_NONE when it does neither. */
+enum { C_NONE, C_WRITE, C_READ };
+
+static int
+carry_effect(const Line *L)
+{
+    const char *m = L->mnem;
+    if (reads_carry(m)) return C_READ;
+    if (writes_carry(m) || strcmp(m, "ASL") == 0 || strcmp(m, "LSR") == 0)
+        return C_WRITE;
+    return C_NONE;
+}
+
+/* The first carry effect of the arms of the DO at line `d': C_WRITE when
+ * both write before reading, C_READ when either may read (or holds what this
+ * does not follow), else C_NONE.  *fin is the line of its FIN. */
+static int
+carry_do_arms(Line *lines, size_t n, size_t d, size_t *fin)
+{
+    int arm[2] = { C_NONE, C_NONE }, k = 0;
+    size_t i;
+    for (i = d + 1; i < n; i++) {
+        const Line *L = &lines[i];
+        if (L->dead || !L->mnem[0]) {
+            if (L->label[0]) return C_READ;
+            continue;
+        }
+        if (L->label[0]) return C_READ;
+        if (strcmp(L->mnem, "ELSE") == 0) { k = 1; continue; }
+        if (strcmp(L->mnem, "FIN") == 0) {
+            *fin = i;
+            if (arm[0] == C_READ || arm[1] == C_READ) return C_READ;
+            return arm[0] == C_WRITE && arm[1] == C_WRITE ? C_WRITE : C_NONE;
+        }
+        if (strcmp(L->mnem, "DO") == 0 || L->mnem[0] == 'B' ||
+            is_control(L->mnem) || insn_size_ub(L) < 0)
+            return C_READ;
+        if (arm[k] == C_NONE) arm[k] = carry_effect(L);
+    }
+    return C_READ;
+}
+
+/* True if the carry is dead at line `from' on every path: written, or the
+ * function returned, before anything reads it.  A conditional branch that
+ * does not read the carry is followed to its label as well as through, and
+ * BRA/BRL to theirs, `depth' branches deep.  A call, a jump, `__asm' text or
+ * a line this does not know reads it. */
+static int
+carry_dead_paths(Line *lines, size_t n, size_t from, int depth)
+{
+    size_t i, fin;
+    for (i = from; i < n && i < from + 512; i++) {
+        Line *L = &lines[i];
+        const char *m = L->mnem;
+        if (strcmp(L->label, "@__asm") == 0) return 0;
+        if (L->dead || !m[0]) continue;
+        if (strcmp(m, "DO") == 0) {
+            int e = carry_do_arms(lines, n, i, &fin);
+            if (e != C_NONE) return e == C_WRITE;
+            i = fin;
+            continue;
+        }
+        if (strcmp(m, "ELSE") == 0 || strcmp(m, "FIN") == 0) return 0;
+        switch (carry_effect(L)) {
+        case C_READ:  return 0;
+        case C_WRITE: return 1;
+        }
+        if (is_return(m)) return 1;
+        if (reads_nz(m) || strcmp(m, "BVC") == 0 || strcmp(m, "BVS") == 0 ||
+            strcmp(m, "BRA") == 0 || strcmp(m, "BRL") == 0) {
+            long t;
+            if (depth == 0 || L->operand[0] == '*') return 0;
+            t = label_line(L->operand);
+            if (t < 0 || !carry_dead_paths(lines, n, (size_t)t, depth - 1))
+                return 0;
+            if (m[1] == 'R') return 1;          /* BRA/BRL: no fall-through */
+            continue;
+        }
+        if (is_control(m) || insn_size_ub(L) < 0) return 0;
+    }
+    return 0;
+}
+
+/* Sets N and Z from the value it leaves in A, at A's width. */
+static int
+sets_nz_from_a(const Line *L)
+{
+    static const char *const t[] = {
+        "LDA","PLA","TXA","TYA","TDC","TSC","AND","ORA","EOR","ADC","SBC", NULL
+    };
+    static const char *const acc[] = {
+        "ASL","LSR","ROL","ROR","INC","DEC", NULL
+    };
+    if (mn_is(L->mnem, t)) return 1;
+    return mn_is(L->mnem, acc) && (!L->operand[0] || strcmp(L->operand, "A") == 0);
+}
+
+/* Leaves A, N and Z as they were: a store or a push. */
+static int
+keeps_a_and_nz(const Line *L)
+{
+    static const char *const t[] = {
+        "STA","STX","STY","STZ","PHA","PHX","PHY","PHB","PHK","PHD","PEI",
+        "PEA", NULL
+    };
+    return mn_is(L->mnem, t);
+}
+
+/* The live instruction line before `i', or -1 if a label or the start of the
+ * buffer comes first. */
+static long
+prev_insn(Line *lines, size_t i)
+{
+    while (i-- > 0) {
+        if (lines[i].dead) continue;
+        if (lines[i].mnem[0]) return (long)i;
+        if (lines[i].label[0]) return -1;
+    }
+    return -1;
+}
+
+/* Pattern: `CMP #0' after an instruction that set N and Z from A, with only
+ * stores and pushes between.  The
+ * compare sets the same N and Z (A - 0 is A), so it is needed only for the
+ * carry it sets, and goes when nothing reads that. */
+static void
+pat_cmp_zero_after_nz(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        long p;
+        if (lines[i].dead || lines[i].label[0] ||
+            strcmp(lines[i].mnem, "CMP") != 0 ||
+            strcmp(lines[i].operand, "#0") != 0) continue;
+        p = prev_insn(lines, i);
+        while (p >= 0 && keeps_a_and_nz(&lines[p]))
+            p = prev_insn(lines, (size_t)p);
+        if (p < 0 || !sets_nz_from_a(&lines[p])) continue;
+        if (carry_dead_paths(lines, n, i + 1, 4))
+            lines[i].dead = 1;
+    }
+}
+
+/* Pattern: `TAX ; TXA' -- the allocator's register home for a push popped
+ * at once.  TXA puts back what A already holds and sets N and Z as TAX did.
+ * fcc never narrows X outside `__asm' text, so the round trip is exact. */
+static void
+pat_tax_txa(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        long j;
+        if (lines[i].dead || strcmp(lines[i].mnem, "TAX") != 0) continue;
+        j = next_insn_no_label(lines, n, i + 1);
+        if (j >= 0 && strcmp(lines[j].mnem, "TXA") == 0)
+            lines[j].dead = 1;
+    }
+}
+
 /* Pattern: a far branch whose target is in reach.  `B!cc *+5 ; BRL L'
  * becomes `Bcc L', and a lone `BRL L' becomes `BRA L', when L lies within
  * a branch's -128..+127.  The distance is summed from an upper bound on each
@@ -1326,6 +1486,9 @@ peephole_optimize(const char *asm_text)
     pat_dead_lda(lines, n);
     pat_empty_width_roundtrip(lines, n);
     if (labels_build(lines, n)) {
+        pat_tax_txa(lines, n);
+        pat_relax_branches(lines, n);       /* the carry walk follows Bcc L */
+        pat_cmp_zero_after_nz(lines, n);
         pat_relax_branches(lines, n);
     }
     free(g_lab);

@@ -780,23 +780,18 @@ _llong_conv_sw_stkok        TCS
                 BEQ     _llong_conv_L5
 _llong_conv_L9
                 LDA     _fcc_q3
-                CMP     #0
                 BNE     _llong_conv_L10
                 LDA     _fcc_q2
-                CMP     #0
                 BNE     _llong_conv_L10
                 LDA     _fcc_long_hi
-                CMP     #0
                 BNE     _llong_conv_L10
                 LDA     _fcc_long_b_lo
                 CMP     #5
                 BEQ     _llong_conv_L6
 _llong_conv_L10
                 LDA     _fcc_q3
-                CMP     #0
                 BNE     _llong_conv_L11
                 LDA     _fcc_q2
-                CMP     #0
                 BNE     _llong_conv_L11
                 LDA     _fcc_long_hi
                 CMP     #65535
@@ -806,10 +801,8 @@ _llong_conv_L10
                 BEQ     _llong_conv_L7
 _llong_conv_L11
                 LDA     _fcc_q3
-                CMP     #0
                 BNE     _llong_conv_L12
                 LDA     _fcc_q2
-                CMP     #0
                 BNE     _llong_conv_L12
                 LDA     _fcc_long_hi
                 CMP     #32767
@@ -940,7 +933,6 @@ main_stkok        TCS
                 LDA     a
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #52719
                 BEQ     _llong_conv_L13
                 LDA     #1
@@ -1009,7 +1001,6 @@ _llong_conv_L14
                 STA     19,S   ; fccstk d=0 b=19
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #239
                 BEQ     _llong_conv_L15
                 LDA     #3
@@ -1032,7 +1023,6 @@ _llong_conv_L15
                 LDA     a
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #52719
                 BEQ     _llong_conv_L16
                 LDA     #4
@@ -1101,7 +1091,6 @@ _llong_conv_L16
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L18
                 LDA     #0
                 BRA     _llong_conv_L19
@@ -1181,7 +1170,6 @@ _llong_conv_L17
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L21
                 LDA     #0
                 BRA     _llong_conv_L22
@@ -1257,7 +1245,6 @@ _llong_conv_L20
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L24
                 LDA     #0
                 BRA     _llong_conv_L25
@@ -1345,7 +1332,6 @@ _llong_conv_L23
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L27
                 LDA     #0
                 BRA     _llong_conv_L28
@@ -1426,7 +1412,6 @@ _llong_conv_L26
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L30
                 LDA     #0
                 BRA     _llong_conv_L31
@@ -1507,7 +1492,6 @@ _llong_conv_L29
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L33
                 LDA     #0
                 BRA     _llong_conv_L34
@@ -1653,7 +1637,6 @@ _llong_conv_L32
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L36
                 LDA     #0
                 BRA     _llong_conv_L37
@@ -1743,7 +1726,6 @@ _llong_conv_L35
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L39
                 LDA     #0
                 BRA     _llong_conv_L40
@@ -1805,7 +1787,6 @@ _llong_conv_L38
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_conv_L42
                 LDA     #0
                 BRA     _llong_conv_L43
@@ -1947,7 +1928,6 @@ _llong_conv_L41
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L45
                 LDA     #0
                 BRA     _llong_conv_L46
@@ -2053,7 +2033,6 @@ _llong_conv_L44
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L48
                 LDA     #0
                 BRA     _llong_conv_L49
@@ -2129,7 +2108,6 @@ _llong_conv_L47
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_conv_L53
                 LDA     #0
                 BRA     _llong_conv_L54
@@ -2176,7 +2154,6 @@ _llong_conv_L54
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_conv_L55
                 LDA     #0
                 BRA     _llong_conv_L56
@@ -2284,7 +2261,6 @@ _llong_conv_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_conv_L57
                 LDA     #17
                 TAY
@@ -2342,7 +2318,6 @@ _llong_conv_L57
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_conv_L59
                 LDA     #0
                 BRA     _llong_conv_L60
@@ -2469,7 +2444,6 @@ _llong_conv_L62
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L64
                 LDA     #0
                 BRA     _llong_conv_L65
@@ -2560,7 +2534,6 @@ _llong_conv_L67
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L69
                 LDA     #0
                 BRA     _llong_conv_L70
@@ -2651,7 +2624,6 @@ _llong_conv_L72
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L74
                 LDA     #0
                 BRA     _llong_conv_L75
@@ -2676,7 +2648,6 @@ _llong_conv_L73
                 LDA     #$9C40
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BEQ     _llong_conv_L76
                 LDA     b+6
                 STA     _fcc_q3
@@ -2741,7 +2712,6 @@ _llong_conv_L77
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L79
                 LDA     #0
                 BRA     _llong_conv_L80
@@ -2823,7 +2793,6 @@ _llong_conv_L78
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_conv_L81
                 LDA     #23
@@ -2897,7 +2866,6 @@ _llong_conv_L81
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _llong_conv_L82
                 LDA     #24
@@ -2971,7 +2939,6 @@ _llong_conv_L82
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _llong_conv_L83
                 LDA     #25
@@ -3045,7 +3012,6 @@ _llong_conv_L83
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _llong_conv_L84
                 LDA     #26
@@ -3119,7 +3085,6 @@ _llong_conv_L84
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _llong_conv_L85
                 LDA     #27
@@ -3193,7 +3158,6 @@ _llong_conv_L85
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _llong_conv_L86
                 LDA     #28
@@ -3256,7 +3220,6 @@ _llong_conv_L86
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #52719
                 BEQ     _llong_conv_L87
                 LDA     #29
@@ -3343,7 +3306,6 @@ _llong_conv_L88
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #52719
                 BEQ     _llong_conv_L89
                 LDA     #31
@@ -3417,7 +3379,6 @@ _llong_conv_L89
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L91
                 LDA     #0
                 BRA     _llong_conv_L92
@@ -3498,7 +3459,6 @@ _llong_conv_L90
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_conv_L94
                 LDA     #0
                 BRA     _llong_conv_L95
@@ -3609,7 +3569,6 @@ _llong_conv_L96
                 BEQ     _llong_conv_L98
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _llong_conv_L100
@@ -3628,7 +3587,6 @@ _llong_conv_L99
                 INC
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #2
                 BEQ     *+5
                 BRL     _llong_conv_L101
@@ -3686,7 +3644,6 @@ _llong_conv_L101
 _llong_conv_L97
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _llong_conv_L102
                 LDA     #34

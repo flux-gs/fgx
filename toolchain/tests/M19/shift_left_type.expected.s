@@ -70,7 +70,6 @@ main_stkok        TCS
                 BNE     _shift_left_type_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -84,12 +83,10 @@ _shift_left_type_L0
                 PLA
                 JSR     _fcc_shl16
                 TAX
-                TXA
                 CMP     #8
                 BNE     _shift_left_type_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -128,7 +125,6 @@ _shift_left_type_L4
                 BEQ     _shift_left_type_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
@@ -140,7 +136,6 @@ _shift_left_type_L2
                 TXA
                 JSR     _fcc_shr16
                 TAX
-                TXA
                 CMP     #2048
                 BNE     _shift_left_type_L6
                 LDA     _fcc_img6
@@ -192,7 +187,6 @@ _shift_left_type_L7
                 BEQ     _shift_left_type_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0

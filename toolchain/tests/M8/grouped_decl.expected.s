@@ -119,7 +119,6 @@ main_stkok        TCS
                 CLC
                 ADC     #8
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 TAY

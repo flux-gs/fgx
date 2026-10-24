@@ -25,19 +25,16 @@ _ppbodylong_L0
                 JSR     _fcc_safepoint
                 LDA     #1
                 TAX
-                TXA
                 INC
                 INC
                 STA     _fcc_img0
                 LDA     #3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img1
                 LDA     #5
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img2
@@ -53,25 +50,19 @@ _ppbodylong_L0
                 CLC
                 ADC     _fcc_img5
                 TAX
-                TXA
                 INC
                 TAX
-                TXA
                 DEC
                 TAX
-                TXA
                 INC
                 INC
                 TAX
-                TXA
                 DEC
                 DEC
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     acc
@@ -83,7 +74,6 @@ _ppbodylong_L1
 _ppbodylong_L2
                 LDA     acc
                 TAX
-                TXA
                 CLC
                 ADC     #21
                 TAY

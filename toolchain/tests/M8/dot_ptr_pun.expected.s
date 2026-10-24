@@ -36,11 +36,9 @@ main_stkok        TCS
                 STA     p+2
                 LDA     p
                 TAX
-                TXA
                 AND     #0
                 STA     p
                 TAX
-                TXA
                 ORA     #42
                 STA     p
                 SEP     #$20

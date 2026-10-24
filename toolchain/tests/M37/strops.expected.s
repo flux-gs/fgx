@@ -138,11 +138,9 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -168,12 +166,10 @@ _strops_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BNE     _strops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -211,11 +207,9 @@ _strops_L1
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -253,11 +247,9 @@ _strops_L2
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BPL     _strops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -299,13 +291,11 @@ _strops_L3
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _strops_L5
                 LDA     #7
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _strops_L5
                 LDA     #1
                 BRA     _strops_L6
@@ -316,7 +306,6 @@ _strops_L6
                 BEQ     _strops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -356,11 +345,9 @@ _strops_L4
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BNE     _strops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -417,7 +404,6 @@ _strops_L10
                 BEQ     _strops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -474,7 +460,6 @@ _strops_L13
                 BEQ     _strops_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -523,7 +508,6 @@ _strops_L16
                 BEQ     _strops_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -580,7 +564,6 @@ _strops_L19
                 BEQ     _strops_L17
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1

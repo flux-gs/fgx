@@ -122,7 +122,6 @@ addr_of_sfok         STA     _fcc_sfp
                 LDA     6+addr_of_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -159,7 +158,6 @@ _p33_soft_addr_L1
                 LDA     12+addr_of_FRAMESIZE,S   ; fccstk d=6 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 PHA
                 FGX2_FARCALL addr_of
@@ -247,7 +245,6 @@ _p33_soft_addr_L2
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _p33_soft_addr_L5
@@ -446,7 +443,6 @@ _p33_soft_addr_L4
                 LDA     6+elems_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -502,7 +498,6 @@ _p33_soft_addr_L7
                 LDA     10+elems_FRAMESIZE,S   ; fccstk d=4 b=6 fs
                 FIN
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 PHA
@@ -625,7 +620,6 @@ _p33_soft_addr_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _p33_soft_addr_L11
@@ -820,7 +814,6 @@ _p33_soft_addr_L10
                 LDA     6+rowsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -844,7 +837,6 @@ _p33_soft_addr_L13
                 LDA     8+rowsum_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 PHA
                 FGX2_FARCALL rowsum
@@ -922,7 +914,6 @@ crosspath_sfok         STA     _fcc_sfp
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 LDY     #2
                 STA     [_fcc_sfp],Y
@@ -993,7 +984,6 @@ _p33_soft_addr_L14
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -1014,7 +1004,6 @@ _p33_soft_addr_L16
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 DEC
                 PHA
                 FGX2_FARCALL crosspath
@@ -1025,7 +1014,6 @@ _p33_soft_addr_L16
                 STA     [_fcc_sfp],Y
                 LDY     #6
                 LDA     [_fcc_sfp],Y
-                CMP     #0
                 BPL     _p33_soft_addr_L17
                 LDA     #$FFFF
                 TAY
@@ -1090,7 +1078,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _p33_soft_addr_L18
                 LDA     #1
@@ -1147,7 +1134,6 @@ _p33_soft_addr_L19
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #18
                 BEQ     _p33_soft_addr_L20
                 LDA     #3
@@ -1168,7 +1154,6 @@ _p33_soft_addr_L20
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _p33_soft_addr_L21
                 LDA     #4

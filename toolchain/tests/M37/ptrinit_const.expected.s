@@ -110,7 +110,6 @@ main_stkok        TCS
                 BEQ     _ptrinit_const_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -156,7 +155,6 @@ _ptrinit_const_L0
                 BEQ     _ptrinit_const_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -185,7 +183,6 @@ _ptrinit_const_L1
                 BEQ     _ptrinit_const_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

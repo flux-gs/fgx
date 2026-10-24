@@ -21,7 +21,6 @@ _comma_stmt_bump_stkok        TCS
                 INC     _fcc_fb
                 LDA     g
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     g
@@ -86,7 +85,6 @@ main_stkok        TCS
                 FGX2_FARCALL _comma_stmt_bump
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 INC
                 INC
                 STA     7,S   ; fccstk d=0 b=7
@@ -98,7 +96,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1
@@ -146,7 +143,6 @@ main_stkok        TCS
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9
                 TAX
-                TXA
                 DEC
                 DEC
                 STA     _fcc_tmp_b
@@ -156,7 +152,6 @@ main_stkok        TCS
                 CLC
                 ADC     g
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 TAY

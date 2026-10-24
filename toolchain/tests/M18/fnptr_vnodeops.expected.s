@@ -1275,7 +1275,6 @@ _fnptr_vnodeops_L5
                 ADC     _fcc_tmp_b
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 SEC
                 SBC     #57
                 TAY

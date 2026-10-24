@@ -120,7 +120,6 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _callchain_incdec_L0
                 LDA     #1
@@ -136,7 +135,6 @@ main_stkok        TCS
 _callchain_incdec_L0
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_incdec_L1
                 LDA     #2
@@ -165,7 +163,6 @@ _callchain_incdec_L1
                 STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_incdec_L2
                 LDA     #3
@@ -181,7 +178,6 @@ _callchain_incdec_L1
 _callchain_incdec_L2
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_incdec_L3
                 LDA     #4
@@ -211,7 +207,6 @@ _callchain_incdec_L3
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_incdec_L4
                 LDA     #5
@@ -240,7 +235,6 @@ _callchain_incdec_L4
                 STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_incdec_L5
                 LDA     #6
@@ -256,7 +250,6 @@ _callchain_incdec_L4
 _callchain_incdec_L5
                 LDA     calls
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _callchain_incdec_L6
                 LDA     #7
@@ -301,7 +294,6 @@ _callchain_incdec_L6
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _callchain_incdec_L7
                 LDA     #8
@@ -320,7 +312,6 @@ _callchain_incdec_L7
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _callchain_incdec_L8
                 LDA     #9
@@ -344,7 +335,6 @@ _callchain_incdec_L8
                 STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _callchain_incdec_L9
                 LDA     #10
@@ -363,7 +353,6 @@ _callchain_incdec_L9
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _callchain_incdec_L10
                 LDA     #11
@@ -391,7 +380,6 @@ _callchain_incdec_L10
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _callchain_incdec_L11
                 LDA     #12
@@ -407,7 +395,6 @@ _callchain_incdec_L10
 _callchain_incdec_L11
                 LDA     calls
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _callchain_incdec_L12
                 LDA     #13
@@ -443,7 +430,6 @@ _callchain_incdec_L12
                 STA     vec+2
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #21
                 BEQ     _callchain_incdec_L13
                 LDA     #14
@@ -462,7 +448,6 @@ _callchain_incdec_L13
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #21
                 BEQ     _callchain_incdec_L14
                 LDA     #15
@@ -484,7 +469,6 @@ _callchain_incdec_L14
                 TAX
                 LDA:    vec,X
                 TAX
-                TXA
                 CMP     #22
                 BEQ     _callchain_incdec_L15
                 LDA     #16
@@ -579,7 +563,6 @@ _callchain_incdec_L15
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _callchain_incdec_L16
                 LDA     #17
@@ -603,7 +586,6 @@ _callchain_incdec_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #200
                 BEQ     _callchain_incdec_L17
                 LDA     #18

@@ -140,7 +140,6 @@ _libcadds_L2
                 BEQ     _libcadds_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -315,7 +314,6 @@ _libcadds_L5
 _libcadds_L6
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #3
                 BNE     _libcadds_L12
                 LDA     #0
@@ -323,7 +321,6 @@ _libcadds_L6
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _libcadds_L12
                 LDA     #1
@@ -338,7 +335,6 @@ _libcadds_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _libcadds_L10
                 LDA     #1
@@ -350,7 +346,6 @@ _libcadds_L11
                 BEQ     _libcadds_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -586,7 +581,6 @@ _libcadds_L21
                 TCS
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #4
                 BNE     _libcadds_L25
                 LDA     #0
@@ -594,7 +588,6 @@ _libcadds_L21
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _libcadds_L25
                 LDA     #1
@@ -609,7 +602,6 @@ _libcadds_L26
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #100
                 BNE     _libcadds_L23
                 LDA     #1
@@ -621,7 +613,6 @@ _libcadds_L24
                 BEQ     _libcadds_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -671,7 +662,6 @@ _libcadds_L22
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #97
                 BNE     _libcadds_L32
                 LDA     3,S   ; fccstk d=0 b=3
@@ -690,7 +680,6 @@ _libcadds_L22
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #90
                 BNE     _libcadds_L32
                 LDA     #1
@@ -714,7 +703,6 @@ _libcadds_L33
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #90
                 BNE     _libcadds_L30
                 LDA     #1
@@ -738,7 +726,6 @@ _libcadds_L31
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #98
                 BNE     _libcadds_L28
                 LDA     #1
@@ -750,7 +737,6 @@ _libcadds_L29
                 BEQ     _libcadds_L27
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -836,7 +822,6 @@ _libcadds_L35
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #81
                 BNE     _libcadds_L37
                 LDA     3,S   ; fccstk d=0 b=3
@@ -853,7 +838,6 @@ _libcadds_L35
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #81
                 BNE     _libcadds_L37
                 LDA     #1
@@ -865,7 +849,6 @@ _libcadds_L38
                 BEQ     _libcadds_L36
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5

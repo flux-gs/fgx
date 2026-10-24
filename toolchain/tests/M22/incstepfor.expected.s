@@ -59,7 +59,6 @@ _incstepfor_L3
 _incstepfor_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -99,7 +98,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #15
                 BEQ     _incstepfor_L4
                 LDA     #1
@@ -120,7 +118,6 @@ _incstepfor_L4
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #55
                 BEQ     _incstepfor_L5
                 LDA     #2

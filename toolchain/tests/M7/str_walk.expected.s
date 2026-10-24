@@ -51,7 +51,6 @@ _str_walk_L0
                 JSR     _fcc_safepoint
                 LDA     [_fcc_img0]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _str_walk_L1
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2

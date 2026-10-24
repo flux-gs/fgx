@@ -148,7 +148,6 @@ use_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #97
                 STA     _fcc_tmp_b
@@ -198,7 +197,6 @@ use_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #97
                 STA     _fcc_tmp_b

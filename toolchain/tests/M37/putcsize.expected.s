@@ -44,7 +44,6 @@ put_stkok        TCS
                 LDA     [_fcc_fpr0]
                 DEC
                 STA     [_fcc_fpr0]
-                CMP     #0
                 BMI     _putcsize_L0
                 LDA     _fcc_fpr0
                 INC
@@ -108,9 +107,7 @@ _putcsize_L0
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 AND     #128
-                CMP     #0
                 BEQ     _putcsize_L4
                 LDA     [_fcc_fpr0]
                 EOR     #$FFFF
@@ -184,7 +181,6 @@ _putcsize_L5
                 REP     #$20
                 MX      %00
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _putcsize_L7
                 DO      10+put_FRAMESIZE/256
@@ -415,7 +411,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #97
                 BNE     _putcsize_L10
                 SEP     #$20
@@ -440,7 +435,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #98
                 BNE     _putcsize_L10
                 LDA     #1
@@ -452,14 +446,12 @@ _putcsize_L11
                 BEQ     _putcsize_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
 _putcsize_L9
                 LDA     #2
                 TAX
-                TXA
                 ORA     #128
                 STA     15,S   ; fccstk d=0 b=15
                 SEP     #$20
@@ -484,7 +476,6 @@ _putcsize_L9
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #99
                 BNE     _putcsize_L15
                 LDA     3,S   ; fccstk d=0 b=3
@@ -538,7 +529,6 @@ _putcsize_L14
                 BEQ     _putcsize_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -548,7 +538,6 @@ _putcsize_L12
                 LDA:    b,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _putcsize_L22
                 LDA     #1
@@ -556,7 +545,6 @@ _putcsize_L12
                 LDA:    b,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _putcsize_L22
                 LDA     #1
@@ -571,7 +559,6 @@ _putcsize_L23
                 LDA:    b,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _putcsize_L20
                 LDA     #1
@@ -583,7 +570,6 @@ _putcsize_L21
                 BEQ     _putcsize_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1

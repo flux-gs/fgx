@@ -165,7 +165,6 @@ main_stkok        TCS
                 BEQ     _arrfield_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -406,11 +405,9 @@ _arrfield_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _arrfield_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -446,7 +443,6 @@ _arrfield_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 INC
                 INC
                 SEP     #$20
@@ -457,12 +453,10 @@ _arrfield_L1
                 LDA     gs+35
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _arrfield_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -560,7 +554,6 @@ _arrfield_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #9
                 STA     [_fcc_fpr0]
@@ -617,7 +610,6 @@ _arrfield_L2
                 BEQ     _arrfield_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -646,7 +638,6 @@ _arrfield_L3
                 BEQ     _arrfield_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     1,S   ; fccstk d=0 b=1

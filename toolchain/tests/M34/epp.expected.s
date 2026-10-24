@@ -334,11 +334,9 @@ _epp_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _epp_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     21,S   ; fccstk d=0 b=21

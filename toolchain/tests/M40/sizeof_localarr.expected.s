@@ -21,12 +21,10 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #5
                 TAX
-                TXA
                 CMP     #5
                 BNE     _sizeof_localarr_L3
                 LDA     #5
                 TAX
-                TXA
                 CMP     #5
                 BNE     _sizeof_localarr_L3
                 LDA     #0
@@ -59,7 +57,6 @@ _sizeof_localarr_L2
 _sizeof_localarr_L0
                 LDA     #6
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _sizeof_localarr_L5
                 LDA     #2
@@ -75,7 +72,6 @@ _sizeof_localarr_L0
 _sizeof_localarr_L5
                 LDA     #16
                 TAX
-                TXA
                 CMP     #16
                 BNE     _sizeof_localarr_L9
                 LDA     #16
@@ -85,7 +81,6 @@ _sizeof_localarr_L5
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_localarr_L9
                 LDA     #0
@@ -118,7 +113,6 @@ _sizeof_localarr_L8
 _sizeof_localarr_L6
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BNE     _sizeof_localarr_L12
                 LDA     #12
@@ -128,7 +122,6 @@ _sizeof_localarr_L6
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #3
                 BNE     _sizeof_localarr_L12
                 LDA     #0
@@ -151,7 +144,6 @@ _sizeof_localarr_L13
 _sizeof_localarr_L11
                 LDA     #16
                 TAX
-                TXA
                 CMP     #16
                 BEQ     _sizeof_localarr_L14
                 LDA     #5
@@ -167,7 +159,6 @@ _sizeof_localarr_L11
 _sizeof_localarr_L14
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BNE     _sizeof_localarr_L16
                 LDA     #12
@@ -177,7 +168,6 @@ _sizeof_localarr_L14
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #3
                 BNE     _sizeof_localarr_L16
                 LDA     #0
@@ -200,7 +190,6 @@ _sizeof_localarr_L17
 _sizeof_localarr_L15
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _sizeof_localarr_L18
                 LDA     #7
@@ -216,7 +205,6 @@ _sizeof_localarr_L15
 _sizeof_localarr_L18
                 LDA     #24
                 TAX
-                TXA
                 CMP     #24
                 BNE     _sizeof_localarr_L20
                 LDA     #24
@@ -226,7 +214,6 @@ _sizeof_localarr_L18
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_localarr_L20
                 LDA     #0
@@ -249,12 +236,10 @@ _sizeof_localarr_L21
 _sizeof_localarr_L19
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BNE     _sizeof_localarr_L23
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_localarr_L23
                 LDA     #0
@@ -277,7 +262,6 @@ _sizeof_localarr_L24
 _sizeof_localarr_L22
                 LDA     #10
                 TAX
-                TXA
                 CMP     #10
                 BNE     _sizeof_localarr_L28
                 LDA     #40
@@ -287,7 +271,6 @@ _sizeof_localarr_L22
                 PLA
                 JSR     _fcc_divs16
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sizeof_localarr_L28
                 LDA     #0
@@ -299,7 +282,6 @@ _sizeof_localarr_L29
                 BNE     _sizeof_localarr_L26
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _sizeof_localarr_L26
                 LDA     #0
@@ -322,7 +304,6 @@ _sizeof_localarr_L27
 _sizeof_localarr_L25
                 LDA     #1
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _sizeof_localarr_L30
                 LDA     #11

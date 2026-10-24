@@ -141,7 +141,6 @@ main_stkok        TCS
                 BEQ     _widestmt_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -260,7 +259,6 @@ _widestmt_L0
                 BEQ     _widestmt_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -313,7 +311,6 @@ _widestmt_L1
                 BEQ     _widestmt_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -398,7 +395,6 @@ _widestmt_L5
                 BEQ     _widestmt_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -467,12 +463,10 @@ _widestmt_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _widestmt_L8
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -525,7 +519,6 @@ _widestmt_L8
                 BEQ     _widestmt_L9
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0

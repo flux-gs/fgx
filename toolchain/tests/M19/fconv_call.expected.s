@@ -255,7 +255,6 @@ main_stkok        TCS
                 BNE     _fconv_call_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -283,7 +282,6 @@ _fconv_call_L0
                 BEQ     _fconv_call_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -298,12 +296,10 @@ _fconv_call_L1
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _fconv_call_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -345,7 +341,6 @@ _fconv_call_L2
                 BEQ     _fconv_call_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -388,19 +383,16 @@ _fconv_call_L3
                 BEQ     _fconv_call_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_call_L4
                 LDA     gi
                 TAX
-                TXA
                 CMP     #2
                 BNE     _fconv_call_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
@@ -430,7 +422,6 @@ _fconv_call_L5
                 BEQ     _fconv_call_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
@@ -438,12 +429,10 @@ _fconv_call_L6
                 LDA     gc
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _fconv_call_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1

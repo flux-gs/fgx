@@ -34,11 +34,9 @@ main_stkok        TCS
                 PLA
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BMI     _sockops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -71,7 +69,6 @@ _sockops_L0
                 BNE     _sockops_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -104,7 +101,6 @@ _sockops_L1
                 BNE     _sockops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -139,7 +135,6 @@ _sockops_L2
                 BNE     _sockops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -174,7 +169,6 @@ _sockops_L3
                 BNE     _sockops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -211,7 +205,6 @@ _sockops_L4
                 BNE     _sockops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
@@ -261,7 +254,6 @@ _sockops_L5
                 BNE     _sockops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
@@ -311,7 +303,6 @@ _sockops_L6
                 BNE     _sockops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
@@ -342,7 +333,6 @@ _sockops_L7
                 BNE     _sockops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3

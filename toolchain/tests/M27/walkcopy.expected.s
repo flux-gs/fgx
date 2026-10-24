@@ -179,7 +179,6 @@ _walkcopy_L2
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -203,7 +202,6 @@ _walkcopy_L4
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0

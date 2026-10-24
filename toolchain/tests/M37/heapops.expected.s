@@ -61,7 +61,6 @@ _heapops_L2
                 BEQ     _heapops_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -116,7 +115,6 @@ _heapops_L0
                 BNE     _heapops_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -167,7 +165,6 @@ _heapops_L6
                 BEQ     _heapops_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -196,11 +193,9 @@ _heapops_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _heapops_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     9,S   ; fccstk d=0 b=9
@@ -252,7 +247,6 @@ _heapops_L10
                 BEQ     _heapops_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     9,S   ; fccstk d=0 b=9

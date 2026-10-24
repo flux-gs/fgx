@@ -21,7 +21,6 @@ bump_stkok        TCS
                 INC     _fcc_fb
                 LDA     g
                 TAX
-                TXA
                 INC
                 STA     g
                 TAY

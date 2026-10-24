@@ -37,7 +37,6 @@ _mods_pow2_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #1100
                 STA     _fcc_tmp_b
                 TXA
@@ -140,11 +139,9 @@ _mods_pow2_L1
                 BRL     _mods_pow2_L0
 _mods_pow2_L2
                 LDA     _fcc_img2
-                CMP     #0
                 BNE     _mods_pow2_L14
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img1
@@ -166,7 +163,6 @@ _mods_pow2_L17
                 BNE     _mods_pow2_L15
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img1
@@ -188,7 +184,6 @@ _mods_pow2_L20
                 BNE     _mods_pow2_L18
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img1
@@ -210,7 +205,6 @@ _mods_pow2_L23
                 BNE     _mods_pow2_L21
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img1
@@ -229,12 +223,10 @@ _mods_pow2_L25
                 AND     #3
 _mods_pow2_L26
                 TAX
-                TXA
                 CMP     #3
                 BNE     _mods_pow2_L24
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img1
@@ -259,7 +251,6 @@ _mods_pow2_L29
                 BNE     _mods_pow2_L27
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img1
@@ -284,7 +275,6 @@ _mods_pow2_L32
                 BNE     _mods_pow2_L30
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img1
@@ -306,7 +296,6 @@ _mods_pow2_L35
                 BNE     _mods_pow2_L33
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img1
@@ -325,12 +314,10 @@ _mods_pow2_L37
                 AND     #16383
 _mods_pow2_L38
                 TAX
-                TXA
                 CMP     #16383
                 BNE     _mods_pow2_L36
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #256
                 STA     _fcc_img1
@@ -357,7 +344,6 @@ _mods_pow2_L41
                 BEQ     _mods_pow2_L39
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #512
                 STA     _fcc_img1
@@ -392,7 +378,6 @@ _mods_pow2_L44
                 BEQ     _mods_pow2_L42
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #1024
                 STA     _fcc_img1
@@ -447,14 +432,12 @@ _mods_pow2_L55
                 BEQ     _mods_pow2_L47
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #2048
                 STA     _fcc_img1
 _mods_pow2_L47
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #4095
                 BNE     _mods_pow2_L56
                 LDA     #42

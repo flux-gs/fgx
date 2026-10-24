@@ -93,7 +93,6 @@ bump_stkok        TCS
                 LDA     6+bump_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #0
                 STA     _fcc_img0
@@ -162,7 +161,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     g
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _int_to_ptr_implicit_L2
                 LDA     #1
@@ -291,7 +289,6 @@ _int_to_ptr_implicit_L5
                 STA     [_fcc_fpr0]
                 LDA     guard
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _int_to_ptr_implicit_L8
                 LDA     #5

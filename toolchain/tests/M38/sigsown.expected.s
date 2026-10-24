@@ -157,7 +157,6 @@ fill_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BNE     _sigsown_L3
                 DO      12+fill_FRAMESIZE/256
@@ -190,7 +189,6 @@ fill_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _sigsown_L3
                 LDA     #1
@@ -230,7 +228,6 @@ _sigsown_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _sigsown_L1
                 LDA     #1

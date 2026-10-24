@@ -661,7 +661,6 @@ _llong_arith_run_stkok        TCS
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L5
                 LDA     #0
                 BRA     _llong_arith_L6
@@ -841,7 +840,6 @@ _llong_arith_L4
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L8
                 LDA     #0
                 BRA     _llong_arith_L9
@@ -1021,7 +1019,6 @@ _llong_arith_L7
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L11
                 LDA     #0
                 BRA     _llong_arith_L12
@@ -1201,7 +1198,6 @@ _llong_arith_L10
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L14
                 LDA     #0
                 BRA     _llong_arith_L15
@@ -1381,7 +1377,6 @@ _llong_arith_L13
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L17
                 LDA     #0
                 BRA     _llong_arith_L18
@@ -1529,7 +1524,6 @@ _llong_arith_L16
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L20
                 LDA     #0
                 BRA     _llong_arith_L21
@@ -1677,7 +1671,6 @@ _llong_arith_L19
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L23
                 LDA     #0
                 BRA     _llong_arith_L24
@@ -1857,7 +1850,6 @@ _llong_arith_L22
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L26
                 LDA     #0
                 BRA     _llong_arith_L27
@@ -2037,7 +2029,6 @@ _llong_arith_L25
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L29
                 LDA     #0
                 BRA     _llong_arith_L30
@@ -2217,7 +2208,6 @@ _llong_arith_L28
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L32
                 LDA     #0
                 BRA     _llong_arith_L33
@@ -2397,7 +2387,6 @@ _llong_arith_L31
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L35
                 LDA     #0
                 BRA     _llong_arith_L36
@@ -2577,7 +2566,6 @@ _llong_arith_L34
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L38
                 LDA     #0
                 BRA     _llong_arith_L39
@@ -2725,7 +2713,6 @@ _llong_arith_L37
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L41
                 LDA     #0
                 BRA     _llong_arith_L42
@@ -2873,7 +2860,6 @@ _llong_arith_L40
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L44
                 LDA     #0
                 BRA     _llong_arith_L45
@@ -3053,7 +3039,6 @@ _llong_arith_L43
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L47
                 LDA     #0
                 BRA     _llong_arith_L48
@@ -3233,7 +3218,6 @@ _llong_arith_L46
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L50
                 LDA     #0
                 BRA     _llong_arith_L51
@@ -3413,7 +3397,6 @@ _llong_arith_L49
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L53
                 LDA     #0
                 BRA     _llong_arith_L54
@@ -3593,7 +3576,6 @@ _llong_arith_L52
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L56
                 LDA     #0
                 BRA     _llong_arith_L57
@@ -3773,7 +3755,6 @@ _llong_arith_L55
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L59
                 LDA     #0
                 BRA     _llong_arith_L60
@@ -3921,7 +3902,6 @@ _llong_arith_L58
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L62
                 LDA     #0
                 BRA     _llong_arith_L63
@@ -4069,7 +4049,6 @@ _llong_arith_L61
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L65
                 LDA     #0
                 BRA     _llong_arith_L66
@@ -4249,7 +4228,6 @@ _llong_arith_L64
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L68
                 LDA     #0
                 BRA     _llong_arith_L69
@@ -4429,7 +4407,6 @@ _llong_arith_L67
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L71
                 LDA     #0
                 BRA     _llong_arith_L72
@@ -4609,7 +4586,6 @@ _llong_arith_L70
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L74
                 LDA     #0
                 BRA     _llong_arith_L75
@@ -4789,7 +4765,6 @@ _llong_arith_L73
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L77
                 LDA     #0
                 BRA     _llong_arith_L78
@@ -4969,7 +4944,6 @@ _llong_arith_L76
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L80
                 LDA     #0
                 BRA     _llong_arith_L81
@@ -5117,7 +5091,6 @@ _llong_arith_L79
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L83
                 LDA     #0
                 BRA     _llong_arith_L84
@@ -5265,7 +5238,6 @@ _llong_arith_L82
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L86
                 LDA     #0
                 BRA     _llong_arith_L87
@@ -5445,7 +5417,6 @@ _llong_arith_L85
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L89
                 LDA     #0
                 BRA     _llong_arith_L90
@@ -5625,7 +5596,6 @@ _llong_arith_L88
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L92
                 LDA     #0
                 BRA     _llong_arith_L93
@@ -5805,7 +5775,6 @@ _llong_arith_L91
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L95
                 LDA     #0
                 BRA     _llong_arith_L96
@@ -5985,7 +5954,6 @@ _llong_arith_L94
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L98
                 LDA     #0
                 BRA     _llong_arith_L99
@@ -6165,7 +6133,6 @@ _llong_arith_L97
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L101
                 LDA     #0
                 BRA     _llong_arith_L102
@@ -6313,7 +6280,6 @@ _llong_arith_L100
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L104
                 LDA     #0
                 BRA     _llong_arith_L105
@@ -6461,7 +6427,6 @@ _llong_arith_L103
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L107
                 LDA     #0
                 BRA     _llong_arith_L108
@@ -6641,7 +6606,6 @@ _llong_arith_L106
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L110
                 LDA     #0
                 BRA     _llong_arith_L111
@@ -6821,7 +6785,6 @@ _llong_arith_L109
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L113
                 LDA     #0
                 BRA     _llong_arith_L114
@@ -7001,7 +6964,6 @@ _llong_arith_L112
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L116
                 LDA     #0
                 BRA     _llong_arith_L117
@@ -7181,7 +7143,6 @@ _llong_arith_L115
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L119
                 LDA     #0
                 BRA     _llong_arith_L120
@@ -7361,7 +7322,6 @@ _llong_arith_L118
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L122
                 LDA     #0
                 BRA     _llong_arith_L123
@@ -7509,7 +7469,6 @@ _llong_arith_L121
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L125
                 LDA     #0
                 BRA     _llong_arith_L126
@@ -7657,7 +7616,6 @@ _llong_arith_L124
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L128
                 LDA     #0
                 BRA     _llong_arith_L129
@@ -7837,7 +7795,6 @@ _llong_arith_L127
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L131
                 LDA     #0
                 BRA     _llong_arith_L132
@@ -8017,7 +7974,6 @@ _llong_arith_L130
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L134
                 LDA     #0
                 BRA     _llong_arith_L135
@@ -8197,7 +8153,6 @@ _llong_arith_L133
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L137
                 LDA     #0
                 BRA     _llong_arith_L138
@@ -8377,7 +8332,6 @@ _llong_arith_L136
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L140
                 LDA     #0
                 BRA     _llong_arith_L141
@@ -8557,7 +8511,6 @@ _llong_arith_L139
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L143
                 LDA     #0
                 BRA     _llong_arith_L144
@@ -8705,7 +8658,6 @@ _llong_arith_L142
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L146
                 LDA     #0
                 BRA     _llong_arith_L147
@@ -8853,7 +8805,6 @@ _llong_arith_L145
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L149
                 LDA     #0
                 BRA     _llong_arith_L150
@@ -8987,7 +8938,6 @@ _llong_arith_L148
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L152
                 LDA     #0
                 BRA     _llong_arith_L153
@@ -9121,7 +9071,6 @@ _llong_arith_L151
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L155
                 LDA     #0
                 BRA     _llong_arith_L156
@@ -9255,7 +9204,6 @@ _llong_arith_L154
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L158
                 LDA     #0
                 BRA     _llong_arith_L159
@@ -9389,7 +9337,6 @@ _llong_arith_L157
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L161
                 LDA     #0
                 BRA     _llong_arith_L162
@@ -9523,7 +9470,6 @@ _llong_arith_L160
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L164
                 LDA     #0
                 BRA     _llong_arith_L165
@@ -9657,7 +9603,6 @@ _llong_arith_L163
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L167
                 LDA     #0
                 BRA     _llong_arith_L168
@@ -9791,7 +9736,6 @@ _llong_arith_L166
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L170
                 LDA     #0
                 BRA     _llong_arith_L171
@@ -9925,7 +9869,6 @@ _llong_arith_L169
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L173
                 LDA     #0
                 BRA     _llong_arith_L174
@@ -10059,7 +10002,6 @@ _llong_arith_L172
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L176
                 LDA     #0
                 BRA     _llong_arith_L177
@@ -10193,7 +10135,6 @@ _llong_arith_L175
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L179
                 LDA     #0
                 BRA     _llong_arith_L180
@@ -10327,7 +10268,6 @@ _llong_arith_L178
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L182
                 LDA     #0
                 BRA     _llong_arith_L183
@@ -10461,7 +10401,6 @@ _llong_arith_L181
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L185
                 LDA     #0
                 BRA     _llong_arith_L186
@@ -10595,7 +10534,6 @@ _llong_arith_L184
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L188
                 LDA     #0
                 BRA     _llong_arith_L189
@@ -10729,7 +10667,6 @@ _llong_arith_L187
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L191
                 LDA     #0
                 BRA     _llong_arith_L192
@@ -10863,7 +10800,6 @@ _llong_arith_L190
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L194
                 LDA     #0
                 BRA     _llong_arith_L195
@@ -10997,7 +10933,6 @@ _llong_arith_L193
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L197
                 LDA     #0
                 BRA     _llong_arith_L198
@@ -11131,7 +11066,6 @@ _llong_arith_L196
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L200
                 LDA     #0
                 BRA     _llong_arith_L201
@@ -11265,7 +11199,6 @@ _llong_arith_L199
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L203
                 LDA     #0
                 BRA     _llong_arith_L204
@@ -11399,7 +11332,6 @@ _llong_arith_L202
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L206
                 LDA     #0
                 BRA     _llong_arith_L207
@@ -11533,7 +11465,6 @@ _llong_arith_L205
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L209
                 LDA     #0
                 BRA     _llong_arith_L210
@@ -11667,7 +11598,6 @@ _llong_arith_L208
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L212
                 LDA     #0
                 BRA     _llong_arith_L213
@@ -11801,7 +11731,6 @@ _llong_arith_L211
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L215
                 LDA     #0
                 BRA     _llong_arith_L216
@@ -11935,7 +11864,6 @@ _llong_arith_L214
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L218
                 LDA     #0
                 BRA     _llong_arith_L219
@@ -12069,7 +11997,6 @@ _llong_arith_L217
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L221
                 LDA     #0
                 BRA     _llong_arith_L222
@@ -12203,7 +12130,6 @@ _llong_arith_L220
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L224
                 LDA     #0
                 BRA     _llong_arith_L225
@@ -12337,7 +12263,6 @@ _llong_arith_L223
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L227
                 LDA     #0
                 BRA     _llong_arith_L228
@@ -12471,7 +12396,6 @@ _llong_arith_L226
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L230
                 LDA     #0
                 BRA     _llong_arith_L231
@@ -12605,7 +12529,6 @@ _llong_arith_L229
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L233
                 LDA     #0
                 BRA     _llong_arith_L234
@@ -12739,7 +12662,6 @@ _llong_arith_L232
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L236
                 LDA     #0
                 BRA     _llong_arith_L237
@@ -12873,7 +12795,6 @@ _llong_arith_L235
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L239
                 LDA     #0
                 BRA     _llong_arith_L240
@@ -13007,7 +12928,6 @@ _llong_arith_L238
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L242
                 LDA     #0
                 BRA     _llong_arith_L243
@@ -13141,7 +13061,6 @@ _llong_arith_L241
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L245
                 LDA     #0
                 BRA     _llong_arith_L246
@@ -13275,7 +13194,6 @@ _llong_arith_L244
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L248
                 LDA     #0
                 BRA     _llong_arith_L249
@@ -13409,7 +13327,6 @@ _llong_arith_L247
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L251
                 LDA     #0
                 BRA     _llong_arith_L252
@@ -13543,7 +13460,6 @@ _llong_arith_L250
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L254
                 LDA     #0
                 BRA     _llong_arith_L255
@@ -13677,7 +13593,6 @@ _llong_arith_L253
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L257
                 LDA     #0
                 BRA     _llong_arith_L258
@@ -13811,7 +13726,6 @@ _llong_arith_L256
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L260
                 LDA     #0
                 BRA     _llong_arith_L261
@@ -13945,7 +13859,6 @@ _llong_arith_L259
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L263
                 LDA     #0
                 BRA     _llong_arith_L264
@@ -14079,7 +13992,6 @@ _llong_arith_L262
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L266
                 LDA     #0
                 BRA     _llong_arith_L267
@@ -14213,7 +14125,6 @@ _llong_arith_L265
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L269
                 LDA     #0
                 BRA     _llong_arith_L270
@@ -14347,7 +14258,6 @@ _llong_arith_L268
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L272
                 LDA     #0
                 BRA     _llong_arith_L273
@@ -14481,7 +14391,6 @@ _llong_arith_L271
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L275
                 LDA     #0
                 BRA     _llong_arith_L276
@@ -14615,7 +14524,6 @@ _llong_arith_L274
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L278
                 LDA     #0
                 BRA     _llong_arith_L279
@@ -14749,7 +14657,6 @@ _llong_arith_L277
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L281
                 LDA     #0
                 BRA     _llong_arith_L282
@@ -14883,7 +14790,6 @@ _llong_arith_L280
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L284
                 LDA     #0
                 BRA     _llong_arith_L285
@@ -15017,7 +14923,6 @@ _llong_arith_L283
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L287
                 LDA     #0
                 BRA     _llong_arith_L288
@@ -15151,7 +15056,6 @@ _llong_arith_L286
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L290
                 LDA     #0
                 BRA     _llong_arith_L291
@@ -15285,7 +15189,6 @@ _llong_arith_L289
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L293
                 LDA     #0
                 BRA     _llong_arith_L294
@@ -15419,7 +15322,6 @@ _llong_arith_L292
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L296
                 LDA     #0
                 BRA     _llong_arith_L297
@@ -15553,7 +15455,6 @@ _llong_arith_L295
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L299
                 LDA     #0
                 BRA     _llong_arith_L300
@@ -15687,7 +15588,6 @@ _llong_arith_L298
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L302
                 LDA     #0
                 BRA     _llong_arith_L303
@@ -15821,7 +15721,6 @@ _llong_arith_L301
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L305
                 LDA     #0
                 BRA     _llong_arith_L306
@@ -15955,7 +15854,6 @@ _llong_arith_L304
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L308
                 LDA     #0
                 BRA     _llong_arith_L309
@@ -16089,7 +15987,6 @@ _llong_arith_L307
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L311
                 LDA     #0
                 BRA     _llong_arith_L312
@@ -16223,7 +16120,6 @@ _llong_arith_L310
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L314
                 LDA     #0
                 BRA     _llong_arith_L315
@@ -16357,7 +16253,6 @@ _llong_arith_L313
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L317
                 LDA     #0
                 BRA     _llong_arith_L318
@@ -16491,7 +16386,6 @@ _llong_arith_L316
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L320
                 LDA     #0
                 BRA     _llong_arith_L321
@@ -16625,7 +16519,6 @@ _llong_arith_L319
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L323
                 LDA     #0
                 BRA     _llong_arith_L324
@@ -16759,7 +16652,6 @@ _llong_arith_L322
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L326
                 LDA     #0
                 BRA     _llong_arith_L327
@@ -16893,7 +16785,6 @@ _llong_arith_L325
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L329
                 LDA     #0
                 BRA     _llong_arith_L330
@@ -17030,7 +16921,6 @@ _llong_arith_L328
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L331
                 LDA     #111
                 TAY
@@ -17160,7 +17050,6 @@ _llong_arith_L331
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L332
                 LDA     #112
                 TAY
@@ -17292,7 +17181,6 @@ _llong_arith_L332
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L333
                 LDA     #113
@@ -17425,7 +17313,6 @@ _llong_arith_L333
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L334
                 LDA     #114
@@ -17557,7 +17444,6 @@ _llong_arith_L334
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L335
                 LDA     #115
                 TAY
@@ -17688,7 +17574,6 @@ _llong_arith_L335
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L336
                 LDA     #116
                 TAY
@@ -17819,7 +17704,6 @@ _llong_arith_L336
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L337
                 LDA     #117
@@ -17951,7 +17835,6 @@ _llong_arith_L337
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L338
                 LDA     #118
@@ -18082,7 +17965,6 @@ _llong_arith_L338
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L339
                 LDA     #119
                 TAY
@@ -18212,7 +18094,6 @@ _llong_arith_L339
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L340
                 LDA     #120
                 TAY
@@ -18343,7 +18224,6 @@ _llong_arith_L340
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L341
                 LDA     #121
@@ -18475,7 +18355,6 @@ _llong_arith_L341
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L342
                 LDA     #122
@@ -18607,7 +18486,6 @@ _llong_arith_L342
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L343
                 LDA     #123
@@ -18738,7 +18616,6 @@ _llong_arith_L343
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L344
                 LDA     #124
                 TAY
@@ -18869,7 +18746,6 @@ _llong_arith_L344
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L345
                 LDA     #125
                 TAY
@@ -19001,7 +18877,6 @@ _llong_arith_L345
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L346
                 LDA     #126
@@ -19134,7 +19009,6 @@ _llong_arith_L346
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L347
                 LDA     #127
@@ -19266,7 +19140,6 @@ _llong_arith_L347
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L348
                 LDA     #128
                 TAY
@@ -19396,7 +19269,6 @@ _llong_arith_L348
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L349
                 LDA     #129
                 TAY
@@ -19527,7 +19399,6 @@ _llong_arith_L349
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L350
                 LDA     #130
@@ -19658,7 +19529,6 @@ _llong_arith_L350
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L351
                 LDA     #131
                 TAY
@@ -19788,7 +19658,6 @@ _llong_arith_L351
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L352
                 LDA     #132
                 TAY
@@ -19919,7 +19788,6 @@ _llong_arith_L352
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L353
                 LDA     #133
@@ -20051,7 +19919,6 @@ _llong_arith_L353
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L354
                 LDA     #134
@@ -20182,7 +20049,6 @@ _llong_arith_L354
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L355
                 LDA     #135
                 TAY
@@ -20312,7 +20178,6 @@ _llong_arith_L355
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L356
                 LDA     #136
                 TAY
@@ -20443,7 +20308,6 @@ _llong_arith_L356
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L357
                 LDA     #137
                 TAY
@@ -20574,7 +20438,6 @@ _llong_arith_L357
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L358
                 LDA     #138
                 TAY
@@ -20706,7 +20569,6 @@ _llong_arith_L358
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L359
                 LDA     #139
@@ -20839,7 +20701,6 @@ _llong_arith_L359
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L360
                 LDA     #140
@@ -20971,7 +20832,6 @@ _llong_arith_L360
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L361
                 LDA     #141
@@ -21103,7 +20963,6 @@ _llong_arith_L361
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L362
                 LDA     #142
@@ -21235,7 +21094,6 @@ _llong_arith_L362
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L363
                 LDA     #143
@@ -21367,7 +21225,6 @@ _llong_arith_L363
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L364
                 LDA     #144
@@ -21498,7 +21355,6 @@ _llong_arith_L364
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L365
                 LDA     #145
                 TAY
@@ -21628,7 +21484,6 @@ _llong_arith_L365
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L366
                 LDA     #146
                 TAY
@@ -21759,7 +21614,6 @@ _llong_arith_L366
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L367
                 LDA     #147
@@ -21890,7 +21744,6 @@ _llong_arith_L367
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L368
                 LDA     #148
                 TAY
@@ -22021,7 +21874,6 @@ _llong_arith_L368
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L369
                 LDA     #149
                 TAY
@@ -22153,7 +22005,6 @@ _llong_arith_L369
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L370
                 LDA     #150
@@ -22286,7 +22137,6 @@ _llong_arith_L370
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L371
                 LDA     #151
@@ -22418,7 +22268,6 @@ _llong_arith_L371
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L372
                 LDA     #152
                 TAY
@@ -22548,7 +22397,6 @@ _llong_arith_L372
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L373
                 LDA     #153
                 TAY
@@ -22679,7 +22527,6 @@ _llong_arith_L373
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L374
                 LDA     #154
@@ -22810,7 +22657,6 @@ _llong_arith_L374
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L375
                 LDA     #155
                 TAY
@@ -22940,7 +22786,6 @@ _llong_arith_L375
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L376
                 LDA     #156
                 TAY
@@ -23071,7 +22916,6 @@ _llong_arith_L376
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L377
                 LDA     #157
@@ -23203,7 +23047,6 @@ _llong_arith_L377
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L378
                 LDA     #158
@@ -23335,7 +23178,6 @@ _llong_arith_L378
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L379
                 LDA     #159
@@ -23467,7 +23309,6 @@ _llong_arith_L379
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L380
                 LDA     #160
@@ -23599,7 +23440,6 @@ _llong_arith_L380
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L381
                 LDA     #161
                 TAY
@@ -23730,7 +23570,6 @@ _llong_arith_L381
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L382
                 LDA     #162
                 TAY
@@ -23862,7 +23701,6 @@ _llong_arith_L382
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L383
                 LDA     #163
@@ -23995,7 +23833,6 @@ _llong_arith_L383
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L384
                 LDA     #164
@@ -24126,7 +23963,6 @@ _llong_arith_L384
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L385
                 LDA     #165
                 TAY
@@ -24256,7 +24092,6 @@ _llong_arith_L385
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L386
                 LDA     #166
                 TAY
@@ -24386,7 +24221,6 @@ _llong_arith_L386
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L387
                 LDA     #167
                 TAY
@@ -24516,7 +24350,6 @@ _llong_arith_L387
                 BRA     *+5
                 LDA     #1
                 STA     i
-                CMP     #0
                 BEQ     _llong_arith_L388
                 LDA     #168
                 TAY
@@ -24647,7 +24480,6 @@ _llong_arith_L388
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L389
                 LDA     #169
@@ -24779,7 +24611,6 @@ _llong_arith_L389
                 LDA     #1
                 STA     i
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _llong_arith_L390
                 LDA     #170
@@ -25115,7 +24946,6 @@ _llong_arith_L399
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L403
                 LDA     #0
                 BRA     _llong_arith_L404
@@ -25209,7 +25039,6 @@ _llong_arith_L402
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L406
                 LDA     #0
                 BRA     _llong_arith_L407
@@ -25320,7 +25149,6 @@ _llong_arith_L405
                 ADC     #16
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_arith_L409
                 LDA     #0
                 BRA     _llong_arith_L410
@@ -25410,7 +25238,6 @@ _llong_arith_L408
                 STA     _fcc_long_hi
                 LDA     a
                 TAX
-                TXA
                 CMP     #52719
                 BNE     _llong_arith_L412
                 LDA     #0

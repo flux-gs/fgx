@@ -81,7 +81,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #17
                 BEQ     _p33_farfield_L0
                 LDA     #1
@@ -102,7 +101,6 @@ _p33_farfield_L0
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #34
                 BEQ     _p33_farfield_L1
                 LDA     #2
@@ -123,7 +121,6 @@ _p33_farfield_L1
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #51
                 BEQ     _p33_farfield_L2
                 LDA     #3
@@ -152,7 +149,6 @@ _p33_farfield_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _p33_farfield_L3
                 LDA     #4
@@ -183,7 +179,6 @@ _p33_farfield_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _p33_farfield_L4
                 LDA     #5

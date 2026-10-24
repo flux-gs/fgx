@@ -57,7 +57,6 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L11
                 LDA     #1
@@ -65,7 +64,6 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L11
                 LDA     #1
@@ -80,7 +78,6 @@ _pfsign_L12
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L9
                 LDA     #1
@@ -95,7 +92,6 @@ _pfsign_L10
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #45
                 BNE     _pfsign_L7
                 LDA     #1
@@ -110,7 +106,6 @@ _pfsign_L8
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #52
                 BNE     _pfsign_L5
                 LDA     #1
@@ -125,7 +120,6 @@ _pfsign_L6
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BNE     _pfsign_L3
                 LDA     #1
@@ -139,7 +133,6 @@ _pfsign_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _pfsign_L1
                 LDA     #1
                 BRA     _pfsign_L2
@@ -150,7 +143,6 @@ _pfsign_L2
                 BEQ     _pfsign_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -191,7 +183,6 @@ _pfsign_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #45
                 BNE     _pfsign_L22
                 LDA     #1
@@ -199,7 +190,6 @@ _pfsign_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #48
                 BNE     _pfsign_L22
                 LDA     #1
@@ -214,7 +204,6 @@ _pfsign_L23
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #48
                 BNE     _pfsign_L20
                 LDA     #1
@@ -229,7 +218,6 @@ _pfsign_L21
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #48
                 BNE     _pfsign_L18
                 LDA     #1
@@ -244,7 +232,6 @@ _pfsign_L19
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #52
                 BNE     _pfsign_L16
                 LDA     #1
@@ -259,7 +246,6 @@ _pfsign_L17
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BNE     _pfsign_L14
                 LDA     #1
@@ -271,7 +257,6 @@ _pfsign_L15
                 BEQ     _pfsign_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -312,7 +297,6 @@ _pfsign_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #45
                 BNE     _pfsign_L33
                 LDA     #1
@@ -320,7 +304,6 @@ _pfsign_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #52
                 BNE     _pfsign_L33
                 LDA     #1
@@ -335,7 +318,6 @@ _pfsign_L34
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BNE     _pfsign_L31
                 LDA     #1
@@ -350,7 +332,6 @@ _pfsign_L32
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L29
                 LDA     #1
@@ -365,7 +346,6 @@ _pfsign_L30
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L27
                 LDA     #1
@@ -380,7 +360,6 @@ _pfsign_L28
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #88
                 BNE     _pfsign_L25
                 LDA     #1
@@ -392,7 +371,6 @@ _pfsign_L26
                 BEQ     _pfsign_L24
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -440,7 +418,6 @@ _pfsign_L24
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L40
                 LDA     #1
@@ -448,7 +425,6 @@ _pfsign_L24
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _pfsign_L40
                 LDA     #1
@@ -463,7 +439,6 @@ _pfsign_L41
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #45
                 BNE     _pfsign_L38
                 LDA     #1
@@ -478,7 +453,6 @@ _pfsign_L39
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #55
                 BNE     _pfsign_L36
                 LDA     #1
@@ -490,7 +464,6 @@ _pfsign_L37
                 BEQ     _pfsign_L35
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1

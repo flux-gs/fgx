@@ -109,7 +109,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _derefrmw_L1
                 LDA     #2
@@ -117,7 +116,6 @@ main_stkok        TCS
                 TAX
                 LDA:    _derefrmw_s,X
                 TAX
-                TXA
                 CMP     #5
                 BNE     _derefrmw_L1
                 LDA     #0
@@ -181,7 +179,6 @@ _derefrmw_L0
                 LDA:    _derefrmw_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #165
                 BEQ     _derefrmw_L3
                 LDA     #2
@@ -203,7 +200,6 @@ _derefrmw_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 SEP     #$20
@@ -216,7 +212,6 @@ _derefrmw_L3
                 LDA:    _derefrmw_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #168
                 BEQ     _derefrmw_L4
                 LDA     #3
@@ -276,12 +271,10 @@ _derefrmw_L4
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 DEC
                 STA     [_fcc_fpr0]
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
                 BNE     _derefrmw_L6
                 LDA     #0
@@ -289,7 +282,6 @@ _derefrmw_L4
                 TAX
                 LDA:    _derefrmw_s,X
                 TAX
-                TXA
                 CMP     #7
                 BNE     _derefrmw_L6
                 LDA     #0

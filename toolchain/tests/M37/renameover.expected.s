@@ -53,7 +53,6 @@ _renameover_put_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     _renameover_L0
                 LDA     #$FFFF
                 TAY
@@ -208,7 +207,6 @@ main_stkok        TCS
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BPL     _renameover_L2
                 LDA     #1
                 TAY
@@ -252,7 +250,6 @@ _renameover_L2
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BPL     _renameover_L3
                 LDA     #2
                 TAY
@@ -294,11 +291,9 @@ _renameover_L3
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _renameover_L4
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
@@ -359,7 +354,6 @@ _renameover_L4
                 TYA
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #3
                 BNE     _renameover_L11
                 SEP     #$20
@@ -380,7 +374,6 @@ _renameover_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #78
                 BNE     _renameover_L11
                 LDA     #1
@@ -408,7 +401,6 @@ _renameover_L12
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
                 BNE     _renameover_L9
                 LDA     #1
@@ -436,7 +428,6 @@ _renameover_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #87
                 BNE     _renameover_L7
                 LDA     #1
@@ -448,7 +439,6 @@ _renameover_L8
                 BEQ     _renameover_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
@@ -475,11 +465,9 @@ _renameover_L5
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BPL     _renameover_L13
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     13,S   ; fccstk d=0 b=13
@@ -523,7 +511,6 @@ _renameover_L14
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BNE     _renameover_L15
                 SEP     #$20
                 MX      %10
@@ -554,11 +541,9 @@ _renameover_L14
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _renameover_L16
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13

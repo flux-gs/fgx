@@ -26,12 +26,10 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _paren_postincdec_value_L1
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #6
                 BNE     _paren_postincdec_value_L1
                 LDA     #0
@@ -59,12 +57,10 @@ _paren_postincdec_value_L0
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #6
                 BNE     _paren_postincdec_value_L4
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #5
                 BNE     _paren_postincdec_value_L4
                 LDA     #0
@@ -97,7 +93,6 @@ _paren_postincdec_value_L3
                 BNE     _paren_postincdec_value_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #6
                 BNE     _paren_postincdec_value_L7
                 LDA     #0
@@ -123,7 +118,6 @@ _paren_postincdec_value_L6
                 DEC
                 STA     _fcc_img1
                 LDA     _fcc_tmp_b
-                CMP     #0
                 BEQ     _paren_postincdec_value_L9
                 LDA     #0
                 BRA     _paren_postincdec_value_L10
@@ -135,7 +129,6 @@ _paren_postincdec_value_L10
                 BNE     _paren_postincdec_value_L12
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #5
                 BNE     _paren_postincdec_value_L12
                 LDA     #0
@@ -163,12 +156,10 @@ _paren_postincdec_value_L11
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _paren_postincdec_value_L15
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #6
                 BNE     _paren_postincdec_value_L15
                 LDA     #0
@@ -197,12 +188,10 @@ _paren_postincdec_value_L14
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
                 BNE     _paren_postincdec_value_L18
                 LDA     g
                 TAX
-                TXA
                 CMP     #8
                 BNE     _paren_postincdec_value_L18
                 LDA     #0
@@ -529,7 +518,6 @@ _paren_postincdec_value_L23
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #10
                 BNE     _paren_postincdec_value_L27
                 LDA     _fcc_img3
@@ -599,7 +587,6 @@ _paren_postincdec_value_L26
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #20
                 BNE     _paren_postincdec_value_L32
                 LDA     _fcc_img3
@@ -669,7 +656,6 @@ _paren_postincdec_value_L31
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #10
                 BNE     _paren_postincdec_value_L37
                 LDA     _fcc_img3
@@ -773,14 +759,12 @@ _paren_postincdec_value_L36
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #255
                 BNE     _paren_postincdec_value_L44
                 LDA     #1
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _paren_postincdec_value_L44
                 LDA     #0
                 BRA     _paren_postincdec_value_L45
@@ -794,7 +778,6 @@ _paren_postincdec_value_L45
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #30
                 BNE     _paren_postincdec_value_L42
                 LDA     #0
@@ -860,14 +843,12 @@ _paren_postincdec_value_L41
                 MX      %00
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
-                CMP     #0
                 BNE     _paren_postincdec_value_L49
                 LDA     #1
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
                 BNE     _paren_postincdec_value_L49
                 LDA     #0
@@ -882,7 +863,6 @@ _paren_postincdec_value_L50
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #30
                 BNE     _paren_postincdec_value_L47
                 LDA     #0
@@ -984,7 +964,6 @@ _paren_postincdec_value_L46
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #100
                 BNE     _paren_postincdec_value_L54
                 SEP     #$20
@@ -1005,7 +984,6 @@ _paren_postincdec_value_L46
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #101
                 BNE     _paren_postincdec_value_L54
                 LDA     #0
@@ -1033,7 +1011,6 @@ _paren_postincdec_value_L55
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _paren_postincdec_value_L52
                 LDA     #0
@@ -1202,12 +1179,10 @@ _paren_postincdec_value_L56
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #9
                 BNE     _paren_postincdec_value_L60
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
-                TXA
                 CMP     #10
                 BNE     _paren_postincdec_value_L60
                 LDA     #0
@@ -1239,12 +1214,10 @@ _paren_postincdec_value_L59
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #10
                 BNE     _paren_postincdec_value_L63
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
-                TXA
                 CMP     #9
                 BNE     _paren_postincdec_value_L63
                 LDA     #0
@@ -1445,7 +1418,6 @@ _paren_postincdec_value_L65
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #1
                 BNE     _paren_postincdec_value_L73
                 SEP     #$20
@@ -1466,7 +1438,6 @@ _paren_postincdec_value_L65
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #2
                 BNE     _paren_postincdec_value_L73
                 LDA     #0
@@ -1510,7 +1481,6 @@ _paren_postincdec_value_L72
                 ASL
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #4
                 BNE     _paren_postincdec_value_L76
                 SEP     #$20
@@ -1531,7 +1501,6 @@ _paren_postincdec_value_L72
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _paren_postincdec_value_L76
                 LDA     #0
@@ -1557,12 +1526,10 @@ _paren_postincdec_value_L75
                 STA     _fcc_img1
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #4
                 BNE     _paren_postincdec_value_L79
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #4
                 BNE     _paren_postincdec_value_L79
                 LDA     #0

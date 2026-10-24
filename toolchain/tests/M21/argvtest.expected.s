@@ -141,7 +141,6 @@ _argvtest_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #47
                 BNE     _argvtest_L3
                 LDA     #42

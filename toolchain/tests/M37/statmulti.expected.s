@@ -93,7 +93,6 @@ _statmulti_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _statmulti_L1
                 LDA     #2

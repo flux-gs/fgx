@@ -58,7 +58,6 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 STA     [_fcc_fpr0]

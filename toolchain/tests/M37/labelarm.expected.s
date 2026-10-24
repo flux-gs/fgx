@@ -143,7 +143,6 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _labelarm_L8
                 LDA     #1
@@ -173,7 +172,6 @@ _labelarm_L8
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _labelarm_L9
                 LDA     #2
@@ -203,7 +201,6 @@ _labelarm_L9
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _labelarm_L10
                 LDA     #3
@@ -233,7 +230,6 @@ _labelarm_L10
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #990
                 BEQ     _labelarm_L11
                 LDA     #4

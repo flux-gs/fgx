@@ -74,7 +74,6 @@ _struct_init_leaves_L2
                 BEQ     _struct_init_leaves_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -132,7 +131,6 @@ _struct_init_leaves_L5
                 BEQ     _struct_init_leaves_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -161,7 +159,6 @@ _struct_init_leaves_L3
                 BEQ     _struct_init_leaves_L7
                 LDA     _struct_init_leaves_zru+20
                 TAX
-                TXA
                 CMP     #6
                 BNE     _struct_init_leaves_L7
                 LDA     #1
@@ -173,7 +170,6 @@ _struct_init_leaves_L8
                 BEQ     _struct_init_leaves_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -231,7 +227,6 @@ _struct_init_leaves_L11
                 BEQ     _struct_init_leaves_L9
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -289,7 +284,6 @@ _struct_init_leaves_L14
                 BEQ     _struct_init_leaves_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -367,7 +361,6 @@ _struct_init_leaves_L17
                 BEQ     _struct_init_leaves_L15
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -471,7 +464,6 @@ _struct_init_leaves_L26
                 CMP     #0
                 BEQ     _struct_init_leaves_L23
                 LDA     _struct_init_leaves_nulv+20
-                CMP     #0
                 BNE     _struct_init_leaves_L23
                 LDA     #1
                 BRA     _struct_init_leaves_L24
@@ -482,7 +474,6 @@ _struct_init_leaves_L24
                 BEQ     _struct_init_leaves_L22
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0

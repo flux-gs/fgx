@@ -138,7 +138,6 @@ _castinit_L8
 _castinit_L6
                 LDA     gi
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _castinit_L9
                 LDA     #4

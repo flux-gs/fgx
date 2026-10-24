@@ -310,7 +310,6 @@ _init_md_wide_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_wide_L7
                 LDA     #0
                 BRA     _init_md_wide_L8
@@ -385,8 +384,7 @@ _init_md_wide_L6
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _init_md_wide_L10
+                BNE     _init_md_wide_L10
                 LDA     #1
                 ASL
                 ASL
@@ -441,7 +439,6 @@ _init_md_wide_L6
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_wide_L10
                 LDA     #0
                 BRA     _init_md_wide_L11

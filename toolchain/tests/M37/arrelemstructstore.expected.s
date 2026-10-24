@@ -51,7 +51,6 @@ _arrelemstructstore_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _arrelemstructstore_L3
@@ -279,7 +278,6 @@ _arrelemstructstore_landed_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _arrelemstructstore_L4
                 LDA     #1
@@ -375,7 +373,6 @@ _arrelemstructstore_L5
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #17476
                 BEQ     _arrelemstructstore_L6
                 LDA     #3
@@ -494,7 +491,6 @@ _arrelemstructstore_L7
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _arrelemstructstore_L8
                 LDA     #1
                 PHA
@@ -534,7 +530,6 @@ _arrelemstructstore_L7
 _arrelemstructstore_L8
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #49374
                 BEQ     _arrelemstructstore_L9
                 LDA     #5
@@ -550,7 +545,6 @@ _arrelemstructstore_L8
 _arrelemstructstore_L9
                 LDA     gt+22
                 TAX
-                TXA
                 CMP     #48879
                 BEQ     _arrelemstructstore_L10
                 LDA     #6
@@ -566,7 +560,6 @@ _arrelemstructstore_L9
 _arrelemstructstore_L10
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #36864
                 BEQ     _arrelemstructstore_L11
                 LDA     #7
@@ -582,7 +575,6 @@ _arrelemstructstore_L10
 _arrelemstructstore_L11
                 LDA     gt+26
                 TAX
-                TXA
                 CMP     #36866
                 BEQ     _arrelemstructstore_L12
                 LDA     #8
@@ -659,7 +651,6 @@ _arrelemstructstore_L13
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _arrelemstructstore_L14
                 LDA     #10
                 PHA
@@ -699,7 +690,6 @@ _arrelemstructstore_L13
 _arrelemstructstore_L14
                 LDA     gt+24
                 TAX
-                TXA
                 CMP     #49374
                 BEQ     _arrelemstructstore_L15
                 LDA     #15
@@ -715,7 +705,6 @@ _arrelemstructstore_L14
 _arrelemstructstore_L15
                 LDA     gt+34
                 TAX
-                TXA
                 CMP     #48879
                 BEQ     _arrelemstructstore_L16
                 LDA     #16
@@ -731,7 +720,6 @@ _arrelemstructstore_L15
 _arrelemstructstore_L16
                 LDA     gt+14
                 TAX
-                TXA
                 CMP     #36865
                 BEQ     _arrelemstructstore_L17
                 LDA     #17
@@ -789,7 +777,6 @@ _arrelemstructstore_L18
                 BPL     _arrelemstructstore_L18
                 LDA     g_dst+0
                 TAX
-                TXA
                 CMP     #36864
                 BEQ     _arrelemstructstore_L19
                 LDA     #20
@@ -838,7 +825,6 @@ _arrelemstructstore_L19
 _arrelemstructstore_L20
                 LDA     g_dst+6
                 TAX
-                TXA
                 CMP     #45056
                 BEQ     _arrelemstructstore_L21
                 LDA     #22
@@ -854,7 +840,6 @@ _arrelemstructstore_L20
 _arrelemstructstore_L21
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #36864
                 BEQ     _arrelemstructstore_L22
                 LDA     #23
@@ -911,7 +896,6 @@ _arrelemstructstore_L23
                 BPL     _arrelemstructstore_L23
                 LDA     gt+26
                 TAX
-                TXA
                 CMP     #36864
                 BEQ     _arrelemstructstore_L24
                 LDA     #30
@@ -960,7 +944,6 @@ _arrelemstructstore_L24
 _arrelemstructstore_L25
                 LDA     gt+32
                 TAX
-                TXA
                 CMP     #45056
                 BEQ     _arrelemstructstore_L26
                 LDA     #32
@@ -976,7 +959,6 @@ _arrelemstructstore_L25
 _arrelemstructstore_L26
                 LDA     gt+24
                 TAX
-                TXA
                 CMP     #49374
                 BEQ     _arrelemstructstore_L27
                 LDA     #33
@@ -992,7 +974,6 @@ _arrelemstructstore_L26
 _arrelemstructstore_L27
                 LDA     gt+34
                 TAX
-                TXA
                 CMP     #48879
                 BEQ     _arrelemstructstore_L28
                 LDA     #34
@@ -1008,7 +989,6 @@ _arrelemstructstore_L27
 _arrelemstructstore_L28
                 LDA     gt+2
                 TAX
-                TXA
                 CMP     #36864
                 BEQ     _arrelemstructstore_L29
                 LDA     #35
@@ -1024,7 +1004,6 @@ _arrelemstructstore_L28
 _arrelemstructstore_L29
                 LDA     gt+14
                 TAX
-                TXA
                 CMP     #36865
                 BEQ     _arrelemstructstore_L30
                 LDA     #36
@@ -1128,11 +1107,9 @@ _arrelemstructstore_L32
                 RTL
 _arrelemstructstore_L33
                 LDA     gt+20
-                CMP     #0
                 BEQ     _arrelemstructstore_L34
                 LDA     #42
                 TAX
-                TXA
                 CLC
                 ADC     #100
                 TAY
@@ -1147,7 +1124,6 @@ _arrelemstructstore_L33
 _arrelemstructstore_L34
                 LDA     gt+12
                 TAX
-                TXA
                 CMP     #49374
                 BEQ     _arrelemstructstore_L35
                 LDA     #44
@@ -1163,7 +1139,6 @@ _arrelemstructstore_L34
 _arrelemstructstore_L35
                 LDA     gt+22
                 TAX
-                TXA
                 CMP     #48879
                 BEQ     _arrelemstructstore_L36
                 LDA     #45
@@ -1179,7 +1154,6 @@ _arrelemstructstore_L35
 _arrelemstructstore_L36
                 LDA     gt+8
                 TAX
-                TXA
                 CMP     #45056
                 BEQ     _arrelemstructstore_L37
                 LDA     #46
@@ -1195,7 +1169,6 @@ _arrelemstructstore_L36
 _arrelemstructstore_L37
                 LDA     gt+26
                 TAX
-                TXA
                 CMP     #36866
                 BEQ     _arrelemstructstore_L38
                 LDA     #47

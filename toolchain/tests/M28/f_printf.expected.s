@@ -80,7 +80,6 @@ _f_printf_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _f_printf_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -247,7 +246,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L5
                 LDA     #0
                 BRA     _f_printf_L6
@@ -343,7 +341,6 @@ _f_printf_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L8
                 LDA     #0
                 BRA     _f_printf_L9
@@ -439,7 +436,6 @@ _f_printf_L7
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L11
                 LDA     #0
                 BRA     _f_printf_L12
@@ -540,7 +536,6 @@ _f_printf_L10
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L14
                 LDA     #0
                 BRA     _f_printf_L15
@@ -636,7 +631,6 @@ _f_printf_L13
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L17
                 LDA     #0
                 BRA     _f_printf_L18
@@ -732,7 +726,6 @@ _f_printf_L16
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L20
                 LDA     #0
                 BRA     _f_printf_L21
@@ -828,7 +821,6 @@ _f_printf_L19
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L23
                 LDA     #0
                 BRA     _f_printf_L24
@@ -924,7 +916,6 @@ _f_printf_L22
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L26
                 LDA     #0
                 BRA     _f_printf_L27
@@ -1020,7 +1011,6 @@ _f_printf_L25
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L29
                 LDA     #0
                 BRA     _f_printf_L30
@@ -1116,7 +1106,6 @@ _f_printf_L28
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L32
                 LDA     #0
                 BRA     _f_printf_L33
@@ -1212,7 +1201,6 @@ _f_printf_L31
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L35
                 LDA     #0
                 BRA     _f_printf_L36
@@ -1308,7 +1296,6 @@ _f_printf_L34
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L38
                 LDA     #0
                 BRA     _f_printf_L39
@@ -1404,7 +1391,6 @@ _f_printf_L37
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _f_printf_L41
                 LDA     #0
                 BRA     _f_printf_L42

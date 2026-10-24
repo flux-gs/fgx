@@ -21,7 +21,6 @@ onint_stkok        TCS
                 INC     _fcc_fb
                 LDA     hits
                 TAX
-                TXA
                 INC
                 STA     hits
                 TAY
@@ -74,11 +73,9 @@ main_stkok        TCS
                 ADC     #6
                 TCS
                 TYA
-                CMP     #0
                 BNE     _ttyops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -105,11 +102,9 @@ _ttyops_L0
                 ADC     #6
                 TCS
                 TYA
-                CMP     #0
                 BNE     _ttyops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -142,7 +137,6 @@ _ttyops_L1
                 BNE     _ttyops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -188,7 +182,6 @@ _ttyops_L6
                 BEQ     _ttyops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -233,7 +226,6 @@ _ttyops_L9
                 BEQ     _ttyops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -275,7 +267,6 @@ _ttyops_L12
                 BEQ     _ttyops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     5,S   ; fccstk d=0 b=5
@@ -317,7 +308,6 @@ _ttyops_L15
                 BEQ     _ttyops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     5,S   ; fccstk d=0 b=5

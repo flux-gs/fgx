@@ -27,7 +27,6 @@ _castsubsto_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #8
                 BVC     _castsubsto_L3
@@ -47,7 +46,6 @@ _castsubsto_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 AND     #$00FF
@@ -74,7 +72,6 @@ _castsubsto_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _castsubsto_L4
                 LDA     #1
@@ -102,7 +99,6 @@ _castsubsto_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _castsubsto_L5
                 LDA     #2

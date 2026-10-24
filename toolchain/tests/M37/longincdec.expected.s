@@ -73,7 +73,6 @@ _longincdec_L1
 _longincdec_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _longincdec_L3
                 LDA     #1

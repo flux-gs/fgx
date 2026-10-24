@@ -22,7 +22,6 @@ main_stkok        TCS
                 LDA     #0
                 STA     _fcc_img0
                 LDA     #1
-                CMP     #0
                 BEQ     _if_true_L0
                 LDA     #42
                 STA     _fcc_img0

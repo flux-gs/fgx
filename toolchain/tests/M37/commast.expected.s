@@ -35,12 +35,10 @@ main_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #5
                 BNE     _commast_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #7
                 BNE     _commast_L1
                 LDA     #1
@@ -52,14 +50,12 @@ _commast_L2
                 BEQ     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L0
                 LDA     _tty+0
                 TAX
-                TXA
                 ORA     #2
                 STA     _tty+0
                 LDA     #1
@@ -88,12 +84,10 @@ _commast_L0
                 TYA
                 LDA     _tty+0
                 TAX
-                TXA
                 CMP     #10
                 BNE     _commast_L8
                 LDA     _rawmode
                 TAX
-                TXA
                 CMP     #1
                 BNE     _commast_L8
                 LDA     #1
@@ -105,7 +99,6 @@ _commast_L9
                 BEQ     _commast_L6
                 LDA     nxstty
                 TAX
-                TXA
                 CMP     #1
                 BNE     _commast_L6
                 LDA     #1
@@ -117,7 +110,6 @@ _commast_L7
                 BEQ     _commast_L4
                 LDA     seen_flags
                 TAX
-                TXA
                 CMP     #10
                 BNE     _commast_L4
                 LDA     #1
@@ -129,7 +121,6 @@ _commast_L5
                 BEQ     _commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
@@ -168,11 +159,9 @@ _commast_L3
                 TYA
                 LDA     _tty+0
                 TAX
-                TXA
                 CMP     #8
                 BNE     _commast_L15
                 LDA     _rawmode
-                CMP     #0
                 BNE     _commast_L15
                 LDA     #1
                 BRA     _commast_L16
@@ -183,7 +172,6 @@ _commast_L16
                 BEQ     _commast_L13
                 LDA     nxstty
                 TAX
-                TXA
                 CMP     #2
                 BNE     _commast_L13
                 LDA     #1
@@ -195,7 +183,6 @@ _commast_L14
                 BEQ     _commast_L11
                 LDA     seen_flags
                 TAX
-                TXA
                 CMP     #8
                 BNE     _commast_L11
                 LDA     #1
@@ -207,7 +194,6 @@ _commast_L12
                 BEQ     _commast_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
@@ -242,12 +228,10 @@ _commast_L10
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #4
                 BNE     _commast_L18
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #6
                 BNE     _commast_L18
                 LDA     #1
@@ -259,7 +243,6 @@ _commast_L19
                 BEQ     _commast_L17
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13

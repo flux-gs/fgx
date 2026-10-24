@@ -162,7 +162,6 @@ _uderef_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #54
                 BNE     _uderef_L5
                 LDA     #4
@@ -170,7 +169,6 @@ _uderef_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #56
                 BNE     _uderef_L5
                 LDA     #0
@@ -184,7 +182,6 @@ _uderef_L6
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                CMP     #0
                 BNE     _uderef_L3
                 LDA     #0
                 BRA     _uderef_L4

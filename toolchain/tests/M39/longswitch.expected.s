@@ -63,7 +63,6 @@ _longswitch_L8
                 BEQ     _longswitch_L3
 _longswitch_L9
                 LDA     _fcc_long_hi
-                CMP     #0
                 BNE     _longswitch_L10
                 LDA     _fcc_long_b_lo
                 CMP     #5
@@ -277,7 +276,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _longswitch_L12
                 LDA     #1
@@ -382,7 +380,6 @@ _longswitch_L12
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _longswitch_L13
                 LDA     #2
@@ -487,7 +484,6 @@ _longswitch_L13
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _longswitch_L14
                 LDA     #3
@@ -516,7 +512,6 @@ _longswitch_L14
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _longswitch_L15
                 LDA     #4
@@ -546,7 +541,6 @@ _longswitch_L15
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #16
                 BEQ     _longswitch_L16
                 LDA     #5
@@ -651,7 +645,6 @@ _longswitch_L16
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #32
                 BEQ     _longswitch_L17
                 LDA     #6
@@ -681,7 +674,6 @@ _longswitch_L17
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #32
                 BEQ     _longswitch_L18
                 LDA     #7

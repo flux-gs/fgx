@@ -73,19 +73,16 @@ _sysc_L1
                 BNE     _sysc_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L0
                 LDA     __sys_c
                 TAX
-                TXA
                 CMP     #1
                 BNE     _sysc_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -95,7 +92,6 @@ _sysc_L2
                 BNE     _sysc_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -127,11 +123,9 @@ _sysc_L4
                 STX     __sys_c
                 STY     __sys_y
                 LDA     __sys_c
-                CMP     #0
                 BNE     _sysc_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     1,S   ; fccstk d=0 b=1

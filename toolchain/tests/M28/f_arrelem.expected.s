@@ -227,7 +227,6 @@ _f_arrelem_L1
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_arrelem_L2
                 LDA     #3
@@ -284,7 +283,6 @@ _f_arrelem_L2
                 FGX2_FARCALL _fcc_dmul
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _f_arrelem_L3
                 LDA     #4
@@ -345,7 +343,6 @@ _f_arrelem_L4
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _f_arrelem_L5
                 LDA     #6

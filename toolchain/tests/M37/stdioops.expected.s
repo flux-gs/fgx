@@ -76,7 +76,6 @@ _stdioops_L2
                 BEQ     _stdioops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     5,S   ; fccstk d=0 b=5
@@ -105,11 +104,9 @@ _stdioops_L0
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BMI     _stdioops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -130,12 +127,10 @@ _stdioops_L3
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #88
                 BNE     _stdioops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -276,7 +271,6 @@ _stdioops_L11
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #104
                 BNE     _stdioops_L8
                 LDA     #1
@@ -304,7 +298,6 @@ _stdioops_L9
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #10
                 BNE     _stdioops_L6
                 LDA     #1
@@ -316,7 +309,6 @@ _stdioops_L7
                 BEQ     _stdioops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     5,S   ; fccstk d=0 b=5
@@ -329,7 +321,6 @@ _stdioops_L5
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _stdioops_L17
@@ -338,7 +329,6 @@ _stdioops_L17
                 BMI     _stdioops_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -357,12 +347,10 @@ _stdioops_L16
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #88
                 BNE     _stdioops_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -389,7 +377,6 @@ _stdioops_L18
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 AND     #16
                 TAX
                 LDA     #0
@@ -407,7 +394,6 @@ _stdioops_L21
                 BEQ     _stdioops_L19
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -443,7 +429,6 @@ _stdioops_L19
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 AND     #16
                 TAX
                 LDA     #0
@@ -473,7 +458,6 @@ _stdioops_L28
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #101
                 BNE     _stdioops_L25
                 LDA     #1
@@ -523,7 +507,6 @@ _stdioops_L24
                 BEQ     _stdioops_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -663,12 +646,10 @@ _stdioops_L22
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #2
                 BNE     _stdioops_L29
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -724,7 +705,6 @@ _stdioops_L32
                 BEQ     _stdioops_L30
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5

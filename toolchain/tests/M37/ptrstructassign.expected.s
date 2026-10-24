@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #10
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _ptrstructassign_L0
                 LDA     #10
@@ -37,7 +36,6 @@ main_stkok        TCS
 _ptrstructassign_L0
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _ptrstructassign_L1
                 LDA     #11
@@ -175,7 +173,6 @@ _ptrstructassign_L2
                 BPL     _ptrstructassign_L2
                 LDA     45,S   ; fccstk d=0 b=45
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L3
                 LDA     #20
@@ -342,7 +339,6 @@ _ptrstructassign_L10
                 BPL     _ptrstructassign_L10
                 LDA     35,S   ; fccstk d=0 b=35
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L11
                 LDA     #23
@@ -500,7 +496,6 @@ _ptrstructassign_L18
                 BPL     _ptrstructassign_L18
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #273
                 BEQ     _ptrstructassign_L19
                 LDA     #26
@@ -549,7 +544,6 @@ _ptrstructassign_L19
 _ptrstructassign_L20
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
-                TXA
                 CMP     #1092
                 BEQ     _ptrstructassign_L21
                 LDA     #28
@@ -603,7 +597,6 @@ _ptrstructassign_L22
                 BPL     _ptrstructassign_L22
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #22136
                 BEQ     _ptrstructassign_L23
                 LDA     #29
@@ -905,7 +898,6 @@ _ptrstructassign_L24
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L25
                 LDA     #30
@@ -1247,7 +1239,6 @@ _ptrstructassign_L39
                 BPL     _ptrstructassign_L39
                 LDA     g_dst+0
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L40
                 LDA     #40
@@ -1370,12 +1361,10 @@ _ptrstructassign_L44
                 BPL     _ptrstructassign_L44
                 LDA     45,S   ; fccstk d=0 b=45
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L45
                 LDA     #42
                 TAX
-                TXA
                 INC
                 TAY
                 TSC
@@ -1500,7 +1489,6 @@ _ptrstructassign_L49
                 BPL     _ptrstructassign_L49
                 LDA     g_dst+0
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _ptrstructassign_L50
                 LDA     #45

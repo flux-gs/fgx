@@ -57,12 +57,10 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #6
                 BNE     _preincparen_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -76,12 +74,10 @@ _preincparen_L0
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BNE     _preincparen_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -138,7 +134,6 @@ _preincparen_L1
                 BEQ     _preincparen_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -152,12 +147,10 @@ _preincparen_L2
                 STA     [_fcc_fpr0]
                 STA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 CMP     #8
                 BNE     _preincparen_L4
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #8
                 BNE     _preincparen_L4
                 LDA     #1
@@ -169,7 +162,6 @@ _preincparen_L5
                 BEQ     _preincparen_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0

@@ -37,12 +37,10 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #20
                 TAX
-                TXA
                 CMP     #20
                 BEQ     _char_bitfield_bytes_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #1
                 STA     _fcc_img0
 _char_bitfield_bytes_L0
@@ -81,7 +79,6 @@ _char_bitfield_bytes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #69
                 BNE     _char_bitfield_bytes_L2
                 LDA     _fcc_img2
@@ -96,7 +93,6 @@ _char_bitfield_bytes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _char_bitfield_bytes_L2
                 LDA     #0
@@ -108,14 +104,12 @@ _char_bitfield_bytes_L3
                 BEQ     _char_bitfield_bytes_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #2
                 STA     _fcc_img0
 _char_bitfield_bytes_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 AND     #$000F
                 TAX
-                TXA
                 CMP     #5
                 BNE     _char_bitfield_bytes_L7
                 LDA     9,S   ; fccstk d=0 b=9
@@ -125,7 +119,6 @@ _char_bitfield_bytes_L1
                 LSR
                 AND     #$000F
                 TAX
-                TXA
                 CMP     #4
                 BNE     _char_bitfield_bytes_L7
                 LDA     #0
@@ -138,7 +131,6 @@ _char_bitfield_bytes_L8
                 LDA     10,S   ; fccstk d=0 b=10
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BNE     _char_bitfield_bytes_L5
                 LDA     #0
@@ -150,7 +142,6 @@ _char_bitfield_bytes_L6
                 BEQ     _char_bitfield_bytes_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #4
                 STA     _fcc_img0
 _char_bitfield_bytes_L4
@@ -191,13 +182,11 @@ _char_bitfield_bytes_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #70
                 BNE     _char_bitfield_bytes_L10
                 LDA     gh+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _char_bitfield_bytes_L10
                 LDA     #0
@@ -209,7 +198,6 @@ _char_bitfield_bytes_L11
                 BEQ     _char_bitfield_bytes_L9
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #8
                 STA     _fcc_img0
 _char_bitfield_bytes_L9
@@ -253,13 +241,11 @@ _char_bitfield_bytes_L9
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _char_bitfield_bytes_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #17
                 BNE     _char_bitfield_bytes_L15
                 LDA     #0
@@ -291,7 +277,6 @@ _char_bitfield_bytes_L16
                 ASL
                 ASL
                 TAX
-                TXA
                 ORA     #5
                 STA     _fcc_tmp_b
                 PLA
@@ -306,12 +291,10 @@ _char_bitfield_bytes_L14
                 BEQ     _char_bitfield_bytes_L12
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #16
                 STA     _fcc_img0
 _char_bitfield_bytes_L12
                 LDA     _fcc_img0
-                CMP     #0
                 BEQ     _char_bitfield_bytes_L17
                 LDA     _fcc_img0
                 BRA     _char_bitfield_bytes_L18

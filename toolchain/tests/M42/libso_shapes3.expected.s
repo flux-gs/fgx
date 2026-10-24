@@ -78,7 +78,6 @@ _libso_shapes3_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _libso_shapes3_L3
@@ -141,7 +140,6 @@ _libso_shapes3_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _libso_shapes3_L7
@@ -229,7 +227,6 @@ _libso_shapes3_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -297,7 +294,6 @@ _libso_shapes3_L6
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_shapes3_L20
                 SEP     #$20
@@ -313,7 +309,6 @@ _libso_shapes3_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BNE     _libso_shapes3_L20
                 LDA     #1
@@ -338,7 +333,6 @@ _libso_shapes3_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #2
                 BNE     _libso_shapes3_L18
                 LDA     #1
@@ -398,7 +392,6 @@ _libso_shapes3_L22
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_shapes3_L16
                 LDA     #1
@@ -458,7 +451,6 @@ _libso_shapes3_L23
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_shapes3_L14
                 LDA     #1
@@ -516,7 +508,6 @@ _libso_shapes3_L24
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_shapes3_L12
                 LDA     #1

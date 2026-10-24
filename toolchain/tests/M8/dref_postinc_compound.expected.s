@@ -129,7 +129,6 @@ _dref_postinc_compound_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #127
                 SEP     #$20
                 MX      %10
@@ -145,12 +144,10 @@ _dref_postinc_compound_L1
                 LDA:    bytes,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dref_postinc_compound_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -160,12 +157,10 @@ _dref_postinc_compound_L2
                 LDA:    bytes,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BNE     _dref_postinc_compound_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -175,12 +170,10 @@ _dref_postinc_compound_L3
                 LDA:    bytes,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
                 BNE     _dref_postinc_compound_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -243,17 +236,14 @@ _dref_postinc_compound_L4
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BNE     _dref_postinc_compound_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -263,12 +253,10 @@ _dref_postinc_compound_L5
                 TAX
                 LDA:    words,X
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _dref_postinc_compound_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #100
                 STA     _fcc_img0
@@ -309,12 +297,10 @@ _dref_postinc_compound_L6
                 LDA:    bytes,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #32
                 BNE     _dref_postinc_compound_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0

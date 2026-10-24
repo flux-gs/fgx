@@ -217,7 +217,6 @@ _wide_bump_L2
                 BEQ     _wide_bump_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -317,7 +316,6 @@ _wide_bump_L7
                 BEQ     _wide_bump_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -539,7 +537,6 @@ _wide_bump_L10
                 BEQ     _wide_bump_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -676,7 +673,6 @@ _wide_bump_L8
                 BEQ     _wide_bump_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -761,7 +757,6 @@ _wide_bump_L11
                 BEQ     _wide_bump_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -870,7 +865,6 @@ _wide_bump_L17
                 BEQ     _wide_bump_L14
                 LDA     _wide_bump_gobj+0
                 TAX
-                TXA
                 CMP     #1234
                 BNE     _wide_bump_L14
                 LDA     #1
@@ -882,7 +876,6 @@ _wide_bump_L15
                 BEQ     _wide_bump_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -972,7 +965,6 @@ _wide_bump_L13
                 BEQ     _wide_bump_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -1092,7 +1084,6 @@ _wide_bump_L18
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L20
                 LDA     #1
                 BRA     _wide_bump_L21
@@ -1103,7 +1094,6 @@ _wide_bump_L21
                 BEQ     _wide_bump_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -1304,7 +1294,6 @@ _wide_bump_L19
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L25
                 LDA     #1
                 BRA     _wide_bump_L26
@@ -1354,7 +1343,6 @@ _wide_bump_L26
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L23
                 LDA     #1
                 BRA     _wide_bump_L24
@@ -1365,7 +1353,6 @@ _wide_bump_L24
                 BEQ     _wide_bump_L22
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -1531,11 +1518,9 @@ _wide_bump_L22
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -1690,7 +1675,6 @@ _wide_bump_L27
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L29
                 LDA     #1
                 BRA     _wide_bump_L30
@@ -1701,7 +1685,6 @@ _wide_bump_L30
                 BEQ     _wide_bump_L28
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -1844,7 +1827,6 @@ _wide_bump_L28
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L32
                 LDA     #1
                 BRA     _wide_bump_L33
@@ -1855,7 +1837,6 @@ _wide_bump_L33
                 BEQ     _wide_bump_L31
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -2016,7 +1997,6 @@ _wide_bump_L31
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L35
                 LDA     #1
                 BRA     _wide_bump_L36
@@ -2027,7 +2007,6 @@ _wide_bump_L36
                 BEQ     _wide_bump_L34
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -2149,11 +2128,9 @@ _wide_bump_L34
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _wide_bump_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3

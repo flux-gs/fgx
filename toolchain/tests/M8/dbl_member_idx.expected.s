@@ -42,7 +42,6 @@ _dbl_member_idx_L0
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _dbl_member_idx_L3
@@ -328,7 +327,6 @@ _dbl_member_idx_L4
                 STA     _fcc_fpr1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 DEC
                 ASL
                 ASL
@@ -466,7 +464,6 @@ _dbl_member_idx_L6
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 DEC
                 PHA
                 SEP     #$20

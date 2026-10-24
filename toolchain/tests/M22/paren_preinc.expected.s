@@ -164,7 +164,6 @@ _paren_preinc_L2
 _paren_preinc_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #41
                 BEQ     _paren_preinc_L3
                 LDA     #2
@@ -180,7 +179,6 @@ _paren_preinc_L0
 _paren_preinc_L3
                 LDA     gi
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _paren_preinc_L4
                 LDA     #3

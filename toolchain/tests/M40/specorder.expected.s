@@ -61,7 +61,6 @@ main_stkok        TCS
                 BEQ     _specorder_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -81,7 +80,6 @@ _specorder_L3
                 BEQ     _specorder_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -108,7 +106,6 @@ _specorder_L1
                 BEQ     _specorder_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -137,7 +134,6 @@ _specorder_L4
                 BEQ     _specorder_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -185,7 +181,6 @@ _specorder_L5
                 BEQ     _specorder_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0

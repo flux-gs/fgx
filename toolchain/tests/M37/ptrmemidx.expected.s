@@ -71,7 +71,6 @@ _ptrmemidx_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _ptrmemidx_L3
@@ -119,7 +118,6 @@ _ptrmemidx_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     [_fcc_fpr0]
@@ -239,12 +237,10 @@ _ptrmemidx_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BNE     _ptrmemidx_L4
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -268,12 +264,10 @@ _ptrmemidx_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #13
                 BNE     _ptrmemidx_L5
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -297,12 +291,10 @@ _ptrmemidx_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BNE     _ptrmemidx_L6
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -353,12 +345,10 @@ _ptrmemidx_L6
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #5
                 BNE     _ptrmemidx_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img1

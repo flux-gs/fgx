@@ -43,7 +43,6 @@ _ptr_pinc_wide_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -119,7 +118,6 @@ _ptr_pinc_wide_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -179,7 +177,6 @@ _ptr_pinc_wide_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -249,7 +246,6 @@ _ptr_pinc_wide_L6
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -301,7 +297,6 @@ _ptr_pinc_wide_L7
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -380,7 +375,6 @@ _ptr_pinc_wide_L9
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0

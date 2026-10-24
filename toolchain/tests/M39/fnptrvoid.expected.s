@@ -21,7 +21,6 @@ _fnptrvoid_f0_stkok        TCS
                 INC     _fcc_fb
                 LDA     _fnptrvoid_hits
                 TAX
-                TXA
                 INC
                 STA     _fnptrvoid_hits
                 TAY
@@ -52,7 +51,6 @@ _fnptrvoid_f1_stkok        TCS
                 INC     _fcc_fb
                 LDA     _fnptrvoid_hits
                 TAX
-                TXA
                 CLC
                 ADC     #40
                 STA     _fnptrvoid_hits
@@ -130,7 +128,6 @@ _fnptrvoid_L1
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _fnptrvoid_L4

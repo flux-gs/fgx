@@ -105,7 +105,6 @@ _pp_adv4_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -117,7 +116,6 @@ _pp_adv4_L2
                 BPL     _pp_adv4_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
@@ -178,7 +176,6 @@ _pp_adv4_L1
                 BEQ     _pp_adv4_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -208,12 +205,10 @@ _pp_adv4_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
                 BNE     _pp_adv4_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -222,7 +217,6 @@ _pp_adv4_L4
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     _fcc_tmp_b
@@ -246,12 +240,10 @@ _pp_adv4_L4
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1

@@ -632,7 +632,6 @@ _clhash_L6
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5006
                 BVC     _clhash_L9
@@ -816,7 +815,6 @@ _clhash_L13
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 SEC
                 SBC     #5003
                 BVC     _clhash_L16

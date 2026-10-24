@@ -162,12 +162,10 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L5
                 LDA     gi+2
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L5
                 LDA     #1
@@ -179,7 +177,6 @@ _dotvarincdec_L6
                 BEQ     _dotvarincdec_L3
                 LDA     gi+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L3
                 LDA     #1
@@ -191,7 +188,6 @@ _dotvarincdec_L4
                 BEQ     _dotvarincdec_L1
                 LDA     gi+4
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L1
                 LDA     #1
@@ -203,7 +199,6 @@ _dotvarincdec_L2
                 BEQ     _dotvarincdec_L0
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -227,12 +222,10 @@ _dotvarincdec_L0
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L12
                 LDA     gi+2
                 TAX
-                TXA
                 CMP     #3
                 BNE     _dotvarincdec_L12
                 LDA     #1
@@ -244,7 +237,6 @@ _dotvarincdec_L13
                 BEQ     _dotvarincdec_L10
                 LDA     gi+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L10
                 LDA     #1
@@ -256,7 +248,6 @@ _dotvarincdec_L11
                 BEQ     _dotvarincdec_L8
                 LDA     gi+4
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L8
                 LDA     #1
@@ -268,7 +259,6 @@ _dotvarincdec_L9
                 BEQ     _dotvarincdec_L7
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -279,12 +269,10 @@ _dotvarincdec_L7
                 STA     gi+2
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L19
                 LDA     gi+2
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L19
                 LDA     #1
@@ -296,7 +284,6 @@ _dotvarincdec_L20
                 BEQ     _dotvarincdec_L17
                 LDA     gi+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L17
                 LDA     #1
@@ -308,7 +295,6 @@ _dotvarincdec_L18
                 BEQ     _dotvarincdec_L15
                 LDA     gi+4
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L15
                 LDA     #1
@@ -320,7 +306,6 @@ _dotvarincdec_L16
                 BEQ     _dotvarincdec_L14
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -348,13 +333,11 @@ _dotvarincdec_L14
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L26
                 LDA     gc+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L26
                 LDA     #1
@@ -367,7 +350,6 @@ _dotvarincdec_L27
                 LDA     gc+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L24
                 LDA     #1
@@ -380,7 +362,6 @@ _dotvarincdec_L25
                 LDA     gc+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L22
                 LDA     #1
@@ -392,7 +373,6 @@ _dotvarincdec_L23
                 BEQ     _dotvarincdec_L21
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -409,13 +389,11 @@ _dotvarincdec_L21
                 AND     #$00FF
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L33
                 LDA     gc+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L33
                 LDA     #1
@@ -428,7 +406,6 @@ _dotvarincdec_L34
                 LDA     gc+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L31
                 LDA     #1
@@ -441,7 +418,6 @@ _dotvarincdec_L32
                 LDA     gc+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L29
                 LDA     #1
@@ -453,7 +429,6 @@ _dotvarincdec_L30
                 BEQ     _dotvarincdec_L28
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -483,12 +458,10 @@ _dotvarincdec_L28
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L40
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L40
                 LDA     #1
@@ -500,7 +473,6 @@ _dotvarincdec_L41
                 BEQ     _dotvarincdec_L38
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #97
                 BNE     _dotvarincdec_L38
                 LDA     #1
@@ -512,7 +484,6 @@ _dotvarincdec_L39
                 BEQ     _dotvarincdec_L36
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #99
                 BNE     _dotvarincdec_L36
                 LDA     #1
@@ -524,7 +495,6 @@ _dotvarincdec_L37
                 BEQ     _dotvarincdec_L35
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -566,13 +536,11 @@ _dotvarincdec_L35
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L47
                 LDA     8,S   ; fccstk d=0 b=8
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L47
                 LDA     #1
@@ -585,7 +553,6 @@ _dotvarincdec_L48
                 LDA     7,S   ; fccstk d=0 b=7
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #113
                 BNE     _dotvarincdec_L45
                 LDA     #1
@@ -598,7 +565,6 @@ _dotvarincdec_L46
                 LDA     9,S   ; fccstk d=0 b=9
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #115
                 BNE     _dotvarincdec_L43
                 LDA     #1
@@ -610,7 +576,6 @@ _dotvarincdec_L44
                 BEQ     _dotvarincdec_L42
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -632,12 +597,10 @@ _dotvarincdec_L42
                 LDA     _fcc_tmp_b
                 STA     clocks+2
                 TAX
-                TXA
                 CMP     #7
                 BNE     _dotvarincdec_L52
                 LDA     clocks+0
                 TAX
-                TXA
                 CMP     #8
                 BNE     _dotvarincdec_L52
                 LDA     #1
@@ -648,7 +611,6 @@ _dotvarincdec_L53
                 CMP     #0
                 BEQ     _dotvarincdec_L50
                 LDA     clocks+4
-                CMP     #0
                 BNE     _dotvarincdec_L50
                 LDA     #1
                 BRA     _dotvarincdec_L51
@@ -659,7 +621,6 @@ _dotvarincdec_L51
                 BEQ     _dotvarincdec_L49
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -678,12 +639,10 @@ _dotvarincdec_L49
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L59
                 LDA     gi+2
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L59
                 LDA     #1
@@ -695,7 +654,6 @@ _dotvarincdec_L60
                 BEQ     _dotvarincdec_L57
                 LDA     gi+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L57
                 LDA     #1
@@ -707,7 +665,6 @@ _dotvarincdec_L58
                 BEQ     _dotvarincdec_L55
                 LDA     gi+4
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L55
                 LDA     #1
@@ -719,7 +676,6 @@ _dotvarincdec_L56
                 BEQ     _dotvarincdec_L54
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -742,13 +698,11 @@ _dotvarincdec_L54
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L66
                 LDA     gc+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L66
                 LDA     #1
@@ -761,7 +715,6 @@ _dotvarincdec_L67
                 LDA     gc+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L64
                 LDA     #1
@@ -774,7 +727,6 @@ _dotvarincdec_L65
                 LDA     gc+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L62
                 LDA     #1
@@ -786,7 +738,6 @@ _dotvarincdec_L63
                 BEQ     _dotvarincdec_L61
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -888,7 +839,6 @@ _dotvarincdec_L74
                 BEQ     _dotvarincdec_L71
                 LDA     gp+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L71
                 LDA     #1
@@ -900,7 +850,6 @@ _dotvarincdec_L72
                 BEQ     _dotvarincdec_L69
                 LDA     gp+6
                 TAX
-                TXA
                 CMP     #67
                 BNE     _dotvarincdec_L69
                 LDA     #1
@@ -912,7 +861,6 @@ _dotvarincdec_L70
                 BEQ     _dotvarincdec_L68
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -988,7 +936,6 @@ _dotvarincdec_L68
                 AND     #$00FF
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #33
                 BNE     _dotvarincdec_L82
                 LDA     gp+4
@@ -998,7 +945,6 @@ _dotvarincdec_L68
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #34
                 BNE     _dotvarincdec_L82
                 LDA     #1
@@ -1010,7 +956,6 @@ _dotvarincdec_L83
                 BEQ     _dotvarincdec_L80
                 LDA     gp+0
                 TAX
-                TXA
                 CMP     #65
                 BNE     _dotvarincdec_L80
                 LDA     #1
@@ -1022,7 +967,6 @@ _dotvarincdec_L81
                 BEQ     _dotvarincdec_L79
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -1046,12 +990,10 @@ _dotvarincdec_L79
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L91
                 LDA     gn+2
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L91
                 LDA     #1
@@ -1063,7 +1005,6 @@ _dotvarincdec_L92
                 BEQ     _dotvarincdec_L89
                 LDA     gn+0
                 TAX
-                TXA
                 CMP     #81
                 BNE     _dotvarincdec_L89
                 LDA     #1
@@ -1075,7 +1016,6 @@ _dotvarincdec_L90
                 BEQ     _dotvarincdec_L87
                 LDA     gn+4
                 TAX
-                TXA
                 CMP     #83
                 BNE     _dotvarincdec_L87
                 LDA     #1
@@ -1087,7 +1027,6 @@ _dotvarincdec_L88
                 BEQ     _dotvarincdec_L85
                 LDA     gn+6
                 TAX
-                TXA
                 CMP     #84
                 BNE     _dotvarincdec_L85
                 LDA     #1
@@ -1099,7 +1038,6 @@ _dotvarincdec_L86
                 BEQ     _dotvarincdec_L84
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -1165,12 +1103,10 @@ _dotvarincdec_L84
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dotvarincdec_L100
                 LDA     gi+2
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dotvarincdec_L100
                 LDA     #1
@@ -1182,7 +1118,6 @@ _dotvarincdec_L101
                 BEQ     _dotvarincdec_L98
                 LDA     gi+0
                 TAX
-                TXA
                 CMP     #256
                 BNE     _dotvarincdec_L98
                 LDA     #1
@@ -1197,7 +1132,6 @@ _dotvarincdec_L99
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #49
                 BNE     _dotvarincdec_L96
                 LDA     #1
@@ -1212,7 +1146,6 @@ _dotvarincdec_L97
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #50
                 BNE     _dotvarincdec_L94
                 LDA     #1
@@ -1224,7 +1157,6 @@ _dotvarincdec_L95
                 BEQ     _dotvarincdec_L93
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19

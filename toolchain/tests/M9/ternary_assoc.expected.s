@@ -22,7 +22,6 @@ main_stkok        TCS
                 LDA     #2
                 STA     _fcc_img0
                 TAX
-                TXA
                 CMP     #1
                 BNE     _ternary_assoc_L0
                 LDA     #10
@@ -30,7 +29,6 @@ main_stkok        TCS
 _ternary_assoc_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #2
                 BNE     _ternary_assoc_L2
                 LDA     #42

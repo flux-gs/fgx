@@ -59,7 +59,6 @@ _lprobe_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5010
                 BVC     _lprobe_L3
@@ -406,7 +405,6 @@ _lprobe_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -420,7 +418,6 @@ _lprobe_L6
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #77
                 BEQ     _lprobe_L8
                 LDA     #2
@@ -438,7 +435,6 @@ _lprobe_L8
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -488,7 +484,6 @@ _lprobe_L9
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -607,7 +602,6 @@ _lprobe_L10
                 TAX
                 LDA:    cstore,X
                 TAX
-                TXA
                 CMP     #88
                 BEQ     _lprobe_L11
                 LDA     #5
@@ -719,7 +713,6 @@ htabof_eq_stkok        TCS
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

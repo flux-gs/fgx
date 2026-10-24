@@ -80,7 +80,6 @@ _ctimeops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _ctimeops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -242,11 +241,9 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ctimeops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -291,11 +288,9 @@ _ctimeops_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ctimeops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -340,11 +335,9 @@ _ctimeops_L5
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ctimeops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -389,11 +382,9 @@ _ctimeops_L6
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ctimeops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     1,S   ; fccstk d=0 b=1

@@ -92,24 +92,20 @@ main_stkok        TCS
                 DEC
                 STA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4
                 BNE     _preinc_chain_member_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _preinc_chain_member_L0
                 LDA     I+0
                 TAX
-                TXA
                 CMP     #4
                 BNE     _preinc_chain_member_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -137,24 +133,20 @@ _preinc_chain_member_L1
                 INC
                 STA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #5
                 BNE     _preinc_chain_member_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0
 _preinc_chain_member_L2
                 LDA     I+0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _preinc_chain_member_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     _fcc_img0

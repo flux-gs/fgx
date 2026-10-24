@@ -185,12 +185,10 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #55
                 BNE     _idxcall_L0
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     17,S   ; fccstk d=0 b=17
@@ -214,12 +212,10 @@ _idxcall_L0
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #12
                 BNE     _idxcall_L1
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     17,S   ; fccstk d=0 b=17
@@ -274,7 +270,6 @@ _idxcall_L1
                 BEQ     _idxcall_L2
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     17,S   ; fccstk d=0 b=17
@@ -308,12 +303,10 @@ _idxcall_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _idxcall_L3
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     17,S   ; fccstk d=0 b=17
@@ -362,12 +355,10 @@ _idxcall_L3
                 LDA:    _idxcall_digs,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BNE     _idxcall_L4
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     17,S   ; fccstk d=0 b=17
@@ -424,12 +415,10 @@ _idxcall_L4
                 LDA:    _idxcall_digs,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #121
                 BNE     _idxcall_L5
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     17,S   ; fccstk d=0 b=17

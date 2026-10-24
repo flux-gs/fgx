@@ -93,7 +93,6 @@ _dot_member_store_incdec_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _dot_member_store_incdec_L3
@@ -125,7 +124,6 @@ _dot_member_store_incdec_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 AND     #$00FF
@@ -143,7 +141,6 @@ _dot_member_store_incdec_L2
                 LDA:    row,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _dot_member_store_incdec_L5
                 LDA     #3
@@ -151,7 +148,6 @@ _dot_member_store_incdec_L2
                 LDA:    row,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #4
                 BNE     _dot_member_store_incdec_L5
                 LDA     #1
@@ -163,7 +159,6 @@ _dot_member_store_incdec_L6
                 BEQ     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img1
@@ -184,12 +179,10 @@ _dot_member_store_incdec_L4
                 STA     [_fcc_fpr0]
                 LDA     B+6
                 TAX
-                TXA
                 CMP     #5
                 BNE     _dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img1
@@ -201,12 +194,10 @@ _dot_member_store_incdec_L7
                 INC
                 STA     B+10
                 TAX
-                TXA
                 CMP     #11
                 BNE     _dot_member_store_incdec_L8
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img1
@@ -268,7 +259,6 @@ _dot_member_store_incdec_L8
                 BEQ     _dot_member_store_incdec_L9
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img1

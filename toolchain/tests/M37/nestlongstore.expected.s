@@ -109,7 +109,6 @@ main_stkok        TCS
 _nestlongstore_L0
                 LDA     _nestlongstore_o+2
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _nestlongstore_L1
                 LDA     #2
@@ -125,7 +124,6 @@ _nestlongstore_L0
 _nestlongstore_L1
                 LDA     _nestlongstore_o+8
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _nestlongstore_L2
                 LDA     #3
@@ -141,12 +139,10 @@ _nestlongstore_L1
 _nestlongstore_L2
                 LDA     _nestlongstore_o+0
                 TAX
-                TXA
                 CMP     #1
                 BNE     _nestlongstore_L4
                 LDA     _nestlongstore_o+16
                 TAX
-                TXA
                 CMP     #2
                 BNE     _nestlongstore_L4
                 LDA     #0
@@ -234,7 +230,6 @@ _nestlongstore_L3
 _nestlongstore_L6
                 LDA     _nestlongstore_o+8
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _nestlongstore_L7
                 LDA     #6
@@ -314,7 +309,6 @@ _nestlongstore_L7
 _nestlongstore_L8
                 LDA     _nestlongstore_o+8
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _nestlongstore_L9
                 LDA     #8
@@ -537,7 +531,6 @@ _nestlongstore_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _nestlongstore_L12
                 LDA     #11
                 TAY
@@ -552,7 +545,6 @@ _nestlongstore_L11
 _nestlongstore_L12
                 LDA     _nestlongstore_o+8
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _nestlongstore_L13
                 LDA     #12
@@ -568,7 +560,6 @@ _nestlongstore_L12
 _nestlongstore_L13
                 LDA     _nestlongstore_o+14
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _nestlongstore_L14
                 LDA     #13
@@ -654,7 +645,6 @@ _nestlongstore_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _nestlongstore_L15
                 LDA     #14
                 TAY
@@ -681,7 +671,6 @@ _nestlongstore_L15
                 STA     [_fcc_fpr0]
                 LDA     _nestlongstore_o+2
                 TAX
-                TXA
                 CMP     #41
                 BEQ     _nestlongstore_L16
                 LDA     #15
@@ -749,7 +738,6 @@ _nestlongstore_L16
 _nestlongstore_L17
                 LDA     _nestlongstore_o+2
                 TAX
-                TXA
                 CMP     #41
                 BEQ     _nestlongstore_L18
                 LDA     #17

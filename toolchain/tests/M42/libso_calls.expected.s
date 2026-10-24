@@ -30,7 +30,6 @@ _libso_calls_helper_stkok        TCS
                 LDA     6+_libso_calls_helper_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 TAY
                 TSC
@@ -180,7 +179,6 @@ _libso_calls_L0
                 PLA
                 TYA
                 TAX
-                TXA
                 CMP     #16
                 BNE     _libso_calls_L1
                 LDA     #42

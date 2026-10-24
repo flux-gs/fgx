@@ -108,7 +108,6 @@ mask_stkok        TCS
                 LDA     6+mask_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #255
                 TAY
                 TSC

@@ -66,7 +66,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L3
                 LDA     #1
                 ASL
@@ -113,7 +112,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L3
                 LDA     #1
                 BRA     _float_array_init_L4
@@ -167,7 +165,6 @@ _float_array_init_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L1
                 LDA     #1
                 BRA     _float_array_init_L2
@@ -178,7 +175,6 @@ _float_array_init_L2
                 BEQ     _float_array_init_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -233,7 +229,6 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L10
                 LDA     #1
                 ASL
@@ -280,7 +275,6 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L10
                 LDA     #1
                 BRA     _float_array_init_L11
@@ -334,7 +328,6 @@ _float_array_init_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L8
                 LDA     #1
                 BRA     _float_array_init_L9
@@ -388,7 +381,6 @@ _float_array_init_L9
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L6
                 LDA     #1
                 BRA     _float_array_init_L7
@@ -399,7 +391,6 @@ _float_array_init_L7
                 BEQ     _float_array_init_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -450,8 +441,7 @@ _float_array_init_L5
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _float_array_init_L13
+                BEQ     _float_array_init_L13
                 LDA     #1
                 ASL
                 ASL
@@ -502,7 +492,6 @@ _float_array_init_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _float_array_init_L13
                 LDA     #1
                 BRA     _float_array_init_L14
@@ -513,19 +502,16 @@ _float_array_init_L14
                 BEQ     _float_array_init_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
 _float_array_init_L12
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _float_array_init_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1

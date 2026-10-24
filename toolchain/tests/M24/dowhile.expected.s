@@ -29,7 +29,6 @@ _dowhile_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     _fcc_img0
                 LDA     _fcc_img1
@@ -39,7 +38,6 @@ _dowhile_L0
 _dowhile_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5
                 BVC     _dowhile_L3

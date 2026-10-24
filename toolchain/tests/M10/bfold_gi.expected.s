@@ -31,7 +31,6 @@ _bfold_gi_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _bfold_gi_L3

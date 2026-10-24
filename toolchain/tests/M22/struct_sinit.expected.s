@@ -21,7 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     g+0
                 TAX
-                TXA
                 CMP     #40
                 BEQ     _struct_sinit_L0
                 LDA     #1
@@ -37,7 +36,6 @@ main_stkok        TCS
 _struct_sinit_L0
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _struct_sinit_L1
                 LDA     #2
@@ -54,7 +52,6 @@ _struct_sinit_L1
                 LDA     g+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _struct_sinit_L2
                 LDA     #3

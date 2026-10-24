@@ -80,7 +80,6 @@ _tmops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _tmops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -200,13 +199,11 @@ main_stkok        TCS
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #126
                 BNE     _tmops_L19
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #5
                 BNE     _tmops_L19
                 LDA     #1
@@ -223,7 +220,6 @@ _tmops_L20
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #30
                 BNE     _tmops_L17
                 LDA     #1
@@ -240,7 +236,6 @@ _tmops_L18
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #14
                 BNE     _tmops_L15
                 LDA     #1
@@ -257,7 +252,6 @@ _tmops_L16
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #20
                 BNE     _tmops_L13
                 LDA     #1
@@ -273,7 +267,6 @@ _tmops_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BNE     _tmops_L11
                 LDA     #1
@@ -290,7 +283,6 @@ _tmops_L12
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
                 BNE     _tmops_L9
                 LDA     #1
@@ -307,7 +299,6 @@ _tmops_L10
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #180
                 BNE     _tmops_L7
                 LDA     #1
@@ -323,7 +314,6 @@ _tmops_L8
                 STA     _fcc_fpr0
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _tmops_L5
                 LDA     #1
                 BRA     _tmops_L6
@@ -334,7 +324,6 @@ _tmops_L6
                 BEQ     _tmops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -372,11 +361,9 @@ _tmops_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _tmops_L21
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -408,13 +395,11 @@ _tmops_L21
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #1
                 BNE     _tmops_L29
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #29
                 BNE     _tmops_L29
                 LDA     #1
@@ -431,7 +416,6 @@ _tmops_L30
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #124
                 BNE     _tmops_L27
                 LDA     #1
@@ -448,7 +432,6 @@ _tmops_L28
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #4
                 BNE     _tmops_L25
                 LDA     #1
@@ -465,7 +448,6 @@ _tmops_L26
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #59
                 BNE     _tmops_L23
                 LDA     #1
@@ -477,7 +459,6 @@ _tmops_L24
                 BEQ     _tmops_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
@@ -670,7 +651,6 @@ _tmops_L36
                 BEQ     _tmops_L33
                 LDA     gtz+0
                 TAX
-                TXA
                 CMP     #99
                 BEQ     _tmops_L33
                 LDA     #1
@@ -682,7 +662,6 @@ _tmops_L34
                 BEQ     _tmops_L32
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     5,S   ; fccstk d=0 b=5

@@ -155,7 +155,6 @@ main_stkok        TCS
                 PHA
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -234,7 +233,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     [_fcc_fpr0]
@@ -242,7 +240,6 @@ main_stkok        TCS
                 PHA
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -451,7 +448,6 @@ main_stkok        TCS
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -540,7 +536,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     [_fcc_fpr0]
@@ -548,7 +543,6 @@ main_stkok        TCS
                 PHA
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

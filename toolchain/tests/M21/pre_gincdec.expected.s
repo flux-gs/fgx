@@ -75,7 +75,6 @@ main_stkok        TCS
                 LDA     gc
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #64
                 BEQ     _pre_gincdec_L0
                 LDA     #1

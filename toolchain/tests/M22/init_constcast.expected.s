@@ -24,10 +24,8 @@ main_stkok        TCS
                 LDA:    cols,X
                 AND     #$00FF
                 TAX
-                TXA
                 AND     #255
                 TAX
-                TXA
                 CMP     #255
                 BEQ     _init_constcast_L0
                 LDA     #1
@@ -46,7 +44,6 @@ _init_constcast_L0
                 TAX
                 LDA:    flags,X
                 TAX
-                TXA
                 CMP     #16
                 BEQ     _init_constcast_L1
                 LDA     #2
@@ -65,7 +62,6 @@ _init_constcast_L1
                 TAX
                 LDA:    flags,X
                 TAX
-                TXA
                 CMP     #21
                 BEQ     _init_constcast_L2
                 LDA     #3
@@ -113,7 +109,6 @@ _init_constcast_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BEQ     _init_constcast_L3
                 LDA     #4
@@ -145,7 +140,6 @@ _init_constcast_L3
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _init_constcast_L4
                 LDA     #5

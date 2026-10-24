@@ -37,7 +37,6 @@ main_stkok        TCS
                 STA:    $0000,X
                 PLA
                 LDA     #1
-                CMP     #0
                 BEQ     _dblparen_lv_L0
                 LDA     #gv
                 PHA
@@ -59,7 +58,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 TAY
@@ -71,7 +69,6 @@ main_stkok        TCS
 _dblparen_lv_L0
                 LDA     #15
                 TAX
-                TXA
                 AND     #6
                 STA     _fcc_img0
                 LDA     #100
@@ -80,7 +77,6 @@ _dblparen_lv_L0
                 STA     gsv
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _dblparen_lv_L1
                 LDA     #1
@@ -96,7 +92,6 @@ _dblparen_lv_L0
 _dblparen_lv_L1
                 LDA     gsv
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _dblparen_lv_L2
                 LDA     #2

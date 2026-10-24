@@ -180,7 +180,6 @@ _sptrnull_L9
                 LDA:    sentinel,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _sptrnull_L13
                 LDA     #3
@@ -188,7 +187,6 @@ _sptrnull_L9
                 LDA:    sentinel,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #4
                 BNE     _sptrnull_L13
                 LDA     #0

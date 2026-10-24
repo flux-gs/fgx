@@ -30,7 +30,6 @@ add_b_stkok        TCS
                 LDA     6+add_b_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #20
                 TAY
@@ -70,7 +69,6 @@ add_c_stkok        TCS
                 LDA     6+add_c_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 TAY
@@ -110,7 +108,6 @@ add_a_stkok        TCS
                 LDA     6+add_a_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 INC
                 TAY

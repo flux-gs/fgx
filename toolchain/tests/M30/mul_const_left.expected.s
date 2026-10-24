@@ -200,7 +200,6 @@ main_stkok        TCS
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L0
                 LDA     #1
@@ -233,7 +232,6 @@ _mul_const_left_L1
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L2
                 LDA     #3
@@ -251,7 +249,6 @@ _mul_const_left_L2
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L3
                 LDA     #4
@@ -269,7 +266,6 @@ _mul_const_left_L3
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L4
                 LDA     #5
@@ -293,7 +289,6 @@ _mul_const_left_L4
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #44
                 BEQ     _mul_const_left_L5
                 LDA     #6
@@ -311,7 +306,6 @@ _mul_const_left_L5
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L6
                 LDA     #7
@@ -333,7 +327,6 @@ _mul_const_left_L6
                 ADC     _fcc_tmp_b
                 ASL
                 TAX
-                TXA
                 CMP     #70
                 BEQ     _mul_const_left_L7
                 LDA     #8
@@ -352,7 +345,6 @@ _mul_const_left_L7
                 STX     _fcc_tmp_b
                 JSR     _fcc_mul16
                 TAX
-                TXA
                 CMP     #20879
                 BEQ     _mul_const_left_L8
                 LDA     #9
@@ -410,7 +402,6 @@ _mul_const_left_L10
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #54464
                 BEQ     _mul_const_left_L11
                 LDA     #12
@@ -429,7 +420,6 @@ _mul_const_left_L11
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #36
                 BEQ     _mul_const_left_L12
                 LDA     #13
@@ -447,7 +437,6 @@ _mul_const_left_L12
                 ASL
                 ASL
                 TAX
-                TXA
                 CMP     #28
                 BEQ     _mul_const_left_L13
                 LDA     #14
@@ -596,7 +585,6 @@ _mul_const_left_L16
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -646,7 +634,6 @@ _mul_const_left_L16
                 LDA:    _mul_const_left_row256,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _mul_const_left_L17
                 LDA     #18
@@ -676,7 +663,6 @@ _mul_const_left_L17
                 LDA:    _mul_const_left_row10,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _mul_const_left_L18
                 LDA     #19
@@ -779,7 +765,6 @@ _mul_const_left_L18
                 LDA:    _mul_const_left_row256,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #13
                 BEQ     _mul_const_left_L19
                 LDA     #20
@@ -810,7 +795,6 @@ _mul_const_left_L19
                 LDA:    _mul_const_left_row10,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #14
                 BEQ     _mul_const_left_L20
                 LDA     #21

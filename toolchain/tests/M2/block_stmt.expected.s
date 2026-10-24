@@ -24,7 +24,6 @@ main_stkok        TCS
                 ASL
                 STA     _fcc_img0
                 TAX
-                TXA
                 INC
                 INC
                 TAY

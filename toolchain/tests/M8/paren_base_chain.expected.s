@@ -265,7 +265,6 @@ _paren_base_chain_L2
                 BEQ     _paren_base_chain_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -287,12 +286,10 @@ _paren_base_chain_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BNE     _paren_base_chain_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -314,12 +311,10 @@ _paren_base_chain_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #9
                 BNE     _paren_base_chain_L4
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -409,7 +404,6 @@ _paren_base_chain_L9
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #3
                 BNE     _paren_base_chain_L6
                 LDA     #1
@@ -421,7 +415,6 @@ _paren_base_chain_L7
                 BEQ     _paren_base_chain_L5
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -505,7 +498,6 @@ _paren_base_chain_L12
                 BEQ     _paren_base_chain_L10
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -548,7 +540,6 @@ _paren_base_chain_L15
                 BEQ     _paren_base_chain_L13
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -614,7 +605,6 @@ _paren_base_chain_L18
                 BEQ     _paren_base_chain_L16
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -657,7 +647,6 @@ _paren_base_chain_L21
                 BEQ     _paren_base_chain_L19
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     _fcc_img0

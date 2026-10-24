@@ -90,7 +90,6 @@ main_stkok        TCS
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _instruct_chain_L0
                 LDA     #7

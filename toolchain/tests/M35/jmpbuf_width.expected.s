@@ -80,7 +80,6 @@ main_stkok        TCS
                 BNE     _jmpbuf_width_L0
                 LDA     guard
                 TAX
-                TXA
                 CMP     #23130
                 BEQ     _jmpbuf_width_L1
                 LDA     #1
@@ -119,7 +118,6 @@ _jmpbuf_width_L1
 _jmpbuf_width_L0
                 LDA     guard
                 TAX
-                TXA
                 CMP     #23130
                 BEQ     _jmpbuf_width_L2
                 LDA     #3

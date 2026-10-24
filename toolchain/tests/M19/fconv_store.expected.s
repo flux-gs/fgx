@@ -80,12 +80,10 @@ main_stkok        TCS
                 JSR     _fcc_ftoi
                 STA     GI
                 TAX
-                TXA
                 CMP     #2
                 BNE     _fconv_store_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -115,12 +113,10 @@ _fconv_store_L0
                 TAX
                 LDA:    GA,X
                 TAX
-                TXA
                 CMP     #2
                 BNE     _fconv_store_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -159,7 +155,6 @@ _fconv_store_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #2
                 BNE     _fconv_store_L3
                 LDA     GS+6
@@ -193,7 +188,6 @@ _fconv_store_L4
                 BEQ     _fconv_store_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -260,7 +254,6 @@ _fconv_store_L2
                 BEQ     _fconv_store_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -306,12 +299,10 @@ _fconv_store_L5
                 FGX2_FARCALL _fcc_dtol
                 STA     GI
                 TAX
-                TXA
                 CMP     #4
                 BNE     _fconv_store_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
@@ -391,7 +382,6 @@ _fconv_store_L6
                 BEQ     _fconv_store_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
@@ -463,7 +453,6 @@ _fconv_store_L7
                 BEQ     _fconv_store_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
@@ -515,7 +504,6 @@ _fconv_store_L8
                 BEQ     _fconv_store_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1

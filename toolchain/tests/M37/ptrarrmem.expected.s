@@ -73,7 +73,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ptrarrmem_L0
                 LDA     #1
@@ -131,7 +130,6 @@ _ptrarrmem_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
                 BEQ     _ptrarrmem_L1
                 LDA     #2
@@ -193,7 +191,6 @@ _ptrarrmem_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #33
                 BEQ     _ptrarrmem_L2
                 LDA     #3
@@ -209,7 +206,6 @@ _ptrarrmem_L1
 _ptrarrmem_L2
                 LDA     _ptrarrmem_tbl+0
                 TAX
-                TXA
                 CMP     #111
                 BEQ     _ptrarrmem_L3
                 LDA     #4
@@ -225,7 +221,6 @@ _ptrarrmem_L2
 _ptrarrmem_L3
                 LDA     _ptrarrmem_tbl+18
                 TAX
-                TXA
                 CMP     #222
                 BEQ     _ptrarrmem_L4
                 LDA     #5
@@ -353,7 +348,6 @@ _ptrarrmem_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
                 BEQ     _ptrarrmem_L11
                 LDA     #8
@@ -486,7 +480,6 @@ _ptrarrmem_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ptrarrmem_L12
                 LDA     #9
@@ -607,7 +600,6 @@ _ptrarrmem_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #33
                 BEQ     _ptrarrmem_L16
                 LDA     #10
@@ -756,7 +748,6 @@ _ptrarrmem_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ptrarrmem_L20
                 LDA     #13
@@ -780,7 +771,6 @@ _ptrarrmem_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _ptrarrmem_L21
                 LDA     #14
@@ -873,7 +863,6 @@ _ptrarrmem_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22
                 BEQ     _ptrarrmem_L22
                 LDA     #15

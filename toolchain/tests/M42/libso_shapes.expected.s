@@ -87,7 +87,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     [_fcc_fpr0]
@@ -149,7 +148,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 INC
                 ASL
                 CLC
@@ -173,7 +171,6 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -420,7 +417,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #8
                 BNE     _libso_shapes_L22
                 SEP     #$20
@@ -438,7 +434,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #8
                 BNE     _libso_shapes_L22
                 LDA     #1
@@ -463,7 +458,6 @@ _libso_shapes_L23
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #9
                 BNE     _libso_shapes_L20
                 LDA     #1
@@ -488,7 +482,6 @@ _libso_shapes_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BNE     _libso_shapes_L18
                 LDA     #1
@@ -555,7 +548,6 @@ _libso_shapes_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
                 BNE     _libso_shapes_L14
                 LDA     #1
@@ -567,7 +559,6 @@ _libso_shapes_L15
                 BEQ     _libso_shapes_L12
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _libso_shapes_L12
                 LDA     #1
@@ -579,7 +570,6 @@ _libso_shapes_L13
                 BEQ     _libso_shapes_L10
                 FGX2_FARCALL fls
                 TAX
-                TXA
                 CMP     #3
                 BNE     _libso_shapes_L10
                 LDA     #1
@@ -601,7 +591,6 @@ _libso_shapes_L11
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BNE     _libso_shapes_L8
                 LDA     #1
                 BRA     _libso_shapes_L9
@@ -624,7 +613,6 @@ _libso_shapes_L9
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _libso_shapes_L6
                 LDA     #1
@@ -649,7 +637,6 @@ _libso_shapes_L7
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _libso_shapes_L4
                 LDA     #1

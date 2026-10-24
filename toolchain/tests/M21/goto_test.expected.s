@@ -27,7 +27,6 @@ main_stkok        TCS
 main_uL_dec_block
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #100
                 STA     _fcc_img0
@@ -35,20 +34,17 @@ main_uL_dec_block
 main_uL_inc_loop
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CMP     #7
                 BNE     _goto_test_L0
                 BRA     main_uL_done
 _goto_test_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     _fcc_img0
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img1

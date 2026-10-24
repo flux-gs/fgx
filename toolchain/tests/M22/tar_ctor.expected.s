@@ -308,7 +308,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #20
                 BNE     _tar_ctor_L11
                 LDA     #1
@@ -331,7 +330,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #30
                 BNE     _tar_ctor_L11
                 LDA     #0
@@ -347,7 +345,6 @@ _tar_ctor_L10
                 LDA     #8
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _tar_ctor_L13
                 LDA     #0
@@ -417,13 +414,11 @@ _tar_ctor_L16
                 LDA     blk+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #42
                 BNE     _tar_ctor_L20
                 LDA     blk+11
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #42
                 BNE     _tar_ctor_L20
                 LDA     #0
@@ -436,7 +431,6 @@ _tar_ctor_L21
                 LDA     blk+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #42
                 BNE     _tar_ctor_L18
                 LDA     #0
@@ -1383,7 +1377,6 @@ _tar_ctor_L31
                 ADC     #6
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _tar_ctor_L43
                 LDA     #0
                 BRA     _tar_ctor_L44
@@ -1446,7 +1439,6 @@ _tar_ctor_L47
                 STA     7,S   ; fccstk d=0 b=7
 _tar_ctor_L45
                 LDA     7,S   ; fccstk d=0 b=7
-                CMP     #0
                 BEQ     _tar_ctor_L48
                 LDA     #42
                 BRA     _tar_ctor_L49

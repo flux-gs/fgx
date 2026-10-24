@@ -30,12 +30,10 @@ main_stkok        TCS
                 JSR     _fcc_divu16
                 STA     u
                 TAX
-                TXA
                 CMP     #18432
                 BNE     _u_comp_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -49,12 +47,10 @@ _u_comp_L0
                 JSR     _fcc_shr16
                 STA     u
                 TAX
-                TXA
                 CMP     #2304
                 BNE     _u_comp_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -71,14 +67,12 @@ _u_comp_L1
                 BNE     _u_comp_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
 _u_comp_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #7
                 BNE     _u_comp_L3
                 LDA     #42

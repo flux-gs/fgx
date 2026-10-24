@@ -80,7 +80,6 @@ _dirops_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BEQ     _dirops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -320,7 +319,6 @@ _dirops_L14
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     _dirops_L11
                 LDA     #1
                 BRA     _dirops_L12
@@ -331,7 +329,6 @@ _dirops_L12
                 BEQ     _dirops_L10
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     21,S   ; fccstk d=0 b=21
@@ -400,7 +397,6 @@ _dirops_L18
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 SEC
                 SBC     #1
                 BVC     _dirops_L22
@@ -414,7 +410,6 @@ _dirops_L22
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #15
                 STA     _fcc_tmp_b
                 TXA
@@ -439,7 +434,6 @@ _dirops_L19
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BNE     _dirops_L24
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
@@ -470,7 +464,6 @@ _dirops_L24
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _dirops_L25
                 LDA     #1
                 STA     15,S   ; fccstk d=0 b=15
@@ -510,7 +503,6 @@ _dirops_L26
 _dirops_L16
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 LDX     #10
                 STA     _fcc_tmp_b
                 TXA
@@ -522,26 +514,21 @@ _dirops_L28
                 BPL     _dirops_L27
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L27
                 LDA     19,S   ; fccstk d=0 b=19
-                CMP     #0
                 BEQ     _dirops_L29
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L29
                 LDA     15,S   ; fccstk d=0 b=15
-                CMP     #0
                 BEQ     _dirops_L31
                 LDA     17,S   ; fccstk d=0 b=17
-                CMP     #0
                 BEQ     _dirops_L31
                 LDA     #1
                 BRA     _dirops_L32
@@ -552,7 +539,6 @@ _dirops_L32
                 BEQ     _dirops_L30
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
@@ -660,7 +646,6 @@ _dirops_L41
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -679,7 +664,6 @@ _dirops_L39
                 BEQ     _dirops_L37
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 CLC
                 ADC     #9
                 STA     21,S   ; fccstk d=0 b=21

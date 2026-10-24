@@ -127,7 +127,6 @@ _m9_ctrl_test_L8
                 JSR     _fcc_safepoint
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #10
                 BVC     _m9_ctrl_test_L11
@@ -136,14 +135,12 @@ _m9_ctrl_test_L11
                 BPL     _m9_ctrl_test_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #1
                 BNE     _m9_ctrl_test_L12
                 BRA     _m9_ctrl_test_L9
 _m9_ctrl_test_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #5
                 BNE     _m9_ctrl_test_L13
                 BRA     _m9_ctrl_test_L10
@@ -154,7 +151,6 @@ _m9_ctrl_test_L13
                 PHA
                 LDA     7,S   ; fccstk d=4 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _m9_ctrl_test_L16
@@ -183,7 +179,6 @@ _m9_ctrl_test_L15
 _m9_ctrl_test_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     3,S   ; fccstk d=0 b=3

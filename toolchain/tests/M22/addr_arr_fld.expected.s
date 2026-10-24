@@ -89,7 +89,6 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _addr_arr_fld_L0
                 LDA     #1
@@ -130,7 +129,6 @@ _addr_arr_fld_L0
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _addr_arr_fld_L1
                 LDA     #2

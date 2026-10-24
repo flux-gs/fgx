@@ -27,7 +27,6 @@ _p33_promote_scalar_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #520
                 BVC     _p33_promote_scalar_L3
@@ -79,7 +78,6 @@ _p33_promote_scalar_L2
                 ADC     _fcc_img2
                 STA     _fcc_img3
                 TAX
-                TXA
                 CMP     #300
                 BEQ     _p33_promote_scalar_L4
                 LDA     #1
@@ -107,7 +105,6 @@ _p33_promote_scalar_L4
                 ADC     _fcc_tmp_b
                 STA     _fcc_img3
                 TAX
-                TXA
                 CMP     #800
                 BEQ     _p33_promote_scalar_L5
                 LDA     #2
@@ -125,12 +122,10 @@ _p33_promote_scalar_L5
                 STA     _fcc_img2
                 STA     _fcc_img1
                 TAX
-                TXA
                 CMP     #800
                 BNE     _p33_promote_scalar_L7
                 LDA     _fcc_img2
                 TAX
-                TXA
                 CMP     #800
                 BNE     _p33_promote_scalar_L7
                 LDA     #0
@@ -168,7 +163,6 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _p33_promote_scalar_L10
                 SEP     #$20
                 MX      %10
@@ -187,7 +181,6 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _p33_promote_scalar_L10
                 LDA     #0
                 BRA     _p33_promote_scalar_L11

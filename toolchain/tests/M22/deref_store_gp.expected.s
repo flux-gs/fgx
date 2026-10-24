@@ -52,7 +52,6 @@ main_stkok        TCS
                 MX      %00
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _deref_store_gp_L0
                 LDA     #1
@@ -71,7 +70,6 @@ _deref_store_gp_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _deref_store_gp_L1
                 LDA     #2
@@ -149,7 +147,6 @@ _deref_store_gp_L2
                 REP     #$20
                 MX      %00
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _deref_store_gp_L5
                 LDA     #4
@@ -168,7 +165,6 @@ _deref_store_gp_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _deref_store_gp_L6
                 LDA     #5
@@ -211,7 +207,6 @@ _deref_store_gp_L6
                 LDA     #1000
                 STA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1000
                 BEQ     _deref_store_gp_L7
                 LDA     #6
@@ -230,7 +225,6 @@ _deref_store_gp_L7
                 TAX
                 LDA:    ibuf,X
                 TAX
-                TXA
                 CMP     #1000
                 BEQ     _deref_store_gp_L8
                 LDA     #7

@@ -194,7 +194,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _arrowdotchain_L0
                 LDA     #50
@@ -216,7 +215,6 @@ _arrowdotchain_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _arrowdotchain_L1
                 LDA     #51
@@ -239,7 +237,6 @@ _arrowdotchain_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _arrowdotchain_L2
                 LDA     #52
@@ -261,7 +258,6 @@ _arrowdotchain_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _arrowdotchain_L3
                 LDA     #53
@@ -299,7 +295,6 @@ _arrowdotchain_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _arrowdotchain_L4
                 LDA     #54
@@ -326,7 +321,6 @@ _arrowdotchain_L4
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #8738
                 BEQ     _arrowdotchain_L5
                 LDA     #55
@@ -350,7 +344,6 @@ _arrowdotchain_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1911
                 BEQ     _arrowdotchain_L6
                 LDA     #56
@@ -383,7 +376,6 @@ _arrowdotchain_L6
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #17476
                 BEQ     _arrowdotchain_L7
                 LDA     #57
@@ -415,7 +407,6 @@ _arrowdotchain_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #13107
                 BEQ     _arrowdotchain_L8
                 LDA     #58
@@ -454,7 +445,6 @@ _arrowdotchain_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #26210
                 BEQ     _arrowdotchain_L9
                 LDA     #59
@@ -486,7 +476,6 @@ _arrowdotchain_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #21845
                 BEQ     _arrowdotchain_L10
                 LDA     #60
@@ -516,7 +505,6 @@ _arrowdotchain_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #2989
                 BEQ     _arrowdotchain_L11
                 LDA     #61
@@ -538,7 +526,6 @@ _arrowdotchain_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _arrowdotchain_L12
                 LDA     #62
@@ -558,7 +545,6 @@ _arrowdotchain_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #1911
                 BEQ     _arrowdotchain_L13
                 LDA     #63
@@ -609,7 +595,6 @@ _arrowdotchain_L13
                 STA     _fcc_img0
                 LDA     [_fcc_img0]
                 TAX
-                TXA
                 CMP     #26209
                 BEQ     _arrowdotchain_L14
                 LDA     #64
@@ -635,7 +620,6 @@ _arrowdotchain_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #26210
                 BEQ     _arrowdotchain_L15
                 LDA     #65
@@ -657,7 +641,6 @@ _arrowdotchain_L15
                 STA     [_fcc_fpr0]
                 LDA     _arrowdotchain_md+4
                 TAX
-                TXA
                 CMP     #2748
                 BEQ     _arrowdotchain_L16
                 LDA     #66
@@ -673,7 +656,6 @@ _arrowdotchain_L15
 _arrowdotchain_L16
                 LDA     _arrowdotchain_md+2
                 TAX
-                TXA
                 CMP     #26208
                 BEQ     _arrowdotchain_L17
                 LDA     #67
@@ -689,7 +671,6 @@ _arrowdotchain_L16
 _arrowdotchain_L17
                 LDA     _arrowdotchain_md+6
                 TAX
-                TXA
                 CMP     #26210
                 BEQ     _arrowdotchain_L18
                 LDA     #68

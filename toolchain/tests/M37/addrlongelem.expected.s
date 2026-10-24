@@ -27,7 +27,6 @@ _addrlongelem_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #6
                 BVC     _addrlongelem_L3
@@ -322,7 +321,6 @@ _addrlongelem_L7
 _addrlongelem_L9
                 STX     _fcc_long_hi
                 TAX
-                TXA
                 CMP     #4369
                 BEQ     _addrlongelem_L8
                 LDA     #54
@@ -362,7 +360,6 @@ _addrlongelem_L8
                 TYA
                 JSR     _fcc_long_and
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _addrlongelem_L10
                 LDA     #55
@@ -555,7 +552,6 @@ _addrlongelem_L13
                 STA     _fcc_img2
                 LDA     [_fcc_img2]
                 TAX
-                TXA
                 CMP     #258
                 BEQ     _addrlongelem_L14
                 LDA     #59
@@ -580,7 +576,6 @@ _addrlongelem_L14
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #819
                 BEQ     _addrlongelem_L15
                 LDA     #60
@@ -599,7 +594,6 @@ _addrlongelem_L15
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _addrlongelem_L16
                 LDA     #61
@@ -618,7 +612,6 @@ _addrlongelem_L16
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                TXA
                 CMP     #259
                 BEQ     _addrlongelem_L17
                 LDA     #62

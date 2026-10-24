@@ -167,7 +167,6 @@ _sprintf_farbuf_L0
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _sprintf_farbuf_L3
                 LDA     #1
                 TAY

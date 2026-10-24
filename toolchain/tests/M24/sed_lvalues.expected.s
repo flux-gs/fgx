@@ -94,7 +94,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 ORA     #2
                 SEP     #$20
                 MX      %10

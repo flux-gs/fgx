@@ -89,7 +89,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #5
                 BNE     _libso_addr_L0
                 LDA     #42

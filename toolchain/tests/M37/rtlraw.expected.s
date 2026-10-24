@@ -39,7 +39,6 @@ vsum2_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -84,7 +83,6 @@ _rtlraw_L0
                 FIN
                 LDA     _fcc_tmp_b
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -102,7 +100,6 @@ _rtlraw_L2
                 STA     _fcc_fpr0
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -119,7 +116,6 @@ _rtlraw_L2
                 STA     _fcc_img1
                 LDA     #2
                 TAX
-                TXA
                 INC
                 PHA
                 LDA     #1
@@ -354,7 +350,6 @@ _rtlraw_L3
                 TCS
                 TYA
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAY

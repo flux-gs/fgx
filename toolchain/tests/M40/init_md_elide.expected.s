@@ -33,7 +33,6 @@ _init_md_elide_sl_stkok        TCS
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #83
                 BNE     _init_md_elide_L3
                 LDA     #0
@@ -50,7 +49,6 @@ _init_md_elide_sl_stkok        TCS
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BNE     _init_md_elide_L3
                 LDA     #0
@@ -73,7 +71,6 @@ _init_md_elide_L4
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #77
                 BNE     _init_md_elide_L1
                 LDA     #0
@@ -108,7 +105,6 @@ _init_md_elide_L0
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #83
                 BNE     _init_md_elide_L8
                 LDA     #6
@@ -125,7 +121,6 @@ _init_md_elide_L0
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _init_md_elide_L8
                 LDA     #0
@@ -149,7 +144,6 @@ _init_md_elide_L9
                 LDA:    _init_md_elide_sl_sl_wday,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #116
                 BNE     _init_md_elide_L6
                 LDA     #0
@@ -184,7 +178,6 @@ _init_md_elide_L5
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
                 TAX
-                TXA
                 CMP     #4
                 BNE     _init_md_elide_L13
                 LDA     #1
@@ -244,7 +237,6 @@ _init_md_elide_L12
 _init_md_elide_L10
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _init_md_elide_L18
                 LDA     #1
@@ -260,7 +252,6 @@ _init_md_elide_L10
                 TAX
                 LDA:    _init_md_elide_sl_sl_sz,X
                 TAX
-                TXA
                 CMP     #3
                 BNE     _init_md_elide_L18
                 LDA     #0
@@ -444,7 +435,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_elide_L23
                 LDA     #0
                 BRA     _init_md_elide_L24
@@ -509,7 +499,6 @@ _init_md_elide_L24
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_elide_L21
                 LDA     #0
                 BRA     _init_md_elide_L22
@@ -644,7 +633,6 @@ _init_md_elide_L20
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_elide_L28
                 LDA     #0
                 BRA     _init_md_elide_L29
@@ -710,7 +698,6 @@ _init_md_elide_L29
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _init_md_elide_L26
                 LDA     #0
                 BRA     _init_md_elide_L27
@@ -747,7 +734,6 @@ _init_md_elide_L25
                 TAX
                 LDA:    ml,X
                 TAX
-                TXA
                 CMP     #28
                 BNE     _init_md_elide_L33
                 LDA     #1
@@ -766,7 +752,6 @@ _init_md_elide_L25
                 TAX
                 LDA:    ml,X
                 TAX
-                TXA
                 CMP     #29
                 BNE     _init_md_elide_L33
                 LDA     #0
@@ -792,7 +777,6 @@ _init_md_elide_L34
                 TAX
                 LDA:    ml,X
                 TAX
-                TXA
                 CMP     #31
                 BNE     _init_md_elide_L31
                 LDA     #0
@@ -826,7 +810,6 @@ _init_md_elide_L30
                 TAX
                 LDA:    mix,X
                 TAX
-                TXA
                 CMP     #2
                 BNE     _init_md_elide_L38
                 LDA     #1
@@ -842,7 +825,6 @@ _init_md_elide_L30
                 TAX
                 LDA:    mix,X
                 TAX
-                TXA
                 CMP     #3
                 BNE     _init_md_elide_L38
                 LDA     #0
@@ -865,7 +847,6 @@ _init_md_elide_L39
                 TAX
                 LDA:    mix,X
                 TAX
-                TXA
                 CMP     #4
                 BNE     _init_md_elide_L36
                 LDA     #0
@@ -899,7 +880,6 @@ _init_md_elide_L35
                 TAX
                 LDA:    mix,X
                 TAX
-                TXA
                 CMP     #5
                 BNE     _init_md_elide_L41
                 LDA     #2
@@ -936,7 +916,6 @@ _init_md_elide_L42
 _init_md_elide_L40
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _init_md_elide_L43
                 LDA     #6
@@ -964,7 +943,6 @@ _init_md_elide_L43
                 TAX
                 LDA:    unsized,X
                 TAX
-                TXA
                 CMP     #4
                 BNE     _init_md_elide_L47
                 LDA     #1
@@ -1042,7 +1020,6 @@ _init_md_elide_L44
                 TAX
                 LDA:    cube,X
                 TAX
-                TXA
                 CMP     #1
                 BNE     _init_md_elide_L50
                 LDA     #0
@@ -1065,7 +1042,6 @@ _init_md_elide_L44
                 TAX
                 LDA:    cube,X
                 TAX
-                TXA
                 CMP     #2
                 BNE     _init_md_elide_L50
                 LDA     #0
@@ -1106,7 +1082,6 @@ _init_md_elide_L49
                 TAX
                 LDA:    cube,X
                 TAX
-                TXA
                 CMP     #3
                 BNE     _init_md_elide_L53
                 LDA     #0
@@ -1168,7 +1143,6 @@ _init_md_elide_L52
                 TAX
                 LDA:    cube,X
                 TAX
-                TXA
                 CMP     #4
                 BNE     _init_md_elide_L56
                 LDA     #1
@@ -1353,7 +1327,6 @@ _init_md_elide_L58
                 TAX
                 LDA:    trail,X
                 TAX
-                TXA
                 CMP     #3
                 BNE     _init_md_elide_L64
                 LDA     #1

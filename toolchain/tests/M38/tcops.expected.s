@@ -45,12 +45,10 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #1
                 BNE     _tcops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     5,S   ; fccstk d=0 b=5
@@ -74,12 +72,10 @@ _tcops_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #80
                 BNE     _tcops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     5,S   ; fccstk d=0 b=5
@@ -138,7 +134,6 @@ _tcops_L6
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #27
                 BNE     _tcops_L3
                 LDA     #1
@@ -150,7 +145,6 @@ _tcops_L4
                 BEQ     _tcops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     5,S   ; fccstk d=0 b=5
@@ -173,11 +167,9 @@ _tcops_L2
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BNE     _tcops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     5,S   ; fccstk d=0 b=5

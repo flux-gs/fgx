@@ -256,7 +256,6 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _f_param_L0
                 LDA     #1
@@ -305,7 +304,6 @@ _f_param_L0
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_param_L1
                 LDA     #2
@@ -343,7 +341,6 @@ _f_param_L1
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_param_L2
                 LDA     #3
@@ -384,7 +381,6 @@ _f_param_L2
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_param_L3
                 LDA     #4

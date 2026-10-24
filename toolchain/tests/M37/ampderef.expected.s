@@ -49,7 +49,6 @@ main_stkok        TCS
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #101
                 BEQ     _ampderef_L0
                 LDA     #1
@@ -93,7 +92,6 @@ _ampderef_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #111
                 BEQ     _ampderef_L1
                 LDA     #2
@@ -159,7 +157,6 @@ _ampderef_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #30
                 BEQ     _ampderef_L2
                 LDA     #3
@@ -182,11 +179,9 @@ _ampderef_L2
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 SEC
                 SBC     #111
                 TAX
-                TXA
                 CLC
                 ADC     #30
                 TAY

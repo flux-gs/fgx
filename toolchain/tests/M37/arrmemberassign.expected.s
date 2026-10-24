@@ -39,7 +39,6 @@ _arrmemberassign_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _arrmemberassign_L3
@@ -168,7 +167,6 @@ _arrmemberassign_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #4660
                 BEQ     _arrmemberassign_L5
                 LDA     #1
@@ -230,7 +228,6 @@ _arrmemberassign_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #22136
                 BEQ     _arrmemberassign_L7
                 LDA     #3
@@ -250,7 +247,6 @@ _arrmemberassign_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #43690
                 BEQ     _arrmemberassign_L8
                 LDA     #4
@@ -271,7 +267,6 @@ _arrmemberassign_L8
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #48059
                 BEQ     _arrmemberassign_L9
                 LDA     #5

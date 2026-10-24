@@ -29,7 +29,6 @@ _ldiv_sweep_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #14
                 BVC     _ldiv_sweep_L3
@@ -45,7 +44,6 @@ _ldiv_sweep_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #14
                 BVC     _ldiv_sweep_L7
@@ -225,7 +223,6 @@ _ldiv_sweep_L10
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #11
                 BVC     _ldiv_sweep_L13
@@ -241,7 +238,6 @@ _ldiv_sweep_L14
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #9
                 BVC     _ldiv_sweep_L17
@@ -817,7 +813,6 @@ _ldiv_sweep_L31
                 INC     _fcc_img2
 _ldiv_sweep_L32
                 LDA     _fcc_img2
-                CMP     #0
                 BNE     _ldiv_sweep_L33
                 LDA     #42
                 BRA     _ldiv_sweep_L34

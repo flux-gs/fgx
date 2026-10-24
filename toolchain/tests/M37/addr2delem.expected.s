@@ -27,7 +27,6 @@ _addr2delem_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _addr2delem_L3
@@ -43,7 +42,6 @@ _addr2delem_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _addr2delem_L7
@@ -212,7 +210,6 @@ _addr2delem_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _addr2delem_L11
@@ -228,7 +225,6 @@ _addr2delem_L12
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _addr2delem_L15
@@ -244,7 +240,6 @@ _addr2delem_L16
                 JSR     _fcc_safepoint
                 LDA     _fcc_img2
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _addr2delem_L19
@@ -343,7 +338,6 @@ _addr2delem_L10
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #272
                 BEQ     _addr2delem_L20
                 LDA     #50
@@ -369,7 +363,6 @@ _addr2delem_L20
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #273
                 BEQ     _addr2delem_L21
                 LDA     #51
@@ -395,7 +388,6 @@ _addr2delem_L21
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #288
                 BEQ     _addr2delem_L22
                 LDA     #52
@@ -436,7 +428,6 @@ _addr2delem_L22
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #274
                 BEQ     _addr2delem_L23
                 LDA     #53
@@ -462,7 +453,6 @@ _addr2delem_L23
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #275
                 BEQ     _addr2delem_L24
                 LDA     #54
@@ -504,7 +494,6 @@ _addr2delem_L24
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #289
                 BEQ     _addr2delem_L25
                 LDA     #55
@@ -545,7 +534,6 @@ _addr2delem_L25
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #256
                 BEQ     _addr2delem_L26
                 LDA     #56
@@ -855,7 +843,6 @@ _addr2delem_L31
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #595
                 BEQ     _addr2delem_L32
                 LDA     #62
@@ -900,7 +887,6 @@ _addr2delem_L32
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #592
                 BEQ     _addr2delem_L33
                 LDA     #63
@@ -936,7 +922,6 @@ _addr2delem_L33
                 STA     _fcc_img3
                 LDA     [_fcc_img3]
                 TAX
-                TXA
                 CMP     #576
                 BEQ     _addr2delem_L34
                 LDA     #64

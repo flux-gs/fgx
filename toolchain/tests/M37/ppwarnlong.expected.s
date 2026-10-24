@@ -22,7 +22,6 @@ main_stkok        TCS
                 LDA     #20
                 STA     acc
                 TAX
-                TXA
                 CLC
                 ADC     #22
                 TAY

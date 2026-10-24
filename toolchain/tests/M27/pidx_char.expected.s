@@ -95,7 +95,6 @@ _pidx_char_L1
 _pidx_char_L2
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #65
                 TAY

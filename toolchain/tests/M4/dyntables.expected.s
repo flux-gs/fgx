@@ -42,7 +42,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #115
                 BNE     _dyntables_L0
                 LDA     #0
@@ -55,7 +54,6 @@ _dyntables_L1
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CLC
                 ADC     #0
                 TAY

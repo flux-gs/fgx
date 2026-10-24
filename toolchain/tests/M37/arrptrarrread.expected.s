@@ -27,7 +27,6 @@ _arrptrarrread_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrptrarrread_L3
@@ -48,7 +47,6 @@ _arrptrarrread_L3
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -74,7 +72,6 @@ _arrptrarrread_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrptrarrread_L7
@@ -207,7 +204,6 @@ _arrptrarrread_L7
                 MX      %00
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 JSR     _fcc_long_from_int
@@ -287,7 +283,6 @@ _arrptrarrread_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _arrptrarrread_L8
                 LDA     #1
@@ -311,7 +306,6 @@ _arrptrarrread_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #400
                 BEQ     _arrptrarrread_L9
                 LDA     #2
@@ -362,7 +356,6 @@ _arrptrarrread_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _arrptrarrread_L10
                 LDA     #3
@@ -413,7 +406,6 @@ _arrptrarrread_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #300
                 BEQ     _arrptrarrread_L11
                 LDA     #4
@@ -463,7 +455,6 @@ _arrptrarrread_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #400
                 BEQ     _arrptrarrread_L12
                 LDA     #5
@@ -513,7 +504,6 @@ _arrptrarrread_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
                 BEQ     _arrptrarrread_L13
                 LDA     #6
@@ -568,7 +558,6 @@ _arrptrarrread_L13
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #200
                 BEQ     _arrptrarrread_L14
                 LDA     #7
@@ -622,7 +611,6 @@ _arrptrarrread_L14
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #300
                 BEQ     _arrptrarrread_L15
                 LDA     #8
@@ -936,7 +924,6 @@ _arrptrarrread_L19
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #100
                 BNE     _arrptrarrread_L23
                 LDA     #3
@@ -953,7 +940,6 @@ _arrptrarrread_L19
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #400
                 BNE     _arrptrarrread_L23
                 LDA     #0

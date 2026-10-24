@@ -30,7 +30,6 @@ add3_stkok        TCS
                 LDA     6+add3_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 TAY
@@ -287,12 +286,10 @@ _memfnptr_L4
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BNE     _memfnptr_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -351,12 +348,10 @@ _memfnptr_L6
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #10
                 BNE     _memfnptr_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -456,12 +451,10 @@ _memfnptr_L8
                 TYA
                 LDA     g_side
                 TAX
-                TXA
                 CMP     #30
                 BNE     _memfnptr_L9
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -562,12 +555,10 @@ _memfnptr_L10
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #12
                 BNE     _memfnptr_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     9,S   ; fccstk d=0 b=9

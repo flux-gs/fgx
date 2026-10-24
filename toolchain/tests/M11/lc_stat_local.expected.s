@@ -78,7 +78,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _lc_stat_local_L0
                 LDA     #1
                 TAY
@@ -93,9 +92,7 @@ main_stkok        TCS
 _lc_stat_local_L0
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                TXA
                 AND     #32768
-                CMP     #0
                 BNE     _lc_stat_local_L1
                 LDA     #2
                 TAY

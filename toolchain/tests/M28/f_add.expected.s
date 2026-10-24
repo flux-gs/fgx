@@ -67,7 +67,6 @@ main_stkok        TCS
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #3
                 BEQ     _f_add_L0
                 LDA     #1
@@ -123,7 +122,6 @@ _f_add_L0
                 FGX2_FARCALL _fcc_dsub
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _f_add_L1
                 LDA     #2
@@ -179,7 +177,6 @@ _f_add_L1
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _f_add_L2
                 LDA     #3
@@ -241,7 +238,6 @@ _f_add_L2
                 JSR     _fcc_fsub
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _f_add_L3
                 LDA     #4
@@ -276,7 +272,6 @@ _f_add_L3
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BEQ     _f_add_L4
                 LDA     #5
@@ -402,7 +397,6 @@ _f_add_L5
                 JSR     _fcc_fadd
                 JSR     _fcc_ftoi
                 TAX
-                TXA
                 CMP     #42
                 BNE     _f_add_L6
                 LDA     #42

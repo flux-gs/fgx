@@ -274,7 +274,6 @@ main_stkok        TCS
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L3
                 LDA     #0
                 BRA     _ldouble_const_L4
@@ -345,7 +344,6 @@ _ldouble_const_L2
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L6
                 LDA     #0
                 BRA     _ldouble_const_L7
@@ -563,7 +561,6 @@ _ldouble_const_L8
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L10
                 LDA     #0
                 BRA     _ldouble_const_L11
@@ -639,7 +636,6 @@ _ldouble_const_L9
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L13
                 LDA     #0
                 BRA     _ldouble_const_L14
@@ -710,7 +706,6 @@ _ldouble_const_L12
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L16
                 LDA     #0
                 BRA     _ldouble_const_L17
@@ -778,7 +773,6 @@ _ldouble_const_L15
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L19
                 LDA     #0
                 BRA     _ldouble_const_L20
@@ -846,7 +840,6 @@ _ldouble_const_L18
 _ldouble_const_L21
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _ldouble_const_L23
                 LDA     #8
@@ -872,7 +865,6 @@ _ldouble_const_L24
 _ldouble_const_L22
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _ldouble_const_L25
                 LDA     #9
@@ -922,7 +914,6 @@ _ldouble_const_L25
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L27
                 LDA     #0
                 BRA     _ldouble_const_L28
@@ -978,7 +969,6 @@ _ldouble_const_L26
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L30
                 LDA     #0
                 BRA     _ldouble_const_L31
@@ -1034,7 +1024,6 @@ _ldouble_const_L29
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L33
                 LDA     #0
                 BRA     _ldouble_const_L34
@@ -1090,7 +1079,6 @@ _ldouble_const_L32
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L36
                 LDA     #0
                 BRA     _ldouble_const_L37
@@ -1146,7 +1134,6 @@ _ldouble_const_L35
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L39
                 LDA     #0
                 BRA     _ldouble_const_L40
@@ -1202,7 +1189,6 @@ _ldouble_const_L38
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L42
                 LDA     #0
                 BRA     _ldouble_const_L43
@@ -1258,7 +1244,6 @@ _ldouble_const_L41
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L45
                 LDA     #0
                 BRA     _ldouble_const_L46
@@ -1314,7 +1299,6 @@ _ldouble_const_L44
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L48
                 LDA     #0
                 BRA     _ldouble_const_L49
@@ -1370,7 +1354,6 @@ _ldouble_const_L47
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L51
                 LDA     #0
                 BRA     _ldouble_const_L52
@@ -1450,7 +1433,6 @@ _ldouble_const_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _ldouble_const_L53
                 LDA     #19
                 TAY
@@ -1499,7 +1481,6 @@ _ldouble_const_L53
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L55
                 LDA     #0
                 BRA     _ldouble_const_L56
@@ -1555,7 +1536,6 @@ _ldouble_const_L54
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L58
                 LDA     #0
                 BRA     _ldouble_const_L59
@@ -1611,7 +1591,6 @@ _ldouble_const_L57
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L61
                 LDA     #0
                 BRA     _ldouble_const_L62
@@ -1681,7 +1660,6 @@ _ldouble_const_L60
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L64
                 LDA     #0
                 BRA     _ldouble_const_L65
@@ -1751,7 +1729,6 @@ _ldouble_const_L63
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L67
                 LDA     #0
                 BRA     _ldouble_const_L68
@@ -1773,7 +1750,6 @@ _ldouble_const_L68
 _ldouble_const_L66
                 LDA     #24
                 TAX
-                TXA
                 CMP     #24
                 BNE     _ldouble_const_L70
                 LDA     #$0000
@@ -1812,7 +1788,6 @@ _ldouble_const_L66
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L72
                 LDA     #0
                 BRA     _ldouble_const_L73
@@ -1841,7 +1816,6 @@ _ldouble_const_L71
 _ldouble_const_L69
                 LDA     gs+0
                 TAX
-                TXA
                 CMP     #5
                 BNE     _ldouble_const_L75
                 LDA     #$9999
@@ -1880,7 +1854,6 @@ _ldouble_const_L69
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L77
                 LDA     #0
                 BRA     _ldouble_const_L78
@@ -1952,7 +1925,6 @@ _ldouble_const_L74
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L80
                 LDA     #0
                 BRA     _ldouble_const_L81
@@ -1974,7 +1946,6 @@ _ldouble_const_L81
 _ldouble_const_L79
                 LDA     gi
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _ldouble_const_L82
                 LDA     #28
@@ -2057,7 +2028,6 @@ _ldouble_const_L83
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _ldouble_const_L85
                 LDA     #0
                 BRA     _ldouble_const_L86

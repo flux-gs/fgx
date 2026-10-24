@@ -73,7 +73,6 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _pdref_store_L0
                 LDA     #1
@@ -92,7 +91,6 @@ _pdref_store_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #20
                 BEQ     _pdref_store_L1
                 LDA     #2
@@ -111,7 +109,6 @@ _pdref_store_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _pdref_store_L2
                 LDA     #3

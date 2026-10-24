@@ -295,7 +295,6 @@ main_stkok        TCS
                 LDA:    data,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #77
                 BEQ     _ampderefmember_L0
                 LDA     #1
@@ -364,7 +363,6 @@ _ampderefmember_L1
                 LDA:    data,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #55
                 BEQ     _ampderefmember_L2
                 LDA     #3
@@ -467,7 +465,6 @@ _ampderefmember_L3
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _ampderefmember_L4
                 LDA     #5
@@ -636,7 +633,6 @@ _ampderefmember_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #77
                 BEQ     _ampderefmember_L12
                 LDA     #7

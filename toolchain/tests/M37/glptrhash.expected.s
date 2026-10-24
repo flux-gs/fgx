@@ -57,7 +57,6 @@ _glptrhash_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #5010
                 BVC     _glptrhash_L3
@@ -269,7 +268,6 @@ _glptrhash_L4
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -320,7 +318,6 @@ _glptrhash_L5
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -461,7 +458,6 @@ _glptrhash_L6
                 LDA     _fcc_img2
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -475,7 +471,6 @@ _glptrhash_L6
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _glptrhash_L7
                 LDA     #1
@@ -525,7 +520,6 @@ _glptrhash_L8
                 ASL
                 ASL
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -613,7 +607,6 @@ _glptrhash_L10
                 TAX
                 LDA:    cstorage,X
                 TAX
-                TXA
                 CMP     #257
                 BEQ     _glptrhash_L11
                 LDA     #5

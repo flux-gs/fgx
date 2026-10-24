@@ -82,7 +82,6 @@ main_stkok        TCS
                 BEQ     _uconv_long_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -111,7 +110,6 @@ _uconv_long_L0
                 BEQ     _uconv_long_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -140,7 +138,6 @@ _uconv_long_L1
                 BEQ     _uconv_long_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -184,7 +181,6 @@ _uconv_long_L5
                 BEQ     _uconv_long_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -238,7 +234,6 @@ _uconv_long_L3
                 BEQ     _uconv_long_L6
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -284,7 +279,6 @@ _uconv_long_L6
                 BEQ     _uconv_long_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -313,7 +307,6 @@ _uconv_long_L7
                 BEQ     _uconv_long_L8
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     _fcc_img0
@@ -367,7 +360,6 @@ _uconv_long_L8
                 BEQ     _uconv_long_L9
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     _fcc_img0

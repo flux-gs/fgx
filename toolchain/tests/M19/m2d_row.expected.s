@@ -177,7 +177,6 @@ _m2d_row_L4
                 BEQ     _m2d_row_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
@@ -314,7 +313,6 @@ _m2d_row_L7
                 BEQ     _m2d_row_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     5,S   ; fccstk d=0 b=5
@@ -373,7 +371,6 @@ _m2d_row_L14
                 BEQ     _m2d_row_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -463,7 +460,6 @@ _m2d_row_L17
                 BEQ     _m2d_row_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -552,7 +548,6 @@ _m2d_row_L20
                 BEQ     _m2d_row_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     5,S   ; fccstk d=0 b=5
@@ -597,12 +592,10 @@ _m2d_row_L18
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #113
                 BNE     _m2d_row_L21
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     5,S   ; fccstk d=0 b=5
@@ -661,7 +654,6 @@ _m2d_row_L24
                 BEQ     _m2d_row_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     5,S   ; fccstk d=0 b=5
@@ -752,12 +744,10 @@ _m2d_row_L22
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BNE     _m2d_row_L26
                 LDA     #6
                 TAX
-                TXA
                 CMP     #6
                 BNE     _m2d_row_L26
                 LDA     #1
@@ -769,7 +759,6 @@ _m2d_row_L27
                 BEQ     _m2d_row_L25
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     5,S   ; fccstk d=0 b=5

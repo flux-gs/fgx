@@ -180,7 +180,6 @@ main_stkok        TCS
                 SEC
                 SBC     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 SEC
                 SBC     #28
                 TAY

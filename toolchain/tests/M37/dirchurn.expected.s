@@ -169,7 +169,6 @@ _dirchurn_L0
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 SEC
                 SBC     #46
                 BVC     _dirchurn_L2
@@ -253,7 +252,6 @@ _dirchurn_L2
                 TCS
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -286,7 +284,6 @@ _dirchurn_L6
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L4
                 LDA     #1
@@ -324,7 +321,6 @@ _dirchurn_L3
                 TCS
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -357,7 +353,6 @@ _dirchurn_L10
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L8
                 LDA     #1
@@ -386,7 +381,6 @@ _dirchurn_L7
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -419,7 +413,6 @@ _dirchurn_L14
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L12
                 LDA     #1
@@ -535,7 +528,6 @@ _dirchurn_L17
 _dirchurn_L15
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -568,7 +560,6 @@ _dirchurn_L21
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L19
                 LDA     #1
@@ -766,7 +757,6 @@ _dirchurn_L24
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L25
                 LDA     #$FFF6
@@ -1092,7 +1082,6 @@ _dirchurn_L29
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L32
                 LDA     #$FFF5
@@ -1315,7 +1304,6 @@ _dirchurn_L38
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L40
                 LDA     #$FFEF
@@ -1406,7 +1394,6 @@ _dirchurn_L40
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L41
                 LDA     #$FFF4
@@ -1667,7 +1654,6 @@ _dirchurn_L50
                 RTL
 _dirchurn_L51
                 LDA     13,S   ; fccstk d=0 b=13
-                CMP     #0
                 BPL     _dirchurn_L52
                 LDA     #1
                 TAY
@@ -1682,7 +1668,6 @@ _dirchurn_L51
 _dirchurn_L52
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                TXA
                 SEC
                 SBC     #20
                 BVC     _dirchurn_L54
@@ -1746,7 +1731,6 @@ _dirchurn_L58
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #54
                 STA     _fcc_tmp_b
                 TXA
@@ -1798,14 +1782,12 @@ _dirchurn_L59
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #110
                 BEQ     _dirchurn_L63
                 LDA     #100
                 PHA
                 LDA     _fcc_img0
                 TAX
-                TXA
                 LDX     #54
                 STA     _fcc_tmp_b
                 TXA

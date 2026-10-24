@@ -30,7 +30,6 @@ f_stkok        TCS
                 LDA     6+f_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -91,7 +90,6 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -106,12 +104,10 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #101
                 BNE     _bracescalar_L3
                 LDA     #4
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -126,7 +122,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #116
                 BNE     _bracescalar_L3
                 LDA     #1
@@ -138,7 +133,6 @@ _bracescalar_L4
                 BEQ     _bracescalar_L1
                 LDA     #5
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -152,7 +146,6 @@ _bracescalar_L4
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                CMP     #0
                 BNE     _bracescalar_L1
                 LDA     #1
                 BRA     _bracescalar_L2
@@ -163,7 +156,6 @@ _bracescalar_L2
                 BEQ     _bracescalar_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -192,7 +184,6 @@ _bracescalar_L0
                 BEQ     _bracescalar_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -202,7 +193,6 @@ _bracescalar_L5
                 BNE     _bracescalar_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -216,11 +206,9 @@ _bracescalar_L6
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 TAX
-                TXA
                 INC
                 STA     _fcc_tmp_b
                 PLA
@@ -228,7 +216,6 @@ _bracescalar_L6
                 BNE     _bracescalar_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #21
                 STA     1,S   ; fccstk d=0 b=1

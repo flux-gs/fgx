@@ -263,7 +263,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L0
                 LDA     #1
@@ -328,7 +327,6 @@ _callchain_ptr_compound_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_ptr_compound_L1
                 LDA     #2
@@ -391,7 +389,6 @@ _callchain_ptr_compound_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L2
                 LDA     #3
@@ -456,7 +453,6 @@ _callchain_ptr_compound_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _callchain_ptr_compound_L3
                 LDA     #4
@@ -529,7 +525,6 @@ _callchain_ptr_compound_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L4
                 LDA     #5
@@ -604,7 +599,6 @@ _callchain_ptr_compound_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_ptr_compound_L5
                 LDA     #6
@@ -667,7 +661,6 @@ _callchain_ptr_compound_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L6
                 LDA     #7
@@ -730,7 +723,6 @@ _callchain_ptr_compound_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _callchain_ptr_compound_L7
                 LDA     #8
@@ -795,7 +787,6 @@ _callchain_ptr_compound_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L8
                 LDA     #9
@@ -819,7 +810,6 @@ _callchain_ptr_compound_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L9
                 LDA     #10
@@ -886,7 +876,6 @@ _callchain_ptr_compound_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _callchain_ptr_compound_L10
                 LDA     #11
@@ -943,7 +932,6 @@ _callchain_ptr_compound_L10
                 STA     [_fcc_fpr0]
                 LDA     calls
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _callchain_ptr_compound_L11
                 LDA     #12
@@ -983,7 +971,6 @@ _callchain_ptr_compound_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 STA     [_fcc_fpr0]
                 LDA     #1
@@ -991,7 +978,6 @@ _callchain_ptr_compound_L11
                 TAX
                 LDA:    ivv,X
                 TAX
-                TXA
                 CMP     #51
                 BEQ     _callchain_ptr_compound_L12
                 LDA     #13
@@ -1007,7 +993,6 @@ _callchain_ptr_compound_L11
 _callchain_ptr_compound_L12
                 LDA     calls
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _callchain_ptr_compound_L13
                 LDA     #14
@@ -1028,7 +1013,6 @@ _callchain_ptr_compound_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 STA     [_fcc_fpr0]
@@ -1037,7 +1021,6 @@ _callchain_ptr_compound_L13
                 TAX
                 LDA:    ivv,X
                 TAX
-                TXA
                 CMP     #48
                 BEQ     _callchain_ptr_compound_L14
                 LDA     #15
@@ -1125,7 +1108,6 @@ _callchain_ptr_compound_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #11
                 BEQ     _callchain_ptr_compound_L15
                 LDA     #16
@@ -1141,7 +1123,6 @@ _callchain_ptr_compound_L14
 _callchain_ptr_compound_L15
                 LDA     calls
                 TAX
-                TXA
                 CMP     #1
                 BEQ     _callchain_ptr_compound_L16
                 LDA     #17
@@ -1229,7 +1210,6 @@ _callchain_ptr_compound_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _callchain_ptr_compound_L17
                 LDA     #18
@@ -1317,7 +1297,6 @@ _callchain_ptr_compound_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #12
                 BEQ     _callchain_ptr_compound_L18
                 LDA     #19

@@ -63,7 +63,6 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CLC
                 ADC     #37
                 TAY

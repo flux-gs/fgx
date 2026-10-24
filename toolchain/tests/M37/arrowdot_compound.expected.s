@@ -69,17 +69,14 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 AND     #15
                 STA     [_fcc_fpr0]
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #15
                 BNE     _arrowdot_compound_L5
                 LDA     g+4
                 TAX
-                TXA
                 CMP     #4660
                 BNE     _arrowdot_compound_L5
                 LDA     #1
@@ -91,7 +88,6 @@ _arrowdot_compound_L6
                 BEQ     _arrowdot_compound_L3
                 LDA     g+0
                 TAX
-                TXA
                 CMP     #43690
                 BNE     _arrowdot_compound_L3
                 LDA     #1
@@ -103,7 +99,6 @@ _arrowdot_compound_L4
                 BEQ     _arrowdot_compound_L1
                 LDA     g+6
                 TAX
-                TXA
                 CMP     #21845
                 BNE     _arrowdot_compound_L1
                 LDA     #1
@@ -115,7 +110,6 @@ _arrowdot_compound_L2
                 BEQ     _arrowdot_compound_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -147,17 +141,14 @@ _arrowdot_compound_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 ORA     #52
                 STA     [_fcc_fpr0]
                 LDA     g+4
                 TAX
-                TXA
                 CMP     #4660
                 BNE     _arrowdot_compound_L12
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #15
                 BNE     _arrowdot_compound_L12
                 LDA     #1
@@ -169,7 +160,6 @@ _arrowdot_compound_L13
                 BEQ     _arrowdot_compound_L10
                 LDA     g+0
                 TAX
-                TXA
                 CMP     #43690
                 BNE     _arrowdot_compound_L10
                 LDA     #1
@@ -181,7 +171,6 @@ _arrowdot_compound_L11
                 BEQ     _arrowdot_compound_L8
                 LDA     g+6
                 TAX
-                TXA
                 CMP     #21845
                 BNE     _arrowdot_compound_L8
                 LDA     #1
@@ -193,7 +182,6 @@ _arrowdot_compound_L9
                 BEQ     _arrowdot_compound_L7
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -225,18 +213,15 @@ _arrowdot_compound_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CLC
                 ADC     #23
                 STA     [_fcc_fpr0]
                 LDA     g+2
                 TAX
-                TXA
                 CMP     #123
                 BNE     _arrowdot_compound_L19
                 LDA     g+4
                 TAX
-                TXA
                 CMP     #4660
                 BNE     _arrowdot_compound_L19
                 LDA     #1
@@ -248,7 +233,6 @@ _arrowdot_compound_L20
                 BEQ     _arrowdot_compound_L17
                 LDA     g+0
                 TAX
-                TXA
                 CMP     #43690
                 BNE     _arrowdot_compound_L17
                 LDA     #1
@@ -260,7 +244,6 @@ _arrowdot_compound_L18
                 BEQ     _arrowdot_compound_L15
                 LDA     g+6
                 TAX
-                TXA
                 CMP     #21845
                 BNE     _arrowdot_compound_L15
                 LDA     #1
@@ -272,7 +255,6 @@ _arrowdot_compound_L16
                 BEQ     _arrowdot_compound_L14
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

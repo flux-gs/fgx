@@ -31,7 +31,6 @@ _freadn_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #36
                 BVC     _freadn_L3
@@ -150,7 +149,6 @@ _freadn_L8
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #3
                 BNE     _freadn_L5
                 LDA     #1
@@ -162,7 +160,6 @@ _freadn_L6
                 BEQ     _freadn_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -240,7 +237,6 @@ _freadn_L4
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #2
                 BNE     _freadn_L12
                 LDA     #0
@@ -248,7 +244,6 @@ _freadn_L4
                 LDA:    in,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BNE     _freadn_L12
                 LDA     #1
@@ -265,7 +260,6 @@ _freadn_L13
                 PHA
                 LDA     #97
                 TAX
-                TXA
                 CLC
                 ADC     #23
                 STA     _fcc_tmp_b
@@ -281,7 +275,6 @@ _freadn_L11
                 BEQ     _freadn_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -318,12 +311,10 @@ _freadn_L9
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #1
                 BNE     _freadn_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -359,11 +350,9 @@ _freadn_L14
                 TCS
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
-                CMP     #0
                 BNE     _freadn_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -441,12 +430,10 @@ _freadn_L15
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #36
                 BNE     _freadn_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
@@ -539,12 +526,10 @@ _freadn_L16
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #97
                 BNE     _freadn_L22
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 CMP     #2
                 BNE     _freadn_L22
                 LDA     #1
@@ -559,7 +544,6 @@ _freadn_L23
                 LDA:    in,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BNE     _freadn_L20
                 LDA     #1
@@ -576,7 +560,6 @@ _freadn_L21
                 PHA
                 LDA     #97
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     _fcc_tmp_b
@@ -592,7 +575,6 @@ _freadn_L19
                 BEQ     _freadn_L17
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5

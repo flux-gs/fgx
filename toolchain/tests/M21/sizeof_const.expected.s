@@ -84,7 +84,6 @@ main_stkok        TCS
                 LDA:    gbuf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _sizeof_const_L0
                 LDA     #1
@@ -103,7 +102,6 @@ _sizeof_const_L0
                 TAX
                 LDA:    hdr,X
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _sizeof_const_L1
                 LDA     #2
@@ -122,7 +120,6 @@ _sizeof_const_L1
                 TAX
                 LDA:    main_sl_sb,X
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _sizeof_const_L2
                 LDA     #3
@@ -138,7 +135,6 @@ _sizeof_const_L1
 _sizeof_const_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _sizeof_const_L3
                 LDA     #4

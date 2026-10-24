@@ -29,7 +29,6 @@ _break_for_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #100
                 BVC     _break_for_L3
@@ -38,21 +37,18 @@ _break_for_L3
                 BPL     _break_for_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CMP     #6
                 BNE     _break_for_L4
                 BRA     _break_for_L2
 _break_for_L4
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img1
 _break_for_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

@@ -29,7 +29,6 @@ _for_basic_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #6
                 BVC     _for_basic_L3
@@ -38,14 +37,12 @@ _for_basic_L3
                 BPL     _for_basic_L2
                 LDA     _fcc_img1
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img1
 _for_basic_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

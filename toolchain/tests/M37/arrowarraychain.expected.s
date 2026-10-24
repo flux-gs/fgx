@@ -27,7 +27,6 @@ _arrowarraychain_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #28
                 BVC     _arrowarraychain_L3
@@ -282,7 +281,6 @@ _arrowarraychain_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _arrowarraychain_L7
@@ -425,7 +423,6 @@ _arrowarraychain_L6
                 MX      %00
                 LDA     #32
                 TAX
-                TXA
                 CMP     #32
                 BEQ     _arrowarraychain_L8
                 LDA     #10
@@ -966,7 +963,6 @@ _arrowarraychain_L20
                 STA     _fcc_img5
                 LDA     [_fcc_img5]
                 TAX
-                TXA
                 CMP     #512
                 BEQ     _arrowarraychain_L21
                 LDA     #28
@@ -1018,7 +1014,6 @@ _arrowarraychain_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #514
                 BEQ     _arrowarraychain_L22
                 LDA     #29

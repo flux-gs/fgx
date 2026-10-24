@@ -345,7 +345,6 @@ main_stkok        TCS
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L3
                 LDA     #0
                 BRA     _llong_mem_L4
@@ -418,7 +417,6 @@ _llong_mem_L2
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L6
                 LDA     #0
                 BRA     _llong_mem_L7
@@ -489,7 +487,6 @@ _llong_mem_L5
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L9
                 LDA     #0
                 BRA     _llong_mem_L10
@@ -581,7 +578,6 @@ _llong_mem_L8
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L14
                 LDA     #0
                 BRA     _llong_mem_L15
@@ -634,7 +630,6 @@ _llong_mem_L15
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L12
                 LDA     #0
                 BRA     _llong_mem_L13
@@ -656,12 +651,10 @@ _llong_mem_L13
 _llong_mem_L11
                 LDA     #12
                 TAX
-                TXA
                 CMP     #12
                 BNE     _llong_mem_L17
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BNE     _llong_mem_L17
                 LDA     #0
@@ -777,7 +770,6 @@ _llong_mem_L16
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L20
                 LDA     #0
                 BRA     _llong_mem_L21
@@ -869,7 +861,6 @@ _llong_mem_L19
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L22
                 LDA     #7
                 TAY
@@ -982,7 +973,6 @@ _llong_mem_L22
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L24
                 LDA     #0
                 BRA     _llong_mem_L25
@@ -1115,7 +1105,6 @@ _llong_mem_L23
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L26
                 LDA     #9
                 TAY
@@ -1197,7 +1186,6 @@ _llong_mem_L26
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L28
                 LDA     #0
                 BRA     _llong_mem_L29
@@ -1229,7 +1217,6 @@ _llong_mem_L27
                 STA     _fcc_fpr0
                 LDA     n
                 TAX
-                TXA
                 INC
                 ASL
                 ASL
@@ -1301,7 +1288,6 @@ _llong_mem_L27
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L30
                 LDA     #11
                 TAY
@@ -1382,7 +1368,6 @@ _llong_mem_L30
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L32
                 LDA     #0
                 BRA     _llong_mem_L33
@@ -1404,7 +1389,6 @@ _llong_mem_L33
 _llong_mem_L31
                 LDA     n
                 TAX
-                TXA
                 INC
                 ASL
                 ASL
@@ -1484,7 +1468,6 @@ _llong_mem_L31
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L34
                 LDA     #13
                 TAY
@@ -1570,7 +1553,6 @@ _llong_mem_L34
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L36
                 LDA     #0
                 BRA     _llong_mem_L37
@@ -1592,12 +1574,10 @@ _llong_mem_L37
 _llong_mem_L35
                 LDA     63,S   ; fccstk d=0 b=63
                 TAX
-                TXA
                 CMP     #7
                 BNE     _llong_mem_L39
                 LDA     73,S   ; fccstk d=0 b=73
                 TAX
-                TXA
                 CMP     #9
                 BNE     _llong_mem_L39
                 LDA     #0
@@ -1678,7 +1658,6 @@ _llong_mem_L38
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L41
                 LDA     #16
                 TAY
@@ -1771,7 +1750,6 @@ _llong_mem_L41
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L43
                 LDA     #0
                 BRA     _llong_mem_L44
@@ -2101,7 +2079,6 @@ _llong_mem_L46
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L47
                 LDA     #20
                 TAY
@@ -2310,7 +2287,6 @@ _llong_mem_L47
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L48
                 LDA     #21
                 TAY
@@ -2471,7 +2447,6 @@ _llong_mem_L48
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L49
                 LDA     #22
                 TAY
@@ -2584,7 +2559,6 @@ _llong_mem_L49
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L51
                 LDA     #0
                 BRA     _llong_mem_L52
@@ -2746,7 +2720,6 @@ _llong_mem_L50
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L53
                 LDA     #24
                 TAY
@@ -2921,7 +2894,6 @@ _llong_mem_L53
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L55
                 LDA     #0
                 BRA     _llong_mem_L56
@@ -3069,7 +3041,6 @@ _llong_mem_L54
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L58
                 LDA     #0
                 BRA     _llong_mem_L59
@@ -3195,7 +3166,6 @@ _llong_mem_L57
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L60
                 LDA     #27
                 TAY
@@ -3282,7 +3252,6 @@ _llong_mem_L60
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L61
                 LDA     #28
                 TAY
@@ -3430,7 +3399,6 @@ _llong_mem_L61
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L62
                 LDA     #29
                 TAY
@@ -3601,7 +3569,6 @@ _llong_mem_L62
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _llong_mem_L63
                 LDA     #30
                 TAY
@@ -3749,7 +3716,6 @@ _llong_mem_L63
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L65
                 LDA     #0
                 BRA     _llong_mem_L66
@@ -3887,7 +3853,6 @@ _llong_mem_L67
                 FGX2_FARCALL _fcc_ll_add
                 STA     29,S   ; fccstk d=0 b=29
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _llong_mem_L68
                 LDA     #33
@@ -3937,7 +3902,6 @@ _llong_mem_L68
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L72
                 LDA     #0
                 BRA     _llong_mem_L73
@@ -3991,7 +3955,6 @@ _llong_mem_L73
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L70
                 LDA     #0
                 BRA     _llong_mem_L71
@@ -4103,7 +4066,6 @@ _llong_mem_L69
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L79
                 LDA     #0
                 BRA     _llong_mem_L80
@@ -4148,7 +4110,6 @@ _llong_mem_L80
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L81
                 LDA     #0
                 BRA     _llong_mem_L82
@@ -4209,7 +4170,6 @@ _llong_mem_L78
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L75
                 LDA     #0
                 BRA     _llong_mem_L76
@@ -4265,7 +4225,6 @@ _llong_mem_L74
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L84
                 LDA     #0
                 BRA     _llong_mem_L85
@@ -4287,7 +4246,6 @@ _llong_mem_L85
 _llong_mem_L83
                 LDA     gsi+0
                 TAX
-                TXA
                 CMP     #7
                 BNE     _llong_mem_L89
                 LDA     #$5566
@@ -4326,7 +4284,6 @@ _llong_mem_L83
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _llong_mem_L91
                 LDA     #0
                 BRA     _llong_mem_L92
@@ -4344,7 +4301,6 @@ _llong_mem_L90
                 BNE     _llong_mem_L87
                 LDA     gsi+10
                 TAX
-                TXA
                 CMP     #9
                 BNE     _llong_mem_L87
                 LDA     #0
@@ -4468,7 +4424,6 @@ _llong_mem_L86
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L94
                 LDA     #0
                 BRA     _llong_mem_L95
@@ -4611,7 +4566,6 @@ _llong_mem_L93
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L99
                 LDA     #0
                 BRA     _llong_mem_L100
@@ -4682,7 +4636,6 @@ _llong_mem_L100
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L97
                 LDA     #0
                 BRA     _llong_mem_L98
@@ -4704,7 +4657,6 @@ _llong_mem_L98
 _llong_mem_L96
                 LDA     99,S   ; fccstk d=0 b=99
                 TAX
-                TXA
                 CMP     #1
                 BNE     _llong_mem_L104
                 LDA     107,S   ; fccstk d=0 b=107
@@ -4752,7 +4704,6 @@ _llong_mem_L96
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _llong_mem_L104
                 LDA     #0
                 BRA     _llong_mem_L105
@@ -4763,7 +4714,6 @@ _llong_mem_L105
                 BNE     _llong_mem_L102
                 LDA     109,S   ; fccstk d=0 b=109
                 TAX
-                TXA
                 CMP     #2
                 BNE     _llong_mem_L102
                 LDA     #0

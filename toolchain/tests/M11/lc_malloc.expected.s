@@ -307,12 +307,10 @@ _lc_malloc_L3
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #88
                 BNE     _lc_malloc_L7
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #89
                 BNE     _lc_malloc_L7
                 LDA     #0

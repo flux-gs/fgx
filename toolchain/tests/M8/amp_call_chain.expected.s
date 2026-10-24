@@ -101,12 +101,10 @@ main_stkok        TCS
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _amp_call_chain_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -119,12 +117,10 @@ _amp_call_chain_L0
                 STA     [_fcc_fpr0]
                 LDA     slot+0
                 TAX
-                TXA
                 CMP     #15
                 BNE     _amp_call_chain_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -150,12 +146,10 @@ _amp_call_chain_L1
                 STA     [_fcc_fpr0],Y
                 LDA     slot+2
                 TAX
-                TXA
                 CMP     #6
                 BNE     _amp_call_chain_L3
                 LDA     slot+4
                 TAX
-                TXA
                 CMP     #12
                 BNE     _amp_call_chain_L3
                 LDA     #1
@@ -167,7 +161,6 @@ _amp_call_chain_L4
                 BEQ     _amp_call_chain_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #18
                 STA     9,S   ; fccstk d=0 b=9

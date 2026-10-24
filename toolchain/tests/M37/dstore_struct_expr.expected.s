@@ -70,12 +70,10 @@ _dstore_struct_expr_L0
                 BPL     _dstore_struct_expr_L0
                 LDA     dst+0
                 TAX
-                TXA
                 CMP     #4369
                 BNE     _dstore_struct_expr_L10
                 LDA     dst+2
                 TAX
-                TXA
                 CMP     #8738
                 BNE     _dstore_struct_expr_L10
                 LDA     #1
@@ -87,7 +85,6 @@ _dstore_struct_expr_L11
                 BEQ     _dstore_struct_expr_L8
                 LDA     dst+4
                 TAX
-                TXA
                 CMP     #13107
                 BNE     _dstore_struct_expr_L8
                 LDA     #1
@@ -99,7 +96,6 @@ _dstore_struct_expr_L9
                 BEQ     _dstore_struct_expr_L6
                 LDA     after+0
                 TAX
-                TXA
                 CMP     #30583
                 BNE     _dstore_struct_expr_L6
                 LDA     #1
@@ -111,7 +107,6 @@ _dstore_struct_expr_L7
                 BEQ     _dstore_struct_expr_L4
                 LDA     after+2
                 TAX
-                TXA
                 CMP     #30583
                 BNE     _dstore_struct_expr_L4
                 LDA     #1
@@ -123,7 +118,6 @@ _dstore_struct_expr_L5
                 BEQ     _dstore_struct_expr_L2
                 LDA     after+4
                 TAX
-                TXA
                 CMP     #30583
                 BNE     _dstore_struct_expr_L2
                 LDA     #1
@@ -135,7 +129,6 @@ _dstore_struct_expr_L3
                 BEQ     _dstore_struct_expr_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -164,10 +157,8 @@ _dstore_struct_expr_L12
                 DEY
                 BPL     _dstore_struct_expr_L12
                 LDA     dst+0
-                CMP     #0
                 BNE     _dstore_struct_expr_L18
                 LDA     dst+2
-                CMP     #0
                 BNE     _dstore_struct_expr_L18
                 LDA     #1
                 BRA     _dstore_struct_expr_L19
@@ -177,7 +168,6 @@ _dstore_struct_expr_L19
                 CMP     #0
                 BEQ     _dstore_struct_expr_L16
                 LDA     dst+4
-                CMP     #0
                 BNE     _dstore_struct_expr_L16
                 LDA     #1
                 BRA     _dstore_struct_expr_L17
@@ -188,7 +178,6 @@ _dstore_struct_expr_L17
                 BEQ     _dstore_struct_expr_L14
                 LDA     after+0
                 TAX
-                TXA
                 CMP     #30583
                 BNE     _dstore_struct_expr_L14
                 LDA     #1
@@ -200,7 +189,6 @@ _dstore_struct_expr_L15
                 BEQ     _dstore_struct_expr_L13
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -230,12 +218,10 @@ _dstore_struct_expr_L23
                 BPL     _dstore_struct_expr_L23
                 LDA     dst+2
                 TAX
-                TXA
                 CMP     #8738
                 BNE     _dstore_struct_expr_L21
                 LDA     dst+4
                 TAX
-                TXA
                 CMP     #13107
                 BNE     _dstore_struct_expr_L21
                 LDA     #1
@@ -247,7 +233,6 @@ _dstore_struct_expr_L22
                 BEQ     _dstore_struct_expr_L20
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     _fcc_img0

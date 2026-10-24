@@ -68,7 +68,6 @@ bump_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                TXA
                 CLC
                 ADC     #5
                 STA     [_fcc_fpr0]
@@ -160,12 +159,10 @@ main_stkok        TCS
                 TAX
                 LDA:    hdr,X
                 TAX
-                TXA
                 CMP     #15
                 BNE     _derefstore_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #15
                 STA     5,S   ; fccstk d=0 b=5
@@ -184,7 +181,6 @@ _derefstore_L0
                 MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 INC
                 INC
                 STA     [_fcc_fpr0]
@@ -193,12 +189,10 @@ _derefstore_L0
                 TAX
                 LDA:    hdr,X
                 TAX
-                TXA
                 CMP     #17
                 BNE     _derefstore_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     5,S   ; fccstk d=0 b=5

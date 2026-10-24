@@ -518,7 +518,6 @@ _f_round_L4
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _f_round_L5
                 LDA     #6
                 TAY

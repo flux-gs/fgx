@@ -277,7 +277,6 @@ main_stkok        TCS
                 STA     r0+2
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -292,7 +291,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _dot_ptrfield_subscript_rea_L0
                 LDA     #1
@@ -349,7 +347,6 @@ _dot_ptrfield_subscript_rea_L0
                 STA     r1+2
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -364,7 +361,6 @@ _dot_ptrfield_subscript_rea_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _dot_ptrfield_subscript_rea_L1
                 LDA     #2
@@ -402,7 +398,6 @@ _dot_ptrfield_subscript_rea_L1
                 STA     r2+2
                 LDA     #0
                 TAX
-                TXA
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -417,7 +412,6 @@ _dot_ptrfield_subscript_rea_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BEQ     _dot_ptrfield_subscript_rea_L2
                 LDA     #3
@@ -455,7 +449,6 @@ _dot_ptrfield_subscript_rea_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _dot_ptrfield_subscript_rea_L3
                 LDA     #4
@@ -513,7 +506,6 @@ _dot_ptrfield_subscript_rea_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BEQ     _dot_ptrfield_subscript_rea_L4
                 LDA     #5
@@ -681,7 +673,6 @@ _dot_ptrfield_subscript_rea_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #66
                 BEQ     _dot_ptrfield_subscript_rea_L11
                 LDA     #8

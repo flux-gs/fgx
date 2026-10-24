@@ -81,7 +81,6 @@ main_stkok        TCS
                 LDA:    gbuf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _arrdimexpr_L0
                 LDA     #1
@@ -100,7 +99,6 @@ _arrdimexpr_L0
                 LDA:    main_sl_sb,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _arrdimexpr_L1
                 LDA     #2
@@ -128,7 +126,6 @@ _arrdimexpr_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _arrdimexpr_L2
                 LDA     #3

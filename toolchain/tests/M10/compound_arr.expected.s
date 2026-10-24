@@ -106,7 +106,6 @@ _compound_arr_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _compound_arr_L3
@@ -134,7 +133,6 @@ _compound_arr_L3
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 TAY
@@ -152,7 +150,6 @@ _compound_arr_L3
 _compound_arr_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0

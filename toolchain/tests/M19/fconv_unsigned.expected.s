@@ -138,7 +138,6 @@ main_stkok        TCS
                 BEQ     _fconv_unsigned_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -167,7 +166,6 @@ _fconv_unsigned_L0
                 BEQ     _fconv_unsigned_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
@@ -231,7 +229,6 @@ _fconv_unsigned_L1
                 BEQ     _fconv_unsigned_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
@@ -259,7 +256,6 @@ _fconv_unsigned_L2
                 BEQ     _fconv_unsigned_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -358,7 +354,6 @@ _fconv_unsigned_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _fconv_unsigned_L5
                 LDA     #1
                 BRA     _fconv_unsigned_L6
@@ -369,7 +364,6 @@ _fconv_unsigned_L6
                 BEQ     _fconv_unsigned_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
@@ -423,7 +417,6 @@ _fconv_unsigned_L4
                 BEQ     _fconv_unsigned_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
@@ -474,7 +467,6 @@ _fconv_unsigned_L7
                 BEQ     _fconv_unsigned_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
@@ -515,7 +507,6 @@ _fconv_unsigned_L8
                 BEQ     _fconv_unsigned_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     1,S   ; fccstk d=0 b=1

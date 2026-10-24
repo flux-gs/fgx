@@ -39,7 +39,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #97
                 BEQ     _static_arr_init_L0
                 LDA     #1
@@ -73,7 +72,6 @@ _static_arr_init_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #98
                 BEQ     _static_arr_init_L1
                 LDA     #2
@@ -107,7 +105,6 @@ _static_arr_init_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BEQ     _static_arr_init_L2
                 LDA     #3
@@ -126,7 +123,6 @@ _static_arr_init_L2
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #120
                 BEQ     _static_arr_init_L3
                 LDA     #4
@@ -145,7 +141,6 @@ _static_arr_init_L3
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #122
                 BEQ     _static_arr_init_L4
                 LDA     #5
@@ -163,7 +158,6 @@ _static_arr_init_L4
                 TAX
                 LDA:    main_sl_buf,X
                 AND     #$00FF
-                CMP     #0
                 BEQ     _static_arr_init_L5
                 LDA     #6
                 TAY
@@ -181,7 +175,6 @@ _static_arr_init_L5
                 TAX
                 LDA:    main_sl_nums,X
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _static_arr_init_L6
                 LDA     #7

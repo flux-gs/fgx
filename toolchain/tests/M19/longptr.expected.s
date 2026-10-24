@@ -290,7 +290,6 @@ main_stkok        TCS
                 BEQ     _longptr_L2
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     23,S   ; fccstk d=0 b=23
@@ -333,7 +332,6 @@ _longptr_L5
                 BEQ     _longptr_L3
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #2
                 STA     23,S   ; fccstk d=0 b=23
@@ -384,7 +382,6 @@ _longptr_L8
                 BEQ     _longptr_L6
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #4
                 STA     23,S   ; fccstk d=0 b=23
@@ -485,7 +482,6 @@ _longptr_L11
                 BEQ     _longptr_L9
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     23,S   ; fccstk d=0 b=23
@@ -563,7 +559,6 @@ _longptr_L14
                 BEQ     _longptr_L12
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #16
                 STA     23,S   ; fccstk d=0 b=23
@@ -614,7 +609,6 @@ _longptr_L17
                 BEQ     _longptr_L15
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #32
                 STA     23,S   ; fccstk d=0 b=23
@@ -693,7 +687,6 @@ _longptr_L20
                 BEQ     _longptr_L18
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #64
                 STA     23,S   ; fccstk d=0 b=23
@@ -724,7 +717,6 @@ _longptr_L18
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _longptr_L22
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
@@ -771,7 +763,6 @@ _longptr_L23
                 BEQ     _longptr_L21
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                TXA
                 CLC
                 ADC     #128
                 STA     23,S   ; fccstk d=0 b=23

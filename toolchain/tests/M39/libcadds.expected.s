@@ -97,7 +97,6 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BPL     _libcadds_L0
                 LDA     #1
                 TAY
@@ -220,7 +219,6 @@ _libcadds_L1
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _libcadds_L4
                 LDA     #3
                 TAY
@@ -298,7 +296,6 @@ _libcadds_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _libcadds_L5
                 LDA     #4
                 TAY
@@ -382,7 +379,6 @@ _libcadds_L5
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _libcadds_L6
                 LDA     #5
                 TAY

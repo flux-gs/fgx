@@ -32,13 +32,10 @@ score_stkok        TCS
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #1
-                CMP     #0
                 BEQ     _m10_flags_test_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -54,13 +51,10 @@ _m10_flags_test_L0
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #2
-                CMP     #0
                 BEQ     _m10_flags_test_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 ORA     #14
                 STA     _fcc_img0
 _m10_flags_test_L1
@@ -75,9 +69,7 @@ _m10_flags_test_L1
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #4
-                CMP     #0
                 BEQ     _m10_flags_test_L3
                 DO      6+score_FRAMESIZE/256
                 TSC
@@ -90,9 +82,7 @@ _m10_flags_test_L1
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                TXA
                 AND     #8
-                CMP     #0
                 BEQ     _m10_flags_test_L5
                 LDA     #0
                 BRA     _m10_flags_test_L6
@@ -156,7 +146,6 @@ _m10_flags_test_L7
                 JSR     _fcc_safepoint
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 SEC
                 SBC     #4
                 BVC     _m10_flags_test_L10
@@ -185,7 +174,6 @@ _m10_flags_test_L10
 _m10_flags_test_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     3,S   ; fccstk d=0 b=3

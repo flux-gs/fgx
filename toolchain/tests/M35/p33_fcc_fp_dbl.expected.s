@@ -29,7 +29,6 @@ _p33_fcc_fp_dbl_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #520
                 BVC     _p33_fcc_fp_dbl_L3
@@ -112,7 +111,6 @@ _p33_fcc_fp_dbl_L2
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #300
                 BEQ     _p33_fcc_fp_dbl_L4
                 LDA     #1
@@ -163,7 +161,6 @@ _p33_fcc_fp_dbl_L4
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
                 BEQ     _p33_fcc_fp_dbl_L5
                 LDA     #2
@@ -206,7 +203,6 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
                 BNE     _p33_fcc_fp_dbl_L7
                 TSC
@@ -216,7 +212,6 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                TXA
                 CMP     #800
                 BNE     _p33_fcc_fp_dbl_L7
                 LDA     #0
@@ -238,7 +233,6 @@ _p33_fcc_fp_dbl_L8
                 RTL
 _p33_fcc_fp_dbl_L6
                 LDA     3,S   ; fccstk d=0 b=3
-                CMP     #0
                 BNE     _p33_fcc_fp_dbl_L12
                 SEP     #$20
                 MX      %10
@@ -254,7 +248,6 @@ _p33_fcc_fp_dbl_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                CMP     #0
                 BNE     _p33_fcc_fp_dbl_L12
                 LDA     #0
                 BRA     _p33_fcc_fp_dbl_L13
@@ -279,7 +272,6 @@ _p33_fcc_fp_dbl_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                CMP     #0
                 BNE     _p33_fcc_fp_dbl_L10
                 LDA     #0
                 BRA     _p33_fcc_fp_dbl_L11

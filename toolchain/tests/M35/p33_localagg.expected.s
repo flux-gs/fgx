@@ -170,12 +170,10 @@ main_stkok        TCS
                 TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #3
                 BNE     _p33_localagg_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #4
                 BNE     _p33_localagg_L1
                 LDA     #0
@@ -216,7 +214,6 @@ _p33_localagg_L0
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _p33_localagg_L3
                 LDA     #2
@@ -242,7 +239,6 @@ _p33_localagg_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _p33_localagg_L7
@@ -257,7 +253,6 @@ _p33_localagg_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #2
                 BVC     _p33_localagg_L11
@@ -346,7 +341,6 @@ _p33_localagg_L6
                 STA     _fcc_ptr
                 PLA
                 LDA     [_fcc_ptr]
-                CMP     #0
                 BEQ     _p33_localagg_L12
                 LDA     #3
                 TAY
@@ -385,7 +379,6 @@ _p33_localagg_L12
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #21
                 BEQ     _p33_localagg_L13
                 LDA     #4
@@ -425,7 +418,6 @@ _p33_localagg_L13
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #10
                 BEQ     _p33_localagg_L14
                 LDA     #5

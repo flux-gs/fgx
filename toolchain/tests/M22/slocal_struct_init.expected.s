@@ -69,7 +69,6 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 LDA     main_sl_t+0
                 TAX
-                TXA
                 CMP     #5
                 BEQ     _slocal_struct_init_L0
                 LDA     #1
@@ -87,7 +86,6 @@ _slocal_struct_init_L0
                 STA     _fcc_long_hi
                 LDA     main_sl_t+4
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _slocal_struct_init_L1
                 LDA     #2
@@ -103,7 +101,6 @@ _slocal_struct_init_L0
 _slocal_struct_init_L1
                 FGX2_FARCALL getpart
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _slocal_struct_init_L2
                 LDA     #3

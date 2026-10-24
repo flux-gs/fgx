@@ -32,7 +32,6 @@ _struct_arr_init_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 BVC     _struct_arr_init_L3
@@ -67,7 +66,6 @@ _struct_arr_init_L3
 _struct_arr_init_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -122,7 +120,6 @@ _struct_arr_init_L2
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _struct_arr_init_L4
                 LDA     #0
                 TAY

@@ -132,12 +132,10 @@ _mixed_declarator_list_L9
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #11
                 BNE     _mixed_declarator_list_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _mixed_declarator_list_L7
                 LDA     #1
@@ -149,7 +147,6 @@ _mixed_declarator_list_L8
                 BEQ     _mixed_declarator_list_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                TXA
                 CMP     #2
                 BNE     _mixed_declarator_list_L5
                 LDA     #1
@@ -161,7 +158,6 @@ _mixed_declarator_list_L6
                 BEQ     _mixed_declarator_list_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #3
                 BNE     _mixed_declarator_list_L3
                 LDA     #1
@@ -173,7 +169,6 @@ _mixed_declarator_list_L4
                 BEQ     _mixed_declarator_list_L2
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
@@ -212,12 +207,10 @@ _mixed_declarator_list_L15
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _mixed_declarator_list_L13
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #4
                 BNE     _mixed_declarator_list_L13
                 LDA     #1
@@ -229,7 +222,6 @@ _mixed_declarator_list_L14
                 BEQ     _mixed_declarator_list_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                TXA
                 CMP     #5
                 BNE     _mixed_declarator_list_L11
                 LDA     #1
@@ -241,7 +233,6 @@ _mixed_declarator_list_L12
                 BEQ     _mixed_declarator_list_L10
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
@@ -324,7 +315,6 @@ _mixed_declarator_list_L31
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _mixed_declarator_list_L29
                 SEP     #$20
@@ -361,7 +351,6 @@ _mixed_declarator_list_L32
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #11
                 BNE     _mixed_declarator_list_L29
                 LDA     #1
@@ -405,7 +394,6 @@ _mixed_declarator_list_L33
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #7
                 BNE     _mixed_declarator_list_L27
                 LDA     #1
@@ -449,7 +437,6 @@ _mixed_declarator_list_L34
                 TCS
                 TYA
                 TAX
-                TXA
                 CMP     #11
                 BNE     _mixed_declarator_list_L25
                 LDA     #1
@@ -461,7 +448,6 @@ _mixed_declarator_list_L26
                 BEQ     _mixed_declarator_list_L23
                 LDA     gplain
                 TAX
-                TXA
                 CMP     #6
                 BNE     _mixed_declarator_list_L23
                 LDA     #1
@@ -473,7 +459,6 @@ _mixed_declarator_list_L24
                 BEQ     _mixed_declarator_list_L21
                 LDA     gplain2
                 TAX
-                TXA
                 CMP     #8
                 BNE     _mixed_declarator_list_L21
                 LDA     #1
@@ -485,7 +470,6 @@ _mixed_declarator_list_L22
                 BEQ     _mixed_declarator_list_L20
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                TXA
                 CLC
                 ADC     #14
                 STA     19,S   ; fccstk d=0 b=19

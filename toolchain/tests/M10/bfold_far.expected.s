@@ -33,7 +33,6 @@ _bfold_far_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                TXA
                 SEC
                 SBC     #126
                 BVC     _bfold_far_L3

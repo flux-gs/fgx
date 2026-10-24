@@ -116,7 +116,6 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _addr_member_L0
                 LDA     #1
@@ -161,7 +160,6 @@ _addr_member_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #90
                 BEQ     _addr_member_L1
                 LDA     #2
@@ -203,7 +201,6 @@ _addr_member_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _addr_member_L2
                 LDA     #3
@@ -249,7 +246,6 @@ _addr_member_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #76
                 BEQ     _addr_member_L3
                 LDA     #4
@@ -286,7 +282,6 @@ _addr_member_L3
                 STA     [_fcc_fpr0]
                 LDA     gb+0
                 TAX
-                TXA
                 CMP     #40
                 BEQ     _addr_member_L4
                 LDA     #5
@@ -302,7 +297,6 @@ _addr_member_L3
 _addr_member_L4
                 LDA     gb+0
                 TAX
-                TXA
                 INC
                 INC
                 TAY

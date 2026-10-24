@@ -107,7 +107,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _charpack_L0
                 LDA     #1
@@ -123,7 +122,6 @@ main_stkok        TCS
 _charpack_L0
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _charpack_L1
                 LDA     #2
@@ -139,7 +137,6 @@ _charpack_L0
 _charpack_L1
                 LDA     #4
                 TAX
-                TXA
                 CMP     #4
                 BEQ     _charpack_L2
                 LDA     #3
@@ -155,7 +152,6 @@ _charpack_L1
 _charpack_L2
                 LDA     #8
                 TAX
-                TXA
                 CMP     #8
                 BEQ     _charpack_L3
                 LDA     #4
@@ -171,7 +167,6 @@ _charpack_L2
 _charpack_L3
                 LDA     #6
                 TAX
-                TXA
                 CMP     #6
                 BEQ     _charpack_L4
                 LDA     #5
@@ -200,13 +195,11 @@ _charpack_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #17
                 BNE     _charpack_L6
                 LDA     2,S   ; fccstk d=0 b=2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #34
                 BNE     _charpack_L6
                 LDA     #0
@@ -236,7 +229,6 @@ _charpack_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #17
                 BEQ     _charpack_L8
                 LDA     #7
@@ -253,13 +245,11 @@ _charpack_L8
                 LDA     gcc+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #11
                 BNE     _charpack_L10
                 LDA     gcc+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #22
                 BNE     _charpack_L10
                 LDA     #0
@@ -309,13 +299,11 @@ _charpack_L9
                 LDA     gb+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _charpack_L15
                 LDA     gb+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
                 BNE     _charpack_L15
                 LDA     #0
@@ -328,7 +316,6 @@ _charpack_L16
                 LDA     gb+6
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
                 BNE     _charpack_L13
                 LDA     #0
@@ -490,7 +477,6 @@ _charpack_L17
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #2
                 BNE     _charpack_L21
                 LDA     #1
@@ -508,7 +494,6 @@ _charpack_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #3
                 BNE     _charpack_L21
                 LDA     #0
@@ -533,7 +518,6 @@ _charpack_L22
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charpack_L19
                 LDA     #0
@@ -580,7 +564,6 @@ _charpack_L18
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                TXA
                 CMP     #2
                 BEQ     _charpack_L23
                 LDA     #11
@@ -618,7 +601,6 @@ _charpack_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #9
                 BEQ     _charpack_L25
                 LDA     #12
@@ -651,7 +633,6 @@ _charpack_L25
 _charpack_L26
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #7
                 BEQ     _charpack_L27
                 LDA     #12
@@ -708,7 +689,6 @@ _charpack_L29
                 ADC     #17
                 ASL
                 TAX
-                TXA
                 CLC
                 ADC     #51
                 STA     _fcc_tmp_b

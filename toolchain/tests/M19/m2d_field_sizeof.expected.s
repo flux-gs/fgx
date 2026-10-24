@@ -80,7 +80,6 @@ _m2d_field_sizeof_L7
                 PHA
                 LDA     #14
                 TAX
-                TXA
                 CMP     #14
                 BNE     _m2d_field_sizeof_L8
                 LDA     #16
@@ -96,7 +95,6 @@ _m2d_field_sizeof_L9
                 PHA
                 LDA     #15
                 TAX
-                TXA
                 CMP     #15
                 BNE     _m2d_field_sizeof_L10
                 LDA     #32
@@ -112,7 +110,6 @@ _m2d_field_sizeof_L11
                 PHA
                 LDA     #2
                 TAX
-                TXA
                 CMP     #2
                 BNE     _m2d_field_sizeof_L12
                 LDA     #64
@@ -128,7 +125,6 @@ _m2d_field_sizeof_L13
                 PHA
                 LDA     #1
                 TAX
-                TXA
                 CMP     #1
                 BNE     _m2d_field_sizeof_L14
                 LDA     #128

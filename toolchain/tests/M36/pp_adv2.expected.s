@@ -21,23 +21,18 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 TAX
-                TXA
                 INC
                 TAX
-                TXA
                 INC
                 TAX
-                TXA
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #1
                 TAX
-                TXA
                 DEC
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #40
                 TAX
-                TXA
                 INC
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     1,S   ; fccstk d=0 b=1
@@ -46,7 +41,6 @@ main_stkok        TCS
                 CLC
                 ADC     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 SEC
                 SBC     #3
                 TAY

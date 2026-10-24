@@ -216,7 +216,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _deref_store_L0
                 LDA     #1
                 TAY
@@ -629,7 +628,6 @@ _deref_store_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     _deref_store_L4
                 LDA     #0
                 BRA     _deref_store_L5
@@ -752,7 +750,6 @@ _deref_store_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _deref_store_L6
                 LDA     #5
                 TAY
@@ -1087,7 +1084,6 @@ _deref_store_L8
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _deref_store_L9
                 LDA     #8
                 TAY
@@ -1213,7 +1209,6 @@ _deref_store_L9
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     _deref_store_L10
                 LDA     #9
                 TAY
@@ -1249,7 +1244,6 @@ _deref_store_L10
                 STA     [_fcc_fpr0]
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
-                TXA
                 CMP     #7
                 BNE     _deref_store_L12
                 LDA     #0
@@ -1257,7 +1251,6 @@ _deref_store_L10
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
-                TXA
                 CMP     #7
                 BNE     _deref_store_L12
                 LDA     #0
@@ -1295,7 +1288,6 @@ _deref_store_L11
                 STA     [_fcc_fpr0]
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
-                TXA
                 CMP     #9
                 BNE     _deref_store_L15
                 LDA     #1
@@ -1303,7 +1295,6 @@ _deref_store_L11
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
-                TXA
                 CMP     #9
                 BNE     _deref_store_L15
                 LDA     #0

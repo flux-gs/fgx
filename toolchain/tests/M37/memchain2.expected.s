@@ -49,12 +49,10 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #7
                 BNE     _memchain2_L0
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -114,12 +112,10 @@ _memchain2_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                TXA
                 CMP     #9
                 BNE     _memchain2_L1
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -156,12 +152,10 @@ _memchain2_L1
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                TXA
                 CMP     #16
                 BNE     _memchain2_L2
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -235,12 +229,10 @@ _memchain2_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                TXA
                 CMP     #3
                 BNE     _memchain2_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #3
                 BNE     _memchain2_L4
                 LDA     #1
@@ -252,7 +244,6 @@ _memchain2_L5
                 BEQ     _memchain2_L3
                 LDA     _fcc_img0
                 TAX
-                TXA
                 CLC
                 ADC     #12
                 STA     _fcc_img0

@@ -244,20 +244,17 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
-                CMP     #0
                 BNE     _charincdec_L0
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #1
                 BNE     _charincdec_L6
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #1
                 BNE     _charincdec_L6
                 LDA     #1
@@ -270,7 +267,6 @@ _charincdec_L7
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L4
                 LDA     #1
@@ -283,7 +279,6 @@ _charincdec_L5
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L2
                 LDA     #1
@@ -295,7 +290,6 @@ _charincdec_L3
                 BEQ     _charincdec_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -323,13 +317,11 @@ _charincdec_L1
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #4
                 BNE     _charincdec_L13
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L13
                 LDA     #1
@@ -342,7 +334,6 @@ _charincdec_L14
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L11
                 LDA     #1
@@ -355,7 +346,6 @@ _charincdec_L12
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L9
                 LDA     #1
@@ -367,7 +357,6 @@ _charincdec_L10
                 BEQ     _charincdec_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -389,13 +378,11 @@ _charincdec_L8
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L20
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L20
                 LDA     #1
@@ -408,7 +395,6 @@ _charincdec_L21
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L18
                 LDA     #1
@@ -421,7 +407,6 @@ _charincdec_L19
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L16
                 LDA     #1
@@ -433,7 +418,6 @@ _charincdec_L17
                 BEQ     _charincdec_L15
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -450,13 +434,11 @@ _charincdec_L15
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L27
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L27
                 LDA     #1
@@ -469,7 +451,6 @@ _charincdec_L28
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L25
                 LDA     #1
@@ -482,7 +463,6 @@ _charincdec_L26
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L23
                 LDA     #1
@@ -494,7 +474,6 @@ _charincdec_L24
                 BEQ     _charincdec_L22
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -523,7 +502,6 @@ _charincdec_L22
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L36
                 LDA     #1
@@ -531,7 +509,6 @@ _charincdec_L22
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L36
                 LDA     #1
@@ -546,7 +523,6 @@ _charincdec_L37
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #113
                 BNE     _charincdec_L34
                 LDA     #1
@@ -561,7 +537,6 @@ _charincdec_L35
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #115
                 BNE     _charincdec_L32
                 LDA     #1
@@ -576,7 +551,6 @@ _charincdec_L33
                 LDA:    carr,X
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #116
                 BNE     _charincdec_L30
                 LDA     #1
@@ -588,7 +562,6 @@ _charincdec_L31
                 BEQ     _charincdec_L29
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -627,13 +600,11 @@ _charincdec_L29
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L45
                 LDA     gq+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #5
                 BNE     _charincdec_L45
                 LDA     #1
@@ -646,7 +617,6 @@ _charincdec_L46
                 LDA     gq+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #81
                 BNE     _charincdec_L43
                 LDA     #1
@@ -659,7 +629,6 @@ _charincdec_L44
                 LDA     gq+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #83
                 BNE     _charincdec_L41
                 LDA     #1
@@ -672,7 +641,6 @@ _charincdec_L42
                 LDA     gq+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #84
                 BNE     _charincdec_L39
                 LDA     #1
@@ -684,7 +652,6 @@ _charincdec_L40
                 BEQ     _charincdec_L38
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -707,17 +674,14 @@ _charincdec_L38
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L47
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L47
                 LDA     11,S   ; fccstk d=0 b=11
-                CMP     #0
                 BNE     _charincdec_L53
                 LDA     gs+1
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L53
                 LDA     #1
                 BRA     _charincdec_L54
@@ -729,7 +693,6 @@ _charincdec_L54
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L51
                 LDA     #1
@@ -742,7 +705,6 @@ _charincdec_L52
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L49
                 LDA     #1
@@ -754,7 +716,6 @@ _charincdec_L50
                 BEQ     _charincdec_L48
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -784,12 +745,10 @@ _charincdec_L48
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L60
                 LDA     gs+1
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L60
                 LDA     #1
                 BRA     _charincdec_L61
@@ -801,7 +760,6 @@ _charincdec_L61
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L58
                 LDA     #1
@@ -814,7 +772,6 @@ _charincdec_L59
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L56
                 LDA     #1
@@ -826,7 +783,6 @@ _charincdec_L57
                 BEQ     _charincdec_L55
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -849,13 +805,11 @@ _charincdec_L55
                 AND     #$00FF
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L67
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L67
                 LDA     #1
@@ -868,7 +822,6 @@ _charincdec_L68
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L65
                 LDA     #1
@@ -881,7 +834,6 @@ _charincdec_L66
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L63
                 LDA     #1
@@ -893,7 +845,6 @@ _charincdec_L64
                 BEQ     _charincdec_L62
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -922,12 +873,10 @@ _charincdec_L62
                 MX      %00
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
-                CMP     #0
                 BNE     _charincdec_L74
                 LDA     gs+1
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L74
                 LDA     #1
@@ -940,7 +889,6 @@ _charincdec_L75
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L72
                 LDA     #1
@@ -953,7 +901,6 @@ _charincdec_L73
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L70
                 LDA     #1
@@ -965,7 +912,6 @@ _charincdec_L71
                 BEQ     _charincdec_L69
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -996,12 +942,10 @@ _charincdec_L69
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L81
                 LDA     go+2
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L81
                 LDA     #1
                 BRA     _charincdec_L82
@@ -1013,7 +957,6 @@ _charincdec_L82
                 LDA     go+4
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #99
                 BNE     _charincdec_L79
                 LDA     #1
@@ -1025,7 +968,6 @@ _charincdec_L80
                 BEQ     _charincdec_L77
                 LDA     go+0
                 TAX
-                TXA
                 CMP     #24930
                 BNE     _charincdec_L77
                 LDA     #1
@@ -1037,7 +979,6 @@ _charincdec_L78
                 BEQ     _charincdec_L76
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -1061,12 +1002,10 @@ _charincdec_L76
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                TXA
                 CMP     #255
                 BNE     _charincdec_L84
                 LDA     gu
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L84
                 LDA     #1
                 BRA     _charincdec_L85
@@ -1077,7 +1016,6 @@ _charincdec_L85
                 BEQ     _charincdec_L83
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -1135,7 +1073,6 @@ _charincdec_L83
                 BEQ     _charincdec_L89
                 LDA     gs+1
                 AND     #$00FF
-                CMP     #0
                 BNE     _charincdec_L89
                 LDA     #1
                 BRA     _charincdec_L90
@@ -1147,7 +1084,6 @@ _charincdec_L90
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #67
                 BNE     _charincdec_L87
                 LDA     #1
@@ -1159,7 +1095,6 @@ _charincdec_L88
                 BEQ     _charincdec_L86
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9
@@ -1205,7 +1140,6 @@ _charincdec_L86
                 PHA
                 LDA     #17
                 TAX
-                TXA
                 CLC
                 ADC     #17
                 STA     _fcc_tmp_b
@@ -1215,7 +1149,6 @@ _charincdec_L86
                 LDA     gs+2
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #42
                 BNE     _charincdec_L94
                 LDA     #1
@@ -1228,7 +1161,6 @@ _charincdec_L95
                 LDA     gs+0
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #65
                 BNE     _charincdec_L92
                 LDA     #1
@@ -1240,7 +1172,6 @@ _charincdec_L93
                 BEQ     _charincdec_L91
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CLC
                 ADC     #3
                 STA     9,S   ; fccstk d=0 b=9

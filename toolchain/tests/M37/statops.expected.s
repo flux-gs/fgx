@@ -51,26 +51,21 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     _statops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _statops_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                TXA
                 AND     #61440
                 TAX
-                TXA
                 CMP     #32768
                 BNE     _statops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -98,19 +93,16 @@ _statops_L1
                 BEQ     _statops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _statops_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                TXA
                 CMP     #1
                 BNE     _statops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -149,7 +141,6 @@ _statops_L3
                 BNE     _statops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -163,12 +154,10 @@ _statops_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                TXA
                 CMP     #78
                 BNE     _statops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                TXA
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1

@@ -563,12 +563,10 @@ _gptr_heap_L16
 _gptr_heap_L17
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 CMP     #18
                 BEQ     _gptr_heap_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                TXA
                 AND     #255
                 TAY
                 TSC
