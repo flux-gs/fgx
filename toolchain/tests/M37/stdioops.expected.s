@@ -114,10 +114,7 @@ _stdioops_L0
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _stdioops_L4
-                EOR     #$8000
+                CMP     #0
 _stdioops_L4
                 BPL     *+5
                 BRL     _stdioops_L3

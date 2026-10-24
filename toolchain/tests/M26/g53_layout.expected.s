@@ -19,6 +19,17 @@ layout_stkovf       JMP     _fcc_stkoflow
 layout_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      6+layout_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+layout_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+layout_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
 _g53_layout_L0
@@ -41,7 +52,7 @@ _g53_layout_L3
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 PHA
                 LDA     _fcc_img0
                 CLC
@@ -99,7 +110,7 @@ _g53_layout_L7
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #318
+                ADC     #320
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 ASL
@@ -120,7 +131,7 @@ _g53_layout_L6
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
@@ -155,7 +166,7 @@ _g53_layout_L11
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #518
+                ADC     #520
                 PHA
                 LDA     _fcc_img1
                 ASL
@@ -190,7 +201,7 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #518
+                ADC     #520
                 PHA
                 LDA     #129
                 ASL
@@ -208,7 +219,7 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #318
+                ADC     #320
                 CLC
                 ADC     #198
                 STA     _fcc_fpr0
@@ -230,8 +241,8 @@ _g53_layout_L10
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
-                CLC
-                ADC     #0
+                INC
+                INC
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
@@ -261,7 +272,7 @@ _g53_layout_L10
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #18
+                ADC     #20
                 PHA
                 LDA     #140
                 CLC
@@ -278,7 +289,7 @@ _g53_layout_L10
                 SEC
                 SBC     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 LDA     _fcc_img7
                 STA     _fcc_long_hi
@@ -291,21 +302,8 @@ _g53_layout_L10
                 TXA
                 SEC
                 SBC     #30
-                PHA
-                DO      8+layout_FRAMESIZE/256
-                TSC
                 CLC
-                ADC     #8+layout_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+layout_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_tmp_b
-                PLA
-                CLC
-                ADC     _fcc_tmp_b
+                ADC     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
                 CLC
@@ -315,7 +313,7 @@ _g53_layout_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-layout_FRAMESIZE   EQU     778
+layout_FRAMESIZE   EQU     780
 layout_STKGUARD    EQU     1
                 FGX2_EXPORT main
 main            ENT

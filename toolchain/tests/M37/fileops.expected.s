@@ -44,10 +44,7 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _fileops_L1
-                EOR     #$8000
+                CMP     #0
 _fileops_L1
                 BPL     *+5
                 BRL     _fileops_L0
@@ -133,10 +130,7 @@ _fileops_L3
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _fileops_L5
-                EOR     #$8000
+                CMP     #0
 _fileops_L5
                 BPL     *+5
                 BRL     _fileops_L4

@@ -338,10 +338,7 @@ main_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _mkstemp_uniq_L10
-                EOR     #$8000
+                CMP     #0
 _mkstemp_uniq_L10
                 BPL     *+5
                 BRL     _mkstemp_uniq_L8
@@ -392,10 +389,7 @@ _mkstemp_uniq_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _mkstemp_uniq_L14
-                EOR     #$8000
+                CMP     #0
 _mkstemp_uniq_L14
                 BPL     *+5
                 BRL     _mkstemp_uniq_L13
@@ -599,10 +593,7 @@ _mkstemp_uniq_L13
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _mkstemp_uniq_L27
-                EOR     #$8000
+                CMP     #0
 _mkstemp_uniq_L27
                 BPL     *+5
                 BRL     _mkstemp_uniq_L25
@@ -665,10 +656,7 @@ _mkstemp_uniq_L24
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _mkstemp_uniq_L31
-                EOR     #$8000
+                CMP     #0
 _mkstemp_uniq_L31
                 BPL     *+5
                 BRL     _mkstemp_uniq_L30
@@ -699,10 +687,7 @@ _mkstemp_uniq_L30
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _mkstemp_uniq_L33
-                EOR     #$8000
+                CMP     #0
 _mkstemp_uniq_L33
                 BPL     *+5
                 BRL     _mkstemp_uniq_L32

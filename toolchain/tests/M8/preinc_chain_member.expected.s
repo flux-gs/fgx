@@ -88,17 +88,9 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 TAX
                 TXA
                 CMP     #4
@@ -143,17 +135,9 @@ _preinc_chain_member_L1
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 TAX
                 TXA
                 CMP     #5

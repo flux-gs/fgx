@@ -36,10 +36,7 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _sockops_L1
-                EOR     #$8000
+                CMP     #0
 _sockops_L1
                 BPL     *+5
                 BRL     _sockops_L0

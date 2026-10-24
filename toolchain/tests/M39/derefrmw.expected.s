@@ -104,17 +104,9 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_tmp_b
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     _fcc_img0
                 TAX
                 TXA

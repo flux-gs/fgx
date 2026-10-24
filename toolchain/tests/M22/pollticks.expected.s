@@ -26,10 +26,7 @@ _pollticks_L0
                 FGX2_FARCALL pollkey
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L2
-                EOR     #$8000
+                CMP     #0
 _pollticks_L2
                 BPL     *+5
                 BRL     _pollticks_L1
@@ -55,10 +52,7 @@ _pollticks_L3
                 FGX2_FARCALL pollkey
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L5
-                EOR     #$8000
+                CMP     #0
 _pollticks_L5
                 BPL     *+5
                 BRL     _pollticks_L4
@@ -82,10 +76,7 @@ _pollticks_L4
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _pollticks_L7
-                EOR     #$8000
+                CMP     #0
 _pollticks_L7
                 BMI     *+5
                 BRL     _pollticks_L6

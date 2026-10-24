@@ -57,10 +57,7 @@ _seekrw_filesize_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _seekrw_L1
-                EOR     #$8000
+                CMP     #0
 _seekrw_L1
                 BMI     *+5
                 BRL     _seekrw_L0
@@ -210,10 +207,7 @@ _seekrw_L4
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _seekrw_L7
-                EOR     #$8000
+                CMP     #0
 _seekrw_L7
                 BMI     *+5
                 BRL     _seekrw_L6
@@ -310,10 +304,7 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _seekrw_L9
-                EOR     #$8000
+                CMP     #0
 _seekrw_L9
                 BMI     *+5
                 BRL     _seekrw_L8

@@ -866,10 +866,7 @@ _libcadds_L34
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _libcadds_L36
-                EOR     #$8000
+                CMP     #0
 _libcadds_L36
                 BPL     *+5
                 BRL     _libcadds_L35

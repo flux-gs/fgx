@@ -1056,10 +1056,7 @@ _p33_soft_addr_L16
                 LDA     [_fcc_sfp],Y
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _p33_soft_addr_L18
-                EOR     #$8000
+                CMP     #0
 _p33_soft_addr_L18
                 BMI     *+5
                 BRL     _p33_soft_addr_L17

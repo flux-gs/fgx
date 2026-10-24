@@ -827,7 +827,7 @@ ir_promote_locals(void)
             }
         }
         /* A promoted PARAM must be seeded from its stack home at entry. */
-        if (cand[best]->kind == LK_PARAM) {
+        if (cand[best]->kind == LK_PARAM || cand[best]->homed_from >= 0) {
             g_promoted_param[g_n_promoted_params]      = cand[best];
             g_promoted_param_slot[g_n_promoted_params] = chosen;
             g_n_promoted_params++;
@@ -916,7 +916,7 @@ ir_promote_locals(void)
                 default: break;
                 }
             }
-            if (pc[best]->kind == LK_PARAM) {  /* 4-byte seed (ir_emit_param_seeds detects the type) */
+            if (pc[best]->kind == LK_PARAM || pc[best]->homed_from >= 0) {  /* 4-byte seed (ir_emit_param_seeds detects the type) */
                 g_promoted_param[g_n_promoted_params]      = pc[best];
                 g_promoted_param_slot[g_n_promoted_params] = chosen;
                 g_n_promoted_params++;
@@ -981,7 +981,7 @@ ir_promote_locals(void)
                     g_ir[j].u0 = (unsigned)chosen;   /* u1 (widen arm) is kept */
                 }
             }
-            if (gc[best]->kind == LK_PARAM) {
+            if (gc[best]->kind == LK_PARAM || gc[best]->homed_from >= 0) {
                 g_promoted_param[g_n_promoted_params]      = gc[best];
                 g_promoted_param_slot[g_n_promoted_params] = chosen;
                 g_n_promoted_params++;
@@ -1047,6 +1047,21 @@ ir_emit_param_seeds(void)
 {
     int s, saved = g_s_delta;
     g_s_delta = 0;
+    /* Homed parameters first (params_home): from the slot the caller pushed
+     * to the frame slot the body uses, which a promoted one is then seeded
+     * from below. */
+    for (s = 0; s < g_n_locals; s++) {
+        Local *h = &g_locals[s], pushed;
+        int off;
+        if (h->homed_from < 0) continue;
+        pushed            = *h;
+        pushed.kind       = LK_PARAM;
+        pushed.slot_first = h->homed_from;
+        for (off = 0; off < h->byte_size; off += 2) {
+            emit_slot_lda16(&pushed, off);
+            emit_slot_sta16(h, off);
+        }
+    }
     for (s = 0; s < g_n_promoted_params; s++) {
         Local *p = g_promoted_param[s];
         int    k = g_promoted_param_slot[s];

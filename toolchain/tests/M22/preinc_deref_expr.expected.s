@@ -46,21 +46,12 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -139,21 +130,12 @@ _preinc_deref_expr_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -225,20 +207,12 @@ _preinc_deref_expr_L5
                 LDA     _fcc_img0
                 DEC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF

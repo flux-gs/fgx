@@ -19,6 +19,17 @@ bigframe_p_stkovf       JMP     _fcc_stkoflow
 bigframe_p_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      6+bigframe_p_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+bigframe_p_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+bigframe_p_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
 _g53_param_L0
@@ -40,8 +51,8 @@ _g53_param_L3
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
-                INC
-                INC
+                CLC
+                ADC     #4
                 PHA
                 LDA     _fcc_img0
                 CLC
@@ -75,16 +86,7 @@ _g53_param_L1
                 INC     _fcc_img0
                 BRL     _g53_param_L0
 _g53_param_L2
-                DO      6+bigframe_p_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bigframe_p_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bigframe_p_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 SEP     #$20
                 MX      %10
@@ -93,8 +95,8 @@ _g53_param_L2
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fb
-                INC
-                INC
+                CLC
+                ADC     #4
                 PHA
                 LDA     #50
                 CLC
@@ -120,7 +122,7 @@ _g53_param_L2
                 STA     _fcc_fb
                 TYA
                 RTL
-bigframe_p_FRAMESIZE   EQU     302
+bigframe_p_FRAMESIZE   EQU     304
 bigframe_p_STKGUARD    EQU     1
                 FGX2_EXPORT main
 main            ENT

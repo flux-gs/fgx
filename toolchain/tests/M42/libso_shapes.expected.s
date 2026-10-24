@@ -30,17 +30,9 @@ fls_stkok        TCS
                 CLC
                 ADC     #34
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 TAY
                 TSC
                 CLC
@@ -110,18 +102,10 @@ main_stkok        TCS
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -382,20 +366,12 @@ main_stkok        TCS
                 CLC
                 ADC     #30
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDY     #2
-                LDA     [_fcc_ptr],Y
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_ptr+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0

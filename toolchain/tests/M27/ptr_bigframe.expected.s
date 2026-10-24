@@ -19,17 +19,6 @@ _ptr_bigframe_bigframe_stkovf       JMP     _fcc_stkoflow
 _ptr_bigframe_bigframe_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                DO      10+_ptr_bigframe_bigframe_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+_ptr_bigframe_bigframe_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+_ptr_bigframe_bigframe_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_img2
                 DO      6+_ptr_bigframe_bigframe_FRAMESIZE/256
                 TSC
                 CLC
@@ -40,7 +29,7 @@ _ptr_bigframe_bigframe_stkok        TCS
                 ELSE
                 LDA     6+_ptr_bigframe_bigframe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                STA     _fcc_img3
+                STA     1,S   ; fccstk d=0 b=1
                 DO      8+_ptr_bigframe_bigframe_FRAMESIZE/256
                 TSC
                 CLC
@@ -51,6 +40,22 @@ _ptr_bigframe_bigframe_stkok        TCS
                 ELSE
                 LDA     8+_ptr_bigframe_bigframe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
+                STA     3,S   ; fccstk d=0 b=3
+                DO      10+_ptr_bigframe_bigframe_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+_ptr_bigframe_bigframe_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+_ptr_bigframe_bigframe_FRAMESIZE,S   ; fccstk d=0 b=10 fs
+                FIN
+                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img3
+                LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_img4
                 LDA     #0
                 STA     _fcc_img1
@@ -60,7 +65,7 @@ _ptr_bigframe_bigframe_stkok        TCS
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #4
+                ADC     #10
                 PHA
                 LDA     #0
                 CLC
@@ -133,7 +138,7 @@ _ptr_bigframe_L2
                 MX      %00
                 LDA     _fcc_fb
                 CLC
-                ADC     #4
+                ADC     #10
                 PHA
                 LDA     #0
                 CLC
@@ -155,7 +160,7 @@ _ptr_bigframe_L2
                 STA     _fcc_fb
                 TYA
                 RTL
-_ptr_bigframe_bigframe_FRAMESIZE   EQU     304
+_ptr_bigframe_bigframe_FRAMESIZE   EQU     310
 _ptr_bigframe_bigframe_STKGUARD    EQU     1
                 FGX2_EXPORT main
 main            ENT

@@ -2186,9 +2186,11 @@ emit_deref_ptr_field_store(LocalType field_type, int field_offset)
  * why `c.b = 0xFF; if (++c.b == 0)' is the fixture case that catches its
  * absence and nothing else is.  Postfix needs no mask: its result comes from
  * _fcc_tmp_b, which was saved already masked. */
-/* emit_incdec_at_fcc_ptr's word at offset y: through _fcc_ptr, or at the
- * absolute cell emit_incdec_at_sym set. */
+/* emit_incdec_at_fcc_ptr's word at offset y: through _fcc_ptr, through the
+ * register emit_incdec_at_fpr named, or at the absolute cell
+ * emit_incdec_at_sym set. */
 static const char *g_rmw_cell;
+static const char *g_rmw_ptr;
 
 static void
 rmw_lda(int y)
@@ -2200,9 +2202,11 @@ rmw_lda(int y)
     }
     if (y) {
         ir_emitf("                LDY     #%d\n", y);
-        ir_record_raw(IR_LDA_DEREF, 1, 0, (void *)cellp("_fcc_ptr"));
+        ir_record_raw(IR_LDA_DEREF, 1, 0,
+                      (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
     } else {
-        ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
+        ir_record_raw(IR_LDA_DEREF, 0, 0,
+                      (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
     }
 }
 
@@ -2210,7 +2214,8 @@ static void
 rmw_sta(void)
 {
     if (g_rmw_cell) ir_record_raw(IR_STA_CELL, 0, 0, (void *)g_rmw_cell);
-    else            ir_record_raw(IR_STA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
+    else            ir_record_raw(IR_STA_DEREF, 0, 0,
+                                  (void *)(g_rmw_ptr ? g_rmw_ptr : cellp("_fcc_ptr")));
 }
 
 void
@@ -6363,6 +6368,17 @@ emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix, int is_ptr,
     g_rmw_cell = fpr_sym_cell(k, 0);
     emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, is_ptr, rt, rt_sid);
     g_rmw_cell = NULL;
+}
+
+/* The same in place through register k, which already holds the address:
+ * `LDA [_fcc_fprK]', with no copy of it into _fcc_ptr first. */
+void
+emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix, int is_ptr,
+                   tword rt, int rt_sid)
+{
+    g_rmw_ptr = cellp(fpr_name(k));
+    emit_incdec_at_fcc_ptr(stride, is_inc, is_prefix, is_ptr, rt, rt_sid);
+    g_rmw_ptr = NULL;
 }
 
 int

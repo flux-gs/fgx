@@ -64,10 +64,7 @@ _ftrunc_sizeof_path_stkok        TCS
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ftrunc_L1
-                EOR     #$8000
+                CMP     #0
 _ftrunc_L1
                 BMI     *+5
                 BRL     _ftrunc_L0
@@ -147,10 +144,7 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ftrunc_L3
-                EOR     #$8000
+                CMP     #0
 _ftrunc_L3
                 BMI     *+5
                 BRL     _ftrunc_L2
@@ -496,10 +490,7 @@ _ftrunc_L13
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ftrunc_L15
-                EOR     #$8000
+                CMP     #0
 _ftrunc_L15
                 BPL     *+5
                 BRL     _ftrunc_L14
@@ -812,10 +803,7 @@ _ftrunc_L29
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ftrunc_L31
-                EOR     #$8000
+                CMP     #0
 _ftrunc_L31
                 BPL     *+5
                 BRL     _ftrunc_L30
@@ -840,10 +828,7 @@ _ftrunc_L31
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ftrunc_L35
-                EOR     #$8000
+                CMP     #0
 _ftrunc_L35
                 BMI     *+5
                 BRL     _ftrunc_L33

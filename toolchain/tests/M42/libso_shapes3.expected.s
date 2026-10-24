@@ -117,19 +117,11 @@ _libso_shapes3_L1
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 BRL     _libso_shapes3_L0
 _libso_shapes3_L2
@@ -174,19 +166,11 @@ _libso_shapes3_L5
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 BRL     _libso_shapes3_L4
 _libso_shapes3_L6
@@ -218,17 +202,9 @@ _libso_shapes3_L6
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB

@@ -296,6 +296,10 @@ typedef struct {
     int        ubs_in_loop;     /* ...and that read was inside a loop */
     int        decl_line;
     int        decl_col;
+    /* A parameter copied at entry into a frame slot near S (params_home):
+     * its index into g_param_byte_offsets, the slot the caller pushed.
+     * -1 for everything else.  kind is LK_LOCAL once it is homed. */
+    int        homed_from;
 } Local;
 #define MAX_SOFT_SLOTS  6144        /* per-frame slot cap (~12KB of 2-byte slots).  The 16KB
                                        soft-stack region it derived from is gone (P3-3 3.3); the
@@ -1413,6 +1417,9 @@ void fpr_sym_flush_live(void);
 void fpr_sym_live_check(void);
 void emit_fpr_add_index(int k, int idx, unsigned stride);                   /* die if one is live */
 void emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix,
+                        int is_ptr, tword rt, int rt_sid);
+Local *param_addr_node(int n);   /* params_home: &param in the body */
+void emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix,
                         int is_ptr, tword rt, int rt_sid);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
 void emit_m16(void);                                /* T2-3: REP #$20 / MX %00 */

@@ -9449,10 +9449,7 @@ ndslot_stkok        TCS
                 FIN
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specalias_L180
-                EOR     #$8000
+                CMP     #0
 _specalias_L180
                 BPL     *+5
                 BRL     _specalias_L178
@@ -12670,10 +12667,7 @@ _specalias_L229
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specalias_L232
-                EOR     #$8000
+                CMP     #0
 _specalias_L232
                 BPL     *+5
                 BRL     _specalias_L231

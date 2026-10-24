@@ -262,10 +262,7 @@ _strops_L2
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _strops_L4
-                EOR     #$8000
+                CMP     #0
 _strops_L4
                 BMI     *+5
                 BRL     _strops_L3

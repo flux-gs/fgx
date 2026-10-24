@@ -35,10 +35,7 @@ _dowhile_once_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _dowhile_once_L3
-                EOR     #$8000
+                CMP     #0
 _dowhile_once_L3
                 BMI     *+5
                 BRL     _dowhile_once_L2

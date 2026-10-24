@@ -241,10 +241,7 @@ _miscops_L7
                 SBC     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _miscops_L10
-                EOR     #$8000
+                CMP     #0
 _miscops_L10
                 BPL     *+5
                 BRL     _miscops_L9

@@ -309,10 +309,7 @@ main_stkok        TCS
                 STA     tab+16
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _symfold_L2
-                EOR     #$8000
+                CMP     #0
 _symfold_L2
                 BPL     *+5
                 BRL     _symfold_L0
@@ -359,10 +356,7 @@ _symfold_L3
                 STA     tab+16
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _symfold_L6
-                EOR     #$8000
+                CMP     #0
 _symfold_L6
                 BPL     *+5
                 BRL     _symfold_L4
@@ -557,10 +551,7 @@ _symfold_L13
                 STA     tab+16
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _symfold_L19
-                EOR     #$8000
+                CMP     #0
 _symfold_L19
                 BPL     *+5
                 BRL     _symfold_L17
@@ -785,10 +776,7 @@ _symfold_L23
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _symfold_L26
-                EOR     #$8000
+                CMP     #0
 _symfold_L26
                 BMI     *+5
                 BRL     _symfold_L24
@@ -873,10 +861,7 @@ _symfold_L28
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _symfold_L32
-                EOR     #$8000
+                CMP     #0
 _symfold_L32
                 PHP
                 PHA

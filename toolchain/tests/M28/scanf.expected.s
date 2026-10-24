@@ -2346,23 +2346,12 @@ _scanf_L78
                 STA     _fcc_fpr0+2
                 LDA     39,S   ; fccstk d=0 b=39
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _scanf_L86
-                EOR     #$8000
+                CMP     #0
 _scanf_L86
                 BPL     *+5
                 BRL     _scanf_L84
@@ -2372,21 +2361,13 @@ _scanf_L86
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDY     #2
-                LDA     [_fcc_ptr],Y
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_ptr+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0

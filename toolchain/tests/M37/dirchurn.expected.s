@@ -1718,10 +1718,7 @@ _dirchurn_L51
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _dirchurn_L53
-                EOR     #$8000
+                CMP     #0
 _dirchurn_L53
                 BMI     *+5
                 BRL     _dirchurn_L52

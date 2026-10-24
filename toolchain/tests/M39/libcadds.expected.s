@@ -99,10 +99,7 @@ main_stkok        TCS
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _libcadds_L1
-                EOR     #$8000
+                CMP     #0
 _libcadds_L1
                 BMI     *+5
                 BRL     _libcadds_L0

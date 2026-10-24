@@ -216,10 +216,7 @@ _uchar_promote_L14
                 INC
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _uchar_promote_L16
-                EOR     #$8000
+                CMP     #0
 _uchar_promote_L16
                 BMI     *+5
                 BRL     _uchar_promote_L15

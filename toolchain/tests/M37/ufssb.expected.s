@@ -4266,10 +4266,7 @@ _ufssb_L27
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ufssb_L31
-                EOR     #$8000
+                CMP     #0
 _ufssb_L31
                 BPL     *+5
                 BRL     _ufssb_L29
@@ -4354,10 +4351,7 @@ _ufssb_L28
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _ufssb_L36
-                EOR     #$8000
+                CMP     #0
 _ufssb_L36
                 BPL     *+5
                 BRL     _ufssb_L34

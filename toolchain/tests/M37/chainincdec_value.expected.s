@@ -80,18 +80,10 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -113,18 +105,10 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     3,S   ; fccstk d=0 b=3
                 SEP     #$20
@@ -148,18 +132,10 @@ main_stkok        TCS
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     1,S   ; fccstk d=0 b=1

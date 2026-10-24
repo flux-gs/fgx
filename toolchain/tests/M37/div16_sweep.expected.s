@@ -394,10 +394,7 @@ _div16_sweep_L27
                 LDA     _fcc_img1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _div16_sweep_L33
-                EOR     #$8000
+                CMP     #0
 _div16_sweep_L33
                 BMI     *+5
                 BRL     _div16_sweep_L31
@@ -412,10 +409,7 @@ _div16_sweep_L32
                 LDA     _fcc_img0
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _div16_sweep_L36
-                EOR     #$8000
+                CMP     #0
 _div16_sweep_L36
                 BMI     *+5
                 BRL     _div16_sweep_L34

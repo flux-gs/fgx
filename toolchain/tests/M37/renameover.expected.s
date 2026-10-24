@@ -55,10 +55,7 @@ _renameover_put_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L1
-                EOR     #$8000
+                CMP     #0
 _renameover_L1
                 BMI     *+5
                 BRL     _renameover_L0
@@ -218,10 +215,7 @@ main_stkok        TCS
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L4
-                EOR     #$8000
+                CMP     #0
 _renameover_L4
                 BMI     *+5
                 BRL     _renameover_L3
@@ -269,10 +263,7 @@ _renameover_L3
                 TYA
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L6
-                EOR     #$8000
+                CMP     #0
 _renameover_L6
                 BMI     *+5
                 BRL     _renameover_L5
@@ -351,10 +342,7 @@ _renameover_L7
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L9
-                EOR     #$8000
+                CMP     #0
 _renameover_L9
                 BPL     *+5
                 BRL     _renameover_L8
@@ -515,10 +503,7 @@ _renameover_L8
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _renameover_L18
-                EOR     #$8000
+                CMP     #0
 _renameover_L18
                 BMI     *+5
                 BRL     _renameover_L17

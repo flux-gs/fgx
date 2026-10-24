@@ -625,10 +625,7 @@ bio_strategy_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specops_L3
-                EOR     #$8000
+                CMP     #0
 _specops_L3
                 BPL     *+5
                 BRL     _specops_L1
@@ -5859,10 +5856,7 @@ _specops_L88
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specops_L91
-                EOR     #$8000
+                CMP     #0
 _specops_L91
                 BMI     *+5
                 BRL     _specops_L90
@@ -25591,10 +25585,7 @@ ndslot_stkok        TCS
                 FIN
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specops_L480
-                EOR     #$8000
+                CMP     #0
 _specops_L480
                 BPL     *+5
                 BRL     _specops_L478
@@ -28812,10 +28803,7 @@ _specops_L529
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _specops_L532
-                EOR     #$8000
+                CMP     #0
 _specops_L532
                 BPL     *+5
                 BRL     _specops_L531

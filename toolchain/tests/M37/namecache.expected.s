@@ -9030,10 +9030,7 @@ ndslot_stkok        TCS
                 FIN
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _namecache_L173
-                EOR     #$8000
+                CMP     #0
 _namecache_L173
                 BPL     *+5
                 BRL     _namecache_L171
@@ -12251,10 +12248,7 @@ _namecache_L222
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _namecache_L225
-                EOR     #$8000
+                CMP     #0
 _namecache_L225
                 BPL     *+5
                 BRL     _namecache_L224

@@ -113,18 +113,10 @@ main_stkok        TCS
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -170,17 +162,9 @@ _callchain_incdec_L1
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -225,18 +209,10 @@ _callchain_incdec_L3
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
                 TXA
@@ -264,17 +240,9 @@ _callchain_incdec_L4
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     root+8
                 TAX
                 TXA
@@ -333,18 +301,10 @@ _callchain_incdec_L6
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -388,17 +348,9 @@ _callchain_incdec_L8
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -441,18 +393,10 @@ _callchain_incdec_L10
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     #2
                 ASL
                 TAX
@@ -633,21 +577,13 @@ _callchain_incdec_L15
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #4
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDY     #2
-                LDA     [_fcc_ptr],Y
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_ptr+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0

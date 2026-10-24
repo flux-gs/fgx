@@ -220,21 +220,13 @@ _lvrun_bump_L0
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
@@ -383,19 +375,10 @@ _lvrun_bump_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
@@ -539,18 +522,10 @@ _lvrun_bump_L14
                 CLC
                 ADC     #18
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
@@ -727,18 +702,10 @@ _lvrun_bump_L21
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
@@ -1201,20 +1168,12 @@ _lvrun_bump_L41
                 PLA
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -1236,21 +1195,13 @@ _lvrun_bump_L41
                 INC
                 INC
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b

@@ -351,6 +351,19 @@ walk_cond(int n)
     emit_test_a_zero();
 }
 
+/* The address of a homed parameter would be its frame copy, not the slot the
+ * caller pushed.  params_home leaves every parameter in place when the body
+ * takes one's address, by the same test, so this is reached only if the two
+ * disagree. */
+static void
+refuse_homed_addr(int n)
+{
+    Local *lc = param_addr_node(n);
+    if (lc && lc->homed_from >= 0)
+        die(g_ast[n].line, g_ast[n].col,
+            "internal: the address of a homed parameter");
+}
+
 /* Walk a child that must yield a far pointer; materialize an int-valued child
  * as (A, bank per apple/fgx#12).
  *
@@ -7783,6 +7796,7 @@ walk_expr_body(int n)
         break;
     }
     case N_ADDR_VAR:
+        refuse_homed_addr(n);
         fpr_addr_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
         break;
     case N_DEREF_POSTINC:
@@ -9069,7 +9083,9 @@ walk_expr_body(int n)
     case N_ADDR_LV_E: {
         /* &chain: the walker's ADDRESS fpr IS the value -- a far pointer whose
          * bank rides through every deref/scaled-add (K&R A.7.4.2). */
-        int kd = emit_lvalue_addr(g_ast[n].a);
+        int kd;
+        refuse_homed_addr(n);
+        kd = emit_lvalue_addr(g_ast[n].a);
         g_fpr_res        = kd;
         g_expr_type      = g_ast[n].type;
         g_expr_struct_id = g_ast[n].struct_id;
@@ -9098,9 +9114,9 @@ walk_expr_body(int n)
     }
     case N_LV_INCDEC_E: {
         /* postfix ++/-- of a deref LVALUE `(*p)++`: the ADDRESS of the pointee
-         * is p's own value (the deref's operand).  Land that far address in
-         * _fcc_ptr, then RMW the word there in place (bank preserved).  For a
-         * pointer leaf the yielded far pointer is captured by fpr_in. */
+         * is p's own value (the deref's operand), in an fpr; RMW the word
+         * through it in place (bank preserved).  For a pointer leaf the
+         * yielded far pointer is captured by fpr_in. */
         int op        = g_ast[n].a;
         int is_inc    = (g_ast[n].flags & AF_IS_INC) ? 1 : 0;
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
@@ -9135,15 +9151,9 @@ walk_expr_body(int n)
             g_expr_unsigned  = g_ast[n].is_unsigned;
             break;
         }
-        emit_m8();                                            /* _fcc_ptr <- fpr kd */
-        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(fpr_name(kd)));
-        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
-        emit_m16();
-        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp(fpr_name(kd)));
-        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
+        emit_incdec_at_fpr(kd, (int)g_ast[n].val, is_inc, is_prefix, is_ptr,
+                           lt, g_ast[n].struct_id);
         fpr_drop(kd);
-        emit_incdec_at_fcc_ptr((int)g_ast[n].val, is_inc, is_prefix, is_ptr,
-                               lt, g_ast[n].struct_id);
         if (is_ptr) {
             fpr_in();                          /* A + _fcc_ptr+2 -> fresh fpr */
         } else {

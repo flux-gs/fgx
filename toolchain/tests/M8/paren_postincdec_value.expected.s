@@ -802,21 +802,13 @@ _paren_postincdec_value_L36
                 STA     _fcc_fpr0+2
                 LDA     31,S   ; fccstk d=0 b=31
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
@@ -905,22 +897,13 @@ _paren_postincdec_value_L41
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
@@ -1049,18 +1032,10 @@ _paren_postincdec_value_L46
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_ptr]
+                STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX

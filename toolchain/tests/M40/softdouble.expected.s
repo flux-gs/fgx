@@ -6759,10 +6759,7 @@ _softdouble_L76
                 LDA     67,S   ; fccstk d=0 b=67
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _softdouble_L79
-                EOR     #$8000
+                CMP     #0
 _softdouble_L79
                 BPL     *+5
                 BRL     _softdouble_L78
@@ -12029,10 +12026,7 @@ _softdouble_L135
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _softdouble_L139
-                EOR     #$8000
+                CMP     #0
 _softdouble_L139
                 BMI     *+5
                 BRL     _softdouble_L138
@@ -12216,10 +12210,7 @@ _softdouble_L140
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _softdouble_L145
-                EOR     #$8000
+                CMP     #0
 _softdouble_L145
                 BPL     *+5
                 BRL     _softdouble_L144
@@ -12594,10 +12585,7 @@ _softdouble_L151
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _softdouble_L153
-                EOR     #$8000
+                CMP     #0
 _softdouble_L153
                 BMI     *+5
                 BRL     _softdouble_L152

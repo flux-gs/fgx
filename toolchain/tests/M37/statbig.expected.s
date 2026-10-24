@@ -42,10 +42,7 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _statbig_L1
-                EOR     #$8000
+                CMP     #0
 _statbig_L1
                 BMI     *+5
                 BRL     _statbig_L0

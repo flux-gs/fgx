@@ -133,10 +133,7 @@ bio_strategy_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _biocache_L3
-                EOR     #$8000
+                CMP     #0
 _biocache_L3
                 BPL     *+5
                 BRL     _biocache_L1
@@ -5450,10 +5447,7 @@ _biocache_L88
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _biocache_L91
-                EOR     #$8000
+                CMP     #0
 _biocache_L91
                 BMI     *+5
                 BRL     _biocache_L90
@@ -10950,10 +10944,7 @@ _biocache_L246
                 LDA     15,S   ; fccstk d=0 b=15
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _biocache_L250
-                EOR     #$8000
+                CMP     #0
 _biocache_L250
                 BMI     *+5
                 BRL     _biocache_L249

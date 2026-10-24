@@ -64,10 +64,7 @@ store_stkok        TCS
                 FIN
                 TAX
                 TXA
-                SEC
-                SBC     #0
-                BVC     _longparamseed_L1
-                EOR     #$8000
+                CMP     #0
 _longparamseed_L1
                 BMI     *+5
                 BRL     _longparamseed_L0
