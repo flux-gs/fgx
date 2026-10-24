@@ -113,7 +113,31 @@ fcc compiles to about 700 bytes each.  The port found two compiler defects
 (db33004): type specifiers out of order, and an index that calls a function
 losing its base pointer's bank.
 
-## 8. Next
+## 8. The putc expansion (758ec75, a7ff800, ad0fb31)
 
-The size of a putc expansion under fcc, which every stdio user pays; then a
-profile of ls and printf for inline asm on what it finds.
+One putc on a FILE parameter measured 337 bytes.  Three passes over fcc's
+output took it to 314, and took 188.6 KB out of the staged system, with no
+file larger than before:
+
+- far branches whose target is in reach become short ones (36,000 pairs;
+  144 KB; libc.so -8,755 bytes);
+- the allocator's `TAX ; TXA' keeps the TAX, and `CMP #0' after an op that
+  set N and Z from A goes when the carry is dead on every path (44.6 KB).
+
+Reading the expansion found a defect: the value of an assignment to a char
+was A's whole word, so putc returned its argument rather than the byte it
+wrote (K&R A.7.17).  A used char store now masks A, which gives back 1.2 KB.
+
+What is left in the expansion is codegen, not peephole: the FILE pointer is
+reloaded from the frame on each arm of the ternaries (six loads, 48 bytes),
+because the fpr hold record clears at every label; `(p)->_ptr++' copies the
+pointer through _fcc_tmp_b and _fcc_ptr+2 where a second fpr would hold it;
+and the `&&' in the line-buffered test is materialized as 0/1 and then
+tested.
+
+## 9. Next
+
+The putc codegen above -- a hold record that survives a label every branch
+to which it has seen, the post-increment through a second fpr, and `&&' as
+branches in a condition -- then a profile of ls and printf for inline asm on
+what it finds.
