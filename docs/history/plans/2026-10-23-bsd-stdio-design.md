@@ -104,7 +104,16 @@ open: any call other than a runtime helper reuses the pair, and getc and putc
 call `_filbuf`/`_flsbuf` on their slow arms.  With the reloads above gone, it
 would save the first load in each block.
 
-## 7. Next
+## 7. 4.3BSD-Reno's doprnt.c (cba4071)
 
-`_doprnt` from 4.3BSD-Reno's `doprnt.c`, then a profile of od, ls and printf
-for inline asm on what it finds.
+`_doprnt` is Reno's doprnt.c (5.39), writing into the FILE's buffer; its
+deltas are in the file's header.  `ls -l /bin` 529 -> 505 frames.  libc.so
+grew 4,940 bytes, most of it fourteen expansions of the putc macro, which
+fcc compiles to about 700 bytes each.  The port found two compiler defects
+(db33004): type specifiers out of order, and an index that calls a function
+losing its base pointer's bank.
+
+## 8. Next
+
+The size of a putc expansion under fcc, which every stdio user pays; then a
+profile of ls and printf for inline asm on what it finds.
