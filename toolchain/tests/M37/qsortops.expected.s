@@ -385,6 +385,7 @@ main_stkok        TCS
                 PHA
                 LDA     #7
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -394,6 +395,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #iv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL qsort
@@ -501,6 +503,12 @@ _qsortops_L9
                 ADC     #14
                 STA     1,S   ; fccstk d=0 b=1
 _qsortops_L7
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -508,16 +516,14 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #3
                 STA     [_fcc_fpr0]
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -525,17 +531,15 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #30
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -543,16 +547,14 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     [_fcc_fpr0]
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -560,17 +562,15 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #10
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -578,16 +578,14 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #2
                 STA     [_fcc_fpr0]
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -595,17 +593,15 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #20
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #3
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -613,16 +609,14 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
+                LDA     #3
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -630,14 +624,6 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -655,6 +641,7 @@ _qsortops_L7
                 PHA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -664,6 +651,7 @@ _qsortops_L7
                 MX      %00
                 LDA     #rv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL qsort
@@ -671,6 +659,12 @@ _qsortops_L7
                 CLC
                 ADC     #12
                 TCS
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -678,14 +672,6 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -693,6 +679,12 @@ _qsortops_L7
                 CMP     #0
                 BEQ     *+5
                 BRL     _qsortops_L18
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -700,14 +692,6 @@ _qsortops_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -723,6 +707,12 @@ _qsortops_L19
                 CMP     #0
                 BNE     *+5
                 BRL     _qsortops_L16
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -730,14 +720,6 @@ _qsortops_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -753,6 +735,12 @@ _qsortops_L17
                 CMP     #0
                 BNE     *+5
                 BRL     _qsortops_L14
+                LDA     #3
+                ASL
+                ASL
+                CLC
+                ADC     #rv
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -760,14 +748,6 @@ _qsortops_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #rv
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -804,6 +784,7 @@ _qsortops_L13
                 PHA
                 LDA     #7
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -813,6 +794,7 @@ _qsortops_L13
                 MX      %00
                 LDA     #iv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL qsort

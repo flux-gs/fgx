@@ -137,6 +137,7 @@ _freadn_L8
                 PHA
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,6 +147,7 @@ _freadn_L8
                 MX      %00
                 LDA     #rec
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fwrite
@@ -229,6 +231,7 @@ _freadn_L4
                 PHA
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -238,6 +241,7 @@ _freadn_L4
                 MX      %00
                 LDA     #in
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread
@@ -310,6 +314,7 @@ _freadn_L9
                 PHA
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -319,6 +324,7 @@ _freadn_L9
                 MX      %00
                 LDA     #in
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread
@@ -351,6 +357,7 @@ _freadn_L14
                 PHA
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -360,6 +367,7 @@ _freadn_L14
                 MX      %00
                 LDA     #in
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread
@@ -436,6 +444,7 @@ _freadn_L15
                 PHA
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -445,6 +454,7 @@ _freadn_L15
                 MX      %00
                 LDA     #in
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread
@@ -535,6 +545,7 @@ _freadn_L16
                 PHA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -544,6 +555,7 @@ _freadn_L16
                 MX      %00
                 LDA     #in
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread

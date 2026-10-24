@@ -120,12 +120,20 @@ _uchar_compound_L3
                 SEP     #$20
                 MX      %10
                 STA     GC
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
                 LDA     #GC
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     PC
                 LDA     _fcc_fpr0+2
                 STA     PC+2

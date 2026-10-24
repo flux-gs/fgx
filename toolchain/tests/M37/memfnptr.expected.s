@@ -124,6 +124,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -133,10 +134,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_o
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,6 +149,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_e
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -178,6 +182,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -187,6 +192,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_in
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10

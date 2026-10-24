@@ -32,6 +32,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -84,6 +86,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -93,8 +96,10 @@ main_stkok        TCS
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -104,6 +109,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv
@@ -183,6 +189,7 @@ _spawnops_L2
                 ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -192,6 +199,7 @@ _spawnops_L3
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -227,6 +235,7 @@ _spawnops_L4
                 STZ     _fcc_fpr0+2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -236,8 +245,10 @@ _spawnops_L4
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -247,6 +258,7 @@ _spawnops_L4
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnve

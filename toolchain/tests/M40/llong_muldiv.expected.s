@@ -521,6 +521,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -530,6 +531,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -555,6 +557,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -564,6 +567,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -698,6 +702,7 @@ _llong_muldiv_L4
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -707,6 +712,7 @@ _llong_muldiv_L4
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -732,6 +738,7 @@ _llong_muldiv_L4
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -741,6 +748,7 @@ _llong_muldiv_L4
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -875,6 +883,7 @@ _llong_muldiv_L7
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -884,6 +893,7 @@ _llong_muldiv_L7
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -909,6 +919,7 @@ _llong_muldiv_L7
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -918,6 +929,7 @@ _llong_muldiv_L7
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1052,6 +1064,7 @@ _llong_muldiv_L10
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1061,6 +1074,7 @@ _llong_muldiv_L10
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1086,6 +1100,7 @@ _llong_muldiv_L10
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1095,6 +1110,7 @@ _llong_muldiv_L10
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1229,6 +1245,7 @@ _llong_muldiv_L13
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1238,6 +1255,7 @@ _llong_muldiv_L13
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1263,6 +1281,7 @@ _llong_muldiv_L13
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1272,6 +1291,7 @@ _llong_muldiv_L13
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1406,6 +1426,7 @@ _llong_muldiv_L16
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1415,6 +1436,7 @@ _llong_muldiv_L16
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1440,6 +1462,7 @@ _llong_muldiv_L16
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1449,6 +1472,7 @@ _llong_muldiv_L16
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1583,6 +1607,7 @@ _llong_muldiv_L19
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1592,6 +1617,7 @@ _llong_muldiv_L19
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1617,6 +1643,7 @@ _llong_muldiv_L19
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1626,6 +1653,7 @@ _llong_muldiv_L19
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1760,6 +1788,7 @@ _llong_muldiv_L22
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1769,6 +1798,7 @@ _llong_muldiv_L22
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1794,6 +1824,7 @@ _llong_muldiv_L22
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1803,6 +1834,7 @@ _llong_muldiv_L22
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1937,6 +1969,7 @@ _llong_muldiv_L25
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1946,6 +1979,7 @@ _llong_muldiv_L25
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -1971,6 +2005,7 @@ _llong_muldiv_L25
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1980,6 +2015,7 @@ _llong_muldiv_L25
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2114,6 +2150,7 @@ _llong_muldiv_L28
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2123,6 +2160,7 @@ _llong_muldiv_L28
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2148,6 +2186,7 @@ _llong_muldiv_L28
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2157,6 +2196,7 @@ _llong_muldiv_L28
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2291,6 +2331,7 @@ _llong_muldiv_L31
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2300,6 +2341,7 @@ _llong_muldiv_L31
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2325,6 +2367,7 @@ _llong_muldiv_L31
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2334,6 +2377,7 @@ _llong_muldiv_L31
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2468,6 +2512,7 @@ _llong_muldiv_L34
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2477,6 +2522,7 @@ _llong_muldiv_L34
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2502,6 +2548,7 @@ _llong_muldiv_L34
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2511,6 +2558,7 @@ _llong_muldiv_L34
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2645,6 +2693,7 @@ _llong_muldiv_L37
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2654,6 +2703,7 @@ _llong_muldiv_L37
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2679,6 +2729,7 @@ _llong_muldiv_L37
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2688,6 +2739,7 @@ _llong_muldiv_L37
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2822,6 +2874,7 @@ _llong_muldiv_L40
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2831,6 +2884,7 @@ _llong_muldiv_L40
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2856,6 +2910,7 @@ _llong_muldiv_L40
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2865,6 +2920,7 @@ _llong_muldiv_L40
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -2999,6 +3055,7 @@ _llong_muldiv_L43
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3008,6 +3065,7 @@ _llong_muldiv_L43
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3033,6 +3091,7 @@ _llong_muldiv_L43
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3042,6 +3101,7 @@ _llong_muldiv_L43
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3176,6 +3236,7 @@ _llong_muldiv_L46
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3185,6 +3246,7 @@ _llong_muldiv_L46
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3210,6 +3272,7 @@ _llong_muldiv_L46
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3219,6 +3282,7 @@ _llong_muldiv_L46
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3353,6 +3417,7 @@ _llong_muldiv_L49
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3362,6 +3427,7 @@ _llong_muldiv_L49
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3387,6 +3453,7 @@ _llong_muldiv_L49
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3396,6 +3463,7 @@ _llong_muldiv_L49
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3530,6 +3598,7 @@ _llong_muldiv_L52
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3539,6 +3608,7 @@ _llong_muldiv_L52
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3564,6 +3634,7 @@ _llong_muldiv_L52
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3573,6 +3644,7 @@ _llong_muldiv_L52
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3707,6 +3779,7 @@ _llong_muldiv_L55
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3716,6 +3789,7 @@ _llong_muldiv_L55
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3741,6 +3815,7 @@ _llong_muldiv_L55
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3750,6 +3825,7 @@ _llong_muldiv_L55
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3884,6 +3960,7 @@ _llong_muldiv_L58
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3893,6 +3970,7 @@ _llong_muldiv_L58
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -3918,6 +3996,7 @@ _llong_muldiv_L58
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3927,6 +4006,7 @@ _llong_muldiv_L58
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4061,6 +4141,7 @@ _llong_muldiv_L61
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4070,6 +4151,7 @@ _llong_muldiv_L61
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4095,6 +4177,7 @@ _llong_muldiv_L61
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4104,6 +4187,7 @@ _llong_muldiv_L61
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4238,6 +4322,7 @@ _llong_muldiv_L64
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4247,6 +4332,7 @@ _llong_muldiv_L64
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4272,6 +4358,7 @@ _llong_muldiv_L64
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4281,6 +4368,7 @@ _llong_muldiv_L64
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4415,6 +4503,7 @@ _llong_muldiv_L67
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4424,6 +4513,7 @@ _llong_muldiv_L67
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4449,6 +4539,7 @@ _llong_muldiv_L67
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4458,6 +4549,7 @@ _llong_muldiv_L67
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4592,6 +4684,7 @@ _llong_muldiv_L70
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4601,6 +4694,7 @@ _llong_muldiv_L70
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4626,6 +4720,7 @@ _llong_muldiv_L70
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4635,6 +4730,7 @@ _llong_muldiv_L70
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4769,6 +4865,7 @@ _llong_muldiv_L73
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4778,6 +4875,7 @@ _llong_muldiv_L73
                 MX      %00
                 LDA     #ua
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4803,6 +4901,7 @@ _llong_muldiv_L73
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4812,6 +4911,7 @@ _llong_muldiv_L73
                 MX      %00
                 LDA     #ub
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4946,6 +5046,7 @@ _llong_muldiv_L76
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4955,6 +5056,7 @@ _llong_muldiv_L76
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -4980,6 +5082,7 @@ _llong_muldiv_L76
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4989,6 +5092,7 @@ _llong_muldiv_L76
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5123,6 +5227,7 @@ _llong_muldiv_L79
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5132,6 +5237,7 @@ _llong_muldiv_L79
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5157,6 +5263,7 @@ _llong_muldiv_L79
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5166,6 +5273,7 @@ _llong_muldiv_L79
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5300,6 +5408,7 @@ _llong_muldiv_L82
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5309,6 +5418,7 @@ _llong_muldiv_L82
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5334,6 +5444,7 @@ _llong_muldiv_L82
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5343,6 +5454,7 @@ _llong_muldiv_L82
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5477,6 +5589,7 @@ _llong_muldiv_L85
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5486,6 +5599,7 @@ _llong_muldiv_L85
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5511,6 +5625,7 @@ _llong_muldiv_L85
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5520,6 +5635,7 @@ _llong_muldiv_L85
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5654,6 +5770,7 @@ _llong_muldiv_L88
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5663,6 +5780,7 @@ _llong_muldiv_L88
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5688,6 +5806,7 @@ _llong_muldiv_L88
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5697,6 +5816,7 @@ _llong_muldiv_L88
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5831,6 +5951,7 @@ _llong_muldiv_L91
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5840,6 +5961,7 @@ _llong_muldiv_L91
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -5865,6 +5987,7 @@ _llong_muldiv_L91
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5874,6 +5997,7 @@ _llong_muldiv_L91
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6008,6 +6132,7 @@ _llong_muldiv_L94
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6017,6 +6142,7 @@ _llong_muldiv_L94
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6042,6 +6168,7 @@ _llong_muldiv_L94
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6051,6 +6178,7 @@ _llong_muldiv_L94
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6185,6 +6313,7 @@ _llong_muldiv_L97
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6194,6 +6323,7 @@ _llong_muldiv_L97
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6219,6 +6349,7 @@ _llong_muldiv_L97
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6228,6 +6359,7 @@ _llong_muldiv_L97
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6362,6 +6494,7 @@ _llong_muldiv_L100
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6371,6 +6504,7 @@ _llong_muldiv_L100
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6396,6 +6530,7 @@ _llong_muldiv_L100
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6405,6 +6540,7 @@ _llong_muldiv_L100
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6539,6 +6675,7 @@ _llong_muldiv_L103
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6548,6 +6685,7 @@ _llong_muldiv_L103
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6573,6 +6711,7 @@ _llong_muldiv_L103
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6582,6 +6721,7 @@ _llong_muldiv_L103
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6716,6 +6856,7 @@ _llong_muldiv_L106
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6725,6 +6866,7 @@ _llong_muldiv_L106
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6750,6 +6892,7 @@ _llong_muldiv_L106
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6759,6 +6902,7 @@ _llong_muldiv_L106
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6893,6 +7037,7 @@ _llong_muldiv_L109
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6902,6 +7047,7 @@ _llong_muldiv_L109
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -6927,6 +7073,7 @@ _llong_muldiv_L109
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6936,6 +7083,7 @@ _llong_muldiv_L109
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7070,6 +7218,7 @@ _llong_muldiv_L112
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7079,6 +7228,7 @@ _llong_muldiv_L112
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7104,6 +7254,7 @@ _llong_muldiv_L112
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7113,6 +7264,7 @@ _llong_muldiv_L112
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7247,6 +7399,7 @@ _llong_muldiv_L115
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7256,6 +7409,7 @@ _llong_muldiv_L115
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7281,6 +7435,7 @@ _llong_muldiv_L115
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7290,6 +7445,7 @@ _llong_muldiv_L115
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7424,6 +7580,7 @@ _llong_muldiv_L118
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7433,6 +7590,7 @@ _llong_muldiv_L118
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7458,6 +7616,7 @@ _llong_muldiv_L118
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7467,6 +7626,7 @@ _llong_muldiv_L118
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7601,6 +7761,7 @@ _llong_muldiv_L121
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7610,6 +7771,7 @@ _llong_muldiv_L121
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7635,6 +7797,7 @@ _llong_muldiv_L121
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7644,6 +7807,7 @@ _llong_muldiv_L121
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7778,6 +7942,7 @@ _llong_muldiv_L124
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7787,6 +7952,7 @@ _llong_muldiv_L124
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put
@@ -7812,6 +7978,7 @@ _llong_muldiv_L124
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7821,6 +7988,7 @@ _llong_muldiv_L124
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_muldiv_put

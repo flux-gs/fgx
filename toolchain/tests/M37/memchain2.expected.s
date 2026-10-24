@@ -30,14 +30,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #14
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     #7
                 STA     [_fcc_fpr0]
@@ -50,14 +44,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #14
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -106,13 +94,8 @@ _memchain2_L0
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 INC
                 INC
                 STA     _fcc_fpr0

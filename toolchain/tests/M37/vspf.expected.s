@@ -61,6 +61,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -70,6 +71,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -139,21 +141,21 @@ _vspf_L3
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #5
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ov
-                STA     _fcc_fpr0
                 LDA     #2
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #ov
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -163,6 +165,7 @@ _vspf_L3
                 MX      %00
                 LDA     #ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bcopy
@@ -222,6 +225,7 @@ _vspf_L7
 _vspf_L5
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -231,8 +235,13 @@ _vspf_L5
                 MX      %00
                 LDA     #ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                LDA     #5
+                CLC
+                ADC     #ov
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -240,12 +249,7 @@ _vspf_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ov
-                STA     _fcc_fpr0
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bcopy
@@ -356,6 +360,7 @@ fmtit_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -365,6 +370,7 @@ fmtit_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vsprintf

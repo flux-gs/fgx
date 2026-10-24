@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30,6 +31,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_sysc_path
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0

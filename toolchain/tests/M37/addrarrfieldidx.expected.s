@@ -35,15 +35,6 @@ _addrarrfieldidx_L0
 _addrarrfieldidx_L3
                 BMI     *+5
                 BRL     _addrarrfieldidx_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -53,19 +44,17 @@ _addrarrfieldidx_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #4369
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -75,8 +64,15 @@ _addrarrfieldidx_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #8738
                 LDY     #18
                 STA     [_fcc_fpr0],Y
@@ -96,15 +92,6 @@ _addrarrfieldidx_L4
 _addrarrfieldidx_L7
                 BMI     *+5
                 BRL     _addrarrfieldidx_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -114,7 +101,16 @@ _addrarrfieldidx_L7
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -145,15 +141,6 @@ _addrarrfieldidx_L2
                 STA     _fcc_img0
                 LDA     #2
                 STA     _fcc_img1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -163,7 +150,16 @@ _addrarrfieldidx_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -190,15 +186,6 @@ _addrarrfieldidx_L2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -206,7 +193,16 @@ _addrarrfieldidx_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -251,15 +247,6 @@ _addrarrfieldidx_L2
                 TYA
                 RTL
 _addrarrfieldidx_L8
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -267,7 +254,16 @@ _addrarrfieldidx_L8
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -312,15 +308,6 @@ _addrarrfieldidx_L8
                 TYA
                 RTL
 _addrarrfieldidx_L9
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -328,7 +315,16 @@ _addrarrfieldidx_L9
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -373,15 +369,6 @@ _addrarrfieldidx_L9
                 TYA
                 RTL
 _addrarrfieldidx_L10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -390,7 +377,16 @@ _addrarrfieldidx_L10
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -435,15 +431,6 @@ _addrarrfieldidx_L10
                 TYA
                 RTL
 _addrarrfieldidx_L11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -452,7 +439,16 @@ _addrarrfieldidx_L11
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -497,15 +493,6 @@ _addrarrfieldidx_L11
                 TYA
                 RTL
 _addrarrfieldidx_L12
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -513,8 +500,15 @@ _addrarrfieldidx_L12
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -532,15 +526,6 @@ _addrarrfieldidx_L12
                 TYA
                 RTL
 _addrarrfieldidx_L13
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -548,8 +533,15 @@ _addrarrfieldidx_L13
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -572,15 +564,6 @@ _addrarrfieldidx_L14
                 STA     _fcc_img0
                 LDA     #0
                 STA     _fcc_img1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -590,7 +573,16 @@ _addrarrfieldidx_L14
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -617,15 +609,6 @@ _addrarrfieldidx_L14
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -634,7 +617,16 @@ _addrarrfieldidx_L14
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -679,15 +671,6 @@ _addrarrfieldidx_L14
                 TYA
                 RTL
 _addrarrfieldidx_L15
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -696,8 +679,15 @@ _addrarrfieldidx_L15
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -719,15 +709,6 @@ _addrarrfieldidx_L16
                 STA     _fcc_img0
                 LDA     #3
                 STA     _fcc_img1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -737,7 +718,16 @@ _addrarrfieldidx_L16
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -764,15 +754,6 @@ _addrarrfieldidx_L16
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -781,7 +762,16 @@ _addrarrfieldidx_L16
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -826,15 +816,6 @@ _addrarrfieldidx_L16
                 TYA
                 RTL
 _addrarrfieldidx_L17
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -843,8 +824,15 @@ _addrarrfieldidx_L17
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -865,16 +853,6 @@ _addrarrfieldidx_L17
 _addrarrfieldidx_L18
                 LDA     #1
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -883,21 +861,19 @@ _addrarrfieldidx_L18
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #earr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -907,7 +883,16 @@ _addrarrfieldidx_L18
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #earr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -984,6 +969,14 @@ _addrarrfieldidx_L22
 _addrarrfieldidx_L25
                 BMI     *+5
                 BRL     _addrarrfieldidx_L24
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -991,18 +984,16 @@ _addrarrfieldidx_L25
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #13107
                 STA     [_fcc_fpr0]
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1010,16 +1001,6 @@ _addrarrfieldidx_L25
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #17476
                 LDY     #14
                 STA     [_fcc_fpr0],Y
@@ -1039,6 +1020,14 @@ _addrarrfieldidx_L26
 _addrarrfieldidx_L29
                 BMI     *+5
                 BRL     _addrarrfieldidx_L28
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1046,15 +1035,7 @@ _addrarrfieldidx_L29
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -1093,6 +1074,14 @@ _addrarrfieldidx_L24
                 STA     _fcc_img0
                 LDA     #2
                 STA     _fcc_img1
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1100,15 +1089,7 @@ _addrarrfieldidx_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -1135,6 +1116,12 @@ _addrarrfieldidx_L24
                 LDA     #26214
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #harr+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1142,24 +1129,6 @@ _addrarrfieldidx_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1207,6 +1176,12 @@ _addrarrfieldidx_L30
                 TYA
                 RTL
 _addrarrfieldidx_L31
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #harr+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1214,24 +1189,6 @@ _addrarrfieldidx_L31
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1257,6 +1214,12 @@ _addrarrfieldidx_L31
                 TYA
                 RTL
 _addrarrfieldidx_L32
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #harr+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1264,24 +1227,6 @@ _addrarrfieldidx_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1307,6 +1252,12 @@ _addrarrfieldidx_L32
                 TYA
                 RTL
 _addrarrfieldidx_L33
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #harr+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1314,24 +1265,6 @@ _addrarrfieldidx_L33
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1357,6 +1290,14 @@ _addrarrfieldidx_L33
                 TYA
                 RTL
 _addrarrfieldidx_L34
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1364,16 +1305,6 @@ _addrarrfieldidx_L34
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -1391,6 +1322,14 @@ _addrarrfieldidx_L34
                 TYA
                 RTL
 _addrarrfieldidx_L35
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #harr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1398,16 +1337,6 @@ _addrarrfieldidx_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #harr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX

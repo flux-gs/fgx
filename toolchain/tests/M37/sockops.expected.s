@@ -52,6 +52,7 @@ _sockops_L1
 _sockops_L0
                 LDA     #16
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -61,6 +62,7 @@ _sockops_L0
                 MX      %00
                 LDA     #sa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -84,6 +86,7 @@ _sockops_L0
 _sockops_L2
                 LDA     #16
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -93,6 +96,7 @@ _sockops_L2
                 MX      %00
                 LDA     #sa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -118,6 +122,7 @@ _sockops_L3
                 PHA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -127,6 +132,7 @@ _sockops_L3
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -152,6 +158,7 @@ _sockops_L4
                 PHA
                 LDA     #8
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -161,6 +168,7 @@ _sockops_L4
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -184,6 +192,7 @@ _sockops_L4
 _sockops_L5
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -193,6 +202,7 @@ _sockops_L5
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -220,6 +230,7 @@ _sockops_L5
 _sockops_L6
                 LDA     #16
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -229,11 +240,13 @@ _sockops_L6
                 MX      %00
                 LDA     #sa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
                 LDA     #4
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -244,6 +257,7 @@ _sockops_L6
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -267,6 +281,7 @@ _sockops_L6
 _sockops_L7
                 LDA     #16
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -276,11 +291,13 @@ _sockops_L7
                 MX      %00
                 LDA     #sa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
                 LDA     #8
+                PHA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -291,6 +308,7 @@ _sockops_L7
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #99
@@ -312,6 +330,7 @@ _sockops_L7
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -321,6 +340,7 @@ _sockops_L8
                 MX      %00
                 LDA     #sa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0

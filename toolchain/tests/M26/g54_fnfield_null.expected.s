@@ -73,6 +73,7 @@ main_stkok        TCS
                 STA     sa+4
                 TYA
                 STZ     _fcc_fpr0+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -80,10 +81,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #sa
-                INC
-                INC
+                LDA     #sa+2
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0

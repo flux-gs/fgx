@@ -119,15 +119,6 @@ _mulconst_L0
 _mulconst_L3
                 BMI     *+5
                 BRL     _mulconst_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_mulconst_tbl
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -136,8 +127,15 @@ _mulconst_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_mulconst_tbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -171,15 +169,6 @@ _mulconst_L7
                 BRL     _mulconst_L6
                 LDA     _fcc_img1
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_mulconst_tbl
-                STA     _fcc_fpr0
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -188,8 +177,15 @@ _mulconst_L7
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_mulconst_tbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

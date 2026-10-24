@@ -27,6 +27,7 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     gl+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -36,6 +37,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gl
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -138,6 +140,7 @@ _f_ptrderef_L1
                 LDA     _fcc_long_hi
                 STA     gf+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -147,6 +150,7 @@ _f_ptrderef_L1
                 MX      %00
                 LDA     #gf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -280,6 +284,7 @@ _f_ptrderef_L3
                 TYA
                 RTL
 _f_ptrderef_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -289,6 +294,7 @@ _f_ptrderef_L4
                 MX      %00
                 LDA     #la
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -357,6 +363,7 @@ _f_ptrderef_L4
                 TYA
                 RTL
 _f_ptrderef_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -366,6 +373,7 @@ _f_ptrderef_L5
                 MX      %00
                 LDA     #fa
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0

@@ -104,6 +104,7 @@ _pdplayout_L3
                 TYA
                 RTL
 _pdplayout_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -111,10 +112,10 @@ _pdplayout_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                INC
-                INC
+                LDA     #gp+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -124,6 +125,7 @@ _pdplayout_L4
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -143,6 +145,7 @@ _pdplayout_L4
                 TYA
                 RTL
 _pdplayout_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -150,10 +153,10 @@ _pdplayout_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #6
+                LDA     #gp+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -163,6 +166,7 @@ _pdplayout_L5
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -182,6 +186,7 @@ _pdplayout_L5
                 TYA
                 RTL
 _pdplayout_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -189,10 +194,10 @@ _pdplayout_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #8
+                LDA     #gp+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -202,6 +207,7 @@ _pdplayout_L6
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -221,6 +227,7 @@ _pdplayout_L6
                 TYA
                 RTL
 _pdplayout_L7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -228,10 +235,10 @@ _pdplayout_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #12
+                LDA     #gp+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -241,6 +248,7 @@ _pdplayout_L7
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -260,6 +268,7 @@ _pdplayout_L7
                 TYA
                 RTL
 _pdplayout_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -267,10 +276,10 @@ _pdplayout_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                CLC
-                ADC     #20
+                LDA     #gp+20
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -280,6 +289,7 @@ _pdplayout_L8
                 MX      %00
                 LDA     #gp
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -333,6 +343,7 @@ _pdplayout_L10
                 TYA
                 RTL
 _pdplayout_L11
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -342,6 +353,8 @@ _pdplayout_L11
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -351,6 +364,7 @@ _pdplayout_L11
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -370,6 +384,7 @@ _pdplayout_L11
                 TYA
                 RTL
 _pdplayout_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -377,10 +392,10 @@ _pdplayout_L12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                INC
-                INC
+                LDA     #gdi+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -390,6 +405,7 @@ _pdplayout_L12
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -409,6 +425,7 @@ _pdplayout_L12
                 TYA
                 RTL
 _pdplayout_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -416,10 +433,10 @@ _pdplayout_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #4
+                LDA     #gdi+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -429,6 +446,7 @@ _pdplayout_L13
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -448,6 +466,7 @@ _pdplayout_L13
                 TYA
                 RTL
 _pdplayout_L14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -455,10 +474,10 @@ _pdplayout_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #6
+                LDA     #gdi+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -468,6 +487,7 @@ _pdplayout_L14
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -487,6 +507,7 @@ _pdplayout_L14
                 TYA
                 RTL
 _pdplayout_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -494,10 +515,10 @@ _pdplayout_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #8
+                LDA     #gdi+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -507,6 +528,7 @@ _pdplayout_L15
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -526,6 +548,7 @@ _pdplayout_L15
                 TYA
                 RTL
 _pdplayout_L16
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -533,10 +556,10 @@ _pdplayout_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
+                LDA     #gdi+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -546,6 +569,7 @@ _pdplayout_L16
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -565,6 +589,7 @@ _pdplayout_L16
                 TYA
                 RTL
 _pdplayout_L17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -572,10 +597,10 @@ _pdplayout_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #40
+                LDA     #gdi+40
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -585,6 +610,7 @@ _pdplayout_L17
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -604,6 +630,7 @@ _pdplayout_L17
                 TYA
                 RTL
 _pdplayout_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -611,10 +638,10 @@ _pdplayout_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #50
+                LDA     #gdi+50
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -624,6 +651,7 @@ _pdplayout_L18
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -643,6 +671,7 @@ _pdplayout_L18
                 TYA
                 RTL
 _pdplayout_L19
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -650,10 +679,10 @@ _pdplayout_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #52
+                LDA     #gdi+52
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -663,6 +692,7 @@ _pdplayout_L19
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -682,6 +712,7 @@ _pdplayout_L19
                 TYA
                 RTL
 _pdplayout_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -689,12 +720,10 @@ _pdplayout_L20
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #8
-                CLC
-                ADC     #52
+                LDA     #gdi+60
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -704,6 +733,7 @@ _pdplayout_L20
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -740,6 +770,7 @@ _pdplayout_L21
                 TYA
                 RTL
 _pdplayout_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -747,10 +778,10 @@ _pdplayout_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                INC
-                INC
+                LDA     #gdir+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -760,6 +791,7 @@ _pdplayout_L22
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -779,6 +811,7 @@ _pdplayout_L22
                 TYA
                 RTL
 _pdplayout_L23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -786,10 +819,10 @@ _pdplayout_L23
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                CLC
-                ADC     #4
+                LDA     #gdir+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -799,6 +832,7 @@ _pdplayout_L23
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -818,6 +852,7 @@ _pdplayout_L23
                 TYA
                 RTL
 _pdplayout_L24
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -825,10 +860,10 @@ _pdplayout_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdir
-                CLC
-                ADC     #6
+                LDA     #gdir+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -838,6 +873,7 @@ _pdplayout_L24
                 MX      %00
                 LDA     #gdir
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -874,6 +910,7 @@ _pdplayout_L25
                 TYA
                 RTL
 _pdplayout_L26
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -881,10 +918,10 @@ _pdplayout_L26
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                INC
-                INC
+                LDA     #gfs+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -894,6 +931,7 @@ _pdplayout_L26
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -913,6 +951,7 @@ _pdplayout_L26
                 TYA
                 RTL
 _pdplayout_L27
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -920,10 +959,10 @@ _pdplayout_L27
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #6
+                LDA     #gfs+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -933,6 +972,7 @@ _pdplayout_L27
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -952,6 +992,7 @@ _pdplayout_L27
                 TYA
                 RTL
 _pdplayout_L28
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -959,10 +1000,10 @@ _pdplayout_L28
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
+                LDA     #gfs+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -972,6 +1013,7 @@ _pdplayout_L28
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -991,6 +1033,7 @@ _pdplayout_L28
                 TYA
                 RTL
 _pdplayout_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -998,10 +1041,10 @@ _pdplayout_L29
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #208
+                LDA     #gfs+208
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1011,6 +1054,7 @@ _pdplayout_L29
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1030,6 +1074,7 @@ _pdplayout_L29
                 TYA
                 RTL
 _pdplayout_L30
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1037,10 +1082,10 @@ _pdplayout_L30
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
+                LDA     #gfs+210
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1050,6 +1095,7 @@ _pdplayout_L30
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1069,6 +1115,7 @@ _pdplayout_L30
                 TYA
                 RTL
 _pdplayout_L31
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1076,10 +1123,10 @@ _pdplayout_L31
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #410
+                LDA     #gfs+410
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1089,6 +1136,7 @@ _pdplayout_L31
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1108,6 +1156,7 @@ _pdplayout_L31
                 TYA
                 RTL
 _pdplayout_L32
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1115,10 +1164,10 @@ _pdplayout_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #414
+                LDA     #gfs+414
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1128,6 +1177,7 @@ _pdplayout_L32
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1147,6 +1197,7 @@ _pdplayout_L32
                 TYA
                 RTL
 _pdplayout_L33
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1154,10 +1205,10 @@ _pdplayout_L33
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #418
+                LDA     #gfs+418
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1167,6 +1218,7 @@ _pdplayout_L33
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1186,6 +1238,7 @@ _pdplayout_L33
                 TYA
                 RTL
 _pdplayout_L34
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1193,10 +1246,10 @@ _pdplayout_L34
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #422
+                LDA     #gfs+422
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1206,6 +1259,7 @@ _pdplayout_L34
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1225,6 +1279,7 @@ _pdplayout_L34
                 TYA
                 RTL
 _pdplayout_L35
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1232,10 +1287,10 @@ _pdplayout_L35
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #428
+                LDA     #gfs+428
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1245,6 +1300,7 @@ _pdplayout_L35
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1264,6 +1320,7 @@ _pdplayout_L35
                 TYA
                 RTL
 _pdplayout_L36
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1271,10 +1328,10 @@ _pdplayout_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #440
+                LDA     #gfs+440
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1284,6 +1341,7 @@ _pdplayout_L36
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1303,6 +1361,7 @@ _pdplayout_L36
                 TYA
                 RTL
 _pdplayout_L37
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1310,10 +1369,10 @@ _pdplayout_L37
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #444
+                LDA     #gfs+444
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1323,6 +1382,7 @@ _pdplayout_L37
                 MX      %00
                 LDA     #gfs
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1342,6 +1402,12 @@ _pdplayout_L37
                 TYA
                 RTL
 _pdplayout_L38
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #gfs+8
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1349,16 +1415,12 @@ _pdplayout_L38
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gfs+8
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1366,16 +1428,6 @@ _pdplayout_L38
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #8
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1395,6 +1447,11 @@ _pdplayout_L38
                 TYA
                 RTL
 _pdplayout_L39
+                LDA     #1
+                ASL
+                CLC
+                ADC     #gfs+210
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1402,15 +1459,11 @@ _pdplayout_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gfs+210
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1418,15 +1471,6 @@ _pdplayout_L39
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gfs
-                CLC
-                ADC     #210
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1446,6 +1490,12 @@ _pdplayout_L39
                 TYA
                 RTL
 _pdplayout_L40
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #gdi+12
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1453,16 +1503,12 @@ _pdplayout_L40
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #gdi+12
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1470,16 +1516,6 @@ _pdplayout_L40
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1

@@ -171,6 +171,7 @@ _sigsfwd_L0
                 PHA
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -180,6 +181,7 @@ _sigsfwd_L0
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     11,S   ; fccstk d=8 b=3
@@ -217,6 +219,7 @@ _sigsfwd_L1
                 PHA
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -226,6 +229,7 @@ _sigsfwd_L1
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     11,S   ; fccstk d=8 b=3
@@ -409,6 +413,7 @@ chk_stkok        TCS
                 LDA     10+chk_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -418,6 +423,7 @@ chk_stkok        TCS
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

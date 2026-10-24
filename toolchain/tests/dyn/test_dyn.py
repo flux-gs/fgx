@@ -119,12 +119,15 @@ def hello():
         check(n in im and im[n]["data"], "%s is imported with data sites" % n)
     segs, _end = segments(data)
     if "_iob" in im:
-        addr = libc_data = {e[0]: e[3] for e in libc["exports"]}["_iob"]
+        addr, size = {e[0]: (e[3], e[4]) for e in libc["exports"]}["_iob"]
         vals = [struct.unpack_from("<H", segs[s], o)[0] for s, o, _v in im["_iob"]["data"]]
         check(vals == [v for _s, _o, v in im["_iob"]["data"]],
               "each data site carries the word the link wrote there")
-        check(addr in vals, "_iob's sites hold its address",
-              "%04X: %s" % (libc_data, ["%04X" % v for v in vals]))
+        # A site may name a member: stdout's _cnt is _iob+16.  The binders
+        # move the word the site carries by the table's displacement.
+        check(vals and all(addr <= v < addr + size for v in vals),
+              "_iob's sites are inside _iob",
+              "%04X+%d: %s" % (addr, size, ["%04X" % v for v in vals]))
     check("errno" in im and any(s == 1 for s, _o, _v in im["errno"]["data"]),
           "errno has a data site in segment 1 (ep's initialiser)")
     s0 = os.path.join(d, "seg0_Output.txt")

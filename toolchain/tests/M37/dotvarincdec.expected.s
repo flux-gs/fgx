@@ -45,6 +45,7 @@ clear_stkok        TCS
                 MX      %00
                 LDA     #65
                 STA     gp+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -52,12 +53,9 @@ clear_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+2
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -115,6 +113,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -124,10 +123,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gi
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0
                 STA     11,S   ; fccstk d=0 b=11
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -137,6 +138,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gc
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     _fcc_fpr0
@@ -286,28 +288,9 @@ _dotvarincdec_L9
                 STA     19,S   ; fccstk d=0 b=19
 _dotvarincdec_L7
                 FGX2_FARCALL clear
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gi
+                LDA     gi+2
                 INC
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
-                INC
-                STA     [_fcc_ptr]
+                STA     gi+2
                 STA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
@@ -443,30 +426,12 @@ _dotvarincdec_L23
                 STA     19,S   ; fccstk d=0 b=19
 _dotvarincdec_L21
                 FGX2_FARCALL clear
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gc
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gc+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gc+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -924,6 +889,7 @@ _dotvarincdec_L61
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -931,12 +897,9 @@ _dotvarincdec_L61
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+2
                 STA     _fcc_fpr1
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -961,6 +924,7 @@ _dotvarincdec_L76
                 STA     _fcc_fpr0+2
                 LDA     gp+2
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -968,12 +932,9 @@ _dotvarincdec_L76
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
+                LDA     #buf+3
                 STA     _fcc_fpr1
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

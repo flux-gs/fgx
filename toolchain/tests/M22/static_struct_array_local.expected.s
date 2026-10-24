@@ -19,6 +19,12 @@ _static_struct_array_local_sized_stkovf       JMP     _fcc_stkoflow
 _static_struct_array_local_sized_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_sized_sl_a
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,16 +32,14 @@ _static_struct_array_local_sized_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_sized_sl_a
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_sized_sl_a
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -43,14 +47,6 @@ _static_struct_array_local_sized_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_sized_sl_a
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -58,6 +54,12 @@ _static_struct_array_local_sized_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_sized_sl_a
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -65,20 +67,18 @@ _static_struct_array_local_sized_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_sized_sl_a
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_sized_sl_a
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -86,14 +86,6 @@ _static_struct_array_local_sized_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_sized_sl_a
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -146,6 +138,12 @@ _static_struct_array_local_L3
                 BRL     _static_struct_array_local_L2
                 LDA     _fcc_img1
                 PHA
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_from_init_sl_b
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -153,16 +151,14 @@ _static_struct_array_local_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_from_init_sl_b
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #_static_struct_array_local_from_init_sl_b
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -170,14 +166,6 @@ _static_struct_array_local_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_static_struct_array_local_from_init_sl_b
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

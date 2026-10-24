@@ -230,6 +230,7 @@ _seekrw_L7
 _seekrw_L6
                 LDA     #35
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -239,6 +240,7 @@ _seekrw_L6
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=6 b=1
@@ -394,6 +396,7 @@ _seekrw_L8
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -403,6 +406,7 @@ _seekrw_L8
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3
@@ -647,6 +651,7 @@ _seekrw_L15
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -656,6 +661,7 @@ _seekrw_L15
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3
@@ -776,6 +782,7 @@ _seekrw_L22
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #8
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -785,6 +792,7 @@ _seekrw_L22
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3
@@ -912,6 +920,7 @@ _seekrw_L32
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -921,6 +930,7 @@ _seekrw_L32
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3
@@ -1053,6 +1063,7 @@ _seekrw_L33
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #16
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1062,6 +1073,7 @@ _seekrw_L33
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3
@@ -1271,6 +1283,7 @@ _seekrw_L48
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #64
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1280,6 +1293,7 @@ _seekrw_L48
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3

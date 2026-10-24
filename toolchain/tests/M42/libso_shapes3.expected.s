@@ -268,12 +268,8 @@ _libso_shapes3_L6
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -393,12 +389,8 @@ _libso_shapes3_L19
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -459,12 +451,8 @@ _libso_shapes3_L17
                 LDA     _libc_blk_libso_shapes3
                 CLC
                 ADC     #6
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA

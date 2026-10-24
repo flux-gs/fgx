@@ -381,6 +381,7 @@ main_stkok        TCS
                 PHA
                 LDA     #14
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -390,6 +391,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_bag
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL poke_ints
@@ -397,6 +399,7 @@ main_stkok        TCS
                 CLC
                 ADC     #16
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -406,6 +409,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_bag
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

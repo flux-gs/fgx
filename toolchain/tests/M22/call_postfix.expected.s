@@ -32,6 +32,7 @@ getn_stkok        TCS
                 CMP     #0
                 BNE     *+5
                 BRL     _call_postfix_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,8 +42,10 @@ getn_stkok        TCS
                 MX      %00
                 LDA     #n1
                 STA     _fcc_fpr0
+                PLA
                 BRL     _call_postfix_L1
 _call_postfix_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -52,6 +55,7 @@ _call_postfix_L0
                 MX      %00
                 LDA     #n0
                 STA     _fcc_fpr0
+                PLA
 _call_postfix_L1
                 TAY
                 TSC
@@ -79,6 +83,7 @@ getarr_stkovf       JMP     _fcc_stkoflow
 getarr_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -88,6 +93,7 @@ getarr_stkok        TCS
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -118,6 +124,7 @@ main_stkok        TCS
                 STA     n0+0
                 LDA     #30
                 STA     n1+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -127,6 +134,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #n1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -139,6 +147,10 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     n0+8
                 TYA
+                LDA     #0
+                CLC
+                ADC     #n0+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,14 +158,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #n0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #90
                 SEP     #$20
                 MX      %10

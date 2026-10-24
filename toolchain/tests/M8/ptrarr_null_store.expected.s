@@ -207,6 +207,7 @@ _ptrarr_null_store_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -216,6 +217,7 @@ _ptrarr_null_store_L6
                 MX      %00
                 LDA     #s0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -246,6 +248,7 @@ _ptrarr_null_store_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -255,6 +258,7 @@ _ptrarr_null_store_L6
                 MX      %00
                 LDA     #s0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2

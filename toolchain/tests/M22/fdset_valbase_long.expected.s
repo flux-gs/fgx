@@ -30,10 +30,24 @@ main_stkok        TCS
                 ADC     #0
                 STA     _fcc_fpr0
                 LDA     #0
-                ASL
-                ASL
+                JSR     _fcc_long_from_int
+                STA     [_fcc_fpr0]
+                TAX
+                LDA     _fcc_long_hi
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                TXA
+                SEP     #$20
+                MX      %10
+                LDA     #0
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fb
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #0
+                CLC
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     #0
                 JSR     _fcc_long_from_int
@@ -52,36 +66,6 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     [_fcc_fpr0]
-                TAX
-                LDA     _fcc_long_hi
-                LDY     #2
-                STA     [_fcc_fpr0],Y
-                TXA
-                SEP     #$20
-                MX      %10
-                LDA     #0
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fb
-                CLC
-                ADC     #0
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -125,12 +109,6 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -182,12 +160,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -217,12 +191,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y

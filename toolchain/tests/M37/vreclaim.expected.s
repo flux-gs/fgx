@@ -2365,15 +2365,6 @@ _vreclaim_L12
 _vreclaim_L15
                 BMI     *+5
                 BRL     _vreclaim_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -2386,8 +2377,15 @@ _vreclaim_L15
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -2452,15 +2450,6 @@ _vreclaim_L16
 _vreclaim_L19
                 BMI     *+5
                 BRL     _vreclaim_L18
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bufhash
-                STA     _fcc_fpr0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2473,8 +2462,15 @@ _vreclaim_L19
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bufhash
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -2524,6 +2520,7 @@ _vreclaim_L17
                 STA     9,S   ; fccstk d=0 b=9
                 BRL     _vreclaim_L16
 _vreclaim_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2531,22 +2528,9 @@ _vreclaim_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -2567,15 +2551,6 @@ _vreclaim_L20
 _vreclaim_L23
                 BMI     *+5
                 BRL     _vreclaim_L22
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #buf
-                STA     _fcc_fpr0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2588,8 +2563,15 @@ _vreclaim_L23
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #buf
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -2842,6 +2824,7 @@ incore_stkovf       JMP     _fcc_stkoflow
 incore_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2851,6 +2834,7 @@ incore_stkok        TCS
                 MX      %00
                 LDA     #bufhash
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      16+incore_FRAMESIZE/256
@@ -3185,6 +3169,7 @@ _vreclaim_L36
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3192,22 +3177,9 @@ _vreclaim_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -3252,6 +3224,7 @@ _vreclaim_L41
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L39
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3259,22 +3232,9 @@ _vreclaim_L41
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -3618,6 +3578,7 @@ _vreclaim_L49
                 ADC     #4
                 TCS
 _vreclaim_L47
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3627,6 +3588,7 @@ _vreclaim_L47
                 MX      %00
                 LDA     #bufhash
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      16+getblk_FRAMESIZE/256
@@ -4198,15 +4160,6 @@ brelse_stkok        TCS
                 ADC     #4
                 TCS
 _vreclaim_L63
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4219,8 +4172,15 @@ _vreclaim_L63
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4228,15 +4188,6 @@ _vreclaim_L63
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L64
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4249,8 +4200,15 @@ _vreclaim_L63
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -4259,6 +4217,7 @@ _vreclaim_L63
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4266,22 +4225,9 @@ _vreclaim_L63
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -4290,15 +4236,6 @@ _vreclaim_L63
                 ADC     #4
                 TCS
 _vreclaim_L64
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4311,8 +4248,15 @@ _vreclaim_L64
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4320,15 +4264,6 @@ _vreclaim_L64
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L65
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4341,8 +4276,15 @@ _vreclaim_L64
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -4351,6 +4293,7 @@ _vreclaim_L64
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4358,22 +4301,9 @@ _vreclaim_L64
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -4734,6 +4664,7 @@ _vreclaim_L67
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L69
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4741,22 +4672,9 @@ _vreclaim_L67
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -4792,6 +4710,7 @@ _vreclaim_L69
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L71
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4801,20 +4720,7 @@ _vreclaim_L69
                 MX      %00
                 LDA     #bfreelist
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -4850,6 +4756,7 @@ _vreclaim_L71
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L73
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4857,28 +4764,16 @@ _vreclaim_L71
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _vreclaim_L74
 _vreclaim_L73
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4886,22 +4781,9 @@ _vreclaim_L73
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -7956,6 +7838,7 @@ bflush_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
 bflush_uL_loop
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7965,6 +7848,7 @@ bflush_uL_loop
                 MX      %00
                 LDA     #bfreelist
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -7977,6 +7861,8 @@ _vreclaim_L125
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
+                PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7984,24 +7870,9 @@ _vreclaim_L125
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+150
                 STA     _fcc_fpr1
-                LDA     #3
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0
-                PHA
+                PLA
                 LDA     _fcc_fpr1
                 STA     _fcc_tmp_b
                 PLA
@@ -11078,6 +10949,7 @@ _vreclaim_L197
                 LDA     #0
                 STA     vnode_free_head+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11086,6 +10958,9 @@ _vreclaim_L197
                 REP     #$20
                 MX      %00
                 LDA     #vnode_free_head
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
@@ -13776,23 +13651,11 @@ _vreclaim_L235
                 BRL     _vreclaim_L233
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     specinfo_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #specinfo_pool
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     specinfo_pool
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -14145,15 +14008,6 @@ _vreclaim_L238
                 TYA
                 RTL
 _vreclaim_L236
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #speclisth
-                STA     _fcc_fpr0
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14195,8 +14049,15 @@ _vreclaim_L236
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #speclisth
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -16677,6 +16538,7 @@ _vreclaim_L290
                 LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16686,6 +16548,8 @@ _vreclaim_L290
                 MX      %00
                 LDA     #dead_vnodeops
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -18551,6 +18415,7 @@ _vreclaim_L301
                 LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18560,6 +18425,8 @@ _vreclaim_L301
                 MX      %00
                 LDA     #vnode_free_head
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -20805,15 +20672,6 @@ _vreclaim_nchbucket_stkovf       JMP     _fcc_stkoflow
 _vreclaim_nchbucket_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
                 DO      8+_vreclaim_nchbucket_FRAMESIZE/256
                 TSC
                 CLC
@@ -20859,8 +20717,16 @@ _vreclaim_nchbucket_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #nchashtbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -22031,6 +21897,7 @@ _vreclaim_nclru_tohead_stkok        TCS
                 LDA     6+_vreclaim_nclru_tohead_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -22040,6 +21907,8 @@ _vreclaim_nclru_tohead_stkok        TCS
                 MX      %00
                 LDA     #nchhead
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -22460,6 +22329,13 @@ _vreclaim_L400
 _vreclaim_L403
                 BMI     *+5
                 BRL     _vreclaim_L402
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -22467,15 +22343,6 @@ _vreclaim_L403
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
@@ -22529,6 +22396,7 @@ _vreclaim_L402
                 LDA     #0
                 STA     nchhead+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -22537,6 +22405,9 @@ _vreclaim_L402
                 REP     #$20
                 MX      %00
                 LDA     #nchhead
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
@@ -23215,6 +23086,13 @@ _vreclaim_L419
 _vreclaim_L422
                 BMI     *+5
                 BRL     _vreclaim_L421
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23222,15 +23100,6 @@ _vreclaim_L422
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -23430,6 +23299,13 @@ _vreclaim_L428
 _vreclaim_L431
                 BMI     *+5
                 BRL     _vreclaim_L430
+                LDA     13,S   ; fccstk d=0 b=13
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23437,15 +23313,6 @@ _vreclaim_L431
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -23819,6 +23686,7 @@ _vreclaim_L444
 _vreclaim_L448
                 BMI     *+5
                 BRL     _vreclaim_L447
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23826,10 +23694,9 @@ _vreclaim_L448
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #20
+                LDA     #nchstats+20
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -24270,6 +24137,7 @@ _vreclaim_L465
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L463
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24277,10 +24145,9 @@ _vreclaim_L465
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #16
+                LDA     #nchstats+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -24343,6 +24210,7 @@ _vreclaim_L468
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L466
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24350,10 +24218,9 @@ _vreclaim_L468
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #8
+                LDA     #nchstats+8
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -24411,6 +24278,7 @@ _vreclaim_L472
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L470
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24418,10 +24286,9 @@ _vreclaim_L472
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #4
+                LDA     #nchstats+4
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -24508,6 +24375,7 @@ _vreclaim_L470
                 CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L474
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24515,10 +24383,9 @@ _vreclaim_L470
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #12
+                LDA     #nchstats+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -24537,6 +24404,7 @@ _vreclaim_L470
                 TXA
                 BRL     _vreclaim_L475
 _vreclaim_L474
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24546,6 +24414,7 @@ _vreclaim_L474
                 MX      %00
                 LDA     #nchstats
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -25618,6 +25487,7 @@ _vreclaim_reset_stkovf       JMP     _fcc_stkoflow
 _vreclaim_reset_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25627,6 +25497,7 @@ _vreclaim_reset_stkok        TCS
                 MX      %00
                 LDA     #fixarena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
@@ -25634,6 +25505,7 @@ _vreclaim_reset_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25643,6 +25515,7 @@ _vreclaim_reset_stkok        TCS
                 MX      %00
                 LDA     #_vreclaim_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -25712,6 +25585,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25721,8 +25595,10 @@ main_stkok        TCS
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25732,6 +25608,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -25912,6 +25789,7 @@ _vreclaim_L508
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25921,6 +25799,7 @@ _vreclaim_L508
                 MX      %00
                 LDA     #dead_vnodeops
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -26382,6 +26261,7 @@ _vreclaim_L521
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26391,8 +26271,10 @@ _vreclaim_L521
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26402,6 +26284,7 @@ _vreclaim_L521
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -26524,6 +26407,7 @@ _vreclaim_L527
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26533,8 +26417,10 @@ _vreclaim_L527
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26544,6 +26430,7 @@ _vreclaim_L527
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -26583,6 +26470,7 @@ _vreclaim_L530
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26592,8 +26480,10 @@ _vreclaim_L530
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26603,6 +26493,7 @@ _vreclaim_L530
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -27009,6 +26900,7 @@ _vreclaim_L551
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27018,8 +26910,10 @@ _vreclaim_L551
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27029,6 +26923,7 @@ _vreclaim_L551
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -27201,6 +27096,7 @@ _vreclaim_L555
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27210,8 +27106,10 @@ _vreclaim_L555
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27221,6 +27119,7 @@ _vreclaim_L555
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -27535,6 +27434,7 @@ _vreclaim_L563
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27544,8 +27444,10 @@ _vreclaim_L563
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27555,6 +27457,7 @@ _vreclaim_L563
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -27786,6 +27689,7 @@ _vreclaim_L570
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27795,8 +27699,10 @@ _vreclaim_L570
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27806,6 +27712,7 @@ _vreclaim_L570
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -27994,6 +27901,7 @@ _vreclaim_L574
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28003,8 +27911,10 @@ _vreclaim_L574
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28014,6 +27924,7 @@ _vreclaim_L574
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -28053,6 +27964,7 @@ _vreclaim_L575
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28062,8 +27974,10 @@ _vreclaim_L575
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28073,6 +27987,7 @@ _vreclaim_L575
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -28132,6 +28047,7 @@ _vreclaim_L576
                 STZ     _fcc_fpr0+2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28141,6 +28057,7 @@ _vreclaim_L576
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vflush
@@ -28217,6 +28134,7 @@ _vreclaim_L579
                 STZ     _fcc_fpr0+2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28226,6 +28144,7 @@ _vreclaim_L579
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vflush
@@ -28332,6 +28251,7 @@ _vreclaim_L582
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28341,8 +28261,10 @@ _vreclaim_L582
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28352,6 +28274,7 @@ _vreclaim_L582
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -28391,6 +28314,7 @@ _vreclaim_L585
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28400,8 +28324,10 @@ _vreclaim_L585
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28411,6 +28337,7 @@ _vreclaim_L585
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -28491,6 +28418,7 @@ _vreclaim_L586
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28500,6 +28428,7 @@ _vreclaim_L586
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vflush

@@ -677,6 +677,10 @@ _f_acompound_L4
                 LDA     _fcc_long_hi
                 STA:    $0002,X
                 PLA
+                LDA     fg+2
+                STA     _fcc_long_hi
+                LDA     fg
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -686,16 +690,7 @@ _f_acompound_L4
                 MX      %00
                 LDA     #fg
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfromf
@@ -846,6 +841,10 @@ _f_acompound_L5
                 LDA     _fcc_long_hi
                 STA:    $0002,X
                 PLA
+                LDA     fg+6
+                STA     _fcc_long_hi
+                LDA     fg+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -853,18 +852,9 @@ _f_acompound_L5
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #fg
+                LDA     #fg+4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfromf
@@ -1008,12 +998,6 @@ _f_acompound_L6
                 LDA     _fcc_fb
                 CLC
                 ADC     #14
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y

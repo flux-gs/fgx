@@ -322,6 +322,7 @@ main_stkok        TCS
                 STA     S+0
                 LDA     #0
                 STA     S+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -331,6 +332,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -343,6 +345,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     S+6
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -352,6 +355,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #S
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL f

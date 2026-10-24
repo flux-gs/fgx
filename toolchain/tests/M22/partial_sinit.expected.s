@@ -19,6 +19,13 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,15 +33,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -68,6 +66,13 @@ main_stkok        TCS
                 TYA
                 RTL
 _partial_sinit_L0
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -75,15 +80,6 @@ _partial_sinit_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -102,6 +98,13 @@ _partial_sinit_L0
                 TYA
                 RTL
 _partial_sinit_L1
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -109,15 +112,6 @@ _partial_sinit_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -136,6 +130,13 @@ _partial_sinit_L1
                 TYA
                 RTL
 _partial_sinit_L2
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -143,15 +144,6 @@ _partial_sinit_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -197,6 +189,13 @@ _partial_sinit_L5
                 TYA
                 RTL
 _partial_sinit_L3
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -204,15 +203,6 @@ _partial_sinit_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -231,6 +221,13 @@ _partial_sinit_L3
                 TYA
                 RTL
 _partial_sinit_L6
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -238,15 +235,6 @@ _partial_sinit_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX

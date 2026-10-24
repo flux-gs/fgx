@@ -209,11 +209,8 @@ _p33_addr_bank_L1
                 LDA     _fcc_fb
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                INC
+                INC
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -301,11 +298,6 @@ _p33_addr_bank_L3
                 LDA     _fcc_fb
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11

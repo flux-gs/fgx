@@ -229,6 +229,7 @@ _static_ptr_disp_L18
                 MX      %00
                 LDA     op
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -238,6 +239,7 @@ _static_ptr_disp_L18
                 MX      %00
                 LDA     #obj
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

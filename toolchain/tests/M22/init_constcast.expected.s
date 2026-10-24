@@ -82,6 +82,14 @@ _init_constcast_L1
                 TYA
                 RTL
 _init_constcast_L2
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #keys
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -89,16 +97,6 @@ _init_constcast_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -133,6 +131,14 @@ _init_constcast_L2
                 TYA
                 RTL
 _init_constcast_L3
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #keys
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -140,16 +146,6 @@ _init_constcast_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -168,15 +164,6 @@ _init_constcast_L3
                 TYA
                 RTL
 _init_constcast_L4
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -184,8 +171,15 @@ _init_constcast_L4
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #keys
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -214,15 +208,6 @@ _init_constcast_L4
                 TYA
                 RTL
 _init_constcast_L5
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #keys
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -230,8 +215,15 @@ _init_constcast_L5
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #keys
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20

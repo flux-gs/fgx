@@ -35,15 +35,6 @@ _arrelemdeepstore_L0
 _arrelemdeepstore_L3
                 BMI     *+5
                 BRL     _arrelemdeepstore_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -53,21 +44,19 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #4096
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -77,7 +66,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -85,15 +83,6 @@ _arrelemdeepstore_L3
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -103,7 +92,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -111,15 +109,6 @@ _arrelemdeepstore_L3
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -129,7 +118,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #6
                 STA     _fcc_fpr0
@@ -158,15 +156,6 @@ _arrelemdeepstore_L3
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -176,7 +165,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #10
                 STA     _fcc_fpr0
@@ -184,15 +182,6 @@ _arrelemdeepstore_L3
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -202,7 +191,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #12
                 STA     _fcc_fpr0
@@ -210,15 +208,6 @@ _arrelemdeepstore_L3
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -228,7 +217,16 @@ _arrelemdeepstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #14
                 STA     _fcc_fpr0
@@ -268,6 +266,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -277,22 +276,14 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gt
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
                 FGX2_FARCALL _arrelemdeepstore_clear
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -301,12 +292,8 @@ main_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
+                ADC     #gt
                 STA     _fcc_fpr0
-                LDA     #21930
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -314,20 +301,13 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     #21930
+                STA     [_fcc_fpr0]
+                LDA     gt+24
                 TAX
                 TXA
                 CMP     #21930
@@ -344,28 +324,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _arrelemdeepstore_L4
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+4
                 TAX
                 TXA
                 CMP     #12288
@@ -382,28 +341,7 @@ _arrelemdeepstore_L4
                 TYA
                 RTL
 _arrelemdeepstore_L5
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+44
                 TAX
                 TXA
                 CMP     #12290
@@ -420,27 +358,7 @@ _arrelemdeepstore_L5
                 TYA
                 RTL
 _arrelemdeepstore_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+22
                 TAX
                 TXA
                 CMP     #8193
@@ -457,25 +375,7 @@ _arrelemdeepstore_L6
                 TYA
                 RTL
 _arrelemdeepstore_L7
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+20
                 TAX
                 TXA
                 CMP     #4097
@@ -514,23 +414,11 @@ _arrelemdeepstore_L9
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     gp
                 STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
@@ -547,28 +435,7 @@ _arrelemdeepstore_L9
                 STA     _fcc_fpr0
                 LDA     #4660
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+44
                 TAX
                 TXA
                 CMP     #4660
@@ -585,27 +452,7 @@ _arrelemdeepstore_L9
                 TYA
                 RTL
 _arrelemdeepstore_L10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+24
                 TAX
                 TXA
                 CMP     #12289
@@ -622,28 +469,7 @@ _arrelemdeepstore_L10
                 TYA
                 RTL
 _arrelemdeepstore_L11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+42
                 TAX
                 TXA
                 CMP     #8194
@@ -660,26 +486,7 @@ _arrelemdeepstore_L11
                 TYA
                 RTL
 _arrelemdeepstore_L12
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+40
                 TAX
                 TXA
                 CMP     #4098
@@ -699,16 +506,6 @@ _arrelemdeepstore_L13
                 FGX2_FARCALL _arrelemdeepstore_clear
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -717,12 +514,8 @@ _arrelemdeepstore_L13
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #14
+                ADC     #gt
                 STA     _fcc_fpr0
-                LDA     #3855
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -730,21 +523,13 @@ _arrelemdeepstore_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #14
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     #3855
+                STA     [_fcc_fpr0]
+                LDA     gt+14
                 TAX
                 TXA
                 CMP     #3855
@@ -761,28 +546,7 @@ _arrelemdeepstore_L13
                 TYA
                 RTL
 _arrelemdeepstore_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #12
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+12
                 TAX
                 TXA
                 CMP     #24576
@@ -799,28 +563,7 @@ _arrelemdeepstore_L14
                 TYA
                 RTL
 _arrelemdeepstore_L15
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+10
                 TAX
                 TXA
                 CMP     #20480
@@ -837,28 +580,7 @@ _arrelemdeepstore_L15
                 TYA
                 RTL
 _arrelemdeepstore_L16
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+4
                 TAX
                 TXA
                 CMP     #12288
@@ -875,27 +597,7 @@ _arrelemdeepstore_L16
                 TYA
                 RTL
 _arrelemdeepstore_L17
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #14
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+34
                 TAX
                 TXA
                 CMP     #28673
@@ -915,16 +617,6 @@ _arrelemdeepstore_L18
                 FGX2_FARCALL _arrelemdeepstore_clear
                 LDA     #2
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -933,7 +625,16 @@ _arrelemdeepstore_L18
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #6
                 STA     _fcc_fpr0
@@ -946,31 +647,9 @@ _arrelemdeepstore_L18
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gt+48
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     gt+46
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1002,30 +681,9 @@ _arrelemdeepstore_L18
                 TYA
                 RTL
 _arrelemdeepstore_L19
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gt+28
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     gt+26
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1057,28 +715,7 @@ _arrelemdeepstore_L19
                 TYA
                 RTL
 _arrelemdeepstore_L20
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+44
                 TAX
                 TXA
                 CMP     #12290
@@ -1098,16 +735,6 @@ _arrelemdeepstore_L21
                 FGX2_FARCALL _arrelemdeepstore_clear
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -1116,21 +743,21 @@ _arrelemdeepstore_L21
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     #32382
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1140,7 +767,16 @@ _arrelemdeepstore_L21
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0

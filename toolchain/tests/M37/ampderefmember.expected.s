@@ -63,10 +63,8 @@ fill_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #3
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #3
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
@@ -178,10 +176,8 @@ fill_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #5
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #5
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
@@ -224,6 +220,14 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #bufs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -231,16 +235,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bufs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -250,6 +246,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #data
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -257,21 +255,19 @@ main_stkok        TCS
                 LDA     _fcc_fpr1+2
                 LDY     #4
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bufs
+                LDA     #bufs+10
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -321,6 +317,14 @@ main_stkok        TCS
                 TYA
                 RTL
 _ampderefmember_L0
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #bufs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -328,16 +332,6 @@ _ampderefmember_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bufs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -394,15 +388,6 @@ _ampderefmember_L1
                 TYA
                 RTL
 _ampderefmember_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bufs
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -410,8 +395,15 @@ _ampderefmember_L2
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bufs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -473,6 +465,14 @@ _ampderefmember_L3
                 STA     _fcc_fpr0
                 LDA     #9
                 STA     [_fcc_fpr0]
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #bufs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -480,16 +480,6 @@ _ampderefmember_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bufs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -524,6 +514,7 @@ _ampderefmember_L4
                 CLC
                 ADC     #6
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -531,18 +522,9 @@ _ampderefmember_L4
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #bufs
+                LDA     #bufs+16
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                CLC
-                ADC     #6
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -623,6 +605,7 @@ _ampderefmember_L7
                 TYA
                 RTL
 _ampderefmember_L5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -632,6 +615,7 @@ _ampderefmember_L5
                 MX      %00
                 LDA     #data
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0

@@ -109,6 +109,14 @@ _ampderef_L0
                 TYA
                 RTL
 _ampderef_L1
+                LDA     #2
+                ASL
+                INC
+                INC
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -116,16 +124,6 @@ _ampderef_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #30
                 LDY     #2
                 STA     [_fcc_fpr0],Y

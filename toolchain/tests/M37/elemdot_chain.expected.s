@@ -21,6 +21,13 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,17 +35,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #11
                 STA     [_fcc_fpr0]
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -46,18 +51,16 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #22
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -65,15 +68,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -81,6 +75,13 @@ main_stkok        TCS
                 CMP     #22
                 BEQ     *+5
                 BRL     _elemdot_chain_L1
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -88,15 +89,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -120,24 +112,13 @@ _elemdot_chain_L2
 _elemdot_chain_L0
                 LDA     #1
                 STA     _fcc_img1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_vs
                 STA     _fcc_fpr0
-                LDA     #33
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -145,18 +126,32 @@ _elemdot_chain_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
+                LDA     #33
+                STA     [_fcc_fpr0]
                 LDA     _fcc_img1
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_vs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #44
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     _fcc_img1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -164,15 +159,6 @@ _elemdot_chain_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -180,6 +166,13 @@ _elemdot_chain_L0
                 CMP     #44
                 BEQ     *+5
                 BRL     _elemdot_chain_L6
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -187,15 +180,6 @@ _elemdot_chain_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -210,6 +194,13 @@ _elemdot_chain_L7
                 CMP     #0
                 BNE     *+5
                 BRL     _elemdot_chain_L4
+                LDA     #0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -217,15 +208,6 @@ _elemdot_chain_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -248,6 +230,13 @@ _elemdot_chain_L5
                 ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L3
+                LDA     _fcc_img1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -255,15 +244,6 @@ _elemdot_chain_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -272,6 +252,13 @@ _elemdot_chain_L3
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     _fcc_img1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -279,20 +266,18 @@ _elemdot_chain_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     _fcc_img1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -300,15 +285,6 @@ _elemdot_chain_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -316,6 +292,13 @@ _elemdot_chain_L3
                 CMP     #47
                 BEQ     *+5
                 BRL     _elemdot_chain_L9
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -323,15 +306,6 @@ _elemdot_chain_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -353,6 +327,13 @@ _elemdot_chain_L10
                 ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L8
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -360,14 +341,7 @@ _elemdot_chain_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -379,19 +353,23 @@ _elemdot_chain_L8
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -403,19 +381,23 @@ _elemdot_chain_L8
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -430,6 +412,13 @@ _elemdot_chain_L8
                 CMP     #65
                 BEQ     *+5
                 BRL     _elemdot_chain_L14
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -437,14 +426,7 @@ _elemdot_chain_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -467,6 +449,13 @@ _elemdot_chain_L15
                 CMP     #0
                 BNE     *+5
                 BRL     _elemdot_chain_L12
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -474,15 +463,6 @@ _elemdot_chain_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -505,6 +485,14 @@ _elemdot_chain_L13
                 ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L11
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -512,18 +500,16 @@ _elemdot_chain_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #55
                 STA     [_fcc_fpr0]
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -531,19 +517,17 @@ _elemdot_chain_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #66
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -551,19 +535,17 @@ _elemdot_chain_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #77
                 LDY     #4
                 STA     [_fcc_fpr0],Y
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -571,16 +553,6 @@ _elemdot_chain_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -588,6 +560,14 @@ _elemdot_chain_L11
                 CMP     #77
                 BEQ     *+5
                 BRL     _elemdot_chain_L19
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -595,16 +575,6 @@ _elemdot_chain_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -620,6 +590,14 @@ _elemdot_chain_L20
                 CMP     #0
                 BNE     *+5
                 BRL     _elemdot_chain_L17
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_dp
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -627,16 +605,6 @@ _elemdot_chain_L20
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_dp
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -658,6 +626,14 @@ _elemdot_chain_L18
                 ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L16
+                LDA     #0
+                ASL
+                CLC
+                ADC     #0
+                ASL
+                CLC
+                ADC     #_elemdot_chain_valstack
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -665,18 +641,16 @@ _elemdot_chain_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #88
                 STA     [_fcc_fpr0]
+                LDA     #0
+                ASL
+                CLC
+                ADC     #0
+                ASL
+                CLC
+                ADC     #_elemdot_chain_valstack
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -684,38 +658,16 @@ _elemdot_chain_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #99
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
-                LDA     #100
-                LDY     #2
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -723,16 +675,24 @@ _elemdot_chain_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
+                LDA     #100
+                LDY     #2
+                STA     [_fcc_fpr0],Y
                 LDA     #0
                 ASL
                 CLC
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -740,6 +700,14 @@ _elemdot_chain_L16
                 CMP     #99
                 BEQ     *+5
                 BRL     _elemdot_chain_L24
+                LDA     #0
+                ASL
+                CLC
+                ADC     #0
+                ASL
+                CLC
+                ADC     #_elemdot_chain_valstack
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -747,16 +715,6 @@ _elemdot_chain_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -771,6 +729,13 @@ _elemdot_chain_L25
                 CMP     #0
                 BNE     *+5
                 BRL     _elemdot_chain_L22
+                LDA     #1
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #_elemdot_chain_valstack
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -778,15 +743,6 @@ _elemdot_chain_L25
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_valstack
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -811,6 +767,13 @@ _elemdot_chain_L23
 _elemdot_chain_L21
                 LDA     #123
                 STA     _elemdot_chain_src+0
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -818,17 +781,15 @@ _elemdot_chain_L21
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #121
                 STA     [_fcc_fpr0]
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -836,17 +797,7 @@ _elemdot_chain_L21
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -866,6 +817,13 @@ _elemdot_chain_L26
                 DEY
                 DEY
                 BPL     _elemdot_chain_L26
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -873,15 +831,6 @@ _elemdot_chain_L26
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -889,6 +838,13 @@ _elemdot_chain_L26
                 CMP     #123
                 BEQ     *+5
                 BRL     _elemdot_chain_L28
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_elemdot_chain_vs
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -896,15 +852,6 @@ _elemdot_chain_L26
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_elemdot_chain_vs
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA

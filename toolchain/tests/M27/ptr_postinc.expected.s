@@ -498,6 +498,7 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -507,6 +508,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_postinc_fwd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_fwd
@@ -519,6 +521,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -526,12 +529,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_postinc_bwd
+                LDA     #_ptr_postinc_bwd+2
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_bwd
@@ -548,6 +548,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -555,13 +556,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_ptr_postinc_v
+                LDA     #_ptr_postinc_v+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_isum_bwd

@@ -295,6 +295,7 @@ main_stkok        TCS
                 PHA
                 LDA     #6
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -304,6 +305,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL setit
@@ -379,6 +381,7 @@ _od_probe3_L2
                 TYA
                 RTL
 _od_probe3_L3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -388,6 +391,7 @@ _od_probe3_L3
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -406,6 +410,7 @@ _od_probe3_L3
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -414,6 +419,9 @@ _od_probe3_L3
                 REP     #$20
                 MX      %00
                 LDA     #a
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -436,6 +444,11 @@ _od_probe3_L3
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -443,6 +456,7 @@ _od_probe3_L3
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -475,6 +489,7 @@ _od_probe3_L3
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -484,6 +499,7 @@ _od_probe3_L3
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

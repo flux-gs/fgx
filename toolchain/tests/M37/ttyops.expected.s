@@ -52,6 +52,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -61,6 +62,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #sgbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -84,6 +86,7 @@ main_stkok        TCS
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -93,6 +96,7 @@ _ttyops_L0
                 MX      %00
                 LDA     #sgbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #0
@@ -116,6 +120,7 @@ _ttyops_L0
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _ttyops_L1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -125,6 +130,7 @@ _ttyops_L1
                 MX      %00
                 LDA     #sgbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #29704

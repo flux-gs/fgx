@@ -136,6 +136,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     guard
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -145,6 +146,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -280,6 +282,7 @@ _int_to_ptr_implicit_L7
 _int_to_ptr_implicit_L5
                 LDA     #0
                 STA     guard
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -289,6 +292,8 @@ _int_to_ptr_implicit_L5
                 MX      %00
                 LDA     #guard
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 PHA
                 FGX2_FARCALL bump
                 TAY

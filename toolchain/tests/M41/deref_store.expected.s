@@ -172,33 +172,13 @@ main_stkok        TCS
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -285,33 +265,13 @@ _deref_store_L0
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+8
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -447,33 +407,13 @@ _deref_store_L1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -649,33 +589,13 @@ _deref_store_L2
                 CMP     #0
                 BEQ     *+5
                 BRL     _deref_store_L4
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -794,33 +714,13 @@ _deref_store_L3
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+22
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+20
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+18
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+16
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -872,6 +772,7 @@ _deref_store_L3
                 TYA
                 RTL
 _deref_store_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -881,6 +782,7 @@ _deref_store_L6
                 MX      %00
                 LDA     #_deref_store_dp
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     29,S   ; fccstk d=0 b=29
                 LDA     _fcc_fpr0
@@ -944,33 +846,13 @@ _deref_store_L6
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1061,33 +943,13 @@ _deref_store_L7
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_dv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_dv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1194,33 +1056,13 @@ _deref_store_L8
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_qv
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1341,33 +1183,13 @@ _deref_store_L9
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_deref_store_qv
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     _deref_store_qv+8
                 TAY
                 LDA     _fcc_q3
                 PHA

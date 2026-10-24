@@ -171,6 +171,7 @@ main_stkok        TCS
                 TCS
                 LDA     #12
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -180,6 +181,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #sink
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -201,6 +203,7 @@ main_stkok        TCS
                 TCS
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -210,6 +213,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #sink
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20

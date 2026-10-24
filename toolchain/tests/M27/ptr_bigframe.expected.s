@@ -254,6 +254,7 @@ main_stkok        TCS
                 PLA
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -263,6 +264,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_bigframe_data
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_bigframe_bigframe

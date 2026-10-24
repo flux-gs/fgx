@@ -19,15 +19,6 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr_dot_hops_ptr_arr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -36,11 +27,8 @@ main_stkok        TCS
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
-                LDA     #1
-                LDY     #16
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,8 +36,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr_dot_hops_ptr_arr
-                STA     _fcc_fpr0
+                LDA     #1
+                LDY     #16
+                STA     [_fcc_fpr0],Y
                 LDA     #1
                 ASL
                 ASL
@@ -57,11 +46,8 @@ main_stkok        TCS
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
-                LDA     #10
-                LDY     #16
-                STA     [_fcc_fpr0],Y
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,8 +55,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr_dot_hops_ptr_arr
-                STA     _fcc_fpr0
+                LDA     #10
+                LDY     #16
+                STA     [_fcc_fpr0],Y
                 LDA     #2
                 ASL
                 ASL
@@ -79,11 +66,19 @@ main_stkok        TCS
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #30
                 LDY     #16
                 STA     [_fcc_fpr0],Y
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -93,6 +88,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -105,6 +101,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_tmp_b
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -114,6 +111,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -147,16 +145,8 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #36
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
@@ -164,33 +154,13 @@ main_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _addr_dot_hops_ptr_G+4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr_dot_hops_ptr_G
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                INC
-                ASL
+                LDA     _addr_dot_hops_ptr_G+2
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #18
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13

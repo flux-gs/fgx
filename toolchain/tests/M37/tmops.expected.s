@@ -176,6 +176,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -185,6 +186,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #e0
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL gmtime
@@ -410,6 +412,7 @@ _tmops_L4
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _tmops_L21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -419,6 +422,7 @@ _tmops_L21
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL localtime
@@ -526,6 +530,7 @@ _tmops_L24
                 ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _tmops_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -535,6 +540,7 @@ _tmops_L22
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL localtime
@@ -555,6 +561,7 @@ _tmops_L22
                 TYA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -564,6 +571,7 @@ _tmops_L22
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime
@@ -587,6 +595,7 @@ _tmops_L22
                 BRL     _tmops_L31
                 LDA     #99
                 STA     gtz+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -596,8 +605,10 @@ _tmops_L22
                 MX      %00
                 LDA     #gtz
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -607,6 +618,7 @@ _tmops_L22
                 MX      %00
                 LDA     #gtv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL gettimeofday

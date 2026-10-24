@@ -216,6 +216,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -225,6 +226,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #e0
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime
@@ -264,6 +266,7 @@ _ctimeops_L4
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -273,6 +276,7 @@ _ctimeops_L4
                 MX      %00
                 LDA     #e1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime
@@ -312,6 +316,7 @@ _ctimeops_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -321,6 +326,7 @@ _ctimeops_L5
                 MX      %00
                 LDA     #e2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime
@@ -360,6 +366,7 @@ _ctimeops_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -369,6 +376,7 @@ _ctimeops_L6
                 MX      %00
                 LDA     #e3
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ctime

@@ -35,15 +35,6 @@ _selfchain_L0
 _selfchain_L3
                 BMI     *+5
                 BRL     _selfchain_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_selfchain_tbl
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -52,22 +43,20 @@ _selfchain_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_selfchain_tbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #100
                 CLC
                 ADC     _fcc_img0
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_selfchain_tbl
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -76,14 +65,25 @@ _selfchain_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_selfchain_tbl
                 STA     _fcc_fpr0
-                LDA     #0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_img0
+                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     #_selfchain_tbl
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -91,18 +91,7 @@ _selfchain_L3
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
-                STA     _fcc_fpr1
-                LDA     _fcc_img0
-                STA     _fcc_tmp_b
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -113,7 +102,16 @@ _selfchain_L3
                 MX      %00
                 LDA     _fcc_fpr1
                 STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_img0
+                STA     _fcc_tmp_b
+                ASL
+                ASL
+                CLC
+                ADC     _fcc_tmp_b
+                ASL
+                CLC
+                ADC     #_selfchain_tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -121,7 +119,9 @@ _selfchain_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
+                LDA     _fcc_fpr0
+                CLC
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -131,14 +131,8 @@ _selfchain_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                ADC     #_selfchain_tbl
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -146,18 +140,7 @@ _selfchain_L3
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
-                STA     _fcc_fpr1
-                LDA     _fcc_img0
-                STA     _fcc_tmp_b
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -191,15 +174,6 @@ _selfchain_L4
 _selfchain_L7
                 BMI     *+5
                 BRL     _selfchain_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_selfchain_tbl
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -208,8 +182,15 @@ _selfchain_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_selfchain_tbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
@@ -362,6 +343,7 @@ _selfchain_L5
                 INC     _fcc_img0
                 BRL     _selfchain_L4
 _selfchain_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -371,19 +353,12 @@ _selfchain_L6
                 MX      %00
                 LDA     #_selfchain_tbl
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -391,16 +366,9 @@ _selfchain_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
+                LDA     #_selfchain_tbl+10
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0
@@ -478,6 +446,7 @@ _selfchain_L17
                 TYA
                 RTL
 _selfchain_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -485,21 +454,14 @@ _selfchain_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
+                LDA     #_selfchain_tbl+20
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                INC
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -507,17 +469,9 @@ _selfchain_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_selfchain_tbl
+                LDA     #_selfchain_tbl+30
                 STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                CLC
-                ADC     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0

@@ -35,6 +35,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -44,6 +45,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_fpr0
@@ -192,6 +194,7 @@ _wait3ops_L6
 _wait3ops_L9
                 LDA     #4660
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -201,8 +204,10 @@ _wait3ops_L9
                 MX      %00
                 LDA     #argv_tab
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -212,6 +217,7 @@ _wait3ops_L9
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv

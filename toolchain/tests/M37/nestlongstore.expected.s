@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27,6 +28,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #_nestlongstore_o
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     _nestlongstore_p
                 LDA     _fcc_fpr0+2
                 STA     _nestlongstore_p+2

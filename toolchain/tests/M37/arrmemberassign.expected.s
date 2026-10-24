@@ -47,15 +47,6 @@ _arrmemberassign_L0
 _arrmemberassign_L3
                 BMI     *+5
                 BRL     _arrmemberassign_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -64,8 +55,15 @@ _arrmemberassign_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -120,18 +118,6 @@ _arrmemberassign_L1
 _arrmemberassign_L2
                 LDA     #1
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #g_arr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -139,8 +125,16 @@ _arrmemberassign_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #g_arr+2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -160,6 +154,7 @@ _arrmemberassign_L4
                 DEY
                 DEY
                 BPL     _arrmemberassign_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -167,16 +162,9 @@ _arrmemberassign_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+12
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -311,6 +299,7 @@ _arrmemberassign_L8
                 TYA
                 RTL
 _arrmemberassign_L9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -320,15 +309,7 @@ _arrmemberassign_L9
                 MX      %00
                 LDA     #g_arr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -374,6 +355,7 @@ _arrmemberassign_L9
                 TYA
                 RTL
 _arrmemberassign_L10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -381,17 +363,9 @@ _arrmemberassign_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #g_arr
+                LDA     #g_arr+24
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

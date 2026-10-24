@@ -125,11 +125,8 @@ _arrdimexpr_L1
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #10
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX

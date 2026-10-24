@@ -99,6 +99,13 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #tbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -106,15 +113,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA

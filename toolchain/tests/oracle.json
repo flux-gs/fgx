@@ -291,6 +291,7 @@
   "div16_sweep": 42,
   "ldiv_sweep": 42,
   "derefparen": 42,
+  "symfold": 42,
   "instruct_chain": 42,
   "int_const_ladder": 42,
   "int_to_ptr_implicit": 42,

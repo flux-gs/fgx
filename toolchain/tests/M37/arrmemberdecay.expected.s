@@ -169,6 +169,12 @@ _arrmemberdecay_L4
 _arrmemberdecay_L7
                 BMI     *+5
                 BRL     _arrmemberdecay_L6
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #o+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -176,16 +182,6 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #o
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -215,6 +211,11 @@ _arrmemberdecay_L7
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                LDA     _fcc_img0
+                ASL
+                CLC
+                ADC     #o+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -222,15 +223,6 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #o
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -242,6 +234,10 @@ _arrmemberdecay_L7
                 ADC     _fcc_tmp_b
                 ASL
                 STA     [_fcc_fpr0]
+                LDA     _fcc_img0
+                CLC
+                ADC     #o+26
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -249,14 +245,6 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #o
-                CLC
-                ADC     #26
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -265,21 +253,23 @@ _arrmemberdecay_L7
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #o+30
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #o
-                CLC
-                ADC     #30
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -289,6 +279,8 @@ _arrmemberdecay_L7
                 MX      %00
                 LDA     #spare
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -308,6 +300,7 @@ _arrmemberdecay_L5
 _arrmemberdecay_L6
                 LDA     _fcc_img0
                 STA     17,S   ; fccstk d=0 b=17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -317,6 +310,7 @@ _arrmemberdecay_L6
                 MX      %00
                 LDA     #o
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -465,27 +459,9 @@ _arrmemberdecay_L9
                 STA     [_fcc_ptr],Y
                 PLA
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #o
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     o+8
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     o+6
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -714,6 +690,7 @@ _arrmemberdecay_L13
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -723,6 +700,7 @@ _arrmemberdecay_L13
                 MX      %00
                 LDA     #spare
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

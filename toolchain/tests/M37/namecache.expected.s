@@ -730,6 +730,7 @@ _namecache_L12
                 LDA     #0
                 STA     vnode_free_head+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -738,6 +739,9 @@ _namecache_L12
                 REP     #$20
                 MX      %00
                 LDA     #vnode_free_head
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
@@ -3428,23 +3432,11 @@ _namecache_L50
                 BRL     _namecache_L48
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     specinfo_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #specinfo_pool
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     specinfo_pool
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -3797,15 +3789,6 @@ _namecache_L53
                 TYA
                 RTL
 _namecache_L51
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #speclisth
-                STA     _fcc_fpr0
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -3847,8 +3830,15 @@ _namecache_L51
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #speclisth
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -6329,6 +6319,7 @@ _namecache_L105
                 LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6338,6 +6329,8 @@ _namecache_L105
                 MX      %00
                 LDA     #dead_vnodeops
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -8203,6 +8196,7 @@ _namecache_L116
                 LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8212,6 +8206,8 @@ _namecache_L116
                 MX      %00
                 LDA     #vnode_free_head
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -10457,15 +10453,6 @@ _namecache_nchbucket_stkovf       JMP     _fcc_stkoflow
 _namecache_nchbucket_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
                 DO      8+_namecache_nchbucket_FRAMESIZE/256
                 TSC
                 CLC
@@ -10511,8 +10498,16 @@ _namecache_nchbucket_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #nchashtbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -11683,6 +11678,7 @@ _namecache_nclru_tohead_stkok        TCS
                 LDA     6+_namecache_nclru_tohead_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11692,6 +11688,8 @@ _namecache_nclru_tohead_stkok        TCS
                 MX      %00
                 LDA     #nchhead
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -12112,6 +12110,13 @@ _namecache_L215
 _namecache_L218
                 BMI     *+5
                 BRL     _namecache_L217
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12119,15 +12124,6 @@ _namecache_L218
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
@@ -12181,6 +12177,7 @@ _namecache_L217
                 LDA     #0
                 STA     nchhead+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12189,6 +12186,9 @@ _namecache_L217
                 REP     #$20
                 MX      %00
                 LDA     #nchhead
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
@@ -12867,6 +12867,13 @@ _namecache_L234
 _namecache_L237
                 BMI     *+5
                 BRL     _namecache_L236
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12874,15 +12881,6 @@ _namecache_L237
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -13082,6 +13080,13 @@ _namecache_L243
 _namecache_L246
                 BMI     *+5
                 BRL     _namecache_L245
+                LDA     13,S   ; fccstk d=0 b=13
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13089,15 +13094,6 @@ _namecache_L246
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -13471,6 +13467,7 @@ _namecache_L259
 _namecache_L263
                 BMI     *+5
                 BRL     _namecache_L262
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13478,10 +13475,9 @@ _namecache_L263
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #20
+                LDA     #nchstats+20
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -13922,6 +13918,7 @@ _namecache_L280
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L278
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13929,10 +13926,9 @@ _namecache_L280
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #16
+                LDA     #nchstats+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -13995,6 +13991,7 @@ _namecache_L283
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L281
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14002,10 +13999,9 @@ _namecache_L283
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #8
+                LDA     #nchstats+8
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14063,6 +14059,7 @@ _namecache_L287
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L285
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14070,10 +14067,9 @@ _namecache_L287
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #4
+                LDA     #nchstats+4
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14160,6 +14156,7 @@ _namecache_L285
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L289
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14167,10 +14164,9 @@ _namecache_L285
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #12
+                LDA     #nchstats+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -14189,6 +14185,7 @@ _namecache_L285
                 TXA
                 BRL     _namecache_L290
 _namecache_L289
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14198,6 +14195,7 @@ _namecache_L289
                 MX      %00
                 LDA     #nchstats
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -15232,6 +15230,13 @@ _namecache_L307
 _namecache_L310
                 BMI     *+5
                 BRL     _namecache_L309
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15239,15 +15244,6 @@ _namecache_L310
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -15606,6 +15602,7 @@ _namecache_reset_stkovf       JMP     _fcc_stkoflow
 _namecache_reset_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15615,6 +15612,7 @@ _namecache_reset_stkok        TCS
                 MX      %00
                 LDA     #_namecache_nc_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -15631,6 +15629,7 @@ _namecache_reset_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15640,6 +15639,7 @@ _namecache_reset_stkok        TCS
                 MX      %00
                 LDA     #ufs_cacheops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfs_setcacheops
@@ -15722,33 +15722,11 @@ main_stkok        TCS
 _namecache_L330
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     namecache_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #namecache_pool
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     namecache_pool
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -15789,33 +15767,11 @@ _namecache_L330
 _namecache_L331
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     namecache_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #namecache_pool
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     namecache_pool
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -15977,6 +15933,7 @@ _namecache_L336
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15986,8 +15943,10 @@ _namecache_L336
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15997,6 +15956,7 @@ _namecache_L336
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16043,6 +16003,7 @@ _namecache_L339
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16052,8 +16013,10 @@ _namecache_L339
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16063,6 +16026,7 @@ _namecache_L339
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16119,6 +16083,7 @@ _namecache_L340
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16128,6 +16093,7 @@ _namecache_L340
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16202,6 +16168,7 @@ _namecache_L342
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16211,6 +16178,7 @@ _namecache_L342
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -16257,6 +16225,7 @@ _namecache_L343
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16266,6 +16235,7 @@ _namecache_L343
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16373,6 +16343,7 @@ _namecache_L348
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16382,8 +16353,10 @@ _namecache_L348
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16393,6 +16366,7 @@ _namecache_L348
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16449,6 +16423,7 @@ _namecache_L349
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16458,6 +16433,7 @@ _namecache_L349
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16505,6 +16481,7 @@ _namecache_L350
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16514,6 +16491,7 @@ _namecache_L350
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16561,6 +16539,7 @@ _namecache_L351
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16570,6 +16549,7 @@ _namecache_L351
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16602,6 +16582,7 @@ _namecache_L352
                 STA     nd+50
                 TYA
                 STZ     _fcc_fpr0+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16611,6 +16592,7 @@ _namecache_L352
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -16644,6 +16626,7 @@ _namecache_L352
                 STA     _fcc_long_hi
                 LDA     nchstats+4
                 STA     23,S   ; fccstk d=0 b=23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16653,6 +16636,7 @@ _namecache_L352
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -16728,6 +16712,7 @@ _namecache_L354
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16737,8 +16722,10 @@ _namecache_L354
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16748,6 +16735,7 @@ _namecache_L354
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16794,6 +16782,7 @@ _namecache_L355
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16803,8 +16792,10 @@ _namecache_L355
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16814,6 +16805,7 @@ _namecache_L355
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -16886,6 +16878,7 @@ _namecache_L356
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16895,6 +16888,7 @@ _namecache_L356
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -16936,6 +16930,7 @@ _namecache_L356
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16945,8 +16940,10 @@ _namecache_L356
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16956,6 +16953,7 @@ _namecache_L356
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17055,6 +17053,7 @@ _namecache_L358
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17064,6 +17063,7 @@ _namecache_L358
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -17154,6 +17154,7 @@ _namecache_L363
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17163,8 +17164,10 @@ _namecache_L363
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17174,6 +17177,7 @@ _namecache_L363
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17220,6 +17224,7 @@ _namecache_L364
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17229,8 +17234,10 @@ _namecache_L364
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17240,6 +17247,7 @@ _namecache_L364
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17312,6 +17320,7 @@ _namecache_L365
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17321,6 +17330,7 @@ _namecache_L365
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -17361,6 +17371,7 @@ _namecache_L365
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17370,6 +17381,7 @@ _namecache_L365
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -17408,6 +17420,7 @@ _namecache_L366
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17417,8 +17430,10 @@ _namecache_L366
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17428,6 +17443,7 @@ _namecache_L366
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17516,6 +17532,7 @@ _namecache_L368
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17525,8 +17542,10 @@ _namecache_L368
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17536,6 +17555,7 @@ _namecache_L368
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17641,6 +17661,7 @@ _namecache_L372
                 STA     _fcc_long_hi
                 LDA     nchstats+20
                 STA     23,S   ; fccstk d=0 b=23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17650,6 +17671,7 @@ _namecache_L372
                 MX      %00
                 LDA     #main_sl_toolong
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -17663,6 +17685,7 @@ _namecache_L372
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17672,6 +17695,7 @@ _namecache_L372
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -17768,6 +17792,7 @@ _namecache_L376
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17777,6 +17802,7 @@ _namecache_L376
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -17814,6 +17840,7 @@ _namecache_L377
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17823,8 +17850,10 @@ _namecache_L377
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17834,6 +17863,7 @@ _namecache_L377
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -17880,6 +17910,7 @@ _namecache_L378
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17889,8 +17920,10 @@ _namecache_L378
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17900,6 +17933,7 @@ _namecache_L378
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -18043,6 +18077,7 @@ _namecache_L383
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18052,6 +18087,7 @@ _namecache_L383
                 MX      %00
                 LDA     #main_sl_nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -18081,6 +18117,7 @@ _namecache_L383
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18090,6 +18127,7 @@ _namecache_L383
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -18178,6 +18216,7 @@ _namecache_L385
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18187,6 +18226,7 @@ _namecache_L385
                 MX      %00
                 LDA     #main_sl_nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -18200,6 +18240,7 @@ _namecache_L385
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18209,6 +18250,7 @@ _namecache_L385
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -18270,6 +18312,7 @@ _namecache_L386
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18279,6 +18322,7 @@ _namecache_L386
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -18326,6 +18370,7 @@ _namecache_L386
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18335,6 +18380,7 @@ _namecache_L386
                 MX      %00
                 LDA     #main_sl_nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -18348,6 +18394,7 @@ _namecache_L386
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18357,6 +18404,7 @@ _namecache_L386
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -18420,6 +18468,7 @@ _namecache_L387
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18429,6 +18478,7 @@ _namecache_L387
                 MX      %00
                 LDA     #main_sl_nm
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     7,S   ; fccstk d=4 b=3
@@ -18442,6 +18492,7 @@ _namecache_L387
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18451,6 +18502,7 @@ _namecache_L387
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -18523,6 +18575,7 @@ _namecache_L390
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18532,8 +18585,10 @@ _namecache_L390
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18543,6 +18598,7 @@ _namecache_L390
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -18589,6 +18645,7 @@ _namecache_L391
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18598,8 +18655,10 @@ _namecache_L391
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18609,6 +18668,7 @@ _namecache_L391
                 MX      %00
                 LDA     #mnt_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -18655,6 +18715,7 @@ _namecache_L392
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18664,8 +18725,10 @@ _namecache_L392
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18675,6 +18738,7 @@ _namecache_L392
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -18740,6 +18804,7 @@ _namecache_L393
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18749,6 +18814,7 @@ _namecache_L393
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -18794,6 +18860,7 @@ _namecache_L393
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18803,6 +18870,7 @@ _namecache_L393
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -18827,6 +18895,7 @@ _namecache_L393
                 TYA
                 RTL
 _namecache_L394
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18836,6 +18905,7 @@ _namecache_L394
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_purgevfs
@@ -18882,6 +18952,7 @@ _namecache_L395
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18891,6 +18962,7 @@ _namecache_L395
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -18938,6 +19010,7 @@ _namecache_L396
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18947,6 +19020,7 @@ _namecache_L396
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -19000,6 +19074,7 @@ _namecache_L398
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19009,8 +19084,10 @@ _namecache_L398
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19020,6 +19097,7 @@ _namecache_L398
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -19059,6 +19137,7 @@ _namecache_L399
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19068,8 +19147,10 @@ _namecache_L399
                 MX      %00
                 LDA     #fsops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19079,6 +19160,7 @@ _namecache_L399
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -19144,6 +19226,7 @@ _namecache_L400
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19153,6 +19236,7 @@ _namecache_L400
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
@@ -19184,6 +19268,7 @@ _namecache_L400
                 CLC
                 ADC     #8
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19193,6 +19278,7 @@ _namecache_L400
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
@@ -19256,6 +19342,7 @@ _namecache_L401
                 LDA     _fcc_ptr+2
                 STA     nd+50
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19265,6 +19352,7 @@ _namecache_L401
                 MX      %00
                 LDA     #nd
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter

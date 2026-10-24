@@ -39,6 +39,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #2
                 STA     L+10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,6 +49,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #L
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -80,6 +82,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #4
                 STA     M+14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -89,6 +92,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #M
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -101,6 +105,7 @@ _chainincdec_setup_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     T+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -110,6 +115,7 @@ _chainincdec_setup_stkok        TCS
                 MX      %00
                 LDA     #L
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -169,6 +175,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 FGX2_FARCALL _chainincdec_setup
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -178,6 +185,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #T
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -280,23 +288,11 @@ _chainincdec_L3
 _chainincdec_L1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     T+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #T
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     T
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -330,23 +326,11 @@ _chainincdec_L1
 _chainincdec_L4
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     M+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #M
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     M
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -1151,21 +1135,9 @@ _chainincdec_L20
                 TYA
                 RTL
 _chainincdec_L21
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #T
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
                 LDA     T+8
+                INC
+                STA     T+8
                 TAX
                 TXA
                 CMP     #6
@@ -1199,6 +1171,7 @@ _chainincdec_L22
                 TYA
                 RTL
 _chainincdec_L23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1208,6 +1181,7 @@ _chainincdec_L23
                 MX      %00
                 LDA     #M
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -1416,21 +1390,9 @@ _chainincdec_L30
                 STA     [_fcc_fpr0]
                 LDA     #0
                 STA     L+2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #M
-                CLC
-                ADC     #6
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                INC
-                STA     [_fcc_fpr0]
                 LDA     M+6
+                INC
+                STA     M+6
                 TAX
                 TXA
                 CMP     #1

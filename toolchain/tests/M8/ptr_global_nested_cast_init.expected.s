@@ -29,6 +29,12 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     #42
                 STA     [_fcc_fpr0]
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #endarr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -36,14 +42,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #endarr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAY
                 TSC

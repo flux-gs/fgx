@@ -39,6 +39,7 @@ getbuf_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,6 +49,7 @@ getbuf_stkok        TCS
                 MX      %00
                 LDA     #getbuf_sl_buf
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC

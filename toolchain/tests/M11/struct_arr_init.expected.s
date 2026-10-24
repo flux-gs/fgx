@@ -42,15 +42,6 @@ _struct_arr_init_L3
                 BRL     _struct_arr_init_L2
                 LDA     _fcc_img1
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #items
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -58,8 +49,15 @@ _struct_arr_init_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #items
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -91,6 +89,13 @@ _struct_arr_init_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                LDA     #1
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #items
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -98,15 +103,6 @@ _struct_arr_init_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #items
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20

@@ -22,6 +22,7 @@ lookup_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31,6 +32,7 @@ lookup_stkok        TCS
                 MX      %00
                 LDA     #root
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -60,6 +62,7 @@ ivec_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,6 +72,7 @@ ivec_stkok        TCS
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -325,10 +329,9 @@ _callchain_incdec_L6
                 LDA     #0
                 STA     calls
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -381,10 +384,9 @@ _callchain_incdec_L7
                 RTL
 _callchain_incdec_L8
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -435,10 +437,9 @@ _callchain_incdec_L9
                 RTL
 _callchain_incdec_L10
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -506,31 +507,9 @@ _callchain_incdec_L12
                 TYA
                 STA:    $0000,X
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vec
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     vec+2
                 INC
-                STA     [_fcc_ptr]
+                STA     vec+2
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -568,31 +547,9 @@ _callchain_incdec_L13
                 TYA
                 RTL
 _callchain_incdec_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #vec
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     vec+2
                 INC
-                STA     [_fcc_ptr]
+                STA     vec+2
                 LDA     #1
                 ASL
                 TAX
@@ -613,23 +570,12 @@ _callchain_incdec_L14
                 TYA
                 RTL
 _callchain_incdec_L15
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #sub
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #sub
                 STA     _fcc_fpr0
-                LDA     #100
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -637,16 +583,24 @@ _callchain_incdec_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #sub
-                STA     _fcc_fpr0
+                LDA     #100
+                STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #sub
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #200
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -656,12 +610,7 @@ _callchain_incdec_L15
                 MX      %00
                 LDA     #sub
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -727,24 +676,11 @@ _callchain_incdec_L15
 _callchain_incdec_L16
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     root+6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #root
-                STA     _fcc_fpr0
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     root+4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX

@@ -34,6 +34,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -43,6 +44,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -181,6 +183,7 @@ _pfsign_L0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -190,6 +193,7 @@ _pfsign_L0
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -311,6 +315,7 @@ _pfsign_L13
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -320,6 +325,7 @@ _pfsign_L13
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -448,6 +454,7 @@ _pfsign_L24
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -457,6 +464,7 @@ _pfsign_L24
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf

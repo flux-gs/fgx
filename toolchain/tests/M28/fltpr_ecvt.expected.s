@@ -582,6 +582,7 @@ _fltpr_ecvt_L18
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -591,6 +592,7 @@ _fltpr_ecvt_L18
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -609,6 +611,7 @@ _fltpr_ecvt_L18
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -618,6 +621,7 @@ _fltpr_ecvt_L18
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -675,6 +679,7 @@ _fltpr_ecvt_L25
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -684,6 +689,7 @@ _fltpr_ecvt_L25
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -702,6 +708,7 @@ _fltpr_ecvt_L25
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -711,6 +718,7 @@ _fltpr_ecvt_L25
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -768,6 +776,7 @@ _fltpr_ecvt_L28
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -777,6 +786,7 @@ _fltpr_ecvt_L28
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -795,6 +805,7 @@ _fltpr_ecvt_L28
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -804,6 +815,7 @@ _fltpr_ecvt_L28
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -861,6 +873,7 @@ _fltpr_ecvt_L31
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -870,6 +883,7 @@ _fltpr_ecvt_L31
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -888,6 +902,7 @@ _fltpr_ecvt_L31
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -897,6 +912,7 @@ _fltpr_ecvt_L31
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -954,6 +970,7 @@ _fltpr_ecvt_L34
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -963,6 +980,7 @@ _fltpr_ecvt_L34
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -981,6 +999,7 @@ _fltpr_ecvt_L34
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -990,6 +1009,7 @@ _fltpr_ecvt_L34
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1047,6 +1067,7 @@ _fltpr_ecvt_L37
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1056,6 +1077,7 @@ _fltpr_ecvt_L37
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1074,6 +1096,7 @@ _fltpr_ecvt_L37
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1083,6 +1106,7 @@ _fltpr_ecvt_L37
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1140,6 +1164,7 @@ _fltpr_ecvt_L40
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1149,6 +1174,7 @@ _fltpr_ecvt_L40
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1167,6 +1193,7 @@ _fltpr_ecvt_L40
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1176,6 +1203,7 @@ _fltpr_ecvt_L40
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1249,6 +1277,7 @@ _fltpr_ecvt_L43
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1258,6 +1287,7 @@ _fltpr_ecvt_L43
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1276,6 +1306,7 @@ _fltpr_ecvt_L43
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1285,6 +1316,7 @@ _fltpr_ecvt_L43
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1340,6 +1372,7 @@ _fltpr_ecvt_L46
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1349,6 +1382,7 @@ _fltpr_ecvt_L46
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1367,6 +1401,7 @@ _fltpr_ecvt_L46
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1376,6 +1411,7 @@ _fltpr_ecvt_L46
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1873,6 +1909,7 @@ _fltpr_ecvt_L58
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1882,6 +1919,7 @@ _fltpr_ecvt_L58
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1900,6 +1938,7 @@ _fltpr_ecvt_L58
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1909,6 +1948,7 @@ _fltpr_ecvt_L58
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
@@ -1966,6 +2006,7 @@ _fltpr_ecvt_L59
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1975,6 +2016,7 @@ _fltpr_ecvt_L59
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -1993,6 +2035,7 @@ _fltpr_ecvt_L59
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2002,6 +2045,7 @@ _fltpr_ecvt_L59
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq

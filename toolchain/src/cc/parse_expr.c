@@ -3428,6 +3428,7 @@ walk_call_args(int kid0, int n_kids, const LocalType *ptypes,
              * was lost -- elvis's msg(fmt, long...) %s read bank 0. */
             int ptr_long = ks >= 0 && (is_ptr_type(at) || ISARY(at));
             if (ptr_long) {
+                fpr_sym_flush(ks);
                 ir_emitf("                LDA     %s+2\n", fpr_name(ks));
                 ir_emitf("                STA     _fcc_long_hi\n");
             }
@@ -7265,6 +7266,21 @@ walk_expr(int n)
     g_expr_const_int = cast_operand_is_const(n);
 }
 
+/* fpr k += index * stride.  A constant index is a constant offset (K&R
+ * A.7.3.1: E1[E2] is *((E1)+(E2))), added at compile time. */
+void
+emit_fpr_add_index(int k, int idx, unsigned stride)
+{
+    long v;
+    if (ast_const_int(idx, &v)) {
+        emit_fpr_add_const(k, (int)(v * (long)(stride > 1 ? stride : 1)));
+        return;
+    }
+    walk_val(idx);
+    emit_index_scale(stride);
+    emit_fpr_add_a(k);
+}
+
 /* emit_addr_field_index -- add `index * elemsize' to an address already in
  * fpr k.  The tail of `&arr[i].field[j]' (apple/fgx#202), split out because
  * the multi-dimensional twin below needs the identical three steps and two
@@ -7281,7 +7297,7 @@ emit_addr_field_index(int k, int idx_ast, int elemsize)
 static void
 walk_expr_body(int n)
 {
-    g_fpr_res = -1;
+        g_fpr_res = -1;
     switch (g_ast[n].kind) {
     case N_MUL_INLINE_CONST:
         walk_val(g_ast[n].a);
@@ -7482,11 +7498,13 @@ walk_expr_body(int n)
         int res_ptr  = ISPTR(g_ast[n].type) || g_ast[n].type == LT_STRUCT;
         int kb = -1, kc = -1;
         walk_cond_branch(g_ast[n].a, lab_else, 0);
-        if (res_ptr) { kb = walk_fpr(g_ast[n].b); fpr_drop(kb); }
+        /* Each arm leaves its value in the register the join re-allocates,
+         * so a constant address is built before the drop. */
+        if (res_ptr) { kb = walk_fpr(g_ast[n].b); fpr_sym_flush(kb); fpr_drop(kb); }
         else         { walk_val(g_ast[n].b); ternary_arm_conv(n); }
         emit_bra_label(lab_end);
         emit_label(lab_else);
-        if (res_ptr) { kc = walk_fpr(g_ast[n].c); fpr_drop(kc); }
+        if (res_ptr) { kc = walk_fpr(g_ast[n].c); fpr_sym_flush(kc); fpr_drop(kc); }
         else         { walk_val(g_ast[n].c); ternary_arm_conv(n); }
         emit_label(lab_end);
         if (res_ptr) {
@@ -7722,9 +7740,7 @@ walk_expr_body(int n)
     }
     case N_ADDR_ARR_ELEM: {
         int k = fpr_addr_sym(g_ast[n].sym_lc, g_ast[n].sym_gv);
-        walk_val(g_ast[n].a);                  /* index -> A */
-        emit_index_scale(g_ast[n].val);
-        emit_fpr_add_a(k);
+        emit_fpr_add_index(k, g_ast[n].a, g_ast[n].val);
         if (g_ast[n].b == -2 && g_ast[n].val_hi > 0)   /* '.field...' chain */
             emit_fpr_add_const(k, (int)g_ast[n].val_hi);
         if (g_ast[n].c >= 0)                  /* `.arrayfield[j]' (#202) */
@@ -7895,6 +7911,7 @@ walk_expr_body(int n)
              * offset through long_from_int and dropped the bank (caught
              * by M37/fileops: write()'s buffer bank arrived as 0). */
             int k = walk_fpr(g_ast[n].a);
+            fpr_sym_flush(k);
             ir_emitf("                LDA     %s+2\n", fpr_name(k));
             ir_emitf("                STA     _fcc_long_hi\n");
             emit_fpr_to_a(k);
@@ -9101,9 +9118,21 @@ walk_expr_body(int n)
          * _fcc_long_hi last held (`++s.lw[i]' in value position), and a float
          * had one added to its mantissa bits. */
         if (lt == LT_LONG || lt == LT_FLOAT || IS_QUAD(lt)) {
+            fpr_sym_flush(kd);
             emit_wide_incdec_at_fpr(kd, 0, lt, is_inc, !is_prefix);
             fpr_drop(kd);
             g_fpr_res = -1;
+            break;
+        }
+        if (fpr_is_sym(kd)) {                 /* a fixed address: RMW it there */
+            emit_incdec_at_sym(kd, (int)g_ast[n].val, is_inc, is_prefix, is_ptr,
+                               lt, g_ast[n].struct_id);
+            fpr_drop(kd);
+            if (is_ptr) fpr_in();
+            else        g_fpr_res = -1;
+            g_expr_type      = lt;
+            g_expr_struct_id = g_ast[n].struct_id;
+            g_expr_unsigned  = g_ast[n].is_unsigned;
             break;
         }
         emit_m8();                                            /* _fcc_ptr <- fpr kd */

@@ -190,6 +190,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -199,10 +200,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -212,6 +215,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gq
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -459,30 +463,12 @@ _charincdec_L17
                 STA     9,S   ; fccstk d=0 b=9
 _charincdec_L15
                 FGX2_FARCALL clear
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -547,6 +533,9 @@ _charincdec_L22
                 FGX2_FARCALL clear
                 LDA     #1
                 STA     13,S   ; fccstk d=0 b=13
+                CLC
+                ADC     #carr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -554,12 +543,7 @@ _charincdec_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #carr
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -780,30 +764,12 @@ _charincdec_L38
                 MX      %00
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -959,28 +925,14 @@ _charincdec_L55
                 SEP     #$20
                 MX      %10
                 STA     gs+1
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 DEC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
@@ -1349,28 +1301,14 @@ _charincdec_L86
                 SEP     #$20
                 MX      %10
                 STA     gs+2
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                STA     _fcc_ptr+2
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     gs+1
                 AND     #$00FF
                 INC
                 SEP     #$20
                 MX      %10
-                STA     [_fcc_ptr]
+                STA     gs+1
                 REP     #$20
                 MX      %00
                 AND     #$00FF

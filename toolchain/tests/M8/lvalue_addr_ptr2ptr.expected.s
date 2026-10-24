@@ -210,12 +210,8 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
@@ -265,12 +261,8 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13
@@ -326,12 +318,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     13,S   ; fccstk d=0 b=13

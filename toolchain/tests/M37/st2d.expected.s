@@ -32,6 +32,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r0
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -71,6 +73,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -80,6 +83,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #r1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -99,17 +103,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #rows
-                STA     gyy
-                LDA     _fcc_fpr0+2
-                STA     gyy+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -119,6 +113,22 @@ main_stkok        TCS
                 MX      %00
                 LDA     #rows
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
+                STA     gyy
+                LDA     _fcc_fpr0+2
+                STA     gyy+2
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #rows
+                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -131,6 +141,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     gw+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -140,6 +151,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gw
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -413,6 +425,11 @@ main_stkok        TCS
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -420,6 +437,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #rows
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

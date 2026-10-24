@@ -313,6 +313,7 @@ _struct_init_leaves_L12
                 STA     _fcc_fpr0+2
                 LDA     _struct_init_leaves_nulv+0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -322,6 +323,7 @@ _struct_init_leaves_L12
                 MX      %00
                 LDA     #nv
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -346,6 +348,7 @@ _struct_init_leaves_L19
                 STA     _fcc_fpr0+2
                 LDA     _struct_init_leaves_nulv+4
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -355,6 +358,7 @@ _struct_init_leaves_L19
                 MX      %00
                 LDA     #nm
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -392,31 +396,11 @@ _struct_init_leaves_L17
 _struct_init_leaves_L15
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _struct_init_leaves_nulv+10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_struct_init_leaves_nulv
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _struct_init_leaves_nulv+8
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
@@ -443,31 +427,11 @@ _struct_init_leaves_L30
                 BRL     _struct_init_leaves_L27
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _struct_init_leaves_nulv+14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_struct_init_leaves_nulv
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _struct_init_leaves_nulv+12
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
@@ -502,31 +466,11 @@ _struct_init_leaves_L28
                 BRL     _struct_init_leaves_L25
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _struct_init_leaves_nulv+18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_struct_init_leaves_nulv
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _struct_init_leaves_nulv+16
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1

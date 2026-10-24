@@ -122,6 +122,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     7,S   ; fccstk d=0 b=7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -130,6 +131,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #g_n
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     g_p
                 LDA     _fcc_fpr0+2
                 STA     g_p+2
@@ -151,6 +155,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -160,6 +165,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g_n
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL read_through

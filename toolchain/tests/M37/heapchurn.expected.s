@@ -111,6 +111,7 @@ _heapchurn_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -120,6 +121,7 @@ _heapchurn_L6
                 MX      %00
                 LDA     #nbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -139,6 +141,7 @@ _heapchurn_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -148,6 +151,7 @@ _heapchurn_L6
                 MX      %00
                 LDA     #nbuf
                 STA     _fcc_fpr1
+                PLA
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL strdup
@@ -392,6 +396,7 @@ _heapchurn_L17
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -401,6 +406,7 @@ _heapchurn_L17
                 MX      %00
                 LDA     #nbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf

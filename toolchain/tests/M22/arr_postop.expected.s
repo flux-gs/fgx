@@ -36,6 +36,11 @@ main_stkok        TCS
                 TYA
                 STA:    $0000,X
                 PLA
+                LDA     #0
+                ASL
+                CLC
+                ADC     #giw
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -43,13 +48,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #giw
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC
@@ -211,6 +209,10 @@ _arr_postop_L3
                 REP     #$20
                 MX      %00
                 PLA
+                LDA     #2
+                CLC
+                ADC     #gcb
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -218,12 +220,6 @@ _arr_postop_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gcb
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     _fcc_tmp_b
@@ -294,6 +290,11 @@ _arr_postop_L6
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
+                LDA     #3
+                ASL
+                CLC
+                ADC     #giw
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -301,13 +302,6 @@ _arr_postop_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #giw
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 DEC

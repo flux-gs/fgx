@@ -324,6 +324,13 @@ _addr2delem_L9
                 INC     _fcc_img0
                 BRL     _addr2delem_L8
 _addr2delem_L10
+                LDA     #1
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_addr2delem_i2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -331,15 +338,6 @@ _addr2delem_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr2delem_i2
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -415,15 +413,6 @@ _addr2delem_L21
                 TYA
                 RTL
 _addr2delem_L22
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i2
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -436,8 +425,15 @@ _addr2delem_L22
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -488,16 +484,6 @@ _addr2delem_L23
 _addr2delem_L24
                 LDA     #2
                 STA     19,S   ; fccstk d=0 b=19
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i2
-                STA     _fcc_fpr0
-                LDA     19,S   ; fccstk d=0 b=19
                 ASL
                 ASL
                 ASL
@@ -509,8 +495,15 @@ _addr2delem_L24
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -532,15 +525,6 @@ _addr2delem_L24
                 TYA
                 RTL
 _addr2delem_L25
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i2
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -553,8 +537,15 @@ _addr2delem_L25
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -576,15 +567,6 @@ _addr2delem_L25
                 TYA
                 RTL
 _addr2delem_L26
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_c2
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -595,8 +577,15 @@ _addr2delem_L26
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_c2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img6
                 LDA     _fcc_fpr0
@@ -670,15 +659,6 @@ _addr2delem_L27
                 TYA
                 RTL
 _addr2delem_L28
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_l2
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -693,8 +673,15 @@ _addr2delem_L28
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_l2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -788,6 +775,14 @@ _addr2delem_L29
                 TYA
                 RTL
 _addr2delem_L30
+                LDA     #2
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_addr2delem_l2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -795,16 +790,6 @@ _addr2delem_L30
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr2delem_l2
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -847,15 +832,6 @@ _addr2delem_L30
                 TYA
                 RTL
 _addr2delem_L31
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i3
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 INC
@@ -877,8 +853,15 @@ _addr2delem_L31
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i3
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -900,15 +883,6 @@ _addr2delem_L31
                 TYA
                 RTL
 _addr2delem_L32
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i3
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 INC
@@ -925,8 +899,15 @@ _addr2delem_L32
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i3
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -948,15 +929,6 @@ _addr2delem_L32
                 TYA
                 RTL
 _addr2delem_L33
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i3
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 INC
@@ -964,8 +936,15 @@ _addr2delem_L33
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i3
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -987,15 +966,6 @@ _addr2delem_L33
                 TYA
                 RTL
 _addr2delem_L34
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_i2
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -1008,8 +978,15 @@ _addr2delem_L34
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_i2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -1045,15 +1022,6 @@ _addr2delem_L34
                 TYA
                 RTL
 _addr2delem_L35
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_addr2delem_l2
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -1068,8 +1036,15 @@ _addr2delem_L35
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_addr2delem_l2
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0

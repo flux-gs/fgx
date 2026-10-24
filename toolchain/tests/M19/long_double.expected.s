@@ -373,6 +373,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -382,6 +383,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _long_double_bits
@@ -444,17 +446,6 @@ _long_double_L5
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L3
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #sv
-                INC
-                INC
-                STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -462,6 +453,17 @@ _long_double_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #sv+2
+                STA     _fcc_fpr0
+                PLA
                 LDY     #0
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -491,6 +493,7 @@ _long_double_L3
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -498,10 +501,9 @@ _long_double_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #sv
-                INC
-                INC
+                LDA     #sv+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _long_double_bits

@@ -101,6 +101,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -110,6 +111,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #bytes
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -221,6 +223,7 @@ _dref_postinc_compound_L4
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -230,6 +233,7 @@ _dref_postinc_compound_L4
                 MX      %00
                 LDA     #words
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -275,6 +279,7 @@ _dref_postinc_compound_L5
                 SBC     #100
                 STA     _fcc_img0
 _dref_postinc_compound_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -284,6 +289,7 @@ _dref_postinc_compound_L6
                 MX      %00
                 LDA     #bytes
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

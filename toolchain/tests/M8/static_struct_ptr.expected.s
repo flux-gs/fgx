@@ -50,6 +50,7 @@ _static_struct_ptr_L2
                 CMP     #0
                 BNE     *+5
                 BRL     _static_struct_ptr_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -59,6 +60,8 @@ _static_struct_ptr_L2
                 MX      %00
                 LDA     #gd
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     get_sl_dp
                 LDA     _fcc_fpr0+2
                 STA     get_sl_dp+2

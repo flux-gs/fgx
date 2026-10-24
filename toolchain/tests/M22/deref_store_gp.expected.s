@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -27,6 +28,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #buf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
@@ -91,6 +95,10 @@ _deref_store_gp_L1
                 MX      %00
                 LDA     gp
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -98,12 +106,6 @@ _deref_store_gp_L1
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -187,6 +189,7 @@ _deref_store_gp_L5
                 TYA
                 RTL
 _deref_store_gp_L6
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,6 +198,9 @@ _deref_store_gp_L6
                 REP     #$20
                 MX      %00
                 LDA     #ibuf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     ip
                 LDA     _fcc_fpr0+2
                 STA     ip+2
@@ -255,6 +261,11 @@ _deref_store_gp_L8
                 MX      %00
                 LDA     ip
                 STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                CLC
+                ADC     #ibuf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -262,13 +273,6 @@ _deref_store_gp_L8
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #ibuf
-                STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

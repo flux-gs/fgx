@@ -827,9 +827,7 @@ emit_lvalue_addr(int head)
                 emit_fpr_add_const(kd, off);
                 off = 0;
             }
-            walk_val(g_ast[s].b);                           /* index -> A */
-            emit_index_scale(g_ast[s].val);                 /* * elem size */
-            emit_fpr_add_a(kd);
+            emit_fpr_add_index(kd, g_ast[s].b, g_ast[s].val);
             break;
         default:
             die(g_ast[s].line, g_ast[s].col, "bad lvalue step (internal)");

@@ -400,6 +400,11 @@ _charpack_L12
                 TYA
                 RTL
 _charpack_L17
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -407,95 +412,98 @@ _charpack_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #1
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #2
                 SEP     #$20
                 MX      %10
                 LDY     #1
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     #1
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #1
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #4
                 SEP     #$20
                 MX      %10
                 LDY     #1
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                LDA     #2
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #5
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #0
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #1
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -504,6 +512,11 @@ _charpack_L17
                 CMP     #2
                 BEQ     *+5
                 BRL     _charpack_L21
+                LDA     #1
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -511,13 +524,6 @@ _charpack_L17
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
@@ -533,6 +539,11 @@ _charpack_L22
                 CMP     #0
                 BEQ     *+5
                 BRL     _charpack_L19
+                LDA     #2
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -540,13 +551,6 @@ _charpack_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX

@@ -101,6 +101,7 @@ main_stkok        TCS
                 PLA
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -110,6 +111,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #str
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     Cursor
                 LDA     _fcc_fpr0+2
                 STA     Cursor+2

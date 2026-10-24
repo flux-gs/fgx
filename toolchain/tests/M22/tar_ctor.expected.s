@@ -367,6 +367,7 @@ _tar_ctor_L10
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
 _tar_ctor_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -374,10 +375,9 @@ _tar_ctor_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                CLC
-                ADC     #4
+                LDA     #blk+4
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -390,6 +390,10 @@ _tar_ctor_L14
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                LDA     #8
+                CLC
+                ADC     #blk+4
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -397,14 +401,6 @@ _tar_ctor_L14
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #blk
-                CLC
-                ADC     #4
-                STA     _fcc_fpr1
-                LDA     #8
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 PHA
                 LDA     _fcc_fpr1
@@ -433,44 +429,14 @@ _tar_ctor_L15
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _tar_ctor_L14
 _tar_ctor_L16
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     blk+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #42
                 BEQ     *+5
                 BRL     _tar_ctor_L20
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #7
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     blk+11
                 AND     #$00FF
                 TAX
                 TXA
@@ -485,20 +451,7 @@ _tar_ctor_L21
                 CMP     #0
                 BEQ     *+5
                 BRL     _tar_ctor_L18
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #blk
-                STA     _fcc_fpr0
-                LDA     #4
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     blk+4
                 AND     #$00FF
                 TAX
                 TXA

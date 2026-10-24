@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #L
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -52,6 +54,11 @@ main_stkok        TCS
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -59,6 +66,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0
@@ -112,6 +120,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 STA     17,S   ; fccstk d=0 b=17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -119,14 +128,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ptrarr
+                LDA     #ptrarr+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -135,6 +139,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -143,24 +148,18 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #buf
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #L
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     L+3
                 AND     #$00FF
                 PHA
                 LDA     #1
@@ -196,6 +195,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     15,S   ; fccstk d=2 b=13
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -203,14 +203,9 @@ main_stkok        TCS
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #ptrarr
+                LDA     #ptrarr+8
                 STA     _fcc_fpr1
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

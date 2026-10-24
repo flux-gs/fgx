@@ -19,6 +19,10 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                LDA     #3
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -26,27 +30,23 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #42
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                LDA     #3
+                CLC
+                ADC     #words
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #words
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img1
                 LDA     _fcc_fpr0

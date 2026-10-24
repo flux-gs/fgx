@@ -39,15 +39,6 @@ pick_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #buf
-                STA     _fcc_fpr0
                 DO      6+pick_FRAMESIZE/256
                 TSC
                 CLC
@@ -59,8 +50,16 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #buf
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -140,6 +139,10 @@ _fnptr_ptrret_L1
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -147,12 +150,6 @@ _fnptr_ptrret_L1
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

@@ -223,11 +223,6 @@ main_stkok        TCS
                 INC
                 INC
                 STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 PHA
                 FGX2_FARCALL sink
@@ -332,13 +327,8 @@ main_stkok        TCS
                 LDA     _libc_blk_libso_shapes
                 CLC
                 ADC     #18
-                STA     _fcc_fpr0
-                LDA     #8
-                TAX
-                TXA
-                DEC
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #7
                 STA     _fcc_fpr0
                 LDA     #122
                 SEP     #$20
@@ -468,11 +458,8 @@ main_stkok        TCS
                 LDA     _libc_blk_libso_shapes
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -498,11 +485,8 @@ _libso_shapes_L23
                 LDA     _libc_blk_libso_shapes
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -598,10 +582,8 @@ _libso_shapes_L17
                 LDA     _libc_blk_libso_shapes
                 CLC
                 ADC     #18
-                STA     _fcc_fpr0
-                LDA     #7
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -657,11 +639,6 @@ _libso_shapes_L11
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -686,10 +663,6 @@ _libso_shapes_L9
                 LDA     _libc_blk_libso_shapes
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -716,10 +689,7 @@ _libso_shapes_L7
                 LDA     _libc_blk_libso_shapes
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
+                INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

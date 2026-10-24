@@ -192,6 +192,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -201,6 +202,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     27,S   ; fccstk d=0 b=27
                 LDA     _fcc_fpr0
@@ -691,6 +693,7 @@ _llong_mem_L18
                 TYA
                 RTL
 _llong_mem_L16
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -700,6 +703,8 @@ _llong_mem_L16
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     p
                 LDA     _fcc_fpr0+2
                 STA     p+2
@@ -763,6 +768,7 @@ _llong_mem_L16
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -772,13 +778,7 @@ _llong_mem_L16
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -897,30 +897,13 @@ _llong_mem_L19
 _llong_mem_L22
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     p+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #p
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
+                LDA     p
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
@@ -992,6 +975,7 @@ _llong_mem_L22
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -999,15 +983,9 @@ _llong_mem_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -1040,23 +1018,11 @@ _llong_mem_L25
 _llong_mem_L23
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     p+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #p
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     p
                 STA     _fcc_fpr0
                 LDA     n
                 ASL
@@ -1186,13 +1152,8 @@ _llong_mem_L26
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
@@ -1239,13 +1200,8 @@ _llong_mem_L26
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1375,22 +1331,6 @@ _llong_mem_L27
                 TYA
                 RTL
 _llong_mem_L30
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_q3
                 LDA     5,S   ; fccstk d=0 b=5
@@ -1399,6 +1339,17 @@ _llong_mem_L30
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
                 FGX2_FARCALL _fcc_ll_neg
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #garr+16
+                STA     _fcc_fpr0
+                PLA
                 LDY     #0
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -1428,6 +1379,7 @@ _llong_mem_L30
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1435,15 +1387,9 @@ _llong_mem_L30
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+16
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -1474,15 +1420,6 @@ _llong_mem_L33
                 TYA
                 RTL
 _llong_mem_L31
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
                 LDA     n
                 TAX
                 TXA
@@ -1491,8 +1428,15 @@ _llong_mem_L31
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #garr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -1831,6 +1775,7 @@ _llong_mem_L41
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1838,10 +1783,9 @@ _llong_mem_L41
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                INC
+                LDA     #gs+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -2207,13 +2151,8 @@ _llong_mem_L47
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     #3
                 JSR     _fcc_long_from_int
@@ -2245,13 +2184,8 @@ _llong_mem_L47
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -2319,13 +2253,8 @@ _llong_mem_L47
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -2585,33 +2514,13 @@ _llong_mem_L48
                 TYA
                 RTL
 _llong_mem_L49
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+8
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -2645,6 +2554,17 @@ _llong_mem_L49
                 STA     _fcc_q3
                 TYA
                 FGX2_FARCALL _fcc_ll_or
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #garr+8
+                STA     _fcc_fpr0
+                PLA
                 LDY     #0
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -2674,6 +2594,7 @@ _llong_mem_L49
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2681,15 +2602,9 @@ _llong_mem_L49
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -3420,6 +3335,14 @@ _llong_mem_L60
                 TYA
                 RTL
 _llong_mem_L61
+                LDA     #0
+                STA     _fcc_q3
+                LDA     #65535
+                STA     _fcc_q2
+                LDA     #65535
+                STA     _fcc_long_hi
+                LDA     #65535
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3429,20 +3352,7 @@ _llong_mem_L61
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_q3
-                LDA     #65535
-                STA     _fcc_q2
-                LDA     #65535
-                STA     _fcc_long_hi
-                LDA     #65535
+                PLA
                 LDY     #0
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -3516,33 +3426,13 @@ _llong_mem_L61
                 PLA
                 PLA
                 TYA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     garr
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -3603,13 +3493,8 @@ _llong_mem_L62
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #24
                 STA     _fcc_fpr0
                 LDA     #0
                 JSR     _fcc_long_from_int
@@ -3641,13 +3526,8 @@ _llong_mem_L62
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #24
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -3710,13 +3590,8 @@ _llong_mem_L62
                 LDA     _fcc_fb
                 CLC
                 ADC     #30
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #24
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -4089,6 +3964,7 @@ _llong_mem_L68
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4098,6 +3974,7 @@ _llong_mem_L68
                 MX      %00
                 LDA     #gi1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -4184,33 +4061,13 @@ _llong_mem_L71
                 TYA
                 RTL
 _llong_mem_L69
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gi3
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+6
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+4
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+2
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -4252,33 +4109,13 @@ _llong_mem_L69
                 CMP     #0
                 BEQ     *+5
                 BRL     _llong_mem_L79
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gi3
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+8
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -4344,6 +4181,7 @@ _llong_mem_L80
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4351,15 +4189,9 @@ _llong_mem_L80
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gi3
+                LDA     #gi3+16
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -4387,33 +4219,13 @@ _llong_mem_L78
                 CMP     #0
                 BEQ     *+5
                 BRL     _llong_mem_L75
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gi3
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+30
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+28
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+26
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     gi3+24
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -4490,6 +4302,7 @@ _llong_mem_L74
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4499,6 +4312,7 @@ _llong_mem_L74
                 MX      %00
                 LDA     #gi4
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -4551,6 +4365,7 @@ _llong_mem_L83
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4558,10 +4373,9 @@ _llong_mem_L83
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsi
-                INC
-                INC
+                LDA     #gsi+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_mem_is
@@ -4750,13 +4564,6 @@ _llong_mem_L93
                 CLC
                 ADC     #74
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -4818,13 +4625,8 @@ _llong_mem_L93
                 LDA     _fcc_fb
                 CLC
                 ADC     #74
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -4895,13 +4697,8 @@ _llong_mem_L100
                 LDA     _fcc_fb
                 CLC
                 ADC     #74
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y

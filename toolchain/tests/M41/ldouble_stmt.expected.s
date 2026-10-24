@@ -51,6 +51,7 @@ main_stkok        TCS
                 LDA     _fcc_q3
                 STA     15,S   ; fccstk d=0 b=15
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -60,10 +61,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     31,S   ; fccstk d=0 b=31
                 LDA     _fcc_fpr0
                 STA     29,S   ; fccstk d=0 b=29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -71,14 +74,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ga
+                LDA     #ga+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
@@ -272,6 +270,10 @@ _ldouble_stmt_L1
                 LDA     _fcc_long_hi
                 STA:    $0002,X
                 PLA
+                LDA     ga+6
+                STA     _fcc_long_hi
+                LDA     ga+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -279,18 +281,9 @@ _ldouble_stmt_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ga
+                LDA     #ga+4
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfromf
@@ -993,6 +986,14 @@ _ldouble_stmt_L8
                 TYA
                 RTL
 _ldouble_stmt_L9
+                LDA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_q3
+                LDA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_q2
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_long_hi
+                LDA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1002,19 +1003,7 @@ _ldouble_stmt_L9
                 MX      %00
                 LDA     #ga
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_q3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_q2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_long_hi
-                LDA     1,S   ; fccstk d=0 b=1
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dtof

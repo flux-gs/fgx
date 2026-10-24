@@ -30,6 +30,7 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     slot+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -39,6 +40,7 @@ pick_stkok        TCS
                 MX      %00
                 LDA     #slot
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC

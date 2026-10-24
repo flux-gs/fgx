@@ -78,6 +78,7 @@ _statbig_L5
                 BRL     _statbig_L4
                 LDA     #500
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -87,6 +88,7 @@ _statbig_L5
                 MX      %00
                 LDA     #blk
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     9,S   ; fccstk d=6 b=3

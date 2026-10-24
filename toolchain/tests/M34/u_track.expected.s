@@ -67,6 +67,7 @@ main_stkok        TCS
                 PLA
                 LDA     #36864
                 STA     gs+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -76,6 +77,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2

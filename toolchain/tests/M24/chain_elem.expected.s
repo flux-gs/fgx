@@ -28,6 +28,10 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                LDA     #0
+                CLC
+                ADC     #b
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35,12 +39,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #b
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #5
                 SEP     #$20
                 MX      %10
@@ -67,6 +65,11 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                LDA     #0
+                ASL
+                CLC
+                ADC     #q
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -74,13 +77,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #q
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #3
                 STA     [_fcc_fpr0]
                 TAY

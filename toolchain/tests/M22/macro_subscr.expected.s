@@ -181,6 +181,7 @@ _macro_subscr_L2
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -190,10 +191,12 @@ _macro_subscr_L2
                 MX      %00
                 LDA     #dbuf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -203,6 +206,7 @@ _macro_subscr_L2
                 MX      %00
                 LDA     #sbuf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0

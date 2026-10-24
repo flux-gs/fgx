@@ -36,6 +36,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _vfslayout_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -43,10 +44,10 @@ _vfslayout_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gdi
-                CLC
-                ADC     #12
+                LDA     #gdi+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -56,6 +57,7 @@ _vfslayout_L0
                 MX      %00
                 LDA     #gdi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -99,6 +101,7 @@ _vfslayout_L3
                 TYA
                 RTL
 _vfslayout_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -108,6 +111,8 @@ _vfslayout_L2
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -117,6 +122,7 @@ _vfslayout_L2
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -136,6 +142,7 @@ _vfslayout_L2
                 TYA
                 RTL
 _vfslayout_L4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -143,10 +150,10 @@ _vfslayout_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #36
+                LDA     #gin+36
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -156,6 +163,7 @@ _vfslayout_L4
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -201,6 +209,7 @@ _vfslayout_L5
                 TYA
                 RTL
 _vfslayout_L7
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -208,10 +217,10 @@ _vfslayout_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #8
+                LDA     #gin+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -221,6 +230,7 @@ _vfslayout_L7
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -240,6 +250,7 @@ _vfslayout_L7
                 TYA
                 RTL
 _vfslayout_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -247,10 +258,10 @@ _vfslayout_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #12
+                LDA     #gin+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -260,6 +271,7 @@ _vfslayout_L8
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -279,6 +291,7 @@ _vfslayout_L8
                 TYA
                 RTL
 _vfslayout_L9
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -286,10 +299,10 @@ _vfslayout_L9
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #16
+                LDA     #gin+16
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -299,6 +312,7 @@ _vfslayout_L9
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -318,6 +332,7 @@ _vfslayout_L9
                 TYA
                 RTL
 _vfslayout_L10
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -325,10 +340,10 @@ _vfslayout_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #18
+                LDA     #gin+18
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -338,6 +353,7 @@ _vfslayout_L10
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -357,6 +373,7 @@ _vfslayout_L10
                 TYA
                 RTL
 _vfslayout_L11
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -364,10 +381,10 @@ _vfslayout_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #20
+                LDA     #gin+20
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -377,6 +394,7 @@ _vfslayout_L11
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -396,6 +414,7 @@ _vfslayout_L11
                 TYA
                 RTL
 _vfslayout_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -403,10 +422,10 @@ _vfslayout_L12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #22
+                LDA     #gin+22
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -416,6 +435,7 @@ _vfslayout_L12
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -435,6 +455,7 @@ _vfslayout_L12
                 TYA
                 RTL
 _vfslayout_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -442,10 +463,10 @@ _vfslayout_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #24
+                LDA     #gin+24
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -455,6 +476,7 @@ _vfslayout_L13
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -474,6 +496,7 @@ _vfslayout_L13
                 TYA
                 RTL
 _vfslayout_L14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -481,10 +504,10 @@ _vfslayout_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #28
+                LDA     #gin+28
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -494,6 +517,7 @@ _vfslayout_L14
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -513,6 +537,7 @@ _vfslayout_L14
                 TYA
                 RTL
 _vfslayout_L15
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -520,10 +545,10 @@ _vfslayout_L15
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #32
+                LDA     #gin+32
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -533,6 +558,7 @@ _vfslayout_L15
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -552,6 +578,7 @@ _vfslayout_L15
                 TYA
                 RTL
 _vfslayout_L16
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -559,10 +586,10 @@ _vfslayout_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gin
-                CLC
-                ADC     #36
+                LDA     #gin+36
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -572,6 +599,7 @@ _vfslayout_L16
                 MX      %00
                 LDA     #gin
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -591,6 +619,7 @@ _vfslayout_L16
                 TYA
                 RTL
 _vfslayout_L17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -600,6 +629,8 @@ _vfslayout_L17
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -609,6 +640,7 @@ _vfslayout_L17
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -628,6 +660,7 @@ _vfslayout_L17
                 TYA
                 RTL
 _vfslayout_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -635,10 +668,10 @@ _vfslayout_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                INC
-                INC
+                LDA     #gvn+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -648,6 +681,7 @@ _vfslayout_L18
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -667,6 +701,7 @@ _vfslayout_L18
                 TYA
                 RTL
 _vfslayout_L19
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -674,10 +709,10 @@ _vfslayout_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #10
+                LDA     #gvn+10
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -687,6 +722,7 @@ _vfslayout_L19
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -706,6 +742,7 @@ _vfslayout_L19
                 TYA
                 RTL
 _vfslayout_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -713,10 +750,10 @@ _vfslayout_L20
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #14
+                LDA     #gvn+14
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -726,6 +763,7 @@ _vfslayout_L20
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -745,6 +783,7 @@ _vfslayout_L20
                 TYA
                 RTL
 _vfslayout_L21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -752,10 +791,10 @@ _vfslayout_L21
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #18
+                LDA     #gvn+18
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -765,6 +804,7 @@ _vfslayout_L21
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -784,6 +824,7 @@ _vfslayout_L21
                 TYA
                 RTL
 _vfslayout_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -791,10 +832,10 @@ _vfslayout_L22
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #22
+                LDA     #gvn+22
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -804,6 +845,7 @@ _vfslayout_L22
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -823,6 +865,7 @@ _vfslayout_L22
                 TYA
                 RTL
 _vfslayout_L23
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -830,10 +873,10 @@ _vfslayout_L23
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #60
+                LDA     #gvn+60
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -843,6 +886,7 @@ _vfslayout_L23
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -887,6 +931,7 @@ _vfslayout_L24
 _vfslayout_L25
                 LDA     #164
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -894,10 +939,10 @@ _vfslayout_L25
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gvn
-                CLC
-                ADC     #60
+                LDA     #gvn+60
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -907,6 +952,7 @@ _vfslayout_L25
                 MX      %00
                 LDA     #gvn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -948,6 +994,7 @@ _vfslayout_L26
                 TYA
                 RTL
 _vfslayout_L27
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -955,10 +1002,10 @@ _vfslayout_L27
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsf
-                CLC
-                ADC     #4
+                LDA     #gsf+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -968,6 +1015,7 @@ _vfslayout_L27
                 MX      %00
                 LDA     #gsf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -987,6 +1035,7 @@ _vfslayout_L27
                 TYA
                 RTL
 _vfslayout_L28
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -994,10 +1043,10 @@ _vfslayout_L28
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsf
-                CLC
-                ADC     #36
+                LDA     #gsf+36
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1007,6 +1056,7 @@ _vfslayout_L28
                 MX      %00
                 LDA     #gsf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1026,6 +1076,7 @@ _vfslayout_L28
                 TYA
                 RTL
 _vfslayout_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1033,10 +1084,10 @@ _vfslayout_L29
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsf
-                CLC
-                ADC     #68
+                LDA     #gsf+68
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1046,6 +1097,7 @@ _vfslayout_L29
                 MX      %00
                 LDA     #gsf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1082,6 +1134,7 @@ _vfslayout_L30
                 TYA
                 RTL
 _vfslayout_L31
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1089,10 +1142,10 @@ _vfslayout_L31
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gmn
-                CLC
-                ADC     #26
+                LDA     #gmn+26
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1102,6 +1155,7 @@ _vfslayout_L31
                 MX      %00
                 LDA     #gmn
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1368,6 +1422,7 @@ _vfslayout_L40
                 TYA
                 RTL
 _vfslayout_L41
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1377,6 +1432,8 @@ _vfslayout_L41
                 MX      %00
                 LDA     #gsi
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1386,6 +1443,7 @@ _vfslayout_L41
                 MX      %00
                 LDA     #gsi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1405,6 +1463,7 @@ _vfslayout_L41
                 TYA
                 RTL
 _vfslayout_L42
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1412,10 +1471,10 @@ _vfslayout_L42
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsi
-                CLC
-                ADC     #4
+                LDA     #gsi+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1425,6 +1484,7 @@ _vfslayout_L42
                 MX      %00
                 LDA     #gsi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1444,6 +1504,7 @@ _vfslayout_L42
                 TYA
                 RTL
 _vfslayout_L43
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1451,10 +1512,10 @@ _vfslayout_L43
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsi
-                CLC
-                ADC     #8
+                LDA     #gsi+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1464,6 +1525,7 @@ _vfslayout_L43
                 MX      %00
                 LDA     #gsi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1483,6 +1545,7 @@ _vfslayout_L43
                 TYA
                 RTL
 _vfslayout_L44
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1490,10 +1553,10 @@ _vfslayout_L44
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gsi
-                CLC
-                ADC     #12
+                LDA     #gsi+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1503,6 +1566,7 @@ _vfslayout_L44
                 MX      %00
                 LDA     #gsi
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1729,6 +1793,7 @@ _vfslayout_L56
                 TYA
                 RTL
 _vfslayout_L57
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1738,6 +1803,8 @@ _vfslayout_L57
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1747,6 +1814,7 @@ _vfslayout_L57
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1766,6 +1834,7 @@ _vfslayout_L57
                 TYA
                 RTL
 _vfslayout_L58
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1773,10 +1842,10 @@ _vfslayout_L58
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                INC
-                INC
+                LDA     #gfl+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1786,6 +1855,7 @@ _vfslayout_L58
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1805,6 +1875,7 @@ _vfslayout_L58
                 TYA
                 RTL
 _vfslayout_L59
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1812,10 +1883,10 @@ _vfslayout_L59
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #4
+                LDA     #gfl+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1825,6 +1896,7 @@ _vfslayout_L59
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1844,6 +1916,7 @@ _vfslayout_L59
                 TYA
                 RTL
 _vfslayout_L60
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1851,10 +1924,10 @@ _vfslayout_L60
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #6
+                LDA     #gfl+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1864,6 +1937,7 @@ _vfslayout_L60
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1883,6 +1957,7 @@ _vfslayout_L60
                 TYA
                 RTL
 _vfslayout_L61
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1890,10 +1965,10 @@ _vfslayout_L61
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #8
+                LDA     #gfl+8
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1903,6 +1978,7 @@ _vfslayout_L61
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1922,6 +1998,7 @@ _vfslayout_L61
                 TYA
                 RTL
 _vfslayout_L62
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1929,10 +2006,10 @@ _vfslayout_L62
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #12
+                LDA     #gfl+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1942,6 +2019,7 @@ _vfslayout_L62
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -1961,6 +2039,7 @@ _vfslayout_L62
                 TYA
                 RTL
 _vfslayout_L63
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1968,10 +2047,10 @@ _vfslayout_L63
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #16
+                LDA     #gfl+16
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1981,6 +2060,7 @@ _vfslayout_L63
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2000,6 +2080,7 @@ _vfslayout_L63
                 TYA
                 RTL
 _vfslayout_L64
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2007,10 +2088,10 @@ _vfslayout_L64
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gfl
-                CLC
-                ADC     #20
+                LDA     #gfl+20
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2020,6 +2101,7 @@ _vfslayout_L64
                 MX      %00
                 LDA     #gfl
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2118,6 +2200,7 @@ _vfslayout_L68
                 TYA
                 RTL
 _vfslayout_L70
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2125,10 +2208,10 @@ _vfslayout_L70
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                INC
-                INC
+                LDA     #gbf+2
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2138,6 +2221,7 @@ _vfslayout_L70
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2157,6 +2241,7 @@ _vfslayout_L70
                 TYA
                 RTL
 _vfslayout_L71
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2164,10 +2249,10 @@ _vfslayout_L71
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #22
+                LDA     #gbf+22
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2177,6 +2262,7 @@ _vfslayout_L71
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2196,6 +2282,7 @@ _vfslayout_L71
                 TYA
                 RTL
 _vfslayout_L72
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2203,10 +2290,10 @@ _vfslayout_L72
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #24
+                LDA     #gbf+24
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2216,6 +2303,7 @@ _vfslayout_L72
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2235,6 +2323,7 @@ _vfslayout_L72
                 TYA
                 RTL
 _vfslayout_L73
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2242,10 +2331,10 @@ _vfslayout_L73
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #28
+                LDA     #gbf+28
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2255,6 +2344,7 @@ _vfslayout_L73
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2274,6 +2364,7 @@ _vfslayout_L73
                 TYA
                 RTL
 _vfslayout_L74
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2281,10 +2372,10 @@ _vfslayout_L74
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #32
+                LDA     #gbf+32
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2294,6 +2385,7 @@ _vfslayout_L74
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2313,6 +2405,7 @@ _vfslayout_L74
                 TYA
                 RTL
 _vfslayout_L75
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2320,10 +2413,10 @@ _vfslayout_L75
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #38
+                LDA     #gbf+38
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2333,6 +2426,7 @@ _vfslayout_L75
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2352,6 +2446,7 @@ _vfslayout_L75
                 TYA
                 RTL
 _vfslayout_L76
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2359,10 +2454,10 @@ _vfslayout_L76
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #42
+                LDA     #gbf+42
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2372,6 +2467,7 @@ _vfslayout_L76
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2391,6 +2487,7 @@ _vfslayout_L76
                 TYA
                 RTL
 _vfslayout_L77
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2398,10 +2495,10 @@ _vfslayout_L77
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbf
-                CLC
-                ADC     #46
+                LDA     #gbf+46
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2411,6 +2508,7 @@ _vfslayout_L77
                 MX      %00
                 LDA     #gbf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2708,6 +2806,7 @@ _vfslayout_L86
                 TYA
                 RTL
 _vfslayout_L87
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2717,6 +2816,8 @@ _vfslayout_L87
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2726,6 +2827,7 @@ _vfslayout_L87
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2745,6 +2847,7 @@ _vfslayout_L87
                 TYA
                 RTL
 _vfslayout_L88
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2752,10 +2855,10 @@ _vfslayout_L88
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gui
-                CLC
-                ADC     #4
+                LDA     #gui+4
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2765,6 +2868,7 @@ _vfslayout_L88
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2784,6 +2888,7 @@ _vfslayout_L88
                 TYA
                 RTL
 _vfslayout_L89
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2791,10 +2896,10 @@ _vfslayout_L89
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gui
-                CLC
-                ADC     #6
+                LDA     #gui+6
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2804,6 +2909,7 @@ _vfslayout_L89
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2823,6 +2929,7 @@ _vfslayout_L89
                 TYA
                 RTL
 _vfslayout_L90
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2830,10 +2937,10 @@ _vfslayout_L90
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gui
-                CLC
-                ADC     #10
+                LDA     #gui+10
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2843,6 +2950,7 @@ _vfslayout_L90
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2862,6 +2970,7 @@ _vfslayout_L90
                 TYA
                 RTL
 _vfslayout_L91
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2869,10 +2978,10 @@ _vfslayout_L91
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gui
-                CLC
-                ADC     #12
+                LDA     #gui+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2882,6 +2991,7 @@ _vfslayout_L91
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2901,6 +3011,7 @@ _vfslayout_L91
                 TYA
                 RTL
 _vfslayout_L92
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2908,10 +3019,10 @@ _vfslayout_L92
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gui
-                CLC
-                ADC     #14
+                LDA     #gui+14
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2921,6 +3032,7 @@ _vfslayout_L92
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
@@ -2957,6 +3069,7 @@ _vfslayout_L93
                 TYA
                 RTL
 _vfslayout_L94
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2966,6 +3079,8 @@ _vfslayout_L94
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2975,6 +3090,7 @@ _vfslayout_L94
                 MX      %00
                 LDA     #gui
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1

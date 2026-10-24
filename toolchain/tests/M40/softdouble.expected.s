@@ -12906,15 +12906,6 @@ _softdouble_L159
 _softdouble_L162
                 BMI     *+5
                 BRL     _softdouble_L161
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_softdouble_vec
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -12927,8 +12918,15 @@ _softdouble_L162
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_softdouble_vec
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
@@ -13515,6 +13513,14 @@ _softdouble_L174
 _softdouble_L177
                 BMI     *+5
                 BRL     _softdouble_L176
+                LDA     1,S   ; fccstk d=0 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_cvt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13522,16 +13528,6 @@ _softdouble_L177
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_cvt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -13557,6 +13553,14 @@ _softdouble_L177
                 PHA
                 TYA
                 PHA
+                LDA     9,S   ; fccstk d=8 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_cvt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13564,16 +13568,6 @@ _softdouble_L177
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_cvt
-                STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=8 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -13609,6 +13603,14 @@ _softdouble_L177
                 CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L179
+                LDA     1,S   ; fccstk d=0 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_cvt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13616,16 +13618,6 @@ _softdouble_L177
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_cvt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -13658,6 +13650,14 @@ _softdouble_L177
                 PHA
                 TYA
                 PHA
+                LDA     5,S   ; fccstk d=4 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_cvt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13665,16 +13665,6 @@ _softdouble_L177
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_cvt
-                STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=4 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -13743,6 +13733,14 @@ _softdouble_L181
 _softdouble_L184
                 BMI     *+5
                 BRL     _softdouble_L183
+                LDA     1,S   ; fccstk d=0 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_flt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13750,16 +13748,6 @@ _softdouble_L184
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_flt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -13785,6 +13773,14 @@ _softdouble_L184
                 PHA
                 TYA
                 PHA
+                LDA     9,S   ; fccstk d=8 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_flt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13792,16 +13788,6 @@ _softdouble_L184
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_flt
-                STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=8 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -13837,6 +13823,14 @@ _softdouble_L184
                 CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L186
+                LDA     1,S   ; fccstk d=0 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_flt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13844,16 +13838,6 @@ _softdouble_L184
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_flt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -13886,6 +13870,14 @@ _softdouble_L184
                 PHA
                 TYA
                 PHA
+                LDA     5,S   ; fccstk d=4 b=1
+                ASL
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #_softdouble_flt
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13893,16 +13885,6 @@ _softdouble_L184
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_softdouble_flt
-                STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=4 b=1
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi

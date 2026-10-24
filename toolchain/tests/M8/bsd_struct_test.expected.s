@@ -310,14 +310,6 @@ main_stkok        TCS
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL set_point
@@ -340,13 +332,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -370,14 +357,8 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #0
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0

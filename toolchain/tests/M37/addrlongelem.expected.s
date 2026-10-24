@@ -96,6 +96,7 @@ _addrlongelem_L1
                 INC     _fcc_img0
                 BRL     _addrlongelem_L0
 _addrlongelem_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -103,14 +104,9 @@ _addrlongelem_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
+                LDA     #_addrlongelem_al+8
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -302,6 +298,7 @@ _addrlongelem_L7
                 LDA     _fcc_long_hi
                 STA:    $0002,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -309,14 +306,9 @@ _addrlongelem_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
+                LDA     #_addrlongelem_al+16
                 STA     _fcc_fpr0
-                LDA     #4
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -393,6 +385,11 @@ _addrlongelem_L8
 _addrlongelem_L10
                 LDA     #3
                 STA     _fcc_img1
+                ASL
+                ASL
+                CLC
+                ADC     #_addrlongelem_al
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -400,14 +397,6 @@ _addrlongelem_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -452,6 +441,11 @@ _addrlongelem_L10
 _addrlongelem_L11
                 LDA     #0
                 STA     _fcc_img1
+                ASL
+                ASL
+                CLC
+                ADC     #_addrlongelem_al
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -459,14 +453,6 @@ _addrlongelem_L11
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_al
-                STA     _fcc_fpr0
-                LDA     _fcc_img1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -509,6 +495,7 @@ _addrlongelem_L11
                 TYA
                 RTL
 _addrlongelem_L12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -518,12 +505,7 @@ _addrlongelem_L12
                 MX      %00
                 LDA     #_addrlongelem_al
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -566,6 +548,7 @@ _addrlongelem_L12
                 TYA
                 RTL
 _addrlongelem_L13
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -573,13 +556,9 @@ _addrlongelem_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addrlongelem_ai
+                LDA     #_addrlongelem_ai+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0

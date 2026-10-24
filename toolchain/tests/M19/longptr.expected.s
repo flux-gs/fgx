@@ -268,6 +268,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -277,6 +278,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #D
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi

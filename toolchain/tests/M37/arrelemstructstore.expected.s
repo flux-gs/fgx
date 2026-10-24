@@ -59,15 +59,6 @@ _arrelemstructstore_L0
 _arrelemstructstore_L3
                 BMI     *+5
                 BRL     _arrelemstructstore_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -76,19 +67,17 @@ _arrelemstructstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #49374
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -97,21 +86,21 @@ _arrelemstructstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #10
                 STA     _fcc_fpr0
                 LDA     #48879
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -120,7 +109,16 @@ _arrelemstructstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -128,15 +126,6 @@ _arrelemstructstore_L3
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -145,7 +134,16 @@ _arrelemstructstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -174,15 +172,6 @@ _arrelemstructstore_L3
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -191,7 +180,16 @@ _arrelemstructstore_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
@@ -421,6 +419,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -430,22 +429,14 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gt
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
                 FGX2_FARCALL _arrelemstructstore_seed
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -453,7 +444,16 @@ main_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #2
                 STA     _fcc_fpr0
@@ -477,6 +477,7 @@ _arrelemstructstore_L7
                 DEY
                 BPL     _arrelemstructstore_L7
                 LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -484,18 +485,9 @@ _arrelemstructstore_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
+                LDA     #gt+14
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arrelemstructstore_landed
@@ -510,6 +502,7 @@ _arrelemstructstore_L7
                 BRL     _arrelemstructstore_L8
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -517,18 +510,9 @@ _arrelemstructstore_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
+                LDA     #gt+14
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arrelemstructstore_landed
@@ -552,24 +536,7 @@ _arrelemstructstore_L7
                 TYA
                 RTL
 _arrelemstructstore_L8
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+12
                 TAX
                 TXA
                 CMP     #49374
@@ -586,26 +553,7 @@ _arrelemstructstore_L8
                 TYA
                 RTL
 _arrelemstructstore_L9
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+22
                 TAX
                 TXA
                 CMP     #48879
@@ -622,27 +570,7 @@ _arrelemstructstore_L9
                 TYA
                 RTL
 _arrelemstructstore_L10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+2
                 TAX
                 TXA
                 CMP     #36864
@@ -659,27 +587,7 @@ _arrelemstructstore_L10
                 TYA
                 RTL
 _arrelemstructstore_L11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+26
                 TAX
                 TXA
                 CMP     #36866
@@ -701,23 +609,11 @@ _arrelemstructstore_L12
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     gp
                 STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
@@ -751,6 +647,7 @@ _arrelemstructstore_L13
                 DEY
                 BPL     _arrelemstructstore_L13
                 LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -758,19 +655,9 @@ _arrelemstructstore_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
+                LDA     #gt+26
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arrelemstructstore_landed
@@ -785,6 +672,7 @@ _arrelemstructstore_L13
                 BRL     _arrelemstructstore_L14
                 LDA     #10
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -792,19 +680,9 @@ _arrelemstructstore_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
+                LDA     #gt+26
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arrelemstructstore_landed
@@ -828,25 +706,7 @@ _arrelemstructstore_L13
                 TYA
                 RTL
 _arrelemstructstore_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+24
                 TAX
                 TXA
                 CMP     #49374
@@ -863,27 +723,7 @@ _arrelemstructstore_L14
                 TYA
                 RTL
 _arrelemstructstore_L15
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+34
                 TAX
                 TXA
                 CMP     #48879
@@ -900,26 +740,7 @@ _arrelemstructstore_L15
                 TYA
                 RTL
 _arrelemstructstore_L16
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+14
                 TAX
                 TXA
                 CMP     #36865
@@ -950,16 +771,6 @@ _arrelemstructstore_L17
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr0+2
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -968,7 +779,16 @@ _arrelemstructstore_L17
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #gt
+                STA     _fcc_fpr1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr1
                 CLC
                 ADC     #2
                 STA     _fcc_fpr1
@@ -1047,27 +867,7 @@ _arrelemstructstore_L20
                 TYA
                 RTL
 _arrelemstructstore_L21
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+2
                 TAX
                 TXA
                 CMP     #36864
@@ -1087,16 +887,6 @@ _arrelemstructstore_L22
                 FGX2_FARCALL _arrelemstructstore_seed
                 LDA     #2
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1104,38 +894,8 @@ _arrelemstructstore_L22
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
+                ADC     #gt
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                CLC
-                ADC     #2
-                STA     _fcc_fpr1
-                LDY     #6
-_arrelemstructstore_L23
-                LDA     [_fcc_fpr1],Y
-                STA     [_fcc_fpr0],Y
-                DEY
-                DEY
-                BPL     _arrelemstructstore_L23
-                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1143,20 +903,29 @@ _arrelemstructstore_L23
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
+                ADC     #2
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #gt+2
+                STA     _fcc_fpr1
+                PLA
+                LDY     #6
+_arrelemstructstore_L23
+                LDA     [_fcc_fpr1],Y
+                STA     [_fcc_fpr0],Y
+                DEY
+                DEY
+                BPL     _arrelemstructstore_L23
+                LDA     gt+26
                 TAX
                 TXA
                 CMP     #36864
@@ -1173,30 +942,9 @@ _arrelemstructstore_L23
                 TYA
                 RTL
 _arrelemstructstore_L24
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gt+30
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     gt+28
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1228,27 +976,7 @@ _arrelemstructstore_L24
                 TYA
                 RTL
 _arrelemstructstore_L25
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+32
                 TAX
                 TXA
                 CMP     #45056
@@ -1265,25 +993,7 @@ _arrelemstructstore_L25
                 TYA
                 RTL
 _arrelemstructstore_L26
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+24
                 TAX
                 TXA
                 CMP     #49374
@@ -1300,27 +1010,7 @@ _arrelemstructstore_L26
                 TYA
                 RTL
 _arrelemstructstore_L27
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+34
                 TAX
                 TXA
                 CMP     #48879
@@ -1337,27 +1027,7 @@ _arrelemstructstore_L27
                 TYA
                 RTL
 _arrelemstructstore_L28
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+2
                 TAX
                 TXA
                 CMP     #36864
@@ -1374,26 +1044,7 @@ _arrelemstructstore_L28
                 TYA
                 RTL
 _arrelemstructstore_L29
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+14
                 TAX
                 TXA
                 CMP     #36865
@@ -1413,16 +1064,6 @@ _arrelemstructstore_L30
                 FGX2_FARCALL _arrelemstructstore_seed
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1430,7 +1071,16 @@ _arrelemstructstore_L30
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #2
                 STA     _fcc_fpr0
@@ -1453,27 +1103,7 @@ _arrelemstructstore_L31
                 DEY
                 DEY
                 BPL     _arrelemstructstore_L31
-                LDA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+14
                 TAX
                 TXA
                 CMP     #0
@@ -1490,29 +1120,9 @@ _arrelemstructstore_L31
                 TYA
                 RTL
 _arrelemstructstore_L32
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gt+18
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     gt+16
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -1544,26 +1154,7 @@ _arrelemstructstore_L32
                 TYA
                 RTL
 _arrelemstructstore_L33
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+20
                 TAX
                 TXA
                 CMP     #0
@@ -1584,24 +1175,7 @@ _arrelemstructstore_L33
                 TYA
                 RTL
 _arrelemstructstore_L34
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+12
                 TAX
                 TXA
                 CMP     #49374
@@ -1618,26 +1192,7 @@ _arrelemstructstore_L34
                 TYA
                 RTL
 _arrelemstructstore_L35
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #10
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+22
                 TAX
                 TXA
                 CMP     #48879
@@ -1654,27 +1209,7 @@ _arrelemstructstore_L35
                 TYA
                 RTL
 _arrelemstructstore_L36
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                CLC
-                ADC     #8
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+8
                 TAX
                 TXA
                 CMP     #45056
@@ -1691,27 +1226,7 @@ _arrelemstructstore_L36
                 TYA
                 RTL
 _arrelemstructstore_L37
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                INC
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     gt+26
                 TAX
                 TXA
                 CMP     #36866

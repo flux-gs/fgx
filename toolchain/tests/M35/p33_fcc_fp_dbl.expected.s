@@ -261,10 +261,6 @@ _p33_fcc_fp_dbl_L6
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
@@ -291,10 +287,8 @@ _p33_fcc_fp_dbl_L13
                 INC
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #519
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #519
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

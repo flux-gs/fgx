@@ -67,6 +67,7 @@ _commast_L0
                 STA     _tty+0
                 LDA     #1
                 STA     _rawmode
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -76,6 +77,7 @@ _commast_L0
                 MX      %00
                 LDA     #_tty
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _tty_ch
@@ -152,6 +154,7 @@ _commast_L3
                 STA     _tty+0
                 LDA     #0
                 STA     _rawmode
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -161,6 +164,7 @@ _commast_L3
                 MX      %00
                 LDA     #_tty
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _tty_ch
@@ -231,6 +235,7 @@ _commast_L10
                 STA     gwin+0
                 LDA     #6
                 STA     gwin+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -240,6 +245,7 @@ _commast_L10
                 MX      %00
                 LDA     #gwin
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0

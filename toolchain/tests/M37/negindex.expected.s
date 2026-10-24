@@ -81,6 +81,7 @@ _negindex_L1
                 INC     _fcc_img0
                 BRL     _negindex_L0
 _negindex_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -88,13 +89,9 @@ _negindex_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_negindex_ai
+                LDA     #_negindex_ai+4
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
@@ -423,6 +420,7 @@ _negindex_L14
                 TYA
                 STA:    $0000,X
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -430,12 +428,9 @@ _negindex_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_negindex_ac
+                LDA     #_negindex_ac+2
                 STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
                 LDA     _fcc_fpr0

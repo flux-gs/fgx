@@ -32,6 +32,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +42,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
@@ -116,6 +118,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -125,6 +128,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -146,6 +150,7 @@ main_stkok        TCS
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
 _strops_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -155,6 +160,7 @@ _strops_L0
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strlen
@@ -189,6 +195,7 @@ _strops_L1
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -198,6 +205,7 @@ _strops_L1
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strncmp
@@ -232,6 +240,7 @@ _strops_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -241,6 +250,7 @@ _strops_L2
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strncmp
@@ -268,6 +278,7 @@ _strops_L4
 _strops_L3
                 LDA     #8
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -277,8 +288,10 @@ _strops_L3
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -288,6 +301,7 @@ _strops_L3
                 MX      %00
                 LDA     #g2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strncpy
@@ -330,6 +344,7 @@ _strops_L7
 _strops_L5
                 LDA     #6
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -339,8 +354,10 @@ _strops_L5
                 MX      %00
                 LDA     #g2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -350,6 +367,7 @@ _strops_L5
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memcmp
@@ -373,6 +391,7 @@ _strops_L5
 _strops_L8
                 LDA     #108
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -382,6 +401,7 @@ _strops_L8
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strchr
@@ -391,6 +411,10 @@ _strops_L8
                 ADC     #6
                 TCS
                 TYA
+                LDA     #2
+                CLC
+                ADC     #g1
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -398,12 +422,6 @@ _strops_L8
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #g1
-                STA     _fcc_fpr1
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -433,6 +451,7 @@ _strops_L11
 _strops_L9
                 LDA     #108
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -442,6 +461,7 @@ _strops_L9
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strrchr
@@ -451,6 +471,10 @@ _strops_L9
                 ADC     #6
                 TCS
                 TYA
+                LDA     #3
+                CLC
+                ADC     #g1
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -458,12 +482,6 @@ _strops_L9
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #g1
-                STA     _fcc_fpr1
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -493,6 +511,7 @@ _strops_L14
 _strops_L12
                 LDA     #122
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -502,6 +521,7 @@ _strops_L12
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strchr
@@ -543,6 +563,7 @@ _strops_L17
 _strops_L15
                 LDA     #0
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -552,6 +573,7 @@ _strops_L15
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strrchr
@@ -561,6 +583,10 @@ _strops_L15
                 ADC     #6
                 TCS
                 TYA
+                LDA     #5
+                CLC
+                ADC     #g1
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -568,12 +594,6 @@ _strops_L15
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #g1
-                STA     _fcc_fpr1
-                LDA     #5
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

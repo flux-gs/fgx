@@ -39,6 +39,12 @@ _structassign_L0
 _structassign_L3
                 BMI     *+5
                 BRL     _structassign_L2
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #src+4
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -46,16 +52,6 @@ _structassign_L3
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #src
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$1111
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -168,6 +164,12 @@ _structassign_L7
 _structassign_L10
                 BMI     *+5
                 BRL     _structassign_L9
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #dst+4
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -175,16 +177,6 @@ _structassign_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #dst
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -257,27 +249,9 @@ _structassign_L9
                 TYA
                 RTL
 _structassign_L12
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #src
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     src+6
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     src+4
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -342,6 +316,12 @@ _structassign_L15
 _structassign_L18
                 BMI     *+5
                 BRL     _structassign_L17
+                LDA     _fcc_img0
+                ASL
+                ASL
+                CLC
+                ADC     #dst+4
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -349,16 +329,6 @@ _structassign_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #dst
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -376,6 +346,7 @@ _structassign_L17
                 STA     dst+0
                 LDA     #0
                 STA     dst+32
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -384,9 +355,13 @@ _structassign_L17
                 REP     #$20
                 MX      %00
                 LDA     #src
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     sp
                 LDA     _fcc_fpr0+2
                 STA     sp+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -395,6 +370,9 @@ _structassign_L17
                 REP     #$20
                 MX      %00
                 LDA     #dst
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     dp
                 LDA     _fcc_fpr0+2
                 STA     dp+2

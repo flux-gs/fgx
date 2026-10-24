@@ -859,6 +859,7 @@ _ldouble_store_L12
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -868,6 +869,7 @@ _ldouble_store_L12
                 MX      %00
                 LDA     #g
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_store_is
@@ -1014,13 +1016,8 @@ _ldouble_store_L18
                 LDA     _fcc_fb
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
@@ -1067,13 +1064,8 @@ _ldouble_store_L18
                 LDA     _fcc_fb
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1201,22 +1193,6 @@ _ldouble_store_L26
                 TYA
                 RTL
 _ldouble_store_L24
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     g+6
                 STA     _fcc_q3
                 LDA     g+4
@@ -1224,6 +1200,17 @@ _ldouble_store_L24
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #garr+8
+                STA     _fcc_fpr0
+                PLA
                 LDY     #0
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -1253,6 +1240,7 @@ _ldouble_store_L24
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1260,15 +1248,9 @@ _ldouble_store_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_store_is
@@ -1299,6 +1281,13 @@ _ldouble_store_L29
                 TYA
                 RTL
 _ldouble_store_L27
+                LDA     25,S   ; fccstk d=0 b=25
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #garr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1306,15 +1295,6 @@ _ldouble_store_L27
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     25,S   ; fccstk d=0 b=25
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -1400,13 +1380,8 @@ _ldouble_store_L30
                 LDA     _fcc_fb
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     19,S   ; fccstk d=0 b=19
@@ -1461,13 +1436,8 @@ _ldouble_store_L30
                 LDA     _fcc_fb
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1519,13 +1489,8 @@ _ldouble_store_L33
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     g+6
                 STA     _fcc_q3
@@ -1572,13 +1537,8 @@ _ldouble_store_L33
                 LDA     _fcc_fb
                 CLC
                 ADC     #26
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1714,6 +1674,7 @@ _ldouble_store_L41
                 TYA
                 RTL
 _ldouble_store_L39
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1723,36 +1684,21 @@ _ldouble_store_L39
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
                 LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
+                LDA     gp
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_fpr1+2
@@ -1798,6 +1744,7 @@ _ldouble_store_L39
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1805,15 +1752,9 @@ _ldouble_store_L39
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+16
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_store_is
@@ -1969,6 +1910,7 @@ _ldouble_store_L50
                 TYA
                 RTL
 _ldouble_store_L48
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1978,6 +1920,7 @@ _ldouble_store_L48
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
@@ -2041,6 +1984,7 @@ _ldouble_store_L48
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2048,10 +1992,9 @@ _ldouble_store_L48
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                INC
+                LDA     #gs+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_store_is
@@ -2129,6 +2072,7 @@ _ldouble_store_L54
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2136,10 +2080,9 @@ _ldouble_store_L54
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs2
-                INC
-                INC
+                LDA     #gs2+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_store_is

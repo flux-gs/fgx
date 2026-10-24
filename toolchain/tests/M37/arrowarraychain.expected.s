@@ -35,15 +35,6 @@ _arrowarraychain_L0
 _arrowarraychain_L3
                 BMI     *+5
                 BRL     _arrowarraychain_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -51,7 +42,16 @@ _arrowarraychain_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -66,13 +66,8 @@ _arrowarraychain_L3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -80,7 +75,16 @@ _arrowarraychain_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -95,13 +99,8 @@ _arrowarraychain_L3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -109,7 +108,16 @@ _arrowarraychain_L3
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -130,15 +138,6 @@ _arrowarraychain_L1
                 INC     _fcc_img0
                 BRL     _arrowarraychain_L0
 _arrowarraychain_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -146,8 +145,17 @@ _arrowarraychain_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -155,8 +163,18 @@ _arrowarraychain_L2
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+32
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
+                STA     [_fcc_fpr0]
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr1+2
+                LDY     #2
+                STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
                 LDA     #1
                 ASL
                 ASL
@@ -164,29 +182,54 @@ _arrowarraychain_L2
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     #pool+64
+                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
-                LDA     #1
+                LDA     #2
                 ASL
                 ASL
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -196,54 +239,8 @@ _arrowarraychain_L2
                 MX      %00
                 LDA     #pool
                 STA     _fcc_fpr1
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr1+2
-                LDY     #2
-                STA     [_fcc_fpr0],Y
-                PHB
                 PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr1+2
-                REP     #$20
-                MX      %00
-                LDA     #pool
-                STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -254,6 +251,7 @@ _arrowarraychain_L2
                 MX      %00
                 LDA     #30583
                 STA     wr+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -261,17 +259,9 @@ _arrowarraychain_L2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+32
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -300,15 +290,6 @@ _arrowarraychain_L4
 _arrowarraychain_L7
                 BMI     *+5
                 BRL     _arrowarraychain_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ipool
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 CLC
@@ -316,7 +297,16 @@ _arrowarraychain_L7
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #ipool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -329,6 +319,14 @@ _arrowarraychain_L7
                 CLC
                 ADC     _fcc_img0
                 STA     [_fcc_fpr0]
+                LDA     #1
+                ASL
+                INC
+                ASL
+                ASL
+                CLC
+                ADC     #ipool
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -336,15 +334,7 @@ _arrowarraychain_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ipool
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -361,15 +351,6 @@ _arrowarraychain_L5
                 INC     _fcc_img0
                 BRL     _arrowarraychain_L4
 _arrowarraychain_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #ipool
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 CLC
@@ -377,8 +358,17 @@ _arrowarraychain_L6
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #ipool
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -386,36 +376,35 @@ _arrowarraychain_L6
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #ipool
+                LDA     #ipool+12
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                INC
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ipool
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 INC
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #ipool
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -425,15 +414,8 @@ _arrowarraychain_L6
                 MX      %00
                 LDA     #ipool
                 STA     _fcc_fpr1
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -459,6 +441,7 @@ _arrowarraychain_L6
                 TYA
                 RTL
 _arrowarraychain_L8
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -468,15 +451,7 @@ _arrowarraychain_L8
                 MX      %00
                 LDA     #pool
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -673,24 +648,11 @@ _arrowarraychain_L11
 _arrowarraychain_L12
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     wr+4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #wr
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     wr+2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -816,6 +778,7 @@ _arrowarraychain_L16
                 TYA
                 RTL
 _arrowarraychain_L14
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -823,17 +786,9 @@ _arrowarraychain_L14
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+32
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
@@ -946,10 +901,8 @@ _arrowarraychain_L17
                 PLA
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #3
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -972,6 +925,7 @@ _arrowarraychain_L17
                 TYA
                 RTL
 _arrowarraychain_L20
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -981,15 +935,7 @@ _arrowarraychain_L20
                 MX      %00
                 LDA     #ipool
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
@@ -1082,11 +1028,8 @@ _arrowarraychain_L21
                 PLA
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
@@ -1138,23 +1081,16 @@ _arrowarraychain_L22
                 PLA
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #5
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #5
                 STA     _fcc_fpr0
                 LDA     #153
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -1162,7 +1098,16 @@ _arrowarraychain_L22
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -1191,15 +1136,6 @@ _arrowarraychain_L22
                 TYA
                 RTL
 _arrowarraychain_L23
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #pool
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -1207,7 +1143,16 @@ _arrowarraychain_L23
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #pool
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
@@ -1220,22 +1165,19 @@ _arrowarraychain_L23
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+64
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -1280,6 +1222,7 @@ _arrowarraychain_L23
                 TYA
                 RTL
 _arrowarraychain_L24
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1287,17 +1230,9 @@ _arrowarraychain_L24
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+64
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -1305,21 +1240,10 @@ _arrowarraychain_L24
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #$FFFF
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #-32
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -1345,15 +1269,8 @@ _arrowarraychain_L25
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #$FFFF
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #-32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -1366,6 +1283,7 @@ _arrowarraychain_L25
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1373,17 +1291,9 @@ _arrowarraychain_L25
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+64
                 STA     _fcc_fpr1
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1418,15 +1328,8 @@ _arrowarraychain_L26
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #$FFFF
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #-32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -1466,6 +1369,7 @@ _arrowarraychain_L26
                 TYA
                 RTL
 _arrowarraychain_L29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1475,15 +1379,7 @@ _arrowarraychain_L29
                 MX      %00
                 LDA     #pool
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img4
                 LDA     _fcc_fpr0
@@ -1491,21 +1387,10 @@ _arrowarraychain_L29
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #32
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -1531,21 +1416,10 @@ _arrowarraychain_L30
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #64
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -1571,21 +1445,8 @@ _arrowarraychain_L31
                 LDA     _fcc_img4
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img3
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -1624,10 +1485,7 @@ _arrowarraychain_L32
                 ADC     _fcc_fpr0
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
+                INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
@@ -1663,6 +1521,7 @@ _arrowarraychain_L33
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1670,17 +1529,9 @@ _arrowarraychain_L33
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #pool
+                LDA     #pool+32
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

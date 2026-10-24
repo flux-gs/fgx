@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30,6 +31,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gs
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -38,6 +40,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -47,6 +50,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -103,6 +108,7 @@ main_stkok        TCS
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -112,6 +118,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -213,6 +220,7 @@ _derefparen_L9
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -222,6 +230,7 @@ _derefparen_L9
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -318,6 +327,7 @@ _derefparen_L12
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -327,6 +337,8 @@ _derefparen_L12
                 MX      %00
                 LDA     #buf2
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -362,6 +374,7 @@ _derefparen_L12
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -371,6 +384,7 @@ _derefparen_L12
                 MX      %00
                 LDA     #buf2
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -475,6 +489,10 @@ _derefparen_L15
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf2
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -482,12 +500,6 @@ _derefparen_L15
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf2
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

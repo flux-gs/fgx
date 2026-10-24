@@ -523,6 +523,7 @@ _paren_postincdec_value_L23
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -532,6 +533,7 @@ _paren_postincdec_value_L23
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
@@ -561,6 +563,10 @@ _paren_postincdec_value_L23
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -568,12 +574,6 @@ _paren_postincdec_value_L23
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -638,6 +638,7 @@ _paren_postincdec_value_L26
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -647,6 +648,7 @@ _paren_postincdec_value_L26
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -711,6 +713,10 @@ _paren_postincdec_value_L31
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -718,12 +724,6 @@ _paren_postincdec_value_L31
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -763,6 +763,10 @@ _paren_postincdec_value_L38
                 TYA
                 RTL
 _paren_postincdec_value_L36
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -770,12 +774,6 @@ _paren_postincdec_value_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     _fcc_fpr0
@@ -1040,11 +1038,8 @@ _paren_postincdec_value_L46
                 LDA     _fcc_fb
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                INC
+                INC
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img5
@@ -1368,6 +1363,7 @@ _paren_postincdec_value_L64
                 TYA
                 RTL
 _paren_postincdec_value_L62
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1377,6 +1373,7 @@ _paren_postincdec_value_L62
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1417,6 +1414,7 @@ _paren_postincdec_value_L62
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1426,6 +1424,7 @@ _paren_postincdec_value_L62
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1450,6 +1449,10 @@ _paren_postincdec_value_L69
                 STA     _fcc_fpr0+2
                 LDA     41,S   ; fccstk d=0 b=41
                 STA     _fcc_fpr0
+                LDA     #1
+                CLC
+                ADC     #buf
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1457,12 +1460,6 @@ _paren_postincdec_value_L69
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #buf
-                STA     _fcc_fpr1
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

@@ -56,6 +56,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -65,6 +66,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memcpy
@@ -76,6 +78,10 @@ main_stkok        TCS
                 PHA
                 LDA     #66
                 PHA
+                LDA     #4
+                CLC
+                ADC     #gbuf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -83,12 +89,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gbuf
-                STA     _fcc_fpr0
-                LDA     #4
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
@@ -159,6 +160,7 @@ _memops_L2
                 PHA
                 LDA     #90
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -168,6 +170,7 @@ _memops_L2
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
@@ -177,6 +180,7 @@ _memops_L2
                 ADC     #8
                 TCS
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -186,6 +190,7 @@ _memops_L2
                 MX      %00
                 LDA     #gbuf
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

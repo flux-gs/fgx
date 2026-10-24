@@ -19,6 +19,7 @@ mk_stkovf       JMP     _fcc_stkoflow
 mk_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ mk_stkok        TCS
                 MX      %00
                 LDA     #_chain_structcopy_g2
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -220,6 +222,7 @@ main_stkok        TCS
                 STA     _chain_structcopy_iv+2
                 LDA     #33
                 STA     _chain_structcopy_iv+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -229,6 +232,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_chain_structcopy_g1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -241,6 +245,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     _chain_structcopy_g0+12
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -250,6 +255,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_chain_structcopy_g3
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -262,6 +268,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     _chain_structcopy_g1+12
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -270,6 +277,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #_chain_structcopy_g0
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     _chain_structcopy_gp
                 LDA     _fcc_fpr0+2
                 STA     _chain_structcopy_gp+2
@@ -287,24 +297,11 @@ main_stkok        TCS
                 STA     _chain_structcopy_g3+8
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _chain_structcopy_g0+12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g0
-                STA     _fcc_fpr0
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _chain_structcopy_g0+10
                 CLC
                 ADC     #2
                 STA     _fcc_fpr0
@@ -333,6 +330,7 @@ _chain_structcopy_L4
                 PHA
                 LDA     #11
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -340,10 +338,9 @@ _chain_structcopy_L4
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g1
-                INC
-                INC
+                LDA     #_chain_structcopy_g1+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -395,23 +392,11 @@ _chain_structcopy_L5
                 STA     _chain_structcopy_iv+0
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _chain_structcopy_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _chain_structcopy_gp
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
@@ -464,6 +449,7 @@ _chain_structcopy_L10
                 PHA
                 LDA     #44
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -471,10 +457,9 @@ _chain_structcopy_L10
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g3
-                INC
-                INC
+                LDA     #_chain_structcopy_g3+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -526,23 +511,11 @@ _chain_structcopy_L11
                 STA     _chain_structcopy_iv+2
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _chain_structcopy_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _chain_structcopy_gp
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
@@ -583,6 +556,7 @@ _chain_structcopy_L16
                 PHA
                 LDA     #44
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -590,10 +564,9 @@ _chain_structcopy_L16
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g1
-                INC
-                INC
+                LDA     #_chain_structcopy_g1+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -659,6 +632,7 @@ _chain_structcopy_L20
                 PHA
                 LDA     #44
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -666,10 +640,9 @@ _chain_structcopy_L20
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g2
-                INC
-                INC
+                LDA     #_chain_structcopy_g2+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -723,23 +696,11 @@ _chain_structcopy_L21
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _chain_structcopy_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _chain_structcopy_gp
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
@@ -798,6 +759,7 @@ _chain_structcopy_L26
                 PHA
                 LDA     #77
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -805,10 +767,9 @@ _chain_structcopy_L26
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g3
-                INC
-                INC
+                LDA     #_chain_structcopy_g3+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -856,23 +817,11 @@ _chain_structcopy_L27
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _chain_structcopy_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _chain_structcopy_gp
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
@@ -919,6 +868,7 @@ _chain_structcopy_L32
                 PHA
                 LDA     #77
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -926,10 +876,9 @@ _chain_structcopy_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_chain_structcopy_g1
-                INC
-                INC
+                LDA     #_chain_structcopy_g1+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same
@@ -963,6 +912,7 @@ _chain_structcopy_L33
                 PHA
                 LDA     #77
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -972,6 +922,7 @@ _chain_structcopy_L33
                 MX      %00
                 LDA     #_chain_structcopy_iv
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _chain_structcopy_same

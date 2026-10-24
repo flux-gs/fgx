@@ -48,13 +48,10 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #28
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -64,6 +61,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #pa
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -84,13 +83,10 @@ main_stkok        TCS
                 LDA     _fcc_fb
                 CLC
                 ADC     #28
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -100,6 +96,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     #pb
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -172,6 +170,7 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -181,6 +180,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #msg
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -256,12 +256,8 @@ _memchain3_L0
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -320,10 +316,6 @@ _memchain3_L1
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
@@ -371,10 +363,6 @@ _memchain3_L2
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 STA     19,S   ; fccstk d=0 b=19
@@ -421,12 +409,8 @@ _memchain3_L3
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -475,12 +459,8 @@ _memchain3_L3
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA

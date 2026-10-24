@@ -62,6 +62,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -71,6 +72,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -91,6 +93,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -100,6 +103,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -186,6 +190,7 @@ _llong_printf_L0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -195,6 +200,7 @@ _llong_printf_L0
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -215,6 +221,7 @@ _llong_printf_L0
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -224,6 +231,7 @@ _llong_printf_L0
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -276,6 +284,7 @@ _llong_printf_L1
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -285,6 +294,7 @@ _llong_printf_L1
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -305,6 +315,7 @@ _llong_printf_L1
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -314,6 +325,7 @@ _llong_printf_L1
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -382,6 +394,7 @@ _llong_printf_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -391,6 +404,7 @@ _llong_printf_L2
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -411,6 +425,7 @@ _llong_printf_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -420,6 +435,7 @@ _llong_printf_L2
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -472,6 +488,7 @@ _llong_printf_L3
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -481,6 +498,7 @@ _llong_printf_L3
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -501,6 +519,7 @@ _llong_printf_L3
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -510,6 +529,7 @@ _llong_printf_L3
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -579,6 +599,7 @@ _llong_printf_L4
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -588,6 +609,7 @@ _llong_printf_L4
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -608,6 +630,7 @@ _llong_printf_L4
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -617,6 +640,7 @@ _llong_printf_L4
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -703,6 +727,7 @@ _llong_printf_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -712,6 +737,7 @@ _llong_printf_L5
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -732,6 +758,7 @@ _llong_printf_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -741,6 +768,7 @@ _llong_printf_L5
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -805,6 +833,7 @@ _llong_printf_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -814,6 +843,7 @@ _llong_printf_L6
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -834,6 +864,7 @@ _llong_printf_L6
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -843,6 +874,7 @@ _llong_printf_L6
                 MX      %00
                 LDA     #_llong_printf_b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp

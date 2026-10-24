@@ -107,17 +107,7 @@ main_stkok        TCS
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     #2
                 STA     17,S   ; fccstk d=0 b=17
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bx
-                STA     19,S   ; fccstk d=0 b=19
-                LDA     _fcc_fpr0+2
-                STA     21,S   ; fccstk d=0 b=21
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -127,6 +117,23 @@ main_stkok        TCS
                 MX      %00
                 LDA     #bx
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
+                STA     19,S   ; fccstk d=0 b=19
+                LDA     _fcc_fpr0+2
+                STA     21,S   ; fccstk d=0 b=21
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #bx
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0+2
                 STA     25,S   ; fccstk d=0 b=25

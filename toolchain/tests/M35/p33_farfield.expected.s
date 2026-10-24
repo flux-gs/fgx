@@ -152,10 +152,6 @@ _p33_farfield_L2
                 INC
                 INC
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
@@ -185,10 +181,8 @@ _p33_farfield_L3
                 ADC     #0
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #255
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #255
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

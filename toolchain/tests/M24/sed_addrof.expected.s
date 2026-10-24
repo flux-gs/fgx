@@ -99,13 +99,8 @@ main_stkok        TCS
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 INC
@@ -113,11 +108,8 @@ main_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #tbl
                 STA     _fcc_fpr0
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -125,8 +117,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #tbl
-                STA     _fcc_fpr0
+                LDY     #10
+                LDA     [_fcc_fpr0],Y
+                PHA
                 LDA     #0
                 ASL
                 CLC
@@ -134,8 +127,15 @@ main_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #tbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

@@ -1407,6 +1407,13 @@ enum { IRC_BEQ, IRC_BNE, IRC_BCC, IRC_BCS, IRC_BMI, IRC_BPL, IRC_BVC,
 void emit_br(int n, int is_brl);                   /* T2-3: BRA/BRL <tu>_Ln */
 void emit_bcond(int cond, int n, int far);          /* T2-3: Bcc [<tu>_Ln | *+5+BRL] */
 void emit_jsr_rt(const char *name);                 /* T2-3: JSR runtime helper */
+int  fpr_is_sym(int k);                          /* &global+off, not yet built */
+void fpr_sym_flush(int k);                       /* build it (A preserved) */
+void fpr_sym_flush_live(void);
+void fpr_sym_live_check(void);
+void emit_fpr_add_index(int k, int idx, unsigned stride);                   /* die if one is live */
+void emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix,
+                        int is_ptr, tword rt, int rt_sid);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
 void emit_m16(void);                                /* T2-3: REP #$20 / MX %00 */
 void

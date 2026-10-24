@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     3,S   ; fccstk d=0 b=3
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,9 +30,13 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #_wide_bump_gobj
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     _wide_bump_gp
                 LDA     _fcc_fpr0+2
                 STA     _wide_bump_gp+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -41,6 +46,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_wide_bump_chain
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -55,6 +61,12 @@ main_stkok        TCS
                 TYA
                 LDA     #1234
                 STA     _wide_bump_gobj+0
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #_wide_bump_gobj+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -62,16 +74,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #7
                 JSR     _fcc_long_from_int
                 STA     [_fcc_fpr0]
@@ -80,6 +82,12 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #_wide_bump_gobj+2
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -87,16 +95,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -106,6 +104,7 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -113,16 +112,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
+                LDA     #_wide_bump_gobj+6
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -167,27 +159,9 @@ main_stkok        TCS
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L3
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     _wide_bump_gobj+6
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -216,27 +190,9 @@ _wide_bump_L4
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _wide_bump_gobj+4
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     _wide_bump_gobj+2
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -271,6 +227,7 @@ _wide_bump_L2
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -278,16 +235,9 @@ _wide_bump_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
+                LDA     #_wide_bump_gobj+6
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -342,27 +292,9 @@ _wide_bump_L0
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gobj
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     _wide_bump_gobj+6
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -400,15 +332,6 @@ _wide_bump_L7
 _wide_bump_L5
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -422,8 +345,15 @@ _wide_bump_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFE
@@ -434,15 +364,6 @@ _wide_bump_L5
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -456,8 +377,15 @@ _wide_bump_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #3
                 JSR     _fcc_long_from_int
                 LDY     #10
@@ -467,15 +395,6 @@ _wide_bump_L5
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -489,7 +408,16 @@ _wide_bump_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #10
                 STA     _fcc_fpr0
@@ -519,15 +447,6 @@ _wide_bump_L5
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -541,8 +460,15 @@ _wide_bump_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -568,15 +494,6 @@ _wide_bump_L5
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L9
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -590,8 +507,15 @@ _wide_bump_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -631,15 +555,6 @@ _wide_bump_L10
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L8
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -653,8 +568,15 @@ _wide_bump_L8
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$FFFF
@@ -665,15 +587,6 @@ _wide_bump_L8
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -687,7 +600,16 @@ _wide_bump_L8
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #10
                 STA     _fcc_fpr0
@@ -717,15 +639,6 @@ _wide_bump_L8
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
                 JSR     _fcc_long_add
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -739,8 +652,15 @@ _wide_bump_L8
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -783,23 +703,11 @@ _wide_bump_L11
                 TYA
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _wide_bump_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _wide_bump_gp
                 STA     _fcc_fpr0
                 LDY     #26
                 LDA     [_fcc_fpr0],Y
@@ -884,6 +792,11 @@ _wide_bump_L12
                 STA     _fcc_long_b_lo
                 LDA     _fcc_long_hi
                 STA     _fcc_long_b_hi
+                LDA     _wide_bump_gobj+12
+                STA     _fcc_long_hi
+                LDA     _wide_bump_gobj+10
+                JSR     _fcc_long_add
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -893,12 +806,7 @@ _wide_bump_L12
                 MX      %00
                 LDA     #_wide_bump_gobj
                 STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_long_hi
-                LDY     #10
-                LDA     [_fcc_fpr0],Y
-                JSR     _fcc_long_add
+                PLA
                 LDY     #10
                 STA     [_fcc_fpr0],Y
                 TAX
@@ -1010,6 +918,7 @@ _wide_bump_L13
                 LDA     _fcc_long_hi
                 STA     _wide_bump_gobj+16
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1017,10 +926,9 @@ _wide_bump_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #14
+                LDA     #_wide_bump_gobj+14
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_itof
                 STA     _fcc_long_b_lo
@@ -1222,6 +1130,12 @@ _wide_bump_L21
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L19
+                LDA     #0
+                ASL
+                ASL
+                CLC
+                ADC     #_wide_bump_gobj+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1229,16 +1143,6 @@ _wide_bump_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #16352
                 STA     _fcc_q3
                 LDA     #0
@@ -1261,6 +1165,12 @@ _wide_bump_L19
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #_wide_bump_gobj+18
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1268,16 +1178,6 @@ _wide_bump_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #16416
                 STA     _fcc_q3
                 LDA     #0
@@ -1300,6 +1200,7 @@ _wide_bump_L19
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1307,16 +1208,9 @@ _wide_bump_L19
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #18
+                LDA     #_wide_bump_gobj+18
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_itof
                 STA     _fcc_long_b_lo
@@ -1392,27 +1286,9 @@ _wide_bump_L19
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L25
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _wide_bump_gobj+20
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     _wide_bump_gobj+18
                 FGX2_FARCALL _fcc_dfromf
                 TAY
                 LDA     _fcc_q3
@@ -1462,27 +1338,9 @@ _wide_bump_L26
                 CMP     #0
                 BNE     *+5
                 BRL     _wide_bump_L23
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gobj
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     _wide_bump_gobj+24
                 STA     _fcc_long_hi
-                LDA     [_fcc_fpr0]
+                LDA     _wide_bump_gobj+22
                 FGX2_FARCALL _fcc_dfromf
                 TAY
                 LDA     _fcc_q3
@@ -1539,15 +1397,6 @@ _wide_bump_L24
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L22
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1561,8 +1410,15 @@ _wide_bump_L22
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #16400
                 STA     _fcc_q3
                 LDA     #0
@@ -1586,15 +1442,6 @@ _wide_bump_L22
                 LDY     #16
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1608,7 +1455,16 @@ _wide_bump_L22
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #14
                 STA     _fcc_fpr0
@@ -1637,15 +1493,6 @@ _wide_bump_L22
                 TAY
                 PLA
                 TYA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -1659,8 +1506,15 @@ _wide_bump_L22
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -1729,23 +1583,11 @@ _wide_bump_L27
                 TYA
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     _wide_bump_gp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_wide_bump_gp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     _wide_bump_gp
                 STA     _fcc_fpr0
                 LDY     #26
                 LDA     [_fcc_fpr0],Y
@@ -2065,6 +1907,7 @@ _wide_bump_L31
                 LDA     _fcc_long_hi
                 STA     _wide_bump_fv+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2074,6 +1917,7 @@ _wide_bump_L31
                 MX      %00
                 LDA     #_wide_bump_fv
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_itof
                 STA     _fcc_long_b_lo
@@ -2090,6 +1934,7 @@ _wide_bump_L31
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2099,6 +1944,7 @@ _wide_bump_L31
                 MX      %00
                 LDA     #_wide_bump_fv
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_itof
                 STA     _fcc_long_b_lo
@@ -2223,15 +2069,6 @@ _wide_bump_L36
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _wide_bump_L34
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -2245,7 +2082,16 @@ _wide_bump_L34
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #14
                 STA     _fcc_fpr0
@@ -2275,15 +2121,6 @@ _wide_bump_L34
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_wide_bump_gvs
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -2297,8 +2134,15 @@ _wide_bump_L34
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_wide_bump_gvs
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi

@@ -47,15 +47,6 @@ _struct_ecopy_L0
 _struct_ecopy_L3
                 BMI     *+5
                 BRL     _struct_ecopy_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -64,8 +55,15 @@ _struct_ecopy_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -74,15 +72,6 @@ _struct_ecopy_L3
                 ADC     _fcc_tmp_b
                 ASL
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -91,8 +80,16 @@ _struct_ecopy_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     gs+2
@@ -108,13 +105,8 @@ _struct_ecopy_L3
                 LDA     _fcc_fpr1+2
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -123,8 +115,15 @@ _struct_ecopy_L3
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #100
                 JSR     _fcc_long_from_int
                 LDY     #6
@@ -138,15 +137,6 @@ _struct_ecopy_L1
                 INC     _fcc_img0
                 BRL     _struct_ecopy_L0
 _struct_ecopy_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -154,8 +144,15 @@ _struct_ecopy_L2
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #777
                 JSR     _fcc_long_from_int
                 LDY     #6
@@ -184,15 +181,6 @@ _struct_ecopy_L4
 _struct_ecopy_L7
                 BMI     *+5
                 BRL     _struct_ecopy_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -201,17 +189,15 @@ _struct_ecopy_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
                 PLA
-                STA     _fcc_fpr1+2
+                STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -223,8 +209,16 @@ _struct_ecopy_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #arr
                 STA     _fcc_fpr1
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr1+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr1
                 LDY     #8
 _struct_ecopy_L8
                 LDA     [_fcc_fpr1],Y
@@ -236,15 +230,6 @@ _struct_ecopy_L5
                 DEC     _fcc_img0
                 BRL     _struct_ecopy_L4
 _struct_ecopy_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -252,8 +237,15 @@ _struct_ecopy_L6
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -271,6 +263,14 @@ _struct_ecopy_L6
                 TYA
                 RTL
 _struct_ecopy_L9
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -278,16 +278,6 @@ _struct_ecopy_L9
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -305,15 +295,6 @@ _struct_ecopy_L9
                 TYA
                 RTL
 _struct_ecopy_L10
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #2
                 ASL
                 ASL
@@ -321,8 +302,15 @@ _struct_ecopy_L10
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -340,15 +328,6 @@ _struct_ecopy_L10
                 TYA
                 RTL
 _struct_ecopy_L11
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #3
                 ASL
                 ASL
@@ -356,8 +335,15 @@ _struct_ecopy_L11
                 ADC     #3
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -375,6 +361,14 @@ _struct_ecopy_L11
                 TYA
                 RTL
 _struct_ecopy_L12
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -382,16 +376,6 @@ _struct_ecopy_L12
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -427,6 +411,14 @@ _struct_ecopy_L12
                 TYA
                 RTL
 _struct_ecopy_L13
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -434,16 +426,6 @@ _struct_ecopy_L13
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -478,15 +460,6 @@ _struct_ecopy_L13
                 TYA
                 RTL
 _struct_ecopy_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #3
                 ASL
                 ASL
@@ -494,8 +467,15 @@ _struct_ecopy_L14
                 ADC     #3
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA

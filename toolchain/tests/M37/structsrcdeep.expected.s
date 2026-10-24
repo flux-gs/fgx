@@ -449,6 +449,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     17,S   ; fccstk d=0 b=17
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -458,10 +459,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gt
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -471,10 +474,12 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gh
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -484,6 +489,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #gt
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -504,6 +510,7 @@ main_stkok        TCS
                 STA     gt+10
                 LDA     #100
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -511,12 +518,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                INC
-                INC
-                INC
-                INC
+                LDA     #gt+4
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
@@ -526,6 +530,7 @@ main_stkok        TCS
                 TCS
                 LDA     #200
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -533,10 +538,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                CLC
-                ADC     #12
+                LDA     #gt+12
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
@@ -560,17 +564,6 @@ _structsrcdeep_L4
 _structsrcdeep_L7
                 BMI     *+5
                 BRL     _structsrcdeep_L6
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_tmp_b
                 ASL
@@ -579,23 +572,19 @@ _structsrcdeep_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt+18
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     #13056
                 CLC
                 ADC     15,S   ; fccstk d=0 b=15
                 STA     [_fcc_fpr0]
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_tmp_b
                 ASL
@@ -604,7 +593,16 @@ _structsrcdeep_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt+18
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
@@ -626,17 +624,6 @@ _structsrcdeep_L7
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gt
-                CLC
-                ADC     #18
-                STA     _fcc_fpr0
                 LDA     17,S   ; fccstk d=2 b=15
                 STA     _fcc_tmp_b
                 ASL
@@ -645,7 +632,16 @@ _structsrcdeep_L7
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gt+18
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -669,6 +665,7 @@ _structsrcdeep_L6
                 STA     gh+12
                 LDA     #400
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -676,12 +673,9 @@ _structsrcdeep_L6
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                INC
-                INC
-                CLC
-                ADC     #4
+                LDA     #gh+6
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
@@ -814,6 +808,7 @@ _structsrcdeep_L9
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr0+2
                 LDA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -821,10 +816,9 @@ _structsrcdeep_L9
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                CLC
-                ADC     #4
+                LDA     #gt+4
                 STA     _fcc_fpr1
+                PLA
                 LDY     #4
 _structsrcdeep_L10
                 LDA     [_fcc_fpr1],Y
@@ -1323,6 +1317,7 @@ _structsrcdeep_L29
 _structsrcdeep_L27
                 LDA     #0
                 STA     gt+12
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1330,10 +1325,10 @@ _structsrcdeep_L27
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                CLC
-                ADC     #12
+                LDA     #gt+12
                 STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1341,10 +1336,9 @@ _structsrcdeep_L27
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                CLC
-                ADC     #6
+                LDA     #gh+6
                 STA     _fcc_fpr1
+                PLA
                 LDY     #4
 _structsrcdeep_L32
                 LDA     [_fcc_fpr1],Y
@@ -1354,6 +1348,7 @@ _structsrcdeep_L32
                 BPL     _structsrcdeep_L32
                 LDA     #400
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1361,10 +1356,9 @@ _structsrcdeep_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gt
-                CLC
-                ADC     #12
+                LDA     #gt+12
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
@@ -1379,6 +1373,7 @@ _structsrcdeep_L32
                 BRL     _structsrcdeep_L38
                 LDA     #400
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1386,12 +1381,9 @@ _structsrcdeep_L32
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                INC
-                INC
-                CLC
-                ADC     #4
+                LDA     #gh+6
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same

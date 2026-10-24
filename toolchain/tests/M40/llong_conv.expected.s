@@ -931,6 +931,7 @@ main_stkok        TCS
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -940,6 +941,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -1573,6 +1575,7 @@ _llong_conv_L32
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1582,6 +1585,7 @@ _llong_conv_L32
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -1870,6 +1874,7 @@ _llong_conv_L41
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1879,6 +1884,7 @@ _llong_conv_L41
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2251,6 +2257,7 @@ _llong_conv_L50
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2260,6 +2267,7 @@ _llong_conv_L50
                 MX      %00
                 LDA     #u
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2412,6 +2420,7 @@ _llong_conv_L58
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2421,6 +2430,7 @@ _llong_conv_L58
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2817,6 +2827,7 @@ _llong_conv_L78
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2826,6 +2837,7 @@ _llong_conv_L78
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2890,6 +2902,7 @@ _llong_conv_L81
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2899,6 +2912,7 @@ _llong_conv_L81
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -2963,6 +2977,7 @@ _llong_conv_L82
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2972,6 +2987,7 @@ _llong_conv_L82
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3036,6 +3052,7 @@ _llong_conv_L83
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3045,6 +3062,7 @@ _llong_conv_L83
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3109,6 +3127,7 @@ _llong_conv_L84
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3118,6 +3137,7 @@ _llong_conv_L84
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3182,6 +3202,7 @@ _llong_conv_L85
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3191,6 +3212,7 @@ _llong_conv_L85
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3255,6 +3277,7 @@ _llong_conv_L86
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3264,6 +3287,7 @@ _llong_conv_L86
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3569,6 +3593,7 @@ _llong_conv_L93
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3578,6 +3603,7 @@ _llong_conv_L93
                 MX      %00
                 LDA     #a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put
@@ -3603,6 +3629,7 @@ _llong_conv_L93
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3612,6 +3639,7 @@ _llong_conv_L93
                 MX      %00
                 LDA     #b
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _llong_conv_put

@@ -23,6 +23,10 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     #85
                 STA     5,S   ; fccstk d=0 b=5
+                LDA     #3
+                CLC
+                ADC     #_derefrmw_buf
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30,16 +34,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_derefrmw_buf
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img3
                 LDA     _fcc_fpr0
                 STA     _fcc_img2
+                LDA     #4
+                ASL
+                CLC
+                ADC     #_derefrmw_s
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -47,12 +50,7 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_derefrmw_s
-                STA     _fcc_fpr0
-                LDA     #4
-                ASL
-                CLC
-                ADC     _fcc_fpr0
+                LDA     _fcc_fpr0
                 STA     _derefrmw_fp
                 LDA     _fcc_fpr0+2
                 STA     _derefrmw_fp+2
@@ -105,11 +103,6 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_tmp_b
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10

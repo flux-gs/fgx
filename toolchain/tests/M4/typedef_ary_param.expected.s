@@ -246,24 +246,6 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #table
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                FGX2_FARCALL walk
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
                 PHA
                 SEP     #$20
                 MX      %10
@@ -274,6 +256,28 @@ main_stkok        TCS
                 MX      %00
                 LDA     #table
                 STA     _fcc_fpr0
+                PLA
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                FGX2_FARCALL walk
+                TAY
+                TSC
+                CLC
+                ADC     #4
+                TCS
+                TYA
+                PHA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #table
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL count
@@ -288,6 +292,7 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -297,6 +302,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #tag
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL first

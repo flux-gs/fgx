@@ -566,6 +566,7 @@ _popen_L19
                 TYA
                 RTL
 _popen_L22
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -575,14 +576,7 @@ _popen_L22
                 MX      %00
                 LDA     #_iob
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pclose

@@ -30,10 +30,6 @@ main_stkok        TCS
                 CLC
                 ADC     #4
                 STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #65
                 SEP     #$20
                 MX      %10
@@ -101,10 +97,6 @@ main_stkok        TCS
                 LDA     _libc_blk_libso_lit
                 CLC
                 ADC     #4
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF

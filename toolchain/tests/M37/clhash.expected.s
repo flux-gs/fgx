@@ -670,6 +670,12 @@ _clhash_L7
 _clhash_L8
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -677,14 +683,7 @@ _clhash_L8
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 STA     htab
                 LDA     _fcc_fpr0+2
                 STA     htab+2

@@ -209,11 +209,8 @@ _g53_layout_L10
                 LDA     _fcc_fb
                 CLC
                 ADC     #318
-                STA     _fcc_fpr0
-                LDA     #99
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #198
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b

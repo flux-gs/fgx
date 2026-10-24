@@ -2827,15 +2827,6 @@ _specops_L12
 _specops_L15
                 BMI     *+5
                 BRL     _specops_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -2848,8 +2839,15 @@ _specops_L15
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -2914,15 +2912,6 @@ _specops_L16
 _specops_L19
                 BMI     *+5
                 BRL     _specops_L18
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bufhash
-                STA     _fcc_fpr0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2935,8 +2924,15 @@ _specops_L19
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bufhash
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -2986,6 +2982,7 @@ _specops_L17
                 STA     9,S   ; fccstk d=0 b=9
                 BRL     _specops_L16
 _specops_L18
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2993,22 +2990,9 @@ _specops_L18
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -3029,15 +3013,6 @@ _specops_L20
 _specops_L23
                 BMI     *+5
                 BRL     _specops_L22
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #buf
-                STA     _fcc_fpr0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -3050,8 +3025,15 @@ _specops_L23
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #buf
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -3304,6 +3286,7 @@ incore_stkovf       JMP     _fcc_stkoflow
 incore_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3313,6 +3296,7 @@ incore_stkok        TCS
                 MX      %00
                 LDA     #bufhash
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      16+incore_FRAMESIZE/256
@@ -3647,6 +3631,7 @@ _specops_L36
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3654,22 +3639,9 @@ _specops_L36
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -3714,6 +3686,7 @@ _specops_L41
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L39
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3721,22 +3694,9 @@ _specops_L41
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -4080,6 +4040,7 @@ _specops_L49
                 ADC     #4
                 TCS
 _specops_L47
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4089,6 +4050,7 @@ _specops_L47
                 MX      %00
                 LDA     #bufhash
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      16+getblk_FRAMESIZE/256
@@ -4660,15 +4622,6 @@ brelse_stkok        TCS
                 ADC     #4
                 TCS
 _specops_L63
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4681,8 +4634,15 @@ _specops_L63
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4690,15 +4650,6 @@ _specops_L63
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L64
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4711,8 +4662,15 @@ _specops_L63
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -4721,6 +4679,7 @@ _specops_L63
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4728,22 +4687,9 @@ _specops_L63
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -4752,15 +4698,6 @@ _specops_L63
                 ADC     #4
                 TCS
 _specops_L64
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4773,8 +4710,15 @@ _specops_L64
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4782,15 +4726,6 @@ _specops_L64
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L65
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #bfreelist
-                STA     _fcc_fpr0
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4803,8 +4738,15 @@ _specops_L64
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #bfreelist
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -4813,6 +4755,7 @@ _specops_L64
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4820,22 +4763,9 @@ _specops_L64
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -5196,6 +5126,7 @@ _specops_L67
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L69
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5203,22 +5134,9 @@ _specops_L67
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -5254,6 +5172,7 @@ _specops_L69
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L71
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5263,20 +5182,7 @@ _specops_L69
                 MX      %00
                 LDA     #bfreelist
                 STA     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -5312,6 +5218,7 @@ _specops_L71
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L73
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5319,28 +5226,16 @@ _specops_L71
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+100
                 STA     _fcc_fpr0
-                LDA     #2
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _specops_L74
 _specops_L73
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5348,22 +5243,9 @@ _specops_L73
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+50
                 STA     _fcc_fpr0
-                LDA     #1
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -8418,6 +8300,7 @@ bflush_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
 bflush_uL_loop
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8427,6 +8310,7 @@ bflush_uL_loop
                 MX      %00
                 LDA     #bfreelist
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -8439,6 +8323,8 @@ _specops_L125
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
+                PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8446,24 +8332,9 @@ _specops_L125
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #bfreelist
+                LDA     #bfreelist+150
                 STA     _fcc_fpr1
-                LDA     #3
-                STA     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_tmp_b
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
-                LDA     _fcc_fpr0
-                PHA
+                PLA
                 LDA     _fcc_fpr1
                 STA     _fcc_tmp_b
                 PLA
@@ -14509,6 +14380,7 @@ _specops_L254
                 PEI     _fcc_fpr0
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14518,6 +14390,7 @@ _specops_L254
                 MX      %00
                 LDA     #_specops_specbyte
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL uiomove
@@ -14745,6 +14618,7 @@ _specops_L258
                 PEI     _fcc_fpr0
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14754,6 +14628,7 @@ _specops_L258
                 MX      %00
                 LDA     #_specops_specbyte
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL uiomove
@@ -17416,6 +17291,7 @@ _specops_L319
                 LDA     #0
                 STA     vnode_free_head+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17424,6 +17300,9 @@ _specops_L319
                 REP     #$20
                 MX      %00
                 LDA     #vnode_free_head
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
@@ -20114,23 +19993,11 @@ _specops_L357
                 BRL     _specops_L355
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     specinfo_pool+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #specinfo_pool
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     specinfo_pool
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
@@ -20483,15 +20350,6 @@ _specops_L360
                 TYA
                 RTL
 _specops_L358
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #speclisth
-                STA     _fcc_fpr0
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20533,8 +20391,15 @@ _specops_L358
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #speclisth
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -23015,6 +22880,7 @@ _specops_L412
                 LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23024,6 +22890,8 @@ _specops_L412
                 MX      %00
                 LDA     #dead_vnodeops
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -24889,6 +24757,7 @@ _specops_L423
                 LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24898,6 +24767,8 @@ _specops_L423
                 MX      %00
                 LDA     #vnode_free_head
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -27143,15 +27014,6 @@ _specops_nchbucket_stkovf       JMP     _fcc_stkoflow
 _specops_nchbucket_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
                 DO      8+_specops_nchbucket_FRAMESIZE/256
                 TSC
                 CLC
@@ -27197,8 +27059,16 @@ _specops_nchbucket_stkok        TCS
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #nchashtbl
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -28369,6 +28239,7 @@ _specops_nclru_tohead_stkok        TCS
                 LDA     6+_specops_nclru_tohead_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28378,6 +28249,8 @@ _specops_nclru_tohead_stkok        TCS
                 MX      %00
                 LDA     #nchhead
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #12
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -28798,6 +28671,13 @@ _specops_L522
 _specops_L525
                 BMI     *+5
                 BRL     _specops_L524
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28805,15 +28685,6 @@ _specops_L525
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
@@ -28867,6 +28738,7 @@ _specops_L524
                 LDA     #0
                 STA     nchhead+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28875,6 +28747,9 @@ _specops_L524
                 REP     #$20
                 MX      %00
                 LDA     #nchhead
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
@@ -29553,6 +29428,13 @@ _specops_L541
 _specops_L544
                 BMI     *+5
                 BRL     _specops_L543
+                LDA     _fcc_img0
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29560,15 +29442,6 @@ _specops_L544
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     _fcc_img0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -29768,6 +29641,13 @@ _specops_L550
 _specops_L553
                 BMI     *+5
                 BRL     _specops_L552
+                LDA     13,S   ; fccstk d=0 b=13
+                ASL
+                ASL
+                ASL
+                CLC
+                ADC     #nchashtbl
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29775,15 +29655,6 @@ _specops_L553
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchashtbl
-                STA     _fcc_fpr0
-                LDA     13,S   ; fccstk d=0 b=13
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -30157,6 +30028,7 @@ _specops_L566
 _specops_L570
                 BMI     *+5
                 BRL     _specops_L569
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30164,10 +30036,9 @@ _specops_L570
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #20
+                LDA     #nchstats+20
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -30608,6 +30479,7 @@ _specops_L587
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L585
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30615,10 +30487,9 @@ _specops_L587
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #16
+                LDA     #nchstats+16
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -30681,6 +30552,7 @@ _specops_L590
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L588
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30688,10 +30560,9 @@ _specops_L590
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #8
+                LDA     #nchstats+8
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -30749,6 +30620,7 @@ _specops_L594
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L592
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30756,10 +30628,9 @@ _specops_L594
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #4
+                LDA     #nchstats+4
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -30846,6 +30717,7 @@ _specops_L592
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L596
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30853,10 +30725,9 @@ _specops_L592
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #nchstats
-                CLC
-                ADC     #12
+                LDA     #nchstats+12
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -30875,6 +30746,7 @@ _specops_L592
                 TXA
                 BRL     _specops_L597
 _specops_L596
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -30884,6 +30756,7 @@ _specops_L596
                 MX      %00
                 LDA     #nchstats
                 STA     _fcc_fpr0
+                PLA
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
@@ -31707,6 +31580,7 @@ _specops_reset_stkovf       JMP     _fcc_stkoflow
 _specops_reset_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31716,6 +31590,7 @@ _specops_reset_stkok        TCS
                 MX      %00
                 LDA     #fixarena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
@@ -31723,6 +31598,7 @@ _specops_reset_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31732,6 +31608,7 @@ _specops_reset_stkok        TCS
                 MX      %00
                 LDA     #_specops_vn_arena
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
@@ -31739,6 +31616,7 @@ _specops_reset_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31748,6 +31626,7 @@ _specops_reset_stkok        TCS
                 MX      %00
                 LDA     #spec_vnodeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfs_setspecops
@@ -31814,6 +31693,7 @@ _specops_mkdevvn_stkok        TCS
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31823,8 +31703,10 @@ _specops_mkdevvn_stkok        TCS
                 MX      %00
                 LDA     #spec_vnodeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31834,6 +31716,7 @@ _specops_mkdevvn_stkok        TCS
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -31900,6 +31783,11 @@ _specops_L612
                 LDA     _fcc_fpr1+2
                 LDY     #2
                 STA     [_fcc_fpr0],Y
+                REP     #$20
+                MX      %00
+                PHA
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
@@ -31907,6 +31795,7 @@ _specops_L612
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #513
@@ -32039,6 +31928,7 @@ _specops_L616
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -32048,6 +31938,7 @@ _specops_L616
                 MX      %00
                 LDA     #spec_vnodeops
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -33684,6 +33575,7 @@ _specops_L657
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     #4
                 STA     29,S   ; fccstk d=0 b=29
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -33693,6 +33585,7 @@ _specops_L657
                 MX      %00
                 LDA     #_specops_fake_buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33707,6 +33600,7 @@ _specops_L657
                 TYA
                 LDA     #4
                 STA     _specops_fake_iov+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -33716,6 +33610,7 @@ _specops_L657
                 MX      %00
                 LDA     #_specops_fake_iov
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -34023,6 +33918,7 @@ _specops_L665
                 REP     #$20
                 MX      %00
                 PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -34032,6 +33928,7 @@ _specops_L665
                 MX      %00
                 LDA     #_specops_fake_buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -34046,6 +33943,7 @@ _specops_L665
                 TYA
                 LDA     #4
                 STA     _specops_fake_iov+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -34055,6 +33953,7 @@ _specops_L665
                 MX      %00
                 LDA     #_specops_fake_iov
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35179,6 +35078,7 @@ _specops_L696
                 STA     _specops_cd_dwrites
                 LDA     #0
                 STA     _specops_cd_dstatus
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35188,6 +35088,7 @@ _specops_L696
                 MX      %00
                 LDA     #_specops_fake_buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35202,6 +35103,7 @@ _specops_L696
                 TYA
                 LDA     #4
                 STA     _specops_fake_iov+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35211,6 +35113,7 @@ _specops_L696
                 MX      %00
                 LDA     #_specops_fake_iov
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35364,6 +35267,7 @@ _specops_L699
                 TYA
                 RTL
 _specops_L700
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35373,6 +35277,7 @@ _specops_L700
                 MX      %00
                 LDA     #_specops_fake_buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35387,6 +35292,7 @@ _specops_L700
                 TYA
                 LDA     #4
                 STA     _specops_fake_iov+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35396,6 +35302,7 @@ _specops_L700
                 MX      %00
                 LDA     #_specops_fake_iov
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35559,6 +35466,7 @@ _specops_L704
                 CLC
                 ADC     #19
                 STA     _specops_cd_dstatus
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35568,6 +35476,7 @@ _specops_L704
                 MX      %00
                 LDA     #_specops_fake_buf
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35582,6 +35491,7 @@ _specops_L704
                 TYA
                 LDA     #4
                 STA     _specops_fake_iov+4
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -35591,6 +35501,7 @@ _specops_L704
                 MX      %00
                 LDA     #_specops_fake_iov
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -36393,6 +36304,7 @@ _specops_L723
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -36402,8 +36314,10 @@ _specops_L723
                 MX      %00
                 LDA     #spec_vnodeops
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -36413,6 +36327,7 @@ _specops_L723
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -37850,6 +37765,7 @@ _specops_L764
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -37859,6 +37775,8 @@ _specops_L764
                 MX      %00
                 LDA     #mnt_a
                 STA     _fcc_fpr1
+                PLA
+                LDA     _fcc_fpr1
                 LDY     #18
                 STA     [_fcc_fpr0],Y
                 SEP     #$20

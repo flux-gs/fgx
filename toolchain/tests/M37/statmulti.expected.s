@@ -21,6 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     main_sl_b
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -29,6 +30,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #main_sl_buf
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     main_sl_p
                 LDA     _fcc_fpr0+2
                 STA     main_sl_p+2

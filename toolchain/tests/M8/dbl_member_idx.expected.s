@@ -19,6 +19,7 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_dbl_member_idx_pr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -192,13 +194,6 @@ _dbl_member_idx_L2
                 CLC
                 ADC     #66
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     #5
                 JSR     _fcc_long_from_int
                 LDX     #0
@@ -242,13 +237,8 @@ _dbl_member_idx_L2
                 PLA
                 CLC
                 ADC     #66
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     #7
                 JSR     _fcc_long_from_int
@@ -398,13 +388,8 @@ _dbl_member_idx_L6
                 PLA
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #24
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -448,13 +433,8 @@ _dbl_member_idx_L6
                 PLA
                 INC
                 INC
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -511,13 +491,8 @@ _dbl_member_idx_L6
                 PLA
                 CLC
                 ADC     #34
-                STA     _fcc_fpr0
-                LDA     #3
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #24
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -558,13 +533,8 @@ _dbl_member_idx_L6
                 PLA
                 CLC
                 ADC     #66
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -608,13 +578,6 @@ _dbl_member_idx_L6
                 PLA
                 CLC
                 ADC     #66
-                STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
@@ -671,13 +634,8 @@ _dbl_member_idx_L6
                 PLA
                 CLC
                 ADC     #34
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #16
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y

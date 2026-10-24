@@ -916,6 +916,7 @@ _ldouble_const_L25
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -925,6 +926,7 @@ _ldouble_const_L25
                 MX      %00
                 LDA     #g1
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -971,6 +973,7 @@ _ldouble_const_L26
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -980,6 +983,7 @@ _ldouble_const_L26
                 MX      %00
                 LDA     #g2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1026,6 +1030,7 @@ _ldouble_const_L29
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1035,6 +1040,7 @@ _ldouble_const_L29
                 MX      %00
                 LDA     #g3
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1081,6 +1087,7 @@ _ldouble_const_L32
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1090,6 +1097,7 @@ _ldouble_const_L32
                 MX      %00
                 LDA     #g4
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1136,6 +1144,7 @@ _ldouble_const_L35
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1145,6 +1154,7 @@ _ldouble_const_L35
                 MX      %00
                 LDA     #g5
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1191,6 +1201,7 @@ _ldouble_const_L38
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1200,6 +1211,7 @@ _ldouble_const_L38
                 MX      %00
                 LDA     #g6
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1246,6 +1258,7 @@ _ldouble_const_L41
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1255,6 +1268,7 @@ _ldouble_const_L41
                 MX      %00
                 LDA     #g7
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1301,6 +1315,7 @@ _ldouble_const_L44
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1310,6 +1325,7 @@ _ldouble_const_L44
                 MX      %00
                 LDA     #g8
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1356,6 +1372,7 @@ _ldouble_const_L47
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1365,6 +1382,7 @@ _ldouble_const_L47
                 MX      %00
                 LDA     #g9
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1485,6 +1503,7 @@ _ldouble_const_L53
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1494,13 +1513,7 @@ _ldouble_const_L53
                 MX      %00
                 LDA     #ga
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1547,6 +1560,7 @@ _ldouble_const_L54
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1554,15 +1568,9 @@ _ldouble_const_L54
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ga
+                LDA     #ga+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1609,6 +1617,7 @@ _ldouble_const_L57
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1616,15 +1625,9 @@ _ldouble_const_L57
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #ga
+                LDA     #ga+16
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1671,15 +1674,6 @@ _ldouble_const_L60
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gm
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -1695,8 +1689,16 @@ _ldouble_const_L60
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gm
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1743,15 +1745,6 @@ _ldouble_const_L63
                 PHA
                 TYA
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gm
-                STA     _fcc_fpr0
                 LDA     #1
                 ASL
                 ASL
@@ -1767,8 +1760,16 @@ _ldouble_const_L63
                 STA     1,S
                 PLA
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #gm
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1821,6 +1822,7 @@ _ldouble_const_L66
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1828,15 +1830,9 @@ _ldouble_const_L66
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gu
+                LDA     #gu+16
                 STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -1897,6 +1893,7 @@ _ldouble_const_L69
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1904,10 +1901,9 @@ _ldouble_const_L69
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                INC
-                INC
+                LDA     #gs+2
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is
@@ -2079,6 +2075,7 @@ _ldouble_const_L83
                 PHA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2088,6 +2085,7 @@ _ldouble_const_L83
                 MX      %00
                 LDA     #g5p32
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ldouble_const_is

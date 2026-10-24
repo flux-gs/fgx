@@ -61,6 +61,7 @@ _glptrsub_L1
                 INC     _fcc_img0
                 BRL     _glptrsub_L0
 _glptrsub_L2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -70,6 +71,8 @@ _glptrsub_L2
                 MX      %00
                 LDA     #larr
                 STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     lp
                 LDA     _fcc_fpr0+2
                 STA     lp+2

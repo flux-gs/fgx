@@ -233,6 +233,7 @@ _dirchurn_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -242,6 +243,7 @@ _dirchurn_L2
                 MX      %00
                 LDA     #nbuf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sprintf
@@ -453,6 +455,7 @@ _dirchurn_L11
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -462,6 +465,7 @@ _dirchurn_L11
                 MX      %00
                 LDA     #nbuf
                 STA     _fcc_fpr1
+                PLA
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL strdup

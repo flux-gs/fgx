@@ -119,6 +119,7 @@ _libcadds_L1
 _libcadds_L0
                 LDA     #4
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -128,8 +129,13 @@ _libcadds_L0
                 MX      %00
                 LDA     #_libcadds_ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                LDA     #2
+                CLC
+                ADC     #_libcadds_ov
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -137,12 +143,7 @@ _libcadds_L0
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_libcadds_ov
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memmove
@@ -160,6 +161,10 @@ _libcadds_L0
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
+                LDA     #2
+                CLC
+                ADC     #_libcadds_ov
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -167,12 +172,6 @@ _libcadds_L0
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #_libcadds_ov
-                STA     _fcc_fpr1
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -215,6 +214,7 @@ _libcadds_L2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -224,6 +224,7 @@ _libcadds_L2
                 MX      %00
                 LDA     #_libcadds_ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
@@ -251,21 +252,21 @@ _libcadds_L2
 _libcadds_L5
                 LDA     #4
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #_libcadds_ov
-                STA     _fcc_fpr0
                 LDA     #2
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #_libcadds_ov
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -275,6 +276,7 @@ _libcadds_L5
                 MX      %00
                 LDA     #_libcadds_ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memmove
@@ -293,6 +295,7 @@ _libcadds_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -302,6 +305,7 @@ _libcadds_L5
                 MX      %00
                 LDA     #_libcadds_ov
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp

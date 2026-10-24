@@ -177,6 +177,7 @@ _uresid_L5
                 STA     _fcc_long_hi
                 LDA     #$9C40
                 STA     gu
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -186,6 +187,7 @@ _uresid_L5
                 MX      %00
                 LDA     #gu
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0

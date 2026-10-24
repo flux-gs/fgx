@@ -184,17 +184,19 @@ _char_bitfield_bytes_L4
                 SEP     #$20
                 MX      %10
                 STA     gh+1
+                REP     #$20
+                MX      %00
+                LDA     #0
+                CLC
+                ADC     #gh
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
                 PHB
                 PLA
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gh
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX

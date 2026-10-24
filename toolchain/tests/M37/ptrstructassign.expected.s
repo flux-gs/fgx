@@ -55,6 +55,7 @@ _ptrstructassign_L0
 _ptrstructassign_L1
                 LDA     #4660
                 STA     g_src+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -64,6 +65,7 @@ _ptrstructassign_L1
                 MX      %00
                 LDA     #buf_f
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -76,6 +78,7 @@ _ptrstructassign_L1
                 LDA     _fcc_ptr+2
                 STA     g_src+4
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -85,6 +88,7 @@ _ptrstructassign_L1
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -97,6 +101,7 @@ _ptrstructassign_L1
                 LDA     _fcc_ptr+2
                 STA     g_src+8
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -106,6 +111,7 @@ _ptrstructassign_L1
                 MX      %00
                 LDA     #g_src
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -190,6 +196,7 @@ _ptrstructassign_L3
                 STA     _fcc_fpr0+2
                 LDA     47,S   ; fccstk d=0 b=47
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -199,6 +206,7 @@ _ptrstructassign_L3
                 MX      %00
                 LDA     #buf_f
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -234,6 +242,7 @@ _ptrstructassign_L4
                 STA     _fcc_fpr0+2
                 LDA     51,S   ; fccstk d=0 b=51
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -243,6 +252,7 @@ _ptrstructassign_L4
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -363,6 +373,7 @@ _ptrstructassign_L11
                 STA     _fcc_fpr0+2
                 LDA     37,S   ; fccstk d=0 b=37
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -372,6 +383,7 @@ _ptrstructassign_L11
                 MX      %00
                 LDA     #buf_f
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -407,6 +419,7 @@ _ptrstructassign_L12
                 STA     _fcc_fpr0+2
                 LDA     41,S   ; fccstk d=0 b=41
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -416,6 +429,7 @@ _ptrstructassign_L12
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -789,6 +803,7 @@ _ptrstructassign_L23
                 MX      %00
                 LDA     #1911
                 STA     g_dst+0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -798,6 +813,7 @@ _ptrstructassign_L23
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -810,6 +826,7 @@ _ptrstructassign_L23
                 LDA     _fcc_ptr+2
                 STA     g_dst+4
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -819,6 +836,7 @@ _ptrstructassign_L23
                 MX      %00
                 LDA     #buf_f
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -845,6 +863,7 @@ _ptrstructassign_L23
                 STA     29,S   ; fccstk d=0 b=29
                 LDA     _fcc_fpr0
                 STA     27,S   ; fccstk d=0 b=27
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -854,6 +873,7 @@ _ptrstructassign_L23
                 MX      %00
                 LDA     #g_src
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     _fcc_fpr0
@@ -960,6 +980,7 @@ _ptrstructassign_L25
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -969,6 +990,7 @@ _ptrstructassign_L25
                 MX      %00
                 LDA     #buf_f
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1031,6 +1053,7 @@ _ptrstructassign_L26
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1040,6 +1063,7 @@ _ptrstructassign_L26
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1084,14 +1108,8 @@ _ptrstructassign_L29
                 LDA     _fcc_fb
                 CLC
                 ADC     #54
-                STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
                 CLC
-                ADC     _fcc_fpr1
+                ADC     #10
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
@@ -1128,6 +1146,14 @@ _ptrstructassign_L32
                 STA     _fcc_fpr0+2
                 LDA     31,S   ; fccstk d=0 b=31
                 STA     _fcc_fpr0
+                LDA     #1
+                ASL
+                ASL
+                INC
+                ASL
+                CLC
+                ADC     #g_src
+                STA     _fcc_fpr1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1135,16 +1161,6 @@ _ptrstructassign_L32
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #g_src
-                STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1295,6 +1311,7 @@ _ptrstructassign_L40
                 STA     _fcc_fpr0+2
                 LDA     g_dst+6
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1304,6 +1321,7 @@ _ptrstructassign_L40
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1423,6 +1441,7 @@ _ptrstructassign_L45
                 STA     _fcc_fpr0+2
                 LDA     51,S   ; fccstk d=0 b=51
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1432,6 +1451,7 @@ _ptrstructassign_L45
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -1552,6 +1572,7 @@ _ptrstructassign_L50
                 STA     _fcc_fpr0+2
                 LDA     g_dst+6
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1561,6 +1582,7 @@ _ptrstructassign_L50
                 MX      %00
                 LDA     #buf_l
                 STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5

@@ -41,6 +41,7 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     _fcc_img5
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -50,6 +51,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #garr
                 STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0

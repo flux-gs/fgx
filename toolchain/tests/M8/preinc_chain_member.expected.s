@@ -31,6 +31,7 @@ main_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     I+4
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -40,6 +41,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #I
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -52,6 +54,7 @@ main_stkok        TCS
                 LDA     _fcc_ptr+2
                 STA     O+2
                 TYA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -60,28 +63,19 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #O
+                STA     _fcc_fpr0
+                PLA
+                LDA     _fcc_fpr0
                 STA     pp
                 LDA     _fcc_fpr0+2
                 STA     pp+2
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     pp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     pp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
@@ -132,23 +126,11 @@ _preinc_chain_member_L0
 _preinc_chain_member_L1
                 SEP     #$20
                 MX      %10
-                PHB
-                PLA
+                LDA     pp+2
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #pp
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
+                LDA     pp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA

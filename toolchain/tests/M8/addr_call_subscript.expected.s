@@ -19,6 +19,7 @@ pb_stkovf       JMP     _fcc_stkoflow
 pb_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ pb_stkok        TCS
                 MX      %00
                 LDA     #_addr_call_subscript_buf
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -54,6 +56,7 @@ ps_stkovf       JMP     _fcc_stkoflow
 ps_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -63,6 +66,7 @@ ps_stkok        TCS
                 MX      %00
                 LDA     #_addr_call_subscript_arr
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -90,31 +94,27 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 FGX2_FARCALL pb
-                LDA     #3
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #3
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 FGX2_FARCALL ps
-                LDA     #2
-                ASL
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 FGX2_FARCALL ps
-                LDA     #1
-                ASL
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -149,6 +149,12 @@ main_stkok        TCS
                 LDA:    _addr_call_subscript_buf,X
                 AND     #$00FF
                 PHA
+                LDA     #2
+                ASL
+                ASL
+                CLC
+                ADC     #_addr_call_subscript_arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -156,20 +162,18 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr_call_subscript_arr
-                STA     _fcc_fpr0
-                LDA     #2
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
+                LDA     #1
+                ASL
+                ASL
+                CLC
+                ADC     #_addr_call_subscript_arr
+                STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -177,14 +181,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #_addr_call_subscript_arr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

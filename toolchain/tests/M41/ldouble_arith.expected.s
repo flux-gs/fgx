@@ -3314,6 +3314,9 @@ _ldouble_arith_L94
                 TYA
                 RTL
 _ldouble_arith_L97
+                LDA     #1
+                JSR     _fcc_long_from_int
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3321,17 +3324,9 @@ _ldouble_arith_L97
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     #1
-                JSR     _fcc_long_from_int
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfroml
@@ -3354,6 +3349,7 @@ _ldouble_arith_L97
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3361,15 +3357,9 @@ _ldouble_arith_L97
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #garr
+                LDA     #garr+8
                 STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     43,S   ; fccstk d=0 b=43
                 LDA     _fcc_fpr0
@@ -3452,13 +3442,6 @@ _ldouble_arith_L97
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_q3
@@ -3524,33 +3507,13 @@ _ldouble_arith_L97
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #garr
-                STA     _fcc_fpr0
-                LDA     #1
-                ASL
-                ASL
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+14
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+12
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+10
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     garr+8
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -3602,6 +3565,9 @@ _ldouble_arith_L97
                 TYA
                 RTL
 _ldouble_arith_L98
+                LDA     #4
+                JSR     _fcc_long_from_int
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3609,12 +3575,9 @@ _ldouble_arith_L98
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #gs
-                CLC
-                ADC     #2
+                LDA     #gs+2
                 STA     _fcc_fpr0
-                LDA     #4
-                JSR     _fcc_long_from_int
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfroml
@@ -3637,28 +3600,13 @@ _ldouble_arith_L98
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+8
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+6
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+4
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+2
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -3691,6 +3639,17 @@ _ldouble_arith_L98
                 PLA
                 STA     _fcc_q3
                 TYA
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gs+2
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dmul
@@ -3713,28 +3672,13 @@ _ldouble_arith_L98
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #gs
-                CLC
-                ADC     #2
-                STA     _fcc_fpr0
-                LDY     #6
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+8
                 STA     _fcc_q3
-                LDY     #4
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+6
                 STA     _fcc_q2
-                LDY     #2
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+4
                 STA     _fcc_long_hi
-                LDY     #0
-                LDA     [_fcc_fpr0],Y
+                LDA     gs+2
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -3746,6 +3690,17 @@ _ldouble_arith_L98
                 PHA
                 LDA     #1
                 JSR     _fcc_long_from_int
+                PHA
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     #gs+2
+                STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _fcc_dfroml

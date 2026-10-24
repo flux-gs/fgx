@@ -543,6 +543,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -552,6 +553,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_x
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -582,6 +584,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -591,6 +594,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_y
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -621,6 +625,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -630,6 +635,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_z
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -651,6 +657,7 @@ main_stkok        TCS
                 PLA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -660,6 +667,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_la
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_long
@@ -672,6 +680,7 @@ main_stkok        TCS
                 PHA
                 LDA     #2
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -681,6 +690,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_fa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_float
@@ -697,6 +707,7 @@ main_stkok        TCS
                 PHA
                 LDA     #3
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -706,6 +717,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #_ptr_pinc_wide_pa
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_pinc_wide_sum_pp

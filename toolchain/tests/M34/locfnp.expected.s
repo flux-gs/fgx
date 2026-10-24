@@ -495,6 +495,7 @@ _locfnp_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -504,6 +505,7 @@ _locfnp_L6
                 MX      %00
                 LDA     #b1
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -543,6 +545,7 @@ _locfnp_L6
                 PLA
                 TYA
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -552,6 +555,7 @@ _locfnp_L6
                 MX      %00
                 LDA     #b2
                 STA     _fcc_fpr0
+                PLA
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2

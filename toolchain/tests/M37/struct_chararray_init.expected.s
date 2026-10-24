@@ -41,22 +41,7 @@ _struct_chararray_init_L10
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L7
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #braced
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     braced+2
                 AND     #$00FF
                 TAX
                 TXA
@@ -71,22 +56,7 @@ _struct_chararray_init_L8
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L5
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #braced
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     braced+3
                 AND     #$00FF
                 TAX
                 TXA
@@ -101,22 +71,7 @@ _struct_chararray_init_L6
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L3
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #braced
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     braced+4
                 AND     #$00FF
                 TAX
                 TXA
@@ -131,22 +86,7 @@ _struct_chararray_init_L4
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L1
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #braced
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     braced+5
                 AND     #$00FF
                 TAX
                 TXA
@@ -188,22 +128,7 @@ _struct_chararray_init_L21
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L18
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #shortb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     shortb+2
                 AND     #$00FF
                 TAX
                 TXA
@@ -218,22 +143,7 @@ _struct_chararray_init_L19
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L16
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #shortb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     shortb+3
                 AND     #$00FF
                 TAX
                 TXA
@@ -248,22 +158,7 @@ _struct_chararray_init_L17
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L14
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #shortb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     shortb+4
                 AND     #$00FF
                 TAX
                 TXA
@@ -278,22 +173,7 @@ _struct_chararray_init_L15
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L12
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #shortb
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     shortb+5
                 AND     #$00FF
                 TAX
                 TXA
@@ -335,22 +215,7 @@ _struct_chararray_init_L40
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L37
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #fromstr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     fromstr+2
                 AND     #$00FF
                 TAX
                 TXA
@@ -365,22 +230,7 @@ _struct_chararray_init_L38
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L35
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #fromstr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #1
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     fromstr+3
                 AND     #$00FF
                 TAX
                 TXA
@@ -395,22 +245,7 @@ _struct_chararray_init_L36
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L33
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #fromstr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #2
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     fromstr+4
                 AND     #$00FF
                 TAX
                 TXA
@@ -425,22 +260,7 @@ _struct_chararray_init_L34
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L31
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #fromstr
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     fromstr+5
                 AND     #$00FF
                 TAX
                 TXA
@@ -483,22 +303,7 @@ _struct_chararray_init_L28
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L25
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #exact
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #0
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     exact+2
                 AND     #$00FF
                 TAX
                 TXA
@@ -513,22 +318,7 @@ _struct_chararray_init_L26
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_chararray_init_L23
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #exact
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     #3
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDA     exact+5
                 AND     #$00FF
                 TAX
                 TXA

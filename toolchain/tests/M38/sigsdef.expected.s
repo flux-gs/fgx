@@ -108,6 +108,15 @@ main_stkok        TCS
                 PLA
                 FGX2_FARCALL mode2octal
                 PHA
+                TSC
+                SEC
+                SBC     #0
+                TCS
+                TSC
+                INC
+                STA     _fcc_fpr1
+                STZ     _fcc_fpr1+2
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -117,14 +126,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     #msbuf
                 STA     _fcc_fpr0
-                TSC
-                SEC
-                SBC     #0
-                TCS
-                TSC
-                INC
-                STA     _fcc_fpr1
-                STZ     _fcc_fpr1+2
+                PLA
                 LDY     #-2
 _sigsdef_L0
                 LDA     [_fcc_fpr0],Y

@@ -304,6 +304,7 @@ _libcadds_L8
                 PHA
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -313,6 +314,7 @@ _libcadds_L8
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread
@@ -583,6 +585,7 @@ _libcadds_L21
                 PHA
                 LDA     #1
                 PHA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -592,6 +595,7 @@ _libcadds_L21
                 MX      %00
                 LDA     #buf
                 STA     _fcc_fpr0
+                PLA
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fread

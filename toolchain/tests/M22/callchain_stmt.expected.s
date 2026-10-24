@@ -22,6 +22,7 @@ lookup_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -31,6 +32,7 @@ lookup_stkok        TCS
                 MX      %00
                 LDA     #root
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -60,6 +62,7 @@ ivec_stkok        TCS
                 LDA     calls
                 INC
                 STA     calls
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -69,6 +72,7 @@ ivec_stkok        TCS
                 MX      %00
                 LDA     #vec
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -221,10 +225,9 @@ _callchain_stmt_L2
                 RTL
 _callchain_stmt_L3
                 FGX2_FARCALL ivec
-                LDA     #2
-                ASL
+                LDA     _fcc_fpr0
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX

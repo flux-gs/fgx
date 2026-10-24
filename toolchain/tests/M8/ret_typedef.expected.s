@@ -19,6 +19,7 @@ getmsg_stkovf       JMP     _fcc_stkoflow
 getmsg_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -28,6 +29,7 @@ getmsg_stkok        TCS
                 MX      %00
                 LDA     #_ret_typedef_msg
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC
@@ -54,6 +56,7 @@ getbox_stkovf       JMP     _fcc_stkoflow
 getbox_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -63,6 +66,7 @@ getbox_stkok        TCS
                 MX      %00
                 LDA     #_ret_typedef_box
                 STA     _fcc_fpr0
+                PLA
                 TAY
                 TSC
                 CLC

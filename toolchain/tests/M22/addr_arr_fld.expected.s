@@ -21,15 +21,6 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 STA     _fcc_img0
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL
@@ -37,10 +28,8 @@ main_stkok        TCS
                 ADC     #0
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
-                LDA     #3
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -48,18 +37,16 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
+                LDA     #3
+                STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 ASL
                 INC
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
-                LDA     #5
-                STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
                 PHB
@@ -67,8 +54,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
+                LDA     #5
+                STA     [_fcc_fpr0]
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -77,8 +64,15 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img2
                 LDA     _fcc_fpr0
@@ -110,6 +104,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _addr_arr_fld_L0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -119,15 +114,7 @@ _addr_arr_fld_L0
                 MX      %00
                 LDA     #arr
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                STA     _fcc_fpr0
+                PLA
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img2
                 LDA     _fcc_fpr0
@@ -159,6 +146,7 @@ _addr_arr_fld_L0
                 TYA
                 RTL
 _addr_arr_fld_L1
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -166,19 +154,10 @@ _addr_arr_fld_L1
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
+                LDA     #arr+2
                 STA     _fcc_fpr0
-                LDA     #0
-                ASL
-                ASL
-                CLC
-                ADC     #0
-                ASL
-                CLC
-                ADC     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
+                PLA
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -186,18 +165,9 @@ _addr_arr_fld_L1
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
+                LDA     #arr+12
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                INC
-                INC
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -229,15 +199,6 @@ _addr_arr_fld_L4
                 TYA
                 RTL
 _addr_arr_fld_L2
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -246,10 +207,20 @@ _addr_arr_fld_L2
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
+                STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
+                PHA
                 SEP     #$20
                 MX      %10
                 PHB
@@ -257,18 +228,9 @@ _addr_arr_fld_L2
                 STA     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                LDA     #arr
+                LDA     #arr+12
                 STA     _fcc_fpr1
-                LDA     #1
-                ASL
-                ASL
-                INC
-                ASL
-                CLC
-                ADC     _fcc_fpr1
-                INC
-                INC
-                STA     _fcc_fpr1
+                PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
@@ -302,15 +264,6 @@ _addr_arr_fld_L7
 _addr_arr_fld_L5
                 LDA     #37
                 PHA
-                SEP     #$20
-                MX      %10
-                PHB
-                PLA
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                LDA     #arr
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -319,8 +272,15 @@ _addr_arr_fld_L5
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_fpr0
+                ADC     #arr
                 STA     _fcc_fpr0
+                SEP     #$20
+                MX      %10
+                PHB
+                PLA
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 PLA
