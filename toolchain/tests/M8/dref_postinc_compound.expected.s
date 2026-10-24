@@ -135,6 +135,7 @@ _dref_postinc_compound_L0
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 CMP     #0
                 BEQ     _dref_postinc_compound_L1
                 BRA     _dref_postinc_compound_L0

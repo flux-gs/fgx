@@ -45,6 +45,7 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAY
                 LDA     1,S
                 TAX

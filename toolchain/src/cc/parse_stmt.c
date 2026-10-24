@@ -2257,7 +2257,7 @@ walk_stmt(int n)
         g_last_stmt_returned = 0;
         break;
     case S_EXPR:
-        walk_val(g_ast[n].a);       /* discarded: offset word suffices */
+        walk_expr_stmt(g_ast[n].a);  /* the value is discarded */
         g_last_stmt_returned = 0;
         break;
     case S_IF: {

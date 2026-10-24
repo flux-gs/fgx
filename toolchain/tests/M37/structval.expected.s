@@ -1279,7 +1279,6 @@ _structval_L44
                 DEY
                 DEY
                 BPL     _structval_L44
-                LDA     _fcc_fpr0
                 BRA     _structval_L40
 _structval_L42
                 LDA     _fcc_img0

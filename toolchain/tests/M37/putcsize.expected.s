@@ -80,6 +80,7 @@ put_stkok        TCS
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 BRL     _putcsize_L1
 _putcsize_L0
                 DO      10+put_FRAMESIZE/256
@@ -180,6 +181,7 @@ _putcsize_L5
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAX
                 CMP     #10
                 BEQ     _putcsize_L7

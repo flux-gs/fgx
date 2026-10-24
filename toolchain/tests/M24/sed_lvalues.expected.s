@@ -114,6 +114,7 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 STA     17,S   ; fccstk d=0 b=17
                 PHA
                 SEP     #$20

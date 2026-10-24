@@ -470,7 +470,6 @@ _arrelemstructstore_L7
                 DEY
                 DEY
                 BPL     _arrelemstructstore_L7
-                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -630,7 +629,6 @@ _arrelemstructstore_L13
                 DEY
                 DEY
                 BPL     _arrelemstructstore_L13
-                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10

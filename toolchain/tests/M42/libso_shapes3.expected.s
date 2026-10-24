@@ -258,9 +258,7 @@ _libso_shapes3_L6
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_fpr1+2
                 SEP     #$20
                 MX      %10
                 PHB

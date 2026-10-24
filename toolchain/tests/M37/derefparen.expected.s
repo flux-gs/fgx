@@ -166,6 +166,7 @@ _derefparen_L0
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAX
                 LDA     #10
                 STA     _fcc_tmp_b
@@ -268,6 +269,7 @@ _derefparen_L5
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAX
                 LDA     #10
                 STA     _fcc_tmp_b

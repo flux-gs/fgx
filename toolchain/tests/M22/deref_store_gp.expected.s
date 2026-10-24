@@ -50,6 +50,7 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #65
@@ -146,6 +147,7 @@ _deref_store_gp_L2
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
+                AND     #$00FF
                 TAX
                 CMP     #66
                 BEQ     _deref_store_gp_L5

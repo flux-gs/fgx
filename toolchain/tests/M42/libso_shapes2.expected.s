@@ -73,9 +73,7 @@ main_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_fpr1+2
                 SEP     #$20
                 MX      %10
                 PHB
@@ -484,9 +482,7 @@ main_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
+                LDA     _fcc_fpr1+2
                 SEP     #$20
                 MX      %10
                 PHB

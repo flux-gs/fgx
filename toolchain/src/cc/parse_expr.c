@@ -7284,10 +7284,39 @@ llong_opassign(int n, TokKind op, int rhs, LocalType ht, int lhs_u)
                       g_ast[rhs].is_unsigned, compound_binop_fn(op));
 }
 
+/* The statement-context root whose value walk_expr_stmt discards. */
+static int g_discard_node = -1;
+
+/* The type of the object an expression-context store writes, or LT_VOID
+ * when n is not one.  N_STORE_VAR carries its RHS's descriptor (chained
+ * pointer stores read it), so its object's type comes from the symbol. */
+static LocalType
+store_object_type(int n)
+{
+    switch (g_ast[n].kind) {
+    case N_STORE_VAR:
+        return g_ast[n].sym_lc ? g_ast[n].sym_lc->type : g_ast[n].sym_gv->type;
+    case N_DSTORE: case N_COMPOUND_VAR:
+    case N_STORE_DOTFIELD: case N_STORE_PTRARR_ELEM: case N_STORE_MEMBER:
+    case N_STORE_SARR_MEMBER: case N_STORE_ARR_ELEM: case N_LV_STORE_E:
+        return g_ast[n].type;
+    default:
+        return LT_VOID;
+    }
+}
+
 void
 walk_expr(int n)
 {
     walk_expr_body(n);
+    /* K&R A.7.17: "The type of an assignment expression is that of its left
+     * operand, and the value is the value stored in the left operand after
+     * the assignment has taken place."  A char store writes A's low byte;
+     * the value is that byte, so A drops its high one -- unless the
+     * statement discards the value. */
+    if (n != g_discard_node && g_fpr_res < 0 &&
+        store_object_type(n) == LT_CHAR)
+        ir_emitf("                AND     #$00FF\n");
     g_expr_const_int = cast_operand_is_const(n);
 }
 
@@ -7541,11 +7570,15 @@ walk_expr_body(int n)
         }
         break;
     }
-    case N_COMMA:
+    case N_COMMA: {
+        int saved = g_discard_node;    /* K&R A.7.18: the left value is discarded */
+        g_discard_node = g_ast[n].a;
         walk_expr(g_ast[n].a);
+        g_discard_node = saved;
         if (g_fpr_res >= 0) { fpr_drop(g_fpr_res); g_fpr_res = -1; }
         walk_expr(g_ast[n].b);
         break;
+    }
     /* --- unary --- */
     case N_SIZEOF:
         ir_emitf("                LDA     #%d\n", (int)g_ast[n].val);
@@ -9555,7 +9588,10 @@ walk_expr_root(int n)
 void
 walk_expr_stmt(int n)
 {
+    int saved = g_discard_node;
+    g_discard_node = n;
     walk_expr(n);
+    g_discard_node = saved;
     if (g_fpr_res >= 0)
         fpr_drop(g_fpr_res);
     if (fpr_live() != 0)

@@ -1652,7 +1652,6 @@ _ldouble_store_L39
                 STA     gp
                 LDA     _fcc_fpr0+2
                 STA     gp+2
-                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     gp+2

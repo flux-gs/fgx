@@ -288,7 +288,6 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                LDA     _fcc_fpr0
 _arrmemberdecay_L5
                 INC     _fcc_img0
                 BRL     _arrmemberdecay_L4

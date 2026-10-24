@@ -99,8 +99,6 @@ _selfchain_L3
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr1
-                STA     _fcc_fpr0
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -152,7 +150,6 @@ _selfchain_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                LDA     _fcc_fpr0
 _selfchain_L1
                 INC     _fcc_img0
                 BRL     _selfchain_L0
