@@ -154,8 +154,6 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L0
@@ -186,8 +184,6 @@ _mul_var_L0
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L1
@@ -502,8 +498,6 @@ _mul_var_L10
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L11
@@ -534,8 +528,6 @@ _mul_var_L11
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L12

@@ -177,8 +177,6 @@ _spawnops_L0
                 STA     5,S   ; fccstk d=0 b=5
 _spawnops_L2
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _spawnops_L3

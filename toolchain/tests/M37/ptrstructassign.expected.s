@@ -329,10 +329,7 @@ _ptrstructassign_L7
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -497,10 +494,7 @@ _ptrstructassign_L15
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -606,10 +600,7 @@ _ptrstructassign_L21
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0+2
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1211,8 +1202,6 @@ _ptrstructassign_L35
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _ptrstructassign_L38

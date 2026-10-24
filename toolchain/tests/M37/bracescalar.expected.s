@@ -155,8 +155,6 @@ _bracescalar_L4
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _bracescalar_L1

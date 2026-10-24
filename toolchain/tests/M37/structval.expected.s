@@ -212,28 +212,6 @@ _structval_same_stkok        TCS
                 CMP     _fcc_tmp_b
                 BEQ     *+5
                 BRL     _structval_L6
-                DO      8+_structval_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structval_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structval_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structval_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -364,28 +342,7 @@ _structval_fill_stkok        TCS
                 LDA     10+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+_structval_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structval_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structval_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -401,28 +358,7 @@ _structval_fill_stkok        TCS
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+_structval_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structval_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structval_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structval_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+_structval_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -1829,8 +1765,6 @@ _structval_L68
                 BNE     *+5
                 BRL     _structval_L65
                 LDA     _structval_g0+0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _structval_L65
@@ -1843,8 +1777,6 @@ _structval_L66
                 BNE     *+5
                 BRL     _structval_L63
                 LDA     _structval_g0+20
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _structval_L63

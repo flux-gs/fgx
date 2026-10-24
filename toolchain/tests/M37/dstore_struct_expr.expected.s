@@ -48,10 +48,7 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -178,14 +175,10 @@ _dstore_struct_expr_L12
                 DEY
                 BPL     _dstore_struct_expr_L12
                 LDA     dst+0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L18
                 LDA     dst+2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L18
@@ -198,8 +191,6 @@ _dstore_struct_expr_L19
                 BNE     *+5
                 BRL     _dstore_struct_expr_L16
                 LDA     dst+4
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _dstore_struct_expr_L16

@@ -34,10 +34,6 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #$1111
                 STA     _fcc_long_hi
                 LDA     #$2222
@@ -47,10 +43,6 @@ main_stkok        TCS
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #$3333
                 STA     _fcc_long_hi
                 LDA     #$4444
@@ -588,8 +580,6 @@ _arrfieldlong_L12
                 LDX     #$FFFF
 _arrfieldlong_L14
                 STX     _fcc_long_hi
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _arrfieldlong_L13
@@ -727,8 +717,6 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _arrfieldlong_L18
@@ -744,8 +732,6 @@ _arrfieldlong_L16
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _arrfieldlong_L18

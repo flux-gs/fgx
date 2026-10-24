@@ -45,10 +45,6 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -112,8 +108,6 @@ _pwdops_L7
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L4
@@ -195,8 +189,6 @@ _pwdops_L12
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L9
@@ -278,8 +270,6 @@ _pwdops_L17
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L14
@@ -308,10 +298,6 @@ _pwdops_L13
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -370,8 +356,6 @@ _pwdops_L22
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L19

@@ -949,8 +949,6 @@ _lvrun_bump_L28
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L36
@@ -1733,8 +1731,6 @@ _lvrun_bump_L76
                 PLA
                 TAX
                 LDA:    _lvrun_bump_m2,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L73
@@ -1816,8 +1812,6 @@ _lvrun_bump_L70
                 PLA
                 TAX
                 LDA:    _lvrun_bump_m2,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L78

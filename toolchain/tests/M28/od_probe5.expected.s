@@ -272,10 +272,7 @@ _od_probe5_L3
                 PHA
                 LDA     9,S   ; fccstk d=2 b=7
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _od_probe5_L4-1
                 SEP     #$20

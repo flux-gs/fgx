@@ -52,28 +52,7 @@ _structsrcdeep_fill_stkok        TCS
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+_structsrcdeep_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -89,28 +68,7 @@ _structsrcdeep_fill_stkok        TCS
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+_structsrcdeep_fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -132,28 +90,7 @@ _structsrcdeep_fill_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      8+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_fill_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_fill_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+_structsrcdeep_fill_FRAMESIZE/256
                 TSC
                 CLC

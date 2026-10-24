@@ -1756,28 +1756,7 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+ufs_sbdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1813,28 +1792,7 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+ufs_sbdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1870,28 +1828,7 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+ufs_sbdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -2959,28 +2896,6 @@ ufs_sbencode_stkok        TCS
                 PHA
                 TYA
                 PHA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #431
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -3031,28 +2946,6 @@ ufs_sbencode_stkok        TCS
                 PHA
                 TYA
                 PHA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #432
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -3103,28 +2996,6 @@ ufs_sbencode_stkok        TCS
                 PHA
                 TYA
                 PHA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #433
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -4190,28 +4061,6 @@ _ufssb_L26
                 PHA
                 TYA
                 PHA
-                DO      12+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -4264,34 +4113,9 @@ _ufssb_L27
                 STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
-_ufssb_L31
                 BPL     *+5
                 BRL     _ufssb_L29
-                DO      8+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -4301,9 +4125,9 @@ _ufssb_L31
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _ufssb_L32
+                BVC     _ufssb_L31
                 EOR     #$8000
-_ufssb_L32
+_ufssb_L31
                 BPL     *+5
                 BRL     _ufssb_L29
                 LDA     #0
@@ -4349,34 +4173,9 @@ _ufssb_L28
                 STA     _fcc_fpr0
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
-_ufssb_L36
                 BPL     *+5
-                BRL     _ufssb_L34
-                DO      8+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _ufssb_L33
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -4386,19 +4185,19 @@ _ufssb_L36
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _ufssb_L37
+                BVC     _ufssb_L35
                 EOR     #$8000
-_ufssb_L37
-                BPL     *+5
-                BRL     _ufssb_L34
-                LDA     #0
-                BRL     _ufssb_L35
-_ufssb_L34
-                LDA     #1
 _ufssb_L35
+                BPL     *+5
+                BRL     _ufssb_L33
+                LDA     #0
+                BRL     _ufssb_L34
+_ufssb_L33
+                LDA     #1
+_ufssb_L34
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L33
+                BRL     _ufssb_L32
                 LDA     #0
                 TAY
                 TSC
@@ -4409,7 +4208,7 @@ _ufssb_L35
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L33
+_ufssb_L32
                 DO      8+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4442,28 +4241,6 @@ _ufssb_L33
                 PHA
                 TYA
                 PHA
-                DO      12+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -4480,7 +4257,7 @@ _ufssb_L33
                 JSR     _fcc_long_gts
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L38
+                BRL     _ufssb_L36
                 LDA     #0
                 TAY
                 TSC
@@ -4491,7 +4268,7 @@ _ufssb_L33
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L38
+_ufssb_L36
                 DO      12+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4531,7 +4308,7 @@ _ufssb_L38
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L40
+                BRL     _ufssb_L38
                 DO      8+ufs_sbvalid_FRAMESIZE/256
                 TSC
                 CLC
@@ -4596,15 +4373,15 @@ _ufssb_L38
                 JSR     _fcc_long_gts
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L40
+                BRL     _ufssb_L38
                 LDA     #1
-                BRL     _ufssb_L41
-_ufssb_L40
+                BRL     _ufssb_L39
+_ufssb_L38
                 LDA     #0
-_ufssb_L41
+_ufssb_L39
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L39
+                BRL     _ufssb_L37
                 LDA     #0
                 TAY
                 TSC
@@ -4615,7 +4392,7 @@ _ufssb_L41
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L39
+_ufssb_L37
                 LDA     #1
                 TAY
                 TSC
@@ -4678,7 +4455,7 @@ main_stkok        TCS
                 TXA
                 CMP     #126
                 BNE     *+5
-                BRL     _ufssb_L42
+                BRL     _ufssb_L40
                 LDA     #1
                 TAY
                 TSC
@@ -4689,13 +4466,13 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L42
+_ufssb_L40
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
                 CMP     #40
                 BNE     *+5
-                BRL     _ufssb_L43
+                BRL     _ufssb_L41
                 LDA     #2
                 TAY
                 TSC
@@ -4706,14 +4483,58 @@ _ufssb_L42
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L43
+_ufssb_L41
                 LDA     209,S   ; fccstk d=0 b=209
                 TAX
                 TXA
                 CMP     #92
                 BNE     *+5
-                BRL     _ufssb_L44
+                BRL     _ufssb_L42
                 LDA     #3
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_ufssb_L42
+                TSC
+                CLC
+                ADC     #419
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                TAX
+                TXA
+                CMP     #1368
+                BNE     *+5
+                BRL     _ufssb_L43
+                LDA     #4
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_ufssb_L43
+                TSC
+                CLC
+                ADC     #421
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                TAX
+                TXA
+                CMP     #7
+                BNE     *+5
+                BRL     _ufssb_L44
+                LDA     #5
                 TAY
                 TSC
                 CLC
@@ -4726,50 +4547,6 @@ _ufssb_L43
 _ufssb_L44
                 TSC
                 CLC
-                ADC     #419
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                TAX
-                TXA
-                CMP     #1368
-                BNE     *+5
-                BRL     _ufssb_L45
-                LDA     #4
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_ufssb_L45
-                TSC
-                CLC
-                ADC     #421
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                TAX
-                TXA
-                CMP     #7
-                BNE     *+5
-                BRL     _ufssb_L46
-                LDA     #5
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_ufssb_L46
-                TSC
-                CLC
                 ADC     #423
                 STA     _fcc_fp
                 STZ     _fcc_fp+2
@@ -4778,7 +4555,7 @@ _ufssb_L46
                 TXA
                 CMP     #400
                 BNE     *+5
-                BRL     _ufssb_L47
+                BRL     _ufssb_L45
                 LDA     #6
                 TAY
                 TSC
@@ -4789,7 +4566,7 @@ _ufssb_L46
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L47
+_ufssb_L45
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4812,7 +4589,7 @@ _ufssb_L47
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L48
+                BRL     _ufssb_L46
                 LDA     #7
                 TAY
                 TSC
@@ -4823,7 +4600,7 @@ _ufssb_L47
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L48
+_ufssb_L46
                 TSC
                 CLC
                 ADC     #417
@@ -4856,7 +4633,7 @@ _ufssb_L48
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L49
+                BRL     _ufssb_L47
                 LDA     #8
                 TAY
                 TSC
@@ -4867,7 +4644,7 @@ _ufssb_L48
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L49
+_ufssb_L47
                 TSC
                 CLC
                 ADC     #413
@@ -4900,7 +4677,7 @@ _ufssb_L49
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L50
+                BRL     _ufssb_L48
                 LDA     #9
                 TAY
                 TSC
@@ -4911,7 +4688,7 @@ _ufssb_L49
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L50
+_ufssb_L48
                 LDA     #0
                 JSR     _fcc_long_from_int
                 TAY
@@ -4939,15 +4716,15 @@ _ufssb_L50
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _ufssb_L52
+                BEQ     _ufssb_L50
                 LDA     #0
-                BRA     _ufssb_L53
-_ufssb_L52
+                BRA     _ufssb_L51
+_ufssb_L50
                 LDA     #1
-_ufssb_L53
+_ufssb_L51
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L51
+                BRL     _ufssb_L49
                 LDA     #10
                 TAY
                 TSC
@@ -4958,7 +4735,7 @@ _ufssb_L53
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L51
+_ufssb_L49
                 LDA     #7942
                 JSR     _fcc_long_from_int
                 TAY
@@ -4986,15 +4763,15 @@ _ufssb_L51
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _ufssb_L55
+                BEQ     _ufssb_L53
                 LDA     #0
-                BRA     _ufssb_L56
-_ufssb_L55
+                BRA     _ufssb_L54
+_ufssb_L53
                 LDA     #1
-_ufssb_L56
+_ufssb_L54
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L54
+                BRL     _ufssb_L52
                 LDA     #11
                 TAY
                 TSC
@@ -5005,7 +4782,7 @@ _ufssb_L56
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L54
+_ufssb_L52
                 LDA     #100
                 JSR     _fcc_long_from_int
                 TAY
@@ -5034,7 +4811,7 @@ _ufssb_L54
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _ufssb_L57
+                BRL     _ufssb_L55
                 LDA     #12
                 TAY
                 TSC
@@ -5045,7 +4822,7 @@ _ufssb_L54
                 STA     _fcc_fb
                 TYA
                 RTL
-_ufssb_L57
+_ufssb_L55
                 LDA     #42
                 TAY
                 TSC

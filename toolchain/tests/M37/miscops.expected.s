@@ -239,10 +239,7 @@ _miscops_L7
                 STA     5,S   ; fccstk d=0 b=5
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
-_miscops_L10
                 BPL     *+5
                 BRL     _miscops_L9
                 LDA     7,S   ; fccstk d=0 b=7

@@ -46,10 +46,6 @@ main_stkok        TCS
                 TXA
                 INC
                 STA     [_fcc_fpr0]
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -57,16 +53,8 @@ main_stkok        TCS
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=2 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

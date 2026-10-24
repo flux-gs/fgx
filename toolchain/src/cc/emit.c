@@ -5660,6 +5660,22 @@ emit_cmp_branch(TokKind op, int is_unsigned, int label, int want_true)
 }
 
 
+/* emit_cmp_branch with a literal 0 on the right: A is the left side, and
+ * `CMP #0' leaves the N and Z the subtraction would -- A - 0 cannot
+ * overflow, so the sign of A is the sign of the difference. */
+void
+emit_cmp_zero_branch(TokKind op, int label, int want_true)
+{
+    int cc = (op == TOK_EQEQ) ? IRC_BEQ :
+             (op == TOK_NE)   ? IRC_BNE :
+             (op == TOK_LT)   ? IRC_BMI : IRC_BPL;
+    ir_emitf("                CMP     #0\n");
+    if (!want_true) cc ^= 1;
+    emit_bcond(cc, label, 1);
+    g_expr_type = LT_INT;
+}
+
+
 void emit_cmp_lt(void) {
     if (g_expr_type == LT_LLONG) { emit_ll_cmp("BMI"); return; }
     if (g_expr_type == LT_DOUBLE) { emit_d_cmp("BMI"); return; }

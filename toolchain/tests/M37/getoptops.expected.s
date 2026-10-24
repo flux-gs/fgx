@@ -709,8 +709,6 @@ _getoptops_L21
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L22
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _getoptops_L23

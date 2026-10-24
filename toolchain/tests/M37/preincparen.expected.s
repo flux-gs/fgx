@@ -75,10 +75,6 @@ _preincparen_L0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -163,10 +159,6 @@ _preincparen_L2
                 CMP     #8
                 BEQ     *+5
                 BRL     _preincparen_L4
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA

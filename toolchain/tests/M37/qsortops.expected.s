@@ -466,8 +466,6 @@ _qsortops_L3
                 ASL
                 TAX
                 LDA:    iv,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _qsortops_L10
@@ -674,8 +672,6 @@ _qsortops_L7
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _qsortops_L18
@@ -815,8 +811,6 @@ _qsortops_L13
                 ASL
                 TAX
                 LDA:    iv,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _qsortops_L22

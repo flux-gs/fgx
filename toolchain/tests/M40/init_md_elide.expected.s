@@ -211,8 +211,6 @@ _init_md_elide_L5
                 PLA
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L13
@@ -237,8 +235,6 @@ _init_md_elide_L14
                 PLA
                 TAX
                 LDA:    _init_md_elide_sl_sl_dm,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L11
@@ -304,8 +300,6 @@ _init_md_elide_L19
                 PLA
                 TAX
                 LDA:    _init_md_elide_sl_sl_sz,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L16
@@ -957,8 +951,6 @@ _init_md_elide_L35
                 PLA
                 TAX
                 LDA:    mix,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L41
@@ -1029,8 +1021,6 @@ _init_md_elide_L43
                 PLA
                 TAX
                 LDA:    unsized,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L47
@@ -1055,8 +1045,6 @@ _init_md_elide_L48
                 PLA
                 TAX
                 LDA:    unsized,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L45
@@ -1189,8 +1177,6 @@ _init_md_elide_L49
                 PLA
                 TAX
                 LDA:    cube,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L53
@@ -1256,8 +1242,6 @@ _init_md_elide_L52
                 PLA
                 TAX
                 LDA:    cube,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L56
@@ -1444,8 +1428,6 @@ _init_md_elide_L58
                 PLA
                 TAX
                 LDA:    trail,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L64
@@ -1470,8 +1452,6 @@ _init_md_elide_L65
 _init_md_elide_L63
                 FGX2_FARCALL _init_md_elide_sl
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _init_md_elide_L66

@@ -485,10 +485,6 @@ _memchain3_L3
                 STA     27,S   ; fccstk d=0 b=27
                 LDA     _fcc_fpr0
                 STA     25,S   ; fccstk d=0 b=25
-                LDA     27,S   ; fccstk d=0 b=27
-                STA     _fcc_fpr0+2
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA

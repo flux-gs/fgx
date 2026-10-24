@@ -51,8 +51,6 @@ _ptr_postinc_L0
                 INC     _fcc_img2
                 AND     #$00FF
                 STA     _fcc_img1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _ptr_postinc_L1

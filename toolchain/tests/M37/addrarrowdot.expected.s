@@ -296,10 +296,7 @@ main_stkok        TCS
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -516,10 +513,7 @@ _addrarrowdot_L8
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -670,10 +664,7 @@ _addrarrowdot_L28
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -825,10 +816,6 @@ _addrarrowdot_L42
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
                 STA     21,S   ; fccstk d=0 b=21
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0+2
-                LDA     21,S   ; fccstk d=0 b=21
-                STA     _fcc_fpr0
                 LDA     #2
                 CLC
                 ADC     #gt+14
@@ -986,10 +973,7 @@ _addrarrowdot_L52
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1168,10 +1152,7 @@ _addrarrowdot_L64
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1329,10 +1310,7 @@ _addrarrowdot_L80
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1480,10 +1458,7 @@ _addrarrowdot_L90
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1605,10 +1580,7 @@ _addrarrowdot_L102
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1787,10 +1759,6 @@ _addrarrowdot_L112
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #6682
                 STA     [_fcc_fpr0]
                 LDA     gt+68
@@ -1891,10 +1859,7 @@ _addrarrowdot_L128
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10

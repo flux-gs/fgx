@@ -346,8 +346,6 @@ _f_add_L4
                 TYA
                 FGX2_FARCALL _fcc_dsub
                 FGX2_FARCALL _fcc_dtol
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _f_add_L5

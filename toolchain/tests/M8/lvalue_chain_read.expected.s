@@ -207,10 +207,7 @@ main_stkok        TCS
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     _fcc_img0
                 PHA
-                LDA     21,S   ; fccstk d=2 b=19
-                STA     _fcc_fpr0+2
-                LDA     19,S   ; fccstk d=2 b=17
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     #0

@@ -787,10 +787,6 @@ _deref_store_L6
                 STA     29,S   ; fccstk d=0 b=29
                 LDA     _fcc_fpr0
                 STA     27,S   ; fccstk d=0 b=27
-                LDA     29,S   ; fccstk d=0 b=29
-                STA     _fcc_fpr0+2
-                LDA     27,S   ; fccstk d=0 b=27
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20

@@ -358,8 +358,6 @@ _div16_sweep_L23
                 INC     _fcc_img5
 _div16_sweep_L26
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _div16_sweep_L28
@@ -392,10 +390,7 @@ _div16_sweep_L29
                 INC     _fcc_img5
 _div16_sweep_L27
                 LDA     _fcc_img1
-                TAX
-                TXA
                 CMP     #0
-_div16_sweep_L33
                 BMI     *+5
                 BRL     _div16_sweep_L31
                 LDA     _fcc_img1
@@ -407,26 +402,23 @@ _div16_sweep_L31
 _div16_sweep_L32
                 PHA
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CMP     #0
-_div16_sweep_L36
                 BMI     *+5
-                BRL     _div16_sweep_L34
+                BRL     _div16_sweep_L33
                 LDA     _fcc_img0
                 EOR     #$FFFF
                 INC
-                BRL     _div16_sweep_L35
-_div16_sweep_L34
+                BRL     _div16_sweep_L34
+_div16_sweep_L33
                 LDA     _fcc_img0
-_div16_sweep_L35
+_div16_sweep_L34
                 STA     _fcc_tmp_b
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _div16_sweep_L37
+                BVC     _div16_sweep_L35
                 EOR     #$8000
-_div16_sweep_L37
+_div16_sweep_L35
                 BPL     *+5
                 BRL     _div16_sweep_L30
                 INC     _fcc_img5
@@ -454,16 +446,14 @@ _div16_sweep_L17
                 LDA     _fcc_img6
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _div16_sweep_L38
+                BRL     _div16_sweep_L36
                 LDA     #42
-                BRL     _div16_sweep_L39
-_div16_sweep_L38
+                BRL     _div16_sweep_L37
+_div16_sweep_L36
                 LDA     5,S   ; fccstk d=0 b=5
-_div16_sweep_L39
+_div16_sweep_L37
                 TAY
                 TSC
                 CLC

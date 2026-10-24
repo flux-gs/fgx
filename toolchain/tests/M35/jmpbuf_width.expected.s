@@ -76,8 +76,6 @@ main_stkok        TCS
                 LDA     #env
                 TAX
                 FGX2_FARCALL setjmp
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _jmpbuf_width_L0

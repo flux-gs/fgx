@@ -623,10 +623,7 @@ bio_strategy_stkok        TCS
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_specops_L3
                 BPL     *+5
                 BRL     _specops_L1
                 LDA     1,S   ; fccstk d=0 b=1
@@ -634,9 +631,9 @@ _specops_L3
                 TXA
                 SEC
                 SBC     #64
-                BVC     _specops_L4
+                BVC     _specops_L3
                 EOR     #$8000
-_specops_L4
+_specops_L3
                 BMI     *+5
                 BRL     _specops_L1
                 LDA     #0
@@ -674,28 +671,6 @@ _specops_L2
                 TXA
                 ORA     #4
                 STA     [_fcc_fpr0]
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #5
                 SEP     #$20
                 MX      %10
@@ -703,28 +678,7 @@ _specops_L2
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL biodone
@@ -770,32 +724,10 @@ _specops_L0
                 AND     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L5
+                BRL     _specops_L4
                 LDA     _specops_fake_reads
                 INC
                 STA     _specops_fake_reads
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -821,8 +753,8 @@ _specops_L0
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                BRL     _specops_L6
-_specops_L5
+                BRL     _specops_L5
+_specops_L4
                 LDA     _specops_fake_writes
                 INC
                 STA     _specops_fake_writes
@@ -885,7 +817,7 @@ _specops_L5
                 REP     #$20
                 MX      %00
                 PLA
-_specops_L6
+_specops_L5
                 DO      8+bio_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -1382,6 +1314,7 @@ _specops_binshash_stkok        TCS
                 ELSE
                 LDA     6+_specops_binshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -1413,28 +1346,7 @@ _specops_binshash_stkok        TCS
                 LDA     10+_specops_binshash_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_specops_binshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_specops_binshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_specops_binshash_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_specops_binshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_specops_binshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_specops_binshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2351,7 +2263,7 @@ _specops_bufinsvn_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L7
+                BRL     _specops_L6
                 DO      8+_specops_bufinsvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2419,7 +2331,7 @@ _specops_bufinsvn_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_specops_L7
+_specops_L6
                 DO      12+_specops_bufinsvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2538,7 +2450,7 @@ _specops_bufremvn_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L9
+                BRL     _specops_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2546,15 +2458,15 @@ _specops_bufremvn_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L9
+                BRL     _specops_L8
                 LDA     #1
-                BRL     _specops_L10
-_specops_L9
+                BRL     _specops_L9
+_specops_L8
                 LDA     #0
-_specops_L10
+_specops_L9
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L8
+                BRL     _specops_L7
                 TAY
                 TSC
                 CLC
@@ -2564,7 +2476,7 @@ _specops_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L8
+_specops_L7
                 DO      8+_specops_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2607,11 +2519,8 @@ _specops_L8
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L10
+                LDA     _fcc_fpr0
                 DO      8+_specops_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2659,7 +2568,7 @@ _specops_L8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L11
+_specops_L10
                 DO      8+_specops_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2810,7 +2719,7 @@ bufinit_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_specops_L12
+_specops_L11
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2819,11 +2728,11 @@ _specops_L12
                 TXA
                 SEC
                 SBC     #3
-                BVC     _specops_L15
+                BVC     _specops_L14
                 EOR     #$8000
-_specops_L15
+_specops_L14
                 BMI     *+5
-                BRL     _specops_L14
+                BRL     _specops_L13
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -2850,10 +2759,6 @@ _specops_L15
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1
@@ -2870,10 +2775,7 @@ _specops_L15
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #14
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2887,15 +2789,15 @@ _specops_L15
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L13
+_specops_L12
                 INC     _fcc_img0
-                BRL     _specops_L12
-_specops_L14
+                BRL     _specops_L11
+_specops_L13
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
-_specops_L16
+_specops_L15
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2904,11 +2806,11 @@ _specops_L16
                 TXA
                 SEC
                 SBC     #16
-                BVC     _specops_L19
+                BVC     _specops_L18
                 EOR     #$8000
-_specops_L19
+_specops_L18
                 BMI     *+5
-                BRL     _specops_L18
+                BRL     _specops_L17
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2935,10 +2837,6 @@ _specops_L19
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1
@@ -2955,10 +2853,7 @@ _specops_L19
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2972,13 +2867,13 @@ _specops_L19
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L17
+_specops_L16
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _specops_L16
-_specops_L18
+                BRL     _specops_L15
+_specops_L17
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2996,7 +2891,7 @@ _specops_L18
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
-_specops_L20
+_specops_L19
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3005,11 +2900,11 @@ _specops_L20
                 TXA
                 SEC
                 SBC     #16
-                BVC     _specops_L23
+                BVC     _specops_L22
                 EOR     #$8000
-_specops_L23
+_specops_L22
                 BMI     *+5
-                BRL     _specops_L22
+                BRL     _specops_L21
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -3035,23 +2930,11 @@ _specops_L23
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #2048
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -3098,10 +2981,6 @@ _specops_L23
                 LDA     #1024
                 LDY     #18
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -3109,17 +2988,10 @@ _specops_L23
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+bufinit_FRAMESIZE/256
                 TSC
                 CLC
@@ -3186,10 +3058,7 @@ _specops_L23
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -3250,13 +3119,13 @@ _specops_L23
                 CLC
                 ADC     #8
                 TCS
-_specops_L21
+_specops_L20
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _specops_L20
-_specops_L22
+                BRL     _specops_L19
+_specops_L21
                 TAY
                 TSC
                 CLC
@@ -3376,10 +3245,6 @@ incore_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -3396,7 +3261,7 @@ incore_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L24
+_specops_L23
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3411,7 +3276,7 @@ _specops_L24
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L27
+                BRL     _specops_L26
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3419,15 +3284,15 @@ _specops_L24
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L27
+                BRL     _specops_L26
                 LDA     #0
-                BRL     _specops_L28
-_specops_L27
+                BRL     _specops_L27
+_specops_L26
                 LDA     #1
-_specops_L28
+_specops_L27
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L26
+                BRL     _specops_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3474,7 +3339,7 @@ _specops_L28
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L32
+                BRL     _specops_L31
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3516,7 +3381,7 @@ _specops_L28
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L34
+                BRL     _specops_L33
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3524,23 +3389,23 @@ _specops_L28
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L34
-                LDA     #1
-                BRL     _specops_L35
-_specops_L34
-                LDA     #0
-_specops_L35
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L32
-                LDA     #1
                 BRL     _specops_L33
-_specops_L32
-                LDA     #0
+                LDA     #1
+                BRL     _specops_L34
 _specops_L33
+                LDA     #0
+_specops_L34
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L30
+                BRL     _specops_L31
+                LDA     #1
+                BRL     _specops_L32
+_specops_L31
+                LDA     #0
+_specops_L32
+                CMP     #0
+                BNE     *+5
+                BRL     _specops_L29
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3549,19 +3414,17 @@ _specops_L33
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L30
+                BRL     _specops_L29
                 LDA     #1
-                BRL     _specops_L31
-_specops_L30
+                BRL     _specops_L30
+_specops_L29
                 LDA     #0
-_specops_L31
+_specops_L30
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L29
+                BRL     _specops_L28
                 LDA     #1
                 TAY
                 TSC
@@ -3572,8 +3435,8 @@ _specops_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L29
-_specops_L25
+_specops_L28
+_specops_L24
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3594,8 +3457,8 @@ _specops_L25
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L24
-_specops_L26
+                BRL     _specops_L23
+_specops_L25
                 LDA     #0
                 TAY
                 TSC
@@ -3624,7 +3487,7 @@ _specops_getnewbuf_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
 _specops_getnewbuf_uL_again
-_specops_L36
+_specops_L35
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3643,10 +3506,6 @@ _specops_L36
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -3666,7 +3525,7 @@ _specops_L36
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L40
+                BRL     _specops_L39
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3674,15 +3533,15 @@ _specops_L36
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L40
+                BRL     _specops_L39
                 LDA     #1
-                BRL     _specops_L41
-_specops_L40
+                BRL     _specops_L40
+_specops_L39
                 LDA     #0
-_specops_L41
+_specops_L40
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L39
+                BRL     _specops_L38
                 PHA
                 SEP     #$20
                 MX      %10
@@ -3698,7 +3557,7 @@ _specops_L41
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_specops_L39
+_specops_L38
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3722,7 +3581,7 @@ _specops_L39
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L43
+                BRL     _specops_L42
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3730,17 +3589,17 @@ _specops_L39
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L43
+                BRL     _specops_L42
                 LDA     #0
-                BRL     _specops_L44
-_specops_L43
+                BRL     _specops_L43
+_specops_L42
                 LDA     #1
-_specops_L44
+_specops_L43
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L42
-                BRL     _specops_L38
-_specops_L42
+                BRL     _specops_L41
+                BRL     _specops_L37
+_specops_L41
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3750,10 +3609,7 @@ _specops_L42
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -3761,9 +3617,9 @@ _specops_L42
                 CLC
                 ADC     #4
                 TCS
+_specops_L36
+                BRL     _specops_L35
 _specops_L37
-                BRL     _specops_L36
-_specops_L38
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3784,10 +3640,7 @@ _specops_L38
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _specops_bremfree
@@ -3804,21 +3657,14 @@ _specops_L38
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L45
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L44
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -3830,7 +3676,7 @@ _specops_L38
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     _specops_getnewbuf_uL_again
-_specops_L45
+_specops_L44
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3851,7 +3697,7 @@ _specops_L45
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L46
+                BRL     _specops_L45
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3863,7 +3709,7 @@ _specops_L45
                 CLC
                 ADC     #4
                 TCS
-_specops_L46
+_specops_L45
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3896,10 +3742,7 @@ _specops_L46
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -3915,10 +3758,6 @@ _specops_L46
                 STA     _fcc_fpr0
                 LDA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -3926,17 +3765,10 @@ _specops_L46
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -4003,7 +3835,7 @@ getblk_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L48
+                BRL     _specops_L47
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4011,15 +3843,15 @@ getblk_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L48
+                BRL     _specops_L47
                 LDA     #1
-                BRL     _specops_L49
-_specops_L48
+                BRL     _specops_L48
+_specops_L47
                 LDA     #0
-_specops_L49
+_specops_L48
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L47
+                BRL     _specops_L46
                 SEP     #$20
                 MX      %10
                 PHB
@@ -4036,7 +3868,7 @@ _specops_L49
                 CLC
                 ADC     #4
                 TCS
-_specops_L47
+_specops_L46
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4151,7 +3983,7 @@ getblk_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L50
+_specops_L49
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4166,7 +3998,7 @@ _specops_L50
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L53
+                BRL     _specops_L52
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4174,15 +4006,15 @@ _specops_L50
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L53
+                BRL     _specops_L52
                 LDA     #0
-                BRL     _specops_L54
-_specops_L53
+                BRL     _specops_L53
+_specops_L52
                 LDA     #1
-_specops_L54
+_specops_L53
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L52
+                BRL     _specops_L51
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4229,7 +4061,7 @@ _specops_L54
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L58
+                BRL     _specops_L57
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4271,7 +4103,7 @@ _specops_L54
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L60
+                BRL     _specops_L59
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -4279,23 +4111,23 @@ _specops_L54
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L60
-                LDA     #0
-                BRL     _specops_L61
-_specops_L60
-                LDA     #1
-_specops_L61
-                CMP     #0
-                BEQ     *+5
-                BRL     _specops_L58
-                LDA     #0
                 BRL     _specops_L59
-_specops_L58
-                LDA     #1
+                LDA     #0
+                BRL     _specops_L60
 _specops_L59
+                LDA     #1
+_specops_L60
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L56
+                BRL     _specops_L57
+                LDA     #0
+                BRL     _specops_L58
+_specops_L57
+                LDA     #1
+_specops_L58
+                CMP     #0
+                BEQ     *+5
+                BRL     _specops_L55
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4306,17 +4138,17 @@ _specops_L59
                 AND     #2048
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L56
+                BRL     _specops_L55
                 LDA     #0
-                BRL     _specops_L57
-_specops_L56
+                BRL     _specops_L56
+_specops_L55
                 LDA     #1
-_specops_L57
+_specops_L56
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L55
-                BRL     _specops_L51
-_specops_L55
+                BRL     _specops_L54
+                BRL     _specops_L50
+_specops_L54
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4327,20 +4159,13 @@ _specops_L55
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L62
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L61
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -4352,7 +4177,7 @@ _specops_L55
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     getblk_uL_loop
-_specops_L62
+_specops_L61
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4373,10 +4198,7 @@ _specops_L62
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -4386,7 +4208,7 @@ _specops_L62
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L51
+_specops_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4407,17 +4229,14 @@ _specops_L51
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L50
-_specops_L52
+                BRL     _specops_L49
+_specops_L51
                 FGX2_FARCALL _specops_getnewbuf
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      12+getblk_FRAMESIZE/256
@@ -4481,10 +4300,7 @@ _specops_L52
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+getblk_FRAMESIZE/256
                 TSC
                 CLC
@@ -4588,29 +4404,8 @@ brelse_stkok        TCS
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L63
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L62
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -4618,7 +4413,7 @@ brelse_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L63
+_specops_L62
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4646,7 +4441,7 @@ _specops_L63
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L64
+                BRL     _specops_L63
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4694,7 +4489,7 @@ _specops_L63
                 CLC
                 ADC     #4
                 TCS
-_specops_L64
+_specops_L63
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4722,7 +4517,7 @@ _specops_L64
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L65
+                BRL     _specops_L64
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4770,7 +4565,7 @@ _specops_L64
                 CLC
                 ADC     #4
                 TCS
-_specops_L65
+_specops_L64
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4799,35 +4594,13 @@ _specops_L65
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L66
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L65
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-_specops_L66
+_specops_L65
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4856,29 +4629,7 @@ _specops_L66
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L67
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L66
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -4895,7 +4646,7 @@ _specops_L66
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L68
+                BRL     _specops_L67
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4925,7 +4676,7 @@ _specops_L66
                 CLC
                 ADC     #4
                 TCS
-_specops_L68
+_specops_L67
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5031,28 +4782,7 @@ _specops_L68
                 LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -5093,7 +4823,7 @@ _specops_L68
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_specops_L67
+_specops_L66
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5122,7 +4852,7 @@ _specops_L67
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L69
+                BRL     _specops_L68
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5138,8 +4868,8 @@ _specops_L67
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L70
-_specops_L69
+                BRL     _specops_L69
+_specops_L68
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5168,7 +4898,7 @@ _specops_L69
                 AND     #8192
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L71
+                BRL     _specops_L70
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5184,8 +4914,8 @@ _specops_L69
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L72
-_specops_L71
+                BRL     _specops_L71
+_specops_L70
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5214,7 +4944,7 @@ _specops_L71
                 AND     #128
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L73
+                BRL     _specops_L72
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5230,8 +4960,8 @@ _specops_L71
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L74
-_specops_L73
+                BRL     _specops_L73
+_specops_L72
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5247,9 +4977,9 @@ _specops_L73
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L74
-_specops_L72
-_specops_L70
+_specops_L73
+_specops_L71
+_specops_L69
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5283,7 +5013,7 @@ _specops_L70
                 AND     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L75
+                BRL     _specops_L74
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5319,8 +5049,8 @@ _specops_L70
                 CLC
                 ADC     #8
                 TCS
-                BRL     _specops_L76
-_specops_L75
+                BRL     _specops_L75
+_specops_L74
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5356,7 +5086,7 @@ _specops_L75
                 CLC
                 ADC     #8
                 TCS
-_specops_L76
+_specops_L75
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -5422,7 +5152,7 @@ biowait_stkovf       JMP     _fcc_stkoflow
 biowait_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-_specops_L77
+_specops_L76
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5452,33 +5182,10 @@ _specops_L77
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L78
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L77
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -5486,8 +5193,8 @@ _specops_L77
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L77
-_specops_L78
+                BRL     _specops_L76
+_specops_L77
                 DO      8+biowait_FRAMESIZE/256
                 TSC
                 CLC
@@ -5514,11 +5221,9 @@ _specops_L78
                 TAX
                 TXA
                 AND     #4
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L79
+                BRL     _specops_L78
                 LDA     #0
                 TAY
                 TSC
@@ -5529,7 +5234,7 @@ _specops_L78
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L79
+_specops_L78
                 DO      8+biowait_FRAMESIZE/256
                 TSC
                 CLC
@@ -5557,36 +5262,14 @@ _specops_L79
                 AND     #$00FF
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L80
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L79
                 LDY     #20
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                BRL     _specops_L81
-_specops_L80
+                BRL     _specops_L80
+_specops_L79
                 LDA     #5
-_specops_L81
+_specops_L80
                 TAY
                 TSC
                 CLC
@@ -5641,7 +5324,7 @@ biodone_stkok        TCS
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L82
+                BRL     _specops_L81
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5658,7 +5341,7 @@ biodone_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L82
+_specops_L81
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5686,59 +5369,13 @@ _specops_L82
                 TXA
                 ORA     #2
                 STA     [_fcc_fpr0]
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #1
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L84
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L83
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5755,15 +5392,15 @@ _specops_L82
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L84
+                BRL     _specops_L83
                 LDA     #1
-                BRL     _specops_L85
-_specops_L84
+                BRL     _specops_L84
+_specops_L83
                 LDA     #0
-_specops_L85
+_specops_L84
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L83
+                BRL     _specops_L82
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5802,30 +5439,18 @@ _specops_L85
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 DEC
                 LDY     #50
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #1024
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L87
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L86
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -5835,31 +5460,28 @@ _specops_L85
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L89
+                BVC     _specops_L88
                 EOR     #$8000
-_specops_L89
-                BPL     *+5
-                BRL     _specops_L87
-                LDA     #1
-                BRL     _specops_L88
-_specops_L87
-                LDA     #0
 _specops_L88
+                BPL     *+5
+                BRL     _specops_L86
+                LDA     #1
+                BRL     _specops_L87
+_specops_L86
+                LDA     #0
+_specops_L87
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L86
+                BRL     _specops_L85
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
-_specops_L91
                 BMI     *+5
-                BRL     _specops_L90
+                BRL     _specops_L89
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5876,7 +5498,7 @@ _specops_L91
                 CLC
                 ADC     #4
                 TCS
-_specops_L90
+_specops_L89
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5889,9 +5511,7 @@ _specops_L90
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #50
                 STA     _fcc_fpr0
@@ -5902,8 +5522,8 @@ _specops_L90
                 CLC
                 ADC     #4
                 TCS
-_specops_L86
-_specops_L83
+_specops_L85
+_specops_L82
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5932,29 +5552,8 @@ _specops_L83
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L92
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L90
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
@@ -5971,7 +5570,7 @@ _specops_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L92
+_specops_L90
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -6000,29 +5599,7 @@ _specops_L92
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L93
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L91
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -6031,28 +5608,7 @@ _specops_L92
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -6060,7 +5616,7 @@ _specops_L92
                 CLC
                 ADC     #4
                 TCS
-_specops_L93
+_specops_L91
                 TAY
                 TSC
                 CLC
@@ -6197,7 +5753,7 @@ bread_stkok        TCS
                 AND     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L94
+                BRL     _specops_L92
                 LDA     #0
                 TAY
                 TSC
@@ -6208,7 +5764,7 @@ bread_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L94
+_specops_L92
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6218,17 +5774,9 @@ _specops_L94
                 TXA
                 ORA     #1
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -6278,7 +5826,7 @@ _specops_L94
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L95-1
+                PEA     _specops_L93-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6289,7 +5837,7 @@ _specops_L94
                 DEC
                 PHA
                 RTL
-_specops_L95
+_specops_L93
                 TAY
                 TSC
                 CLC
@@ -6431,7 +5979,7 @@ bwrite_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L96
+                BRL     _specops_L94
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6497,7 +6045,7 @@ bwrite_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
-_specops_L96
+_specops_L94
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6656,7 +6204,7 @@ _specops_L96
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L97-1
+                PEA     _specops_L95-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6667,7 +6215,7 @@ _specops_L96
                 DEC
                 PHA
                 RTL
-_specops_L97
+_specops_L95
                 TAY
                 TSC
                 CLC
@@ -6677,7 +6225,7 @@ _specops_L97
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L98
+                BRL     _specops_L96
                 LDA     #0
                 TAY
                 TSC
@@ -6688,7 +6236,7 @@ _specops_L97
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L98
+_specops_L96
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6803,60 +6351,14 @@ bdwrite_stkok        TCS
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L99
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L97
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -6900,7 +6402,7 @@ bdwrite_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
-_specops_L99
+_specops_L97
                 DO      8+bdwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6928,28 +6430,7 @@ _specops_L99
                 TXA
                 ORA     #2
                 STA     [_fcc_fpr0]
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
@@ -7010,28 +6491,7 @@ bawrite_stkok        TCS
                 TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
-                DO      8+bawrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bawrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bawrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bawrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bawrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bawrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -7103,7 +6563,7 @@ bgetvp_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L100
+                BRL     _specops_L98
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7120,7 +6580,7 @@ bgetvp_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L100
+_specops_L98
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7203,44 +6663,22 @@ _specops_L100
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L102
-                DO      8+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L100
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L102
+                BRL     _specops_L100
                 LDA     #0
-                BRL     _specops_L103
-_specops_L102
+                BRL     _specops_L101
+_specops_L100
                 LDA     #1
-_specops_L103
+_specops_L101
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L101
+                BRL     _specops_L99
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7301,8 +6739,8 @@ _specops_L103
                 LDA     [_fcc_fpr1],Y
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-                BRL     _specops_L104
-_specops_L101
+                BRL     _specops_L102
+_specops_L99
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7328,7 +6766,7 @@ _specops_L101
                 LDA     #65535
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-_specops_L104
+_specops_L102
                 DO      8+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7356,27 +6794,7 @@ _specops_L104
                 INC
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                DO      8+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #42
                 STA     _fcc_fpr0
@@ -7477,7 +6895,7 @@ brelvp_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L106
+                BRL     _specops_L104
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -7485,15 +6903,15 @@ brelvp_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L106
+                BRL     _specops_L104
                 LDA     #1
-                BRL     _specops_L107
-_specops_L106
+                BRL     _specops_L105
+_specops_L104
                 LDA     #0
-_specops_L107
+_specops_L105
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L105
+                BRL     _specops_L103
                 TAY
                 TSC
                 CLC
@@ -7503,7 +6921,7 @@ _specops_L107
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L105
+_specops_L103
                 DO      8+brelvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7614,18 +7032,14 @@ _specops_L105
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L108
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L106
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 SEC
                 SBC     #1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-_specops_L108
+_specops_L106
                 TAY
                 TSC
                 CLC
@@ -7680,7 +7094,7 @@ reassignbuf_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L110
+                BRL     _specops_L108
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -7688,15 +7102,15 @@ reassignbuf_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L110
+                BRL     _specops_L108
                 LDA     #1
-                BRL     _specops_L111
-_specops_L110
+                BRL     _specops_L109
+_specops_L108
                 LDA     #0
-_specops_L111
+_specops_L109
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L109
+                BRL     _specops_L107
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7713,7 +7127,7 @@ _specops_L111
                 CLC
                 ADC     #4
                 TCS
-_specops_L109
+_specops_L107
                 DO      8+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7771,7 +7185,7 @@ _specops_L109
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L112
+                BRL     _specops_L110
                 DO      12+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7827,8 +7241,8 @@ _specops_L109
                 CLC
                 ADC     #8
                 TCS
-                BRL     _specops_L113
-_specops_L112
+                BRL     _specops_L111
+_specops_L110
                 DO      12+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7884,7 +7298,7 @@ _specops_L112
                 CLC
                 ADC     #8
                 TCS
-_specops_L113
+_specops_L111
                 TAY
                 TSC
                 CLC
@@ -7950,7 +7364,7 @@ vflushbuf_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L114
+_specops_L112
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7962,11 +7376,7 @@ _specops_L114
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L116
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L114
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7993,9 +7403,9 @@ _specops_L114
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L117
                 BRL     _specops_L115
-_specops_L117
+                BRL     _specops_L113
+_specops_L115
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8004,11 +7414,9 @@ _specops_L117
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L118
+                BRL     _specops_L116
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8025,7 +7433,7 @@ _specops_L117
                 CLC
                 ADC     #4
                 TCS
-_specops_L118
+_specops_L116
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8059,15 +7467,10 @@ _specops_L118
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L119
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L117
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bawrite
@@ -8075,8 +7478,8 @@ _specops_L118
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L120
-_specops_L119
+                BRL     _specops_L118
+_specops_L117
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8092,8 +7495,8 @@ _specops_L119
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflushbuf_uL_loop
-_specops_L120
-_specops_L115
+_specops_L118
+_specops_L113
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8102,8 +7505,8 @@ _specops_L115
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L114
-_specops_L116
+                BRL     _specops_L112
+_specops_L114
                 DO      10+vflushbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8117,11 +7520,9 @@ _specops_L116
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L121
+                BRL     _specops_L119
                 TAY
                 TSC
                 CLC
@@ -8131,8 +7532,8 @@ _specops_L116
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L121
-_specops_L122
+_specops_L119
+_specops_L120
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8162,55 +7563,13 @@ _specops_L122
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L123
-                DO      8+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L121
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #1024
                 STA     [_fcc_fpr0]
-                DO      8+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #50
                 STA     _fcc_fpr0
@@ -8221,8 +7580,8 @@ _specops_L122
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L122
-_specops_L123
+                BRL     _specops_L120
+_specops_L121
                 DO      8+vflushbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8261,12 +7620,12 @@ _specops_L123
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L124
+                BRL     _specops_L122
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflushbuf_uL_loop
-_specops_L124
+_specops_L122
                 TAY
                 TSC
                 CLC
@@ -8309,7 +7668,7 @@ bflush_uL_loop
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_specops_L125
+_specops_L123
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8335,7 +7694,7 @@ _specops_L125
                 JSR     _fcc_ltu16
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L127
+                BRL     _specops_L125
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8356,7 +7715,7 @@ _specops_L125
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L128
+_specops_L126
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8371,7 +7730,7 @@ _specops_L128
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L131
+                BRL     _specops_L129
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -8379,15 +7738,15 @@ _specops_L128
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L131
+                BRL     _specops_L129
                 LDA     #0
-                BRL     _specops_L132
-_specops_L131
+                BRL     _specops_L130
+_specops_L129
                 LDA     #1
-_specops_L132
+_specops_L130
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L130
+                BRL     _specops_L128
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8396,13 +7755,11 @@ _specops_L132
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L133
-                BRL     _specops_L129
-_specops_L133
+                BRL     _specops_L131
+                BRL     _specops_L127
+_specops_L131
                 DO      6+bflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -8417,7 +7774,7 @@ _specops_L133
                 TXA
                 CMP     #65535
                 BNE     *+5
-                BRL     _specops_L135
+                BRL     _specops_L133
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8439,17 +7796,17 @@ _specops_L133
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L135
+                BRL     _specops_L133
                 LDA     #1
-                BRL     _specops_L136
-_specops_L135
+                BRL     _specops_L134
+_specops_L133
                 LDA     #0
-_specops_L136
+_specops_L134
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L134
-                BRL     _specops_L129
-_specops_L134
+                BRL     _specops_L132
+                BRL     _specops_L127
+_specops_L132
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8470,10 +7827,7 @@ _specops_L134
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -8487,7 +7841,7 @@ _specops_L134
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     bflush_uL_loop
-_specops_L129
+_specops_L127
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8508,17 +7862,17 @@ _specops_L129
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L128
-_specops_L130
-_specops_L126
+                BRL     _specops_L126
+_specops_L128
+_specops_L124
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     #50
                 STA     5,S   ; fccstk d=0 b=5
-                BRL     _specops_L125
-_specops_L127
+                BRL     _specops_L123
+_specops_L125
                 TAY
                 TSC
                 CLC
@@ -8547,7 +7901,7 @@ vinvalbuf_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_specops_L137
+_specops_L135
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8593,9 +7947,9 @@ _specops_L137
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L140
-                BRL     _specops_L141
-_specops_L140
+                BRL     _specops_L138
+                BRL     _specops_L139
+_specops_L138
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8638,12 +7992,12 @@ _specops_L140
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L142
-                BRL     _specops_L143
-_specops_L142
-                BRL     _specops_L139
-_specops_L143
+                BRL     _specops_L140
+                BRL     _specops_L141
+_specops_L140
+                BRL     _specops_L137
 _specops_L141
+_specops_L139
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -8652,7 +8006,7 @@ _specops_L141
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L144
+_specops_L142
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8664,11 +8018,7 @@ _specops_L144
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L146
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L144
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8695,20 +8045,13 @@ _specops_L144
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L147
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L145
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -8716,8 +8059,8 @@ _specops_L144
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L146
-_specops_L147
+                BRL     _specops_L144
+_specops_L145
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8750,26 +8093,22 @@ _specops_L147
                 FIN
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L149
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L147
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L149
+                BRL     _specops_L147
                 LDA     #1
-                BRL     _specops_L150
-_specops_L149
+                BRL     _specops_L148
+_specops_L147
                 LDA     #0
-_specops_L150
+_specops_L148
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L148
+                BRL     _specops_L146
                 LDA     13,S   ; fccstk d=0 b=13
                 INC
                 STA     13,S   ; fccstk d=0 b=13
@@ -8784,8 +8123,8 @@ _specops_L150
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L146
-_specops_L148
+                BRL     _specops_L144
+_specops_L146
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8827,7 +8166,7 @@ _specops_L148
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L152
+                BRL     _specops_L150
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -8835,15 +8174,15 @@ _specops_L148
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L152
+                BRL     _specops_L150
                 LDA     #0
-                BRL     _specops_L153
-_specops_L152
+                BRL     _specops_L151
+_specops_L150
                 LDA     #1
-_specops_L153
+_specops_L151
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L151
+                BRL     _specops_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8873,8 +8212,8 @@ _specops_L153
                 CLC
                 ADC     #8
                 TCS
-                BRL     _specops_L154
-_specops_L151
+                BRL     _specops_L152
+_specops_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8884,7 +8223,7 @@ _specops_L151
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-_specops_L154
+_specops_L152
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8896,7 +8235,7 @@ _specops_L154
                 CLC
                 ADC     #4
                 TCS
-_specops_L145
+_specops_L143
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8905,11 +8244,11 @@ _specops_L145
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L144
-_specops_L146
-_specops_L138
-                BRL     _specops_L137
-_specops_L139
+                BRL     _specops_L142
+_specops_L144
+_specops_L136
+                BRL     _specops_L135
+_specops_L137
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8948,7 +8287,7 @@ _specops_L139
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BEQ     *+5
-                BRL     _specops_L156
+                BRL     _specops_L154
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8987,15 +8326,15 @@ _specops_L139
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BEQ     *+5
-                BRL     _specops_L156
+                BRL     _specops_L154
                 LDA     #0
-                BRL     _specops_L157
-_specops_L156
+                BRL     _specops_L155
+_specops_L154
                 LDA     #1
-_specops_L157
+_specops_L155
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L155
+                BRL     _specops_L153
                 SEP     #$20
                 MX      %10
                 PHB
@@ -9012,7 +8351,7 @@ _specops_L157
                 CLC
                 ADC     #4
                 TCS
-_specops_L155
+_specops_L153
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC
@@ -9042,7 +8381,7 @@ _specops_chkvnlock_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L158
+_specops_L156
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -9074,56 +8413,13 @@ _specops_L158
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L159
-                DO      8+_specops_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_specops_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_specops_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_specops_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_specops_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_specops_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L157
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+_specops_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_specops_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_specops_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_specops_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_specops_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_specops_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -9133,8 +8429,8 @@ _specops_L158
                 TCS
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L158
-_specops_L159
+                BRL     _specops_L156
+_specops_L157
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -9249,7 +8545,7 @@ dead_read_stkok        TCS
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L160
+                BRL     _specops_L158
                 SEP     #$20
                 MX      %10
                 PHB
@@ -9266,7 +8562,7 @@ dead_read_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L160
+_specops_L158
                 DO      8+dead_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -9295,7 +8591,7 @@ _specops_L160
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L161
+                BRL     _specops_L159
                 LDA     #5
                 TAY
                 TSC
@@ -9306,7 +8602,7 @@ _specops_L160
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L161
+_specops_L159
                 LDA     #0
                 TAY
                 TSC
@@ -9367,7 +8663,7 @@ dead_write_stkok        TCS
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L162
+                BRL     _specops_L160
                 SEP     #$20
                 MX      %10
                 PHB
@@ -9384,7 +8680,7 @@ dead_write_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L162
+_specops_L160
                 LDA     #5
                 TAY
                 TSC
@@ -9444,15 +8740,15 @@ dead_ioctl_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _specops_L164
+                BEQ     _specops_L162
                 LDA     #0
-                BRA     _specops_L165
-_specops_L164
+                BRA     _specops_L163
+_specops_L162
                 LDA     #1
-_specops_L165
+_specops_L163
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L163
+                BRL     _specops_L161
                 LDA     #9
                 TAY
                 TSC
@@ -9463,7 +8759,7 @@ _specops_L165
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L163
+_specops_L161
                 DO      8+dead_ioctl_FRAMESIZE/256
                 TSC
                 CLC
@@ -9611,7 +8907,7 @@ _specops_L163
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L166-1
+                PEA     _specops_L164-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9622,7 +8918,7 @@ _specops_L163
                 DEC
                 PHA
                 RTL
-_specops_L166
+_specops_L164
                 TAY
                 TSC
                 CLC
@@ -9722,7 +9018,7 @@ dead_strategy_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L170
+                BRL     _specops_L168
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9730,15 +9026,15 @@ dead_strategy_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L170
+                BRL     _specops_L168
                 LDA     #1
-                BRL     _specops_L171
-_specops_L170
+                BRL     _specops_L169
+_specops_L168
                 LDA     #0
-_specops_L171
+_specops_L169
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L168
+                BRL     _specops_L166
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9783,23 +9079,23 @@ _specops_L171
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _specops_L172
+                BEQ     _specops_L170
                 LDA     #0
-                BRA     _specops_L173
-_specops_L172
+                BRA     _specops_L171
+_specops_L170
                 LDA     #1
-_specops_L173
+_specops_L171
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L168
+                BRL     _specops_L166
                 LDA     #0
-                BRL     _specops_L169
-_specops_L168
+                BRL     _specops_L167
+_specops_L166
                 LDA     #1
-_specops_L169
+_specops_L167
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L167
+                BRL     _specops_L165
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9827,28 +9123,7 @@ _specops_L169
                 TXA
                 ORA     #4
                 STA     [_fcc_fpr0]
-                DO      8+dead_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+dead_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+dead_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+dead_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+dead_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+dead_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL biodone
@@ -9866,7 +9141,7 @@ _specops_L169
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L167
+_specops_L165
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9956,7 +9231,7 @@ _specops_L167
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L174-1
+                PEA     _specops_L172-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9967,7 +9242,7 @@ _specops_L167
                 DEC
                 PHA
                 RTL
-_specops_L174
+_specops_L172
                 TAY
                 TSC
                 CLC
@@ -10032,15 +9307,15 @@ dead_lock_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _specops_L176
+                BEQ     _specops_L174
                 LDA     #0
-                BRA     _specops_L177
-_specops_L176
+                BRA     _specops_L175
+_specops_L174
                 LDA     #1
-_specops_L177
+_specops_L175
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L175
+                BRL     _specops_L173
                 LDA     #0
                 TAY
                 TSC
@@ -10051,7 +9326,7 @@ _specops_L177
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L175
+_specops_L173
                 DO      8+dead_lock_FRAMESIZE/256
                 TSC
                 CLC
@@ -10129,7 +9404,7 @@ _specops_L175
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L178-1
+                PEA     _specops_L176-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -10140,7 +9415,7 @@ _specops_L175
                 DEC
                 PHA
                 RTL
-_specops_L178
+_specops_L176
                 TAY
                 TSC
                 CLC
@@ -10205,15 +9480,15 @@ dead_bmap_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _specops_L180
+                BEQ     _specops_L178
                 LDA     #0
-                BRA     _specops_L181
-_specops_L180
+                BRA     _specops_L179
+_specops_L178
                 LDA     #1
-_specops_L181
+_specops_L179
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L179
+                BRL     _specops_L177
                 LDA     #5
                 TAY
                 TSC
@@ -10224,7 +9499,7 @@ _specops_L181
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L179
+_specops_L177
                 DO      8+dead_bmap_FRAMESIZE/256
                 TSC
                 CLC
@@ -10376,7 +9651,7 @@ _specops_L179
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L182-1
+                PEA     _specops_L180-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -10387,7 +9662,7 @@ _specops_L179
                 DEC
                 PHA
                 RTL
-_specops_L182
+_specops_L180
                 TAY
                 TSC
                 CLC
@@ -10569,11 +9844,9 @@ ureadc_uL_again
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L183
+                BRL     _specops_L181
                 SEP     #$20
                 MX      %10
                 PHB
@@ -10590,7 +9863,7 @@ ureadc_uL_again
                 CLC
                 ADC     #4
                 TCS
-_specops_L183
+_specops_L181
                 DO      10+ureadc_FRAMESIZE/256
                 TSC
                 CLC
@@ -10628,17 +9901,11 @@ _specops_L183
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L185
+                BRL     _specops_L183
                 DO      10+ureadc_FRAMESIZE/256
                 TSC
                 CLC
@@ -10663,19 +9930,17 @@ _specops_L183
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L185
+                BRL     _specops_L183
                 LDA     #0
-                BRL     _specops_L186
-_specops_L185
+                BRL     _specops_L184
+_specops_L183
                 LDA     #1
-_specops_L186
+_specops_L184
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L184
+                BRL     _specops_L182
                 DO      10+ureadc_FRAMESIZE/256
                 TSC
                 CLC
@@ -10703,28 +9968,7 @@ _specops_L186
                 DEC
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                DO      10+ureadc_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ureadc_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ureadc_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+ureadc_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ureadc_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ureadc_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      10+ureadc_FRAMESIZE/256
                 TSC
                 CLC
@@ -10781,7 +10025,7 @@ _specops_L186
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     ureadc_uL_again
-_specops_L184
+_specops_L182
                 DO      10+ureadc_FRAMESIZE/256
                 TSC
                 CLC
@@ -10810,44 +10054,20 @@ _specops_L184
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L188
-                DO      10+ureadc_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ureadc_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ureadc_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+ureadc_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ureadc_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ureadc_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L186
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L188
+                BRL     _specops_L186
                 LDA     #1
-                BRL     _specops_L189
-_specops_L188
+                BRL     _specops_L187
+_specops_L186
                 LDA     #0
-_specops_L189
+_specops_L187
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L187
+                BRL     _specops_L185
                 LDA     #14
                 TAY
                 TSC
@@ -10858,7 +10078,7 @@ _specops_L189
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L187
+_specops_L185
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -11049,48 +10269,24 @@ uiomove_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L191
-                DO      14+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+uiomove_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+uiomove_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L189
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L191
+                BRL     _specops_L189
                 LDA     #1
-                BRL     _specops_L192
-_specops_L191
+                BRL     _specops_L190
+_specops_L189
                 LDA     #0
-_specops_L192
+_specops_L190
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L190
+                BRL     _specops_L188
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11107,8 +10303,8 @@ _specops_L192
                 CLC
                 ADC     #4
                 TCS
-_specops_L190
-_specops_L193
+_specops_L188
+_specops_L191
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -11129,11 +10325,11 @@ _specops_L193
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L197
+                BVC     _specops_L195
                 EOR     #$8000
-_specops_L197
+_specops_L195
                 BMI     *+5
-                BRL     _specops_L195
+                BRL     _specops_L193
                 DO      14+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11160,15 +10356,15 @@ _specops_L197
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L195
+                BRL     _specops_L193
                 LDA     #1
-                BRL     _specops_L196
-_specops_L195
+                BRL     _specops_L194
+_specops_L193
                 LDA     #0
-_specops_L196
+_specops_L194
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L194
+                BRL     _specops_L192
                 DO      14+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11206,18 +10402,12 @@ _specops_L196
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L198
+                BRL     _specops_L196
                 DO      14+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11317,8 +10507,8 @@ _specops_L196
                 SBC     #1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                BRL     _specops_L193
-_specops_L198
+                BRL     _specops_L191
+_specops_L196
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 DO      10+uiomove_FRAMESIZE/256
@@ -11338,7 +10528,7 @@ _specops_L198
                 TXA
                 CMP     _fcc_tmp_b
                 BCC     *+5
-                BRL     _specops_L199
+                BRL     _specops_L197
                 DO      10+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11350,7 +10540,7 @@ _specops_L198
                 LDA     10+uiomove_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     5,S   ; fccstk d=0 b=5
-_specops_L199
+_specops_L197
                 DO      14+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11379,44 +10569,20 @@ _specops_L199
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L201
-                DO      14+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+uiomove_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+uiomove_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L199
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L201
+                BRL     _specops_L199
                 LDA     #1
-                BRL     _specops_L202
-_specops_L201
+                BRL     _specops_L200
+_specops_L199
                 LDA     #0
-_specops_L202
+_specops_L200
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L200
+                BRL     _specops_L198
                 LDA     #14
                 TAY
                 TSC
@@ -11427,7 +10593,7 @@ _specops_L202
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L200
+_specops_L198
                 DO      14+uiomove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11452,11 +10618,9 @@ _specops_L200
                 STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L203
+                BRL     _specops_L201
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -11505,8 +10669,8 @@ _specops_L200
                 CLC
                 ADC     #10
                 TCS
-                BRL     _specops_L204
-_specops_L203
+                BRL     _specops_L202
+_specops_L201
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 DO      10+uiomove_FRAMESIZE/256
@@ -11555,7 +10719,7 @@ _specops_L203
                 CLC
                 ADC     #10
                 TCS
-_specops_L204
+_specops_L202
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -11625,28 +10789,6 @@ _specops_L204
                 SBC     5,S   ; fccstk d=0 b=5
                 LDY     #10
                 STA     [_fcc_fpr0],Y
-                DO      14+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+uiomove_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+uiomove_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+uiomove_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+uiomove_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -11752,8 +10894,8 @@ _specops_L204
                 ELSE
                 STA     10+uiomove_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                BRL     _specops_L193
-_specops_L194
+                BRL     _specops_L191
+_specops_L192
                 LDA     #0
                 TAY
                 TSC
@@ -11816,7 +10958,7 @@ uio_copy_stkok        TCS
                 STA     _fcc_img3
                 LDA     #0
                 STA     _fcc_img0
-_specops_L205
+_specops_L203
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -11827,11 +10969,11 @@ _specops_L205
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L208
+                BVC     _specops_L206
                 EOR     #$8000
-_specops_L208
+_specops_L206
                 BMI     *+5
-                BRL     _specops_L207
+                BRL     _specops_L205
                 DO      12+uio_copy_FRAMESIZE/256
                 TSC
                 CLC
@@ -11890,10 +11032,10 @@ _specops_L208
                 PLA
                 PLA
                 TYA
-_specops_L206
+_specops_L204
                 INC     _fcc_img0
-                BRL     _specops_L205
-_specops_L207
+                BRL     _specops_L203
+_specops_L205
                 TAY
                 TSC
                 CLC
@@ -11977,7 +11119,7 @@ mountedon_stkok        TCS
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
                 BNE     *+5
-                BRL     _specops_L209
+                BRL     _specops_L207
                 LDA     #16
                 TAY
                 TSC
@@ -11988,7 +11130,7 @@ mountedon_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L209
+_specops_L207
                 DO      8+mountedon_FRAMESIZE/256
                 TSC
                 CLC
@@ -12017,29 +11159,7 @@ _specops_L209
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L210
-                DO      8+mountedon_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+mountedon_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+mountedon_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+mountedon_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+mountedon_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+mountedon_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L208
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -12078,7 +11198,7 @@ _specops_L209
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L211
+_specops_L209
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -12090,71 +11210,67 @@ _specops_L211
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
+                BRL     _specops_L211
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                PHA
+                DO      10+mountedon_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+mountedon_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+mountedon_FRAMESIZE,S   ; fccstk d=2 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      8+mountedon_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+mountedon_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+mountedon_FRAMESIZE,S   ; fccstk d=2 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
                 BRL     _specops_L213
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                PHA
-                DO      10+mountedon_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+mountedon_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+mountedon_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+mountedon_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+mountedon_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+mountedon_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _specops_L215
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -12186,17 +11302,17 @@ _specops_L211
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L215
+                BRL     _specops_L213
                 LDA     #0
-                BRL     _specops_L216
-_specops_L215
+                BRL     _specops_L214
+_specops_L213
                 LDA     #1
-_specops_L216
+_specops_L214
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L214
                 BRL     _specops_L212
-_specops_L214
+                BRL     _specops_L210
+_specops_L212
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12236,7 +11352,7 @@ _specops_L214
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
                 BNE     *+5
-                BRL     _specops_L217
+                BRL     _specops_L215
                 LDA     #16
                 TAY
                 TSC
@@ -12247,8 +11363,8 @@ _specops_L214
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L217
-_specops_L212
+_specops_L215
+_specops_L210
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12281,9 +11397,9 @@ _specops_L212
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L211
-_specops_L213
-_specops_L210
+                BRL     _specops_L209
+_specops_L211
+_specops_L208
                 LDA     #0
                 TAY
                 TSC
@@ -12376,7 +11492,7 @@ spec_open_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L219
+                BRL     _specops_L217
                 DO      8+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12435,15 +11551,15 @@ spec_open_stkok        TCS
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
                 BNE     *+5
-                BRL     _specops_L219
+                BRL     _specops_L217
                 LDA     #1
-                BRL     _specops_L220
-_specops_L219
+                BRL     _specops_L218
+_specops_L217
                 LDA     #0
-_specops_L220
+_specops_L218
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L218
+                BRL     _specops_L216
                 LDA     #6
                 TAY
                 TSC
@@ -12454,7 +11570,7 @@ _specops_L220
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L218
+_specops_L216
                 DO      8+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12483,44 +11599,22 @@ _specops_L218
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L222
-                DO      8+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_open_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_open_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L220
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L222
+                BRL     _specops_L220
                 LDA     #1
-                BRL     _specops_L223
-_specops_L222
+                BRL     _specops_L221
+_specops_L220
                 LDA     #0
-_specops_L223
+_specops_L221
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L221
+                BRL     _specops_L219
                 LDA     #6
                 TAY
                 TSC
@@ -12531,7 +11625,7 @@ _specops_L223
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L221
+_specops_L219
                 DO      8+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12572,6 +11666,77 @@ _specops_L221
                 TXA
                 CMP     #65535
                 BEQ     *+5
+                BRL     _specops_L222
+                LDA     #6
+                TAY
+                TSC
+                CLC
+                ADC     #spec_open_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L222
+                DO      8+spec_open_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+spec_open_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+spec_open_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      6+spec_open_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+spec_open_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+spec_open_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #52
+                LDA     [_fcc_fpr0],Y
+                TAX
+                TXA
+                CMP     #3
+                BEQ     *+5
+                BRL     _specops_L223
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                TAX
+                LDA     #8
+                STA     _fcc_tmp_b
+                TXA
+                JSR     _fcc_shrs16
+                TAX
+                TXA
+                AND     #255
+                TAX
+                TXA
+                SEC
+                SBC     #3
+                BVC     _specops_L225
+                EOR     #$8000
+_specops_L225
+                BPL     *+5
                 BRL     _specops_L224
                 LDA     #6
                 TAY
@@ -12606,99 +11771,6 @@ _specops_L224
                 LDA     6+spec_open_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                LDY     #52
-                LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
-                CMP     #3
-                BEQ     *+5
-                BRL     _specops_L225
-                DO      8+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_open_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_open_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                TAX
-                LDA     #8
-                STA     _fcc_tmp_b
-                TXA
-                JSR     _fcc_shrs16
-                TAX
-                TXA
-                AND     #255
-                TAX
-                TXA
-                SEC
-                SBC     #3
-                BVC     _specops_L227
-                EOR     #$8000
-_specops_L227
-                BPL     *+5
-                BRL     _specops_L226
-                LDA     #6
-                TAY
-                TSC
-                CLC
-                ADC     #spec_open_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L226
-                DO      8+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_open_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_open_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_open_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_open_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL mountedon
@@ -12711,7 +11783,7 @@ _specops_L226
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L228
+                BRL     _specops_L226
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -12722,7 +11794,7 @@ _specops_L226
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L228
+_specops_L226
                 LDA     #0
                 TAY
                 TSC
@@ -12733,7 +11805,7 @@ _specops_L228
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L225
+_specops_L223
                 DO      10+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12749,7 +11821,7 @@ _specops_L225
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L229
+                BRL     _specops_L227
                 DO      8+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12794,7 +11866,7 @@ _specops_L225
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L230
+                BRL     _specops_L228
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -12805,8 +11877,8 @@ _specops_L225
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L230
-_specops_L229
+_specops_L228
+_specops_L227
                 DO      8+spec_open_FRAMESIZE/256
                 TSC
                 CLC
@@ -12900,12 +11972,12 @@ spec_close_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L232
+                BRL     _specops_L230
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L233
                 BRL     _specops_L231
-_specops_L232
+                BRL     _specops_L229
+_specops_L230
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -12944,11 +12016,11 @@ _specops_L232
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L237
+                BVC     _specops_L235
                 EOR     #$8000
-_specops_L237
+_specops_L235
                 BMI     *+5
-                BRL     _specops_L235
+                BRL     _specops_L233
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -12975,19 +12047,17 @@ _specops_L237
                 TAX
                 TXA
                 AND     #256
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L235
+                BRL     _specops_L233
                 LDA     #1
-                BRL     _specops_L236
-_specops_L235
+                BRL     _specops_L234
+_specops_L233
                 LDA     #0
-_specops_L236
+_specops_L234
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L234
+                BRL     _specops_L232
                 LDA     #0
                 TAY
                 TSC
@@ -12998,7 +12068,7 @@ _specops_L236
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L234
+_specops_L232
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -13049,7 +12119,7 @@ _specops_L234
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L233
+_specops_L231
                 LDA     #0
                 PHA
                 DO      10+spec_close_FRAMESIZE/256
@@ -13116,7 +12186,7 @@ _specops_L233
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L238
+                BRL     _specops_L236
                 LDA     #0
                 TAY
                 TSC
@@ -13127,7 +12197,7 @@ _specops_L233
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L238
+_specops_L236
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -13166,11 +12236,11 @@ _specops_L238
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L242
+                BVC     _specops_L240
                 EOR     #$8000
-_specops_L242
+_specops_L240
                 BMI     *+5
-                BRL     _specops_L240
+                BRL     _specops_L238
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -13197,19 +12267,17 @@ _specops_L242
                 TAX
                 TXA
                 AND     #256
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L240
+                BRL     _specops_L238
                 LDA     #1
-                BRL     _specops_L241
-_specops_L240
+                BRL     _specops_L239
+_specops_L238
                 LDA     #0
-_specops_L241
+_specops_L239
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L239
+                BRL     _specops_L237
                 LDA     #0
                 TAY
                 TSC
@@ -13220,7 +12288,7 @@ _specops_L241
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L239
+_specops_L237
                 DO      8+spec_close_FRAMESIZE/256
                 TSC
                 CLC
@@ -13271,7 +12339,7 @@ _specops_L239
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L231
+_specops_L229
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13343,29 +12411,7 @@ spec_ioctl_stkok        TCS
                 TXA
                 CMP     #4
                 BEQ     *+5
-                BRL     _specops_L243
-                DO      8+spec_ioctl_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_ioctl_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_ioctl_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_ioctl_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_ioctl_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_ioctl_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L241
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -13394,7 +12440,7 @@ spec_ioctl_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L243
+_specops_L241
                 DO      8+spec_ioctl_FRAMESIZE/256
                 TSC
                 CLC
@@ -13423,29 +12469,7 @@ _specops_L243
                 TXA
                 CMP     #3
                 BEQ     *+5
-                BRL     _specops_L244
-                DO      8+spec_ioctl_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_ioctl_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_ioctl_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_ioctl_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_ioctl_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_ioctl_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L242
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -13474,7 +12498,7 @@ _specops_L243
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L244
+_specops_L242
                 LDA     #25
                 TAY
                 TSC
@@ -13530,7 +12554,7 @@ spec_select_stkok        TCS
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L245
+                BRL     _specops_L243
                 LDA     #1
                 TAY
                 TSC
@@ -13541,7 +12565,7 @@ spec_select_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L245
+_specops_L243
                 DO      8+spec_select_FRAMESIZE/256
                 TSC
                 CLC
@@ -13598,7 +12622,7 @@ _specops_L245
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _specops_L246
+                BRL     _specops_L244
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -13617,7 +12641,7 @@ _specops_L245
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L246
+_specops_L244
                 DO      10+spec_select_FRAMESIZE/256
                 TSC
                 CLC
@@ -13632,7 +12656,7 @@ _specops_L246
                 TXA
                 CMP     #2
                 BEQ     *+5
-                BRL     _specops_L247
+                BRL     _specops_L245
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -13651,7 +12675,7 @@ _specops_L246
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L247
+_specops_L245
                 LDA     #0
                 TAY
                 TSC
@@ -13761,29 +12785,8 @@ spec_bmap_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L248
-                DO      16+spec_bmap_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+spec_bmap_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+spec_bmap_FRAMESIZE,S   ; fccstk d=0 b=16 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      14+spec_bmap_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+spec_bmap_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+spec_bmap_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L246
+                LDA     _fcc_fpr0
                 DO      8+spec_bmap_FRAMESIZE/256
                 TSC
                 CLC
@@ -13814,7 +12817,7 @@ spec_bmap_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_specops_L248
+_specops_L246
                 DO      20+spec_bmap_FRAMESIZE/256
                 TSC
                 CLC
@@ -13841,29 +12844,8 @@ _specops_L248
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L249
-                DO      20+spec_bmap_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #20+spec_bmap_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     20+spec_bmap_FRAMESIZE,S   ; fccstk d=0 b=20 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      18+spec_bmap_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+spec_bmap_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+spec_bmap_FRAMESIZE,S   ; fccstk d=0 b=18 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L247
+                LDA     _fcc_fpr0
                 DO      12+spec_bmap_FRAMESIZE/256
                 TSC
                 CLC
@@ -13891,7 +12873,7 @@ _specops_L248
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-_specops_L249
+_specops_L247
                 LDA     #0
                 TAY
                 TSC
@@ -14190,7 +13172,7 @@ _specops_spec_chread_stkok        TCS
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L250
+                BRL     _specops_L248
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -14204,10 +13186,10 @@ _specops_spec_chread_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L250
+_specops_L248
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L251
+_specops_L249
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14235,11 +13217,9 @@ _specops_L251
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L252
+                BRL     _specops_L250
                 DO      14+_specops_spec_chread_FRAMESIZE/256
                 TSC
                 CLC
@@ -14307,23 +13287,19 @@ _specops_L251
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _specops_L253
-                BRL     _specops_L252
-_specops_L253
+                BRL     _specops_L251
+                BRL     _specops_L250
+_specops_L251
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L254
-                LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L255
                 BRL     _specops_L252
-_specops_L255
+                LDA     1,S   ; fccstk d=0 b=1
+                CMP     #0
+                BNE     *+5
+                BRL     _specops_L253
+                BRL     _specops_L250
+_specops_L253
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -14337,7 +13313,7 @@ _specops_L255
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L254
+_specops_L252
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -14397,7 +13373,7 @@ _specops_L254
                 STA     7,S   ; fccstk d=0 b=7
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L256
+                BRL     _specops_L254
                 LDA     7,S   ; fccstk d=0 b=7
                 TAY
                 TSC
@@ -14408,15 +13384,15 @@ _specops_L254
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L256
+_specops_L254
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L251
-_specops_L252
+                BRL     _specops_L249
+_specops_L250
                 LDA     #0
                 TAY
                 TSC
@@ -14536,7 +13512,7 @@ _specops_spec_chwrite_stkok        TCS
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L257
+                BRL     _specops_L255
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -14550,10 +13526,10 @@ _specops_spec_chwrite_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L257
+_specops_L255
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L258
+_specops_L256
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14581,33 +13557,10 @@ _specops_L258
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L259
-                DO      12+_specops_spec_chwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+_specops_spec_chwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+_specops_spec_chwrite_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+_specops_spec_chwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+_specops_spec_chwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+_specops_spec_chwrite_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L257
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1
@@ -14635,7 +13588,7 @@ _specops_L258
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L260
+                BRL     _specops_L258
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC
@@ -14646,7 +13599,7 @@ _specops_L258
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L260
+_specops_L258
                 DO      14+_specops_spec_chwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -14708,7 +13661,7 @@ _specops_L260
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L261
+                BRL     _specops_L259
                 DO      12+_specops_spec_chwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -14761,13 +13714,11 @@ _specops_L260
                 LDY     #10
                 STA     [_fcc_fpr0],Y
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L262
-                BRL     _specops_L259
-_specops_L262
+                BRL     _specops_L260
+                BRL     _specops_L257
+_specops_L260
                 LDA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC
@@ -14778,15 +13729,15 @@ _specops_L262
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L261
+_specops_L259
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L258
-_specops_L259
+                BRL     _specops_L256
+_specops_L257
                 LDA     #0
                 TAY
                 TSC
@@ -14838,11 +13789,9 @@ spec_read_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L263
+                BRL     _specops_L261
                 SEP     #$20
                 MX      %10
                 PHB
@@ -14859,7 +13808,7 @@ spec_read_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L263
+_specops_L261
                 DO      12+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -14884,11 +13833,9 @@ _specops_L263
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L264
+                BRL     _specops_L262
                 LDA     #0
                 TAY
                 TSC
@@ -14899,7 +13846,7 @@ _specops_L263
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L264
+_specops_L262
                 DO      8+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -14928,29 +13875,7 @@ _specops_L264
                 TXA
                 CMP     #4
                 BEQ     *+5
-                BRL     _specops_L265
-                DO      8+spec_read_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_read_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_read_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_read_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_read_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_read_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L263
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -15006,7 +13931,7 @@ _specops_L264
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L266-1
+                PEA     _specops_L264-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -15017,7 +13942,7 @@ _specops_L264
                 DEC
                 PHA
                 RTL
-_specops_L266
+_specops_L264
                 TAY
                 TSC
                 CLC
@@ -15168,7 +14093,7 @@ _specops_L266
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L267-1
+                PEA     _specops_L265-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -15179,7 +14104,7 @@ _specops_L266
                 DEC
                 PHA
                 RTL
-_specops_L267
+_specops_L265
                 TAY
                 TSC
                 CLC
@@ -15196,8 +14121,8 @@ _specops_L267
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _specops_L268
-_specops_L265
+                BRL     _specops_L266
+_specops_L263
                 DO      8+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -15226,7 +14151,7 @@ _specops_L265
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L269
+                BRL     _specops_L267
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15243,8 +14168,8 @@ _specops_L265
                 CLC
                 ADC     #4
                 TCS
-_specops_L269
-_specops_L268
+_specops_L267
+_specops_L266
                 DO      12+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -15290,7 +14215,7 @@ _specops_L268
                 JSR     _fcc_long_lts
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L270
+                BRL     _specops_L268
                 LDA     #22
                 TAY
                 TSC
@@ -15301,10 +14226,10 @@ _specops_L268
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L270
+_specops_L268
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_specops_L271
+_specops_L269
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -15359,9 +14284,9 @@ _specops_L271
                 LSR
                 ROR     _fcc_long_b_hi
                 CPX     #$8000
-                BCC     _specops_L274
+                BCC     _specops_L272
                 ORA     #$FFC0
-_specops_L274
+_specops_L272
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_hi
                 STA     5,S   ; fccstk d=0 b=5
@@ -15450,11 +14375,11 @@ _specops_L274
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L276
+                BVC     _specops_L274
                 EOR     #$8000
-_specops_L276
+_specops_L274
                 BMI     *+5
-                BRL     _specops_L275
+                BRL     _specops_L273
                 DO      12+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -15480,7 +14405,7 @@ _specops_L276
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     11,S   ; fccstk d=0 b=11
-_specops_L275
+_specops_L273
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -15535,7 +14460,7 @@ _specops_L275
                 STA     13,S   ; fccstk d=0 b=13
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L277
+                BRL     _specops_L275
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15557,7 +14482,7 @@ _specops_L275
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L277
+_specops_L275
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 LDA     #1024
@@ -15579,11 +14504,11 @@ _specops_L277
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L279
+                BVC     _specops_L277
                 EOR     #$8000
-_specops_L279
+_specops_L277
                 BMI     *+5
-                BRL     _specops_L278
+                BRL     _specops_L276
                 LDA     #1024
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -15597,7 +14522,7 @@ _specops_L279
                 SEC
                 SBC     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
-_specops_L278
+_specops_L276
                 DO      12+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -15665,13 +14590,11 @@ _specops_L278
                 CLC
                 ADC     #4
                 TCS
-_specops_L272
+_specops_L270
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L282
+                BRL     _specops_L280
                 DO      12+spec_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -15703,20 +14626,6 @@ _specops_L272
                 TXA
                 CMP     _fcc_tmp_b
                 BCC     *+5
-                BRL     _specops_L282
-                LDA     #1
-                BRL     _specops_L283
-_specops_L282
-                LDA     #0
-_specops_L283
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L280
-                LDA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
                 BRL     _specops_L280
                 LDA     #1
                 BRL     _specops_L281
@@ -15725,9 +14634,21 @@ _specops_L280
 _specops_L281
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L273
+                BRL     _specops_L278
+                LDA     11,S   ; fccstk d=0 b=11
+                CMP     #0
+                BNE     *+5
+                BRL     _specops_L278
+                LDA     #1
+                BRL     _specops_L279
+_specops_L278
+                LDA     #0
+_specops_L279
+                CMP     #0
+                BNE     *+5
                 BRL     _specops_L271
-_specops_L273
+                BRL     _specops_L269
+_specops_L271
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC
@@ -15783,7 +14704,7 @@ spec_write_stkok        TCS
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L284
+                BRL     _specops_L282
                 SEP     #$20
                 MX      %10
                 PHB
@@ -15800,7 +14721,7 @@ spec_write_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L284
+_specops_L282
                 DO      12+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -15825,11 +14746,9 @@ _specops_L284
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L285
+                BRL     _specops_L283
                 LDA     #0
                 TAY
                 TSC
@@ -15840,7 +14759,7 @@ _specops_L284
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L285
+_specops_L283
                 DO      8+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -15869,29 +14788,7 @@ _specops_L285
                 TXA
                 CMP     #4
                 BEQ     *+5
-                BRL     _specops_L286
-                DO      8+spec_write_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+spec_write_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+spec_write_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+spec_write_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+spec_write_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+spec_write_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L284
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -15947,7 +14844,7 @@ _specops_L285
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L287-1
+                PEA     _specops_L285-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -15958,7 +14855,7 @@ _specops_L285
                 DEC
                 PHA
                 RTL
-_specops_L287
+_specops_L285
                 TAY
                 TSC
                 CLC
@@ -16109,7 +15006,7 @@ _specops_L287
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L288-1
+                PEA     _specops_L286-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -16120,7 +15017,7 @@ _specops_L287
                 DEC
                 PHA
                 RTL
-_specops_L288
+_specops_L286
                 TAY
                 TSC
                 CLC
@@ -16137,8 +15034,8 @@ _specops_L288
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _specops_L289
-_specops_L286
+                BRL     _specops_L287
+_specops_L284
                 DO      8+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -16167,7 +15064,7 @@ _specops_L286
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L290
+                BRL     _specops_L288
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16184,8 +15081,8 @@ _specops_L286
                 CLC
                 ADC     #4
                 TCS
-_specops_L290
-_specops_L289
+_specops_L288
+_specops_L287
                 DO      12+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -16231,7 +15128,7 @@ _specops_L289
                 JSR     _fcc_long_lts
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L291
+                BRL     _specops_L289
                 LDA     #22
                 TAY
                 TSC
@@ -16242,10 +15139,10 @@ _specops_L289
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L291
+_specops_L289
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_specops_L292
+_specops_L290
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -16300,9 +15197,9 @@ _specops_L292
                 LSR
                 ROR     _fcc_long_b_hi
                 CPX     #$8000
-                BCC     _specops_L295
+                BCC     _specops_L293
                 ORA     #$FFC0
-_specops_L295
+_specops_L293
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_hi
                 STA     5,S   ; fccstk d=0 b=5
@@ -16391,11 +15288,11 @@ _specops_L295
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L297
+                BVC     _specops_L295
                 EOR     #$8000
-_specops_L297
+_specops_L295
                 BMI     *+5
-                BRL     _specops_L296
+                BRL     _specops_L294
                 DO      12+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -16421,13 +15318,13 @@ _specops_L297
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 STA     11,S   ; fccstk d=0 b=11
-_specops_L296
+_specops_L294
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
                 CMP     #1024
                 BEQ     *+5
-                BRL     _specops_L298
+                BRL     _specops_L296
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
@@ -16471,8 +15368,8 @@ _specops_L296
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L299
-_specops_L298
+                BRL     _specops_L297
+_specops_L296
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -16527,7 +15424,7 @@ _specops_L298
                 STA     13,S   ; fccstk d=0 b=13
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L300
+                BRL     _specops_L298
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16549,8 +15446,8 @@ _specops_L298
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L300
-_specops_L299
+_specops_L298
+_specops_L297
                 DO      12+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -16614,7 +15511,7 @@ _specops_L299
                 TXA
                 CMP     #1024
                 BEQ     *+5
-                BRL     _specops_L301
+                BRL     _specops_L299
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16635,8 +15532,8 @@ _specops_L299
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L302
-_specops_L301
+                BRL     _specops_L300
+_specops_L299
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16648,14 +15545,12 @@ _specops_L301
                 CLC
                 ADC     #4
                 TCS
-_specops_L302
-_specops_L293
+_specops_L300
+_specops_L291
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L305
+                BRL     _specops_L303
                 DO      12+spec_write_FRAMESIZE/256
                 TSC
                 CLC
@@ -16687,20 +15582,6 @@ _specops_L293
                 TXA
                 CMP     _fcc_tmp_b
                 BCC     *+5
-                BRL     _specops_L305
-                LDA     #1
-                BRL     _specops_L306
-_specops_L305
-                LDA     #0
-_specops_L306
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L303
-                LDA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
                 BRL     _specops_L303
                 LDA     #1
                 BRL     _specops_L304
@@ -16709,9 +15590,21 @@ _specops_L303
 _specops_L304
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L294
+                BRL     _specops_L301
+                LDA     11,S   ; fccstk d=0 b=11
+                CMP     #0
+                BNE     *+5
+                BRL     _specops_L301
+                LDA     #1
+                BRL     _specops_L302
+_specops_L301
+                LDA     #0
+_specops_L302
+                CMP     #0
+                BNE     *+5
                 BRL     _specops_L292
-_specops_L294
+                BRL     _specops_L290
+_specops_L292
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC
@@ -16753,8 +15646,60 @@ chrtoblk_stkok        TCS
                 TXA
                 CMP     #10
                 BEQ     *+5
-                BRL     _specops_L307
+                BRL     _specops_L305
                 LDA     #0
+                TAY
+                TSC
+                CLC
+                ADC     #chrtoblk_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L305
+                DO      6+chrtoblk_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+chrtoblk_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                TXA
+                CMP     #11
+                BEQ     *+5
+                BRL     _specops_L306
+                LDA     #1
+                TAY
+                TSC
+                CLC
+                ADC     #chrtoblk_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L306
+                DO      6+chrtoblk_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+chrtoblk_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                TXA
+                CMP     #12
+                BEQ     *+5
+                BRL     _specops_L307
+                LDA     #2
                 TAY
                 TSC
                 CLC
@@ -16777,10 +15722,10 @@ _specops_L307
                 FIN
                 TAX
                 TXA
-                CMP     #11
+                CMP     #13
                 BEQ     *+5
                 BRL     _specops_L308
-                LDA     #1
+                LDA     #3
                 TAY
                 TSC
                 CLC
@@ -16803,10 +15748,10 @@ _specops_L308
                 FIN
                 TAX
                 TXA
-                CMP     #12
+                CMP     #14
                 BEQ     *+5
                 BRL     _specops_L309
-                LDA     #2
+                LDA     #4
                 TAY
                 TSC
                 CLC
@@ -16829,10 +15774,10 @@ _specops_L309
                 FIN
                 TAX
                 TXA
-                CMP     #13
+                CMP     #15
                 BEQ     *+5
                 BRL     _specops_L310
-                LDA     #3
+                LDA     #5
                 TAY
                 TSC
                 CLC
@@ -16855,10 +15800,10 @@ _specops_L310
                 FIN
                 TAX
                 TXA
-                CMP     #14
+                CMP     #16
                 BEQ     *+5
                 BRL     _specops_L311
-                LDA     #4
+                LDA     #6
                 TAY
                 TSC
                 CLC
@@ -16881,61 +15826,9 @@ _specops_L311
                 FIN
                 TAX
                 TXA
-                CMP     #15
-                BEQ     *+5
-                BRL     _specops_L312
-                LDA     #5
-                TAY
-                TSC
-                CLC
-                ADC     #chrtoblk_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L312
-                DO      6+chrtoblk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+chrtoblk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                TAX
-                TXA
-                CMP     #16
-                BEQ     *+5
-                BRL     _specops_L313
-                LDA     #6
-                TAY
-                TSC
-                CLC
-                ADC     #chrtoblk_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L313
-                DO      6+chrtoblk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+chrtoblk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                TAX
-                TXA
                 CMP     #17
                 BEQ     *+5
-                BRL     _specops_L314
+                BRL     _specops_L312
                 LDA     #7
                 TAY
                 TSC
@@ -16946,7 +15839,7 @@ _specops_L313
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L314
+_specops_L312
                 LDA     #65535
                 TAY
                 TSC
@@ -17109,7 +16002,7 @@ _specops_zerobytes_stkok        TCS
                 LDA     8+_specops_zerobytes_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 STA     _fcc_img2
-_specops_L315
+_specops_L313
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -17125,7 +16018,7 @@ _specops_L315
                 TXA
                 CMP     _fcc_tmp_b
                 BCC     *+5
-                BRL     _specops_L316
+                BRL     _specops_L314
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -17133,8 +16026,8 @@ _specops_L315
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _specops_L315
-_specops_L316
+                BRL     _specops_L313
+_specops_L314
                 TAY
                 TSC
                 CLC
@@ -17182,31 +16075,10 @@ vntblinit_stkok        TCS
                 ELSE
                 LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr0
                 STA     vnode_pool
                 LDA     _fcc_fpr0+2
                 STA     vnode_pool+2
-                DO      8+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #10496
                 CLC
                 ADC     _fcc_fpr0
@@ -17218,7 +16090,7 @@ vntblinit_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_specops_L317
+_specops_L315
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -17227,11 +16099,11 @@ _specops_L317
                 TXA
                 SEC
                 SBC     #8
-                BVC     _specops_L320
+                BVC     _specops_L318
                 EOR     #$8000
-_specops_L320
+_specops_L318
                 BMI     *+5
-                BRL     _specops_L319
+                BRL     _specops_L317
                 LDA     #speclisth
                 PHA
                 LDA     _fcc_img0
@@ -17256,10 +16128,10 @@ _specops_L320
                 REP     #$20
                 MX      %00
                 PLA
-_specops_L318
+_specops_L316
                 INC     _fcc_img0
-                BRL     _specops_L317
-_specops_L319
+                BRL     _specops_L315
+_specops_L317
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #896
@@ -17323,7 +16195,7 @@ _specops_L319
                 TCS
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L321
+_specops_L319
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -17332,11 +16204,11 @@ _specops_L321
                 TXA
                 SEC
                 SBC     #64
-                BVC     _specops_L324
+                BVC     _specops_L322
                 EOR     #$8000
-_specops_L324
+_specops_L322
                 BMI     *+5
-                BRL     _specops_L323
+                BRL     _specops_L321
                 SEP     #$20
                 MX      %10
                 LDA     vnode_pool+2
@@ -17365,17 +16237,10 @@ _specops_L324
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #8
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfree
@@ -17383,13 +16248,13 @@ _specops_L324
                 CLC
                 ADC     #4
                 TCS
-_specops_L322
+_specops_L320
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L321
-_specops_L323
+                BRL     _specops_L319
+_specops_L321
                 DO      8+vntblinit_FRAMESIZE/256
                 TSC
                 CLC
@@ -17730,7 +16595,7 @@ vremfree_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L325
+                BRL     _specops_L323
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -17808,8 +16673,8 @@ vremfree_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _specops_L326
-_specops_L325
+                BRL     _specops_L324
+_specops_L323
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -17847,7 +16712,7 @@ _specops_L325
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_specops_L326
+_specops_L324
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -17964,17 +16829,13 @@ getnewvnode_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L328
+                BRL     _specops_L326
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -17982,15 +16843,15 @@ getnewvnode_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L328
+                BRL     _specops_L326
                 LDA     #1
-                BRL     _specops_L329
-_specops_L328
+                BRL     _specops_L327
+_specops_L326
                 LDA     #0
-_specops_L329
+_specops_L327
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L327
+                BRL     _specops_L325
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -18035,7 +16896,7 @@ _specops_L329
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L327
+_specops_L325
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18044,7 +16905,7 @@ _specops_L327
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L330
+                BRL     _specops_L328
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18061,7 +16922,7 @@ _specops_L327
                 CLC
                 ADC     #4
                 TCS
-_specops_L330
+_specops_L328
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18083,11 +16944,8 @@ _specops_L330
                 TXA
                 CMP     #8
                 BNE     *+5
-                BRL     _specops_L331
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L329
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -18095,38 +16953,23 @@ _specops_L330
                 CLC
                 ADC     #4
                 TCS
-_specops_L331
+_specops_L329
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      6+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -18139,10 +16982,6 @@ _specops_L331
                 FIN
                 LDY     #58
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDY     #10
@@ -18159,24 +16998,12 @@ _specops_L331
                 LDA     #0
                 LDY     #50
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #6
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -18289,7 +17116,7 @@ _specops_L331
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L332
+                BRL     _specops_L330
                 SEP     #$20
                 MX      %10
                 LDA     _specops_vfs_cacheops+2
@@ -18322,7 +17149,7 @@ _specops_L331
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L333-1
+                PEA     _specops_L331-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -18333,14 +17160,14 @@ _specops_L331
                 DEC
                 PHA
                 RTL
-_specops_L333
+_specops_L331
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_specops_L332
+_specops_L330
                 DO      10+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -18468,11 +17295,11 @@ vref_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L335
+                BVC     _specops_L333
                 EOR     #$8000
-_specops_L335
+_specops_L333
                 BPL     *+5
-                BRL     _specops_L334
+                BRL     _specops_L332
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18489,7 +17316,7 @@ _specops_L335
                 CLC
                 ADC     #4
                 TCS
-_specops_L334
+_specops_L332
                 DO      8+vref_FRAMESIZE/256
                 TSC
                 CLC
@@ -18571,56 +17398,13 @@ vget_stkok        TCS
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L336
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L334
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -18638,7 +17422,7 @@ vget_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L336
+_specops_L334
                 DO      8+vget_FRAMESIZE/256
                 TSC
                 CLC
@@ -18663,33 +17447,10 @@ _specops_L336
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L337
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L335
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vremfree
@@ -18697,7 +17458,7 @@ _specops_L336
                 CLC
                 ADC     #4
                 TCS
-_specops_L337
+_specops_L335
                 DO      8+vget_FRAMESIZE/256
                 TSC
                 CLC
@@ -18783,11 +17544,11 @@ vrele_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L339
+                BVC     _specops_L337
                 EOR     #$8000
-_specops_L339
+_specops_L337
                 BPL     *+5
-                BRL     _specops_L338
+                BRL     _specops_L336
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18804,7 +17565,7 @@ _specops_L339
                 CLC
                 ADC     #4
                 TCS
-_specops_L338
+_specops_L336
                 DO      8+vrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -18832,28 +17593,6 @@ _specops_L338
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vrele_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vrele_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -18863,11 +17602,11 @@ _specops_L338
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L341
+                BVC     _specops_L339
                 EOR     #$8000
-_specops_L341
+_specops_L339
                 BMI     *+5
-                BRL     _specops_L340
+                BRL     _specops_L338
                 TAY
                 TSC
                 CLC
@@ -18877,7 +17616,7 @@ _specops_L341
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L340
+_specops_L338
                 DO      8+vrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -18984,7 +17723,7 @@ _specops_L340
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L342-1
+                PEA     _specops_L340-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -18995,7 +17734,7 @@ _specops_L340
                 DEC
                 PHA
                 RTL
-_specops_L342
+_specops_L340
                 TAY
                 TSC
                 CLC
@@ -19112,11 +17851,11 @@ holdrele_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L344
+                BVC     _specops_L342
                 EOR     #$8000
-_specops_L344
+_specops_L342
                 BPL     *+5
-                BRL     _specops_L343
+                BRL     _specops_L341
                 SEP     #$20
                 MX      %10
                 PHB
@@ -19133,7 +17872,7 @@ _specops_L344
                 CLC
                 ADC     #4
                 TCS
-_specops_L343
+_specops_L341
                 DO      8+holdrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -19225,7 +17964,7 @@ insmntque_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L345
+                BRL     _specops_L343
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19340,7 +18079,7 @@ insmntque_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L346
+                BRL     _specops_L344
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19418,8 +18157,8 @@ insmntque_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_specops_L346
-_specops_L345
+_specops_L344
+_specops_L343
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19574,7 +18313,7 @@ _specops_L345
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L348
+                BRL     _specops_L346
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19582,15 +18321,15 @@ _specops_L345
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L348
+                BRL     _specops_L346
                 LDA     #1
-                BRL     _specops_L349
-_specops_L348
+                BRL     _specops_L347
+_specops_L346
                 LDA     #0
-_specops_L349
+_specops_L347
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L347
+                BRL     _specops_L345
                 TAY
                 TSC
                 CLC
@@ -19600,7 +18339,7 @@ _specops_L349
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L347
+_specops_L345
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19705,7 +18444,7 @@ _specops_L347
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L350
+                BRL     _specops_L348
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19773,7 +18512,7 @@ _specops_L347
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_specops_L350
+_specops_L348
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -19917,7 +18656,7 @@ _specops_specalloc_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_specops_L351
+_specops_L349
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -19926,11 +18665,11 @@ _specops_L351
                 TXA
                 SEC
                 SBC     #64
-                BVC     _specops_L354
+                BVC     _specops_L352
                 EOR     #$8000
-_specops_L354
+_specops_L352
                 BMI     *+5
-                BRL     _specops_L353
+                BRL     _specops_L351
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -19968,7 +18707,7 @@ _specops_L354
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L356
+                BRL     _specops_L354
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19976,15 +18715,15 @@ _specops_L354
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L356
+                BRL     _specops_L354
                 LDA     #1
-                BRL     _specops_L357
-_specops_L356
+                BRL     _specops_L355
+_specops_L354
                 LDA     #0
-_specops_L357
+_specops_L355
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L355
+                BRL     _specops_L353
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -20060,11 +18799,11 @@ _specops_L357
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L355
-_specops_L352
-                INC     _fcc_img0
-                BRL     _specops_L351
 _specops_L353
+_specops_L350
+                INC     _fcc_img0
+                BRL     _specops_L349
+_specops_L351
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -20293,44 +19032,22 @@ checkalias_stkok        TCS
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L359
-                DO      8+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+checkalias_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+checkalias_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L357
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L359
+                BRL     _specops_L357
                 LDA     #1
-                BRL     _specops_L360
-_specops_L359
+                BRL     _specops_L358
+_specops_L357
                 LDA     #0
-_specops_L360
+_specops_L358
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L358
+                BRL     _specops_L356
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -20343,7 +19060,7 @@ _specops_L360
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L358
+_specops_L356
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20424,7 +19141,7 @@ checkalias_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L361
+_specops_L359
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -20436,7 +19153,7 @@ _specops_L361
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L363
+                BRL     _specops_L361
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20448,10 +19165,6 @@ _specops_L361
                 LDA     10+checkalias_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -20470,7 +19183,7 @@ _specops_L361
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L365
+                BRL     _specops_L363
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20506,32 +19219,27 @@ _specops_L361
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L365
+                BRL     _specops_L363
                 LDA     #0
-                BRL     _specops_L366
-_specops_L365
+                BRL     _specops_L364
+_specops_L363
                 LDA     #1
-_specops_L366
+_specops_L364
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L364
                 BRL     _specops_L362
-_specops_L364
+                BRL     _specops_L360
+_specops_L362
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L367
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L365
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -20543,7 +19251,7 @@ _specops_L364
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_specops_L367
+_specops_L365
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -20559,14 +19267,14 @@ _specops_L367
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L368
+                BRL     _specops_L366
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_specops_L368
-                BRL     _specops_L363
-_specops_L362
+_specops_L366
+                BRL     _specops_L361
+_specops_L360
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -20599,8 +19307,8 @@ _specops_L362
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L361
-_specops_L363
+                BRL     _specops_L359
+_specops_L361
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -20611,7 +19319,7 @@ _specops_L363
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L372
+                BRL     _specops_L370
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20619,34 +19327,32 @@ _specops_L363
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L372
+                BRL     _specops_L370
                 LDA     #1
-                BRL     _specops_L373
-_specops_L372
+                BRL     _specops_L371
+_specops_L370
                 LDA     #0
-_specops_L373
+_specops_L371
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L370
+                BRL     _specops_L368
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L370
+                BRL     _specops_L368
                 LDA     #0
-                BRL     _specops_L371
-_specops_L370
+                BRL     _specops_L369
+_specops_L368
                 LDA     #1
-_specops_L371
+_specops_L369
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L369
+                BRL     _specops_L367
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20902,7 +19608,7 @@ _specops_L371
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L375
+                BRL     _specops_L373
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20910,15 +19616,15 @@ _specops_L371
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L375
+                BRL     _specops_L373
                 LDA     #0
-                BRL     _specops_L376
-_specops_L375
+                BRL     _specops_L374
+_specops_L373
                 LDA     #1
-_specops_L376
+_specops_L374
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L374
+                BRL     _specops_L372
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -20955,10 +19661,7 @@ _specops_L376
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
@@ -20966,7 +19669,7 @@ _specops_L376
                 CLC
                 ADC     #4
                 TCS
-_specops_L374
+_specops_L372
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -20979,7 +19682,7 @@ _specops_L374
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L369
+_specops_L367
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -21174,7 +19877,7 @@ bdevvp_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L378
+                BRL     _specops_L376
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -21182,15 +19885,15 @@ bdevvp_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L378
+                BRL     _specops_L376
                 LDA     #1
-                BRL     _specops_L379
-_specops_L378
+                BRL     _specops_L377
+_specops_L376
                 LDA     #0
-_specops_L379
+_specops_L377
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L377
+                BRL     _specops_L375
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -21235,7 +19938,7 @@ _specops_L379
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L377
+_specops_L375
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -21275,7 +19978,7 @@ _specops_L377
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L380
+                BRL     _specops_L378
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -21320,7 +20023,7 @@ _specops_L377
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L380
+_specops_L378
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -21329,10 +20032,6 @@ _specops_L380
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #3
                 LDY     #52
                 STA     [_fcc_fpr0],Y
@@ -21377,7 +20076,7 @@ _specops_L380
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L381
+                BRL     _specops_L379
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -21397,7 +20096,7 @@ _specops_L380
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L381
+_specops_L379
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -21514,7 +20213,7 @@ vfinddev_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L382
+_specops_L380
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -21526,13 +20225,9 @@ _specops_L382
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L384
+                BRL     _specops_L382
                 LDA     _fcc_img0
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -21551,7 +20246,7 @@ _specops_L382
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L386
+                BRL     _specops_L384
                 LDA     _fcc_img1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -21564,17 +20259,17 @@ _specops_L382
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L386
+                BRL     _specops_L384
                 LDA     #0
-                BRL     _specops_L387
-_specops_L386
+                BRL     _specops_L385
+_specops_L384
                 LDA     #1
-_specops_L387
+_specops_L385
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L385
                 BRL     _specops_L383
-_specops_L385
+                BRL     _specops_L381
+_specops_L383
                 DO      12+vfinddev_FRAMESIZE/256
                 TSC
                 CLC
@@ -21619,7 +20314,7 @@ _specops_L385
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L383
+_specops_L381
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -21652,8 +20347,8 @@ _specops_L383
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L382
-_specops_L384
+                BRL     _specops_L380
+_specops_L382
                 LDA     #1
                 TAY
                 TSC
@@ -21686,11 +20381,11 @@ spec_securechr_stkok        TCS
                 TXA
                 SEC
                 SBC     #1
-                BVC     _specops_L389
+                BVC     _specops_L387
                 EOR     #$8000
-_specops_L389
+_specops_L387
                 BMI     *+5
-                BRL     _specops_L388
+                BRL     _specops_L386
                 LDA     #0
                 TAY
                 TSC
@@ -21701,7 +20396,7 @@ _specops_L389
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L388
+_specops_L386
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
                 CLC
@@ -21722,7 +20417,7 @@ _specops_L388
                 TXA
                 CMP     #65535
                 BEQ     *+5
-                BRL     _specops_L390
+                BRL     _specops_L388
                 LDA     #0
                 TAY
                 TSC
@@ -21733,7 +20428,7 @@ _specops_L388
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L390
+_specops_L388
                 LDA     5,S   ; fccstk d=0 b=5
                 LSR
                 LSR
@@ -21769,7 +20464,7 @@ _specops_L390
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_specops_L391
+_specops_L389
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -21781,11 +20476,7 @@ _specops_L391
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L393
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L391
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -21806,7 +20497,7 @@ _specops_L391
                 TXA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L395
+                BRL     _specops_L393
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -21817,17 +20508,17 @@ _specops_L391
                 TXA
                 CMP     #3
                 BEQ     *+5
-                BRL     _specops_L395
+                BRL     _specops_L393
                 LDA     #0
-                BRL     _specops_L396
-_specops_L395
+                BRL     _specops_L394
+_specops_L393
                 LDA     #1
-_specops_L396
+_specops_L394
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L394
                 BRL     _specops_L392
-_specops_L394
+                BRL     _specops_L390
+_specops_L392
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -21867,7 +20558,7 @@ _specops_L394
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
                 BNE     *+5
-                BRL     _specops_L397
+                BRL     _specops_L395
                 LDA     #16
                 TAY
                 TSC
@@ -21878,8 +20569,8 @@ _specops_L394
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L397
-_specops_L392
+_specops_L395
+_specops_L390
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -21912,8 +20603,8 @@ _specops_L392
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L391
-_specops_L393
+                BRL     _specops_L389
+_specops_L391
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
@@ -21987,11 +20678,11 @@ vfs_setsecurelevel_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L399
+                BVC     _specops_L397
                 EOR     #$8000
-_specops_L399
+_specops_L397
                 BMI     *+5
-                BRL     _specops_L398
+                BRL     _specops_L396
                 LDA     #22
                 TAY
                 TSC
@@ -22002,7 +20693,7 @@ _specops_L399
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L398
+_specops_L396
                 DO      6+vfs_setsecurelevel_FRAMESIZE/256
                 TSC
                 CLC
@@ -22067,33 +20758,9 @@ vcount_stkok        TCS
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L400
-                DO      8+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vcount_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L398
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAY
@@ -22105,7 +20772,7 @@ vcount_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L400
+_specops_L398
 vcount_uL_loop
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
@@ -22169,7 +20836,7 @@ vcount_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L401
+_specops_L399
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -22181,71 +20848,67 @@ _specops_L401
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
+                BRL     _specops_L401
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                PHA
+                DO      10+vcount_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vcount_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vcount_FRAMESIZE,S   ; fccstk d=2 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      8+vcount_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+vcount_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=2 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
                 BRL     _specops_L403
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                PHA
-                DO      10+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vcount_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _specops_L405
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -22277,32 +20940,27 @@ _specops_L401
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L405
+                BRL     _specops_L403
                 LDA     #0
-                BRL     _specops_L406
-_specops_L405
+                BRL     _specops_L404
+_specops_L403
                 LDA     #1
-_specops_L406
+_specops_L404
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L404
                 BRL     _specops_L402
-_specops_L404
+                BRL     _specops_L400
+_specops_L402
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L407
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L405
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -22314,7 +20972,7 @@ _specops_L404
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
-_specops_L407
+_specops_L405
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -22328,7 +20986,7 @@ _specops_L407
                 CLC
                 ADC     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
-_specops_L402
+_specops_L400
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -22361,8 +21019,8 @@ _specops_L402
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L401
-_specops_L403
+                BRL     _specops_L399
+_specops_L401
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC
@@ -22467,7 +21125,7 @@ vput_stkok        TCS
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L408-1
+                PEA     _specops_L406-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -22478,7 +21136,7 @@ vput_stkok        TCS
                 DEC
                 PHA
                 RTL
-_specops_L408
+_specops_L406
                 TAY
                 TSC
                 CLC
@@ -22567,29 +21225,8 @@ vclean_stkok        TCS
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L409
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L407
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vref
@@ -22597,7 +21234,7 @@ vclean_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L409
+_specops_L407
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -22626,7 +21263,7 @@ _specops_L409
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L410
+                BRL     _specops_L408
                 SEP     #$20
                 MX      %10
                 PHB
@@ -22643,7 +21280,7 @@ _specops_L409
                 CLC
                 ADC     #4
                 TCS
-_specops_L410
+_specops_L408
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -22671,28 +21308,6 @@ _specops_L410
                 TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -22748,7 +21363,7 @@ _specops_L410
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L411-1
+                PEA     _specops_L409-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -22759,7 +21374,7 @@ _specops_L410
                 DEC
                 PHA
                 RTL
-_specops_L411
+_specops_L409
                 TAY
                 TSC
                 CLC
@@ -22781,7 +21396,7 @@ _specops_L411
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L412
+                BRL     _specops_L410
                 LDA     #1
                 PHA
                 DO      10+vclean_FRAMESIZE/256
@@ -22813,7 +21428,7 @@ _specops_L411
                 CLC
                 ADC     #6
                 TCS
-_specops_L412
+_specops_L410
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -22968,7 +21583,7 @@ _specops_L412
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L413-1
+                PEA     _specops_L411-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -22979,7 +21594,7 @@ _specops_L412
                 DEC
                 PHA
                 RTL
-_specops_L413
+_specops_L411
                 TAY
                 TSC
                 CLC
@@ -22989,7 +21604,7 @@ _specops_L413
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L414
+                BRL     _specops_L412
                 DO      10+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -23005,7 +21620,7 @@ _specops_L413
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L415
+                BRL     _specops_L413
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23060,7 +21675,7 @@ _specops_L413
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L416-1
+                PEA     _specops_L414-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23071,14 +21686,14 @@ _specops_L413
                 DEC
                 PHA
                 RTL
-_specops_L416
+_specops_L414
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-_specops_L415
+_specops_L413
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23089,6 +21704,72 @@ _specops_L415
                 SEP     #$20
                 MX      %10
                 LDY     #98
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                DO      12+vclean_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+vclean_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+vclean_FRAMESIZE,S   ; fccstk d=4 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      10+vclean_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vclean_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vclean_FRAMESIZE,S   ; fccstk d=4 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     5,S
+                STA     _fcc_fpr0
+                LDA     7,S
+                STA     _fcc_fpr0+2
+                PHK
+                PEA     _specops_L415-1
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                PHA
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                DEC
+                PHA
+                RTL
+_specops_L415
+                TAY
+                TSC
+                CLC
+                ADC     #8
+                TCS
+                TYA
+_specops_L412
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #100
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #102
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
@@ -23144,75 +21825,9 @@ _specops_L417
                 ADC     #8
                 TCS
                 TYA
-_specops_L414
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDY     #100
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #102
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                DO      12+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+vclean_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vclean_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     5,S
-                STA     _fcc_fpr0
-                LDA     7,S
-                STA     _fcc_fpr0+2
-                PHK
-                PEA     _specops_L419-1
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                PHA
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                DEC
-                PHA
-                RTL
-_specops_L419
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L418
+                BRL     _specops_L416
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23229,11 +21844,11 @@ _specops_L419
                 CLC
                 ADC     #4
                 TCS
-_specops_L418
+_specops_L416
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L420
+                BRL     _specops_L418
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -23263,7 +21878,7 @@ _specops_L418
                 CLC
                 ADC     #4
                 TCS
-_specops_L420
+_specops_L418
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -23294,57 +21909,13 @@ _specops_L420
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L421
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L419
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #512
@@ -23353,28 +21924,7 @@ _specops_L420
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -23382,7 +21932,7 @@ _specops_L420
                 CLC
                 ADC     #4
                 TCS
-_specops_L421
+_specops_L419
                 TAY
                 TSC
                 CLC
@@ -23437,56 +21987,13 @@ vgone_stkok        TCS
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L422
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L420
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -23503,7 +22010,7 @@ vgone_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L422
+_specops_L420
                 LDA     #4
                 PHA
                 DO      10+vgone_FRAMESIZE/256
@@ -23597,44 +22104,22 @@ _specops_L422
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L424
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _specops_L422
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L424
+                BRL     _specops_L422
                 LDA     #0
-                BRL     _specops_L425
-_specops_L424
+                BRL     _specops_L423
+_specops_L422
                 LDA     #1
-_specops_L425
+_specops_L423
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L423
+                BRL     _specops_L421
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -23675,7 +22160,7 @@ _specops_L425
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L427
+                BRL     _specops_L425
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23683,15 +22168,15 @@ _specops_L425
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L427
+                BRL     _specops_L425
                 LDA     #1
-                BRL     _specops_L428
-_specops_L427
+                BRL     _specops_L426
+_specops_L425
                 LDA     #0
-_specops_L428
+_specops_L426
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L426
+                BRL     _specops_L424
                 SEP     #$20
                 MX      %10
                 PHB
@@ -23708,7 +22193,7 @@ _specops_L428
                 CLC
                 ADC     #4
                 TCS
-_specops_L426
+_specops_L424
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -23790,7 +22275,7 @@ _specops_L426
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L430
+                BRL     _specops_L428
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23798,15 +22283,15 @@ _specops_L426
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L430
+                BRL     _specops_L428
                 LDA     #1
-                BRL     _specops_L431
-_specops_L430
+                BRL     _specops_L429
+_specops_L428
                 LDA     #0
-_specops_L431
+_specops_L429
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L429
+                BRL     _specops_L427
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -23906,8 +22391,8 @@ _specops_L431
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _specops_L432
-_specops_L429
+                BRL     _specops_L430
+_specops_L427
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -23968,7 +22453,7 @@ _specops_L429
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L433
+_specops_L431
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23980,11 +22465,7 @@ _specops_L433
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L435
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L433
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -24034,7 +22515,7 @@ _specops_L433
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L437
+                BRL     _specops_L435
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -24042,17 +22523,17 @@ _specops_L433
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L437
+                BRL     _specops_L435
                 LDA     #0
-                BRL     _specops_L438
-_specops_L437
+                BRL     _specops_L436
+_specops_L435
                 LDA     #1
-_specops_L438
+_specops_L436
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L436
                 BRL     _specops_L434
-_specops_L436
+                BRL     _specops_L432
+_specops_L434
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24124,8 +22605,8 @@ _specops_L436
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _specops_L435
-_specops_L434
+                BRL     _specops_L433
+_specops_L432
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24158,8 +22639,8 @@ _specops_L434
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L433
-_specops_L435
+                BRL     _specops_L431
+_specops_L433
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24170,7 +22651,7 @@ _specops_L435
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L440
+                BRL     _specops_L438
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -24178,15 +22659,15 @@ _specops_L435
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L440
+                BRL     _specops_L438
                 LDA     #1
-                BRL     _specops_L441
-_specops_L440
+                BRL     _specops_L439
+_specops_L438
                 LDA     #0
-_specops_L441
+_specops_L439
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L439
+                BRL     _specops_L437
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24203,8 +22684,8 @@ _specops_L441
                 CLC
                 ADC     #4
                 TCS
-_specops_L439
-_specops_L432
+_specops_L437
+_specops_L430
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24233,36 +22714,13 @@ _specops_L432
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L442
+                BRL     _specops_L440
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     5,S   ; fccstk d=0 b=5
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -24303,7 +22761,7 @@ _specops_L432
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_specops_L443
+_specops_L441
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -24315,71 +22773,67 @@ _specops_L443
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
+                BRL     _specops_L443
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                PHA
+                DO      10+vgone_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vgone_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vgone_FRAMESIZE,S   ; fccstk d=2 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      8+vgone_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+vgone_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=2 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
                 BRL     _specops_L445
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                PHA
-                DO      10+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vgone_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _specops_L447
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -24411,17 +22865,17 @@ _specops_L443
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L447
+                BRL     _specops_L445
                 LDA     #0
-                BRL     _specops_L448
-_specops_L447
+                BRL     _specops_L446
+_specops_L445
                 LDA     #1
-_specops_L448
+_specops_L446
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L446
                 BRL     _specops_L444
-_specops_L446
+                BRL     _specops_L442
+_specops_L444
                 INC     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -24431,7 +22885,7 @@ _specops_L446
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_specops_L444
+_specops_L442
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24464,15 +22918,13 @@ _specops_L444
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L443
-_specops_L445
+                BRL     _specops_L441
+_specops_L443
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L449
+                BRL     _specops_L447
                 SEP     #$20
                 MX      %10
                 PHB
@@ -24489,13 +22941,13 @@ _specops_L445
                 CLC
                 ADC     #4
                 TCS
-_specops_L449
+_specops_L447
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _specops_L450
+                BRL     _specops_L448
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -24508,7 +22960,7 @@ _specops_L449
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_specops_L450
+_specops_L448
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24539,7 +22991,7 @@ _specops_L450
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_specops_L442
+_specops_L440
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24620,7 +23072,7 @@ _specops_L442
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L423
+_specops_L421
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24659,7 +23111,7 @@ _specops_L423
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L451
+                BRL     _specops_L449
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24785,7 +23237,7 @@ _specops_L423
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L452
+                BRL     _specops_L450
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -24831,8 +23283,8 @@ _specops_L423
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _specops_L453
-_specops_L452
+                BRL     _specops_L451
+_specops_L450
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24860,7 +23312,7 @@ _specops_L452
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_specops_L453
+_specops_L451
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -24890,7 +23342,7 @@ _specops_L453
                 CLC
                 ADC     #1
                 STA     freevnodes
-_specops_L451
+_specops_L449
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -25004,7 +23456,7 @@ vflush_stkok        TCS
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L454
+                BRL     _specops_L452
                 SEP     #$20
                 MX      %10
                 PHB
@@ -25021,7 +23473,7 @@ vflush_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_specops_L454
+_specops_L452
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
 vflush_uL_loop
@@ -25063,7 +23515,7 @@ vflush_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L455
+_specops_L453
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -25075,11 +23527,7 @@ _specops_L455
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L457
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L455
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -25117,7 +23565,7 @@ _specops_L455
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L459
+                BRL     _specops_L457
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25125,20 +23573,20 @@ _specops_L455
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L459
+                BRL     _specops_L457
                 LDA     #0
-                BRL     _specops_L460
-_specops_L459
+                BRL     _specops_L458
+_specops_L457
                 LDA     #1
-_specops_L460
+_specops_L458
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L458
+                BRL     _specops_L456
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflush_uL_loop
-_specops_L458
+_specops_L456
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25188,7 +23636,7 @@ _specops_L458
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L462
+                BRL     _specops_L460
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25196,17 +23644,17 @@ _specops_L458
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L462
+                BRL     _specops_L460
                 LDA     #1
-                BRL     _specops_L463
-_specops_L462
+                BRL     _specops_L461
+_specops_L460
                 LDA     #0
-_specops_L463
+_specops_L461
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L461
-                BRL     _specops_L456
-_specops_L461
+                BRL     _specops_L459
+                BRL     _specops_L454
+_specops_L459
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -25222,7 +23670,7 @@ _specops_L461
                 AND     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L465
+                BRL     _specops_L463
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25233,32 +23681,27 @@ _specops_L461
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L465
+                BRL     _specops_L463
                 LDA     #1
-                BRL     _specops_L466
-_specops_L465
+                BRL     _specops_L464
+_specops_L463
                 LDA     #0
-_specops_L466
+_specops_L464
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L464
-                BRL     _specops_L456
-_specops_L464
+                BRL     _specops_L462
+                BRL     _specops_L454
+_specops_L462
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L467
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L465
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -25266,8 +23709,8 @@ _specops_L464
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L456
-_specops_L467
+                BRL     _specops_L454
+_specops_L465
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -25283,7 +23726,7 @@ _specops_L467
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L468
+                BRL     _specops_L466
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25294,26 +23737,22 @@ _specops_L467
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L470
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _specops_L468
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L470
+                BRL     _specops_L468
                 LDA     #1
-                BRL     _specops_L471
-_specops_L470
+                BRL     _specops_L469
+_specops_L468
                 LDA     #0
-_specops_L471
+_specops_L469
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L469
+                BRL     _specops_L467
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25325,8 +23764,8 @@ _specops_L471
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L472
-_specops_L469
+                BRL     _specops_L470
+_specops_L467
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -25354,7 +23793,7 @@ _specops_L469
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L474
+                BRL     _specops_L472
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25362,15 +23801,15 @@ _specops_L469
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L474
+                BRL     _specops_L472
                 LDA     #1
-                BRL     _specops_L475
-_specops_L474
+                BRL     _specops_L473
+_specops_L472
                 LDA     #0
-_specops_L475
+_specops_L473
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L473
+                BRL     _specops_L471
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25382,8 +23821,8 @@ _specops_L475
                 CLC
                 ADC     #4
                 TCS
-                BRL     _specops_L456
-_specops_L473
+                BRL     _specops_L454
+_specops_L471
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25423,14 +23862,14 @@ _specops_L473
                 CLC
                 ADC     #8
                 TCS
-_specops_L472
-                BRL     _specops_L456
-_specops_L468
+_specops_L470
+                BRL     _specops_L454
+_specops_L466
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-_specops_L456
+_specops_L454
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -25439,12 +23878,12 @@ _specops_L456
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L455
-_specops_L457
+                BRL     _specops_L453
+_specops_L455
                 LDA     9,S   ; fccstk d=0 b=9
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L476
+                BRL     _specops_L474
                 LDA     #16
                 TAY
                 TSC
@@ -25455,7 +23894,7 @@ _specops_L457
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L476
+_specops_L474
                 LDA     #0
                 TAY
                 TSC
@@ -25583,12 +24022,9 @@ ndslot_stkok        TCS
                 ELSE
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                TAX
-                TXA
                 CMP     #0
-_specops_L480
                 BPL     *+5
-                BRL     _specops_L478
+                BRL     _specops_L476
                 DO      8+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -25603,19 +24039,19 @@ _specops_L480
                 TXA
                 SEC
                 SBC     #2
-                BVC     _specops_L481
+                BVC     _specops_L478
                 EOR     #$8000
-_specops_L481
-                BMI     *+5
-                BRL     _specops_L478
-                LDA     #0
-                BRL     _specops_L479
 _specops_L478
+                BMI     *+5
+                BRL     _specops_L476
+                LDA     #0
+                BRL     _specops_L477
+_specops_L476
                 LDA     #1
-_specops_L479
+_specops_L477
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L477
+                BRL     _specops_L475
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -25628,7 +24064,7 @@ _specops_L479
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L477
+_specops_L475
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -25643,11 +24079,11 @@ _specops_L477
                 TXA
                 SEC
                 SBC     #1
-                BVC     _specops_L485
+                BVC     _specops_L482
                 EOR     #$8000
-_specops_L485
+_specops_L482
                 BPL     *+5
-                BRL     _specops_L483
+                BRL     _specops_L480
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -25665,19 +24101,19 @@ _specops_L485
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L486
+                BVC     _specops_L483
                 EOR     #$8000
-_specops_L486
-                BPL     *+5
-                BRL     _specops_L483
-                LDA     #0
-                BRL     _specops_L484
 _specops_L483
+                BPL     *+5
+                BRL     _specops_L480
+                LDA     #0
+                BRL     _specops_L481
+_specops_L480
                 LDA     #1
-_specops_L484
+_specops_L481
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L482
+                BRL     _specops_L479
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -25690,7 +24126,7 @@ _specops_L484
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L482
+_specops_L479
                 SEP     #$20
                 MX      %10
                 LDA     nd_pool+2
@@ -25705,7 +24141,7 @@ _specops_L482
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L488
+                BRL     _specops_L485
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25713,15 +24149,15 @@ _specops_L482
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L488
+                BRL     _specops_L485
                 LDA     #1
-                BRL     _specops_L489
-_specops_L488
+                BRL     _specops_L486
+_specops_L485
                 LDA     #0
-_specops_L489
+_specops_L486
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L487
+                BRL     _specops_L484
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -25734,7 +24170,7 @@ _specops_L489
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L487
+_specops_L484
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -25786,18 +24222,18 @@ _specops_L487
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
-_specops_L490
+_specops_L487
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 SEC
                 SBC     #158
-                BVC     _specops_L493
+                BVC     _specops_L490
                 EOR     #$8000
-_specops_L493
+_specops_L490
                 BMI     *+5
-                BRL     _specops_L492
+                BRL     _specops_L489
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25812,10 +24248,10 @@ _specops_L493
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_specops_L491
+_specops_L488
                 INC     _fcc_img0
-                BRL     _specops_L490
-_specops_L492
+                BRL     _specops_L487
+_specops_L489
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26051,7 +24487,7 @@ vfs_dounmount_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L497
+                BRL     _specops_L494
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26059,15 +24495,15 @@ vfs_dounmount_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L497
+                BRL     _specops_L494
                 LDA     #1
-                BRL     _specops_L498
-_specops_L497
+                BRL     _specops_L495
+_specops_L494
                 LDA     #0
-_specops_L498
+_specops_L495
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L495
+                BRL     _specops_L492
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26108,7 +24544,7 @@ _specops_L498
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L499
+                BRL     _specops_L496
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26116,23 +24552,23 @@ _specops_L498
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L499
+                BRL     _specops_L496
                 LDA     #1
-                BRL     _specops_L500
-_specops_L499
+                BRL     _specops_L497
+_specops_L496
                 LDA     #0
-_specops_L500
+_specops_L497
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L495
+                BRL     _specops_L492
                 LDA     #0
-                BRL     _specops_L496
-_specops_L495
+                BRL     _specops_L493
+_specops_L492
                 LDA     #1
-_specops_L496
+_specops_L493
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L494
+                BRL     _specops_L491
                 LDA     #22
                 TAY
                 TSC
@@ -26143,7 +24579,7 @@ _specops_L496
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L494
+_specops_L491
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26245,7 +24681,7 @@ _specops_L494
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L501
+                BRL     _specops_L498
                 SEP     #$20
                 MX      %10
                 LDA     _specops_vfs_cacheops+2
@@ -26297,7 +24733,7 @@ _specops_L494
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L502-1
+                PEA     _specops_L499-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26308,14 +24744,14 @@ _specops_L494
                 DEC
                 PHA
                 RTL
-_specops_L502
+_specops_L499
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_specops_L501
+_specops_L498
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26404,7 +24840,7 @@ _specops_L501
                 LDA     9,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L503-1
+                PEA     _specops_L500-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26415,7 +24851,7 @@ _specops_L501
                 DEC
                 PHA
                 RTL
-_specops_L503
+_specops_L500
                 TAY
                 TSC
                 CLC
@@ -26425,7 +24861,7 @@ _specops_L503
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L504
+                BRL     _specops_L501
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26488,7 +24924,7 @@ _specops_L503
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L504
+_specops_L501
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26528,7 +24964,7 @@ _specops_L504
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L508
+                BRL     _specops_L505
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26536,15 +24972,15 @@ _specops_L504
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L508
+                BRL     _specops_L505
                 LDA     #0
-                BRL     _specops_L509
-_specops_L508
+                BRL     _specops_L506
+_specops_L505
                 LDA     #1
-_specops_L509
+_specops_L506
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L506
+                BRL     _specops_L503
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26585,7 +25021,7 @@ _specops_L509
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L510
+                BRL     _specops_L507
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26593,23 +25029,23 @@ _specops_L509
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L510
-                LDA     #0
-                BRL     _specops_L511
-_specops_L510
-                LDA     #1
-_specops_L511
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L506
-                LDA     #1
                 BRL     _specops_L507
-_specops_L506
                 LDA     #0
+                BRL     _specops_L508
 _specops_L507
+                LDA     #1
+_specops_L508
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L505
+                BRL     _specops_L503
+                LDA     #1
+                BRL     _specops_L504
+_specops_L503
+                LDA     #0
+_specops_L504
+                CMP     #0
+                BNE     *+5
+                BRL     _specops_L502
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -26833,7 +25269,7 @@ _specops_L507
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L505
+_specops_L502
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26844,7 +25280,7 @@ _specops_L505
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L513
+                BRL     _specops_L510
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26852,15 +25288,15 @@ _specops_L505
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L513
+                BRL     _specops_L510
                 LDA     #0
-                BRL     _specops_L514
-_specops_L513
+                BRL     _specops_L511
+_specops_L510
                 LDA     #1
-_specops_L514
+_specops_L511
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L512
+                BRL     _specops_L509
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26925,7 +25361,7 @@ _specops_L514
                 CLC
                 ADC     #4
                 TCS
-_specops_L512
+_specops_L509
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -27258,6 +25694,7 @@ _specops_ncinshash_stkok        TCS
                 ELSE
                 LDA     6+_specops_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -27289,28 +25726,7 @@ _specops_ncinshash_stkok        TCS
                 LDA     10+_specops_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_specops_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_specops_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_specops_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_specops_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_specops_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_specops_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -27565,7 +25981,7 @@ _specops_nclru_totail_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L516
+                BRL     _specops_L513
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -27573,15 +25989,15 @@ _specops_nclru_totail_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L516
+                BRL     _specops_L513
                 LDA     #1
-                BRL     _specops_L517
-_specops_L516
+                BRL     _specops_L514
+_specops_L513
                 LDA     #0
-_specops_L517
+_specops_L514
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L515
+                BRL     _specops_L512
                 TAY
                 TSC
                 CLC
@@ -27591,7 +26007,7 @@ _specops_L517
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L515
+_specops_L512
                 DO      8+_specops_nclru_totail_FRAMESIZE/256
                 TSC
                 CLC
@@ -28024,7 +26440,7 @@ _specops_nclru_remove_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L518
+                BRL     _specops_L515
                 DO      8+_specops_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -28102,8 +26518,8 @@ _specops_nclru_remove_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _specops_L519
-_specops_L518
+                BRL     _specops_L516
+_specops_L515
                 DO      8+_specops_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -28141,7 +26557,7 @@ _specops_L518
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_specops_L519
+_specops_L516
                 TAY
                 TSC
                 CLC
@@ -28264,7 +26680,7 @@ _specops_nclru_tohead_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L520
+                BRL     _specops_L517
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -28310,8 +26726,8 @@ _specops_nclru_tohead_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _specops_L521
-_specops_L520
+                BRL     _specops_L518
+_specops_L517
                 DO      8+_specops_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -28339,7 +26755,7 @@ _specops_L520
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_specops_L521
+_specops_L518
                 DO      8+_specops_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -28495,28 +26911,7 @@ _specops_ncdetach_stkok        TCS
                 LDA     6+_specops_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_specops_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_specops_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_specops_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_specops_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_specops_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_specops_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -28648,7 +27043,7 @@ nchinit_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_specops_L522
+_specops_L519
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -28657,11 +27052,11 @@ _specops_L522
                 TXA
                 SEC
                 SBC     #16
-                BVC     _specops_L525
+                BVC     _specops_L522
                 EOR     #$8000
-_specops_L525
+_specops_L522
                 BMI     *+5
-                BRL     _specops_L524
+                BRL     _specops_L521
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -28681,10 +27076,6 @@ _specops_L525
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr1+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1
@@ -28700,10 +27091,7 @@ _specops_L525
                 STA     _fcc_fpr0+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr1+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -28717,10 +27105,10 @@ _specops_L525
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_specops_L523
+_specops_L520
                 INC     _fcc_img0
-                BRL     _specops_L522
-_specops_L524
+                BRL     _specops_L519
+_specops_L521
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
@@ -28758,7 +27146,7 @@ _specops_L524
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L527
+                BRL     _specops_L524
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -28766,15 +27154,15 @@ _specops_L524
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L527
+                BRL     _specops_L524
                 LDA     #1
-                BRL     _specops_L528
-_specops_L527
+                BRL     _specops_L525
+_specops_L524
                 LDA     #0
-_specops_L528
+_specops_L525
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L526
+                BRL     _specops_L523
                 LDA     #0
                 STA     doingcache
                 LDA     #0
@@ -28789,24 +27177,21 @@ _specops_L528
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L526
+_specops_L523
                 LDA     #64
                 TAX
                 TXA
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L529
+_specops_L526
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_specops_L532
                 BPL     *+5
-                BRL     _specops_L531
+                BRL     _specops_L528
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -28829,10 +27214,6 @@ _specops_L532
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -28901,10 +27282,6 @@ _specops_L532
                 REP     #$20
                 MX      %00
                 LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1
@@ -28920,10 +27297,7 @@ _specops_L532
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -28944,13 +27318,13 @@ _specops_L532
                 CLC
                 ADC     #4
                 TCS
-_specops_L530
+_specops_L527
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L529
-_specops_L531
+                BRL     _specops_L526
+_specops_L528
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -29037,7 +27411,7 @@ namehash_stkok        TCS
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_specops_L533
+_specops_L529
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29048,11 +27422,11 @@ _specops_L533
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L536
+                BVC     _specops_L532
                 EOR     #$8000
-_specops_L536
+_specops_L532
                 BMI     *+5
-                BRL     _specops_L535
+                BRL     _specops_L531
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -29142,10 +27516,10 @@ _specops_L536
                 LDA     _fcc_long_hi
                 STA     _fcc_img5
                 TYA
-_specops_L534
+_specops_L530
                 INC     _fcc_img0
-                BRL     _specops_L533
-_specops_L535
+                BRL     _specops_L529
+_specops_L531
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -29230,7 +27604,7 @@ _specops_namecmp_stkok        TCS
                 LDA     12+_specops_namecmp_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 STA     _fcc_img4
-_specops_L537
+_specops_L533
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29241,7 +27615,7 @@ _specops_L537
                 LDA     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L538
+                BRL     _specops_L534
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
                 AND     #$00FF
@@ -29253,7 +27627,7 @@ _specops_L537
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L539
+                BRL     _specops_L535
                 LDA     #1
                 TAY
                 TSC
@@ -29264,9 +27638,9 @@ _specops_L537
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L539
-                BRL     _specops_L537
-_specops_L538
+_specops_L535
+                BRL     _specops_L533
+_specops_L534
                 LDA     #0
                 TAY
                 TSC
@@ -29389,7 +27763,7 @@ cache_purge_stkok        TCS
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L540
+                BRL     _specops_L536
                 TAY
                 TSC
                 CLC
@@ -29399,10 +27773,10 @@ cache_purge_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L540
+_specops_L536
                 LDA     #0
                 STA     _fcc_img0
-_specops_L541
+_specops_L537
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29411,11 +27785,11 @@ _specops_L541
                 TXA
                 SEC
                 SBC     #16
-                BVC     _specops_L544
+                BVC     _specops_L540
                 EOR     #$8000
-_specops_L544
+_specops_L540
                 BMI     *+5
-                BRL     _specops_L543
+                BRL     _specops_L539
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -29434,10 +27808,6 @@ _specops_L544
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -29453,7 +27823,7 @@ _specops_L544
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L545
+_specops_L541
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29468,7 +27838,7 @@ _specops_L545
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L548
+                BRL     _specops_L544
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -29476,15 +27846,15 @@ _specops_L545
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L548
+                BRL     _specops_L544
                 LDA     #0
-                BRL     _specops_L549
-_specops_L548
+                BRL     _specops_L545
+_specops_L544
                 LDA     #1
-_specops_L549
+_specops_L545
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L547
+                BRL     _specops_L543
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -29511,7 +27881,7 @@ _specops_L549
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-_specops_L546
+_specops_L542
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -29531,12 +27901,12 @@ _specops_L546
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L545
-_specops_L547
-_specops_L542
-                INC     _fcc_img0
                 BRL     _specops_L541
 _specops_L543
+_specops_L538
+                INC     _fcc_img0
+                BRL     _specops_L537
+_specops_L539
                 DO      8+cache_purge_FRAMESIZE/256
                 TSC
                 CLC
@@ -29615,7 +27985,7 @@ cache_purgevfs_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_specops_L550
+_specops_L546
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29624,11 +27994,11 @@ _specops_L550
                 TXA
                 SEC
                 SBC     #16
-                BVC     _specops_L553
+                BVC     _specops_L549
                 EOR     #$8000
-_specops_L553
+_specops_L549
                 BMI     *+5
-                BRL     _specops_L552
+                BRL     _specops_L548
                 LDA     13,S   ; fccstk d=0 b=13
                 ASL
                 ASL
@@ -29647,10 +28017,6 @@ _specops_L553
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -29666,7 +28032,7 @@ _specops_L553
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L554
+_specops_L550
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -29681,7 +28047,7 @@ _specops_L554
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L557
+                BRL     _specops_L553
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -29689,15 +28055,15 @@ _specops_L554
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L557
+                BRL     _specops_L553
                 LDA     #0
-                BRL     _specops_L558
-_specops_L557
+                BRL     _specops_L554
+_specops_L553
                 LDA     #1
-_specops_L558
+_specops_L554
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L556
+                BRL     _specops_L552
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -29739,7 +28105,7 @@ _specops_L558
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L562
+                BRL     _specops_L558
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -29747,15 +28113,15 @@ _specops_L558
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L562
+                BRL     _specops_L558
                 LDA     #1
-                BRL     _specops_L563
-_specops_L562
+                BRL     _specops_L559
+_specops_L558
                 LDA     #0
-_specops_L563
+_specops_L559
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L560
+                BRL     _specops_L556
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -29809,21 +28175,13 @@ _specops_L563
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L564
+                BRL     _specops_L560
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _specops_L564
-                LDA     #0
-                BRL     _specops_L565
-_specops_L564
-                LDA     #1
-_specops_L565
-                CMP     #0
                 BEQ     *+5
                 BRL     _specops_L560
                 LDA     #0
@@ -29832,10 +28190,18 @@ _specops_L560
                 LDA     #1
 _specops_L561
                 CMP     #0
+                BEQ     *+5
+                BRL     _specops_L556
+                LDA     #0
+                BRL     _specops_L557
+_specops_L556
+                LDA     #1
+_specops_L557
+                CMP     #0
                 BNE     *+5
-                BRL     _specops_L559
                 BRL     _specops_L555
-_specops_L559
+                BRL     _specops_L551
+_specops_L555
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -29881,10 +28247,7 @@ _specops_L559
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _specops_ncdetach
@@ -29914,7 +28277,7 @@ _specops_L559
                 CLC
                 ADC     #4
                 TCS
-_specops_L555
+_specops_L551
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -29923,15 +28286,15 @@ _specops_L555
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L554
-_specops_L556
-_specops_L551
+                BRL     _specops_L550
+_specops_L552
+_specops_L547
                 LDA     13,S   ; fccstk d=0 b=13
                 CLC
                 ADC     #1
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _specops_L550
-_specops_L552
+                BRL     _specops_L546
+_specops_L548
                 TAY
                 TSC
                 CLC
@@ -29960,15 +28323,15 @@ cache_lookup_stkok        TCS
                 INC     _fcc_fb
                 LDA     doingcache
                 CMP     #0
-                BEQ     _specops_L567
+                BEQ     _specops_L563
                 LDA     #0
-                BRA     _specops_L568
-_specops_L567
+                BRA     _specops_L564
+_specops_L563
                 LDA     #1
-_specops_L568
+_specops_L564
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L566
+                BRL     _specops_L562
                 LDA     #0
                 TAY
                 TSC
@@ -29979,7 +28342,7 @@ _specops_L568
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L566
+_specops_L562
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -30011,11 +28374,11 @@ _specops_L566
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L570
+                BVC     _specops_L566
                 EOR     #$8000
-_specops_L570
+_specops_L566
                 BMI     *+5
-                BRL     _specops_L569
+                BRL     _specops_L565
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30082,7 +28445,7 @@ _specops_L570
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L569
+_specops_L565
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -30164,10 +28527,6 @@ _specops_L569
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -30183,7 +28542,7 @@ _specops_L569
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_specops_L571
+_specops_L567
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -30198,7 +28557,7 @@ _specops_L571
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L574
+                BRL     _specops_L570
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -30206,15 +28565,15 @@ _specops_L571
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L574
+                BRL     _specops_L570
                 LDA     #0
-                BRL     _specops_L575
-_specops_L574
+                BRL     _specops_L571
+_specops_L570
                 LDA     #1
-_specops_L575
+_specops_L571
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L573
+                BRL     _specops_L569
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30238,7 +28597,7 @@ _specops_L575
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L583
+                BRL     _specops_L579
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -30246,15 +28605,15 @@ _specops_L575
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L583
+                BRL     _specops_L579
                 LDA     #1
-                BRL     _specops_L584
-_specops_L583
+                BRL     _specops_L580
+_specops_L579
                 LDA     #0
-_specops_L584
+_specops_L580
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L581
+                BRL     _specops_L577
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30289,15 +28648,15 @@ _specops_L584
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L581
+                BRL     _specops_L577
                 LDA     #1
-                BRL     _specops_L582
-_specops_L581
+                BRL     _specops_L578
+_specops_L577
                 LDA     #0
-_specops_L582
+_specops_L578
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L579
+                BRL     _specops_L575
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30334,15 +28693,15 @@ _specops_L582
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _specops_L579
+                BRL     _specops_L575
                 LDA     #1
-                BRL     _specops_L580
-_specops_L579
+                BRL     _specops_L576
+_specops_L575
                 LDA     #0
-_specops_L580
+_specops_L576
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L577
+                BRL     _specops_L573
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30402,22 +28761,20 @@ _specops_L580
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L577
+                BRL     _specops_L573
                 LDA     #1
-                BRL     _specops_L578
-_specops_L577
+                BRL     _specops_L574
+_specops_L573
                 LDA     #0
-_specops_L578
+_specops_L574
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L576
-                BRL     _specops_L573
-_specops_L576
+                BRL     _specops_L572
+                BRL     _specops_L569
 _specops_L572
+_specops_L568
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30437,8 +28794,8 @@ _specops_L572
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _specops_L571
-_specops_L573
+                BRL     _specops_L567
+_specops_L569
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30450,7 +28807,7 @@ _specops_L573
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L586
+                BRL     _specops_L582
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -30458,15 +28815,15 @@ _specops_L573
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L586
+                BRL     _specops_L582
                 LDA     #1
-                BRL     _specops_L587
-_specops_L586
+                BRL     _specops_L583
+_specops_L582
                 LDA     #0
-_specops_L587
+_specops_L583
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L585
+                BRL     _specops_L581
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30504,7 +28861,7 @@ _specops_L587
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L585
+_specops_L581
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -30531,15 +28888,15 @@ _specops_L585
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 CMP     #0
-                BEQ     _specops_L589
+                BEQ     _specops_L585
                 LDA     #0
-                BRA     _specops_L590
-_specops_L589
+                BRA     _specops_L586
+_specops_L585
                 LDA     #1
-_specops_L590
+_specops_L586
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L588
+                BRL     _specops_L584
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30567,8 +28924,8 @@ _specops_L590
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _specops_L591
-_specops_L588
+                BRL     _specops_L587
+_specops_L584
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30591,7 +28948,7 @@ _specops_L588
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L593
+                BRL     _specops_L589
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -30599,15 +28956,15 @@ _specops_L588
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L593
+                BRL     _specops_L589
                 LDA     #1
-                BRL     _specops_L594
-_specops_L593
+                BRL     _specops_L590
+_specops_L589
                 LDA     #0
-_specops_L594
+_specops_L590
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L592
+                BRL     _specops_L588
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30656,8 +29013,8 @@ _specops_L594
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _specops_L595
-_specops_L592
+                BRL     _specops_L591
+_specops_L588
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30672,10 +29029,6 @@ _specops_L592
                 PHA
                 TYA
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -30704,7 +29057,7 @@ _specops_L592
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L596
+                BRL     _specops_L592
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30732,8 +29085,8 @@ _specops_L592
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _specops_L597
-_specops_L596
+                BRL     _specops_L593
+_specops_L592
                 PHA
                 SEP     #$20
                 MX      %10
@@ -30833,9 +29186,9 @@ _specops_L596
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L597
-_specops_L595
+_specops_L593
 _specops_L591
+_specops_L587
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -30898,15 +29251,15 @@ cache_enter_stkok        TCS
                 INC     _fcc_fb
                 LDA     doingcache
                 CMP     #0
-                BEQ     _specops_L599
+                BEQ     _specops_L595
                 LDA     #0
-                BRA     _specops_L600
-_specops_L599
+                BRA     _specops_L596
+_specops_L595
                 LDA     #1
-_specops_L600
+_specops_L596
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L598
+                BRL     _specops_L594
                 TAY
                 TSC
                 CLC
@@ -30916,7 +29269,7 @@ _specops_L600
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L598
+_specops_L594
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -30948,11 +29301,11 @@ _specops_L598
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L602
+                BVC     _specops_L598
                 EOR     #$8000
-_specops_L602
+_specops_L598
                 BMI     *+5
-                BRL     _specops_L601
+                BRL     _specops_L597
                 TAY
                 TSC
                 CLC
@@ -30962,7 +29315,7 @@ _specops_L602
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L601
+_specops_L597
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -30975,17 +29328,13 @@ _specops_L601
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L604
+                BRL     _specops_L600
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -30993,15 +29342,15 @@ _specops_L601
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L604
+                BRL     _specops_L600
                 LDA     #1
-                BRL     _specops_L605
-_specops_L604
+                BRL     _specops_L601
+_specops_L600
                 LDA     #0
-_specops_L605
+_specops_L601
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L603
+                BRL     _specops_L599
                 TAY
                 TSC
                 CLC
@@ -31011,7 +29360,7 @@ _specops_L605
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L603
+_specops_L599
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31120,7 +29469,7 @@ _specops_L603
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _specops_L606
+                BRL     _specops_L602
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31171,8 +29520,8 @@ _specops_L603
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _specops_L607
-_specops_L606
+                BRL     _specops_L603
+_specops_L602
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31186,7 +29535,7 @@ _specops_L606
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-_specops_L607
+_specops_L603
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31284,10 +29633,7 @@ _specops_L607
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -31323,7 +29669,7 @@ _specops_L607
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_specops_L608
+_specops_L604
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -31357,11 +29703,11 @@ _specops_L608
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _specops_L611
+                BVC     _specops_L607
                 EOR     #$8000
-_specops_L611
+_specops_L607
                 BMI     *+5
-                BRL     _specops_L610
+                BRL     _specops_L606
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31417,10 +29763,10 @@ _specops_L611
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_specops_L609
+_specops_L605
                 INC     _fcc_img0
-                BRL     _specops_L608
-_specops_L610
+                BRL     _specops_L604
+_specops_L606
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
@@ -31716,11 +30062,9 @@ _specops_mkdevvn_stkok        TCS
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L612
+                BRL     _specops_L608
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -31731,7 +30075,7 @@ _specops_mkdevvn_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L612
+_specops_L608
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31807,7 +30151,7 @@ _specops_L612
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L614
+                BRL     _specops_L610
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -31815,15 +30159,15 @@ _specops_L612
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L614
+                BRL     _specops_L610
                 LDA     #0
-                BRL     _specops_L615
-_specops_L614
+                BRL     _specops_L611
+_specops_L610
                 LDA     #1
-_specops_L615
+_specops_L611
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L613
+                BRL     _specops_L609
                 LDA     #$FFFE
                 TAY
                 TSC
@@ -31834,7 +30178,7 @@ _specops_L615
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L613
+_specops_L609
                 LDA     #0
                 TAY
                 TSC
@@ -31884,11 +30228,9 @@ main_stkok        TCS
                 ADC     #6
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L616
+                BRL     _specops_L612
                 LDA     #51
                 TAY
                 TSC
@@ -31899,7 +30241,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L616
+_specops_L612
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31930,7 +30272,7 @@ _specops_L616
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L618
+                BRL     _specops_L614
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -31938,15 +30280,15 @@ _specops_L616
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L618
+                BRL     _specops_L614
                 LDA     #0
-                BRL     _specops_L619
-_specops_L618
+                BRL     _specops_L615
+_specops_L614
                 LDA     #1
-_specops_L619
+_specops_L615
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L617
+                BRL     _specops_L613
                 LDA     #52
                 TAY
                 TSC
@@ -31957,7 +30299,7 @@ _specops_L619
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L617
+_specops_L613
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -31968,7 +30310,7 @@ _specops_L617
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _specops_L620
+                BRL     _specops_L616
                 LDA     #53
                 TAY
                 TSC
@@ -31979,7 +30321,7 @@ _specops_L617
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L620
+_specops_L616
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32002,7 +30344,7 @@ _specops_L620
                 TXA
                 CMP     #513
                 BNE     *+5
-                BRL     _specops_L621
+                BRL     _specops_L617
                 LDA     #54
                 TAY
                 TSC
@@ -32013,7 +30355,7 @@ _specops_L620
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L621
+_specops_L617
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32062,7 +30404,7 @@ _specops_L621
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L623-1
+                PEA     _specops_L619-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32073,18 +30415,16 @@ _specops_L621
                 DEC
                 PHA
                 RTL
-_specops_L623
+_specops_L619
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L622
+                BRL     _specops_L618
                 LDA     #55
                 TAY
                 TSC
@@ -32095,7 +30435,7 @@ _specops_L623
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L622
+_specops_L618
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32137,7 +30477,7 @@ _specops_L622
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L625-1
+                PEA     _specops_L621-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32148,18 +30488,16 @@ _specops_L622
                 DEC
                 PHA
                 RTL
-_specops_L625
+_specops_L621
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L624
+                BRL     _specops_L620
                 LDA     #56
                 TAY
                 TSC
@@ -32170,7 +30508,7 @@ _specops_L625
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L624
+_specops_L620
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32212,7 +30550,7 @@ _specops_L624
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L627-1
+                PEA     _specops_L623-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32223,18 +30561,16 @@ _specops_L624
                 DEC
                 PHA
                 RTL
-_specops_L627
+_specops_L623
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L626
+                BRL     _specops_L622
                 LDA     #57
                 TAY
                 TSC
@@ -32245,7 +30581,7 @@ _specops_L627
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L626
+_specops_L622
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32296,7 +30632,7 @@ _specops_L626
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L629-1
+                PEA     _specops_L625-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32307,18 +30643,16 @@ _specops_L626
                 DEC
                 PHA
                 RTL
-_specops_L629
+_specops_L625
                 TAY
                 TSC
                 CLC
                 ADC     #16
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L628
+                BRL     _specops_L624
                 LDA     #58
                 TAY
                 TSC
@@ -32329,7 +30663,7 @@ _specops_L629
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L628
+_specops_L624
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32371,7 +30705,7 @@ _specops_L628
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L631-1
+                PEA     _specops_L627-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32382,18 +30716,16 @@ _specops_L628
                 DEC
                 PHA
                 RTL
-_specops_L631
+_specops_L627
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L630
+                BRL     _specops_L626
                 LDA     #59
                 TAY
                 TSC
@@ -32404,7 +30736,7 @@ _specops_L631
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L630
+_specops_L626
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32446,7 +30778,7 @@ _specops_L630
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L633-1
+                PEA     _specops_L629-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32457,18 +30789,16 @@ _specops_L630
                 DEC
                 PHA
                 RTL
-_specops_L633
+_specops_L629
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L632
+                BRL     _specops_L628
                 LDA     #60
                 TAY
                 TSC
@@ -32479,7 +30809,7 @@ _specops_L633
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L632
+_specops_L628
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32530,7 +30860,7 @@ _specops_L632
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L635-1
+                PEA     _specops_L631-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32541,7 +30871,7 @@ _specops_L632
                 DEC
                 PHA
                 RTL
-_specops_L635
+_specops_L631
                 TAY
                 TSC
                 CLC
@@ -32552,7 +30882,7 @@ _specops_L635
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L634
+                BRL     _specops_L630
                 LDA     #61
                 TAY
                 TSC
@@ -32563,7 +30893,7 @@ _specops_L635
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L634
+_specops_L630
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32619,7 +30949,7 @@ _specops_L634
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L637-1
+                PEA     _specops_L633-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32630,7 +30960,7 @@ _specops_L634
                 DEC
                 PHA
                 RTL
-_specops_L637
+_specops_L633
                 TAY
                 TSC
                 CLC
@@ -32641,7 +30971,7 @@ _specops_L637
                 TXA
                 CMP     #25
                 BNE     *+5
-                BRL     _specops_L636
+                BRL     _specops_L632
                 LDA     #62
                 TAY
                 TSC
@@ -32652,13 +30982,11 @@ _specops_L637
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L636
+_specops_L632
                 LDA     _specops_npanic
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L638
+                BRL     _specops_L634
                 LDA     #63
                 TAY
                 TSC
@@ -32669,7 +30997,7 @@ _specops_L636
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L638
+_specops_L634
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32718,7 +31046,7 @@ _specops_L638
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L640-1
+                PEA     _specops_L636-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32729,7 +31057,7 @@ _specops_L638
                 DEC
                 PHA
                 RTL
-_specops_L640
+_specops_L636
                 TAY
                 TSC
                 CLC
@@ -32740,7 +31068,7 @@ _specops_L640
                 TXA
                 CMP     #9
                 BNE     *+5
-                BRL     _specops_L639
+                BRL     _specops_L635
                 LDA     #64
                 TAY
                 TSC
@@ -32751,7 +31079,7 @@ _specops_L640
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L639
+_specops_L635
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32803,7 +31131,7 @@ _specops_L639
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L642-1
+                PEA     _specops_L638-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32814,7 +31142,7 @@ _specops_L639
                 DEC
                 PHA
                 RTL
-_specops_L642
+_specops_L638
                 TAY
                 TSC
                 CLC
@@ -32825,7 +31153,7 @@ _specops_L642
                 TXA
                 CMP     #9
                 BNE     *+5
-                BRL     _specops_L641
+                BRL     _specops_L637
                 LDA     #65
                 TAY
                 TSC
@@ -32836,7 +31164,7 @@ _specops_L642
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L641
+_specops_L637
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -32888,7 +31216,7 @@ _specops_L641
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L644-1
+                PEA     _specops_L640-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32899,7 +31227,7 @@ _specops_L641
                 DEC
                 PHA
                 RTL
-_specops_L644
+_specops_L640
                 TAY
                 TSC
                 CLC
@@ -32910,7 +31238,7 @@ _specops_L644
                 TXA
                 CMP     #9
                 BNE     *+5
-                BRL     _specops_L643
+                BRL     _specops_L639
                 LDA     #66
                 TAY
                 TSC
@@ -32921,13 +31249,11 @@ _specops_L644
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L643
+_specops_L639
                 LDA     _specops_npanic
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L645
+                BRL     _specops_L641
                 LDA     #67
                 TAY
                 TSC
@@ -32938,7 +31264,7 @@ _specops_L643
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L645
+_specops_L641
                 LDA     _specops_npanic
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     3,S   ; fccstk d=0 b=3
@@ -32987,7 +31313,7 @@ _specops_L645
                 LDA     11,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L646-1
+                PEA     _specops_L642-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -32998,7 +31324,7 @@ _specops_L645
                 DEC
                 PHA
                 RTL
-_specops_L646
+_specops_L642
                 TAY
                 TSC
                 CLC
@@ -33015,7 +31341,7 @@ _specops_L646
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L647
+                BRL     _specops_L643
                 LDA     #68
                 TAY
                 TSC
@@ -33026,7 +31352,7 @@ _specops_L646
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L647
+_specops_L643
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -33083,7 +31409,7 @@ _specops_L647
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L648-1
+                PEA     _specops_L644-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33094,7 +31420,7 @@ _specops_L647
                 DEC
                 PHA
                 RTL
-_specops_L648
+_specops_L644
                 TAY
                 TSC
                 CLC
@@ -33112,7 +31438,7 @@ _specops_L648
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L649
+                BRL     _specops_L645
                 LDA     #69
                 TAY
                 TSC
@@ -33123,7 +31449,7 @@ _specops_L648
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L649
+_specops_L645
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -33180,7 +31506,7 @@ _specops_L649
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L650-1
+                PEA     _specops_L646-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33191,7 +31517,7 @@ _specops_L649
                 DEC
                 PHA
                 RTL
-_specops_L650
+_specops_L646
                 TAY
                 TSC
                 CLC
@@ -33209,7 +31535,7 @@ _specops_L650
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L651
+                BRL     _specops_L647
                 LDA     #70
                 TAY
                 TSC
@@ -33220,7 +31546,7 @@ _specops_L650
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L651
+_specops_L647
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -33272,7 +31598,7 @@ _specops_L651
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L652-1
+                PEA     _specops_L648-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33283,7 +31609,7 @@ _specops_L651
                 DEC
                 PHA
                 RTL
-_specops_L652
+_specops_L648
                 TAY
                 TSC
                 CLC
@@ -33301,7 +31627,7 @@ _specops_L652
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L653
+                BRL     _specops_L649
                 LDA     #71
                 TAY
                 TSC
@@ -33312,7 +31638,7 @@ _specops_L652
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L653
+_specops_L649
                 LDA     #1
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     3,S   ; fccstk d=0 b=3
@@ -33375,7 +31701,7 @@ _specops_L653
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L654-1
+                PEA     _specops_L650-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33386,7 +31712,7 @@ _specops_L653
                 DEC
                 PHA
                 RTL
-_specops_L654
+_specops_L650
                 TAY
                 TSC
                 CLC
@@ -33404,7 +31730,7 @@ _specops_L654
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L655
+                BRL     _specops_L651
                 LDA     #72
                 TAY
                 TSC
@@ -33415,7 +31741,7 @@ _specops_L654
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L655
+_specops_L651
                 LDA     #0
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     3,S   ; fccstk d=0 b=3
@@ -33478,7 +31804,7 @@ _specops_L655
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L656-1
+                PEA     _specops_L652-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33489,7 +31815,7 @@ _specops_L655
                 DEC
                 PHA
                 RTL
-_specops_L656
+_specops_L652
                 TAY
                 TSC
                 CLC
@@ -33507,7 +31833,7 @@ _specops_L656
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L657
+                BRL     _specops_L653
                 LDA     #73
                 TAY
                 TSC
@@ -33518,7 +31844,7 @@ _specops_L656
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L657
+_specops_L653
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -33680,7 +32006,7 @@ _specops_L657
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L659-1
+                PEA     _specops_L655-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -33691,18 +32017,16 @@ _specops_L657
                 DEC
                 PHA
                 RTL
-_specops_L659
+_specops_L655
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L658
+                BRL     _specops_L654
                 LDA     #118
                 TAY
                 TSC
@@ -33713,7 +32037,7 @@ _specops_L659
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L658
+_specops_L654
                 LDA     _specops_npanic
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -33725,7 +32049,7 @@ _specops_L658
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L660
+                BRL     _specops_L656
                 LDA     #119
                 TAY
                 TSC
@@ -33736,13 +32060,13 @@ _specops_L658
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L660
+_specops_L656
                 LDA     _specops_cd_reads
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L661
+                BRL     _specops_L657
                 LDA     #120
                 TAY
                 TSC
@@ -33753,13 +32077,13 @@ _specops_L660
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L661
+_specops_L657
                 LDA     29,S   ; fccstk d=0 b=29
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L662
+                BRL     _specops_L658
                 LDA     #121
                 TAY
                 TSC
@@ -33770,13 +32094,13 @@ _specops_L661
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L662
+_specops_L658
                 LDA     _specops_cd_last_idx
                 TAX
                 TXA
                 CMP     #7
                 BNE     *+5
-                BRL     _specops_L663
+                BRL     _specops_L659
                 LDA     #122
                 TAY
                 TSC
@@ -33787,13 +32111,13 @@ _specops_L662
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L663
+_specops_L659
                 LDA     _specops_cd_dreads
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L664
+                BRL     _specops_L660
                 LDA     #128
                 TAY
                 TSC
@@ -33804,13 +32128,13 @@ _specops_L663
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L664
+_specops_L660
                 LDA     _specops_cd_dlast_idx
                 TAX
                 TXA
                 CMP     #7
                 BNE     *+5
-                BRL     _specops_L665
+                BRL     _specops_L661
                 LDA     #129
                 TAY
                 TSC
@@ -33821,7 +32145,7 @@ _specops_L664
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L665
+_specops_L661
                 LDA     #_specops_fake_buf
                 PHA
                 LDA     #0
@@ -34027,7 +32351,7 @@ _specops_L665
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L667-1
+                PEA     _specops_L663-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -34038,18 +32362,16 @@ _specops_L665
                 DEC
                 PHA
                 RTL
-_specops_L667
+_specops_L663
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L666
+                BRL     _specops_L662
                 LDA     #123
                 TAY
                 TSC
@@ -34060,7 +32382,7 @@ _specops_L667
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L666
+_specops_L662
                 LDA     _specops_npanic
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -34072,7 +32394,7 @@ _specops_L666
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L668
+                BRL     _specops_L664
                 LDA     #124
                 TAY
                 TSC
@@ -34083,13 +32405,13 @@ _specops_L666
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L668
+_specops_L664
                 LDA     _specops_cd_writes
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _specops_L669
+                BRL     _specops_L665
                 LDA     #125
                 TAY
                 TSC
@@ -34100,13 +32422,11 @@ _specops_L668
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L669
+_specops_L665
                 LDA     29,S   ; fccstk d=0 b=29
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L670
+                BRL     _specops_L666
                 LDA     #126
                 TAY
                 TSC
@@ -34117,13 +32437,13 @@ _specops_L669
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L670
+_specops_L666
                 LDA     _specops_cd_last_byte
                 TAX
                 TXA
                 CMP     #196
                 BNE     *+5
-                BRL     _specops_L671
+                BRL     _specops_L667
                 LDA     #127
                 TAY
                 TSC
@@ -34134,13 +32454,13 @@ _specops_L670
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L671
+_specops_L667
                 LDA     _specops_cd_dwrites
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L672
+                BRL     _specops_L668
                 LDA     #130
                 TAY
                 TSC
@@ -34151,7 +32471,7 @@ _specops_L671
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L672
+_specops_L668
                 LDA     #0
                 STA     _specops_cd_ioctls
                 LDA     #0
@@ -34159,6 +32479,131 @@ _specops_L672
                 LDA     #$FFFF
                 STA     _specops_cd_last_idx
                 LDA     #25
+                STA     _specops_cd_ioctlret
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #22
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #24
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #40
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #42
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr0
+                STZ     _fcc_fpr0+2
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                PHA
+                LDA     #0
+                STA     _fcc_fpr0
+                STZ     _fcc_fpr0+2
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                PHA
+                LDA     19,S   ; fccstk d=16 b=3
+                STA     _fcc_fpr0+2
+                LDA     17,S   ; fccstk d=16 b=1
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     17,S
+                STA     _fcc_fpr0
+                LDA     19,S
+                STA     _fcc_fpr0+2
+                PHK
+                PEA     _specops_L670-1
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                PHA
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                DEC
+                PHA
+                RTL
+_specops_L670
+                TAY
+                TSC
+                CLC
+                ADC     #20
+                TCS
+                TYA
+                TAX
+                TXA
+                CMP     #25
+                BNE     *+5
+                BRL     _specops_L669
+                LDA     #139
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L669
+                LDA     _specops_cd_ioctls
+                TAX
+                TXA
+                CMP     #1
+                BNE     *+5
+                BRL     _specops_L671
+                LDA     #140
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L671
+                LDA     _specops_cd_last_idx
+                TAX
+                TXA
+                CMP     #7
+                BNE     *+5
+                BRL     _specops_L672
+                LDA     #141
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L672
+                LDA     #22
                 STA     _specops_cd_ioctlret
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -34235,10 +32680,10 @@ _specops_L674
                 TYA
                 TAX
                 TXA
-                CMP     #25
+                CMP     #22
                 BNE     *+5
                 BRL     _specops_L673
-                LDA     #139
+                LDA     #142
                 TAY
                 TSC
                 CLC
@@ -34252,134 +32697,9 @@ _specops_L673
                 LDA     _specops_cd_ioctls
                 TAX
                 TXA
-                CMP     #1
-                BNE     *+5
-                BRL     _specops_L675
-                LDA     #140
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L675
-                LDA     _specops_cd_last_idx
-                TAX
-                TXA
-                CMP     #7
-                BNE     *+5
-                BRL     _specops_L676
-                LDA     #141
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L676
-                LDA     #22
-                STA     _specops_cd_ioctlret
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDY     #22
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #40
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #42
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr0
-                STZ     _fcc_fpr0+2
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                PHA
-                LDA     #0
-                STA     _fcc_fpr0
-                STZ     _fcc_fpr0+2
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                PHA
-                LDA     19,S   ; fccstk d=16 b=3
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=16 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     17,S
-                STA     _fcc_fpr0
-                LDA     19,S
-                STA     _fcc_fpr0+2
-                PHK
-                PEA     _specops_L678-1
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                PHA
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                DEC
-                PHA
-                RTL
-_specops_L678
-                TAY
-                TSC
-                CLC
-                ADC     #20
-                TCS
-                TYA
-                TAX
-                TXA
-                CMP     #22
-                BNE     *+5
-                BRL     _specops_L677
-                LDA     #142
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L677
-                LDA     _specops_cd_ioctls
-                TAX
-                TXA
                 CMP     #2
                 BNE     *+5
-                BRL     _specops_L679
+                BRL     _specops_L675
                 LDA     #143
                 TAY
                 TSC
@@ -34390,7 +32710,7 @@ _specops_L677
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L679
+_specops_L675
                 LDA     #25
                 STA     _specops_cd_ioctlret
                 LDA     #$FFFF
@@ -34450,7 +32770,7 @@ _specops_L679
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L681-1
+                PEA     _specops_L677-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -34461,7 +32781,7 @@ _specops_L679
                 DEC
                 PHA
                 RTL
-_specops_L681
+_specops_L677
                 TAY
                 TSC
                 CLC
@@ -34472,7 +32792,7 @@ _specops_L681
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L680
+                BRL     _specops_L676
                 LDA     #144
                 TAY
                 TSC
@@ -34483,7 +32803,127 @@ _specops_L681
                 STA     _fcc_fb
                 TYA
                 RTL
+_specops_L676
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #22
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #24
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #44
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #46
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr0
+                STZ     _fcc_fpr0+2
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                PHA
+                LDA     #2
+                PHA
+                LDA     15,S   ; fccstk d=12 b=3
+                STA     _fcc_fpr0+2
+                LDA     13,S   ; fccstk d=12 b=1
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     13,S
+                STA     _fcc_fpr0
+                LDA     15,S
+                STA     _fcc_fpr0+2
+                PHK
+                PEA     _specops_L679-1
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                PHA
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                DEC
+                PHA
+                RTL
+_specops_L679
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                TAX
+                TXA
+                CMP     #1
+                BNE     *+5
+                BRL     _specops_L678
+                LDA     #145
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L678
+                LDA     _specops_cd_polls
+                TAX
+                TXA
+                CMP     #2
+                BNE     *+5
+                BRL     _specops_L680
+                LDA     #146
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
 _specops_L680
+                LDA     _specops_cd_last_idx
+                TAX
+                TXA
+                CMP     #7
+                BNE     *+5
+                BRL     _specops_L681
+                LDA     #147
+                TAY
+                TSC
+                CLC
+                ADC     #main_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_specops_L681
+                LDA     #4
+                STA     _specops_cd_pollmask
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -34557,7 +32997,7 @@ _specops_L683
                 CMP     #1
                 BNE     *+5
                 BRL     _specops_L682
-                LDA     #145
+                LDA     #148
                 TAY
                 TSC
                 CLC
@@ -34568,13 +33008,78 @@ _specops_L683
                 TYA
                 RTL
 _specops_L682
-                LDA     _specops_cd_polls
-                TAX
-                TXA
-                CMP     #2
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #22
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #24
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #44
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #46
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                STA     _fcc_fpr0
+                STZ     _fcc_fpr0+2
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     #0
+                PHA
+                LDA     #1
+                PHA
+                LDA     15,S   ; fccstk d=12 b=3
+                STA     _fcc_fpr0+2
+                LDA     13,S   ; fccstk d=12 b=1
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     13,S
+                STA     _fcc_fpr0
+                LDA     15,S
+                STA     _fcc_fpr0+2
+                PHK
+                PEA     _specops_L685-1
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                PHA
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                DEC
+                PHA
+                RTL
+_specops_L685
+                TAY
+                TSC
+                CLC
+                ADC     #16
+                TCS
+                TYA
+                CMP     #0
                 BNE     *+5
                 BRL     _specops_L684
-                LDA     #146
+                LDA     #149
                 TAY
                 TSC
                 CLC
@@ -34585,24 +33090,7 @@ _specops_L682
                 TYA
                 RTL
 _specops_L684
-                LDA     _specops_cd_last_idx
-                TAX
-                TXA
-                CMP     #7
-                BNE     *+5
-                BRL     _specops_L685
-                LDA     #147
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L685
-                LDA     #4
+                LDA     #1
                 STA     _specops_cd_pollmask
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -34641,7 +33129,7 @@ _specops_L685
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
-                LDA     #2
+                LDA     #1
                 PHA
                 LDA     15,S   ; fccstk d=12 b=3
                 STA     _fcc_fpr0+2
@@ -34677,7 +33165,7 @@ _specops_L687
                 CMP     #1
                 BNE     *+5
                 BRL     _specops_L686
-                LDA     #148
+                LDA     #150
                 TAY
                 TSC
                 CLC
@@ -34725,7 +33213,7 @@ _specops_L686
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
-                LDA     #1
+                LDA     #2
                 PHA
                 LDA     15,S   ; fccstk d=12 b=3
                 STA     _fcc_fpr0+2
@@ -34756,181 +33244,9 @@ _specops_L689
                 ADC     #16
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _specops_L688
-                LDA     #149
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L688
-                LDA     #1
-                STA     _specops_cd_pollmask
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDY     #22
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #44
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #46
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr0
-                STZ     _fcc_fpr0+2
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                PHA
-                LDA     #1
-                PHA
-                LDA     15,S   ; fccstk d=12 b=3
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=12 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     13,S
-                STA     _fcc_fpr0
-                LDA     15,S
-                STA     _fcc_fpr0+2
-                PHK
-                PEA     _specops_L691-1
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                PHA
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                DEC
-                PHA
-                RTL
-_specops_L691
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                TAX
-                TXA
-                CMP     #1
-                BNE     *+5
-                BRL     _specops_L690
-                LDA     #150
-                TAY
-                TSC
-                CLC
-                ADC     #main_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_specops_L690
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDY     #22
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #24
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #44
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #46
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                STA     _fcc_fpr0
-                STZ     _fcc_fpr0+2
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     #0
-                PHA
-                LDA     #2
-                PHA
-                LDA     15,S   ; fccstk d=12 b=3
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=12 b=1
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     13,S
-                STA     _fcc_fpr0
-                LDA     15,S
-                STA     _fcc_fpr0+2
-                PHK
-                PEA     _specops_L693-1
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                PHA
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                DEC
-                PHA
-                RTL
-_specops_L693
-                TAY
-                TSC
-                CLC
-                ADC     #16
-                TCS
-                TYA
-                TAX
-                TXA
-                CMP     #0
-                BNE     *+5
-                BRL     _specops_L692
                 LDA     #151
                 TAY
                 TSC
@@ -34941,7 +33257,7 @@ _specops_L693
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L692
+_specops_L688
                 LDA     #1
                 TAX
                 TXA
@@ -34997,7 +33313,7 @@ _specops_L692
                 LDA     15,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L695-1
+                PEA     _specops_L691-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35008,18 +33324,16 @@ _specops_L692
                 DEC
                 PHA
                 RTL
-_specops_L695
+_specops_L691
                 TAY
                 TSC
                 CLC
                 ADC     #16
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L694
+                BRL     _specops_L690
                 LDA     #152
                 TAY
                 TSC
@@ -35030,7 +33344,7 @@ _specops_L695
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L694
+_specops_L690
                 LDA     #0
                 STA     _specops_cd_pollmask
                 LDA     _specops_npanic
@@ -35044,7 +33358,7 @@ _specops_L694
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L696
+                BRL     _specops_L692
                 LDA     #153
                 TAY
                 TSC
@@ -35055,7 +33369,7 @@ _specops_L694
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L696
+_specops_L692
                 LDA     #0
                 STA     _specops_cd_reads
                 LDA     #0
@@ -35187,7 +33501,7 @@ _specops_L696
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L698-1
+                PEA     _specops_L694-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35198,18 +33512,16 @@ _specops_L696
                 DEC
                 PHA
                 RTL
-_specops_L698
+_specops_L694
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L697
+                BRL     _specops_L693
                 LDA     #131
                 TAY
                 TSC
@@ -35220,13 +33532,13 @@ _specops_L698
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L697
+_specops_L693
                 LDA     _specops_cd_dreads
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L699
+                BRL     _specops_L695
                 LDA     #132
                 TAY
                 TSC
@@ -35237,13 +33549,11 @@ _specops_L697
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L699
+_specops_L695
                 LDA     _specops_cd_reads
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L700
+                BRL     _specops_L696
                 LDA     #133
                 TAY
                 TSC
@@ -35254,7 +33564,7 @@ _specops_L699
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L700
+_specops_L696
                 PHA
                 SEP     #$20
                 MX      %10
@@ -35376,7 +33686,7 @@ _specops_L700
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L702-1
+                PEA     _specops_L698-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35387,18 +33697,16 @@ _specops_L700
                 DEC
                 PHA
                 RTL
-_specops_L702
+_specops_L698
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L701
+                BRL     _specops_L697
                 LDA     #134
                 TAY
                 TSC
@@ -35409,13 +33717,13 @@ _specops_L702
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L701
+_specops_L697
                 LDA     _specops_cd_dwrites
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L703
+                BRL     _specops_L699
                 LDA     #135
                 TAY
                 TSC
@@ -35426,13 +33734,11 @@ _specops_L701
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L703
+_specops_L699
                 LDA     _specops_cd_writes
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L704
+                BRL     _specops_L700
                 LDA     #136
                 TAY
                 TSC
@@ -35443,7 +33749,7 @@ _specops_L703
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L704
+_specops_L700
                 LDA     #0
                 STA     _specops_cd_reads
                 LDA     #0
@@ -35575,7 +33881,7 @@ _specops_L704
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L706-1
+                PEA     _specops_L702-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35586,7 +33892,7 @@ _specops_L704
                 DEC
                 PHA
                 RTL
-_specops_L706
+_specops_L702
                 TAY
                 TSC
                 CLC
@@ -35597,7 +33903,7 @@ _specops_L706
                 TXA
                 CMP     #19
                 BNE     *+5
-                BRL     _specops_L705
+                BRL     _specops_L701
                 LDA     #137
                 TAY
                 TSC
@@ -35608,13 +33914,11 @@ _specops_L706
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L705
+_specops_L701
                 LDA     _specops_cd_reads
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L707
+                BRL     _specops_L703
                 LDA     #138
                 TAY
                 TSC
@@ -35625,7 +33929,7 @@ _specops_L705
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L707
+_specops_L703
                 LDA     #256
                 STA     _specops_cd_dstatus
                 LDA     3,S   ; fccstk d=0 b=3
@@ -35718,7 +34022,7 @@ _specops_L707
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L709-1
+                PEA     _specops_L705-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35729,18 +34033,16 @@ _specops_L707
                 DEC
                 PHA
                 RTL
-_specops_L709
+_specops_L705
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L708
+                BRL     _specops_L704
                 LDA     #79
                 TAY
                 TSC
@@ -35751,7 +34053,7 @@ _specops_L709
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L708
+_specops_L704
                 LDA     #1
                 STA     33,S   ; fccstk d=0 b=33
                 LDA     3,S   ; fccstk d=0 b=3
@@ -35814,7 +34116,7 @@ _specops_L708
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L711-1
+                PEA     _specops_L707-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35825,18 +34127,16 @@ _specops_L708
                 DEC
                 PHA
                 RTL
-_specops_L711
+_specops_L707
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L710
+                BRL     _specops_L706
                 LDA     #80
                 TAY
                 TSC
@@ -35847,7 +34147,7 @@ _specops_L711
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L710
+_specops_L706
                 LDA     _specops_npanic
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -35859,7 +34159,7 @@ _specops_L710
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L712
+                BRL     _specops_L708
                 LDA     #81
                 TAY
                 TSC
@@ -35870,7 +34170,7 @@ _specops_L710
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L712
+_specops_L708
                 LDA     #0
                 STA     _specops_npanic
                 LDA     #0
@@ -35956,7 +34256,7 @@ _specops_L712
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L714-1
+                PEA     _specops_L710-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -35967,18 +34267,16 @@ _specops_L712
                 DEC
                 PHA
                 RTL
-_specops_L714
+_specops_L710
                 TAY
                 TSC
                 CLC
                 ADC     #20
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L713
+                BRL     _specops_L709
                 LDA     #74
                 TAY
                 TSC
@@ -35989,7 +34287,7 @@ _specops_L714
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L713
+_specops_L709
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_long_hi
                 LDA     13,S   ; fccstk d=0 b=13
@@ -36011,7 +34309,7 @@ _specops_L713
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L715
+                BRL     _specops_L711
                 LDA     #75
                 TAY
                 TSC
@@ -36022,7 +34320,7 @@ _specops_L713
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L715
+_specops_L711
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -36034,7 +34332,7 @@ _specops_L715
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L717
+                BRL     _specops_L713
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -36042,15 +34340,15 @@ _specops_L715
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L717
+                BRL     _specops_L713
                 LDA     #0
-                BRL     _specops_L718
-_specops_L717
+                BRL     _specops_L714
+_specops_L713
                 LDA     #1
-_specops_L718
+_specops_L714
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L716
+                BRL     _specops_L712
                 LDA     #76
                 TAY
                 TSC
@@ -36061,7 +34359,7 @@ _specops_L718
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L716
+_specops_L712
                 LDA     #_specops_fake_disk
                 PHA
                 LDA     #9
@@ -36117,11 +34415,9 @@ _specops_L716
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L719
+                BRL     _specops_L715
                 LDA     #77
                 TAY
                 TSC
@@ -36132,7 +34428,7 @@ _specops_L716
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L719
+_specops_L715
                 LDA     _specops_fake_reads
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -36143,7 +34439,7 @@ _specops_L719
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L720
+                BRL     _specops_L716
                 LDA     #78
                 TAY
                 TSC
@@ -36154,7 +34450,7 @@ _specops_L719
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L720
+_specops_L716
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36184,7 +34480,7 @@ _specops_L720
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L721
+                BRL     _specops_L717
                 LDA     #79
                 TAY
                 TSC
@@ -36195,7 +34491,7 @@ _specops_L720
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L721
+_specops_L717
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36206,7 +34502,7 @@ _specops_L721
                 TXA
                 CMP     #513
                 BNE     *+5
-                BRL     _specops_L722
+                BRL     _specops_L718
                 LDA     #80
                 TAY
                 TSC
@@ -36217,7 +34513,7 @@ _specops_L721
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L722
+_specops_L718
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36241,7 +34537,7 @@ _specops_L722
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L724
+                BRL     _specops_L720
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -36249,15 +34545,15 @@ _specops_L722
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L724
+                BRL     _specops_L720
                 LDA     #0
-                BRL     _specops_L725
-_specops_L724
+                BRL     _specops_L721
+_specops_L720
                 LDA     #1
-_specops_L725
+_specops_L721
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L723
+                BRL     _specops_L719
                 LDA     #81
                 TAY
                 TSC
@@ -36268,7 +34564,7 @@ _specops_L725
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L723
+_specops_L719
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36327,11 +34623,9 @@ _specops_L723
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L726
+                BRL     _specops_L722
                 LDA     #83
                 TAY
                 TSC
@@ -36342,7 +34636,7 @@ _specops_L723
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L726
+_specops_L722
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -36384,7 +34678,7 @@ _specops_L726
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _specops_L728
+                BRL     _specops_L724
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -36392,15 +34686,15 @@ _specops_L726
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _specops_L728
+                BRL     _specops_L724
                 LDA     #1
-                BRL     _specops_L729
-_specops_L728
+                BRL     _specops_L725
+_specops_L724
                 LDA     #0
-_specops_L729
+_specops_L725
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L727
+                BRL     _specops_L723
                 LDA     #84
                 TAY
                 TSC
@@ -36411,7 +34705,7 @@ _specops_L729
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L727
+_specops_L723
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36422,7 +34716,7 @@ _specops_L727
                 TXA
                 CMP     #65535
                 BNE     *+5
-                BRL     _specops_L730
+                BRL     _specops_L726
                 LDA     #85
                 TAY
                 TSC
@@ -36433,7 +34727,7 @@ _specops_L727
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L730
+_specops_L726
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36477,11 +34771,9 @@ _specops_L730
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L731
+                BRL     _specops_L727
                 LDA     #82
                 TAY
                 TSC
@@ -36492,7 +34784,7 @@ _specops_L730
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L731
+_specops_L727
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36535,11 +34827,9 @@ _specops_L731
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L732
+                BRL     _specops_L728
                 LDA     #86
                 TAY
                 TSC
@@ -36550,7 +34840,7 @@ _specops_L731
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L732
+_specops_L728
                 LDA     _specops_fake_writes
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -36561,7 +34851,7 @@ _specops_L732
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L733
+                BRL     _specops_L729
                 LDA     #87
                 TAY
                 TSC
@@ -36572,7 +34862,7 @@ _specops_L732
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L733
+_specops_L729
                 LDA     #10
                 TAX
                 LDA:    _specops_fake_disk,X
@@ -36584,7 +34874,7 @@ _specops_L733
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L734
+                BRL     _specops_L730
                 LDA     #88
                 TAY
                 TSC
@@ -36595,7 +34885,7 @@ _specops_L733
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L734
+_specops_L730
                 LDA     #_specops_fake_disk
                 PHA
                 LDA     #11
@@ -36649,11 +34939,9 @@ _specops_L734
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L735
+                BRL     _specops_L731
                 LDA     #115
                 TAY
                 TSC
@@ -36664,7 +34952,7 @@ _specops_L734
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L735
+_specops_L731
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -36696,11 +34984,9 @@ _specops_L735
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L736
+                BRL     _specops_L732
                 LDA     #116
                 TAY
                 TSC
@@ -36711,7 +34997,7 @@ _specops_L735
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L736
+_specops_L732
                 LDA     #0
                 STA     _specops_blk_closes
                 LDA     #$FFFF
@@ -36764,7 +35050,7 @@ _specops_L736
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L738-1
+                PEA     _specops_L734-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -36775,18 +35061,16 @@ _specops_L736
                 DEC
                 PHA
                 RTL
-_specops_L738
+_specops_L734
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L737
+                BRL     _specops_L733
                 LDA     #117
                 TAY
                 TSC
@@ -36797,7 +35081,7 @@ _specops_L738
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L737
+_specops_L733
                 LDA     #11
                 JSR     _fcc_long_from_int
                 TAY
@@ -36820,7 +35104,7 @@ _specops_L737
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L739
+                BRL     _specops_L735
                 LDA     #89
                 TAY
                 TSC
@@ -36831,13 +35115,13 @@ _specops_L737
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L739
+_specops_L735
                 LDA     _specops_blk_closes
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _specops_L740
+                BRL     _specops_L736
                 LDA     #160
                 TAY
                 TSC
@@ -36848,7 +35132,7 @@ _specops_L739
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L740
+_specops_L736
                 LDA     _specops_blk_last
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -36873,7 +35157,7 @@ _specops_L740
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L741
+                BRL     _specops_L737
                 LDA     #161
                 TAY
                 TSC
@@ -36884,7 +35168,7 @@ _specops_L740
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L741
+_specops_L737
                 LDA     #_specops_fake_disk
                 PHA
                 LDA     #11
@@ -36940,11 +35224,9 @@ _specops_L741
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L742
+                BRL     _specops_L738
                 LDA     #90
                 TAY
                 TSC
@@ -36955,7 +35237,7 @@ _specops_L741
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L742
+_specops_L738
                 LDA     _specops_fake_reads
                 TAX
                 LDA     17,S   ; fccstk d=0 b=17
@@ -36966,7 +35248,7 @@ _specops_L742
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L743
+                BRL     _specops_L739
                 LDA     #91
                 TAY
                 TSC
@@ -36977,7 +35259,7 @@ _specops_L742
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L743
+_specops_L739
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -37007,7 +35289,7 @@ _specops_L743
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L744
+                BRL     _specops_L740
                 LDA     #92
                 TAY
                 TSC
@@ -37018,7 +35300,7 @@ _specops_L743
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L744
+_specops_L740
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -37089,7 +35371,7 @@ _specops_L744
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L746-1
+                PEA     _specops_L742-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -37100,18 +35382,16 @@ _specops_L744
                 DEC
                 PHA
                 RTL
-_specops_L746
+_specops_L742
                 TAY
                 TSC
                 CLC
                 ADC     #20
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L745
+                BRL     _specops_L741
                 LDA     #162
                 TAY
                 TSC
@@ -37122,7 +35402,7 @@ _specops_L746
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L745
+_specops_L741
                 LDA     #25
                 STA     _specops_blk_ioctlret
                 LDA     3,S   ; fccstk d=0 b=3
@@ -37180,7 +35460,7 @@ _specops_L745
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L748-1
+                PEA     _specops_L744-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -37191,7 +35471,7 @@ _specops_L745
                 DEC
                 PHA
                 RTL
-_specops_L748
+_specops_L744
                 TAY
                 TSC
                 CLC
@@ -37202,7 +35482,7 @@ _specops_L748
                 TXA
                 CMP     #25
                 BNE     *+5
-                BRL     _specops_L747
+                BRL     _specops_L743
                 LDA     #163
                 TAY
                 TSC
@@ -37213,13 +35493,13 @@ _specops_L748
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L747
+_specops_L743
                 LDA     _specops_blk_ioctls
                 TAX
                 TXA
                 CMP     #2
                 BNE     *+5
-                BRL     _specops_L749
+                BRL     _specops_L745
                 LDA     #164
                 TAY
                 TSC
@@ -37230,7 +35510,7 @@ _specops_L747
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L749
+_specops_L745
                 LDA     _specops_blk_last
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -37255,7 +35535,7 @@ _specops_L749
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L750
+                BRL     _specops_L746
                 LDA     #165
                 TAY
                 TSC
@@ -37266,7 +35546,7 @@ _specops_L749
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L750
+_specops_L746
                 FGX2_FARCALL _specops_reset
                 SEP     #$20
                 MX      %10
@@ -37287,11 +35567,9 @@ _specops_L750
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L751
+                BRL     _specops_L747
                 LDA     #93
                 TAY
                 TSC
@@ -37302,7 +35580,7 @@ _specops_L750
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L751
+_specops_L747
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -37322,11 +35600,9 @@ _specops_L751
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L752
+                BRL     _specops_L748
                 LDA     #95
                 TAY
                 TSC
@@ -37337,7 +35613,7 @@ _specops_L751
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L752
+_specops_L748
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -37346,11 +35622,9 @@ _specops_L752
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L753
+                BRL     _specops_L749
                 LDA     #96
                 TAY
                 TSC
@@ -37361,7 +35635,7 @@ _specops_L752
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L753
+_specops_L749
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -37370,11 +35644,9 @@ _specops_L753
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L754
+                BRL     _specops_L750
                 LDA     #99
                 TAY
                 TSC
@@ -37385,7 +35657,7 @@ _specops_L753
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L754
+_specops_L750
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -37403,11 +35675,11 @@ _specops_L754
                 TXA
                 SEC
                 SBC     #2
-                BVC     _specops_L756
+                BVC     _specops_L752
                 EOR     #$8000
-_specops_L756
+_specops_L752
                 BMI     *+5
-                BRL     _specops_L755
+                BRL     _specops_L751
                 LDA     #97
                 TAY
                 TSC
@@ -37418,7 +35690,7 @@ _specops_L756
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L755
+_specops_L751
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -37450,7 +35722,7 @@ _specops_L755
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _specops_L757
+                BRL     _specops_L753
                 LDA     #98
                 TAY
                 TSC
@@ -37461,7 +35733,7 @@ _specops_L755
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L757
+_specops_L753
                 LDA     #_specops_fake_disk
                 PHA
                 LDA     #12
@@ -37515,11 +35787,9 @@ _specops_L757
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L758
+                BRL     _specops_L754
                 LDA     #100
                 TAY
                 TSC
@@ -37530,7 +35800,7 @@ _specops_L757
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L758
+_specops_L754
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -37562,11 +35832,9 @@ _specops_L758
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _specops_L759
+                BRL     _specops_L755
                 LDA     #101
                 TAY
                 TSC
@@ -37577,7 +35845,7 @@ _specops_L758
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L759
+_specops_L755
                 LDA     #0
                 STA     _specops_blk_closes
                 LDA     3,S   ; fccstk d=0 b=3
@@ -37628,7 +35896,7 @@ _specops_L759
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L761-1
+                PEA     _specops_L757-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -37639,18 +35907,16 @@ _specops_L759
                 DEC
                 PHA
                 RTL
-_specops_L761
+_specops_L757
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L760
+                BRL     _specops_L756
                 LDA     #102
                 TAY
                 TSC
@@ -37661,7 +35927,7 @@ _specops_L761
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L760
+_specops_L756
                 LDA     #12
                 JSR     _fcc_long_from_int
                 TAY
@@ -37684,7 +35950,7 @@ _specops_L760
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L762
+                BRL     _specops_L758
                 LDA     #103
                 TAY
                 TSC
@@ -37695,13 +35961,11 @@ _specops_L760
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L762
+_specops_L758
                 LDA     _specops_blk_closes
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L763
+                BRL     _specops_L759
                 LDA     #166
                 TAY
                 TSC
@@ -37712,7 +35976,7 @@ _specops_L762
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L763
+_specops_L759
                 FGX2_FARCALL _specops_reset
                 SEP     #$20
                 MX      %10
@@ -37733,11 +35997,9 @@ _specops_L763
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L764
+                BRL     _specops_L760
                 LDA     #104
                 TAY
                 TSC
@@ -37748,7 +36010,7 @@ _specops_L763
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L764
+_specops_L760
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -37830,7 +36092,7 @@ _specops_L764
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L766-1
+                PEA     _specops_L762-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -37841,7 +36103,7 @@ _specops_L764
                 DEC
                 PHA
                 RTL
-_specops_L766
+_specops_L762
                 TAY
                 TSC
                 CLC
@@ -37852,7 +36114,7 @@ _specops_L766
                 TXA
                 CMP     #6
                 BNE     *+5
-                BRL     _specops_L765
+                BRL     _specops_L761
                 LDA     #105
                 TAY
                 TSC
@@ -37863,7 +36125,7 @@ _specops_L766
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L765
+_specops_L761
                 LDA     #0
                 STA     mnt_a+20
                 TAY
@@ -37919,7 +36181,7 @@ _specops_L765
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L768-1
+                PEA     _specops_L764-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -37930,18 +36192,16 @@ _specops_L765
                 DEC
                 PHA
                 RTL
-_specops_L768
+_specops_L764
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L767
+                BRL     _specops_L763
                 LDA     #106
                 TAY
                 TSC
@@ -37952,7 +36212,7 @@ _specops_L768
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L767
+_specops_L763
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -38062,7 +36322,7 @@ _specops_L767
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L770-1
+                PEA     _specops_L766-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -38073,7 +36333,7 @@ _specops_L767
                 DEC
                 PHA
                 RTL
-_specops_L770
+_specops_L766
                 TAY
                 TSC
                 CLC
@@ -38084,7 +36344,7 @@ _specops_L770
                 TXA
                 CMP     #16
                 BNE     *+5
-                BRL     _specops_L769
+                BRL     _specops_L765
                 LDA     #107
                 TAY
                 TSC
@@ -38095,7 +36355,7 @@ _specops_L770
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L769
+_specops_L765
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -38177,11 +36437,9 @@ _specops_L769
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L771
+                BRL     _specops_L767
                 LDA     #108
                 TAY
                 TSC
@@ -38192,7 +36450,7 @@ _specops_L769
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L771
+_specops_L767
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -38302,7 +36560,7 @@ _specops_L771
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L773-1
+                PEA     _specops_L769-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -38313,7 +36571,7 @@ _specops_L771
                 DEC
                 PHA
                 RTL
-_specops_L773
+_specops_L769
                 TAY
                 TSC
                 CLC
@@ -38324,7 +36582,7 @@ _specops_L773
                 TXA
                 CMP     #16
                 BNE     *+5
-                BRL     _specops_L772
+                BRL     _specops_L768
                 LDA     #110
                 TAY
                 TSC
@@ -38335,7 +36593,7 @@ _specops_L773
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L772
+_specops_L768
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -38446,7 +36704,7 @@ _specops_L772
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L775-1
+                PEA     _specops_L771-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -38457,18 +36715,16 @@ _specops_L772
                 DEC
                 PHA
                 RTL
-_specops_L775
+_specops_L771
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L774
+                BRL     _specops_L770
                 LDA     #111
                 TAY
                 TSC
@@ -38479,7 +36735,7 @@ _specops_L775
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L774
+_specops_L770
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -38547,7 +36803,7 @@ _specops_L774
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _specops_L777-1
+                PEA     _specops_L773-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -38558,7 +36814,7 @@ _specops_L774
                 DEC
                 PHA
                 RTL
-_specops_L777
+_specops_L773
                 TAY
                 TSC
                 CLC
@@ -38569,7 +36825,7 @@ _specops_L777
                 TXA
                 CMP     #6
                 BNE     *+5
-                BRL     _specops_L776
+                BRL     _specops_L772
                 LDA     #112
                 TAY
                 TSC
@@ -38580,13 +36836,11 @@ _specops_L777
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L776
+_specops_L772
                 LDA     _specops_npanic
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L778
+                BRL     _specops_L774
                 LDA     #113
                 TAY
                 TSC
@@ -38597,13 +36851,11 @@ _specops_L776
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L778
+_specops_L774
                 LDA     _specops_nslept
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _specops_L779
+                BRL     _specops_L775
                 LDA     #114
                 TAY
                 TSC
@@ -38614,7 +36866,7 @@ _specops_L778
                 STA     _fcc_fb
                 TYA
                 RTL
-_specops_L779
+_specops_L775
                 LDA     #42
                 TAY
                 TSC

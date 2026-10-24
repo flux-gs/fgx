@@ -170,8 +170,6 @@ _sprintf9_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _sprintf9_L5

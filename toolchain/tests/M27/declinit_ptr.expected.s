@@ -491,24 +491,12 @@ _declinit_ptr_L19
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_fpr0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 DEC
                 STA     [_fcc_fpr0]
@@ -544,10 +532,6 @@ _declinit_ptr_L21
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     _fcc_fpr0
                 STA     15,S   ; fccstk d=0 b=15
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0+2
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 INC
@@ -556,10 +540,6 @@ _declinit_ptr_L21
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0+2
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 DEC
@@ -568,10 +548,6 @@ _declinit_ptr_L21
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0+2
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 DEC
@@ -614,10 +590,6 @@ _declinit_ptr_L22
                 STA     21,S   ; fccstk d=0 b=21
                 LDA     _fcc_fpr0
                 STA     19,S   ; fccstk d=0 b=19
-                LDA     21,S   ; fccstk d=0 b=21
-                STA     _fcc_fpr0+2
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]

@@ -140,8 +140,6 @@ _paren_postincdec_value_L9
                 LDA     #1
 _paren_postincdec_value_L10
                 STA     _fcc_img0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L12
@@ -822,8 +820,6 @@ _paren_postincdec_value_L36
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L44
@@ -908,8 +904,6 @@ _paren_postincdec_value_L41
                 MX      %00
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L49
@@ -1136,10 +1130,6 @@ _paren_postincdec_value_L51
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0+2
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0
                 LDA     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo

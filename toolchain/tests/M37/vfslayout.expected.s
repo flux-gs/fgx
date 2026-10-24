@@ -126,8 +126,6 @@ _vfslayout_L2
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L4
@@ -644,8 +642,6 @@ _vfslayout_L17
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L18
@@ -1447,8 +1443,6 @@ _vfslayout_L41
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L42
@@ -1646,8 +1640,6 @@ _vfslayout_L48
                 STA     _fcc_tmp_b
                 TXA
                 AND     _fcc_tmp_b
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L49
@@ -1688,8 +1680,6 @@ _vfslayout_L50
                 STA     _fcc_tmp_b
                 TXA
                 AND     _fcc_tmp_b
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L51
@@ -1818,8 +1808,6 @@ _vfslayout_L57
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L58
@@ -2831,8 +2819,6 @@ _vfslayout_L87
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L88
@@ -3094,8 +3080,6 @@ _vfslayout_L94
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _vfslayout_L95

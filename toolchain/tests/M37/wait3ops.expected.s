@@ -295,8 +295,6 @@ _wait3ops_L10
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L12
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _wait3ops_L13
@@ -334,8 +332,6 @@ _wait3ops_L17
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _wait3ops_L18

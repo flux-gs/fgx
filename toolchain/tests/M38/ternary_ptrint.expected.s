@@ -283,10 +283,6 @@ _ternary_ptrint_L5
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
@@ -304,8 +300,6 @@ _ternary_ptrint_L5
                 RTL
 _ternary_ptrint_L6
                 LDA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _ternary_ptrint_L7
@@ -351,10 +345,6 @@ _ternary_ptrint_L9
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
@@ -434,8 +424,6 @@ _ternary_ptrint_L13
                 PLA
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _ternary_ptrint_L14
@@ -523,8 +511,6 @@ _ternary_ptrint_L19
                 PLA
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _ternary_ptrint_L20
@@ -612,8 +598,6 @@ _ternary_ptrint_L25
                 PLA
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _ternary_ptrint_L26
@@ -667,10 +651,6 @@ _ternary_ptrint_L27
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0

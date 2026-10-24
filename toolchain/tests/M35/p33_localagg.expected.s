@@ -52,28 +52,7 @@ mk_stkok        TCS
                 LDA     10+mk_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+mk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+mk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+mk_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+mk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+mk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+mk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+mk_FRAMESIZE/256
                 TSC
                 CLC
@@ -136,28 +115,6 @@ psum_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                DO      10+psum_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+psum_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+psum_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+psum_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+psum_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+psum_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -395,8 +352,6 @@ _p33_localagg_L6
                 STA     _fcc_ptr
                 PLA
                 LDA     [_fcc_ptr]
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _p33_localagg_L12

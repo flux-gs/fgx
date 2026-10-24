@@ -34,16 +34,10 @@ bump_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 STA     gr
                 LDA     _fcc_fpr0+2
                 STA     gr+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -1724,10 +1718,6 @@ _ptr_stride_struct_L22
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
@@ -1793,10 +1783,6 @@ _ptr_stride_struct_L23
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CLC
                 ADC     #4
@@ -1856,10 +1842,6 @@ _ptr_stride_struct_L24
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
@@ -2265,10 +2247,6 @@ _ptr_stride_struct_L30
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     _fcc_fpr0
                 STA     17,S   ; fccstk d=0 b=17
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
@@ -2631,10 +2609,6 @@ _ptr_stride_struct_L35
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     _fcc_fpr0
                 STA     23,S   ; fccstk d=0 b=23
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0+2
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     23,S   ; fccstk d=2 b=21
@@ -4490,10 +4464,7 @@ _ptr_stride_struct_L56
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4563,10 +4534,6 @@ _ptr_stride_struct_L57
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4613,10 +4580,7 @@ _ptr_stride_struct_L60
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4687,10 +4651,6 @@ _ptr_stride_struct_L61
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4756,10 +4716,7 @@ _ptr_stride_struct_L64
                 STA     39,S   ; fccstk d=0 b=39
                 LDA     _fcc_fpr0
                 STA     37,S   ; fccstk d=0 b=37
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0+2
-                LDA     37,S   ; fccstk d=0 b=37
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4827,10 +4784,6 @@ _ptr_stride_struct_L65
                 STA     39,S   ; fccstk d=0 b=39
                 LDA     _fcc_fpr0
                 STA     37,S   ; fccstk d=0 b=37
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0+2
-                LDA     37,S   ; fccstk d=0 b=37
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -4911,10 +4864,7 @@ _ptr_stride_struct_L68
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4997,10 +4947,6 @@ _ptr_stride_struct_L69
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -5055,10 +5001,7 @@ _ptr_stride_struct_L72
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5122,10 +5065,6 @@ _ptr_stride_struct_L73
                 STA     35,S   ; fccstk d=0 b=35
                 LDA     _fcc_fpr0
                 STA     33,S   ; fccstk d=0 b=33
-                LDA     35,S   ; fccstk d=0 b=35
-                STA     _fcc_fpr0+2
-                LDA     33,S   ; fccstk d=0 b=33
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -5195,10 +5134,7 @@ _ptr_stride_struct_L76
                 STA     45,S   ; fccstk d=0 b=45
                 LDA     _fcc_fpr0
                 STA     43,S   ; fccstk d=0 b=43
-                LDA     45,S   ; fccstk d=0 b=45
-                STA     _fcc_fpr0+2
-                LDA     43,S   ; fccstk d=0 b=43
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5268,10 +5204,6 @@ _ptr_stride_struct_L77
                 STA     45,S   ; fccstk d=0 b=45
                 LDA     _fcc_fpr0
                 STA     43,S   ; fccstk d=0 b=43
-                LDA     45,S   ; fccstk d=0 b=45
-                STA     _fcc_fpr0+2
-                LDA     43,S   ; fccstk d=0 b=43
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -5360,10 +5292,7 @@ _ptr_stride_struct_L80
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5439,10 +5368,6 @@ _ptr_stride_struct_L81
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -5511,10 +5436,7 @@ _ptr_stride_struct_L84
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -5592,10 +5514,6 @@ _ptr_stride_struct_L85
                 STA     51,S   ; fccstk d=0 b=51
                 LDA     _fcc_fpr0
                 STA     49,S   ; fccstk d=0 b=49
-                LDA     51,S   ; fccstk d=0 b=51
-                STA     _fcc_fpr0+2
-                LDA     49,S   ; fccstk d=0 b=49
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA

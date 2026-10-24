@@ -48,8 +48,6 @@ main_stkok        TCS
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L3
@@ -65,8 +63,6 @@ _static_ptr_disp_L4
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L1
@@ -108,8 +104,6 @@ _static_ptr_disp_L0
                 ASL
                 TAX
                 LDA:    iarr,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L10
@@ -125,8 +119,6 @@ _static_ptr_disp_L11
                 ASL
                 TAX
                 LDA:    iarr,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _static_ptr_disp_L8

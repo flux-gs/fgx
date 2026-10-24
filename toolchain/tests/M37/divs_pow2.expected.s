@@ -120,8 +120,6 @@ _divs_pow2_L5
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L4
@@ -157,8 +155,6 @@ _divs_pow2_L7
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L6
@@ -264,8 +260,6 @@ _divs_pow2_L13
                 ROR
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L12
@@ -374,8 +368,6 @@ _divs_pow2_L18
 _divs_pow2_L21
                 CMP     #$8000
                 ROR
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _divs_pow2_L20

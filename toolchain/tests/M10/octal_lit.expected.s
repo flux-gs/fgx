@@ -88,8 +88,6 @@ _octal_lit_L2
                 RTL
 _octal_lit_L3
                 LDA     #0
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _octal_lit_L4

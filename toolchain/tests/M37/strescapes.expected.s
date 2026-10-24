@@ -264,8 +264,6 @@ _strescapes_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _strescapes_L7
@@ -468,8 +466,6 @@ _strescapes_L13
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _strescapes_L14

@@ -177,10 +177,6 @@ main_stkok        TCS
                 INC
                 LDY     #16
                 STA     [_fcc_fpr0],Y
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 PHA

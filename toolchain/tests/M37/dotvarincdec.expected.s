@@ -700,8 +700,6 @@ _dotvarincdec_L53
                 BNE     *+5
                 BRL     _dotvarincdec_L50
                 LDA     clocks+4
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _dotvarincdec_L50

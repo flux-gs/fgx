@@ -521,8 +521,6 @@ _addr2d_L10
                 ASL
                 TAX
                 LDA:    i0,X
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _addr2d_L7

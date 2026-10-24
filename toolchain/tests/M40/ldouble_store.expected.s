@@ -2953,8 +2953,6 @@ _ldouble_store_L92
                 BEQ     *+5
                 BRL     _ldouble_store_L89
                 LDA     81,S   ; fccstk d=0 b=81
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_store_L89

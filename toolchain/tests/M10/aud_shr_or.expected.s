@@ -136,8 +136,6 @@ _aud_shr_or_L3
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L1
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _aud_shr_or_L4

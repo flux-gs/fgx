@@ -97,10 +97,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -116,10 +112,6 @@ main_stkok        TCS
                 STA     27,S   ; fccstk d=0 b=27
                 LDA     _fcc_fpr0
                 STA     25,S   ; fccstk d=0 b=25
-                LDA     27,S   ; fccstk d=0 b=27
-                STA     _fcc_fpr0+2
-                LDA     25,S   ; fccstk d=0 b=25
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAY

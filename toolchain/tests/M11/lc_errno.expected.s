@@ -105,8 +105,6 @@ _lc_errno_L1
                 TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L2
@@ -164,8 +162,6 @@ _lc_errno_L3
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L4
@@ -206,8 +202,6 @@ _lc_errno_L4
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L5
@@ -248,8 +242,6 @@ _lc_errno_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L6

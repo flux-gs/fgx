@@ -54,10 +54,6 @@ main_stkok        TCS
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
-                LDA     17,S   ; fccstk d=2 b=15
-                STA     _fcc_fpr0+2
-                LDA     15,S   ; fccstk d=2 b=13
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b

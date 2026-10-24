@@ -307,10 +307,7 @@ main_stkok        TCS
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                TAX
-                TXA
                 CMP     #0
-_symfold_L2
                 BPL     *+5
                 BRL     _symfold_L0
                 LDA     tab+18
@@ -339,7 +336,7 @@ _symfold_L1
                 TXA
                 CMP     #97
                 BNE     *+5
-                BRL     _symfold_L3
+                BRL     _symfold_L2
                 LDA     #1
                 TAY
                 TSC
@@ -350,16 +347,13 @@ _symfold_L1
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L3
+_symfold_L2
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                TAX
-                TXA
                 CMP     #0
-_symfold_L6
                 BPL     *+5
-                BRL     _symfold_L4
+                BRL     _symfold_L3
                 LDA     tab+18
                 STA     _fcc_tmp_b
                 CLC
@@ -377,16 +371,16 @@ _symfold_L6
                 MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                BRL     _symfold_L5
-_symfold_L4
+                BRL     _symfold_L4
+_symfold_L3
                 LDA     #$FFFF
-_symfold_L5
+_symfold_L4
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #98
                 BNE     *+5
-                BRL     _symfold_L7
+                BRL     _symfold_L5
                 LDA     #2
                 TAY
                 TSC
@@ -397,7 +391,7 @@ _symfold_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L7
+_symfold_L5
                 LDA     #1
                 ASL
                 ASL
@@ -418,7 +412,7 @@ _symfold_L7
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _symfold_L9
+                BRL     _symfold_L7
                 LDA     #1
                 ASL
                 ASL
@@ -460,21 +454,13 @@ _symfold_L7
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _symfold_L11
+                BRL     _symfold_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _symfold_L11
-                LDA     #0
-                BRL     _symfold_L12
-_symfold_L11
-                LDA     #1
-_symfold_L12
-                CMP     #0
                 BEQ     *+5
                 BRL     _symfold_L9
                 LDA     #0
@@ -483,8 +469,16 @@ _symfold_L9
                 LDA     #1
 _symfold_L10
                 CMP     #0
-                BNE     *+5
+                BEQ     *+5
+                BRL     _symfold_L7
+                LDA     #0
                 BRL     _symfold_L8
+_symfold_L7
+                LDA     #1
+_symfold_L8
+                CMP     #0
+                BNE     *+5
+                BRL     _symfold_L6
                 LDA     #3
                 TAY
                 TSC
@@ -495,7 +489,7 @@ _symfold_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L8
+_symfold_L6
                 LDA     tab+16
                 STA     _fcc_tmp_b
                 DEC
@@ -505,7 +499,7 @@ _symfold_L8
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _symfold_L14
+                BRL     _symfold_L12
                 LDA     #1
                 ASL
                 ASL
@@ -522,19 +516,17 @@ _symfold_L8
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _symfold_L14
+                BRL     _symfold_L12
                 LDA     #0
-                BRL     _symfold_L15
-_symfold_L14
+                BRL     _symfold_L13
+_symfold_L12
                 LDA     #1
-_symfold_L15
+_symfold_L13
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L13
+                BRL     _symfold_L11
                 LDA     #4
                 TAY
                 TSC
@@ -545,16 +537,13 @@ _symfold_L15
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L13
+_symfold_L11
                 LDA     tab+16
                 DEC
                 STA     tab+16
-                TAX
-                TXA
                 CMP     #0
-_symfold_L19
                 BPL     *+5
-                BRL     _symfold_L17
+                BRL     _symfold_L15
                 LDA     tab+18
                 STA     _fcc_tmp_b
                 CLC
@@ -572,13 +561,13 @@ _symfold_L19
                 MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                BRL     _symfold_L18
-_symfold_L17
+                BRL     _symfold_L16
+_symfold_L15
                 LDA     #$FFFF
-_symfold_L18
+_symfold_L16
                 CMP     #$FFFF
                 BNE     *+5
-                BRL     _symfold_L16
+                BRL     _symfold_L14
                 LDA     #5
                 TAY
                 TSC
@@ -589,7 +578,7 @@ _symfold_L18
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L16
+_symfold_L14
                 LDA     #2
                 ASL
                 ASL
@@ -625,7 +614,7 @@ _symfold_L16
                 TXA
                 CMP     #121
                 BNE     *+5
-                BRL     _symfold_L20
+                BRL     _symfold_L17
                 LDA     #6
                 TAY
                 TSC
@@ -636,7 +625,7 @@ _symfold_L16
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L20
+_symfold_L17
                 LDA     #255
                 AND     #$00FF
                 SEP     #$20
@@ -653,11 +642,9 @@ _symfold_L20
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L21
+                BRL     _symfold_L18
                 LDA     #7
                 TAY
                 TSC
@@ -668,7 +655,7 @@ _symfold_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L21
+_symfold_L18
                 LDA     #2
                 ASL
                 ASL
@@ -708,7 +695,7 @@ _symfold_L21
                 TXA
                 CMP     #4660
                 BNE     *+5
-                BRL     _symfold_L22
+                BRL     _symfold_L19
                 LDA     #8
                 TAY
                 TSC
@@ -719,7 +706,7 @@ _symfold_L21
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L22
+_symfold_L19
                 LDA     #3
                 PHA
                 PHA
@@ -746,7 +733,7 @@ _symfold_L22
                 TXA
                 CMP     #10
                 BNE     *+5
-                BRL     _symfold_L23
+                BRL     _symfold_L20
                 LDA     #9
                 TAY
                 TSC
@@ -757,7 +744,7 @@ _symfold_L22
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L23
+_symfold_L20
                 LDA     #1
                 ASL
                 ASL
@@ -774,17 +761,14 @@ _symfold_L23
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
-_symfold_L26
                 BMI     *+5
-                BRL     _symfold_L24
+                BRL     _symfold_L21
                 LDA     #2
-                BRL     _symfold_L25
-_symfold_L24
+                BRL     _symfold_L22
+_symfold_L21
                 LDA     #1
-_symfold_L25
+_symfold_L22
                 PHA
                 PHA
                 SEP     #$20
@@ -811,7 +795,7 @@ _symfold_L25
                 TXA
                 CMP     #9
                 BNE     *+5
-                BRL     _symfold_L27
+                BRL     _symfold_L23
                 LDA     #10
                 TAY
                 TSC
@@ -822,7 +806,7 @@ _symfold_L25
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L27
+_symfold_L23
                 LDA     #2
                 STA     1,S   ; fccstk d=0 b=1
                 ASL
@@ -842,11 +826,9 @@ _symfold_L27
                 LDY     #14
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L28
+                BRL     _symfold_L24
                 LDA     #11
                 TAY
                 TSC
@@ -857,12 +839,9 @@ _symfold_L27
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L28
+_symfold_L24
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_symfold_L32
                 PHP
                 PHA
                 SEP     #$20
@@ -877,12 +856,12 @@ _symfold_L32
                 PLA
                 PLP
                 BMI     *+5
-                BRL     _symfold_L30
+                BRL     _symfold_L26
                 LDA     #0
-                BRL     _symfold_L31
-_symfold_L30
+                BRL     _symfold_L27
+_symfold_L26
                 LDA     #1
-_symfold_L31
+_symfold_L27
                 ASL
                 ASL
                 ASL
@@ -897,7 +876,7 @@ _symfold_L31
                 TXA
                 CMP     #7
                 BNE     *+5
-                BRL     _symfold_L29
+                BRL     _symfold_L25
                 LDA     #16
                 TAY
                 TSC
@@ -908,7 +887,7 @@ _symfold_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L29
+_symfold_L25
                 PHA
                 SEP     #$20
                 MX      %10
@@ -965,7 +944,7 @@ _symfold_L29
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L33
+                BRL     _symfold_L28
                 LDA     #12
                 TAY
                 TSC
@@ -976,7 +955,7 @@ _symfold_L29
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L33
+_symfold_L28
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1037,7 +1016,7 @@ _symfold_L33
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L34
+                BRL     _symfold_L29
                 LDA     #13
                 TAY
                 TSC
@@ -1048,7 +1027,7 @@ _symfold_L33
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L34
+_symfold_L29
                 LDA     #lg
                 PHA
                 LDA     #1
@@ -1107,7 +1086,7 @@ _symfold_L34
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L35
+                BRL     _symfold_L30
                 LDA     #14
                 TAY
                 TSC
@@ -1118,7 +1097,7 @@ _symfold_L34
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L35
+_symfold_L30
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1134,10 +1113,7 @@ _symfold_L35
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 PHA
@@ -1161,15 +1137,15 @@ _symfold_L35
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _symfold_L39
+                BEQ     _symfold_L34
                 LDA     #0
-                BRA     _symfold_L40
-_symfold_L39
+                BRA     _symfold_L35
+_symfold_L34
                 LDA     #1
-_symfold_L40
+_symfold_L35
                 CMP     #0
                 BEQ     *+5
-                BRL     _symfold_L37
+                BRL     _symfold_L32
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1198,15 +1174,15 @@ _symfold_L40
                 TYA
                 CMP     #0
                 BEQ     *+5
-                BRL     _symfold_L37
+                BRL     _symfold_L32
                 LDA     #0
-                BRL     _symfold_L38
-_symfold_L37
+                BRL     _symfold_L33
+_symfold_L32
                 LDA     #1
-_symfold_L38
+_symfold_L33
                 CMP     #0
                 BNE     *+5
-                BRL     _symfold_L36
+                BRL     _symfold_L31
                 LDA     #17
                 TAY
                 TSC
@@ -1217,7 +1193,7 @@ _symfold_L38
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L36
+_symfold_L31
                 LDA     #5
                 SEP     #$20
                 MX      %10
@@ -1246,7 +1222,7 @@ _symfold_L36
                 TXA
                 CMP     #5
                 BNE     *+5
-                BRL     _symfold_L41
+                BRL     _symfold_L36
                 LDA     #15
                 TAY
                 TSC
@@ -1257,7 +1233,7 @@ _symfold_L36
                 STA     _fcc_fb
                 TYA
                 RTL
-_symfold_L41
+_symfold_L36
                 LDA     #42
                 TAY
                 TSC

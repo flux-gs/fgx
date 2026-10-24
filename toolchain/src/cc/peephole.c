@@ -900,7 +900,8 @@ ends_block(const Line *L)
  * 23,776 reads in 381 tool and library files, 3,448 in 45 kernel files, each
  * preceded by a store in its own block.  The rules below rely on that, so each
  * unit is CHECKED for it first, and a unit where any read lacks an in-block
- * store gets none of them. */
+ * store gets none of them.  A line of an __asm block carries a sentinel
+ * label, so it starts a block of its own: a read there fails the check. */
 static int
 tmpb_block_local(Line *lines, size_t n)
 {
@@ -911,7 +912,6 @@ tmpb_block_local(Line *lines, size_t n)
         if (L->dead || L->raw[0] == '\0') continue;
         if (L->label[0] != '\0') defined = 0;
         if (L->mnem[0] == '\0') continue;
-        if (strcmp(L->label, "@__asm") == 0) return 0;    /* verbatim asm: unknown */
         if (reads_tmpb(L) && !defined) return 0;
         if (defines_tmpb(L)) defined = 1;
         if (ends_block(L)) defined = 0;
@@ -1010,37 +1010,6 @@ pat_tmpb_const(Line *lines, size_t n)
     }
 }
 
-/* Pattern: a signed comparison with zero.  emit_cmp_branch takes the sign of
- * the difference as N XOR V; once pat_tmpb_const has made the right operand a
- * literal 0 the subtraction cannot overflow, so
- *   SEC ; SBC #0 ; BVC L ; EOR #$8000 ; L
- * leaves exactly the N and Z that `CMP #0' does, and the carry set either
- * way.  L is the comparison's own label and nothing else branches to it. */
-static void
-pat_signed_cmp_zero(Line *lines, size_t n)
-{
-    size_t i;
-    for (i = 0; i < n; i++) {
-        long s, v, e, l;
-        if (lines[i].dead || lines[i].label[0] != '\0') continue;
-        if (strcmp(lines[i].mnem, "SEC") != 0) continue;
-        s = next_insn_no_label(lines, n, i + 1);
-        if (s < 0 || strcmp(lines[s].mnem, "SBC") != 0 ||
-            imm16(lines[s].operand) != 0) continue;
-        v = next_insn_no_label(lines, n, (size_t)s + 1);
-        if (v < 0 || strcmp(lines[v].mnem, "BVC") != 0) continue;
-        e = next_insn_no_label(lines, n, (size_t)v + 1);
-        if (e < 0 || strcmp(lines[e].mnem, "EOR") != 0 ||
-            strcmp(lines[e].operand, "#$8000") != 0) continue;
-        l = next_labeled_line(lines, (size_t)e + 1, n);
-        if (l < 0 || strcmp(lines[l].label, lines[v].operand) != 0) continue;
-        if (!set_insn(&lines[i], "CMP", "#0")) continue;
-        lines[s].dead = 1;
-        lines[v].dead = 1;
-        lines[e].dead = 1;
-    }
-}
-
 /* Pattern: a store to _fcc_tmp_b that nothing reads.  pat_dead_store needs a
  * second store to prove the first dead; given tmpb_block_local, the end of the
  * block proves it too. */
@@ -1082,7 +1051,6 @@ peephole_optimize(const char *asm_text)
         pat_tmpb_const(lines, n);
         pat_tmpb_dead_store(lines, n);
     }
-    pat_signed_cmp_zero(lines, n);
     pat_staload_forward(lines, n);
     pat_repsep_adjacent(lines, n);
     pat_clcadc_to_ina(lines, n);

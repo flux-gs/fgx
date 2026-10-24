@@ -81,8 +81,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _vspf_L0

@@ -17143,8 +17143,6 @@ _llong_arith_L328
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L331
@@ -17276,8 +17274,6 @@ _llong_arith_L331
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L332
@@ -17678,8 +17674,6 @@ _llong_arith_L334
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L335
@@ -17812,8 +17806,6 @@ _llong_arith_L335
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L336
@@ -18211,8 +18203,6 @@ _llong_arith_L338
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L339
@@ -18344,8 +18334,6 @@ _llong_arith_L339
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L340
@@ -18876,8 +18864,6 @@ _llong_arith_L343
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L344
@@ -19010,8 +18996,6 @@ _llong_arith_L344
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L345
@@ -19412,8 +19396,6 @@ _llong_arith_L347
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L348
@@ -19545,8 +19527,6 @@ _llong_arith_L348
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L349
@@ -19811,8 +19791,6 @@ _llong_arith_L350
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L351
@@ -19944,8 +19922,6 @@ _llong_arith_L351
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L352
@@ -20343,8 +20319,6 @@ _llong_arith_L354
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L355
@@ -20476,8 +20450,6 @@ _llong_arith_L355
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L356
@@ -20610,8 +20582,6 @@ _llong_arith_L356
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L357
@@ -20744,8 +20714,6 @@ _llong_arith_L357
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L358
@@ -21677,8 +21645,6 @@ _llong_arith_L364
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L365
@@ -21810,8 +21776,6 @@ _llong_arith_L365
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L366
@@ -22076,8 +22040,6 @@ _llong_arith_L367
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L368
@@ -22210,8 +22172,6 @@ _llong_arith_L368
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L369
@@ -22612,8 +22572,6 @@ _llong_arith_L371
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L372
@@ -22745,8 +22703,6 @@ _llong_arith_L372
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L373
@@ -23011,8 +22967,6 @@ _llong_arith_L374
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L375
@@ -23144,8 +23098,6 @@ _llong_arith_L375
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L376
@@ -23810,8 +23762,6 @@ _llong_arith_L380
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L381
@@ -23944,8 +23894,6 @@ _llong_arith_L381
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L382
@@ -24345,8 +24293,6 @@ _llong_arith_L384
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L385
@@ -24478,8 +24424,6 @@ _llong_arith_L385
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L386
@@ -24611,8 +24555,6 @@ _llong_arith_L386
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L387
@@ -24744,8 +24686,6 @@ _llong_arith_L387
                 BRA     *+5
                 LDA     #1
                 STA     i
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L388

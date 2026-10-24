@@ -214,10 +214,7 @@ _uchar_promote_L14
                 AND     #$00FF
                 EOR     #$FFFF
                 INC
-                TAX
-                TXA
                 CMP     #0
-_uchar_promote_L16
                 BMI     *+5
                 BRL     _uchar_promote_L15
                 LDA     _fcc_img0

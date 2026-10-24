@@ -97,10 +97,7 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-_libcadds_L1
                 BMI     *+5
                 BRL     _libcadds_L0
                 LDA     #1
@@ -154,10 +151,6 @@ _libcadds_L0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     #2
                 CLC
                 ADC     #_libcadds_ov
@@ -172,7 +165,7 @@ _libcadds_L0
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _libcadds_L3
+                BRL     _libcadds_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -180,15 +173,15 @@ _libcadds_L0
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _libcadds_L3
+                BRL     _libcadds_L2
                 LDA     #0
-                BRL     _libcadds_L4
-_libcadds_L3
+                BRL     _libcadds_L3
+_libcadds_L2
                 LDA     #1
-_libcadds_L4
+_libcadds_L3
                 CMP     #0
                 BNE     *+5
-                BRL     _libcadds_L2
+                BRL     _libcadds_L1
                 LDA     #2
                 TAY
                 TSC
@@ -199,7 +192,7 @@ _libcadds_L4
                 STA     _fcc_fb
                 TYA
                 RTL
-_libcadds_L2
+_libcadds_L1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -231,11 +224,9 @@ _libcadds_L2
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _libcadds_L5
+                BRL     _libcadds_L4
                 LDA     #3
                 TAY
                 TSC
@@ -246,7 +237,7 @@ _libcadds_L2
                 STA     _fcc_fb
                 TYA
                 RTL
-_libcadds_L5
+_libcadds_L4
                 LDA     #4
                 PHA
                 LDA     #2
@@ -312,11 +303,9 @@ _libcadds_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _libcadds_L6
+                BRL     _libcadds_L5
                 LDA     #4
                 TAY
                 TSC
@@ -327,7 +316,7 @@ _libcadds_L5
                 STA     _fcc_fb
                 TYA
                 RTL
-_libcadds_L6
+_libcadds_L5
                 SEP     #$20
                 MX      %10
                 PHB
@@ -401,7 +390,7 @@ _libcadds_L6
                 LDA     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _libcadds_L7
+                BRL     _libcadds_L6
                 LDA     #5
                 TAY
                 TSC
@@ -412,7 +401,7 @@ _libcadds_L6
                 STA     _fcc_fb
                 TYA
                 RTL
-_libcadds_L7
+_libcadds_L6
                 LDA     #42
                 PHA
                 SEP     #$20

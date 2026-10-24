@@ -33,10 +33,7 @@ main_stkok        TCS
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -62,10 +59,6 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]
@@ -97,10 +90,6 @@ main_stkok        TCS
                 STA     23,S   ; fccstk d=0 b=23
                 LDA     _fcc_fpr0
                 STA     21,S   ; fccstk d=0 b=21
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0+2
-                LDA     21,S   ; fccstk d=0 b=21
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]

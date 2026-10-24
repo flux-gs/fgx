@@ -66,8 +66,6 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_shl16
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _shift_left_type_L0

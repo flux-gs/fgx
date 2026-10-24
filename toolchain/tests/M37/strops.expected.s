@@ -138,8 +138,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strops_L0
@@ -215,8 +213,6 @@ _strops_L1
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strops_L2
@@ -260,10 +256,7 @@ _strops_L2
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-_strops_L4
                 BMI     *+5
                 BRL     _strops_L3
                 LDA     1,S   ; fccstk d=0 b=1
@@ -310,35 +303,31 @@ _strops_L3
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _strops_L6
+                BRL     _strops_L5
                 LDA     #7
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _strops_L6
+                BRL     _strops_L5
                 LDA     #1
-                BRL     _strops_L7
-_strops_L6
+                BRL     _strops_L6
+_strops_L5
                 LDA     #0
-_strops_L7
+_strops_L6
                 CMP     #0
                 BNE     *+5
-                BRL     _strops_L5
+                BRL     _strops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L5
+_strops_L4
                 LDA     #6
                 PHA
                 PHA
@@ -374,18 +363,16 @@ _strops_L5
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _strops_L8
+                BRL     _strops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L8
+_strops_L7
                 LDA     #108
                 PHA
                 PHA
@@ -422,7 +409,7 @@ _strops_L8
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _strops_L10
+                BRL     _strops_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -430,22 +417,22 @@ _strops_L8
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _strops_L10
+                BRL     _strops_L9
                 LDA     #1
-                BRL     _strops_L11
-_strops_L10
+                BRL     _strops_L10
+_strops_L9
                 LDA     #0
-_strops_L11
+_strops_L10
                 CMP     #0
                 BNE     *+5
-                BRL     _strops_L9
+                BRL     _strops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L9
+_strops_L8
                 LDA     #108
                 PHA
                 PHA
@@ -482,7 +469,7 @@ _strops_L9
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _strops_L13
+                BRL     _strops_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -490,22 +477,22 @@ _strops_L9
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _strops_L13
+                BRL     _strops_L12
                 LDA     #1
-                BRL     _strops_L14
-_strops_L13
+                BRL     _strops_L13
+_strops_L12
                 LDA     #0
-_strops_L14
+_strops_L13
                 CMP     #0
                 BNE     *+5
-                BRL     _strops_L12
+                BRL     _strops_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L12
+_strops_L11
                 LDA     #122
                 PHA
                 PHA
@@ -534,7 +521,7 @@ _strops_L12
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _strops_L16
+                BRL     _strops_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -542,22 +529,22 @@ _strops_L12
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _strops_L16
+                BRL     _strops_L15
                 LDA     #1
-                BRL     _strops_L17
-_strops_L16
+                BRL     _strops_L16
+_strops_L15
                 LDA     #0
-_strops_L17
+_strops_L16
                 CMP     #0
                 BNE     *+5
-                BRL     _strops_L15
+                BRL     _strops_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L15
+_strops_L14
                 LDA     #0
                 PHA
                 PHA
@@ -594,7 +581,7 @@ _strops_L15
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _strops_L19
+                BRL     _strops_L18
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -602,22 +589,22 @@ _strops_L15
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _strops_L19
+                BRL     _strops_L18
                 LDA     #1
-                BRL     _strops_L20
-_strops_L19
+                BRL     _strops_L19
+_strops_L18
                 LDA     #0
-_strops_L20
+_strops_L19
                 CMP     #0
                 BNE     *+5
-                BRL     _strops_L18
+                BRL     _strops_L17
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-_strops_L18
+_strops_L17
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

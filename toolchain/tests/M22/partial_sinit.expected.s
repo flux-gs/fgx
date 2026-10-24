@@ -205,8 +205,6 @@ _partial_sinit_L3
                 MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _partial_sinit_L6
@@ -237,8 +235,6 @@ _partial_sinit_L6
                 MX      %00
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _partial_sinit_L7

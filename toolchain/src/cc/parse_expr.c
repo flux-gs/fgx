@@ -279,6 +279,7 @@ fuse_cmp_branch(int n, int label, int want_true)
     TokKind op;
     Node *a, *b;
     int uns;
+    long zero;
 
     if (g_ast[n].kind != N_BINOP) return 0;
     op = g_ast[n].op;
@@ -293,6 +294,16 @@ fuse_cmp_branch(int n, int label, int want_true)
 
     /* The usual arithmetic conversions, as emit_scalar_binop applies them. */
     uns = arith_unsigned(a->type, a->is_unsigned, b->type, b->is_unsigned);
+
+    if (ast_const_int(g_ast[n].b, &zero) && zero == 0 &&
+        (op == TOK_EQEQ || op == TOK_NE ||
+         (!uns && (op == TOK_LT || op == TOK_GE)))) {
+        walk_expr(g_ast[n].a);
+        emit_cmp_zero_branch(op, label, want_true);
+        g_expr_type     = LT_INT;
+        g_expr_unsigned = uns;
+        return 1;
+    }
 
     /* emit_scalar_binop's int arm, inlined: LHS pushed, RHS stashed to
      * _fcc_tmp_b, LHS popped back into A. */

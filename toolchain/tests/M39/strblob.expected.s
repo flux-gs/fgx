@@ -133,8 +133,6 @@ _strblob_L7
                 TAX
                 LDA:    _strblob_big,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _strblob_L8

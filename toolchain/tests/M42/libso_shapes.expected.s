@@ -616,8 +616,6 @@ _libso_shapes_L11
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _libso_shapes_L8

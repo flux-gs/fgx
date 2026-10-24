@@ -33,10 +33,7 @@ _dowhile_once_L0
                 STA     _fcc_img0
 _dowhile_once_L1
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CMP     #0
-_dowhile_once_L3
                 BMI     *+5
                 BRL     _dowhile_once_L2
                 BRL     _dowhile_once_L0

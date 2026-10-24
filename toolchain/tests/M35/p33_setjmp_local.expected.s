@@ -161,8 +161,6 @@ main_stkok        TCS
                 TAX
                 FGX2_FARCALL setjmp
                 STA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_setjmp_local_L4
@@ -254,10 +252,6 @@ _p33_setjmp_local_L8
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1+2
                 LDA     3,S   ; fccstk d=0 b=3

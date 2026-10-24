@@ -183,8 +183,6 @@ _commast_L3
                 BEQ     *+5
                 BRL     _commast_L15
                 LDA     _rawmode
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _commast_L15
@@ -254,16 +252,8 @@ _commast_L10
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     11,S   ; fccstk d=0 b=11

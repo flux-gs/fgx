@@ -313,8 +313,6 @@ _long_truth_L26
 _long_truth_L30
                 LDA     #0
 _long_truth_L31
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _long_truth_L29
@@ -604,8 +602,6 @@ _long_truth_L54
                 BRL     _long_truth_L52
 _long_truth_L53
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _long_truth_L56

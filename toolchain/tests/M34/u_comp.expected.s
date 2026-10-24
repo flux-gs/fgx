@@ -69,8 +69,6 @@ _u_comp_L1
                 TXA
                 JSR     _fcc_modu16
                 STA     u
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _u_comp_L2

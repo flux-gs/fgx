@@ -115,8 +115,6 @@ _str2d_init_L2
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L3
@@ -171,8 +169,6 @@ _str2d_init_L4
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L5
@@ -199,8 +195,6 @@ _str2d_init_L5
                 TAX
                 LDA:    dig,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L6

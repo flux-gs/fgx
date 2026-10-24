@@ -504,8 +504,6 @@ _struct_init_leaves_L26
                 BNE     *+5
                 BRL     _struct_init_leaves_L23
                 LDA     _struct_init_leaves_nulv+20
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_init_leaves_L23

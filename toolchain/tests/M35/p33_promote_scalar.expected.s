@@ -174,8 +174,6 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L10
@@ -196,8 +194,6 @@ _p33_promote_scalar_L6
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_promote_scalar_L10

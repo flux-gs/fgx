@@ -43,28 +43,7 @@ bump_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     #10
                 STA     [_fcc_fpr0]
-                DO      8+bump_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bump_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bump_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bump_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bump_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bump_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+bump_FRAMESIZE/256
                 TSC
                 CLC
@@ -161,10 +140,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bump

@@ -113,8 +113,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L0
@@ -241,8 +239,6 @@ _llong_printf_L0
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L1
@@ -335,8 +331,6 @@ _llong_printf_L1
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L2
@@ -445,8 +439,6 @@ _llong_printf_L2
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L3
@@ -539,8 +531,6 @@ _llong_printf_L3
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L4
@@ -650,8 +640,6 @@ _llong_printf_L4
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L5
@@ -778,8 +766,6 @@ _llong_printf_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L6
@@ -884,8 +870,6 @@ _llong_printf_L6
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L7

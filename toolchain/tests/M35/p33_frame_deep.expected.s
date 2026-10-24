@@ -94,8 +94,6 @@ _p33_frame_deep_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _p33_frame_deep_L4

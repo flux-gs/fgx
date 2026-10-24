@@ -1430,6 +1430,7 @@ void emit_test_long_zero(int is_float);
 void walk_cond(int n);
 void walk_cond_branch(int n, int label, int want_true);
 void emit_cmp_branch(TokKind op, int is_unsigned, int label, int want_true);
+void emit_cmp_zero_branch(TokKind op, int label, int want_true);
 void
 emit_beq_label(int n);
 void

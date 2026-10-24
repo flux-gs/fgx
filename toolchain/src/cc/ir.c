@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 /* Per-function op list.  One C function's emitted line count is modest; this cap
  * is a generous backstop (errors out loudly rather than silently truncating). */
@@ -1504,6 +1505,162 @@ ir_begin_func(void)
     g_n_promoted_params = 0;   /* defensive: never carry seed state across functions */
 }
 
+/* WHICH LOCAL POINTER EACH FPR HOLDS, while lowering.  A walker loads a
+ * pointer local into an fpr for every use -- `--p->_cnt >= 0 ? *p->_ptr++'
+ * loads p twice -- and the second load reads the same four bytes the first
+ * left in the register.  The reload is then `LDA _fcc_fprK', which keeps the
+ * load's contract (A = the offset word) without touching the frame.
+ *
+ * The record is cleared by what the emitted text does, read back line by
+ * line: a label, a call, a jump or any instruction this does not know clears
+ * every register; a store to _fcc_fprK clears K; a store to a frame slot
+ * clears the pointers held from that local, or every register when the op
+ * names no local.  A conditional branch leaves the record for the path that
+ * falls through; a `*+N' branch may land past the next op, so the record is
+ * cleared after that op as well.  A pointer whose address is taken or that raw code touches
+ * is never recorded, so no store through a register can reach its slot. */
+static Local *g_fpr_holds[8];
+static int    g_fpr_skip;    /* this op has a `*+N' branch */
+
+static void
+fpr_holds_drop_local(Local *lc)
+{
+    int k;
+    for (k = 0; k < 8; k++)
+        if (g_fpr_holds[k] == lc) g_fpr_holds[k] = NULL;
+}
+
+static int
+mn_in(const char *m, const char *const *t)
+{
+    for (; *t; t++) if (strcmp(m, *t) == 0) return 1;
+    return 0;
+}
+
+static void
+fpr_holds_scan(const char *t, size_t len, Local *own)
+{
+    static const char *const reads[] = {
+        "LDA", "LDX", "LDY", "LDAL", "TAX", "TAY", "TXA", "TYA", "TXY", "TYX",
+        "TSX", "TSC", "TCS", "PHA", "PLA", "PHX", "PLX", "PHY", "PLY", "PHB",
+        "PLB", "PHK", "PHP", "PLP", "PEI", "PEA", "PER", "CLC", "SEC", "CLV",
+        "ADC", "SBC", "AND", "ORA", "EOR", "CMP", "CPX", "CPY", "BIT", "XBA",
+        "SEP", "REP", "MX", "DO", "ELSE", "FIN", "BEQ", "BNE", "BMI", "BPL",
+        "BCC", "BCS", "BVC", "BVS", "INX", "INY", "DEX", "DEY", "INA", "DEA",
+        "NOP", NULL
+    };
+    static const char *const writes[] = {
+        "STA", "STX", "STY", "STZ", "INC", "DEC", "ASL", "LSR", "ROL", "ROR",
+        "TSB", "TRB", NULL
+    };
+    const char *p = t, *end = t + len;
+    while (p < end) {
+        const char *nl = memchr(p, '\n', (size_t)(end - p));
+        const char *e = nl ? nl : end, *q = p;
+        char m[16], o[64];
+        size_t n;
+        if (q < e && *q != ' ' && *q != '\t' && *q != ';' && *q != '*') {
+            memset(g_fpr_holds, 0, sizeof g_fpr_holds);      /* a label */
+            while (q < e && *q != ' ' && *q != '\t') q++;
+        }
+        while (q < e && (*q == ' ' || *q == '\t')) q++;
+        for (n = 0; q < e && *q != ' ' && *q != '\t' && *q != ';' && n + 1 < sizeof m; q++)
+            m[n++] = (char)toupper((unsigned char)*q);
+        m[n] = '\0';
+        while (q < e && (*q == ' ' || *q == '\t')) q++;
+        for (n = 0; q < e && *q != ' ' && *q != '\t' && *q != ';' && n + 1 < sizeof o; q++)
+            o[n++] = *q;
+        o[n] = '\0';
+        p = nl ? nl + 1 : end;
+        if (m[0] == 'B' && o[0] == '*') g_fpr_skip = 1;
+        if (m[0] == '\0' || mn_in(m, reads)) continue;
+        if (!mn_in(m, writes)) {
+            memset(g_fpr_holds, 0, sizeof g_fpr_holds);      /* call, jump, unknown */
+            continue;
+        }
+        if (o[0] == '\0' || strcmp(o, "A") == 0) continue;   /* the accumulator */
+        if (strncmp(o, "_fcc_fpr", 8) == 0) {
+            if (o[8] >= '0' && o[8] <= '7' && !strchr(o, ','))
+                g_fpr_holds[o[8] - '0'] = NULL;
+            else
+                memset(g_fpr_holds, 0, sizeof g_fpr_holds);  /* indexed */
+            continue;
+        }
+        if (strstr(o, ",S") || strstr(o, "[_fcc_fp]") ||
+            strstr(o, "[_fcc_fb]") || strstr(o, "[_fcc_sfp]")) {
+            if (own) fpr_holds_drop_local(own);              /* its own slot */
+            else     memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        }
+    }
+}
+
+/* The Local an op addresses, or NULL. */
+static Local *
+ir_op_local(const IrNode *n)
+{
+    switch (n->op) {
+    case IR_LOAD_LOCAL: case IR_STORE_LOCAL: case IR_LOAD_LOCAL_IMG:
+    case IR_INCDEC_LOCAL: case IR_DEREF_LOCAL: case IR_LOAD_PTR_LOCAL:
+    case IR_STORE_PTR_LOCAL: case IR_STORE_PTR_OFFSET:
+    case IR_DEREF_POSTINC_LOCAL: case IR_DEREF_POSTINC_LOCAL_IMG:
+    case IR_INDEX_DEREF_LOCAL: case IR_WALK_STORE_SETUP:
+    case IR_WALK_STORE_SETUP_IMG: case IR_WALK_STORE: case IR_WALK_STORE_IMG:
+    case IR_LOAD_LONG_LOCAL: case IR_STORE_LONG_LOCAL:
+    case IR_LOAD_LLONG_LOCAL: case IR_STORE_LLONG_LOCAL:
+    case IR_ADDR_PARAM: case IR_FPR_LOAD_PTR_LOCAL:
+    case IR_FPR_STORE_PTR_LOCAL: case IR_BINOP_MEM_LOCAL:
+        return (Local *)n->ptr;
+    default:
+        return NULL;
+    }
+}
+
+static int
+fpr_holds_ok(Local *lc)
+{
+    return lc && !lc->addr_taken && !lc->raw_accessed;
+}
+
+/* Lower op n into g_out, keeping g_fpr_holds. */
+static void
+ir_lower_tracked(IrNode *n, FILE *out)
+{
+    Local *lc = ir_op_local(n);
+    int    pending = g_fpr_skip;     /* an earlier `*+N' may land after this op */
+    char  *buf;
+    size_t len;
+    FILE  *mem;
+
+    g_fpr_skip = 0;
+    if (n->op == IR_FPR_LOAD_PTR_LOCAL && fpr_holds_ok(lc) &&
+        g_fpr_holds[n->u1] == lc) {
+        fprintf(out, "                LDA     _fcc_fpr%u\n", n->u1);
+    } else if (n->op == IR_BCOND) {          /* `Bcc L' or `B!cc *+5; BRL L' */
+        emit_lower_op(n);
+    } else {
+        mem = open_memstream(&buf, &len);
+        if (!mem) { perror("fcc: open_memstream"); exit(1); }
+        g_out = mem;
+        if (n->op == IR_TEXT) {
+            if (n->text_len) fwrite(n->text, 1, n->text_len, mem);
+        } else {
+            emit_lower_op(n);
+        }
+        g_out = out;
+        fclose(mem);
+        fpr_holds_scan(buf, len, lc);
+        if ((n->op == IR_FPR_LOAD_PTR_LOCAL || n->op == IR_FPR_STORE_PTR_LOCAL) &&
+            fpr_holds_ok(lc))
+            g_fpr_holds[n->u1] = lc;
+        fwrite(buf, 1, len, out);
+        free(buf);
+    }
+    if (pending)
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+    if (g_fpr_skip)
+        g_fpr_skip = 1;
+}
+
 void
 ir_end_func(void)
 {
@@ -1538,8 +1695,12 @@ ir_end_func(void)
         ir_allocate();               /* P1.3 allocator (uses g_bb); no-op if g_ir_opt==0 */
         if (g_p3_stats < 0) g_p3_stats = getenv("FCC_P3_STATS") ? 1 : 0;
         if (g_p3_stats) ir_p3_stats();   /* read-only Phase-3 measurement */
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        g_fpr_skip = 0;
         for (i = 0; i < g_ir_n; i++) {
-            if (g_ir[i].op == IR_TEXT) {
+            if (g_ir_opt) {
+                ir_lower_tracked(&g_ir[i], g_out);
+            } else if (g_ir[i].op == IR_TEXT) {
                 if (g_ir[i].text_len)
                     fwrite(g_ir[i].text, 1, g_ir[i].text_len, g_out);
             } else {

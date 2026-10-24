@@ -303,10 +303,7 @@ _locfnp_L2
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     13,S   ; fccstk d=0 b=13
                 PHA
-                LDA     13,S   ; fccstk d=2 b=11
-                STA     _fcc_fpr0+2
-                LDA     11,S   ; fccstk d=2 b=9
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHK
                 PEA     _locfnp_L3-1
                 SEP     #$20

@@ -118,8 +118,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strncatops_L0
@@ -263,8 +261,6 @@ _strncatops_L1
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strncatops_L4
@@ -279,8 +275,6 @@ _strncatops_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strncatops_L5
@@ -373,8 +367,6 @@ _strncatops_L5
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strncatops_L6
@@ -476,8 +468,6 @@ _strncatops_L6
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _strncatops_L7

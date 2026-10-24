@@ -189,10 +189,6 @@ main_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_img0
                 PHA
-                LDA     11,S   ; fccstk d=2 b=9
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=2 b=7
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 STA     _fcc_tmp_b
                 PLA

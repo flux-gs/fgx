@@ -34,10 +34,7 @@ main_stkok        TCS
                 PLA
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_sockops_L1
                 BPL     *+5
                 BRL     _sockops_L0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -73,14 +70,14 @@ _sockops_L0
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L2
+                BRL     _sockops_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L2
+_sockops_L1
                 LDA     #16
                 PHA
                 PHA
@@ -107,14 +104,14 @@ _sockops_L2
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L3
+                BRL     _sockops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L3
+_sockops_L2
                 LDA     #0
                 PHA
                 LDA     #4
@@ -143,14 +140,14 @@ _sockops_L3
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L4
+                BRL     _sockops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L4
+_sockops_L3
                 LDA     #0
                 PHA
                 LDA     #8
@@ -179,14 +176,14 @@ _sockops_L4
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L5
+                BRL     _sockops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L5
+_sockops_L4
                 LDA     #4
                 PHA
                 PHA
@@ -217,14 +214,14 @@ _sockops_L5
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L6
+                BRL     _sockops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L6
+_sockops_L5
                 LDA     #16
                 PHA
                 PHA
@@ -268,14 +265,14 @@ _sockops_L6
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L7
+                BRL     _sockops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L7
+_sockops_L6
                 LDA     #16
                 PHA
                 PHA
@@ -319,14 +316,14 @@ _sockops_L7
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L8
+                BRL     _sockops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L8
+_sockops_L7
                 PHA
                 SEP     #$20
                 MX      %10
@@ -351,14 +348,14 @@ _sockops_L8
                 TYA
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _sockops_L9
+                BRL     _sockops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CLC
                 ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
-_sockops_L9
+_sockops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL close

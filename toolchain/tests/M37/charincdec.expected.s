@@ -244,8 +244,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     _fcc_tmp_b
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L0
@@ -756,8 +754,6 @@ _charincdec_L38
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L47
@@ -765,15 +761,11 @@ _charincdec_L38
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L47
                 LDA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L53
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L53
@@ -853,8 +845,6 @@ _charincdec_L48
                 BRL     _charincdec_L60
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L60
@@ -1001,8 +991,6 @@ _charincdec_L62
                 MX      %00
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L74
@@ -1090,8 +1078,6 @@ _charincdec_L69
                 BRL     _charincdec_L81
                 LDA     go+2
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L81
@@ -1164,8 +1150,6 @@ _charincdec_L76
                 BRL     _charincdec_L84
                 LDA     gu
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L84
@@ -1238,8 +1222,6 @@ _charincdec_L83
                 BRL     _charincdec_L89
                 LDA     gs+1
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _charincdec_L89

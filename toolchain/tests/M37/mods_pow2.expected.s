@@ -143,8 +143,6 @@ _mods_pow2_L1
                 BRL     _mods_pow2_L0
 _mods_pow2_L2
                 LDA     _fcc_img2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L14
@@ -191,8 +189,6 @@ _mods_pow2_L15
 _mods_pow2_L19
                 AND     #3
 _mods_pow2_L20
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L18
@@ -267,8 +263,6 @@ _mods_pow2_L24
 _mods_pow2_L28
                 AND     #1
 _mods_pow2_L29
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L27
@@ -295,8 +289,6 @@ _mods_pow2_L27
 _mods_pow2_L31
                 AND     #16383
 _mods_pow2_L32
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L30
@@ -358,8 +350,6 @@ _mods_pow2_L36
                 LDA     #$FFFB
                 STA     a
                 LDA     #0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L40
@@ -369,8 +359,6 @@ _mods_pow2_L36
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_mods16
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L40
@@ -402,8 +390,6 @@ _mods_pow2_L39
 _mods_pow2_L45
                 AND     #3
 _mods_pow2_L46
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L43
@@ -411,8 +397,6 @@ _mods_pow2_L46
                 LDX     #100
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mods_pow2_L43
@@ -444,8 +428,6 @@ _mods_pow2_L42
 _mods_pow2_L52
                 AND     #3
 _mods_pow2_L53
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _mods_pow2_L50
@@ -453,8 +435,6 @@ _mods_pow2_L53
                 LDX     #100
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mods_pow2_L50
@@ -470,8 +450,6 @@ _mods_pow2_L51
                 LDX     #400
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _mods_pow2_L48

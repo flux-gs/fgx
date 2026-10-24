@@ -183,10 +183,7 @@ _libcadds_L0
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #3
@@ -267,10 +264,6 @@ _libcadds_L0
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -469,10 +462,6 @@ _libcadds_L17
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -575,10 +564,7 @@ _libcadds_L21
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #8
@@ -697,10 +683,7 @@ _libcadds_L22
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fgetc
@@ -864,10 +847,7 @@ _libcadds_L34
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
-_libcadds_L36
                 BPL     *+5
                 BRL     _libcadds_L35
                 BRL     _libcadds_L34
@@ -891,7 +871,7 @@ _libcadds_L35
                 TXA
                 CMP     #81
                 BEQ     *+5
-                BRL     _libcadds_L38
+                BRL     _libcadds_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -909,22 +889,22 @@ _libcadds_L35
                 TXA
                 CMP     #81
                 BEQ     *+5
-                BRL     _libcadds_L38
+                BRL     _libcadds_L37
                 LDA     #1
-                BRL     _libcadds_L39
-_libcadds_L38
+                BRL     _libcadds_L38
+_libcadds_L37
                 LDA     #0
-_libcadds_L39
+_libcadds_L38
                 CMP     #0
                 BNE     *+5
-                BRL     _libcadds_L37
+                BRL     _libcadds_L36
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
-_libcadds_L37
+_libcadds_L36
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1

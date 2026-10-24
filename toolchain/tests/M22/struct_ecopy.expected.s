@@ -247,8 +247,6 @@ _struct_ecopy_L6
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_ecopy_L9
@@ -279,8 +277,6 @@ _struct_ecopy_L9
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_ecopy_L10

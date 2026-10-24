@@ -20,14 +20,10 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     _struct_partial_init_g+0
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L1
                 LDA     _struct_partial_init_g+2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L1
@@ -142,8 +138,6 @@ _struct_partial_init_L3
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L7

@@ -925,10 +925,6 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -1236,10 +1232,6 @@ _fnptr_vnodeops_L4
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=2 b=5
-                STA     _fcc_fpr0
                 LDY     #112
                 LDA     [_fcc_fpr0],Y
                 PHA

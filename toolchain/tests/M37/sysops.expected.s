@@ -39,8 +39,6 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _sysops_L0
@@ -84,8 +82,6 @@ _sysops_L0
                 TAX
                 TXA
                 AND     #127
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _sysops_L2

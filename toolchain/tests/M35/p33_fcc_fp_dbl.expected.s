@@ -244,8 +244,6 @@ _p33_fcc_fp_dbl_L8
                 RTL
 _p33_fcc_fp_dbl_L6
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L12
@@ -263,8 +261,6 @@ _p33_fcc_fp_dbl_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L12
@@ -292,8 +288,6 @@ _p33_fcc_fp_dbl_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L10

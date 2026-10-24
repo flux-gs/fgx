@@ -785,8 +785,6 @@ _scanf_L30
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L27
@@ -930,8 +928,6 @@ _scanf_L39
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L36
@@ -2003,8 +1999,6 @@ _scanf_L66
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L70
@@ -2066,10 +2060,6 @@ _scanf_L69
                 STA     41,S   ; fccstk d=0 b=41
                 LDA     _fcc_fpr0
                 STA     39,S   ; fccstk d=0 b=39
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -2170,10 +2160,6 @@ _scanf_L72
                 STA     41,S   ; fccstk d=0 b=41
                 LDA     _fcc_fpr0
                 STA     39,S   ; fccstk d=0 b=39
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -2349,15 +2335,10 @@ _scanf_L78
                 LDA     [_fcc_fpr0]
                 DEC
                 STA     [_fcc_fpr0]
-                TAX
-                TXA
                 CMP     #0
-_scanf_L86
                 BPL     *+5
                 BRL     _scanf_L84
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
+                LDA     _fcc_fpr0
                 INC
                 INC
                 STA     _fcc_fpr0
@@ -2449,7 +2430,7 @@ _scanf_L83
                 TYA
                 CMP     #$FFFF
                 BNE     *+5
-                BRL     _scanf_L87
+                BRL     _scanf_L86
                 LDA     #21
                 TAY
                 TSC
@@ -2460,7 +2441,7 @@ _scanf_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_scanf_L87
+_scanf_L86
                 LDA     41,S   ; fccstk d=0 b=41
                 STA     _fcc_fpr0+2
                 LDA     39,S   ; fccstk d=0 b=39

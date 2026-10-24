@@ -150,8 +150,6 @@ _pfsign_L4
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _pfsign_L1

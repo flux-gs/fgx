@@ -142,10 +142,6 @@ main_stkok        TCS
                 LDA     #7
                 LDY     #24
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 ASL
                 ASL

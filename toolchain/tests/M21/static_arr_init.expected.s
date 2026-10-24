@@ -168,8 +168,6 @@ _static_arr_init_L4
                 TAX
                 LDA:    main_sl_buf,X
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _static_arr_init_L5

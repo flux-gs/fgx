@@ -107,8 +107,6 @@ _knr_strconcat_L0
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L1
@@ -222,8 +220,6 @@ _knr_strconcat_L5
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L6
@@ -235,8 +231,6 @@ _knr_strconcat_L5
                 STA     _fcc_img0
 _knr_strconcat_L6
                 LDA     _fcc_img0
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _knr_strconcat_L7

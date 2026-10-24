@@ -24,10 +24,7 @@ feed_stkok        TCS
                 TXA
                 DEC
                 STA     g_n
-                TAX
-                TXA
                 CMP     #0
-_assign_in_while_L1
                 BMI     *+5
                 BRL     _assign_in_while_L0
                 LDA     #0
@@ -75,24 +72,21 @@ main_stkok        TCS
                 STA     g_n
                 LDA     #0
                 STA     3,S   ; fccstk d=0 b=3
-_assign_in_while_L2
+_assign_in_while_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 FGX2_FARCALL feed
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_assign_in_while_L4
                 BPL     *+5
-                BRL     _assign_in_while_L3
+                BRL     _assign_in_while_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
-                BRL     _assign_in_while_L2
-_assign_in_while_L3
+                BRL     _assign_in_while_L1
+_assign_in_while_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC
                 ADC     3,S   ; fccstk d=0 b=3

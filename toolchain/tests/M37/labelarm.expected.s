@@ -32,8 +32,6 @@ probe_stkok        TCS
                 ELSE
                 LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _labelarm_L0

@@ -23,8 +23,6 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #0
                 STA     inline
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _inline_ident_L0

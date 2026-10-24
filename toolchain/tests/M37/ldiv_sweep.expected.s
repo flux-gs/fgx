@@ -832,8 +832,6 @@ _ldiv_sweep_L31
                 INC     _fcc_img2
 _ldiv_sweep_L32
                 LDA     _fcc_img2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _ldiv_sweep_L33

@@ -123,8 +123,6 @@ _struct_arr_init_L2
                 ADC     #8
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _struct_arr_init_L4

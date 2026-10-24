@@ -145,8 +145,6 @@ _struct_chararray_init_L19
                 BRL     _struct_chararray_init_L16
                 LDA     shortb+3
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L16
@@ -160,8 +158,6 @@ _struct_chararray_init_L17
                 BRL     _struct_chararray_init_L14
                 LDA     shortb+4
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L14
@@ -175,8 +171,6 @@ _struct_chararray_init_L15
                 BRL     _struct_chararray_init_L12
                 LDA     shortb+5
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L12
@@ -247,8 +241,6 @@ _struct_chararray_init_L36
                 BRL     _struct_chararray_init_L33
                 LDA     fromstr+4
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L33
@@ -262,8 +254,6 @@ _struct_chararray_init_L34
                 BRL     _struct_chararray_init_L31
                 LDA     fromstr+5
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _struct_chararray_init_L31

@@ -43,28 +43,6 @@ getput_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
-                DO      14+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+getput_FRAMESIZE,S   ; fccstk d=2 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+getput_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -72,28 +50,6 @@ getput_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      14+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+getput_FRAMESIZE,S   ; fccstk d=2 b=12 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      12+getput_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+getput_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+getput_FRAMESIZE,S   ; fccstk d=2 b=10 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
@@ -159,28 +115,7 @@ setit_stkok        TCS
                 LDA     10+setit_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     [_fcc_fpr0]
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -193,28 +128,7 @@ setit_stkok        TCS
                 FIN
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      14+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -227,28 +141,7 @@ setit_stkok        TCS
                 FIN
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                DO      8+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+setit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+setit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+setit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+setit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      16+setit_FRAMESIZE/256
                 TSC
                 CLC
@@ -365,8 +258,6 @@ _od_probe3_L1
                 RTL
 _od_probe3_L2
                 LDA     a+10
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _od_probe3_L3
@@ -485,10 +376,7 @@ _od_probe3_L3
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10

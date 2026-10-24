@@ -511,10 +511,7 @@ _parmhome_L15
                 LDA     [_fcc_ptr]
                 DEC
                 STA     [_fcc_ptr]
-                TAX
-                TXA
                 CMP     #0
-_parmhome_L17
                 BPL     *+5
                 BRL     _parmhome_L16
                 LDA     17,S   ; fccstk d=0 b=17
@@ -568,7 +565,7 @@ _parmhome_L16
                 TXA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _parmhome_L19
+                BRL     _parmhome_L18
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -576,15 +573,15 @@ _parmhome_L16
                 LDA     [_fcc_fpr0]
                 CMP     #$FFFF
                 BEQ     *+5
-                BRL     _parmhome_L19
+                BRL     _parmhome_L18
                 LDA     #0
-                BRL     _parmhome_L20
-_parmhome_L19
+                BRL     _parmhome_L19
+_parmhome_L18
                 LDA     #1
-_parmhome_L20
+_parmhome_L19
                 CMP     #0
                 BNE     *+5
-                BRL     _parmhome_L18
+                BRL     _parmhome_L17
                 LDA     #4
                 TAY
                 TSC
@@ -595,7 +592,7 @@ _parmhome_L20
                 STA     _fcc_fb
                 TYA
                 RTL
-_parmhome_L18
+_parmhome_L17
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     #0
@@ -629,7 +626,7 @@ _parmhome_L18
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _parmhome_L23
+                BRL     _parmhome_L22
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -637,20 +634,20 @@ _parmhome_L18
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _parmhome_L23
+                BRL     _parmhome_L22
                 LDA     #1
-                BRL     _parmhome_L24
-_parmhome_L23
+                BRL     _parmhome_L23
+_parmhome_L22
                 LDA     #0
-_parmhome_L24
+_parmhome_L23
                 CMP     #0
                 BNE     *+5
-                BRL     _parmhome_L21
+                BRL     _parmhome_L20
                 LDA     #0
-                BRL     _parmhome_L22
-_parmhome_L21
+                BRL     _parmhome_L21
+_parmhome_L20
                 LDA     #5
-_parmhome_L22
+_parmhome_L21
                 TAY
                 TSC
                 CLC
@@ -729,10 +726,6 @@ addr_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #2
                 TAX
                 TXA
@@ -973,7 +966,7 @@ main_stkok        TCS
                 STA     11,S   ; fccstk d=0 b=11
                 CMP     #0
                 BNE     *+5
-                BRL     _parmhome_L25
+                BRL     _parmhome_L24
                 LDA     11,S   ; fccstk d=0 b=11
                 TAY
                 TSC
@@ -984,7 +977,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_parmhome_L25
+_parmhome_L24
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
@@ -1006,7 +999,7 @@ _parmhome_L25
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _parmhome_L27
+                BRL     _parmhome_L26
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -1014,15 +1007,15 @@ _parmhome_L25
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _parmhome_L27
+                BRL     _parmhome_L26
                 LDA     #0
-                BRL     _parmhome_L28
-_parmhome_L27
+                BRL     _parmhome_L27
+_parmhome_L26
                 LDA     #1
-_parmhome_L28
+_parmhome_L27
                 CMP     #0
                 BNE     *+5
-                BRL     _parmhome_L26
+                BRL     _parmhome_L25
                 LDA     #6
                 TAY
                 TSC
@@ -1033,7 +1026,7 @@ _parmhome_L28
                 STA     _fcc_fb
                 TYA
                 RTL
-_parmhome_L26
+_parmhome_L25
                 LDA     #36
                 PHA
                 LDA     #1
@@ -1047,7 +1040,7 @@ _parmhome_L26
                 TXA
                 CMP     #37
                 BNE     *+5
-                BRL     _parmhome_L29
+                BRL     _parmhome_L28
                 LDA     #7
                 TAY
                 TSC
@@ -1058,7 +1051,7 @@ _parmhome_L26
                 STA     _fcc_fb
                 TYA
                 RTL
-_parmhome_L29
+_parmhome_L28
                 LDA     #42
                 TAY
                 TSC

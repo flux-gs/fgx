@@ -130,8 +130,6 @@ _for_step_global_ptr_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _for_step_global_ptr_L2

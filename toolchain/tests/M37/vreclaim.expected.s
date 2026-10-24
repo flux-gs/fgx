@@ -161,10 +161,7 @@ bio_strategy_stkok        TCS
                 LDY     #32
                 LDA     [_fcc_fpr0],Y
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_vreclaim_L3
                 BPL     *+5
                 BRL     _vreclaim_L1
                 LDA     1,S   ; fccstk d=0 b=1
@@ -172,9 +169,9 @@ _vreclaim_L3
                 TXA
                 SEC
                 SBC     #64
-                BVC     _vreclaim_L4
+                BVC     _vreclaim_L3
                 EOR     #$8000
-_vreclaim_L4
+_vreclaim_L3
                 BMI     *+5
                 BRL     _vreclaim_L1
                 LDA     #0
@@ -212,28 +209,6 @@ _vreclaim_L2
                 TXA
                 ORA     #4
                 STA     [_fcc_fpr0]
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #5
                 SEP     #$20
                 MX      %10
@@ -241,28 +216,7 @@ _vreclaim_L2
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL biodone
@@ -308,32 +262,10 @@ _vreclaim_L0
                 AND     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L5
+                BRL     _vreclaim_L4
                 LDA     _vreclaim_fake_reads
                 INC
                 STA     _vreclaim_fake_reads
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -359,8 +291,8 @@ _vreclaim_L0
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                BRL     _vreclaim_L6
-_vreclaim_L5
+                BRL     _vreclaim_L5
+_vreclaim_L4
                 LDA     _vreclaim_fake_writes
                 INC
                 STA     _vreclaim_fake_writes
@@ -423,7 +355,7 @@ _vreclaim_L5
                 REP     #$20
                 MX      %00
                 PLA
-_vreclaim_L6
+_vreclaim_L5
                 DO      8+bio_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -920,6 +852,7 @@ _vreclaim_binshash_stkok        TCS
                 ELSE
                 LDA     6+_vreclaim_binshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -951,28 +884,7 @@ _vreclaim_binshash_stkok        TCS
                 LDA     10+_vreclaim_binshash_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_vreclaim_binshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vreclaim_binshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vreclaim_binshash_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_vreclaim_binshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vreclaim_binshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vreclaim_binshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -1889,7 +1801,7 @@ _vreclaim_bufinsvn_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L7
+                BRL     _vreclaim_L6
                 DO      8+_vreclaim_bufinsvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -1957,7 +1869,7 @@ _vreclaim_bufinsvn_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_vreclaim_L7
+_vreclaim_L6
                 DO      12+_vreclaim_bufinsvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2076,7 +1988,7 @@ _vreclaim_bufremvn_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L9
+                BRL     _vreclaim_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2084,15 +1996,15 @@ _vreclaim_bufremvn_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L9
+                BRL     _vreclaim_L8
                 LDA     #1
-                BRL     _vreclaim_L10
-_vreclaim_L9
+                BRL     _vreclaim_L9
+_vreclaim_L8
                 LDA     #0
-_vreclaim_L10
+_vreclaim_L9
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L8
+                BRL     _vreclaim_L7
                 TAY
                 TSC
                 CLC
@@ -2102,7 +2014,7 @@ _vreclaim_L10
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L8
+_vreclaim_L7
                 DO      8+_vreclaim_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2145,11 +2057,8 @@ _vreclaim_L8
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L10
+                LDA     _fcc_fpr0
                 DO      8+_vreclaim_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2197,7 +2106,7 @@ _vreclaim_L8
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L11
+_vreclaim_L10
                 DO      8+_vreclaim_bufremvn_FRAMESIZE/256
                 TSC
                 CLC
@@ -2348,7 +2257,7 @@ bufinit_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_vreclaim_L12
+_vreclaim_L11
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2357,11 +2266,11 @@ _vreclaim_L12
                 TXA
                 SEC
                 SBC     #3
-                BVC     _vreclaim_L15
+                BVC     _vreclaim_L14
                 EOR     #$8000
-_vreclaim_L15
+_vreclaim_L14
                 BMI     *+5
-                BRL     _vreclaim_L14
+                BRL     _vreclaim_L13
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -2388,10 +2297,6 @@ _vreclaim_L15
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1
@@ -2408,10 +2313,7 @@ _vreclaim_L15
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #14
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2425,15 +2327,15 @@ _vreclaim_L15
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L13
+_vreclaim_L12
                 INC     _fcc_img0
-                BRL     _vreclaim_L12
-_vreclaim_L14
+                BRL     _vreclaim_L11
+_vreclaim_L13
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
-_vreclaim_L16
+_vreclaim_L15
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2442,11 +2344,11 @@ _vreclaim_L16
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L19
+                BVC     _vreclaim_L18
                 EOR     #$8000
-_vreclaim_L19
+_vreclaim_L18
                 BMI     *+5
-                BRL     _vreclaim_L18
+                BRL     _vreclaim_L17
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2473,10 +2375,6 @@ _vreclaim_L19
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1
@@ -2493,10 +2391,7 @@ _vreclaim_L19
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2510,13 +2405,13 @@ _vreclaim_L19
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L17
+_vreclaim_L16
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _vreclaim_L16
-_vreclaim_L18
+                BRL     _vreclaim_L15
+_vreclaim_L17
                 PHA
                 SEP     #$20
                 MX      %10
@@ -2534,7 +2429,7 @@ _vreclaim_L18
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
-_vreclaim_L20
+_vreclaim_L19
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2543,11 +2438,11 @@ _vreclaim_L20
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L23
+                BVC     _vreclaim_L22
                 EOR     #$8000
-_vreclaim_L23
+_vreclaim_L22
                 BMI     *+5
-                BRL     _vreclaim_L22
+                BRL     _vreclaim_L21
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_tmp_b
                 ASL
@@ -2573,23 +2468,11 @@ _vreclaim_L23
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #2048
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -2636,10 +2519,6 @@ _vreclaim_L23
                 LDA     #1024
                 LDY     #18
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -2647,17 +2526,10 @@ _vreclaim_L23
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+bufinit_FRAMESIZE/256
                 TSC
                 CLC
@@ -2724,10 +2596,7 @@ _vreclaim_L23
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -2788,13 +2657,13 @@ _vreclaim_L23
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L21
+_vreclaim_L20
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _vreclaim_L20
-_vreclaim_L22
+                BRL     _vreclaim_L19
+_vreclaim_L21
                 TAY
                 TSC
                 CLC
@@ -2914,10 +2783,6 @@ incore_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -2934,7 +2799,7 @@ incore_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L24
+_vreclaim_L23
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2949,7 +2814,7 @@ _vreclaim_L24
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L27
+                BRL     _vreclaim_L26
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -2957,15 +2822,15 @@ _vreclaim_L24
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L27
+                BRL     _vreclaim_L26
                 LDA     #0
-                BRL     _vreclaim_L28
-_vreclaim_L27
+                BRL     _vreclaim_L27
+_vreclaim_L26
                 LDA     #1
-_vreclaim_L28
+_vreclaim_L27
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L26
+                BRL     _vreclaim_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3012,7 +2877,7 @@ _vreclaim_L28
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L32
+                BRL     _vreclaim_L31
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3054,7 +2919,7 @@ _vreclaim_L28
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L34
+                BRL     _vreclaim_L33
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3062,23 +2927,23 @@ _vreclaim_L28
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L34
-                LDA     #1
-                BRL     _vreclaim_L35
-_vreclaim_L34
-                LDA     #0
-_vreclaim_L35
-                CMP     #0
-                BNE     *+5
-                BRL     _vreclaim_L32
-                LDA     #1
                 BRL     _vreclaim_L33
-_vreclaim_L32
-                LDA     #0
+                LDA     #1
+                BRL     _vreclaim_L34
 _vreclaim_L33
+                LDA     #0
+_vreclaim_L34
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L30
+                BRL     _vreclaim_L31
+                LDA     #1
+                BRL     _vreclaim_L32
+_vreclaim_L31
+                LDA     #0
+_vreclaim_L32
+                CMP     #0
+                BNE     *+5
+                BRL     _vreclaim_L29
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3087,19 +2952,17 @@ _vreclaim_L33
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L30
+                BRL     _vreclaim_L29
                 LDA     #1
-                BRL     _vreclaim_L31
-_vreclaim_L30
+                BRL     _vreclaim_L30
+_vreclaim_L29
                 LDA     #0
-_vreclaim_L31
+_vreclaim_L30
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L29
+                BRL     _vreclaim_L28
                 LDA     #1
                 TAY
                 TSC
@@ -3110,8 +2973,8 @@ _vreclaim_L31
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L29
-_vreclaim_L25
+_vreclaim_L28
+_vreclaim_L24
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3132,8 +2995,8 @@ _vreclaim_L25
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L24
-_vreclaim_L26
+                BRL     _vreclaim_L23
+_vreclaim_L25
                 LDA     #0
                 TAY
                 TSC
@@ -3162,7 +3025,7 @@ _vreclaim_getnewbuf_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
 _vreclaim_getnewbuf_uL_again
-_vreclaim_L36
+_vreclaim_L35
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3181,10 +3044,6 @@ _vreclaim_L36
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -3204,7 +3063,7 @@ _vreclaim_L36
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L40
+                BRL     _vreclaim_L39
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3212,15 +3071,15 @@ _vreclaim_L36
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L40
+                BRL     _vreclaim_L39
                 LDA     #1
-                BRL     _vreclaim_L41
-_vreclaim_L40
+                BRL     _vreclaim_L40
+_vreclaim_L39
                 LDA     #0
-_vreclaim_L41
+_vreclaim_L40
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L39
+                BRL     _vreclaim_L38
                 PHA
                 SEP     #$20
                 MX      %10
@@ -3236,7 +3095,7 @@ _vreclaim_L41
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_vreclaim_L39
+_vreclaim_L38
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3260,7 +3119,7 @@ _vreclaim_L39
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L43
+                BRL     _vreclaim_L42
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3268,17 +3127,17 @@ _vreclaim_L39
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L43
+                BRL     _vreclaim_L42
                 LDA     #0
-                BRL     _vreclaim_L44
-_vreclaim_L43
+                BRL     _vreclaim_L43
+_vreclaim_L42
                 LDA     #1
-_vreclaim_L44
+_vreclaim_L43
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L42
-                BRL     _vreclaim_L38
-_vreclaim_L42
+                BRL     _vreclaim_L41
+                BRL     _vreclaim_L37
+_vreclaim_L41
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3288,10 +3147,7 @@ _vreclaim_L42
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -3299,9 +3155,9 @@ _vreclaim_L42
                 CLC
                 ADC     #4
                 TCS
+_vreclaim_L36
+                BRL     _vreclaim_L35
 _vreclaim_L37
-                BRL     _vreclaim_L36
-_vreclaim_L38
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3322,10 +3178,7 @@ _vreclaim_L38
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_bremfree
@@ -3342,21 +3195,14 @@ _vreclaim_L38
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L45
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L44
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -3368,7 +3214,7 @@ _vreclaim_L38
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     _vreclaim_getnewbuf_uL_again
-_vreclaim_L45
+_vreclaim_L44
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3389,7 +3235,7 @@ _vreclaim_L45
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L46
+                BRL     _vreclaim_L45
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3401,7 +3247,7 @@ _vreclaim_L45
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L46
+_vreclaim_L45
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3434,10 +3280,7 @@ _vreclaim_L46
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -3453,10 +3296,6 @@ _vreclaim_L46
                 STA     _fcc_fpr0
                 LDA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -3464,17 +3303,10 @@ _vreclaim_L46
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -3541,7 +3373,7 @@ getblk_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L48
+                BRL     _vreclaim_L47
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3549,15 +3381,15 @@ getblk_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L48
+                BRL     _vreclaim_L47
                 LDA     #1
-                BRL     _vreclaim_L49
-_vreclaim_L48
+                BRL     _vreclaim_L48
+_vreclaim_L47
                 LDA     #0
-_vreclaim_L49
+_vreclaim_L48
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L47
+                BRL     _vreclaim_L46
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3574,7 +3406,7 @@ _vreclaim_L49
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L47
+_vreclaim_L46
                 PHA
                 SEP     #$20
                 MX      %10
@@ -3689,7 +3521,7 @@ getblk_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L50
+_vreclaim_L49
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3704,7 +3536,7 @@ _vreclaim_L50
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L53
+                BRL     _vreclaim_L52
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3712,15 +3544,15 @@ _vreclaim_L50
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L53
+                BRL     _vreclaim_L52
                 LDA     #0
-                BRL     _vreclaim_L54
-_vreclaim_L53
+                BRL     _vreclaim_L53
+_vreclaim_L52
                 LDA     #1
-_vreclaim_L54
+_vreclaim_L53
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L52
+                BRL     _vreclaim_L51
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3767,7 +3599,7 @@ _vreclaim_L54
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L58
+                BRL     _vreclaim_L57
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3809,7 +3641,7 @@ _vreclaim_L54
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L60
+                BRL     _vreclaim_L59
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -3817,23 +3649,23 @@ _vreclaim_L54
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L60
-                LDA     #0
-                BRL     _vreclaim_L61
-_vreclaim_L60
-                LDA     #1
-_vreclaim_L61
-                CMP     #0
-                BEQ     *+5
-                BRL     _vreclaim_L58
-                LDA     #0
                 BRL     _vreclaim_L59
-_vreclaim_L58
-                LDA     #1
+                LDA     #0
+                BRL     _vreclaim_L60
 _vreclaim_L59
+                LDA     #1
+_vreclaim_L60
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L56
+                BRL     _vreclaim_L57
+                LDA     #0
+                BRL     _vreclaim_L58
+_vreclaim_L57
+                LDA     #1
+_vreclaim_L58
+                CMP     #0
+                BEQ     *+5
+                BRL     _vreclaim_L55
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3844,17 +3676,17 @@ _vreclaim_L59
                 AND     #2048
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L56
+                BRL     _vreclaim_L55
                 LDA     #0
-                BRL     _vreclaim_L57
-_vreclaim_L56
+                BRL     _vreclaim_L56
+_vreclaim_L55
                 LDA     #1
-_vreclaim_L57
+_vreclaim_L56
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L55
-                BRL     _vreclaim_L51
-_vreclaim_L55
+                BRL     _vreclaim_L54
+                BRL     _vreclaim_L50
+_vreclaim_L54
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3865,20 +3697,13 @@ _vreclaim_L55
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L62
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L61
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -3890,7 +3715,7 @@ _vreclaim_L55
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     getblk_uL_loop
-_vreclaim_L62
+_vreclaim_L61
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3911,10 +3736,7 @@ _vreclaim_L62
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 TAY
                 TSC
                 CLC
@@ -3924,7 +3746,7 @@ _vreclaim_L62
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L51
+_vreclaim_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3945,17 +3767,14 @@ _vreclaim_L51
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L50
-_vreclaim_L52
+                BRL     _vreclaim_L49
+_vreclaim_L51
                 FGX2_FARCALL _vreclaim_getnewbuf
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      12+getblk_FRAMESIZE/256
@@ -4019,10 +3838,7 @@ _vreclaim_L52
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      12+getblk_FRAMESIZE/256
                 TSC
                 CLC
@@ -4126,29 +3942,8 @@ brelse_stkok        TCS
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L63
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L62
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -4156,7 +3951,7 @@ brelse_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L63
+_vreclaim_L62
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4184,7 +3979,7 @@ _vreclaim_L63
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L64
+                BRL     _vreclaim_L63
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -4232,7 +4027,7 @@ _vreclaim_L63
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L64
+_vreclaim_L63
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4260,7 +4055,7 @@ _vreclaim_L64
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L65
+                BRL     _vreclaim_L64
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -4308,7 +4103,7 @@ _vreclaim_L64
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L65
+_vreclaim_L64
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4337,35 +4132,13 @@ _vreclaim_L65
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L66
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L65
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-_vreclaim_L66
+_vreclaim_L65
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4394,29 +4167,7 @@ _vreclaim_L66
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L67
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L66
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -4433,7 +4184,7 @@ _vreclaim_L66
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L68
+                BRL     _vreclaim_L67
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4463,7 +4214,7 @@ _vreclaim_L66
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L68
+_vreclaim_L67
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4569,28 +4320,7 @@ _vreclaim_L68
                 LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -4631,7 +4361,7 @@ _vreclaim_L68
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_vreclaim_L67
+_vreclaim_L66
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4660,7 +4390,7 @@ _vreclaim_L67
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L69
+                BRL     _vreclaim_L68
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4676,8 +4406,8 @@ _vreclaim_L67
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L70
-_vreclaim_L69
+                BRL     _vreclaim_L69
+_vreclaim_L68
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4706,7 +4436,7 @@ _vreclaim_L69
                 AND     #8192
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L71
+                BRL     _vreclaim_L70
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4722,8 +4452,8 @@ _vreclaim_L69
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L72
-_vreclaim_L71
+                BRL     _vreclaim_L71
+_vreclaim_L70
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4752,7 +4482,7 @@ _vreclaim_L71
                 AND     #128
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L73
+                BRL     _vreclaim_L72
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4768,8 +4498,8 @@ _vreclaim_L71
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L74
-_vreclaim_L73
+                BRL     _vreclaim_L73
+_vreclaim_L72
                 PHA
                 SEP     #$20
                 MX      %10
@@ -4785,9 +4515,9 @@ _vreclaim_L73
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L74
-_vreclaim_L72
-_vreclaim_L70
+_vreclaim_L73
+_vreclaim_L71
+_vreclaim_L69
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4821,7 +4551,7 @@ _vreclaim_L70
                 AND     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L75
+                BRL     _vreclaim_L74
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4857,8 +4587,8 @@ _vreclaim_L70
                 CLC
                 ADC     #8
                 TCS
-                BRL     _vreclaim_L76
-_vreclaim_L75
+                BRL     _vreclaim_L75
+_vreclaim_L74
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4894,7 +4624,7 @@ _vreclaim_L75
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L76
+_vreclaim_L75
                 DO      8+brelse_FRAMESIZE/256
                 TSC
                 CLC
@@ -4960,7 +4690,7 @@ biowait_stkovf       JMP     _fcc_stkoflow
 biowait_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-_vreclaim_L77
+_vreclaim_L76
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4990,33 +4720,10 @@ _vreclaim_L77
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L78
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L77
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -5024,8 +4731,8 @@ _vreclaim_L77
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L77
-_vreclaim_L78
+                BRL     _vreclaim_L76
+_vreclaim_L77
                 DO      8+biowait_FRAMESIZE/256
                 TSC
                 CLC
@@ -5052,11 +4759,9 @@ _vreclaim_L78
                 TAX
                 TXA
                 AND     #4
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L79
+                BRL     _vreclaim_L78
                 LDA     #0
                 TAY
                 TSC
@@ -5067,7 +4772,7 @@ _vreclaim_L78
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L79
+_vreclaim_L78
                 DO      8+biowait_FRAMESIZE/256
                 TSC
                 CLC
@@ -5095,36 +4800,14 @@ _vreclaim_L79
                 AND     #$00FF
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L80
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L79
                 LDY     #20
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
-                BRL     _vreclaim_L81
-_vreclaim_L80
+                BRL     _vreclaim_L80
+_vreclaim_L79
                 LDA     #5
-_vreclaim_L81
+_vreclaim_L80
                 TAY
                 TSC
                 CLC
@@ -5179,7 +4862,7 @@ biodone_stkok        TCS
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L82
+                BRL     _vreclaim_L81
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5196,7 +4879,7 @@ biodone_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L82
+_vreclaim_L81
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5224,59 +4907,13 @@ _vreclaim_L82
                 TXA
                 ORA     #2
                 STA     [_fcc_fpr0]
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #1
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L84
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L83
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5293,15 +4930,15 @@ _vreclaim_L82
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L84
+                BRL     _vreclaim_L83
                 LDA     #1
-                BRL     _vreclaim_L85
-_vreclaim_L84
+                BRL     _vreclaim_L84
+_vreclaim_L83
                 LDA     #0
-_vreclaim_L85
+_vreclaim_L84
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L83
+                BRL     _vreclaim_L82
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5340,30 +4977,18 @@ _vreclaim_L85
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 DEC
                 LDY     #50
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #1024
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L87
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L86
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -5373,31 +4998,28 @@ _vreclaim_L85
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L89
+                BVC     _vreclaim_L88
                 EOR     #$8000
-_vreclaim_L89
-                BPL     *+5
-                BRL     _vreclaim_L87
-                LDA     #1
-                BRL     _vreclaim_L88
-_vreclaim_L87
-                LDA     #0
 _vreclaim_L88
+                BPL     *+5
+                BRL     _vreclaim_L86
+                LDA     #1
+                BRL     _vreclaim_L87
+_vreclaim_L86
+                LDA     #0
+_vreclaim_L87
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L86
+                BRL     _vreclaim_L85
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
-_vreclaim_L91
                 BMI     *+5
-                BRL     _vreclaim_L90
+                BRL     _vreclaim_L89
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5414,7 +5036,7 @@ _vreclaim_L91
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L90
+_vreclaim_L89
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5427,9 +5049,7 @@ _vreclaim_L90
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #50
                 STA     _fcc_fpr0
@@ -5440,8 +5060,8 @@ _vreclaim_L90
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L86
-_vreclaim_L83
+_vreclaim_L85
+_vreclaim_L82
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5470,29 +5090,8 @@ _vreclaim_L83
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L92
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L90
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
@@ -5509,7 +5108,7 @@ _vreclaim_L83
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L92
+_vreclaim_L90
                 DO      8+biodone_FRAMESIZE/256
                 TSC
                 CLC
@@ -5538,29 +5137,7 @@ _vreclaim_L92
                 AND     #64
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L93
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L91
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
@@ -5569,28 +5146,7 @@ _vreclaim_L92
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -5598,7 +5154,7 @@ _vreclaim_L92
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L93
+_vreclaim_L91
                 TAY
                 TSC
                 CLC
@@ -5735,7 +5291,7 @@ bread_stkok        TCS
                 AND     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L94
+                BRL     _vreclaim_L92
                 LDA     #0
                 TAY
                 TSC
@@ -5746,7 +5302,7 @@ bread_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L94
+_vreclaim_L92
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5756,17 +5312,9 @@ _vreclaim_L94
                 TXA
                 ORA     #1
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #36
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -5816,7 +5364,7 @@ _vreclaim_L94
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L95-1
+                PEA     _vreclaim_L93-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -5827,7 +5375,7 @@ _vreclaim_L94
                 DEC
                 PHA
                 RTL
-_vreclaim_L95
+_vreclaim_L93
                 TAY
                 TSC
                 CLC
@@ -5969,7 +5517,7 @@ bwrite_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L96
+                BRL     _vreclaim_L94
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6035,7 +5583,7 @@ bwrite_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L96
+_vreclaim_L94
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6194,7 +5742,7 @@ _vreclaim_L96
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L97-1
+                PEA     _vreclaim_L95-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -6205,7 +5753,7 @@ _vreclaim_L96
                 DEC
                 PHA
                 RTL
-_vreclaim_L97
+_vreclaim_L95
                 TAY
                 TSC
                 CLC
@@ -6215,7 +5763,7 @@ _vreclaim_L97
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L98
+                BRL     _vreclaim_L96
                 LDA     #0
                 TAY
                 TSC
@@ -6226,7 +5774,7 @@ _vreclaim_L97
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L98
+_vreclaim_L96
                 DO      8+bwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6341,60 +5889,14 @@ bdwrite_stkok        TCS
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L99
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L97
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -6438,7 +5940,7 @@ bdwrite_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L99
+_vreclaim_L97
                 DO      8+bdwrite_FRAMESIZE/256
                 TSC
                 CLC
@@ -6466,28 +5968,7 @@ _vreclaim_L99
                 TXA
                 ORA     #2
                 STA     [_fcc_fpr0]
-                DO      8+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bdwrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bdwrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bdwrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
@@ -6548,28 +6029,7 @@ bawrite_stkok        TCS
                 TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
-                DO      8+bawrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bawrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bawrite_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bawrite_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bawrite_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bawrite_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -6641,7 +6101,7 @@ bgetvp_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L100
+                BRL     _vreclaim_L98
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6658,7 +6118,7 @@ bgetvp_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L100
+_vreclaim_L98
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -6741,44 +6201,22 @@ _vreclaim_L100
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _vreclaim_L102
-                DO      8+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L100
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L102
+                BRL     _vreclaim_L100
                 LDA     #0
-                BRL     _vreclaim_L103
-_vreclaim_L102
+                BRL     _vreclaim_L101
+_vreclaim_L100
                 LDA     #1
-_vreclaim_L103
+_vreclaim_L101
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L101
+                BRL     _vreclaim_L99
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -6839,8 +6277,8 @@ _vreclaim_L103
                 LDA     [_fcc_fpr1],Y
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-                BRL     _vreclaim_L104
-_vreclaim_L101
+                BRL     _vreclaim_L102
+_vreclaim_L99
                 DO      12+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -6866,7 +6304,7 @@ _vreclaim_L101
                 LDA     #65535
                 LDY     #22
                 STA     [_fcc_fpr0],Y
-_vreclaim_L104
+_vreclaim_L102
                 DO      8+bgetvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -6894,27 +6332,7 @@ _vreclaim_L104
                 INC
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                DO      8+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #42
                 STA     _fcc_fpr0
@@ -7015,7 +6433,7 @@ brelvp_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L106
+                BRL     _vreclaim_L104
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -7023,15 +6441,15 @@ brelvp_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L106
+                BRL     _vreclaim_L104
                 LDA     #1
-                BRL     _vreclaim_L107
-_vreclaim_L106
+                BRL     _vreclaim_L105
+_vreclaim_L104
                 LDA     #0
-_vreclaim_L107
+_vreclaim_L105
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L105
+                BRL     _vreclaim_L103
                 TAY
                 TSC
                 CLC
@@ -7041,7 +6459,7 @@ _vreclaim_L107
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L105
+_vreclaim_L103
                 DO      8+brelvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -7152,18 +6570,14 @@ _vreclaim_L105
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L108
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L106
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 SEC
                 SBC     #1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-_vreclaim_L108
+_vreclaim_L106
                 TAY
                 TSC
                 CLC
@@ -7218,7 +6632,7 @@ reassignbuf_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L110
+                BRL     _vreclaim_L108
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -7226,15 +6640,15 @@ reassignbuf_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L110
+                BRL     _vreclaim_L108
                 LDA     #1
-                BRL     _vreclaim_L111
-_vreclaim_L110
+                BRL     _vreclaim_L109
+_vreclaim_L108
                 LDA     #0
-_vreclaim_L111
+_vreclaim_L109
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L109
+                BRL     _vreclaim_L107
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7251,7 +6665,7 @@ _vreclaim_L111
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L109
+_vreclaim_L107
                 DO      8+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7309,7 +6723,7 @@ _vreclaim_L109
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L112
+                BRL     _vreclaim_L110
                 DO      12+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7365,8 +6779,8 @@ _vreclaim_L109
                 CLC
                 ADC     #8
                 TCS
-                BRL     _vreclaim_L113
-_vreclaim_L112
+                BRL     _vreclaim_L111
+_vreclaim_L110
                 DO      12+reassignbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7422,7 +6836,7 @@ _vreclaim_L112
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L113
+_vreclaim_L111
                 TAY
                 TSC
                 CLC
@@ -7488,7 +6902,7 @@ vflushbuf_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L114
+_vreclaim_L112
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7500,11 +6914,7 @@ _vreclaim_L114
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L116
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L114
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7531,9 +6941,9 @@ _vreclaim_L114
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L117
                 BRL     _vreclaim_L115
-_vreclaim_L117
+                BRL     _vreclaim_L113
+_vreclaim_L115
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7542,11 +6952,9 @@ _vreclaim_L117
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L118
+                BRL     _vreclaim_L116
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7563,7 +6971,7 @@ _vreclaim_L117
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L118
+_vreclaim_L116
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7597,15 +7005,10 @@ _vreclaim_L118
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L119
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L117
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bawrite
@@ -7613,8 +7016,8 @@ _vreclaim_L118
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L120
-_vreclaim_L119
+                BRL     _vreclaim_L118
+_vreclaim_L117
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7630,8 +7033,8 @@ _vreclaim_L119
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflushbuf_uL_loop
-_vreclaim_L120
-_vreclaim_L115
+_vreclaim_L118
+_vreclaim_L113
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7640,8 +7043,8 @@ _vreclaim_L115
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L114
-_vreclaim_L116
+                BRL     _vreclaim_L112
+_vreclaim_L114
                 DO      10+vflushbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7655,11 +7058,9 @@ _vreclaim_L116
                 TAX
                 TXA
                 AND     #2
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L121
+                BRL     _vreclaim_L119
                 TAY
                 TSC
                 CLC
@@ -7669,8 +7070,8 @@ _vreclaim_L116
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L121
-_vreclaim_L122
+_vreclaim_L119
+_vreclaim_L120
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7700,55 +7101,13 @@ _vreclaim_L122
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L123
-                DO      8+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L121
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #1024
                 STA     [_fcc_fpr0]
-                DO      8+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #50
                 STA     _fcc_fpr0
@@ -7759,8 +7118,8 @@ _vreclaim_L122
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L122
-_vreclaim_L123
+                BRL     _vreclaim_L120
+_vreclaim_L121
                 DO      8+vflushbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -7799,12 +7158,12 @@ _vreclaim_L123
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L124
+                BRL     _vreclaim_L122
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflushbuf_uL_loop
-_vreclaim_L124
+_vreclaim_L122
                 TAY
                 TSC
                 CLC
@@ -7847,7 +7206,7 @@ bflush_uL_loop
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_vreclaim_L125
+_vreclaim_L123
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7873,7 +7232,7 @@ _vreclaim_L125
                 JSR     _fcc_ltu16
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L127
+                BRL     _vreclaim_L125
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7894,7 +7253,7 @@ _vreclaim_L125
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L128
+_vreclaim_L126
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -7909,7 +7268,7 @@ _vreclaim_L128
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L131
+                BRL     _vreclaim_L129
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -7917,15 +7276,15 @@ _vreclaim_L128
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L131
+                BRL     _vreclaim_L129
                 LDA     #0
-                BRL     _vreclaim_L132
-_vreclaim_L131
+                BRL     _vreclaim_L130
+_vreclaim_L129
                 LDA     #1
-_vreclaim_L132
+_vreclaim_L130
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L130
+                BRL     _vreclaim_L128
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7934,13 +7293,11 @@ _vreclaim_L132
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L133
-                BRL     _vreclaim_L129
-_vreclaim_L133
+                BRL     _vreclaim_L131
+                BRL     _vreclaim_L127
+_vreclaim_L131
                 DO      6+bflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -7955,7 +7312,7 @@ _vreclaim_L133
                 TXA
                 CMP     #65535
                 BNE     *+5
-                BRL     _vreclaim_L135
+                BRL     _vreclaim_L133
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7977,17 +7334,17 @@ _vreclaim_L133
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L135
+                BRL     _vreclaim_L133
                 LDA     #1
-                BRL     _vreclaim_L136
-_vreclaim_L135
+                BRL     _vreclaim_L134
+_vreclaim_L133
                 LDA     #0
-_vreclaim_L136
+_vreclaim_L134
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L134
-                BRL     _vreclaim_L129
-_vreclaim_L134
+                BRL     _vreclaim_L132
+                BRL     _vreclaim_L127
+_vreclaim_L132
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8008,10 +7365,7 @@ _vreclaim_L134
                 TXA
                 ORA     #8
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -8025,7 +7379,7 @@ _vreclaim_L134
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     bflush_uL_loop
-_vreclaim_L129
+_vreclaim_L127
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8046,17 +7400,17 @@ _vreclaim_L129
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L128
-_vreclaim_L130
-_vreclaim_L126
+                BRL     _vreclaim_L126
+_vreclaim_L128
+_vreclaim_L124
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     #50
                 STA     5,S   ; fccstk d=0 b=5
-                BRL     _vreclaim_L125
-_vreclaim_L127
+                BRL     _vreclaim_L123
+_vreclaim_L125
                 TAY
                 TSC
                 CLC
@@ -8085,7 +7439,7 @@ vinvalbuf_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_vreclaim_L137
+_vreclaim_L135
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8131,9 +7485,9 @@ _vreclaim_L137
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L140
-                BRL     _vreclaim_L141
-_vreclaim_L140
+                BRL     _vreclaim_L138
+                BRL     _vreclaim_L139
+_vreclaim_L138
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8176,12 +7530,12 @@ _vreclaim_L140
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L142
-                BRL     _vreclaim_L143
-_vreclaim_L142
-                BRL     _vreclaim_L139
-_vreclaim_L143
+                BRL     _vreclaim_L140
+                BRL     _vreclaim_L141
+_vreclaim_L140
+                BRL     _vreclaim_L137
 _vreclaim_L141
+_vreclaim_L139
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -8190,7 +7544,7 @@ _vreclaim_L141
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L144
+_vreclaim_L142
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8202,11 +7556,7 @@ _vreclaim_L144
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L146
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L144
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8233,20 +7583,13 @@ _vreclaim_L144
                 AND     #8
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L147
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L145
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #64
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -8254,8 +7597,8 @@ _vreclaim_L144
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L146
-_vreclaim_L147
+                BRL     _vreclaim_L144
+_vreclaim_L145
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8288,26 +7631,22 @@ _vreclaim_L147
                 FIN
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L149
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L147
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L149
+                BRL     _vreclaim_L147
                 LDA     #1
-                BRL     _vreclaim_L150
-_vreclaim_L149
+                BRL     _vreclaim_L148
+_vreclaim_L147
                 LDA     #0
-_vreclaim_L150
+_vreclaim_L148
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L148
+                BRL     _vreclaim_L146
                 LDA     13,S   ; fccstk d=0 b=13
                 INC
                 STA     13,S   ; fccstk d=0 b=13
@@ -8322,8 +7661,8 @@ _vreclaim_L150
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L146
-_vreclaim_L148
+                BRL     _vreclaim_L144
+_vreclaim_L146
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8365,7 +7704,7 @@ _vreclaim_L148
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L152
+                BRL     _vreclaim_L150
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -8373,15 +7712,15 @@ _vreclaim_L148
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L152
+                BRL     _vreclaim_L150
                 LDA     #0
-                BRL     _vreclaim_L153
-_vreclaim_L152
+                BRL     _vreclaim_L151
+_vreclaim_L150
                 LDA     #1
-_vreclaim_L153
+_vreclaim_L151
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L151
+                BRL     _vreclaim_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8411,8 +7750,8 @@ _vreclaim_L153
                 CLC
                 ADC     #8
                 TCS
-                BRL     _vreclaim_L154
-_vreclaim_L151
+                BRL     _vreclaim_L152
+_vreclaim_L149
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8422,7 +7761,7 @@ _vreclaim_L151
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-_vreclaim_L154
+_vreclaim_L152
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8434,7 +7773,7 @@ _vreclaim_L154
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L145
+_vreclaim_L143
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -8443,11 +7782,11 @@ _vreclaim_L145
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L144
-_vreclaim_L146
-_vreclaim_L138
-                BRL     _vreclaim_L137
-_vreclaim_L139
+                BRL     _vreclaim_L142
+_vreclaim_L144
+_vreclaim_L136
+                BRL     _vreclaim_L135
+_vreclaim_L137
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8486,7 +7825,7 @@ _vreclaim_L139
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BEQ     *+5
-                BRL     _vreclaim_L156
+                BRL     _vreclaim_L154
                 DO      8+vinvalbuf_FRAMESIZE/256
                 TSC
                 CLC
@@ -8525,15 +7864,15 @@ _vreclaim_L139
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BEQ     *+5
-                BRL     _vreclaim_L156
+                BRL     _vreclaim_L154
                 LDA     #0
-                BRL     _vreclaim_L157
-_vreclaim_L156
+                BRL     _vreclaim_L155
+_vreclaim_L154
                 LDA     #1
-_vreclaim_L157
+_vreclaim_L155
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L155
+                BRL     _vreclaim_L153
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8550,7 +7889,7 @@ _vreclaim_L157
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L155
+_vreclaim_L153
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
                 TSC
@@ -8583,11 +7922,11 @@ _vreclaim_note_stkok        TCS
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L159
+                BVC     _vreclaim_L157
                 EOR     #$8000
-_vreclaim_L159
+_vreclaim_L157
                 BMI     *+5
-                BRL     _vreclaim_L158
+                BRL     _vreclaim_L156
                 LDA     #_vreclaim_trace
                 PHA
                 LDA     _vreclaim_n_trace
@@ -8618,7 +7957,7 @@ _vreclaim_L159
                 TYA
                 STA:    $0000,X
                 PLA
-_vreclaim_L158
+_vreclaim_L156
                 TAY
                 TSC
                 CLC
@@ -8895,7 +8234,7 @@ _vreclaim_chkvnlock_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L160
+_vreclaim_L158
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8927,56 +8266,13 @@ _vreclaim_L160
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L161
-                DO      8+_vreclaim_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vreclaim_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vreclaim_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_vreclaim_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vreclaim_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vreclaim_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L159
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+_vreclaim_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vreclaim_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vreclaim_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_vreclaim_chkvnlock_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vreclaim_chkvnlock_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vreclaim_chkvnlock_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -8986,8 +8282,8 @@ _vreclaim_L160
                 TCS
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L160
-_vreclaim_L161
+                BRL     _vreclaim_L158
+_vreclaim_L159
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -9102,7 +8398,7 @@ dead_read_stkok        TCS
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L162
+                BRL     _vreclaim_L160
                 SEP     #$20
                 MX      %10
                 PHB
@@ -9119,7 +8415,7 @@ dead_read_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L162
+_vreclaim_L160
                 DO      8+dead_read_FRAMESIZE/256
                 TSC
                 CLC
@@ -9148,7 +8444,7 @@ _vreclaim_L162
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L163
+                BRL     _vreclaim_L161
                 LDA     #5
                 TAY
                 TSC
@@ -9159,7 +8455,7 @@ _vreclaim_L162
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L163
+_vreclaim_L161
                 LDA     #0
                 TAY
                 TSC
@@ -9220,7 +8516,7 @@ dead_write_stkok        TCS
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L164
+                BRL     _vreclaim_L162
                 SEP     #$20
                 MX      %10
                 PHB
@@ -9237,7 +8533,7 @@ dead_write_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L164
+_vreclaim_L162
                 LDA     #5
                 TAY
                 TSC
@@ -9297,15 +8593,15 @@ dead_ioctl_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _vreclaim_L166
+                BEQ     _vreclaim_L164
                 LDA     #0
-                BRA     _vreclaim_L167
-_vreclaim_L166
+                BRA     _vreclaim_L165
+_vreclaim_L164
                 LDA     #1
-_vreclaim_L167
+_vreclaim_L165
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L165
+                BRL     _vreclaim_L163
                 LDA     #9
                 TAY
                 TSC
@@ -9316,7 +8612,7 @@ _vreclaim_L167
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L165
+_vreclaim_L163
                 DO      8+dead_ioctl_FRAMESIZE/256
                 TSC
                 CLC
@@ -9464,7 +8760,7 @@ _vreclaim_L165
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L168-1
+                PEA     _vreclaim_L166-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9475,7 +8771,7 @@ _vreclaim_L165
                 DEC
                 PHA
                 RTL
-_vreclaim_L168
+_vreclaim_L166
                 TAY
                 TSC
                 CLC
@@ -9575,7 +8871,7 @@ dead_strategy_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L172
+                BRL     _vreclaim_L170
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9583,15 +8879,15 @@ dead_strategy_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L172
+                BRL     _vreclaim_L170
                 LDA     #1
-                BRL     _vreclaim_L173
-_vreclaim_L172
+                BRL     _vreclaim_L171
+_vreclaim_L170
                 LDA     #0
-_vreclaim_L173
+_vreclaim_L171
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L170
+                BRL     _vreclaim_L168
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9636,23 +8932,23 @@ _vreclaim_L173
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _vreclaim_L174
+                BEQ     _vreclaim_L172
                 LDA     #0
-                BRA     _vreclaim_L175
-_vreclaim_L174
+                BRA     _vreclaim_L173
+_vreclaim_L172
                 LDA     #1
-_vreclaim_L175
+_vreclaim_L173
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L170
+                BRL     _vreclaim_L168
                 LDA     #0
-                BRL     _vreclaim_L171
-_vreclaim_L170
+                BRL     _vreclaim_L169
+_vreclaim_L168
                 LDA     #1
-_vreclaim_L171
+_vreclaim_L169
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L169
+                BRL     _vreclaim_L167
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9680,28 +8976,7 @@ _vreclaim_L171
                 TXA
                 ORA     #4
                 STA     [_fcc_fpr0]
-                DO      8+dead_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+dead_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+dead_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+dead_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+dead_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+dead_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL biodone
@@ -9719,7 +8994,7 @@ _vreclaim_L171
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L169
+_vreclaim_L167
                 DO      8+dead_strategy_FRAMESIZE/256
                 TSC
                 CLC
@@ -9809,7 +9084,7 @@ _vreclaim_L169
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L176-1
+                PEA     _vreclaim_L174-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9820,7 +9095,7 @@ _vreclaim_L169
                 DEC
                 PHA
                 RTL
-_vreclaim_L176
+_vreclaim_L174
                 TAY
                 TSC
                 CLC
@@ -9885,15 +9160,15 @@ dead_lock_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _vreclaim_L178
+                BEQ     _vreclaim_L176
                 LDA     #0
-                BRA     _vreclaim_L179
-_vreclaim_L178
+                BRA     _vreclaim_L177
+_vreclaim_L176
                 LDA     #1
-_vreclaim_L179
+_vreclaim_L177
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L177
+                BRL     _vreclaim_L175
                 LDA     #0
                 TAY
                 TSC
@@ -9904,7 +9179,7 @@ _vreclaim_L179
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L177
+_vreclaim_L175
                 DO      8+dead_lock_FRAMESIZE/256
                 TSC
                 CLC
@@ -9982,7 +9257,7 @@ _vreclaim_L177
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L180-1
+                PEA     _vreclaim_L178-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -9993,7 +9268,7 @@ _vreclaim_L177
                 DEC
                 PHA
                 RTL
-_vreclaim_L180
+_vreclaim_L178
                 TAY
                 TSC
                 CLC
@@ -10058,15 +9333,15 @@ dead_bmap_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     _vreclaim_L182
+                BEQ     _vreclaim_L180
                 LDA     #0
-                BRA     _vreclaim_L183
-_vreclaim_L182
+                BRA     _vreclaim_L181
+_vreclaim_L180
                 LDA     #1
-_vreclaim_L183
+_vreclaim_L181
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L181
+                BRL     _vreclaim_L179
                 LDA     #5
                 TAY
                 TSC
@@ -10077,7 +9352,7 @@ _vreclaim_L183
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L181
+_vreclaim_L179
                 DO      8+dead_bmap_FRAMESIZE/256
                 TSC
                 CLC
@@ -10229,7 +9504,7 @@ _vreclaim_L181
                 LDA     19,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L184-1
+                PEA     _vreclaim_L182-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -10240,7 +9515,7 @@ _vreclaim_L181
                 DEC
                 PHA
                 RTL
-_vreclaim_L184
+_vreclaim_L182
                 TAY
                 TSC
                 CLC
@@ -10411,8 +9686,60 @@ chrtoblk_stkok        TCS
                 TXA
                 CMP     #10
                 BEQ     *+5
-                BRL     _vreclaim_L185
+                BRL     _vreclaim_L183
                 LDA     #0
+                TAY
+                TSC
+                CLC
+                ADC     #chrtoblk_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vreclaim_L183
+                DO      6+chrtoblk_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+chrtoblk_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                TXA
+                CMP     #11
+                BEQ     *+5
+                BRL     _vreclaim_L184
+                LDA     #1
+                TAY
+                TSC
+                CLC
+                ADC     #chrtoblk_FRAMESIZE
+                TCS
+                PLA
+                STA     _fcc_fb
+                TYA
+                RTL
+_vreclaim_L184
+                DO      6+chrtoblk_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+chrtoblk_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                TAX
+                TXA
+                CMP     #12
+                BEQ     *+5
+                BRL     _vreclaim_L185
+                LDA     #2
                 TAY
                 TSC
                 CLC
@@ -10435,10 +9762,10 @@ _vreclaim_L185
                 FIN
                 TAX
                 TXA
-                CMP     #11
+                CMP     #13
                 BEQ     *+5
                 BRL     _vreclaim_L186
-                LDA     #1
+                LDA     #3
                 TAY
                 TSC
                 CLC
@@ -10461,10 +9788,10 @@ _vreclaim_L186
                 FIN
                 TAX
                 TXA
-                CMP     #12
+                CMP     #14
                 BEQ     *+5
                 BRL     _vreclaim_L187
-                LDA     #2
+                LDA     #4
                 TAY
                 TSC
                 CLC
@@ -10487,10 +9814,10 @@ _vreclaim_L187
                 FIN
                 TAX
                 TXA
-                CMP     #13
+                CMP     #15
                 BEQ     *+5
                 BRL     _vreclaim_L188
-                LDA     #3
+                LDA     #5
                 TAY
                 TSC
                 CLC
@@ -10513,10 +9840,10 @@ _vreclaim_L188
                 FIN
                 TAX
                 TXA
-                CMP     #14
+                CMP     #16
                 BEQ     *+5
                 BRL     _vreclaim_L189
-                LDA     #4
+                LDA     #6
                 TAY
                 TSC
                 CLC
@@ -10539,61 +9866,9 @@ _vreclaim_L189
                 FIN
                 TAX
                 TXA
-                CMP     #15
-                BEQ     *+5
-                BRL     _vreclaim_L190
-                LDA     #5
-                TAY
-                TSC
-                CLC
-                ADC     #chrtoblk_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vreclaim_L190
-                DO      6+chrtoblk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+chrtoblk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                TAX
-                TXA
-                CMP     #16
-                BEQ     *+5
-                BRL     _vreclaim_L191
-                LDA     #6
-                TAY
-                TSC
-                CLC
-                ADC     #chrtoblk_FRAMESIZE
-                TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
-_vreclaim_L191
-                DO      6+chrtoblk_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+chrtoblk_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                TAX
-                TXA
                 CMP     #17
                 BEQ     *+5
-                BRL     _vreclaim_L192
+                BRL     _vreclaim_L190
                 LDA     #7
                 TAY
                 TSC
@@ -10604,7 +9879,7 @@ _vreclaim_L191
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L192
+_vreclaim_L190
                 LDA     #65535
                 TAY
                 TSC
@@ -10767,7 +10042,7 @@ _vreclaim_zerobytes_stkok        TCS
                 LDA     8+_vreclaim_zerobytes_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 STA     _fcc_img2
-_vreclaim_L193
+_vreclaim_L191
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -10783,7 +10058,7 @@ _vreclaim_L193
                 TXA
                 CMP     _fcc_tmp_b
                 BCC     *+5
-                BRL     _vreclaim_L194
+                BRL     _vreclaim_L192
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -10791,8 +10066,8 @@ _vreclaim_L193
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _vreclaim_L193
-_vreclaim_L194
+                BRL     _vreclaim_L191
+_vreclaim_L192
                 TAY
                 TSC
                 CLC
@@ -10840,31 +10115,10 @@ vntblinit_stkok        TCS
                 ELSE
                 LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr0
                 STA     vnode_pool
                 LDA     _fcc_fpr0+2
                 STA     vnode_pool+2
-                DO      8+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vntblinit_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vntblinit_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vntblinit_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     #10496
                 CLC
                 ADC     _fcc_fpr0
@@ -10876,7 +10130,7 @@ vntblinit_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_vreclaim_L195
+_vreclaim_L193
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -10885,11 +10139,11 @@ _vreclaim_L195
                 TXA
                 SEC
                 SBC     #8
-                BVC     _vreclaim_L198
+                BVC     _vreclaim_L196
                 EOR     #$8000
-_vreclaim_L198
+_vreclaim_L196
                 BMI     *+5
-                BRL     _vreclaim_L197
+                BRL     _vreclaim_L195
                 LDA     #speclisth
                 PHA
                 LDA     _fcc_img0
@@ -10914,10 +10168,10 @@ _vreclaim_L198
                 REP     #$20
                 MX      %00
                 PLA
-_vreclaim_L196
+_vreclaim_L194
                 INC     _fcc_img0
-                BRL     _vreclaim_L195
-_vreclaim_L197
+                BRL     _vreclaim_L193
+_vreclaim_L195
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #896
@@ -10981,7 +10235,7 @@ _vreclaim_L197
                 TCS
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L199
+_vreclaim_L197
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -10990,11 +10244,11 @@ _vreclaim_L199
                 TXA
                 SEC
                 SBC     #64
-                BVC     _vreclaim_L202
+                BVC     _vreclaim_L200
                 EOR     #$8000
-_vreclaim_L202
+_vreclaim_L200
                 BMI     *+5
-                BRL     _vreclaim_L201
+                BRL     _vreclaim_L199
                 SEP     #$20
                 MX      %10
                 LDA     vnode_pool+2
@@ -11023,17 +10277,10 @@ _vreclaim_L202
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #8
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfree
@@ -11041,13 +10288,13 @@ _vreclaim_L202
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L200
+_vreclaim_L198
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L199
-_vreclaim_L201
+                BRL     _vreclaim_L197
+_vreclaim_L199
                 DO      8+vntblinit_FRAMESIZE/256
                 TSC
                 CLC
@@ -11388,7 +10635,7 @@ vremfree_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L203
+                BRL     _vreclaim_L201
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -11466,8 +10713,8 @@ vremfree_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vreclaim_L204
-_vreclaim_L203
+                BRL     _vreclaim_L202
+_vreclaim_L201
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -11505,7 +10752,7 @@ _vreclaim_L203
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_vreclaim_L204
+_vreclaim_L202
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -11622,17 +10869,13 @@ getnewvnode_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L206
+                BRL     _vreclaim_L204
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -11640,15 +10883,15 @@ getnewvnode_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L206
+                BRL     _vreclaim_L204
                 LDA     #1
-                BRL     _vreclaim_L207
-_vreclaim_L206
+                BRL     _vreclaim_L205
+_vreclaim_L204
                 LDA     #0
-_vreclaim_L207
+_vreclaim_L205
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L205
+                BRL     _vreclaim_L203
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -11693,7 +10936,7 @@ _vreclaim_L207
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L205
+_vreclaim_L203
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -11702,7 +10945,7 @@ _vreclaim_L205
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L208
+                BRL     _vreclaim_L206
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11719,7 +10962,7 @@ _vreclaim_L205
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L208
+_vreclaim_L206
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -11741,11 +10984,8 @@ _vreclaim_L208
                 TXA
                 CMP     #8
                 BNE     *+5
-                BRL     _vreclaim_L209
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L207
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -11753,38 +10993,23 @@ _vreclaim_L208
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L209
+_vreclaim_L207
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     #0
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #4
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #52
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      6+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -11797,10 +11022,6 @@ _vreclaim_L209
                 FIN
                 LDY     #58
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 JSR     _fcc_long_from_int
                 LDY     #10
@@ -11817,24 +11038,12 @@ _vreclaim_L209
                 LDA     #0
                 LDY     #50
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #6
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 LDY     #8
                 STA     [_fcc_fpr0],Y
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -11947,7 +11156,7 @@ _vreclaim_L209
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L210
+                BRL     _vreclaim_L208
                 SEP     #$20
                 MX      %10
                 LDA     _vreclaim_vfs_cacheops+2
@@ -11980,7 +11189,7 @@ _vreclaim_L209
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L211-1
+                PEA     _vreclaim_L209-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -11991,14 +11200,14 @@ _vreclaim_L209
                 DEC
                 PHA
                 RTL
-_vreclaim_L211
+_vreclaim_L209
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_vreclaim_L210
+_vreclaim_L208
                 DO      10+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -12126,11 +11335,11 @@ vref_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L213
+                BVC     _vreclaim_L211
                 EOR     #$8000
-_vreclaim_L213
+_vreclaim_L211
                 BPL     *+5
-                BRL     _vreclaim_L212
+                BRL     _vreclaim_L210
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12147,7 +11356,7 @@ _vreclaim_L213
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L212
+_vreclaim_L210
                 DO      8+vref_FRAMESIZE/256
                 TSC
                 CLC
@@ -12229,56 +11438,13 @@ vget_stkok        TCS
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L214
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L212
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -12296,7 +11462,7 @@ vget_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L214
+_vreclaim_L212
                 DO      8+vget_FRAMESIZE/256
                 TSC
                 CLC
@@ -12321,33 +11487,10 @@ _vreclaim_L214
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L215
-                DO      8+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vget_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vget_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vget_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vget_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L213
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vremfree
@@ -12355,7 +11498,7 @@ _vreclaim_L214
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L215
+_vreclaim_L213
                 DO      8+vget_FRAMESIZE/256
                 TSC
                 CLC
@@ -12441,11 +11584,11 @@ vrele_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L217
+                BVC     _vreclaim_L215
                 EOR     #$8000
-_vreclaim_L217
+_vreclaim_L215
                 BPL     *+5
-                BRL     _vreclaim_L216
+                BRL     _vreclaim_L214
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12462,7 +11605,7 @@ _vreclaim_L217
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L216
+_vreclaim_L214
                 DO      8+vrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -12490,28 +11633,6 @@ _vreclaim_L216
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
-                DO      8+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vrele_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vrele_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vrele_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vrele_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -12521,11 +11642,11 @@ _vreclaim_L216
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L219
+                BVC     _vreclaim_L217
                 EOR     #$8000
-_vreclaim_L219
+_vreclaim_L217
                 BMI     *+5
-                BRL     _vreclaim_L218
+                BRL     _vreclaim_L216
                 TAY
                 TSC
                 CLC
@@ -12535,7 +11656,7 @@ _vreclaim_L219
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L218
+_vreclaim_L216
                 DO      8+vrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -12642,7 +11763,7 @@ _vreclaim_L218
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L220-1
+                PEA     _vreclaim_L218-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -12653,7 +11774,7 @@ _vreclaim_L218
                 DEC
                 PHA
                 RTL
-_vreclaim_L220
+_vreclaim_L218
                 TAY
                 TSC
                 CLC
@@ -12770,11 +11891,11 @@ holdrele_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L222
+                BVC     _vreclaim_L220
                 EOR     #$8000
-_vreclaim_L222
+_vreclaim_L220
                 BPL     *+5
-                BRL     _vreclaim_L221
+                BRL     _vreclaim_L219
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12791,7 +11912,7 @@ _vreclaim_L222
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L221
+_vreclaim_L219
                 DO      8+holdrele_FRAMESIZE/256
                 TSC
                 CLC
@@ -12883,7 +12004,7 @@ insmntque_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L223
+                BRL     _vreclaim_L221
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -12998,7 +12119,7 @@ insmntque_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L224
+                BRL     _vreclaim_L222
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -13076,8 +12197,8 @@ insmntque_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_vreclaim_L224
-_vreclaim_L223
+_vreclaim_L222
+_vreclaim_L221
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -13232,7 +12353,7 @@ _vreclaim_L223
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L226
+                BRL     _vreclaim_L224
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -13240,15 +12361,15 @@ _vreclaim_L223
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L226
+                BRL     _vreclaim_L224
                 LDA     #1
-                BRL     _vreclaim_L227
-_vreclaim_L226
+                BRL     _vreclaim_L225
+_vreclaim_L224
                 LDA     #0
-_vreclaim_L227
+_vreclaim_L225
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L225
+                BRL     _vreclaim_L223
                 TAY
                 TSC
                 CLC
@@ -13258,7 +12379,7 @@ _vreclaim_L227
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L225
+_vreclaim_L223
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -13363,7 +12484,7 @@ _vreclaim_L225
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L228
+                BRL     _vreclaim_L226
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -13431,7 +12552,7 @@ _vreclaim_L225
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-_vreclaim_L228
+_vreclaim_L226
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -13575,7 +12696,7 @@ _vreclaim_specalloc_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_vreclaim_L229
+_vreclaim_L227
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -13584,11 +12705,11 @@ _vreclaim_L229
                 TXA
                 SEC
                 SBC     #64
-                BVC     _vreclaim_L232
+                BVC     _vreclaim_L230
                 EOR     #$8000
-_vreclaim_L232
+_vreclaim_L230
                 BMI     *+5
-                BRL     _vreclaim_L231
+                BRL     _vreclaim_L229
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -13626,7 +12747,7 @@ _vreclaim_L232
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L234
+                BRL     _vreclaim_L232
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -13634,15 +12755,15 @@ _vreclaim_L232
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L234
+                BRL     _vreclaim_L232
                 LDA     #1
-                BRL     _vreclaim_L235
-_vreclaim_L234
+                BRL     _vreclaim_L233
+_vreclaim_L232
                 LDA     #0
-_vreclaim_L235
+_vreclaim_L233
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L233
+                BRL     _vreclaim_L231
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -13718,11 +12839,11 @@ _vreclaim_L235
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L233
-_vreclaim_L230
-                INC     _fcc_img0
-                BRL     _vreclaim_L229
 _vreclaim_L231
+_vreclaim_L228
+                INC     _fcc_img0
+                BRL     _vreclaim_L227
+_vreclaim_L229
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -13951,44 +13072,22 @@ checkalias_stkok        TCS
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _vreclaim_L237
-                DO      8+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+checkalias_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+checkalias_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+checkalias_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+checkalias_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L235
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L237
+                BRL     _vreclaim_L235
                 LDA     #1
-                BRL     _vreclaim_L238
-_vreclaim_L237
+                BRL     _vreclaim_L236
+_vreclaim_L235
                 LDA     #0
-_vreclaim_L238
+_vreclaim_L236
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L236
+                BRL     _vreclaim_L234
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -14001,7 +13100,7 @@ _vreclaim_L238
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L236
+_vreclaim_L234
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14082,7 +13181,7 @@ checkalias_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L239
+_vreclaim_L237
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -14094,7 +13193,7 @@ _vreclaim_L239
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L241
+                BRL     _vreclaim_L239
                 DO      10+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14106,10 +13205,6 @@ _vreclaim_L239
                 LDA     10+checkalias_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -14128,7 +13223,7 @@ _vreclaim_L239
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L243
+                BRL     _vreclaim_L241
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14164,32 +13259,27 @@ _vreclaim_L239
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L243
+                BRL     _vreclaim_L241
                 LDA     #0
-                BRL     _vreclaim_L244
-_vreclaim_L243
+                BRL     _vreclaim_L242
+_vreclaim_L241
                 LDA     #1
-_vreclaim_L244
+_vreclaim_L242
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L242
                 BRL     _vreclaim_L240
-_vreclaim_L242
+                BRL     _vreclaim_L238
+_vreclaim_L240
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L245
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L243
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -14201,7 +13291,7 @@ _vreclaim_L242
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_vreclaim_L245
+_vreclaim_L243
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14217,14 +13307,14 @@ _vreclaim_L245
                 TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L246
+                BRL     _vreclaim_L244
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
-_vreclaim_L246
-                BRL     _vreclaim_L241
-_vreclaim_L240
+_vreclaim_L244
+                BRL     _vreclaim_L239
+_vreclaim_L238
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14257,8 +13347,8 @@ _vreclaim_L240
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L239
-_vreclaim_L241
+                BRL     _vreclaim_L237
+_vreclaim_L239
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14269,7 +13359,7 @@ _vreclaim_L241
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L250
+                BRL     _vreclaim_L248
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -14277,34 +13367,32 @@ _vreclaim_L241
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L250
+                BRL     _vreclaim_L248
                 LDA     #1
-                BRL     _vreclaim_L251
-_vreclaim_L250
+                BRL     _vreclaim_L249
+_vreclaim_L248
                 LDA     #0
-_vreclaim_L251
+_vreclaim_L249
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L248
+                BRL     _vreclaim_L246
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L248
+                BRL     _vreclaim_L246
                 LDA     #0
-                BRL     _vreclaim_L249
-_vreclaim_L248
+                BRL     _vreclaim_L247
+_vreclaim_L246
                 LDA     #1
-_vreclaim_L249
+_vreclaim_L247
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L247
+                BRL     _vreclaim_L245
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14560,7 +13648,7 @@ _vreclaim_L249
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L253
+                BRL     _vreclaim_L251
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -14568,15 +13656,15 @@ _vreclaim_L249
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L253
+                BRL     _vreclaim_L251
                 LDA     #0
-                BRL     _vreclaim_L254
-_vreclaim_L253
+                BRL     _vreclaim_L252
+_vreclaim_L251
                 LDA     #1
-_vreclaim_L254
+_vreclaim_L252
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L252
+                BRL     _vreclaim_L250
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -14613,10 +13701,7 @@ _vreclaim_L254
                 TXA
                 ORA     #2048
                 STA     [_fcc_fpr0]
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
@@ -14624,7 +13709,7 @@ _vreclaim_L254
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L252
+_vreclaim_L250
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -14637,7 +13722,7 @@ _vreclaim_L252
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L247
+_vreclaim_L245
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -14832,7 +13917,7 @@ bdevvp_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L256
+                BRL     _vreclaim_L254
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -14840,15 +13925,15 @@ bdevvp_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L256
+                BRL     _vreclaim_L254
                 LDA     #1
-                BRL     _vreclaim_L257
-_vreclaim_L256
+                BRL     _vreclaim_L255
+_vreclaim_L254
                 LDA     #0
-_vreclaim_L257
+_vreclaim_L255
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L255
+                BRL     _vreclaim_L253
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -14893,7 +13978,7 @@ _vreclaim_L257
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L255
+_vreclaim_L253
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -14933,7 +14018,7 @@ _vreclaim_L255
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L258
+                BRL     _vreclaim_L256
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -14978,7 +14063,7 @@ _vreclaim_L255
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L258
+_vreclaim_L256
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -14987,10 +14072,6 @@ _vreclaim_L258
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #3
                 LDY     #52
                 STA     [_fcc_fpr0],Y
@@ -15035,7 +14116,7 @@ _vreclaim_L258
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L259
+                BRL     _vreclaim_L257
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15055,7 +14136,7 @@ _vreclaim_L258
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L259
+_vreclaim_L257
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -15172,7 +14253,7 @@ vfinddev_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L260
+_vreclaim_L258
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -15184,13 +14265,9 @@ _vreclaim_L260
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L262
+                BRL     _vreclaim_L260
                 LDA     _fcc_img0
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -15209,7 +14286,7 @@ _vreclaim_L260
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L264
+                BRL     _vreclaim_L262
                 LDA     _fcc_img1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -15222,17 +14299,17 @@ _vreclaim_L260
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L264
+                BRL     _vreclaim_L262
                 LDA     #0
-                BRL     _vreclaim_L265
-_vreclaim_L264
+                BRL     _vreclaim_L263
+_vreclaim_L262
                 LDA     #1
-_vreclaim_L265
+_vreclaim_L263
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L263
                 BRL     _vreclaim_L261
-_vreclaim_L263
+                BRL     _vreclaim_L259
+_vreclaim_L261
                 DO      12+vfinddev_FRAMESIZE/256
                 TSC
                 CLC
@@ -15277,7 +14354,7 @@ _vreclaim_L263
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L261
+_vreclaim_L259
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15310,8 +14387,8 @@ _vreclaim_L261
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L260
-_vreclaim_L262
+                BRL     _vreclaim_L258
+_vreclaim_L260
                 LDA     #1
                 TAY
                 TSC
@@ -15344,11 +14421,11 @@ spec_securechr_stkok        TCS
                 TXA
                 SEC
                 SBC     #1
-                BVC     _vreclaim_L267
+                BVC     _vreclaim_L265
                 EOR     #$8000
-_vreclaim_L267
+_vreclaim_L265
                 BMI     *+5
-                BRL     _vreclaim_L266
+                BRL     _vreclaim_L264
                 LDA     #0
                 TAY
                 TSC
@@ -15359,7 +14436,7 @@ _vreclaim_L267
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L266
+_vreclaim_L264
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
                 CLC
@@ -15380,7 +14457,7 @@ _vreclaim_L266
                 TXA
                 CMP     #65535
                 BEQ     *+5
-                BRL     _vreclaim_L268
+                BRL     _vreclaim_L266
                 LDA     #0
                 TAY
                 TSC
@@ -15391,7 +14468,7 @@ _vreclaim_L266
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L268
+_vreclaim_L266
                 LDA     5,S   ; fccstk d=0 b=5
                 LSR
                 LSR
@@ -15427,7 +14504,7 @@ _vreclaim_L268
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_vreclaim_L269
+_vreclaim_L267
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -15439,11 +14516,7 @@ _vreclaim_L269
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L271
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L269
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -15464,7 +14537,7 @@ _vreclaim_L269
                 TXA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L273
+                BRL     _vreclaim_L271
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15475,17 +14548,17 @@ _vreclaim_L269
                 TXA
                 CMP     #3
                 BEQ     *+5
-                BRL     _vreclaim_L273
+                BRL     _vreclaim_L271
                 LDA     #0
-                BRL     _vreclaim_L274
-_vreclaim_L273
+                BRL     _vreclaim_L272
+_vreclaim_L271
                 LDA     #1
-_vreclaim_L274
+_vreclaim_L272
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L272
                 BRL     _vreclaim_L270
-_vreclaim_L272
+                BRL     _vreclaim_L268
+_vreclaim_L270
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15525,7 +14598,7 @@ _vreclaim_L272
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
                 BNE     *+5
-                BRL     _vreclaim_L275
+                BRL     _vreclaim_L273
                 LDA     #16
                 TAY
                 TSC
@@ -15536,8 +14609,8 @@ _vreclaim_L272
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L275
-_vreclaim_L270
+_vreclaim_L273
+_vreclaim_L268
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -15570,8 +14643,8 @@ _vreclaim_L270
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L269
-_vreclaim_L271
+                BRL     _vreclaim_L267
+_vreclaim_L269
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
@@ -15645,11 +14718,11 @@ vfs_setsecurelevel_stkok        TCS
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L277
+                BVC     _vreclaim_L275
                 EOR     #$8000
-_vreclaim_L277
+_vreclaim_L275
                 BMI     *+5
-                BRL     _vreclaim_L276
+                BRL     _vreclaim_L274
                 LDA     #22
                 TAY
                 TSC
@@ -15660,7 +14733,7 @@ _vreclaim_L277
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L276
+_vreclaim_L274
                 DO      6+vfs_setsecurelevel_FRAMESIZE/256
                 TSC
                 CLC
@@ -15725,33 +14798,9 @@ vcount_stkok        TCS
                 TAX
                 TXA
                 AND     #2048
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L278
-                DO      8+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vcount_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L276
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAY
@@ -15763,7 +14812,7 @@ vcount_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L278
+_vreclaim_L276
 vcount_uL_loop
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
@@ -15827,7 +14876,7 @@ vcount_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L279
+_vreclaim_L277
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -15839,71 +14888,67 @@ _vreclaim_L279
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
+                BRL     _vreclaim_L279
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                PHA
+                DO      10+vcount_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vcount_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vcount_FRAMESIZE,S   ; fccstk d=2 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      8+vcount_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+vcount_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=2 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
                 BRL     _vreclaim_L281
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                PHA
-                DO      10+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vcount_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+vcount_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vcount_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vcount_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vreclaim_L283
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -15935,32 +14980,27 @@ _vreclaim_L279
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L283
+                BRL     _vreclaim_L281
                 LDA     #0
-                BRL     _vreclaim_L284
-_vreclaim_L283
+                BRL     _vreclaim_L282
+_vreclaim_L281
                 LDA     #1
-_vreclaim_L284
+_vreclaim_L282
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L282
                 BRL     _vreclaim_L280
-_vreclaim_L282
+                BRL     _vreclaim_L278
+_vreclaim_L280
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L285
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L283
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -15972,7 +15012,7 @@ _vreclaim_L282
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
-_vreclaim_L285
+_vreclaim_L283
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -15986,7 +15026,7 @@ _vreclaim_L285
                 CLC
                 ADC     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
-_vreclaim_L280
+_vreclaim_L278
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16019,8 +15059,8 @@ _vreclaim_L280
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L279
-_vreclaim_L281
+                BRL     _vreclaim_L277
+_vreclaim_L279
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC
@@ -16125,7 +15165,7 @@ vput_stkok        TCS
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L286-1
+                PEA     _vreclaim_L284-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -16136,7 +15176,7 @@ vput_stkok        TCS
                 DEC
                 PHA
                 RTL
-_vreclaim_L286
+_vreclaim_L284
                 TAY
                 TSC
                 CLC
@@ -16225,29 +15265,8 @@ vclean_stkok        TCS
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L287
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L285
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vref
@@ -16255,7 +15274,7 @@ vclean_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L287
+_vreclaim_L285
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16284,7 +15303,7 @@ _vreclaim_L287
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L288
+                BRL     _vreclaim_L286
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16301,7 +15320,7 @@ _vreclaim_L287
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L288
+_vreclaim_L286
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16329,28 +15348,6 @@ _vreclaim_L288
                 TXA
                 ORA     #256
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -16406,7 +15403,7 @@ _vreclaim_L288
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L289-1
+                PEA     _vreclaim_L287-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -16417,7 +15414,7 @@ _vreclaim_L288
                 DEC
                 PHA
                 RTL
-_vreclaim_L289
+_vreclaim_L287
                 TAY
                 TSC
                 CLC
@@ -16439,7 +15436,7 @@ _vreclaim_L289
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L290
+                BRL     _vreclaim_L288
                 LDA     #1
                 PHA
                 DO      10+vclean_FRAMESIZE/256
@@ -16471,7 +15468,7 @@ _vreclaim_L289
                 CLC
                 ADC     #6
                 TCS
-_vreclaim_L290
+_vreclaim_L288
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16626,7 +15623,7 @@ _vreclaim_L290
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L291-1
+                PEA     _vreclaim_L289-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -16637,7 +15634,7 @@ _vreclaim_L290
                 DEC
                 PHA
                 RTL
-_vreclaim_L291
+_vreclaim_L289
                 TAY
                 TSC
                 CLC
@@ -16647,7 +15644,7 @@ _vreclaim_L291
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L292
+                BRL     _vreclaim_L290
                 DO      10+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16663,7 +15660,7 @@ _vreclaim_L291
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L293
+                BRL     _vreclaim_L291
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16718,7 +15715,7 @@ _vreclaim_L291
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L294-1
+                PEA     _vreclaim_L292-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -16729,14 +15726,14 @@ _vreclaim_L291
                 DEC
                 PHA
                 RTL
-_vreclaim_L294
+_vreclaim_L292
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-_vreclaim_L293
+_vreclaim_L291
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -16747,6 +15744,72 @@ _vreclaim_L293
                 SEP     #$20
                 MX      %10
                 LDY     #98
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                DO      12+vclean_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+vclean_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+vclean_FRAMESIZE,S   ; fccstk d=4 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      10+vclean_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vclean_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vclean_FRAMESIZE,S   ; fccstk d=4 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                PEI     _fcc_fpr0+2
+                PEI     _fcc_fpr0
+                LDA     5,S
+                STA     _fcc_fpr0
+                LDA     7,S
+                STA     _fcc_fpr0+2
+                PHK
+                PEA     _vreclaim_L293-1
+                SEP     #$20
+                MX      %10
+                LDA     _fcc_fpr0+2
+                PHA
+                REP     #$20
+                MX      %00
+                LDA     _fcc_fpr0
+                DEC
+                PHA
+                RTL
+_vreclaim_L293
+                TAY
+                TSC
+                CLC
+                ADC     #8
+                TCS
+                TYA
+_vreclaim_L290
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
+                LDY     #100
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #102
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 REP     #$20
@@ -16802,75 +15865,9 @@ _vreclaim_L295
                 ADC     #8
                 TCS
                 TYA
-_vreclaim_L292
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
-                LDY     #100
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #102
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                DO      12+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+vclean_FRAMESIZE,S   ; fccstk d=4 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      10+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vclean_FRAMESIZE,S   ; fccstk d=4 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                PEI     _fcc_fpr0+2
-                PEI     _fcc_fpr0
-                LDA     5,S
-                STA     _fcc_fpr0
-                LDA     7,S
-                STA     _fcc_fpr0+2
-                PHK
-                PEA     _vreclaim_L297-1
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_fpr0+2
-                PHA
-                REP     #$20
-                MX      %00
-                LDA     _fcc_fpr0
-                DEC
-                PHA
-                RTL
-_vreclaim_L297
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L296
+                BRL     _vreclaim_L294
                 SEP     #$20
                 MX      %10
                 PHB
@@ -16887,11 +15884,11 @@ _vreclaim_L297
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L296
+_vreclaim_L294
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L298
+                BRL     _vreclaim_L296
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16921,7 +15918,7 @@ _vreclaim_L296
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L298
+_vreclaim_L296
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -16952,57 +15949,13 @@ _vreclaim_L298
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 AND     #512
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L299
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L297
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #512
@@ -17011,28 +15964,7 @@ _vreclaim_L298
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-                DO      8+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vclean_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vclean_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vclean_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vclean_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
@@ -17040,7 +15972,7 @@ _vreclaim_L298
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L299
+_vreclaim_L297
                 TAY
                 TSC
                 CLC
@@ -17095,56 +16027,13 @@ vgone_stkok        TCS
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L300
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L298
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 ORA     #512
                 STA     [_fcc_fpr0]
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
@@ -17161,7 +16050,7 @@ vgone_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L300
+_vreclaim_L298
                 LDA     #4
                 PHA
                 DO      10+vgone_FRAMESIZE/256
@@ -17255,44 +16144,22 @@ _vreclaim_L300
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _vreclaim_L302
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L300
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L302
+                BRL     _vreclaim_L300
                 LDA     #0
-                BRL     _vreclaim_L303
-_vreclaim_L302
+                BRL     _vreclaim_L301
+_vreclaim_L300
                 LDA     #1
-_vreclaim_L303
+_vreclaim_L301
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L301
+                BRL     _vreclaim_L299
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -17333,7 +16200,7 @@ _vreclaim_L303
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L305
+                BRL     _vreclaim_L303
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -17341,15 +16208,15 @@ _vreclaim_L303
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L305
+                BRL     _vreclaim_L303
                 LDA     #1
-                BRL     _vreclaim_L306
-_vreclaim_L305
+                BRL     _vreclaim_L304
+_vreclaim_L303
                 LDA     #0
-_vreclaim_L306
+_vreclaim_L304
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L304
+                BRL     _vreclaim_L302
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17366,7 +16233,7 @@ _vreclaim_L306
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L304
+_vreclaim_L302
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -17448,7 +16315,7 @@ _vreclaim_L304
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L308
+                BRL     _vreclaim_L306
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -17456,15 +16323,15 @@ _vreclaim_L304
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L308
+                BRL     _vreclaim_L306
                 LDA     #1
-                BRL     _vreclaim_L309
-_vreclaim_L308
+                BRL     _vreclaim_L307
+_vreclaim_L306
                 LDA     #0
-_vreclaim_L309
+_vreclaim_L307
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L307
+                BRL     _vreclaim_L305
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -17564,8 +16431,8 @@ _vreclaim_L309
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vreclaim_L310
-_vreclaim_L307
+                BRL     _vreclaim_L308
+_vreclaim_L305
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -17626,7 +16493,7 @@ _vreclaim_L307
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L311
+_vreclaim_L309
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -17638,11 +16505,7 @@ _vreclaim_L311
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L313
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L311
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -17692,7 +16555,7 @@ _vreclaim_L311
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L315
+                BRL     _vreclaim_L313
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -17700,17 +16563,17 @@ _vreclaim_L311
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L315
+                BRL     _vreclaim_L313
                 LDA     #0
-                BRL     _vreclaim_L316
-_vreclaim_L315
+                BRL     _vreclaim_L314
+_vreclaim_L313
                 LDA     #1
-_vreclaim_L316
+_vreclaim_L314
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L314
                 BRL     _vreclaim_L312
-_vreclaim_L314
+                BRL     _vreclaim_L310
+_vreclaim_L312
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17782,8 +16645,8 @@ _vreclaim_L314
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vreclaim_L313
-_vreclaim_L312
+                BRL     _vreclaim_L311
+_vreclaim_L310
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17816,8 +16679,8 @@ _vreclaim_L312
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L311
-_vreclaim_L313
+                BRL     _vreclaim_L309
+_vreclaim_L311
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17828,7 +16691,7 @@ _vreclaim_L313
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L318
+                BRL     _vreclaim_L316
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -17836,15 +16699,15 @@ _vreclaim_L313
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L318
+                BRL     _vreclaim_L316
                 LDA     #1
-                BRL     _vreclaim_L319
-_vreclaim_L318
+                BRL     _vreclaim_L317
+_vreclaim_L316
                 LDA     #0
-_vreclaim_L319
+_vreclaim_L317
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L317
+                BRL     _vreclaim_L315
                 SEP     #$20
                 MX      %10
                 PHB
@@ -17861,8 +16724,8 @@ _vreclaim_L319
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L317
-_vreclaim_L310
+_vreclaim_L315
+_vreclaim_L308
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -17891,36 +16754,13 @@ _vreclaim_L310
                 AND     #2048
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L320
+                BRL     _vreclaim_L318
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     5,S   ; fccstk d=0 b=5
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vgone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #54
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -17961,7 +16801,7 @@ _vreclaim_L310
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_img0
-_vreclaim_L321
+_vreclaim_L319
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -17973,71 +16813,67 @@ _vreclaim_L321
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
+                BRL     _vreclaim_L321
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                PHA
+                DO      10+vgone_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+vgone_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+vgone_FRAMESIZE,S   ; fccstk d=2 b=8 fs
+                FIN
+                STA     _fcc_fpr0+2
+                DO      8+vgone_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+vgone_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=2 b=6 fs
+                FIN
+                STA     _fcc_fpr0
+                LDY     #54
+                LDA     [_fcc_fpr0],Y
+                PHA
+                SEP     #$20
+                MX      %10
+                LDY     #56
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_fpr0+2
+                REP     #$20
+                MX      %00
+                PLA
+                STA     _fcc_fpr0
+                LDY     #12
+                LDA     [_fcc_fpr0],Y
+                STA     _fcc_tmp_b
+                PLA
+                CMP     _fcc_tmp_b
+                BEQ     *+5
                 BRL     _vreclaim_L323
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                PHA
-                DO      10+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+vgone_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+vgone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vgone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vgone_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
-                LDY     #54
-                LDA     [_fcc_fpr0],Y
-                PHA
-                SEP     #$20
-                MX      %10
-                LDY     #56
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
-                PLA
-                STA     _fcc_fpr0
-                LDY     #12
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _vreclaim_L325
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -18069,17 +16905,17 @@ _vreclaim_L321
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L325
+                BRL     _vreclaim_L323
                 LDA     #0
-                BRL     _vreclaim_L326
-_vreclaim_L325
+                BRL     _vreclaim_L324
+_vreclaim_L323
                 LDA     #1
-_vreclaim_L326
+_vreclaim_L324
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L324
                 BRL     _vreclaim_L322
-_vreclaim_L324
+                BRL     _vreclaim_L320
+_vreclaim_L322
                 INC     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -18089,7 +16925,7 @@ _vreclaim_L324
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-_vreclaim_L322
+_vreclaim_L320
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18122,15 +16958,13 @@ _vreclaim_L322
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L321
-_vreclaim_L323
+                BRL     _vreclaim_L319
+_vreclaim_L321
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L327
+                BRL     _vreclaim_L325
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18147,13 +16981,13 @@ _vreclaim_L323
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L327
+_vreclaim_L325
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
                 CMP     #1
                 BEQ     *+5
-                BRL     _vreclaim_L328
+                BRL     _vreclaim_L326
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -18166,7 +17000,7 @@ _vreclaim_L327
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_vreclaim_L328
+_vreclaim_L326
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18197,7 +17031,7 @@ _vreclaim_L328
                 PLA
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
-_vreclaim_L320
+_vreclaim_L318
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18278,7 +17112,7 @@ _vreclaim_L320
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L301
+_vreclaim_L299
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18317,7 +17151,7 @@ _vreclaim_L301
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L329
+                BRL     _vreclaim_L327
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18443,7 +17277,7 @@ _vreclaim_L301
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L330
+                BRL     _vreclaim_L328
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -18489,8 +17323,8 @@ _vreclaim_L301
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _vreclaim_L331
-_vreclaim_L330
+                BRL     _vreclaim_L329
+_vreclaim_L328
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18518,7 +17352,7 @@ _vreclaim_L330
                 STA     vnode_free_tail
                 LDA     _fcc_fpr0+2
                 STA     vnode_free_tail+2
-_vreclaim_L331
+_vreclaim_L329
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18548,7 +17382,7 @@ _vreclaim_L331
                 CLC
                 ADC     #1
                 STA     freevnodes
-_vreclaim_L329
+_vreclaim_L327
                 DO      8+vgone_FRAMESIZE/256
                 TSC
                 CLC
@@ -18662,7 +17496,7 @@ vflush_stkok        TCS
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L332
+                BRL     _vreclaim_L330
                 SEP     #$20
                 MX      %10
                 PHB
@@ -18679,7 +17513,7 @@ vflush_stkok        TCS
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L332
+_vreclaim_L330
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
 vflush_uL_loop
@@ -18721,7 +17555,7 @@ vflush_uL_loop
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L333
+_vreclaim_L331
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -18733,11 +17567,7 @@ _vreclaim_L333
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L335
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L333
                 LDY     #18
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -18775,7 +17605,7 @@ _vreclaim_L333
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L337
+                BRL     _vreclaim_L335
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -18783,20 +17613,20 @@ _vreclaim_L333
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L337
+                BRL     _vreclaim_L335
                 LDA     #0
-                BRL     _vreclaim_L338
-_vreclaim_L337
+                BRL     _vreclaim_L336
+_vreclaim_L335
                 LDA     #1
-_vreclaim_L338
+_vreclaim_L336
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L336
+                BRL     _vreclaim_L334
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     vflush_uL_loop
-_vreclaim_L336
+_vreclaim_L334
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18846,7 +17676,7 @@ _vreclaim_L336
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L340
+                BRL     _vreclaim_L338
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -18854,17 +17684,17 @@ _vreclaim_L336
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L340
+                BRL     _vreclaim_L338
                 LDA     #1
-                BRL     _vreclaim_L341
-_vreclaim_L340
+                BRL     _vreclaim_L339
+_vreclaim_L338
                 LDA     #0
-_vreclaim_L341
+_vreclaim_L339
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L339
-                BRL     _vreclaim_L334
-_vreclaim_L339
+                BRL     _vreclaim_L337
+                BRL     _vreclaim_L332
+_vreclaim_L337
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -18880,7 +17710,7 @@ _vreclaim_L339
                 AND     #1
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L343
+                BRL     _vreclaim_L341
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18891,32 +17721,27 @@ _vreclaim_L339
                 AND     #4
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L343
+                BRL     _vreclaim_L341
                 LDA     #1
-                BRL     _vreclaim_L344
-_vreclaim_L343
+                BRL     _vreclaim_L342
+_vreclaim_L341
                 LDA     #0
-_vreclaim_L344
+_vreclaim_L342
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L342
-                BRL     _vreclaim_L334
-_vreclaim_L342
+                BRL     _vreclaim_L340
+                BRL     _vreclaim_L332
+_vreclaim_L340
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L345
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L343
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
@@ -18924,8 +17749,8 @@ _vreclaim_L342
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L334
-_vreclaim_L345
+                BRL     _vreclaim_L332
+_vreclaim_L343
                 DO      14+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -18941,7 +17766,7 @@ _vreclaim_L345
                 AND     #2
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L346
+                BRL     _vreclaim_L344
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18952,26 +17777,22 @@ _vreclaim_L345
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _vreclaim_L348
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L346
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L348
+                BRL     _vreclaim_L346
                 LDA     #1
-                BRL     _vreclaim_L349
-_vreclaim_L348
+                BRL     _vreclaim_L347
+_vreclaim_L346
                 LDA     #0
-_vreclaim_L349
+_vreclaim_L347
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L347
+                BRL     _vreclaim_L345
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18983,8 +17804,8 @@ _vreclaim_L349
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L350
-_vreclaim_L347
+                BRL     _vreclaim_L348
+_vreclaim_L345
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -19012,7 +17833,7 @@ _vreclaim_L347
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L352
+                BRL     _vreclaim_L350
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19020,15 +17841,15 @@ _vreclaim_L347
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L352
+                BRL     _vreclaim_L350
                 LDA     #1
-                BRL     _vreclaim_L353
-_vreclaim_L352
+                BRL     _vreclaim_L351
+_vreclaim_L350
                 LDA     #0
-_vreclaim_L353
+_vreclaim_L351
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L351
+                BRL     _vreclaim_L349
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -19040,8 +17861,8 @@ _vreclaim_L353
                 CLC
                 ADC     #4
                 TCS
-                BRL     _vreclaim_L334
-_vreclaim_L351
+                BRL     _vreclaim_L332
+_vreclaim_L349
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -19081,14 +17902,14 @@ _vreclaim_L351
                 CLC
                 ADC     #8
                 TCS
-_vreclaim_L350
-                BRL     _vreclaim_L334
-_vreclaim_L346
+_vreclaim_L348
+                BRL     _vreclaim_L332
+_vreclaim_L344
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-_vreclaim_L334
+_vreclaim_L332
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -19097,12 +17918,12 @@ _vreclaim_L334
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L333
-_vreclaim_L335
+                BRL     _vreclaim_L331
+_vreclaim_L333
                 LDA     9,S   ; fccstk d=0 b=9
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L354
+                BRL     _vreclaim_L352
                 LDA     #16
                 TAY
                 TSC
@@ -19113,7 +17934,7 @@ _vreclaim_L335
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L354
+_vreclaim_L352
                 LDA     #0
                 TAY
                 TSC
@@ -19241,12 +18062,9 @@ ndslot_stkok        TCS
                 ELSE
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                TAX
-                TXA
                 CMP     #0
-_vreclaim_L358
                 BPL     *+5
-                BRL     _vreclaim_L356
+                BRL     _vreclaim_L354
                 DO      8+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -19261,19 +18079,19 @@ _vreclaim_L358
                 TXA
                 SEC
                 SBC     #2
-                BVC     _vreclaim_L359
+                BVC     _vreclaim_L356
                 EOR     #$8000
-_vreclaim_L359
-                BMI     *+5
-                BRL     _vreclaim_L356
-                LDA     #0
-                BRL     _vreclaim_L357
 _vreclaim_L356
+                BMI     *+5
+                BRL     _vreclaim_L354
+                LDA     #0
+                BRL     _vreclaim_L355
+_vreclaim_L354
                 LDA     #1
-_vreclaim_L357
+_vreclaim_L355
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L355
+                BRL     _vreclaim_L353
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -19286,7 +18104,7 @@ _vreclaim_L357
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L355
+_vreclaim_L353
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -19301,11 +18119,11 @@ _vreclaim_L355
                 TXA
                 SEC
                 SBC     #1
-                BVC     _vreclaim_L363
+                BVC     _vreclaim_L360
                 EOR     #$8000
-_vreclaim_L363
+_vreclaim_L360
                 BPL     *+5
-                BRL     _vreclaim_L361
+                BRL     _vreclaim_L358
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -19323,19 +18141,19 @@ _vreclaim_L363
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L364
+                BVC     _vreclaim_L361
                 EOR     #$8000
-_vreclaim_L364
-                BPL     *+5
-                BRL     _vreclaim_L361
-                LDA     #0
-                BRL     _vreclaim_L362
 _vreclaim_L361
+                BPL     *+5
+                BRL     _vreclaim_L358
+                LDA     #0
+                BRL     _vreclaim_L359
+_vreclaim_L358
                 LDA     #1
-_vreclaim_L362
+_vreclaim_L359
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L360
+                BRL     _vreclaim_L357
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -19348,7 +18166,7 @@ _vreclaim_L362
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L360
+_vreclaim_L357
                 SEP     #$20
                 MX      %10
                 LDA     nd_pool+2
@@ -19363,7 +18181,7 @@ _vreclaim_L360
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L366
+                BRL     _vreclaim_L363
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19371,15 +18189,15 @@ _vreclaim_L360
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L366
+                BRL     _vreclaim_L363
                 LDA     #1
-                BRL     _vreclaim_L367
-_vreclaim_L366
+                BRL     _vreclaim_L364
+_vreclaim_L363
                 LDA     #0
-_vreclaim_L367
+_vreclaim_L364
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L365
+                BRL     _vreclaim_L362
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -19392,7 +18210,7 @@ _vreclaim_L367
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L365
+_vreclaim_L362
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -19444,18 +18262,18 @@ _vreclaim_L365
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     _fcc_img0
-_vreclaim_L368
+_vreclaim_L365
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 SEC
                 SBC     #158
-                BVC     _vreclaim_L371
+                BVC     _vreclaim_L368
                 EOR     #$8000
-_vreclaim_L371
+_vreclaim_L368
                 BMI     *+5
-                BRL     _vreclaim_L370
+                BRL     _vreclaim_L367
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -19470,10 +18288,10 @@ _vreclaim_L371
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_vreclaim_L369
+_vreclaim_L366
                 INC     _fcc_img0
-                BRL     _vreclaim_L368
-_vreclaim_L370
+                BRL     _vreclaim_L365
+_vreclaim_L367
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -19709,7 +18527,7 @@ vfs_dounmount_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L375
+                BRL     _vreclaim_L372
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19717,15 +18535,15 @@ vfs_dounmount_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L375
+                BRL     _vreclaim_L372
                 LDA     #1
-                BRL     _vreclaim_L376
-_vreclaim_L375
+                BRL     _vreclaim_L373
+_vreclaim_L372
                 LDA     #0
-_vreclaim_L376
+_vreclaim_L373
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L373
+                BRL     _vreclaim_L370
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -19766,7 +18584,7 @@ _vreclaim_L376
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L377
+                BRL     _vreclaim_L374
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19774,23 +18592,23 @@ _vreclaim_L376
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L377
+                BRL     _vreclaim_L374
                 LDA     #1
-                BRL     _vreclaim_L378
-_vreclaim_L377
+                BRL     _vreclaim_L375
+_vreclaim_L374
                 LDA     #0
-_vreclaim_L378
+_vreclaim_L375
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L373
+                BRL     _vreclaim_L370
                 LDA     #0
-                BRL     _vreclaim_L374
-_vreclaim_L373
+                BRL     _vreclaim_L371
+_vreclaim_L370
                 LDA     #1
-_vreclaim_L374
+_vreclaim_L371
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L372
+                BRL     _vreclaim_L369
                 LDA     #22
                 TAY
                 TSC
@@ -19801,7 +18619,7 @@ _vreclaim_L374
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L372
+_vreclaim_L369
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -19903,7 +18721,7 @@ _vreclaim_L372
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L379
+                BRL     _vreclaim_L376
                 SEP     #$20
                 MX      %10
                 LDA     _vreclaim_vfs_cacheops+2
@@ -19955,7 +18773,7 @@ _vreclaim_L372
                 LDA     7,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L380-1
+                PEA     _vreclaim_L377-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -19966,14 +18784,14 @@ _vreclaim_L372
                 DEC
                 PHA
                 RTL
-_vreclaim_L380
+_vreclaim_L377
                 TAY
                 TSC
                 CLC
                 ADC     #8
                 TCS
                 TYA
-_vreclaim_L379
+_vreclaim_L376
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20062,7 +18880,7 @@ _vreclaim_L379
                 LDA     9,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L381-1
+                PEA     _vreclaim_L378-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20073,7 +18891,7 @@ _vreclaim_L379
                 DEC
                 PHA
                 RTL
-_vreclaim_L381
+_vreclaim_L378
                 TAY
                 TSC
                 CLC
@@ -20083,7 +18901,7 @@ _vreclaim_L381
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L382
+                BRL     _vreclaim_L379
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20146,7 +18964,7 @@ _vreclaim_L381
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L382
+_vreclaim_L379
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20186,7 +19004,7 @@ _vreclaim_L382
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L386
+                BRL     _vreclaim_L383
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20194,15 +19012,15 @@ _vreclaim_L382
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L386
+                BRL     _vreclaim_L383
                 LDA     #0
-                BRL     _vreclaim_L387
-_vreclaim_L386
+                BRL     _vreclaim_L384
+_vreclaim_L383
                 LDA     #1
-_vreclaim_L387
+_vreclaim_L384
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L384
+                BRL     _vreclaim_L381
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20243,7 +19061,7 @@ _vreclaim_L387
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L388
+                BRL     _vreclaim_L385
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20251,23 +19069,23 @@ _vreclaim_L387
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L388
-                LDA     #0
-                BRL     _vreclaim_L389
-_vreclaim_L388
-                LDA     #1
-_vreclaim_L389
-                CMP     #0
-                BNE     *+5
-                BRL     _vreclaim_L384
-                LDA     #1
                 BRL     _vreclaim_L385
-_vreclaim_L384
                 LDA     #0
+                BRL     _vreclaim_L386
 _vreclaim_L385
+                LDA     #1
+_vreclaim_L386
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L383
+                BRL     _vreclaim_L381
+                LDA     #1
+                BRL     _vreclaim_L382
+_vreclaim_L381
+                LDA     #0
+_vreclaim_L382
+                CMP     #0
+                BNE     *+5
+                BRL     _vreclaim_L380
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20491,7 +19309,7 @@ _vreclaim_L385
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L383
+_vreclaim_L380
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -20502,7 +19320,7 @@ _vreclaim_L383
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L391
+                BRL     _vreclaim_L388
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -20510,15 +19328,15 @@ _vreclaim_L383
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L391
+                BRL     _vreclaim_L388
                 LDA     #0
-                BRL     _vreclaim_L392
-_vreclaim_L391
+                BRL     _vreclaim_L389
+_vreclaim_L388
                 LDA     #1
-_vreclaim_L392
+_vreclaim_L389
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L390
+                BRL     _vreclaim_L387
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -20583,7 +19401,7 @@ _vreclaim_L392
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L390
+_vreclaim_L387
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -20916,6 +19734,7 @@ _vreclaim_ncinshash_stkok        TCS
                 ELSE
                 LDA     6+_vreclaim_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
+                STA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -20947,28 +19766,7 @@ _vreclaim_ncinshash_stkok        TCS
                 LDA     10+_vreclaim_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_vreclaim_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vreclaim_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vreclaim_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_vreclaim_ncinshash_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vreclaim_ncinshash_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vreclaim_ncinshash_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -21223,7 +20021,7 @@ _vreclaim_nclru_totail_stkok        TCS
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L394
+                BRL     _vreclaim_L391
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -21231,15 +20029,15 @@ _vreclaim_nclru_totail_stkok        TCS
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L394
+                BRL     _vreclaim_L391
                 LDA     #1
-                BRL     _vreclaim_L395
-_vreclaim_L394
+                BRL     _vreclaim_L392
+_vreclaim_L391
                 LDA     #0
-_vreclaim_L395
+_vreclaim_L392
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L393
+                BRL     _vreclaim_L390
                 TAY
                 TSC
                 CLC
@@ -21249,7 +20047,7 @@ _vreclaim_L395
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L393
+_vreclaim_L390
                 DO      8+_vreclaim_nclru_totail_FRAMESIZE/256
                 TSC
                 CLC
@@ -21682,7 +20480,7 @@ _vreclaim_nclru_remove_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L396
+                BRL     _vreclaim_L393
                 DO      8+_vreclaim_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -21760,8 +20558,8 @@ _vreclaim_nclru_remove_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _vreclaim_L397
-_vreclaim_L396
+                BRL     _vreclaim_L394
+_vreclaim_L393
                 DO      8+_vreclaim_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -21799,7 +20597,7 @@ _vreclaim_L396
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_vreclaim_L397
+_vreclaim_L394
                 TAY
                 TSC
                 CLC
@@ -21922,7 +20720,7 @@ _vreclaim_nclru_tohead_stkok        TCS
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L398
+                BRL     _vreclaim_L395
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -21968,8 +20766,8 @@ _vreclaim_nclru_tohead_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _vreclaim_L399
-_vreclaim_L398
+                BRL     _vreclaim_L396
+_vreclaim_L395
                 DO      8+_vreclaim_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -21997,7 +20795,7 @@ _vreclaim_L398
                 STA     nchtail
                 LDA     _fcc_fpr0+2
                 STA     nchtail+2
-_vreclaim_L399
+_vreclaim_L396
                 DO      8+_vreclaim_nclru_tohead_FRAMESIZE/256
                 TSC
                 CLC
@@ -22153,28 +20951,7 @@ _vreclaim_ncdetach_stkok        TCS
                 LDA     6+_vreclaim_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+_vreclaim_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_vreclaim_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_vreclaim_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+_vreclaim_ncdetach_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_vreclaim_ncdetach_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_vreclaim_ncdetach_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -22306,7 +21083,7 @@ nchinit_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_img0
-_vreclaim_L400
+_vreclaim_L397
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -22315,11 +21092,11 @@ _vreclaim_L400
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L403
+                BVC     _vreclaim_L400
                 EOR     #$8000
-_vreclaim_L403
+_vreclaim_L400
                 BMI     *+5
-                BRL     _vreclaim_L402
+                BRL     _vreclaim_L399
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -22339,10 +21116,6 @@ _vreclaim_L403
                 LDA     _fcc_fpr0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_fpr1+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr1
@@ -22358,10 +21131,7 @@ _vreclaim_L403
                 STA     _fcc_fpr0+2
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr1+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -22375,10 +21145,10 @@ _vreclaim_L403
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-_vreclaim_L401
+_vreclaim_L398
                 INC     _fcc_img0
-                BRL     _vreclaim_L400
-_vreclaim_L402
+                BRL     _vreclaim_L397
+_vreclaim_L399
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
@@ -22416,7 +21186,7 @@ _vreclaim_L402
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L405
+                BRL     _vreclaim_L402
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -22424,15 +21194,15 @@ _vreclaim_L402
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L405
+                BRL     _vreclaim_L402
                 LDA     #1
-                BRL     _vreclaim_L406
-_vreclaim_L405
+                BRL     _vreclaim_L403
+_vreclaim_L402
                 LDA     #0
-_vreclaim_L406
+_vreclaim_L403
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L404
+                BRL     _vreclaim_L401
                 LDA     #0
                 STA     doingcache
                 LDA     #0
@@ -22447,24 +21217,21 @@ _vreclaim_L406
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L404
+_vreclaim_L401
                 LDA     #64
                 TAX
                 TXA
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L407
+_vreclaim_L404
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
-_vreclaim_L410
                 BPL     *+5
-                BRL     _vreclaim_L409
+                BRL     _vreclaim_L406
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -22487,10 +21254,6 @@ _vreclaim_L410
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_fpr0
                 STA     3,S   ; fccstk d=0 b=3
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -22559,10 +21322,6 @@ _vreclaim_L410
                 REP     #$20
                 MX      %00
                 LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr1+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1
@@ -22578,10 +21337,7 @@ _vreclaim_L410
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1
+                LDA     _fcc_fpr1
                 LDY     #4
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -22602,13 +21358,13 @@ _vreclaim_L410
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L408
+_vreclaim_L405
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L407
-_vreclaim_L409
+                BRL     _vreclaim_L404
+_vreclaim_L406
                 SEP     #$20
                 MX      %10
                 LDA     namecache_pool+2
@@ -22695,7 +21451,7 @@ namehash_stkok        TCS
                 TYA
                 LDA     #0
                 STA     _fcc_img0
-_vreclaim_L411
+_vreclaim_L407
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -22706,11 +21462,11 @@ _vreclaim_L411
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L414
+                BVC     _vreclaim_L410
                 EOR     #$8000
-_vreclaim_L414
+_vreclaim_L410
                 BMI     *+5
-                BRL     _vreclaim_L413
+                BRL     _vreclaim_L409
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -22800,10 +21556,10 @@ _vreclaim_L414
                 LDA     _fcc_long_hi
                 STA     _fcc_img5
                 TYA
-_vreclaim_L412
+_vreclaim_L408
                 INC     _fcc_img0
-                BRL     _vreclaim_L411
-_vreclaim_L413
+                BRL     _vreclaim_L407
+_vreclaim_L409
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -22888,7 +21644,7 @@ _vreclaim_namecmp_stkok        TCS
                 LDA     12+_vreclaim_namecmp_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 STA     _fcc_img4
-_vreclaim_L415
+_vreclaim_L411
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -22899,7 +21655,7 @@ _vreclaim_L415
                 LDA     _fcc_tmp_b
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L416
+                BRL     _vreclaim_L412
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
                 AND     #$00FF
@@ -22911,7 +21667,7 @@ _vreclaim_L415
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L417
+                BRL     _vreclaim_L413
                 LDA     #1
                 TAY
                 TSC
@@ -22922,9 +21678,9 @@ _vreclaim_L415
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L417
-                BRL     _vreclaim_L415
-_vreclaim_L416
+_vreclaim_L413
+                BRL     _vreclaim_L411
+_vreclaim_L412
                 LDA     #0
                 TAY
                 TSC
@@ -23047,7 +21803,7 @@ cache_purge_stkok        TCS
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L418
+                BRL     _vreclaim_L414
                 TAY
                 TSC
                 CLC
@@ -23057,10 +21813,10 @@ cache_purge_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L418
+_vreclaim_L414
                 LDA     #0
                 STA     _fcc_img0
-_vreclaim_L419
+_vreclaim_L415
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23069,11 +21825,11 @@ _vreclaim_L419
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L422
+                BVC     _vreclaim_L418
                 EOR     #$8000
-_vreclaim_L422
+_vreclaim_L418
                 BMI     *+5
-                BRL     _vreclaim_L421
+                BRL     _vreclaim_L417
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -23092,10 +21848,6 @@ _vreclaim_L422
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -23111,7 +21863,7 @@ _vreclaim_L422
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L423
+_vreclaim_L419
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23126,7 +21878,7 @@ _vreclaim_L423
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L426
+                BRL     _vreclaim_L422
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23134,15 +21886,15 @@ _vreclaim_L423
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L426
+                BRL     _vreclaim_L422
                 LDA     #0
-                BRL     _vreclaim_L427
-_vreclaim_L426
+                BRL     _vreclaim_L423
+_vreclaim_L422
                 LDA     #1
-_vreclaim_L427
+_vreclaim_L423
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L425
+                BRL     _vreclaim_L421
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23169,7 +21921,7 @@ _vreclaim_L427
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-_vreclaim_L424
+_vreclaim_L420
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23189,12 +21941,12 @@ _vreclaim_L424
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L423
-_vreclaim_L425
-_vreclaim_L420
-                INC     _fcc_img0
                 BRL     _vreclaim_L419
 _vreclaim_L421
+_vreclaim_L416
+                INC     _fcc_img0
+                BRL     _vreclaim_L415
+_vreclaim_L417
                 DO      8+cache_purge_FRAMESIZE/256
                 TSC
                 CLC
@@ -23273,7 +22025,7 @@ cache_purgevfs_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
-_vreclaim_L428
+_vreclaim_L424
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23282,11 +22034,11 @@ _vreclaim_L428
                 TXA
                 SEC
                 SBC     #16
-                BVC     _vreclaim_L431
+                BVC     _vreclaim_L427
                 EOR     #$8000
-_vreclaim_L431
+_vreclaim_L427
                 BMI     *+5
-                BRL     _vreclaim_L430
+                BRL     _vreclaim_L426
                 LDA     13,S   ; fccstk d=0 b=13
                 ASL
                 ASL
@@ -23305,10 +22057,6 @@ _vreclaim_L431
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -23324,7 +22072,7 @@ _vreclaim_L431
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L432
+_vreclaim_L428
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23339,7 +22087,7 @@ _vreclaim_L432
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L435
+                BRL     _vreclaim_L431
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23347,15 +22095,15 @@ _vreclaim_L432
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L435
+                BRL     _vreclaim_L431
                 LDA     #0
-                BRL     _vreclaim_L436
-_vreclaim_L435
+                BRL     _vreclaim_L432
+_vreclaim_L431
                 LDA     #1
-_vreclaim_L436
+_vreclaim_L432
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L434
+                BRL     _vreclaim_L430
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23397,7 +22145,7 @@ _vreclaim_L436
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L440
+                BRL     _vreclaim_L436
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23405,15 +22153,15 @@ _vreclaim_L436
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L440
+                BRL     _vreclaim_L436
                 LDA     #1
-                BRL     _vreclaim_L441
-_vreclaim_L440
+                BRL     _vreclaim_L437
+_vreclaim_L436
                 LDA     #0
-_vreclaim_L441
+_vreclaim_L437
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L438
+                BRL     _vreclaim_L434
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23467,21 +22215,13 @@ _vreclaim_L441
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L442
+                BRL     _vreclaim_L438
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vreclaim_L442
-                LDA     #0
-                BRL     _vreclaim_L443
-_vreclaim_L442
-                LDA     #1
-_vreclaim_L443
-                CMP     #0
                 BEQ     *+5
                 BRL     _vreclaim_L438
                 LDA     #0
@@ -23490,10 +22230,18 @@ _vreclaim_L438
                 LDA     #1
 _vreclaim_L439
                 CMP     #0
+                BEQ     *+5
+                BRL     _vreclaim_L434
+                LDA     #0
+                BRL     _vreclaim_L435
+_vreclaim_L434
+                LDA     #1
+_vreclaim_L435
+                CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L437
                 BRL     _vreclaim_L433
-_vreclaim_L437
+                BRL     _vreclaim_L429
+_vreclaim_L433
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23539,10 +22287,7 @@ _vreclaim_L437
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_ncdetach
@@ -23572,7 +22317,7 @@ _vreclaim_L437
                 CLC
                 ADC     #4
                 TCS
-_vreclaim_L433
+_vreclaim_L429
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -23581,15 +22326,15 @@ _vreclaim_L433
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L432
-_vreclaim_L434
-_vreclaim_L429
+                BRL     _vreclaim_L428
+_vreclaim_L430
+_vreclaim_L425
                 LDA     13,S   ; fccstk d=0 b=13
                 CLC
                 ADC     #1
                 STA     13,S   ; fccstk d=0 b=13
-                BRL     _vreclaim_L428
-_vreclaim_L430
+                BRL     _vreclaim_L424
+_vreclaim_L426
                 TAY
                 TSC
                 CLC
@@ -23618,15 +22363,15 @@ cache_lookup_stkok        TCS
                 INC     _fcc_fb
                 LDA     doingcache
                 CMP     #0
-                BEQ     _vreclaim_L445
+                BEQ     _vreclaim_L441
                 LDA     #0
-                BRA     _vreclaim_L446
-_vreclaim_L445
+                BRA     _vreclaim_L442
+_vreclaim_L441
                 LDA     #1
-_vreclaim_L446
+_vreclaim_L442
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L444
+                BRL     _vreclaim_L440
                 LDA     #0
                 TAY
                 TSC
@@ -23637,7 +22382,7 @@ _vreclaim_L446
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L444
+_vreclaim_L440
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -23669,11 +22414,11 @@ _vreclaim_L444
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L448
+                BVC     _vreclaim_L444
                 EOR     #$8000
-_vreclaim_L448
+_vreclaim_L444
                 BMI     *+5
-                BRL     _vreclaim_L447
+                BRL     _vreclaim_L443
                 PHA
                 SEP     #$20
                 MX      %10
@@ -23740,7 +22485,7 @@ _vreclaim_L448
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L447
+_vreclaim_L443
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -23822,10 +22567,6 @@ _vreclaim_L447
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 PHA
                 SEP     #$20
@@ -23841,7 +22582,7 @@ _vreclaim_L447
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L449
+_vreclaim_L445
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -23856,7 +22597,7 @@ _vreclaim_L449
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L452
+                BRL     _vreclaim_L448
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23864,15 +22605,15 @@ _vreclaim_L449
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L452
+                BRL     _vreclaim_L448
                 LDA     #0
-                BRL     _vreclaim_L453
-_vreclaim_L452
+                BRL     _vreclaim_L449
+_vreclaim_L448
                 LDA     #1
-_vreclaim_L453
+_vreclaim_L449
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L451
+                BRL     _vreclaim_L447
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23896,7 +22637,7 @@ _vreclaim_L453
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L461
+                BRL     _vreclaim_L457
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -23904,15 +22645,15 @@ _vreclaim_L453
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L461
+                BRL     _vreclaim_L457
                 LDA     #1
-                BRL     _vreclaim_L462
-_vreclaim_L461
+                BRL     _vreclaim_L458
+_vreclaim_L457
                 LDA     #0
-_vreclaim_L462
+_vreclaim_L458
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L459
+                BRL     _vreclaim_L455
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23947,15 +22688,15 @@ _vreclaim_L462
                 JSR     _fcc_long_eq
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L459
+                BRL     _vreclaim_L455
                 LDA     #1
-                BRL     _vreclaim_L460
-_vreclaim_L459
+                BRL     _vreclaim_L456
+_vreclaim_L455
                 LDA     #0
-_vreclaim_L460
+_vreclaim_L456
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L457
+                BRL     _vreclaim_L453
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -23992,15 +22733,15 @@ _vreclaim_L460
                 PLA
                 CMP     _fcc_tmp_b
                 BEQ     *+5
-                BRL     _vreclaim_L457
+                BRL     _vreclaim_L453
                 LDA     #1
-                BRL     _vreclaim_L458
-_vreclaim_L457
+                BRL     _vreclaim_L454
+_vreclaim_L453
                 LDA     #0
-_vreclaim_L458
+_vreclaim_L454
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L455
+                BRL     _vreclaim_L451
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24060,22 +22801,20 @@ _vreclaim_L458
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L455
+                BRL     _vreclaim_L451
                 LDA     #1
-                BRL     _vreclaim_L456
-_vreclaim_L455
+                BRL     _vreclaim_L452
+_vreclaim_L451
                 LDA     #0
-_vreclaim_L456
+_vreclaim_L452
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L454
-                BRL     _vreclaim_L451
-_vreclaim_L454
+                BRL     _vreclaim_L450
+                BRL     _vreclaim_L447
 _vreclaim_L450
+_vreclaim_L446
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24095,8 +22834,8 @@ _vreclaim_L450
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L449
-_vreclaim_L451
+                BRL     _vreclaim_L445
+_vreclaim_L447
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24108,7 +22847,7 @@ _vreclaim_L451
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L464
+                BRL     _vreclaim_L460
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -24116,15 +22855,15 @@ _vreclaim_L451
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L464
+                BRL     _vreclaim_L460
                 LDA     #1
-                BRL     _vreclaim_L465
-_vreclaim_L464
+                BRL     _vreclaim_L461
+_vreclaim_L460
                 LDA     #0
-_vreclaim_L465
+_vreclaim_L461
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L463
+                BRL     _vreclaim_L459
                 PHA
                 SEP     #$20
                 MX      %10
@@ -24162,7 +22901,7 @@ _vreclaim_L465
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L463
+_vreclaim_L459
                 DO      8+cache_lookup_FRAMESIZE/256
                 TSC
                 CLC
@@ -24189,15 +22928,15 @@ _vreclaim_L463
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
                 CMP     #0
-                BEQ     _vreclaim_L467
+                BEQ     _vreclaim_L463
                 LDA     #0
-                BRA     _vreclaim_L468
-_vreclaim_L467
+                BRA     _vreclaim_L464
+_vreclaim_L463
                 LDA     #1
-_vreclaim_L468
+_vreclaim_L464
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L466
+                BRL     _vreclaim_L462
                 PHA
                 SEP     #$20
                 MX      %10
@@ -24225,8 +22964,8 @@ _vreclaim_L468
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vreclaim_L469
-_vreclaim_L466
+                BRL     _vreclaim_L465
+_vreclaim_L462
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24249,7 +22988,7 @@ _vreclaim_L466
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L471
+                BRL     _vreclaim_L467
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -24257,15 +22996,15 @@ _vreclaim_L466
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L471
+                BRL     _vreclaim_L467
                 LDA     #1
-                BRL     _vreclaim_L472
-_vreclaim_L471
+                BRL     _vreclaim_L468
+_vreclaim_L467
                 LDA     #0
-_vreclaim_L472
+_vreclaim_L468
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L470
+                BRL     _vreclaim_L466
                 PHA
                 SEP     #$20
                 MX      %10
@@ -24314,8 +23053,8 @@ _vreclaim_L472
                 STA     _fcc_fb
                 TYA
                 RTL
-                BRL     _vreclaim_L473
-_vreclaim_L470
+                BRL     _vreclaim_L469
+_vreclaim_L466
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24330,10 +23069,6 @@ _vreclaim_L470
                 PHA
                 TYA
                 PHA
-                LDA     7,S   ; fccstk d=4 b=3
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=4 b=1
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -24362,7 +23097,7 @@ _vreclaim_L470
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L474
+                BRL     _vreclaim_L470
                 PHA
                 SEP     #$20
                 MX      %10
@@ -24390,8 +23125,8 @@ _vreclaim_L470
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vreclaim_L475
-_vreclaim_L474
+                BRL     _vreclaim_L471
+_vreclaim_L470
                 PHA
                 SEP     #$20
                 MX      %10
@@ -24491,9 +23226,9 @@ _vreclaim_L474
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L475
-_vreclaim_L473
+_vreclaim_L471
 _vreclaim_L469
+_vreclaim_L465
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24556,15 +23291,15 @@ cache_enter_stkok        TCS
                 INC     _fcc_fb
                 LDA     doingcache
                 CMP     #0
-                BEQ     _vreclaim_L477
+                BEQ     _vreclaim_L473
                 LDA     #0
-                BRA     _vreclaim_L478
-_vreclaim_L477
+                BRA     _vreclaim_L474
+_vreclaim_L473
                 LDA     #1
-_vreclaim_L478
+_vreclaim_L474
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L476
+                BRL     _vreclaim_L472
                 TAY
                 TSC
                 CLC
@@ -24574,7 +23309,7 @@ _vreclaim_L478
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L476
+_vreclaim_L472
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -24606,11 +23341,11 @@ _vreclaim_L476
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L480
+                BVC     _vreclaim_L476
                 EOR     #$8000
-_vreclaim_L480
+_vreclaim_L476
                 BMI     *+5
-                BRL     _vreclaim_L479
+                BRL     _vreclaim_L475
                 TAY
                 TSC
                 CLC
@@ -24620,7 +23355,7 @@ _vreclaim_L480
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L479
+_vreclaim_L475
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -24633,17 +23368,13 @@ _vreclaim_L479
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L482
+                BRL     _vreclaim_L478
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -24651,15 +23382,15 @@ _vreclaim_L479
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L482
+                BRL     _vreclaim_L478
                 LDA     #1
-                BRL     _vreclaim_L483
-_vreclaim_L482
+                BRL     _vreclaim_L479
+_vreclaim_L478
                 LDA     #0
-_vreclaim_L483
+_vreclaim_L479
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L481
+                BRL     _vreclaim_L477
                 TAY
                 TSC
                 CLC
@@ -24669,7 +23400,7 @@ _vreclaim_L483
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L481
+_vreclaim_L477
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24778,7 +23509,7 @@ _vreclaim_L481
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L484
+                BRL     _vreclaim_L480
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24829,8 +23560,8 @@ _vreclaim_L481
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _vreclaim_L485
-_vreclaim_L484
+                BRL     _vreclaim_L481
+_vreclaim_L480
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24844,7 +23575,7 @@ _vreclaim_L484
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-_vreclaim_L485
+_vreclaim_L481
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -24942,10 +23673,7 @@ _vreclaim_L485
                 LDY     #22
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
                 CLC
@@ -24981,7 +23709,7 @@ _vreclaim_L485
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_img0
-_vreclaim_L486
+_vreclaim_L482
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -25015,11 +23743,11 @@ _vreclaim_L486
                 PLA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L489
+                BVC     _vreclaim_L485
                 EOR     #$8000
-_vreclaim_L489
+_vreclaim_L485
                 BMI     *+5
-                BRL     _vreclaim_L488
+                BRL     _vreclaim_L484
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25075,10 +23803,10 @@ _vreclaim_L489
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-_vreclaim_L487
+_vreclaim_L483
                 INC     _fcc_img0
-                BRL     _vreclaim_L486
-_vreclaim_L488
+                BRL     _vreclaim_L482
+_vreclaim_L484
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
@@ -25271,7 +23999,7 @@ _vreclaim_blkcount_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-_vreclaim_L490
+_vreclaim_L486
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -25283,11 +24011,7 @@ _vreclaim_L490
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L492
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BRL     _vreclaim_L488
                 LDY     #46
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -25306,7 +24030,7 @@ _vreclaim_L490
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L496
+                BRL     _vreclaim_L492
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25314,15 +24038,15 @@ _vreclaim_L490
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L496
+                BRL     _vreclaim_L492
                 LDA     #1
-                BRL     _vreclaim_L497
-_vreclaim_L496
+                BRL     _vreclaim_L493
+_vreclaim_L492
                 LDA     #0
-_vreclaim_L497
+_vreclaim_L493
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L494
+                BRL     _vreclaim_L490
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25357,21 +24081,13 @@ _vreclaim_L497
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L498
+                BRL     _vreclaim_L494
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _vreclaim_L498
-                LDA     #0
-                BRL     _vreclaim_L499
-_vreclaim_L498
-                LDA     #1
-_vreclaim_L499
-                CMP     #0
                 BEQ     *+5
                 BRL     _vreclaim_L494
                 LDA     #0
@@ -25380,8 +24096,16 @@ _vreclaim_L494
                 LDA     #1
 _vreclaim_L495
                 CMP     #0
+                BEQ     *+5
+                BRL     _vreclaim_L490
+                LDA     #0
+                BRL     _vreclaim_L491
+_vreclaim_L490
+                LDA     #1
+_vreclaim_L491
+                CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L493
+                BRL     _vreclaim_L489
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -25392,7 +24116,7 @@ _vreclaim_L495
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L493
+_vreclaim_L489
                 LDA     _fcc_img0
                 INC
                 STA     _fcc_img0
@@ -25409,11 +24133,11 @@ _vreclaim_L493
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L501
+                BVC     _vreclaim_L497
                 EOR     #$8000
-_vreclaim_L501
+_vreclaim_L497
                 BMI     *+5
-                BRL     _vreclaim_L500
+                BRL     _vreclaim_L496
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -25424,8 +24148,8 @@ _vreclaim_L501
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L500
-_vreclaim_L491
+_vreclaim_L496
+_vreclaim_L487
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25446,8 +24170,8 @@ _vreclaim_L491
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _vreclaim_L490
-_vreclaim_L492
+                BRL     _vreclaim_L486
+_vreclaim_L488
                 LDA     _fcc_img0
                 TAY
                 TSC
@@ -25608,11 +24332,9 @@ main_stkok        TCS
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L502
+                BRL     _vreclaim_L498
                 LDA     #51
                 TAY
                 TSC
@@ -25623,7 +24345,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L502
+_vreclaim_L498
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25649,7 +24371,7 @@ _vreclaim_L502
                 TXA
                 CMP     #5
                 BNE     *+5
-                BRL     _vreclaim_L503
+                BRL     _vreclaim_L499
                 LDA     #52
                 TAY
                 TSC
@@ -25660,7 +24382,7 @@ _vreclaim_L502
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L503
+_vreclaim_L499
                 LDA     #0
                 ASL
                 TAX
@@ -25669,7 +24391,7 @@ _vreclaim_L503
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L504
+                BRL     _vreclaim_L500
                 LDA     #53
                 TAY
                 TSC
@@ -25680,7 +24402,7 @@ _vreclaim_L503
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L504
+_vreclaim_L500
                 LDA     #1
                 ASL
                 TAX
@@ -25689,7 +24411,7 @@ _vreclaim_L504
                 TXA
                 CMP     #2
                 BNE     *+5
-                BRL     _vreclaim_L505
+                BRL     _vreclaim_L501
                 LDA     #54
                 TAY
                 TSC
@@ -25700,7 +24422,7 @@ _vreclaim_L504
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L505
+_vreclaim_L501
                 LDA     #2
                 ASL
                 TAX
@@ -25709,7 +24431,7 @@ _vreclaim_L505
                 TXA
                 CMP     #3
                 BNE     *+5
-                BRL     _vreclaim_L506
+                BRL     _vreclaim_L502
                 LDA     #55
                 TAY
                 TSC
@@ -25720,7 +24442,7 @@ _vreclaim_L505
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L506
+_vreclaim_L502
                 LDA     #3
                 ASL
                 TAX
@@ -25729,7 +24451,7 @@ _vreclaim_L506
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L507
+                BRL     _vreclaim_L503
                 LDA     #56
                 TAY
                 TSC
@@ -25740,7 +24462,7 @@ _vreclaim_L506
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L507
+_vreclaim_L503
                 LDA     #4
                 ASL
                 TAX
@@ -25749,7 +24471,7 @@ _vreclaim_L507
                 TXA
                 CMP     #5
                 BNE     *+5
-                BRL     _vreclaim_L508
+                BRL     _vreclaim_L504
                 LDA     #57
                 TAY
                 TSC
@@ -25760,7 +24482,7 @@ _vreclaim_L507
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L508
+_vreclaim_L504
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25791,7 +24513,7 @@ _vreclaim_L508
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L510
+                BRL     _vreclaim_L506
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25799,15 +24521,15 @@ _vreclaim_L508
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L510
+                BRL     _vreclaim_L506
                 LDA     #0
-                BRL     _vreclaim_L511
-_vreclaim_L510
+                BRL     _vreclaim_L507
+_vreclaim_L506
                 LDA     #1
-_vreclaim_L511
+_vreclaim_L507
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L509
+                BRL     _vreclaim_L505
                 LDA     #58
                 TAY
                 TSC
@@ -25818,18 +24540,16 @@ _vreclaim_L511
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L509
+_vreclaim_L505
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L512
+                BRL     _vreclaim_L508
                 LDA     #59
                 TAY
                 TSC
@@ -25840,7 +24560,7 @@ _vreclaim_L509
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L512
+_vreclaim_L508
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -25851,7 +24571,7 @@ _vreclaim_L512
                 AND     #256
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L513
+                BRL     _vreclaim_L509
                 LDA     #60
                 TAY
                 TSC
@@ -25862,7 +24582,7 @@ _vreclaim_L512
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L513
+_vreclaim_L509
                 LDA     _vreclaim_n_trace
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     3,S   ; fccstk d=0 b=3
@@ -25913,7 +24633,7 @@ _vreclaim_L513
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L515-1
+                PEA     _vreclaim_L511-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -25924,7 +24644,7 @@ _vreclaim_L513
                 DEC
                 PHA
                 RTL
-_vreclaim_L515
+_vreclaim_L511
                 TAY
                 TSC
                 CLC
@@ -25935,7 +24655,7 @@ _vreclaim_L515
                 TXA
                 CMP     #9
                 BNE     *+5
-                BRL     _vreclaim_L514
+                BRL     _vreclaim_L510
                 LDA     #61
                 TAY
                 TSC
@@ -25946,7 +24666,7 @@ _vreclaim_L515
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L514
+_vreclaim_L510
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26000,7 +24720,7 @@ _vreclaim_L514
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L517-1
+                PEA     _vreclaim_L513-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26011,7 +24731,7 @@ _vreclaim_L514
                 DEC
                 PHA
                 RTL
-_vreclaim_L517
+_vreclaim_L513
                 TAY
                 TSC
                 CLC
@@ -26022,7 +24742,7 @@ _vreclaim_L517
                 TXA
                 CMP     #5
                 BNE     *+5
-                BRL     _vreclaim_L516
+                BRL     _vreclaim_L512
                 LDA     #62
                 TAY
                 TSC
@@ -26033,7 +24753,7 @@ _vreclaim_L517
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L516
+_vreclaim_L512
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26082,7 +24802,7 @@ _vreclaim_L516
                 LDA     13,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L519-1
+                PEA     _vreclaim_L515-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26093,18 +24813,16 @@ _vreclaim_L516
                 DEC
                 PHA
                 RTL
-_vreclaim_L519
+_vreclaim_L515
                 TAY
                 TSC
                 CLC
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L518
+                BRL     _vreclaim_L514
                 LDA     #63
                 TAY
                 TSC
@@ -26115,7 +24833,7 @@ _vreclaim_L519
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L518
+_vreclaim_L514
                 LDA     _vreclaim_n_trace
                 TAX
                 LDA     19,S   ; fccstk d=0 b=19
@@ -26123,7 +24841,7 @@ _vreclaim_L518
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L520
+                BRL     _vreclaim_L516
                 LDA     #64
                 TAY
                 TSC
@@ -26134,7 +24852,7 @@ _vreclaim_L518
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L520
+_vreclaim_L516
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26195,7 +24913,7 @@ _vreclaim_L520
                 LDA     17,S
                 STA     _fcc_fpr0+2
                 PHK
-                PEA     _vreclaim_L522-1
+                PEA     _vreclaim_L518-1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26206,18 +24924,16 @@ _vreclaim_L520
                 DEC
                 PHA
                 RTL
-_vreclaim_L522
+_vreclaim_L518
                 TAY
                 TSC
                 CLC
                 ADC     #18
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L521
+                BRL     _vreclaim_L517
                 LDA     #65
                 TAY
                 TSC
@@ -26228,7 +24944,7 @@ _vreclaim_L522
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L521
+_vreclaim_L517
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26284,11 +25000,9 @@ _vreclaim_L521
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L523
+                BRL     _vreclaim_L519
                 LDA     #66
                 TAY
                 TSC
@@ -26299,7 +25013,7 @@ _vreclaim_L521
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L523
+_vreclaim_L519
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26325,7 +25039,7 @@ _vreclaim_L523
                 TXA
                 CMP     #4
                 BNE     *+5
-                BRL     _vreclaim_L524
+                BRL     _vreclaim_L520
                 LDA     #67
                 TAY
                 TSC
@@ -26336,10 +25050,10 @@ _vreclaim_L523
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L524
+_vreclaim_L520
                 LDA     #0
                 STA     17,S   ; fccstk d=0 b=17
-_vreclaim_L525
+_vreclaim_L521
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -26350,11 +25064,11 @@ _vreclaim_L525
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L528
+                BVC     _vreclaim_L524
                 EOR     #$8000
-_vreclaim_L528
+_vreclaim_L524
                 BMI     *+5
-                BRL     _vreclaim_L527
+                BRL     _vreclaim_L523
                 LDA     17,S   ; fccstk d=0 b=17
                 ASL
                 TAX
@@ -26363,7 +25077,7 @@ _vreclaim_L528
                 TXA
                 CMP     #3
                 BEQ     *+5
-                BRL     _vreclaim_L529
+                BRL     _vreclaim_L525
                 LDA     #68
                 TAY
                 TSC
@@ -26374,14 +25088,14 @@ _vreclaim_L528
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L529
-_vreclaim_L526
+_vreclaim_L525
+_vreclaim_L522
                 LDA     17,S   ; fccstk d=0 b=17
                 CLC
                 ADC     #1
                 STA     17,S   ; fccstk d=0 b=17
-                BRL     _vreclaim_L525
-_vreclaim_L527
+                BRL     _vreclaim_L521
+_vreclaim_L523
                 FGX2_FARCALL _vreclaim_reset
                 SEP     #$20
                 MX      %10
@@ -26430,11 +25144,9 @@ _vreclaim_L527
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L530
+                BRL     _vreclaim_L526
                 LDA     #69
                 TAY
                 TSC
@@ -26445,7 +25157,7 @@ _vreclaim_L527
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L530
+_vreclaim_L526
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -26493,11 +25205,9 @@ _vreclaim_L530
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L531
+                BRL     _vreclaim_L527
                 LDA     #70
                 TAY
                 TSC
@@ -26508,7 +25218,7 @@ _vreclaim_L530
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L531
+_vreclaim_L527
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26560,7 +25270,7 @@ _vreclaim_L531
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L533
+                BRL     _vreclaim_L529
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26568,15 +25278,15 @@ _vreclaim_L531
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L533
+                BRL     _vreclaim_L529
                 LDA     #1
-                BRL     _vreclaim_L534
-_vreclaim_L533
+                BRL     _vreclaim_L530
+_vreclaim_L529
                 LDA     #0
-_vreclaim_L534
+_vreclaim_L530
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L532
+                BRL     _vreclaim_L528
                 LDA     #114
                 TAY
                 TSC
@@ -26587,7 +25297,7 @@ _vreclaim_L534
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L532
+_vreclaim_L528
                 LDA     freevnodes
                 STA     19,S   ; fccstk d=0 b=19
                 LDA     3,S   ; fccstk d=0 b=3
@@ -26608,7 +25318,7 @@ _vreclaim_L532
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L535
+                BRL     _vreclaim_L531
                 LDA     #71
                 TAY
                 TSC
@@ -26619,7 +25329,7 @@ _vreclaim_L532
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L535
+_vreclaim_L531
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -26635,7 +25345,7 @@ _vreclaim_L535
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L537
+                BRL     _vreclaim_L533
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26643,15 +25353,15 @@ _vreclaim_L535
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L537
+                BRL     _vreclaim_L533
                 LDA     #0
-                BRL     _vreclaim_L538
-_vreclaim_L537
+                BRL     _vreclaim_L534
+_vreclaim_L533
                 LDA     #1
-_vreclaim_L538
+_vreclaim_L534
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L536
+                BRL     _vreclaim_L532
                 LDA     #72
                 TAY
                 TSC
@@ -26662,7 +25372,7 @@ _vreclaim_L538
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L536
+_vreclaim_L532
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26673,7 +25383,7 @@ _vreclaim_L536
                 TXA
                 CMP     #8
                 BNE     *+5
-                BRL     _vreclaim_L539
+                BRL     _vreclaim_L535
                 LDA     #73
                 TAY
                 TSC
@@ -26684,7 +25394,7 @@ _vreclaim_L536
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L539
+_vreclaim_L535
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26707,7 +25417,7 @@ _vreclaim_L539
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L541
+                BRL     _vreclaim_L537
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26715,15 +25425,15 @@ _vreclaim_L539
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L541
+                BRL     _vreclaim_L537
                 LDA     #0
-                BRL     _vreclaim_L542
-_vreclaim_L541
+                BRL     _vreclaim_L538
+_vreclaim_L537
                 LDA     #1
-_vreclaim_L542
+_vreclaim_L538
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L540
+                BRL     _vreclaim_L536
                 LDA     #74
                 TAY
                 TSC
@@ -26734,7 +25444,7 @@ _vreclaim_L542
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L540
+_vreclaim_L536
                 LDA     mnt_a+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_a+16
@@ -26746,7 +25456,7 @@ _vreclaim_L540
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L544
+                BRL     _vreclaim_L540
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -26754,15 +25464,15 @@ _vreclaim_L540
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L544
+                BRL     _vreclaim_L540
                 LDA     #1
-                BRL     _vreclaim_L545
-_vreclaim_L544
+                BRL     _vreclaim_L541
+_vreclaim_L540
                 LDA     #0
-_vreclaim_L545
+_vreclaim_L541
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L543
+                BRL     _vreclaim_L539
                 LDA     #75
                 TAY
                 TSC
@@ -26773,7 +25483,7 @@ _vreclaim_L545
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L543
+_vreclaim_L539
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
                 SEP     #$20
@@ -26788,7 +25498,7 @@ _vreclaim_L543
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-_vreclaim_L546
+_vreclaim_L542
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -26800,7 +25510,7 @@ _vreclaim_L546
                 AND     #$00FF
                 ORA     _fcc_fpr0
                 BNE     *+5
-                BRL     _vreclaim_L548
+                BRL     _vreclaim_L544
                 LDA     19,S   ; fccstk d=0 b=19
                 INC
                 STA     19,S   ; fccstk d=0 b=19
@@ -26817,11 +25527,11 @@ _vreclaim_L546
                 TXA
                 SEC
                 SBC     _fcc_tmp_b
-                BVC     _vreclaim_L550
+                BVC     _vreclaim_L546
                 EOR     #$8000
-_vreclaim_L550
+_vreclaim_L546
                 BMI     *+5
-                BRL     _vreclaim_L549
+                BRL     _vreclaim_L545
                 LDA     #76
                 TAY
                 TSC
@@ -26832,8 +25542,8 @@ _vreclaim_L550
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L549
-_vreclaim_L547
+_vreclaim_L545
+_vreclaim_L543
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -26854,8 +25564,8 @@ _vreclaim_L547
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _vreclaim_L546
-_vreclaim_L548
+                BRL     _vreclaim_L542
+_vreclaim_L544
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 LDA     freevnodes
@@ -26863,7 +25573,7 @@ _vreclaim_L548
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L551
+                BRL     _vreclaim_L547
                 LDA     #77
                 TAY
                 TSC
@@ -26874,7 +25584,7 @@ _vreclaim_L548
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L551
+_vreclaim_L547
                 FGX2_FARCALL _vreclaim_reset
                 SEP     #$20
                 MX      %10
@@ -26923,11 +25633,9 @@ _vreclaim_L551
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L552
+                BRL     _vreclaim_L548
                 LDA     #78
                 TAY
                 TSC
@@ -26938,7 +25646,7 @@ _vreclaim_L551
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L552
+_vreclaim_L548
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -26980,7 +25688,7 @@ _vreclaim_L552
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L553
+                BRL     _vreclaim_L549
                 LDA     #79
                 TAY
                 TSC
@@ -26991,7 +25699,7 @@ _vreclaim_L552
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L553
+_vreclaim_L549
                 LDA     _vreclaim_n_trace
                 TAX
                 LDA     19,S   ; fccstk d=0 b=19
@@ -26999,7 +25707,7 @@ _vreclaim_L553
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L554
+                BRL     _vreclaim_L550
                 LDA     #80
                 TAY
                 TSC
@@ -27010,7 +25718,7 @@ _vreclaim_L553
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L554
+_vreclaim_L550
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27019,11 +25727,9 @@ _vreclaim_L554
                 TAX
                 TXA
                 AND     #512
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
-                BRL     _vreclaim_L555
+                BRL     _vreclaim_L551
                 LDA     #81
                 TAY
                 TSC
@@ -27034,7 +25740,7 @@ _vreclaim_L554
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L555
+_vreclaim_L551
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27119,11 +25825,9 @@ _vreclaim_L555
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L556
+                BRL     _vreclaim_L552
                 LDA     #82
                 TAY
                 TSC
@@ -27134,7 +25838,7 @@ _vreclaim_L555
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L556
+_vreclaim_L552
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27223,7 +25927,7 @@ _vreclaim_L556
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L557
+                BRL     _vreclaim_L553
                 LDA     #83
                 TAY
                 TSC
@@ -27234,7 +25938,7 @@ _vreclaim_L556
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L557
+_vreclaim_L553
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27245,7 +25949,7 @@ _vreclaim_L557
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L558
+                BRL     _vreclaim_L554
                 LDA     #84
                 TAY
                 TSC
@@ -27256,7 +25960,7 @@ _vreclaim_L557
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L558
+_vreclaim_L554
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27291,7 +25995,7 @@ _vreclaim_L558
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L559
+                BRL     _vreclaim_L555
                 LDA     #85
                 TAY
                 TSC
@@ -27302,7 +26006,7 @@ _vreclaim_L558
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L559
+_vreclaim_L555
                 LDA     #20
                 TAX
                 LDA:    _vreclaim_fake_disk,X
@@ -27314,7 +26018,7 @@ _vreclaim_L559
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L560
+                BRL     _vreclaim_L556
                 LDA     #86
                 TAY
                 TSC
@@ -27325,7 +26029,7 @@ _vreclaim_L559
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L560
+_vreclaim_L556
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27341,11 +26045,9 @@ _vreclaim_L560
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L561
+                BRL     _vreclaim_L557
                 LDA     #87
                 TAY
                 TSC
@@ -27356,7 +26058,7 @@ _vreclaim_L560
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L561
+_vreclaim_L557
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27372,11 +26074,9 @@ _vreclaim_L561
                 ADC     #4
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L562
+                BRL     _vreclaim_L558
                 LDA     #88
                 TAY
                 TSC
@@ -27387,18 +26087,16 @@ _vreclaim_L561
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L562
+_vreclaim_L558
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L563
+                BRL     _vreclaim_L559
                 LDA     #89
                 TAY
                 TSC
@@ -27409,7 +26107,7 @@ _vreclaim_L562
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L563
+_vreclaim_L559
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -27457,11 +26155,9 @@ _vreclaim_L563
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L564
+                BRL     _vreclaim_L560
                 LDA     #90
                 TAY
                 TSC
@@ -27472,7 +26168,7 @@ _vreclaim_L563
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L564
+_vreclaim_L560
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -27484,7 +26180,7 @@ _vreclaim_L564
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L566
+                BRL     _vreclaim_L562
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -27492,15 +26188,15 @@ _vreclaim_L564
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L566
+                BRL     _vreclaim_L562
                 LDA     #0
-                BRL     _vreclaim_L567
-_vreclaim_L566
+                BRL     _vreclaim_L563
+_vreclaim_L562
                 LDA     #1
-_vreclaim_L567
+_vreclaim_L563
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L565
+                BRL     _vreclaim_L561
                 LDA     #91
                 TAY
                 TSC
@@ -27511,7 +26207,7 @@ _vreclaim_L567
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L565
+_vreclaim_L561
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -27553,11 +26249,9 @@ _vreclaim_L565
                 ADC     #12
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L568
+                BRL     _vreclaim_L564
                 LDA     #92
                 TAY
                 TSC
@@ -27568,7 +26262,7 @@ _vreclaim_L565
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L568
+_vreclaim_L564
                 LDA     _vreclaim_fake_reads
                 TAX
                 LDA     19,S   ; fccstk d=0 b=19
@@ -27579,7 +26273,7 @@ _vreclaim_L568
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L569
+                BRL     _vreclaim_L565
                 LDA     #93
                 TAY
                 TSC
@@ -27590,7 +26284,7 @@ _vreclaim_L568
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L569
+_vreclaim_L565
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -27620,7 +26314,7 @@ _vreclaim_L569
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L570
+                BRL     _vreclaim_L566
                 LDA     #94
                 TAY
                 TSC
@@ -27631,7 +26325,7 @@ _vreclaim_L569
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L570
+_vreclaim_L566
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -27712,11 +26406,9 @@ _vreclaim_L570
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L571
+                BRL     _vreclaim_L567
                 LDA     #95
                 TAY
                 TSC
@@ -27727,7 +26419,7 @@ _vreclaim_L570
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L571
+_vreclaim_L567
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -27812,11 +26504,9 @@ _vreclaim_L571
                 ADC     #6
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L572
+                BRL     _vreclaim_L568
                 LDA     #96
                 TAY
                 TSC
@@ -27827,13 +26517,11 @@ _vreclaim_L571
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L572
+_vreclaim_L568
                 LDA     _vreclaim_fake_writes
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L573
+                BRL     _vreclaim_L569
                 LDA     #97
                 TAY
                 TSC
@@ -27844,7 +26532,7 @@ _vreclaim_L572
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L573
+_vreclaim_L569
                 LDA     #21
                 TAX
                 LDA:    _vreclaim_fake_disk,X
@@ -27856,7 +26544,7 @@ _vreclaim_L573
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     *+5
-                BRL     _vreclaim_L574
+                BRL     _vreclaim_L570
                 LDA     #98
                 TAY
                 TSC
@@ -27867,7 +26555,7 @@ _vreclaim_L573
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L574
+_vreclaim_L570
                 FGX2_FARCALL _vreclaim_reset
                 LDA     #$0040
                 STA     _fcc_long_hi
@@ -27924,11 +26612,9 @@ _vreclaim_L574
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L575
+                BRL     _vreclaim_L571
                 LDA     #100
                 TAY
                 TSC
@@ -27939,7 +26625,7 @@ _vreclaim_L574
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L575
+_vreclaim_L571
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -27987,11 +26673,9 @@ _vreclaim_L575
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L576
+                BRL     _vreclaim_L572
                 LDA     #101
                 TAY
                 TSC
@@ -28002,7 +26686,7 @@ _vreclaim_L575
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L576
+_vreclaim_L572
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -28059,7 +26743,7 @@ _vreclaim_L576
                 TXA
                 CMP     #16
                 BNE     *+5
-                BRL     _vreclaim_L577
+                BRL     _vreclaim_L573
                 LDA     #102
                 TAY
                 TSC
@@ -28070,7 +26754,7 @@ _vreclaim_L576
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L577
+_vreclaim_L573
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -28081,7 +26765,7 @@ _vreclaim_L577
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L578
+                BRL     _vreclaim_L574
                 LDA     #103
                 TAY
                 TSC
@@ -28092,7 +26776,7 @@ _vreclaim_L577
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L578
+_vreclaim_L574
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -28103,7 +26787,7 @@ _vreclaim_L578
                 TXA
                 CMP     #8
                 BNE     *+5
-                BRL     _vreclaim_L579
+                BRL     _vreclaim_L575
                 LDA     #104
                 TAY
                 TSC
@@ -28114,7 +26798,7 @@ _vreclaim_L578
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L579
+_vreclaim_L575
                 LDA     #2
                 PHA
                 LDA     #0
@@ -28142,11 +26826,9 @@ _vreclaim_L579
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L580
+                BRL     _vreclaim_L576
                 LDA     #105
                 TAY
                 TSC
@@ -28157,7 +26839,7 @@ _vreclaim_L579
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L580
+_vreclaim_L576
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -28168,7 +26850,7 @@ _vreclaim_L580
                 TXA
                 CMP     #8
                 BNE     *+5
-                BRL     _vreclaim_L581
+                BRL     _vreclaim_L577
                 LDA     #106
                 TAY
                 TSC
@@ -28179,7 +26861,7 @@ _vreclaim_L580
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L581
+_vreclaim_L577
                 LDA     mnt_a+18
                 STA     _fcc_fpr0+2
                 LDA     mnt_a+16
@@ -28190,7 +26872,7 @@ _vreclaim_L581
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BEQ     *+5
-                BRL     _vreclaim_L583
+                BRL     _vreclaim_L579
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
@@ -28198,15 +26880,15 @@ _vreclaim_L581
                 REP     #$20
                 MX      %00
                 BEQ     *+5
-                BRL     _vreclaim_L583
+                BRL     _vreclaim_L579
                 LDA     #0
-                BRL     _vreclaim_L584
-_vreclaim_L583
+                BRL     _vreclaim_L580
+_vreclaim_L579
                 LDA     #1
-_vreclaim_L584
+_vreclaim_L580
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L582
+                BRL     _vreclaim_L578
                 LDA     #107
                 TAY
                 TSC
@@ -28217,7 +26899,7 @@ _vreclaim_L584
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L582
+_vreclaim_L578
                 FGX2_FARCALL _vreclaim_reset
                 LDA     #$0040
                 STA     _fcc_long_hi
@@ -28274,11 +26956,9 @@ _vreclaim_L582
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L585
+                BRL     _vreclaim_L581
                 LDA     #108
                 TAY
                 TSC
@@ -28289,7 +26969,7 @@ _vreclaim_L582
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L585
+_vreclaim_L581
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -28337,11 +27017,9 @@ _vreclaim_L585
                 ADC     #14
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L586
+                BRL     _vreclaim_L582
                 LDA     #109
                 TAY
                 TSC
@@ -28352,7 +27030,7 @@ _vreclaim_L585
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L586
+_vreclaim_L582
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -28426,11 +27104,9 @@ _vreclaim_L586
                 ADC     #10
                 TCS
                 TYA
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
-                BRL     _vreclaim_L587
+                BRL     _vreclaim_L583
                 LDA     #110
                 TAY
                 TSC
@@ -28441,7 +27117,7 @@ _vreclaim_L586
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L587
+_vreclaim_L583
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -28452,7 +27128,7 @@ _vreclaim_L587
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L588
+                BRL     _vreclaim_L584
                 LDA     #111
                 TAY
                 TSC
@@ -28463,7 +27139,7 @@ _vreclaim_L587
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L588
+_vreclaim_L584
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -28474,7 +27150,7 @@ _vreclaim_L588
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L589
+                BRL     _vreclaim_L585
                 LDA     #112
                 TAY
                 TSC
@@ -28485,13 +27161,13 @@ _vreclaim_L588
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L589
+_vreclaim_L585
                 LDA     _vreclaim_nslept
                 TAX
                 TXA
                 CMP     #1
                 BNE     *+5
-                BRL     _vreclaim_L590
+                BRL     _vreclaim_L586
                 LDA     #113
                 TAY
                 TSC
@@ -28502,7 +27178,7 @@ _vreclaim_L589
                 STA     _fcc_fb
                 TYA
                 RTL
-_vreclaim_L590
+_vreclaim_L586
                 LDA     #42
                 TAY
                 TSC

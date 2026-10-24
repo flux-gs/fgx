@@ -368,8 +368,6 @@ _pdplayout_L11
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _pdplayout_L12

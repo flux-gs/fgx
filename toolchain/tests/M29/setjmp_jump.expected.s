@@ -99,8 +99,6 @@ main_stkok        TCS
                 TAX
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _setjmp_jump_L0
@@ -166,8 +164,6 @@ _setjmp_jump_L2
                 TAX
                 FGX2_FARCALL setjmp
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _setjmp_jump_L3

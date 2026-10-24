@@ -1104,8 +1104,6 @@ _arrelemstructstore_L31
                 DEY
                 BPL     _arrelemstructstore_L31
                 LDA     gt+14
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _arrelemstructstore_L32
@@ -1155,8 +1153,6 @@ _arrelemstructstore_L32
                 RTL
 _arrelemstructstore_L33
                 LDA     gt+20
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _arrelemstructstore_L34

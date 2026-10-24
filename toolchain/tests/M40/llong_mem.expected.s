@@ -3872,8 +3872,6 @@ _llong_mem_L64
                 TYA
                 FGX2_FARCALL _fcc_ll_divs
                 STA     29,S   ; fccstk d=0 b=29
-                TAX
-                TXA
                 CMP     #0
                 BNE     *+5
                 BRL     _llong_mem_L67

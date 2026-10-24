@@ -276,8 +276,6 @@ _fltpr_ecvt_L8
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L5
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L5
@@ -402,8 +400,6 @@ _fltpr_ecvt_L15
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L12
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
-                TXA
                 CMP     #0
                 BEQ     *+5
                 BRL     _fltpr_ecvt_L12
