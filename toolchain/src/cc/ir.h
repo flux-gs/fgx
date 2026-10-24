@@ -362,6 +362,7 @@ void ir_record_op_ptr2(IrOp op, void *ptr, unsigned u0, unsigned u1);
  * to ir.c, so emit.c reaches it through these. */
 int ir_cur_n(void);
 int ir_local_mutated_since(int snap, void *lc);
+int ir_call_since(int snap);
 
 /* RTL-ABI: reverse a variadic call's N recorded arg op-ranges (right-to-left
  * push) with per-arg g_s_delta compensation.  bounds[0..n], weights[0..n-1]. */

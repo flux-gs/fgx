@@ -1419,6 +1419,7 @@ void emit_fpr_add_index(int k, int idx, unsigned stride);                   /* d
 void emit_incdec_at_sym(int k, int stride, int is_inc, int is_prefix,
                         int is_ptr, tword rt, int rt_sid);
 Local *param_addr_node(int n);   /* params_home: &param in the body */
+void emit_restage_base_bank(Local *lc, Global *gv);   /* after an index that calls */
 void emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix,
                         int is_ptr, tword rt, int rt_sid);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
@@ -1464,7 +1465,8 @@ int
 parse_struct_def(const char *tag_ptr, int tag_len, int is_union);
 TypeSpec
 parse_type_spec(void);
-void long_double_or_die(void);   /* `long double' is double; `long float' dies */
+void long_double_or_die(void);
+void consume_trailing_specifiers(LocalType *base, int *is_unsigned);   /* `long double' is double; `long float' dies */
 LocalType
 type_for_decl(TypeSpec t, int stars, int is_array);
 /* C parameter adjustment: array-typed parameter -> pointer to element. */

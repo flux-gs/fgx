@@ -1192,15 +1192,21 @@ emit_deref_postinc_local_img_lower(Local *lc, unsigned k, int is_inc, int stride
 /* fcc2 P1.4 (B1c-2b): un-promoted lowering of IR_INDEX_DEREF_LOCAL.  BYTE-IDENTICAL
  * to emit_array_index_read's scalar-pointer tail: A holds the scaled element index,
  * the 2-byte base offset is @ 1,S, the base bank is in _fcc_ptr+2.  s_delta is the
- * g_s_delta snapshot (parity; not consumed — the 1,S is literal). */
+ * g_s_delta snapshot after the PLA, where a `called' index re-reads the bank. */
 static void
-emit_index_deref_local_lower(Local *lc, int s_delta, int is_byte)
+emit_index_deref_local_lower(Local *lc, int s_delta, int is_byte, int called)
 {
-    (void)lc; (void)s_delta;
     ir_emitf("                CLC\n");
     ir_emitf("                ADC     1,S\n");      /* + base offset */
     ir_emitf("                STA     _fcc_ptr\n");
     ir_emitf("                PLA\n");              /* drop the 2-byte pushed base */
+    if (called) {                                  /* emit_restage_base_bank */
+        int saved = g_s_delta;
+        g_s_delta = s_delta;
+        emit_slot_lda16(lc, 2);
+        ir_emitf("                STA     _fcc_ptr+2\n");
+        g_s_delta = saved;
+    }
     ir_emitf("                LDA     [_fcc_ptr]\n");
     if (is_byte)
         ir_emitf("                AND     #$00FF\n");
@@ -3015,7 +3021,8 @@ emit_lower_op(const IrNode *n)
         emit_deref_postinc_local_img_lower((Local *)n->ptr, n->u0,
                                            (int)(n->u1 & 1u), (int)(n->u1 >> 1)); break;
     case IR_INDEX_DEREF_LOCAL:
-        emit_index_deref_local_lower((Local *)n->ptr, (int)n->u0, (int)(n->u1 & 1u)); break;
+        emit_index_deref_local_lower((Local *)n->ptr, (int)n->u0, (int)(n->u1 & 1u),
+                                     (int)((n->u1 >> 2) & 1u)); break;
     case IR_INDEX_DEREF_LOCAL_IMG:
         emit_index_deref_local_img_lower(n->u0, (int)(n->u1 & 1u)); break;
     case IR_WALK_STORE_SETUP:
@@ -3734,6 +3741,27 @@ emit_air_head(Local *lc)
     return ir_cur_n();                      /* B1c-2b: scan the index eval's ops */
 }
 
+/* A pointer base's bank waits in _fcc_ptr+2 while its index is evaluated
+ * (emit_load_base, emit_load_global).  A call in the index may reuse
+ * _fcc_ptr -- `digs[f(x)]', 4.3BSD-Reno doprnt.c's quad digits -- so the
+ * bank is staged again from the pointer itself, local or global.  A is
+ * kept. */
+void
+emit_restage_base_bank(Local *lc, Global *gv)
+{
+    ir_record_raw(IR_TAY, 0, 0, NULL);
+    if (lc) {
+        emit_slot_lda16(lc, 2);
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
+    } else {
+        emit_m8();
+        ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp2(gname(gv)));
+        ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr+2"));
+        emit_m16();
+    }
+    ir_record_raw(IR_TYA, 0, 0, NULL);
+}
+
 int
 emit_air_tail(Local *lc, int idx_snap, int consumed)
 {
@@ -3798,11 +3826,14 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         !ISPTR(DECREF(lc->type)) &&
         lc->type != LT_LONG_PTR && lc->type != LT_FLOAT_PTR) {
         int base_mut = ir_local_mutated_since(idx_snap, (void *)lc);
+        int called   = ir_call_since(idx_snap);
         g_s_delta -= 2;                                  /* matches the PLA in the lowering */
         g_expr_type     = is_byte ? LT_CHAR : LT_INT;
         g_expr_unsigned = lc->is_unsigned;   /* A-1: elem inherits decl */
+        if (called) lc->raw_accessed = 1;    /* the lowering reads its slot */
         ir_record_op_ptr2(IR_INDEX_DEREF_LOCAL, lc, (unsigned)g_s_delta,
-                          (unsigned)((is_byte ? 1u : 0u) | (base_mut ? 2u : 0u)));
+                          (unsigned)((is_byte ? 1u : 0u) | (base_mut ? 2u : 0u) |
+                                     (called ? 4u : 0u)));
         return -1;
     }
     ir_emitf("                CLC\n");
@@ -3849,6 +3880,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
+        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
         ir_record_raw(IR_LDA_DEREF, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_long_b_lo"));
         /* Re-load with +2 offset for high word. */
@@ -3872,6 +3904,7 @@ emit_air_tail(Local *lc, int idx_snap, int consumed)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_ptr"));
         ir_record_raw(IR_POP_A, 0, 0, NULL);
         g_s_delta -= 2;
+        if (ir_call_since(idx_snap)) emit_restage_base_bank(lc, NULL);
         if (ISPTR(elem)) {                  /* element is itself a pointer → 4-byte load */
             int k = fpr_alloc();
             emit_fpr_load_ptr_at_fcc_ptr(k);

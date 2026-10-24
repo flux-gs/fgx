@@ -135,6 +135,10 @@ _fnptr_ptrret_L1
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_fpr0+2
+                LDA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_fpr0
                 LDA     #1
                 CLC
                 ADC     #buf
@@ -177,8 +181,6 @@ _fnptr_ptrret_L4
                 TYA
                 RTL
 _fnptr_ptrret_L2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     #1
@@ -186,6 +188,8 @@ _fnptr_ptrret_L2
                 ADC     1,S
                 STA     _fcc_ptr
                 PLA
+                LDA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAY

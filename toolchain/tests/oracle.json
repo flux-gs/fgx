@@ -692,5 +692,7 @@
   "g53_scalarfar": 42,
   "g54_fnfield_null": 42,
   "parmhome": 42,
-  "fprhold": 42
+  "fprhold": 42,
+  "specorder": 42,
+  "idxcall": 42
 }

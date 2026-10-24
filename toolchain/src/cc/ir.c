@@ -659,6 +659,21 @@ ir_text_has_unsafe_call(const char *t)
     return 0;
 }
 
+/* 1 iff an op recorded since `snap' calls anything that may reuse the
+ * _fcc_ scratch cells: a call to other than a runtime helper, or an
+ * indirect call anywhere in the function (it carries no token to find). */
+int
+ir_call_since(int snap)
+{
+    int j;
+    if (g_has_indirect_call) return 1;
+    for (j = snap; j < g_ir_n; j++)
+        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
+            ir_text_has_unsafe_call(g_ir[j].text))
+            return 1;
+    return 0;
+}
+
 /* P1.4 loop-scoped (region) promotion plan: (local, DP-IMG slot) pairs to seed at
  * IR_LOOP_BEGIN and write back at IR_LOOP_END, keyed by loop id.  Filled by
  * ir_promote_loops, consumed by ir_emit_loop_seeds/writeback. */

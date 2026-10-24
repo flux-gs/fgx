@@ -3736,8 +3736,9 @@ build_primary_ast(void)
                 bt = LT_LLONG;                  /* `long long' (extension) */
                 next_tok();
             }
-            if (!from_typedef && bt == LT_LONG && g_cur.kind == TOK_INT_KW)
-                next_tok();
+            if (!from_typedef && (bt == LT_INT || bt == LT_CHAR ||
+                                  bt == LT_LONG || bt == LT_LLONG))
+                consume_trailing_specifiers(&bt, &saw_unsigned);
             if (g_cur.kind == TOK_LPAREN) {
                 /* Inline abstract fn-ptr declarator cast, `T (*)(params)`.
                  *
