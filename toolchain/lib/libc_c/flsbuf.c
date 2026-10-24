@@ -5,7 +5,12 @@
  *	Copyright (c) 1980
  *	Regents of the University of California.
  */
-/* Upstream's body.  The #include lines are the aggregate's (libc_c.c). */
+/* Upstream's body.  The #include lines are the aggregate's (libc_c.c).
+ * FGX delta: a string (_IOSTRG) that has run out of room drops the
+ * character.  2.11BSD's sprintf gives its string a count of 32767 and never
+ * gets here; snprintf's count is the caller's room (vsnprintf.c), and
+ * upstream would write the rest to whatever descriptor _file holds.
+ */
 _flsbuf(c, iop)
 unsigned char c;
 register FILE *iop;
@@ -23,6 +28,8 @@ register FILE *iop;
 
 	if ((iop->_flag&_IOWRT)==0)
 		return(EOF);
+	if (iop->_flag&_IOSTRG)
+		return(c);
 tryagain:
 	if (iop->_flag&_IOLBF) {
 		base = iop->_base;

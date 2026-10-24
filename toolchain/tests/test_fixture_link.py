@@ -54,7 +54,7 @@ def plain(tmp):
     lst = os.path.join(tmp, "ld", "seg0_Output.txt")
     check(not libc_so_check.label_addrs(lst, {"_crt0_start"}),
           "no _crt0_start in the link")
-    check(not defines(os.path.join(tmp, "ld"), "__lc_pf_q"),
+    check(not ffltpr_linked(os.path.join(tmp, "ld")),
           "a program that does not reach printf gets no ffltpr")
 
 
@@ -93,11 +93,17 @@ def bad_key(tmp):
     check(False, "an unknown recipe key is refused", "no SystemExit")
 
 
-def defines(ld, name):
+def ffltpr_linked(ld):
+    """ffltpr is program source, so its __lc_pf_float is in segment 0; libc's
+    is in a libc bank."""
+    return defines(ld, "__lc_pf_float", r"^seg0\.link\.s$")
+
+
+def defines(ld, name, files=r"^(bank\d+|seg0)\.link\.s$|^bank\d+\.s$"):
     """True when one of the link's libc banks or segment 0 defines `name'."""
     pat = re.compile(r"^%s\s+ENT\b" % re.escape(name), re.M)
     for f in os.listdir(ld):
-        if re.match(r"^(bank\d+|seg0)\.link\.s$|^bank\d+\.s$", f):
+        if re.match(files, f):
             txt = open(os.path.join(ld, f), errors="replace").read()
             if pat.search(txt):
                 return True
@@ -158,8 +164,8 @@ def fltpr(tmp):
             continue
         check(defines(ld, "ecvt") == marked,
               "fltpr's ecvt is %slinked with %s" % ("" if marked else "not ", what))
-        check(defines(ld, "__lc_pf_q") != marked,
-              "ffltpr's __lc_pf_q is %slinked with %s" % ("not " if marked else "", what))
+        check(ffltpr_linked(ld) != marked,
+              "ffltpr's __lc_pf_float is %slinked with %s" % ("not " if marked else "", what))
 
 def oracle_flags(tmp):
     """run_runtime's differential build compiles a fixture as run.sh does,

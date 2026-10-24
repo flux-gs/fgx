@@ -1,7 +1,7 @@
 #!/bin/bash
 # libcso: shared libc SP2's machine probe, statically linked against libc's
 # library-mode compile (toolchain/src/ld/fgx_static.py).  $1 names the
-# binary: libcso (libc's reached code capped at 8 KB a bank, so it spans
+# binary: libcso (libc's reached code capped at 12 KB a bank, so it spans
 # several code banks), libcsofull (its heap room squeezed below its
 # blocks' size, so _lib_init must refuse before main), or bytecatso
 # (src/userland/bytecat, the byte loop timed against bytecat).
@@ -10,7 +10,7 @@ cd "$(dirname "$0")"
 REPO="$(cd ../.. && pwd)"
 name="$1"
 case "$name" in
-  libcso) src=libcso/libcso.c; extra="--libc-bank-cap 8192" ;;
+  libcso) src=libcso/libcso.c; extra="--libc-bank-cap 12288" ;;
   libcsofull) src=libcso/libcso.c; extra="--squeeze" ;;
   bytecatso) src=bytecat/bytecat.c; extra="" ;;
   *) echo "build_libcso.sh: libcso, libcsofull or bytecatso" >&2; exit 2 ;;

@@ -134,7 +134,7 @@ DEFAULT_PAD = 128
 # The call table keeps only edges whose callee is in `frames' -- the program's
 # own .s -- on the reasoning that anything else is an `_fcc_*' helper with a
 # register ABI and no stack cost.  True of the helpers, false of libc: syslog(3)
-# reaches fprintf reaches __lc_vpf, each pushing a return address and its
+# reaches fprintf reaches _doprnt, each pushing a return address and its
 # arguments onto the same bank-0 stack.  DEFAULT_PAD above is the allowance for
 # NON-C users and says so; nothing covered this.
 #

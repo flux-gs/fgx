@@ -4,14 +4,13 @@ whose members are NOT standalone-compilable (libc-breakup task 2).
 
 tools/mk_fgxa.sh compiles each member .c as its OWN TU to get the .s that
 `fgx_ar index` scans.  That works for curses/termlib, whose members are
-self-contained.  It does NOT work for lib/libc_c: 7 of the 42 members fail
-to compile alone, because the one-TU aggregation is load-bearing --
+self-contained.  It does NOT work for lib/libc_c: some members fail to
+compile alone, because the one-TU aggregation is load-bearing --
 
     string.c, strerror.c  need __asm_p0/__asm_w0  (syscall_misc.c)
     env.c                 needs args_env          (proc.c)
     stat.c, system.c      need _libc_lstrBufA/B   (popen.c)
     sigmask.c             needs _sig_disp         (signal.c)
-    fltpr.c               needs __lc_pfc          (doprnt.c, a static)
 
 ...and forcing them to compile alone would mean editing the members, which
 is exactly the coupling the umbrella exists to carry.

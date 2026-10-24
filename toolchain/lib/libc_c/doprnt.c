@@ -1,414 +1,472 @@
-/* ---- _doprnt: the printf engine -------------------------------------------
- * 2.11BSD's formatter is pdp/stdio/doprnt.s; this is a transcription of it
- * in C.  The printf family (printf.c, fprintf.c, vfprintf.c, vprintf.c) hands
- * _doprnt a FILE and the characters go into its buffer through fwrite;
- * sprintf.c and vsnprintf.c use the engine's buffer mode.  Arguments arrive
- * as a <stdarg.h> va_list; callers push right-to-left on the bank-0 hardware
- * stack.
- *
- * The conversion semantics are a faithful transcription of that engine —
- * they are what the pinned fixtures (M34/pfsign G-PF2, M28/f_*) verify
- * against host printf:
- *   %s %c %d %u %o %x %X %f %e %g %% + flags '-'/'0', width, .precision
- *   (each literal-accumulated mod 256 like the engine; '*' consumes an arg),
- *   'l' -> 32-bit d/u/o/x, and 'll' (C99) or 'q' (4.4BSD's quad) -> 64-bit.
- *   %D %U %O are 2.11BSD's long forms of %d %u %o (doprnt.s swtab:
- *   `long; 'D', loct; 'O', lunsigned; 'U'), which its sources still use;
- *   %X stays ANSI's upper-case hex rather than the swtab's long hex.
- *   %d/%u/%o/%x are 16-bit (fcc int); precision applies
- *   to %s only; %c ignores width; unknown spec emits '%'+char.  (%o added for
- *   tar(1)'s octal headers.)
- *   G-PF2 sign order: zero-pad -> sign first (-00042); space-pad -> sign
- *   after the pad (   -42); left-justify pads with spaces only.
- *   Floats: sign emitted first with width decremented, magnitude staged and
- *   width-padded; %f/%e emit digit-by-digit ((long)/(int) casts are the
- *   engine's ftol/ftoi) after adding 5 at the first dropped place, which is
- *   2.11BSD cvt()'s round-half-up done in the value; %g generates P+1 digits
- *   and rounds the digit string the same way, picks %f form iff -4 <= X < P,
- *   strips trailing zeros.
- * snprintf is REAL now (the old binding aliased it to sprintf, size
- * ignored): at most sz-1 chars + NUL, returns the would-be length. */
+/* SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: Copyright (c) 2026 flux and the FGX contributors
+ * FGX-Provenance: 4.3BSD-Reno vendor/4.3BSD-Reno/lib/libc/stdio/doprnt.c
+ *   Original work: doprnt.c 5.39 (Berkeley) 6/28/90,
+ *	Copyright (c) 1988 Regents of the University of California.
+ */
+/* _doprnt, the printf engine: upstream's body, writing into the FILE's
+ * buffer through putc and bcopy.  The #include lines are the aggregate's
+ * (libc_c.c).  FGX deltas:
+ * - ARG casts the plain int to its basetype.  Upstream's int is 32 bits, so
+ *   `va_arg(argp, int)' into a u_long is the same either way; here it is 16,
+ *   and %x of 0xffff sign-extended to ffffffff.
+ * - %qd and %lld are 64-bit (QUADINT), from netbsd-0-9's vfprintf.c, which
+ *   is 4.4BSD's: the four words are divided in place, 32 bits at a time,
+ *   because this pile cannot reach the long long runtime.
+ * - The %e/%f/%g digits are __lc_pf_float's, with cvt's interface: fltpr.c,
+ *   or ffltpr's `?' in a static program that prints no float, as 2.11BSD
+ *   splits pdp/stdio/fltpr.s from doprnt.s so that a program with no
+ *   floating point loads none.  cvt itself is double arithmetic.
+ * - %s's memchr is <string.h>'s: upstream's block-scope `char *memchr()'
+ *   hid the prototype, and prec, an int, went where a size_t is read.
+ * - `*buf = '\0'', where upstream assigns NULL, which is a pointer here.
+ */
+/* 11-bit exponent (VAX G floating point) is 308 decimal digits */
+#define	MAXEXP		308
+/* 128 bit fraction takes up 39 decimal digits; max reasonable precision */
+#define	MAXFRACT	39
 
-static int      __lc_pf_mode;        /* 0 = a stream, 1 = a buffer */
-static FILE    *__lc_pf_iop;         /* stream mode: _doprnt's FILE */
-/* Stream mode stages its characters and hands them to the FILE 64 at a time
- * with fwrite, and the rest before _doprnt returns, so nothing is held past
- * the call and the order with the caller's own putc is the order written.
- * One putc per character costs a far FILE pointer's every field per byte;
- * od, which is all printf, ran 10% slower that way. */
-static char     __lc_pf_stage[64];
-static int      __lc_pf_sn;
-static char    *__lc_pf_out;         /* buffer mode: dest (caller's bank) */
-static unsigned __lc_pf_lim;         /* buffer mode: max chars excl NUL */
-static unsigned __lc_pf_n;           /* chars produced (return value) */
-/* The staged conversion (digits, mantissa).  48 holds any integer; fltpr's
- * %f of a large double runs to fcvt's 78 digits plus the fraction. */
-#ifdef FGX_AR_HAVE_fltpr
-#define __LC_PF_GBUF 128
-#else
-#define __LC_PF_GBUF 48
-#endif
-static char     __lc_pf_gbuf[__LC_PF_GBUF];
-static int      __lc_pf_glen;
-#ifdef FGX_AR_HAVE_fltpr
-void __lc_pf_float();                /* fltpr.c: %e, %f, %g */
-#endif
+#define	DEFPREC		6
 
-static void __lc_pfc(int c)
-{
-    if (__lc_pf_mode) {
-        if (__lc_pf_n < __lc_pf_lim)
-            __lc_pf_out[__lc_pf_n] = c;
-    } else {
-        __lc_pf_stage[__lc_pf_sn] = c;
-        __lc_pf_sn++;
-        if (__lc_pf_sn == 64) {
-            fwrite(__lc_pf_stage, 1, 64, __lc_pf_iop);
-            __lc_pf_sn = 0;
-        }
-    }
-    __lc_pf_n++;
-}
+#define	BUF		(MAXEXP+MAXFRACT+1)	/* + decimal point */
 
-static void __lc_gput(int c)
-{
-    if (__lc_pf_glen < __LC_PF_GBUF) {
-        __lc_pf_gbuf[__lc_pf_glen] = c;
-        __lc_pf_glen++;
-    }
-}
+#define	PUTC(ch)	(void) putc(ch, fp)
 
-/* emit the staged gbuf with width-pad; neg = deferred '-' (G-PF2 order;
- * the caller already decremented width for it) */
-static void __lc_pf_padout(int width, int zeropad, int leftjust, int neg)
-{
-    int i, pad;
+#define ARG(basetype) \
+	_ulong = flags&LONGINT ? va_arg(argp, long basetype) : \
+	    flags&SHORTINT ? (short basetype)va_arg(argp, int) : \
+	    (basetype)va_arg(argp, int)
 
-    pad = width - __lc_pf_glen;
-    if (pad < 0)
-        pad = 0;
-    if (leftjust) {
-        if (neg) __lc_pfc('-');
-        for (i = 0; i < __lc_pf_glen; i++) __lc_pfc(__lc_pf_gbuf[i] & 0xFF);
-        while (pad-- > 0) __lc_pfc(' ');
-        return;
-    }
-    if (zeropad) {
-        if (neg) __lc_pfc('-');
-        while (pad-- > 0) __lc_pfc('0');
-        for (i = 0; i < __lc_pf_glen; i++) __lc_pfc(__lc_pf_gbuf[i] & 0xFF);
-        return;
-    }
-    while (pad-- > 0) __lc_pfc(' ');
-    if (neg) __lc_pfc('-');
-    for (i = 0; i < __lc_pf_glen; i++) __lc_pfc(__lc_pf_gbuf[i] & 0xFF);
-}
+#define	todigit(c)	((c) - '0')
+#define	tochar(n)	((n) + '0')
 
-/* One %e, %f or %g conversion with no floating point printer: a `?', as
- * vendor/2.11BSD/usr/lib/libc/pdp/stdio/ffltpr.s's "Simply output a "?"".
- * The caller has stepped over the double.  Not static: the static links'
- * ffltpr (toolchain/lib/ffltpr.c) stands in for fltpr's __lc_pf_float by
- * calling it. */
-void __lc_pf_q(int width, int zeropad, int leftjust)
-{
-    __lc_pf_glen = 0;
-    __lc_gput('?');
-    __lc_pf_padout(width, zeropad, leftjust, 0);
-}
+/* have to deal with the negative buffer count kludge */
+#define	NEGATIVE_COUNT_KLUDGE
 
-/* A 32-bit divide is a 32-iteration restoring loop; a 16-bit one is sixteen.
- * Every %d arrives here widened to unsigned long whatever it held, so an
- * ordinary int spent all of its digits in the long loop for nothing.  Peel the
- * high digits in 32-bit ONLY while the value still needs 32 bits, then finish
- * in 16.  A value under 65536 -- which is every int, and most longs anyone
- * prints -- never enters the long loop at all. */
-static void __lc_pf_udec(unsigned long v)
-{
-    char     t[10];
-    int      i;
-    unsigned w;
+#define	LONGINT		0x01		/* long integer */
+#define	LONGDBL		0x02		/* long double; unimplemented */
+#define	SHORTINT	0x04		/* short integer */
+#define	ALT		0x08		/* alternate form */
+#define	LADJUST		0x10		/* left adjustment */
+#define	ZEROPAD		0x20		/* zero (as opposed to blank) pad */
+#define	HEXPREFIX	0x40		/* add 0x or 0X prefix */
+#define	QUADINT		0x80		/* FGX: %qd, %lld */
 
-    i = 0;
-    while (v > 65535L) {
-        t[i] = '0' + (int)(v % 10);
-        i++;
-        v = v / 10;
-    }
-    w = (unsigned)v;
-    for (;;) {
-        t[i] = '0' + (int)(w % 10);
-        i++;
-        w = w / 10;
-        if (w == 0)
-            break;
-    }
-    while (i-- > 0)
-        __lc_gput(t[i] & 0xFF);
-}
+int	__lc_pf_float(double, int, int, char *, int, char *, char *);
 
-static void __lc_pf_uhex(unsigned long v, int upper)
-{
-    char t[8];
-    int  i, d;
-
-    i = 0;
-    for (;;) {
-        d = (int)(v & 15);
-        if (d < 10)     t[i] = '0' + d;
-        else if (upper) t[i] = 'A' + d - 10;
-        else            t[i] = 'a' + d - 10;
-        i++;
-        v = v >> 4;
-        if (v == 0)
-            break;
-    }
-    while (i-- > 0)
-        __lc_gput(t[i] & 0xFF);
-}
-static void __lc_pf_uoct(unsigned long v)
-{
-    char t[12];                          /* 2^32 = 037777777777 (11 digits) */
-    int  i;
-
-    i = 0;
-    for (;;) {
-        t[i] = '0' + (int)(v & 7);
-        i++;
-        v = v >> 3;
-        if (v == 0)
-            break;
-    }
-    while (i-- > 0)
-        __lc_gput(t[i] & 0xFF);
-}
+/* FGX: a quad's four words, lowest first, as the caller pushed them. */
+#define	QARG() \
+	for (n = 0; n < 4; n++) \
+		_quad[n] = va_arg(argp, unsigned)
+#define	QNONZERO()	(_quad[0] | _quad[1] | _quad[2] | _quad[3])
 
 /* A 64-bit value as four 16-bit words, w[0] lowest, divided in place by base
  * (8, 10 or 16); the remainder is returned.  Each step divides a value below
- * base * 65536, so it stays in 32 bits: code in this pile cannot reach the
- * long long runtime, which is a far-called archive. */
-static int __lc_pf_qdiv(unsigned *w, int base)
+ * base * 65536, so it stays in 32 bits. */
+static int
+__lc_pf_qdiv(w, base)
+	unsigned *w;
+	int base;
 {
-    unsigned long cur, r;
-    int i;
+	unsigned long cur, r;
+	int i;
 
-    r = 0;
-    for (i = 3; i >= 0; i--) {
-        cur = (r << 16) | w[i];
-        w[i] = (unsigned)(cur / base);
-        r = cur % base;
-    }
-    return (int)r;
+	r = 0;
+	for (i = 3; i >= 0; i--) {
+		cur = (r << 16) | w[i];
+		w[i] = (unsigned)(cur / base);
+		r = cur % base;
+	}
+	return ((int)r);
 }
 
-static void __lc_pf_uq(unsigned *w, int base, int upper)
+_doprnt(fmt0, argp, fp)
+	u_char *fmt0;
+	va_list argp;
+	register FILE *fp;
 {
-    char t[22];                          /* 2^64 - 1 is 22 octal digits */
-    int  i, d;
+	register u_char *fmt;	/* format string */
+	register int ch;	/* character from fmt */
+	register int cnt;	/* return value accumulator */
+	register int n;		/* random handy integer */
+	register char *t;	/* buffer pointer */
+	u_long _ulong;		/* integer arguments %[diouxX] */
+	unsigned _quad[4];	/* FGX: %q[diouxX] */
+	int base;		/* base for [diouxX] conversion */
+	int dprec;		/* decimal precision in [diouxX] */
+	int fieldsz;		/* field size expanded by sign, etc */
+	int flags;		/* flags as above */
+	int fpprec;		/* `extra' floating precision in [eEfgG] */
+	int prec;		/* precision from format (%.3d), or -1 */
+	int realsz;		/* field size expanded by decimal precision */
+	int size;		/* size of converted field or string */
+	int width;		/* width from format (%8d), or 0 */
+	char sign;		/* sign prefix (' ', '+', '-', or \0) */
+	char softsign;		/* temporary negative sign for floats */
+	char *digs;		/* digits for [diouxX] conversion */
+	char buf[BUF];		/* space for %c, %[diouxX], %[eEfgG] */
 
-    i = 0;
-    do {
-        d = __lc_pf_qdiv(w, base);
-        if (d < 10)     t[i] = '0' + d;
-        else if (upper) t[i] = 'A' + d - 10;
-        else            t[i] = 'a' + d - 10;
-        i++;
-    } while (w[0] | w[1] | w[2] | w[3]);
-    while (i-- > 0)
-        __lc_gput(t[i] & 0xFF);
-}
+	if (fp->_flag & _IORW) {
+		fp->_flag |= _IOWRT;
+		fp->_flag &= ~(_IOEOF|_IOREAD);
+	}
+	if ((fp->_flag & _IOWRT) == 0)
+		return (EOF);
 
-static int __lc_vpf(char *fmt, char *ap)
-{
-    int c, width, prec, hasprec, zeropad, leftjust, islong, neg;
-    int i, d, len, pad;
-    long lv;
-    unsigned long uv;
-    unsigned qw[4];
-    char *s;
-
-    while ((c = *fmt & 0xFF) != 0) {
-        fmt++;
-        if (c != '%') {
-            __lc_pfc(c);
-            continue;
-        }
-        zeropad = 0; leftjust = 0;
-        for (;;) {
-            c = *fmt & 0xFF;
-            if (c == '-')      { leftjust = 1; fmt++; }
-            else if (c == '0') { zeropad = 1;  fmt++; }
-            else break;
-        }
-        width = 0;
-        if (c == '*') {
-            width = va_arg(ap, int);
-            fmt++;
-        } else {
-            while (c >= '0' && c <= '9') {
-                width = (width * 10 + (c - '0')) & 0xFF;   /* engine masks */
-                fmt++;
-                c = *fmt & 0xFF;
-            }
-        }
-        prec = 0; hasprec = 0;
-        if ((*fmt & 0xFF) == '.') {
-            fmt++;
-            hasprec = 1;
-            c = *fmt & 0xFF;
-            if (c == '*') {
-                prec = va_arg(ap, int);
-                fmt++;
-            } else {
-                while (c >= '0' && c <= '9') {
-                    prec = (prec * 10 + (c - '0')) & 0xFF;
-                    fmt++;
-                    c = *fmt & 0xFF;
-                }
-            }
-        }
-        islong = 0;
-        if ((*fmt & 0xFF) == 'l') {
-            islong = 1;
-            fmt++;
-            if ((*fmt & 0xFF) == 'l') {
-                islong = 2;
-                fmt++;
-            }
-        } else if ((*fmt & 0xFF) == 'q') {
-            islong = 2;
-            fmt++;
-        }
-        c = *fmt & 0xFF;
-        if (c == 0) {                    /* trailing '%': emit it, stop */
-            __lc_pfc('%');
-            break;
-        }
-        fmt++;
-        if (c == 'D' || c == 'U' || c == 'O') {
-            islong = 1;                  /* the long form: %ld %lu %lo */
-            c += 'a' - 'A';
-        }
-
-        if (c == '%') {
-            __lc_pfc('%');
-            continue;
-        }
-        if (c == 'c') {
-            __lc_pfc(va_arg(ap, int) & 0xFF);      /* width ignored (engine) */
-            continue;
-        }
-        if (c == 's') {
-            s = va_arg(ap, char *);
-            len = 0;
-            while (s[len] != 0)
-                len++;
-            if (hasprec && prec < len)
-                len = prec;
-            pad = width - len;
-            if (pad < 0)
-                pad = 0;
-            if (leftjust) {
-                for (i = 0; i < len; i++) __lc_pfc(s[i] & 0xFF);
-                while (pad-- > 0) __lc_pfc(' ');
-            } else {
-                while (pad-- > 0) __lc_pfc(' ');   /* spaces even under '0' */
-                for (i = 0; i < len; i++) __lc_pfc(s[i] & 0xFF);
-            }
-            continue;
-        }
-        if (islong == 2 && (c == 'd' || c == 'u' || c == 'x' || c == 'X' ||
-                            c == 'o')) {
-            /* The eight bytes lowest word first, as the caller pushed them;
-             * a negative %lld is negated in place, as a long is below. */
-            for (i = 0; i < 4; i++)
-                qw[i] = va_arg(ap, unsigned);
-            neg = 0;
-            if (c == 'd' && (qw[3] & 0x8000)) {
-                neg = 1;
-                for (i = 0; i < 4; i++)
-                    qw[i] = ~qw[i];
-                for (i = 0; i < 4; i++)
-                    if (++qw[i] != 0)
-                        break;
-                if (width)
-                    width--;
-            }
-            __lc_pf_glen = 0;
-            __lc_pf_uq(qw, (c == 'o') ? 8 : (c == 'x' || c == 'X') ? 16 : 10,
-                       c == 'X');
-            __lc_pf_padout(width, zeropad, leftjust, neg);
-            continue;
-        }
-        if (c == 'd') {
-            if (islong) lv = va_arg(ap, long);
-            else        lv = (long)va_arg(ap, int);
-            neg = 0;
-            if (lv < 0) {
-                neg = 1;
-                lv = -lv;                          /* LONG_MIN wraps: ok */
-                if (width)
-                    width--;
-            }
-            __lc_pf_glen = 0;
-            __lc_pf_udec((unsigned long)lv);
-            __lc_pf_padout(width, zeropad, leftjust, neg);
-            continue;
-        }
-        if (c == 'u') {
-            if (islong) uv = va_arg(ap, unsigned long);
-            else        uv = (unsigned long)va_arg(ap, unsigned);
-            __lc_pf_glen = 0;
-            __lc_pf_udec(uv);
-            __lc_pf_padout(width, zeropad, leftjust, 0);
-            continue;
-        }
-        if (c == 'x' || c == 'X') {
-            if (islong) uv = va_arg(ap, unsigned long);
-            else        uv = (unsigned long)va_arg(ap, unsigned);
-            __lc_pf_glen = 0;
-            __lc_pf_uhex(uv, c == 'X');
-            __lc_pf_padout(width, zeropad, leftjust, 0);
-            continue;
-        }
-        if (c == 'o') {
-            if (islong) uv = va_arg(ap, unsigned long);
-            else        uv = (unsigned long)va_arg(ap, unsigned);
-            __lc_pf_glen = 0;
-            __lc_pf_uoct(uv);
-            __lc_pf_padout(width, zeropad, leftjust, 0);
-            continue;
-        }
-        if (c == 'f' || c == 'F' || c == 'e' || c == 'E' ||
-            c == 'g' || c == 'G') {
-#ifdef FGX_AR_HAVE_fltpr
-            __lc_pf_float(c, va_arg(ap, double), width, prec, hasprec,
-                          zeropad, leftjust);
-#else
-            (void)va_arg(ap, double);
-            __lc_pf_q(width, zeropad, leftjust);
+	fmt = fmt0;
+	digs = "0123456789abcdef";
+	for (cnt = 0;; ++fmt) {
+		n = fp->_cnt;
+		for (t = (char *)fp->_ptr; (ch = *fmt) && ch != '%';
+		     ++cnt, ++fmt)
+			if (--n < 0
+#ifdef NEGATIVE_COUNT_KLUDGE
+			    && (!(fp->_flag & _IOLBF) || -n >= fp->_bufsiz)
 #endif
-            continue;
-        }
-        __lc_pfc('%');                   /* unknown spec: verbatim */
-        __lc_pfc(c);
-    }
-    return (int)__lc_pf_n;
+			    || ch == '\n' && fp->_flag & _IOLBF) {
+				fp->_cnt = n;
+				fp->_ptr = t;
+				(void) _flsbuf((u_char)ch, fp);
+				n = fp->_cnt;
+				t = (char *)fp->_ptr;
+			} else
+				*t++ = ch;
+		fp->_cnt = n;
+		fp->_ptr = t;
+		if (!ch)
+			return (cnt);
+
+		flags = 0; dprec = 0; fpprec = 0; width = 0;
+		prec = -1;
+		sign = '\0';
+
+rflag:		switch (*++fmt) {
+		case ' ':
+			/*
+			 * ``If the space and + flags both appear, the space
+			 * flag will be ignored.''
+			 *	-- ANSI X3J11
+			 */
+			if (!sign)
+				sign = ' ';
+			goto rflag;
+		case '#':
+			flags |= ALT;
+			goto rflag;
+		case '*':
+			/*
+			 * ``A negative field width argument is taken as a
+			 * - flag followed by a  positive field width.''
+			 *	-- ANSI X3J11
+			 * They don't exclude field widths read from args.
+			 */
+			if ((width = va_arg(argp, int)) >= 0)
+				goto rflag;
+			width = -width;
+			/* FALLTHROUGH */
+		case '-':
+			flags |= LADJUST;
+			goto rflag;
+		case '+':
+			sign = '+';
+			goto rflag;
+		case '.':
+			if (*++fmt == '*')
+				n = va_arg(argp, int);
+			else {
+				n = 0;
+				while (isascii(*fmt) && isdigit(*fmt))
+					n = 10 * n + todigit(*fmt++);
+				--fmt;
+			}
+			prec = n < 0 ? -1 : n;
+			goto rflag;
+		case '0':
+			/*
+			 * ``Note that 0 is taken as a flag, not as the
+			 * beginning of a field width.''
+			 *	-- ANSI X3J11
+			 */
+			flags |= ZEROPAD;
+			goto rflag;
+		case '1': case '2': case '3': case '4':
+		case '5': case '6': case '7': case '8': case '9':
+			n = 0;
+			do {
+				n = 10 * n + todigit(*fmt);
+			} while (isascii(*++fmt) && isdigit(*fmt));
+			width = n;
+			--fmt;
+			goto rflag;
+		case 'L':
+			flags |= LONGDBL;
+			goto rflag;
+		case 'h':
+			flags |= SHORTINT;
+			goto rflag;
+		case 'l':
+			if (flags & LONGINT)
+				flags |= QUADINT;
+			flags |= LONGINT;
+			goto rflag;
+		case 'q':
+			flags |= QUADINT;
+			goto rflag;
+		case 'c':
+			*(t = buf) = va_arg(argp, int);
+			size = 1;
+			sign = '\0';
+			goto pforw;
+		case 'D':
+			flags |= LONGINT;
+			/*FALLTHROUGH*/
+		case 'd':
+		case 'i':
+			if (flags & QUADINT) {
+				QARG();
+				if (_quad[3] & 0x8000) {	/* negate in place */
+					for (n = 0; n < 4; n++)
+						_quad[n] = ~_quad[n];
+					for (n = 0; n < 4; n++)
+						if (++_quad[n] != 0)
+							break;
+					sign = '-';
+				}
+			} else {
+				ARG(int);
+				if ((long)_ulong < 0) {
+					_ulong = -_ulong;
+					sign = '-';
+				}
+			}
+			base = 10;
+			goto number;
+		case 'e':
+		case 'E':
+		case 'f':
+		case 'g':
+		case 'G':
+			/*
+			 * don't do unrealistic precision; just pad it with
+			 * zeroes later, so buffer size stays rational.
+			 */
+			if (prec > MAXFRACT) {
+				if (*fmt != 'g' && *fmt != 'G' || (flags&ALT))
+					fpprec = prec - MAXFRACT;
+				prec = MAXFRACT;
+			}
+			else if (prec == -1)
+				prec = DEFPREC;
+			softsign = 0;
+			*buf = '\0';
+			size = __lc_pf_float(va_arg(argp, double), prec, flags,
+			    &softsign, *fmt, buf, buf + sizeof(buf));
+			if (softsign)
+				sign = '-';
+			t = *buf ? buf : buf + 1;
+			goto pforw;
+		case 'n':
+			if (flags & LONGINT)
+				*va_arg(argp, long *) = cnt;
+			else if (flags & SHORTINT)
+				*va_arg(argp, short *) = cnt;
+			else
+				*va_arg(argp, int *) = cnt;
+			break;
+		case 'O':
+			flags |= LONGINT;
+			/*FALLTHROUGH*/
+		case 'o':
+			if (flags & QUADINT)
+				QARG();
+			else
+				ARG(unsigned);
+			base = 8;
+			goto nosign;
+		case 'p':
+			/*
+			 * ``The argument shall be a pointer to void.  The
+			 * value of the pointer is converted to a sequence
+			 * of printable characters, in an implementation-
+			 * defined manner.''
+			 *	-- ANSI X3J11
+			 */
+			/* NOSTRICT */
+			_ulong = (u_long)va_arg(argp, void *);
+			base = 16;
+			goto nosign;
+		case 's':
+			if (!(t = va_arg(argp, char *)))
+				t = "(null)";
+			if (prec >= 0) {
+				/*
+				 * can't use strlen; can only look for the
+				 * NUL in the first `prec' characters, and
+				 * strlen() will go further.
+				 */
+				char *p;
+
+				if (p = memchr(t, 0, prec)) {
+					size = p - t;
+					if (size > prec)
+						size = prec;
+				} else
+					size = prec;
+			} else
+				size = strlen(t);
+			sign = '\0';
+			goto pforw;
+		case 'U':
+			flags |= LONGINT;
+			/*FALLTHROUGH*/
+		case 'u':
+			if (flags & QUADINT)
+				QARG();
+			else
+				ARG(unsigned);
+			base = 10;
+			goto nosign;
+		case 'X':
+			digs = "0123456789ABCDEF";
+			/* FALLTHROUGH */
+		case 'x':
+			if (flags & QUADINT)
+				QARG();
+			else
+				ARG(unsigned);
+			base = 16;
+			/* leading 0x/X only if non-zero */
+			if (flags & ALT &&
+			    (flags & QUADINT ? QNONZERO() : _ulong) != 0)
+				flags |= HEXPREFIX;
+
+			/* unsigned conversions */
+nosign:			sign = '\0';
+			/*
+			 * ``... diouXx conversions ... if a precision is
+			 * specified, the 0 flag will be ignored.''
+			 *	-- ANSI X3J11
+			 */
+number:			if ((dprec = prec) >= 0)
+				flags &= ~ZEROPAD;
+
+			/*
+			 * ``The result of converting a zero value with an
+			 * explicit precision of zero is no characters.''
+			 *	-- ANSI X3J11
+			 */
+			t = buf + BUF;
+			if (flags & QUADINT) {
+				if (QNONZERO() != 0 || prec != 0) {
+					do {
+						*--t = digs[__lc_pf_qdiv(_quad, base)];
+					} while (QNONZERO());
+					digs = "0123456789abcdef";
+					if (flags & ALT && base == 8 && *t != '0')
+						*--t = '0'; /* octal leading 0 */
+				}
+			} else if (_ulong != 0 || prec != 0) {
+				do {
+					*--t = digs[_ulong % base];
+					_ulong /= base;
+				} while (_ulong);
+				digs = "0123456789abcdef";
+				if (flags & ALT && base == 8 && *t != '0')
+					*--t = '0'; /* octal leading 0 */
+			}
+			size = buf + BUF - t;
+
+pforw:
+			/*
+			 * All reasonable formats wind up here.  At this point,
+			 * `t' points to a string which (if not flags&LADJUST)
+			 * should be padded out to `width' places.  If
+			 * flags&ZEROPAD, it should first be prefixed by any
+			 * sign or other prefix; otherwise, it should be blank
+			 * padded before the prefix is emitted.  After any
+			 * left-hand padding and prefixing, emit zeroes
+			 * required by a decimal [diouxX] precision, then print
+			 * the string proper, then emit zeroes required by any
+			 * leftover floating precision; finally, if LADJUST,
+			 * pad with blanks.
+			 */
+
+			/*
+			 * compute actual size, so we know how much to pad
+			 * fieldsz excludes decimal prec; realsz includes it
+			 */
+			fieldsz = size + fpprec;
+			if (sign)
+				fieldsz++;
+			if (flags & HEXPREFIX)
+				fieldsz += 2;
+			realsz = dprec > fieldsz ? dprec : fieldsz;
+
+			/* right-adjusting blank padding */
+			if ((flags & (LADJUST|ZEROPAD)) == 0 && width)
+				for (n = realsz; n < width; n++)
+					PUTC(' ');
+			/* prefix */
+			if (sign)
+				PUTC(sign);
+			if (flags & HEXPREFIX) {
+				PUTC('0');
+				PUTC((char)*fmt);
+			}
+			/* right-adjusting zero padding */
+			if ((flags & (LADJUST|ZEROPAD)) == ZEROPAD)
+				for (n = realsz; n < width; n++)
+					PUTC('0');
+			/* leading zeroes from decimal precision */
+			for (n = fieldsz; n < dprec; n++)
+				PUTC('0');
+
+			/* the string or number proper */
+			n = size;
+			if (fp->_cnt - n >= 0 && (fp->_flag & _IOLBF) == 0) {
+				fp->_cnt -= n;
+				bcopy(t, (char *)fp->_ptr, n);
+				fp->_ptr += n;
+			} else
+				while (--n >= 0)
+					PUTC(*t++);
+			/* trailing f.p. zeroes */
+			while (--fpprec >= 0)
+				PUTC('0');
+			/* left-adjusting padding (always blank) */
+			if (flags & LADJUST)
+				for (n = realsz; n < width; n++)
+					PUTC(' ');
+			/* finally, adjust cnt */
+			cnt += width > realsz ? width : realsz;
+			break;
+		case '\0':	/* "%?" prints ?, unless ? is NULL */
+			return (cnt);
+		default:
+			PUTC((char)*fmt);
+			cnt++;
+		}
+	}
+	/* NOTREACHED */
 }
 
-/* _doprnt: 2.11BSD's interface to its formatter, which upstream is
- * pdp/stdio/doprnt.s and here is the engine above, a transcription of it.
- * The printf family hands it a FILE and the characters go through putc
- * into that FILE's buffer, as upstream's do.  Returns the count. */
-int _doprnt(char *fmt, char *ap, FILE *iop)
-{
-    int r;
-
-    __lc_pf_mode = 0;
-    __lc_pf_iop = iop;
-    __lc_pf_n = 0;
-    __lc_pf_sn = 0;
-    r = __lc_vpf(fmt, ap);
-    if (__lc_pf_sn > 0)
-        fwrite(__lc_pf_stage, 1, __lc_pf_sn, iop);
-    return r;
-}
+/* One translation unit (libc_c.c): the names above end with this member. */
+#undef	MAXEXP
+#undef	MAXFRACT
+#undef	DEFPREC
+#undef	BUF
+#undef	PUTC
+#undef	ARG
+#undef	todigit
+#undef	tochar
+#undef	NEGATIVE_COUNT_KLUDGE
+#undef	LONGINT
+#undef	LONGDBL
+#undef	SHORTINT
+#undef	ALT
+#undef	LADJUST
+#undef	ZEROPAD
+#undef	HEXPREFIX
+#undef	QUADINT
+#undef	QARG
+#undef	QNONZERO

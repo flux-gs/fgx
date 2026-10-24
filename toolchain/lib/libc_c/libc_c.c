@@ -22,7 +22,7 @@
  *
  * THE INCLUDE ORDER IS THE ORIGINAL DEFINITION ORDER AND IS LOAD-BEARING.
  * One TU means file-scope statics and forward declarations cross member
- * boundaries: doprnt.c defines __lc_pfc() for fltpr.c.  Reordering the list also reorders the
+ * boundaries.  Reordering the list also reorders the
  * emitted routines, so libc_c.s stops being byte-identical.  Add a new
  * member where its definitions belong, not at the end of the list.
  *
@@ -116,6 +116,7 @@ extern char _libc_lstrBufB[];
 #include "strpbrk.c"
 #include "strsep.c"
 #include "strstr.c"
+#include "memchr.c"
 #include "strtok.c"
 #include "fstab.c"
 #include "syscall_file.c"

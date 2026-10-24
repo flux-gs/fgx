@@ -168,9 +168,8 @@ def ffltpr(objects):
     in the program, shadows libc's, and fltpr is never reached.
 
     Two departures from 2.11BSD.  The choice is made only for a program that
-    reaches libc's __lc_pf_float (printf's float conversions): ffltpr calls
-    printf.c's __lc_pf_q, so linking it into any other program would pull
-    printf in.  And `objects' is the program's own files and its --lib
+    reaches libc's __lc_pf_float (printf's float conversions), so no other
+    program carries ffltpr's bytes.  And `objects' is the program's own files and its --lib
     libraries, each scanned whole: a library compiled as program source is
     one translation unit, so a marker anywhere in it keeps fltpr, where
     2.11BSD counts only the archive members it loads."""
@@ -231,8 +230,7 @@ def build(name, d, code, data, out, bank_cap=None, squeeze=False, libs=(),
         files = {p: read(p) for p in order}
         return files, collect(files, order, prune)
     files, (units, live) = walk(list(code), list(data))
-    # ffltpr only for a program that reaches libc's float printer: added to
-    # one that does not, its call to __lc_pf_q would pull printf in.
+    # ffltpr only for a program that reaches libc's float printer.
     if any(units[p][i][1] == "__lc_pf_float" for p, i in live if p == lib_code):
         fcode, fdata = ffltpr(code + xcode + list(data) + lpaths)
         if fcode:
