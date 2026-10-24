@@ -90,10 +90,21 @@ that shape, and every character written to a terminal was lost.
 on a far FILE pointer, and fcc rebuilds that pointer for every field it
 touches.  That is the next item.
 
-## 6. Next
+## 6. The compiler work that followed
 
-fcc: a far struct pointer used in a loop -- `iop` in `fputs`, the FILE in
-every `getc`/`putc` -- held in a direct-page register for the loop and its
-fields reached as `[dp],Y`, where today each field access reloads the
-pointer from the stack and copies it to `_fcc_ptr` through an 8-bit width
-switch.  A constant-index `&_iob[1]` is also computed at run time.
+| change | od | wc | tr | grep | ls |
+|---|---:|---:|---:|---:|---:|
+| after the port | 781 | 601 | 925 | 817 | 529 |
+| a member of `_iob[k]` read and written at its address (ebfc6de) | 697 | 601 | 637 | 697 | 553 |
+| a big frame's parameters copied near S; `++`/`--` through the register (7dd9e39) | 649 | 565 | 625 | 685 | 541 |
+| a pointer already in its register not loaded again; `x >= 0` as `CMP #0` (77c0d19) | 625 | 541 | 613 | 685 | 529 |
+
+Holding a FILE pointer in a direct-page pair for a whole function is still
+open: any call other than a runtime helper reuses the pair, and getc and putc
+call `_filbuf`/`_flsbuf` on their slow arms.  With the reloads above gone, it
+would save the first load in each block.
+
+## 7. Next
+
+`_doprnt` from 4.3BSD-Reno's `doprnt.c`, then a profile of od, ls and printf
+for inline asm on what it finds.
