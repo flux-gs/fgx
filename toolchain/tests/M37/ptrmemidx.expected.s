@@ -241,8 +241,7 @@ _ptrmemidx_L2
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _ptrmemidx_L4
+                BNE     _ptrmemidx_L4
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -271,8 +270,7 @@ _ptrmemidx_L4
                 TAX
                 TXA
                 CMP     #13
-                BEQ     *+5
-                BRL     _ptrmemidx_L5
+                BNE     _ptrmemidx_L5
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -301,8 +299,7 @@ _ptrmemidx_L5
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _ptrmemidx_L6
+                BNE     _ptrmemidx_L6
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -358,8 +355,7 @@ _ptrmemidx_L6
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _ptrmemidx_L7
+                BNE     _ptrmemidx_L7
                 LDA     _fcc_img1
                 TAX
                 TXA

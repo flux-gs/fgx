@@ -281,8 +281,7 @@ _arrelemstructstore_landed_stkok        TCS
                 TAX
                 TXA
                 CMP     #4369
-                BNE     *+5
-                BRL     _arrelemstructstore_L4
+                BEQ     _arrelemstructstore_L4
                 LDA     #1
                 TAY
                 TSC
@@ -339,8 +338,7 @@ _arrelemstructstore_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L5
+                BEQ     _arrelemstructstore_L5
                 LDA     #2
                 TAY
                 TSC
@@ -379,8 +377,7 @@ _arrelemstructstore_L5
                 TAX
                 TXA
                 CMP     #17476
-                BNE     *+5
-                BRL     _arrelemstructstore_L6
+                BEQ     _arrelemstructstore_L6
                 LDA     #3
                 TAY
                 TSC
@@ -498,8 +495,7 @@ _arrelemstructstore_L7
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L8
+                BEQ     _arrelemstructstore_L8
                 LDA     #1
                 PHA
                 PHA
@@ -540,8 +536,7 @@ _arrelemstructstore_L8
                 TAX
                 TXA
                 CMP     #49374
-                BNE     *+5
-                BRL     _arrelemstructstore_L9
+                BEQ     _arrelemstructstore_L9
                 LDA     #5
                 TAY
                 TSC
@@ -557,8 +552,7 @@ _arrelemstructstore_L9
                 TAX
                 TXA
                 CMP     #48879
-                BNE     *+5
-                BRL     _arrelemstructstore_L10
+                BEQ     _arrelemstructstore_L10
                 LDA     #6
                 TAY
                 TSC
@@ -574,8 +568,7 @@ _arrelemstructstore_L10
                 TAX
                 TXA
                 CMP     #36864
-                BNE     *+5
-                BRL     _arrelemstructstore_L11
+                BEQ     _arrelemstructstore_L11
                 LDA     #7
                 TAY
                 TSC
@@ -591,8 +584,7 @@ _arrelemstructstore_L11
                 TAX
                 TXA
                 CMP     #36866
-                BNE     *+5
-                BRL     _arrelemstructstore_L12
+                BEQ     _arrelemstructstore_L12
                 LDA     #8
                 TAY
                 TSC
@@ -668,8 +660,7 @@ _arrelemstructstore_L13
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L14
+                BEQ     _arrelemstructstore_L14
                 LDA     #10
                 PHA
                 PHA
@@ -710,8 +701,7 @@ _arrelemstructstore_L14
                 TAX
                 TXA
                 CMP     #49374
-                BNE     *+5
-                BRL     _arrelemstructstore_L15
+                BEQ     _arrelemstructstore_L15
                 LDA     #15
                 TAY
                 TSC
@@ -727,8 +717,7 @@ _arrelemstructstore_L15
                 TAX
                 TXA
                 CMP     #48879
-                BNE     *+5
-                BRL     _arrelemstructstore_L16
+                BEQ     _arrelemstructstore_L16
                 LDA     #16
                 TAY
                 TSC
@@ -744,8 +733,7 @@ _arrelemstructstore_L16
                 TAX
                 TXA
                 CMP     #36865
-                BNE     *+5
-                BRL     _arrelemstructstore_L17
+                BEQ     _arrelemstructstore_L17
                 LDA     #17
                 TAY
                 TSC
@@ -803,8 +791,7 @@ _arrelemstructstore_L18
                 TAX
                 TXA
                 CMP     #36864
-                BNE     *+5
-                BRL     _arrelemstructstore_L19
+                BEQ     _arrelemstructstore_L19
                 LDA     #20
                 TAY
                 TSC
@@ -837,8 +824,7 @@ _arrelemstructstore_L19
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L20
+                BEQ     _arrelemstructstore_L20
                 LDA     #21
                 TAY
                 TSC
@@ -854,8 +840,7 @@ _arrelemstructstore_L20
                 TAX
                 TXA
                 CMP     #45056
-                BNE     *+5
-                BRL     _arrelemstructstore_L21
+                BEQ     _arrelemstructstore_L21
                 LDA     #22
                 TAY
                 TSC
@@ -871,8 +856,7 @@ _arrelemstructstore_L21
                 TAX
                 TXA
                 CMP     #36864
-                BNE     *+5
-                BRL     _arrelemstructstore_L22
+                BEQ     _arrelemstructstore_L22
                 LDA     #23
                 TAY
                 TSC
@@ -929,8 +913,7 @@ _arrelemstructstore_L23
                 TAX
                 TXA
                 CMP     #36864
-                BNE     *+5
-                BRL     _arrelemstructstore_L24
+                BEQ     _arrelemstructstore_L24
                 LDA     #30
                 TAY
                 TSC
@@ -963,8 +946,7 @@ _arrelemstructstore_L24
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L25
+                BEQ     _arrelemstructstore_L25
                 LDA     #31
                 TAY
                 TSC
@@ -980,8 +962,7 @@ _arrelemstructstore_L25
                 TAX
                 TXA
                 CMP     #45056
-                BNE     *+5
-                BRL     _arrelemstructstore_L26
+                BEQ     _arrelemstructstore_L26
                 LDA     #32
                 TAY
                 TSC
@@ -997,8 +978,7 @@ _arrelemstructstore_L26
                 TAX
                 TXA
                 CMP     #49374
-                BNE     *+5
-                BRL     _arrelemstructstore_L27
+                BEQ     _arrelemstructstore_L27
                 LDA     #33
                 TAY
                 TSC
@@ -1014,8 +994,7 @@ _arrelemstructstore_L27
                 TAX
                 TXA
                 CMP     #48879
-                BNE     *+5
-                BRL     _arrelemstructstore_L28
+                BEQ     _arrelemstructstore_L28
                 LDA     #34
                 TAY
                 TSC
@@ -1031,8 +1010,7 @@ _arrelemstructstore_L28
                 TAX
                 TXA
                 CMP     #36864
-                BNE     *+5
-                BRL     _arrelemstructstore_L29
+                BEQ     _arrelemstructstore_L29
                 LDA     #35
                 TAY
                 TSC
@@ -1048,8 +1026,7 @@ _arrelemstructstore_L29
                 TAX
                 TXA
                 CMP     #36865
-                BNE     *+5
-                BRL     _arrelemstructstore_L30
+                BEQ     _arrelemstructstore_L30
                 LDA     #36
                 TAY
                 TSC
@@ -1105,8 +1082,7 @@ _arrelemstructstore_L31
                 BPL     _arrelemstructstore_L31
                 LDA     gt+14
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L32
+                BEQ     _arrelemstructstore_L32
                 LDA     #40
                 TAY
                 TSC
@@ -1139,8 +1115,7 @@ _arrelemstructstore_L32
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L33
+                BEQ     _arrelemstructstore_L33
                 LDA     #41
                 TAY
                 TSC
@@ -1154,8 +1129,7 @@ _arrelemstructstore_L32
 _arrelemstructstore_L33
                 LDA     gt+20
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemstructstore_L34
+                BEQ     _arrelemstructstore_L34
                 LDA     #42
                 TAX
                 TXA
@@ -1175,8 +1149,7 @@ _arrelemstructstore_L34
                 TAX
                 TXA
                 CMP     #49374
-                BNE     *+5
-                BRL     _arrelemstructstore_L35
+                BEQ     _arrelemstructstore_L35
                 LDA     #44
                 TAY
                 TSC
@@ -1192,8 +1165,7 @@ _arrelemstructstore_L35
                 TAX
                 TXA
                 CMP     #48879
-                BNE     *+5
-                BRL     _arrelemstructstore_L36
+                BEQ     _arrelemstructstore_L36
                 LDA     #45
                 TAY
                 TSC
@@ -1209,8 +1181,7 @@ _arrelemstructstore_L36
                 TAX
                 TXA
                 CMP     #45056
-                BNE     *+5
-                BRL     _arrelemstructstore_L37
+                BEQ     _arrelemstructstore_L37
                 LDA     #46
                 TAY
                 TSC
@@ -1226,8 +1197,7 @@ _arrelemstructstore_L37
                 TAX
                 TXA
                 CMP     #36866
-                BNE     *+5
-                BRL     _arrelemstructstore_L38
+                BEQ     _arrelemstructstore_L38
                 LDA     #47
                 TAY
                 TSC

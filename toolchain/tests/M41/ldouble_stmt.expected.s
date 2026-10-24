@@ -152,8 +152,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L0
+                BEQ     _ldouble_stmt_L0
                 LDA     #1
                 TAY
                 TSC
@@ -236,8 +235,7 @@ _ldouble_stmt_L0
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L1
+                BEQ     _ldouble_stmt_L1
                 LDA     #2
                 TAY
                 TSC
@@ -374,8 +372,7 @@ _ldouble_stmt_L1
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L2
+                BEQ     _ldouble_stmt_L2
                 LDA     #3
                 TAY
                 TSC
@@ -458,8 +455,7 @@ _ldouble_stmt_L2
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L3
+                BEQ     _ldouble_stmt_L3
                 LDA     #4
                 TAY
                 TSC
@@ -584,8 +580,7 @@ _ldouble_stmt_L3
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L4
+                BEQ     _ldouble_stmt_L4
                 LDA     #5
                 TAY
                 TSC
@@ -707,8 +702,7 @@ _ldouble_stmt_L4
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L5
+                BEQ     _ldouble_stmt_L5
                 LDA     #6
                 TAY
                 TSC
@@ -763,8 +757,7 @@ _ldouble_stmt_L5
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _ldouble_stmt_L6
+                BEQ     _ldouble_stmt_L6
                 LDA     #7
                 TAY
                 TSC
@@ -848,8 +841,7 @@ _ldouble_stmt_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L7
+                BEQ     _ldouble_stmt_L7
                 LDA     #8
                 TAY
                 TSC
@@ -912,8 +904,7 @@ _ldouble_stmt_L7
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L8
+                BEQ     _ldouble_stmt_L8
                 LDA     #9
                 TAY
                 TSC
@@ -973,8 +964,7 @@ _ldouble_stmt_L8
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L9
+                BEQ     _ldouble_stmt_L9
                 LDA     #10
                 TAY
                 TSC
@@ -1044,8 +1034,7 @@ _ldouble_stmt_L9
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L10
+                BEQ     _ldouble_stmt_L10
                 LDA     #11
                 TAY
                 TSC
@@ -1109,8 +1098,7 @@ _ldouble_stmt_L10
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_stmt_L12
+                BNE     _ldouble_stmt_L12
                 LDA     #2
                 ASL
                 ASL
@@ -1136,16 +1124,14 @@ _ldouble_stmt_L10
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_stmt_L12
+                BNE     _ldouble_stmt_L12
                 LDA     #0
-                BRL     _ldouble_stmt_L13
+                BRA     _ldouble_stmt_L13
 _ldouble_stmt_L12
                 LDA     #1
 _ldouble_stmt_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L11
+                BEQ     _ldouble_stmt_L11
                 LDA     #12
                 TAY
                 TSC
@@ -1210,8 +1196,7 @@ _ldouble_stmt_L11
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_stmt_L15
+                BNE     _ldouble_stmt_L15
                 LDA     gs+4
                 STA     _fcc_long_hi
                 LDA     gs+2
@@ -1233,16 +1218,14 @@ _ldouble_stmt_L11
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_stmt_L15
+                BNE     _ldouble_stmt_L15
                 LDA     #0
-                BRL     _ldouble_stmt_L16
+                BRA     _ldouble_stmt_L16
 _ldouble_stmt_L15
                 LDA     #1
 _ldouble_stmt_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_stmt_L14
+                BEQ     _ldouble_stmt_L14
                 LDA     #13
                 TAY
                 TSC

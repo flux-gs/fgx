@@ -92,8 +92,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _instruct_chain_L0
+                BEQ     _instruct_chain_L0
                 LDA     #7
                 TAY
                 TSC

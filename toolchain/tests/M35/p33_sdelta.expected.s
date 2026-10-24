@@ -159,8 +159,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _p33_sdelta_L0
+                BEQ     _p33_sdelta_L0
                 LDA     #1
                 TAY
                 TSC
@@ -198,8 +197,7 @@ _p33_sdelta_L0
                 TAX
                 TXA
                 CMP     #44
-                BNE     *+5
-                BRL     _p33_sdelta_L1
+                BEQ     _p33_sdelta_L1
                 LDA     #2
                 TAY
                 TSC
@@ -243,8 +241,7 @@ _p33_sdelta_L1
                 TAX
                 TXA
                 CMP     #37
-                BNE     *+5
-                BRL     _p33_sdelta_L2
+                BEQ     _p33_sdelta_L2
                 LDA     #3
                 TAY
                 TSC
@@ -260,22 +257,19 @@ _p33_sdelta_L2
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _p33_sdelta_L4
+                BNE     _p33_sdelta_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _p33_sdelta_L4
+                BNE     _p33_sdelta_L4
                 LDA     #0
-                BRL     _p33_sdelta_L5
+                BRA     _p33_sdelta_L5
 _p33_sdelta_L4
                 LDA     #1
 _p33_sdelta_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_sdelta_L3
+                BEQ     _p33_sdelta_L3
                 LDA     #4
                 TAY
                 TSC

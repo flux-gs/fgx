@@ -35,8 +35,7 @@ _incdec_img_L0
                 BVC     _incdec_img_L3
                 EOR     #$8000
 _incdec_img_L3
-                BMI     *+5
-                BRL     _incdec_img_L2
+                BPL     _incdec_img_L2
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -45,7 +44,7 @@ _incdec_img_L3
                 STA     _fcc_img1
 _incdec_img_L1
                 INC     _fcc_img0
-                BRL     _incdec_img_L0
+                BRA     _incdec_img_L0
 _incdec_img_L2
                 LDA     #8
                 STA     _fcc_img0

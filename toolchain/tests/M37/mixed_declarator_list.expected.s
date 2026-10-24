@@ -134,50 +134,43 @@ _mixed_declarator_list_L9
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L7
+                BNE     _mixed_declarator_list_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L7
+                BNE     _mixed_declarator_list_L7
                 LDA     #1
-                BRL     _mixed_declarator_list_L8
+                BRA     _mixed_declarator_list_L8
 _mixed_declarator_list_L7
                 LDA     #0
 _mixed_declarator_list_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L5
+                BEQ     _mixed_declarator_list_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L5
+                BNE     _mixed_declarator_list_L5
                 LDA     #1
-                BRL     _mixed_declarator_list_L6
+                BRA     _mixed_declarator_list_L6
 _mixed_declarator_list_L5
                 LDA     #0
 _mixed_declarator_list_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L3
+                BEQ     _mixed_declarator_list_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L3
+                BNE     _mixed_declarator_list_L3
                 LDA     #1
-                BRL     _mixed_declarator_list_L4
+                BRA     _mixed_declarator_list_L4
 _mixed_declarator_list_L3
                 LDA     #0
 _mixed_declarator_list_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L2
+                BEQ     _mixed_declarator_list_L2
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -221,36 +214,31 @@ _mixed_declarator_list_L15
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L13
+                BNE     _mixed_declarator_list_L13
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L13
+                BNE     _mixed_declarator_list_L13
                 LDA     #1
-                BRL     _mixed_declarator_list_L14
+                BRA     _mixed_declarator_list_L14
 _mixed_declarator_list_L13
                 LDA     #0
 _mixed_declarator_list_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L11
+                BEQ     _mixed_declarator_list_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L11
+                BNE     _mixed_declarator_list_L11
                 LDA     #1
-                BRL     _mixed_declarator_list_L12
+                BRA     _mixed_declarator_list_L12
 _mixed_declarator_list_L11
                 LDA     #0
 _mixed_declarator_list_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L10
+                BEQ     _mixed_declarator_list_L10
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -338,8 +326,7 @@ _mixed_declarator_list_L31
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L29
+                BNE     _mixed_declarator_list_L29
                 SEP     #$20
                 MX      %10
                 LDA     gfp2+2
@@ -376,16 +363,14 @@ _mixed_declarator_list_L32
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L29
+                BNE     _mixed_declarator_list_L29
                 LDA     #1
-                BRL     _mixed_declarator_list_L30
+                BRA     _mixed_declarator_list_L30
 _mixed_declarator_list_L29
                 LDA     #0
 _mixed_declarator_list_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L27
+                BEQ     _mixed_declarator_list_L27
                 SEP     #$20
                 MX      %10
                 LDA     gfa+2
@@ -422,16 +407,14 @@ _mixed_declarator_list_L33
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L27
+                BNE     _mixed_declarator_list_L27
                 LDA     #1
-                BRL     _mixed_declarator_list_L28
+                BRA     _mixed_declarator_list_L28
 _mixed_declarator_list_L27
                 LDA     #0
 _mixed_declarator_list_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L25
+                BEQ     _mixed_declarator_list_L25
                 SEP     #$20
                 MX      %10
                 LDA     gfb+2
@@ -468,44 +451,38 @@ _mixed_declarator_list_L34
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L25
+                BNE     _mixed_declarator_list_L25
                 LDA     #1
-                BRL     _mixed_declarator_list_L26
+                BRA     _mixed_declarator_list_L26
 _mixed_declarator_list_L25
                 LDA     #0
 _mixed_declarator_list_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L23
+                BEQ     _mixed_declarator_list_L23
                 LDA     gplain
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L23
+                BNE     _mixed_declarator_list_L23
                 LDA     #1
-                BRL     _mixed_declarator_list_L24
+                BRA     _mixed_declarator_list_L24
 _mixed_declarator_list_L23
                 LDA     #0
 _mixed_declarator_list_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L21
+                BEQ     _mixed_declarator_list_L21
                 LDA     gplain2
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _mixed_declarator_list_L21
+                BNE     _mixed_declarator_list_L21
                 LDA     #1
-                BRL     _mixed_declarator_list_L22
+                BRA     _mixed_declarator_list_L22
 _mixed_declarator_list_L21
                 LDA     #0
 _mixed_declarator_list_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _mixed_declarator_list_L20
+                BEQ     _mixed_declarator_list_L20
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA

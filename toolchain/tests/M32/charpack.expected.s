@@ -109,8 +109,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _charpack_L0
+                BEQ     _charpack_L0
                 LDA     #1
                 TAY
                 TSC
@@ -126,8 +125,7 @@ _charpack_L0
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _charpack_L1
+                BEQ     _charpack_L1
                 LDA     #2
                 TAY
                 TSC
@@ -143,8 +141,7 @@ _charpack_L1
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _charpack_L2
+                BEQ     _charpack_L2
                 LDA     #3
                 TAY
                 TSC
@@ -160,8 +157,7 @@ _charpack_L2
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _charpack_L3
+                BEQ     _charpack_L3
                 LDA     #4
                 TAY
                 TSC
@@ -177,8 +173,7 @@ _charpack_L3
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _charpack_L4
+                BEQ     _charpack_L4
                 LDA     #5
                 TAY
                 TSC
@@ -207,23 +202,20 @@ _charpack_L4
                 TAX
                 TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _charpack_L6
+                BNE     _charpack_L6
                 LDA     2,S   ; fccstk d=0 b=2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #34
-                BEQ     *+5
-                BRL     _charpack_L6
+                BNE     _charpack_L6
                 LDA     #0
-                BRL     _charpack_L7
+                BRA     _charpack_L7
 _charpack_L6
                 LDA     #1
 _charpack_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L5
+                BEQ     _charpack_L5
                 LDA     #6
                 TAY
                 TSC
@@ -246,8 +238,7 @@ _charpack_L5
                 TAX
                 TXA
                 CMP     #17
-                BNE     *+5
-                BRL     _charpack_L8
+                BEQ     _charpack_L8
                 LDA     #7
                 TAY
                 TSC
@@ -264,23 +255,20 @@ _charpack_L8
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _charpack_L10
+                BNE     _charpack_L10
                 LDA     gcc+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #22
-                BEQ     *+5
-                BRL     _charpack_L10
+                BNE     _charpack_L10
                 LDA     #0
-                BRL     _charpack_L11
+                BRA     _charpack_L11
 _charpack_L10
                 LDA     #1
 _charpack_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L9
+                BEQ     _charpack_L9
                 LDA     #8
                 TAY
                 TSC
@@ -323,38 +311,33 @@ _charpack_L9
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charpack_L15
+                BNE     _charpack_L15
                 LDA     gb+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _charpack_L15
+                BNE     _charpack_L15
                 LDA     #0
-                BRL     _charpack_L16
+                BRA     _charpack_L16
 _charpack_L15
                 LDA     #1
 _charpack_L16
                 CMP     #0
-                BEQ     *+5
-                BRL     _charpack_L13
+                BNE     _charpack_L13
                 LDA     gb+6
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _charpack_L13
+                BNE     _charpack_L13
                 LDA     #0
-                BRL     _charpack_L14
+                BRA     _charpack_L14
 _charpack_L13
                 LDA     #1
 _charpack_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L12
+                BEQ     _charpack_L12
                 LDA     #8
                 TAY
                 TSC
@@ -387,8 +370,7 @@ _charpack_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L17
+                BEQ     _charpack_L17
                 LDA     #9
                 TAY
                 TSC
@@ -510,8 +492,7 @@ _charpack_L17
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _charpack_L21
+                BNE     _charpack_L21
                 LDA     #1
                 ASL
                 CLC
@@ -529,16 +510,14 @@ _charpack_L17
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _charpack_L21
+                BNE     _charpack_L21
                 LDA     #0
-                BRL     _charpack_L22
+                BRA     _charpack_L22
 _charpack_L21
                 LDA     #1
 _charpack_L22
                 CMP     #0
-                BEQ     *+5
-                BRL     _charpack_L19
+                BNE     _charpack_L19
                 LDA     #2
                 ASL
                 CLC
@@ -556,16 +535,14 @@ _charpack_L22
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charpack_L19
+                BNE     _charpack_L19
                 LDA     #0
-                BRL     _charpack_L20
+                BRA     _charpack_L20
 _charpack_L19
                 LDA     #1
 _charpack_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _charpack_L18
+                BEQ     _charpack_L18
                 LDA     #10
                 TAY
                 TSC
@@ -605,8 +582,7 @@ _charpack_L18
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _charpack_L23
+                BEQ     _charpack_L23
                 LDA     #11
                 TAY
                 TSC
@@ -644,8 +620,7 @@ _charpack_L23
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _charpack_L25
+                BEQ     _charpack_L25
                 LDA     #12
                 TAY
                 TSC
@@ -678,8 +653,7 @@ _charpack_L26
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _charpack_L27
+                BEQ     _charpack_L27
                 LDA     #12
                 TAY
                 TSC
@@ -740,8 +714,7 @@ _charpack_L29
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _charpack_L28
+                BEQ     _charpack_L28
                 LDA     #13
                 TAY
                 TSC

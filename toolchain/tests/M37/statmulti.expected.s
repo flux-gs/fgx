@@ -70,8 +70,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _statmulti_L0
+                BEQ     _statmulti_L0
                 LDA     #1
                 TAY
                 TSC
@@ -96,8 +95,7 @@ _statmulti_L0
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _statmulti_L1
+                BEQ     _statmulti_L1
                 LDA     #2
                 TAY
                 TSC

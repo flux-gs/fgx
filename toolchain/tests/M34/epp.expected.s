@@ -335,8 +335,7 @@ _epp_L2
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _epp_L3
+                BEQ     _epp_L3
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA

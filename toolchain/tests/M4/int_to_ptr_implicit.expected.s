@@ -30,8 +30,7 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BEQ     *+5
-                BRL     _int_to_ptr_implicit_L0
+                BNE     _int_to_ptr_implicit_L0
                 SEP     #$20
                 MX      %10
                 LDA     cmdadr+2
@@ -40,7 +39,7 @@ pick_stkok        TCS
                 MX      %00
                 LDA     cmdadr
                 STA     _fcc_fpr0
-                BRL     _int_to_ptr_implicit_L1
+                BRA     _int_to_ptr_implicit_L1
 _int_to_ptr_implicit_L0
                 LDA     #0
                 STA     dolg
@@ -165,8 +164,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _int_to_ptr_implicit_L2
+                BEQ     _int_to_ptr_implicit_L2
                 LDA     #1
                 TAY
                 TSC
@@ -189,8 +187,7 @@ _int_to_ptr_implicit_L2
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _int_to_ptr_implicit_L3
+                BEQ     _int_to_ptr_implicit_L3
                 LDA     #2
                 TAY
                 TSC
@@ -213,8 +210,7 @@ _int_to_ptr_implicit_L3
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _int_to_ptr_implicit_L4
+                BEQ     _int_to_ptr_implicit_L4
                 LDA     #3
                 TAY
                 TSC
@@ -242,24 +238,21 @@ _int_to_ptr_implicit_L4
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _int_to_ptr_implicit_L6
+                BNE     _int_to_ptr_implicit_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _int_to_ptr_implicit_L6
+                BNE     _int_to_ptr_implicit_L6
                 LDA     #0
-                BRL     _int_to_ptr_implicit_L7
+                BRA     _int_to_ptr_implicit_L7
 _int_to_ptr_implicit_L6
                 LDA     #1
 _int_to_ptr_implicit_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _int_to_ptr_implicit_L5
+                BEQ     _int_to_ptr_implicit_L5
                 LDA     #4
                 TAY
                 TSC
@@ -300,8 +293,7 @@ _int_to_ptr_implicit_L5
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _int_to_ptr_implicit_L8
+                BEQ     _int_to_ptr_implicit_L8
                 LDA     #5
                 TAY
                 TSC

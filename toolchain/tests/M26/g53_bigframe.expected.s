@@ -33,8 +33,7 @@ _g53_bigframe_L0
                 BVC     _g53_bigframe_L3
                 EOR     #$8000
 _g53_bigframe_L3
-                BMI     *+5
-                BRL     _g53_bigframe_L2
+                BPL     _g53_bigframe_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -73,7 +72,7 @@ _g53_bigframe_L3
                 PLA
 _g53_bigframe_L1
                 INC     _fcc_img0
-                BRL     _g53_bigframe_L0
+                BRA     _g53_bigframe_L0
 _g53_bigframe_L2
                 SEP     #$20
                 MX      %10

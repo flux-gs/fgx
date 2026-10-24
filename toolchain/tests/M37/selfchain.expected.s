@@ -218,24 +218,21 @@ _selfchain_L7
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _selfchain_L9
+                BNE     _selfchain_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _selfchain_L9
+                BNE     _selfchain_L9
                 LDA     #0
-                BRL     _selfchain_L10
+                BRA     _selfchain_L10
 _selfchain_L9
                 LDA     #1
 _selfchain_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _selfchain_L8
+                BEQ     _selfchain_L8
                 LDA     #1
                 CLC
                 ADC     _fcc_img0
@@ -276,24 +273,21 @@ _selfchain_L8
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _selfchain_L12
+                BNE     _selfchain_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _selfchain_L12
+                BNE     _selfchain_L12
                 LDA     #0
-                BRL     _selfchain_L13
+                BRA     _selfchain_L13
 _selfchain_L12
                 LDA     #1
 _selfchain_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _selfchain_L11
+                BEQ     _selfchain_L11
                 LDA     #5
                 CLC
                 ADC     _fcc_img0
@@ -320,8 +314,7 @@ _selfchain_L11
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _selfchain_L14
+                BEQ     _selfchain_L14
                 LDA     #9
                 CLC
                 ADC     _fcc_img0
@@ -413,24 +406,21 @@ _selfchain_L6
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _selfchain_L16
+                BNE     _selfchain_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _selfchain_L16
+                BNE     _selfchain_L16
                 LDA     #1
-                BRL     _selfchain_L17
+                BRA     _selfchain_L17
 _selfchain_L16
                 LDA     #0
 _selfchain_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _selfchain_L15
+                BEQ     _selfchain_L15
                 LDA     #13
                 TAY
                 TSC
@@ -516,24 +506,21 @@ _selfchain_L15
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _selfchain_L19
+                BNE     _selfchain_L19
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _selfchain_L19
+                BNE     _selfchain_L19
                 LDA     #1
-                BRL     _selfchain_L20
+                BRA     _selfchain_L20
 _selfchain_L19
                 LDA     #0
 _selfchain_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _selfchain_L18
+                BEQ     _selfchain_L18
                 LDA     #14
                 TAY
                 TSC

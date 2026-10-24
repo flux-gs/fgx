@@ -81,8 +81,7 @@ _ctimeops_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L2
+                BEQ     _ctimeops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _ctimeops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ctimeops_L2
+                BNE     _ctimeops_L2
                 LDA     #1
-                BRL     _ctimeops_L3
+                BRA     _ctimeops_L3
 _ctimeops_L2
                 LDA     #0
 _ctimeops_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L1
+                BEQ     _ctimeops_L1
                 INC     _fcc_img0
-                BRL     _ctimeops_L0
+                BRA     _ctimeops_L0
 _ctimeops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -246,8 +243,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L4
+                BEQ     _ctimeops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -296,8 +292,7 @@ _ctimeops_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L5
+                BEQ     _ctimeops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -346,8 +341,7 @@ _ctimeops_L5
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L6
+                BEQ     _ctimeops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -396,8 +390,7 @@ _ctimeops_L6
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _ctimeops_L7
+                BEQ     _ctimeops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

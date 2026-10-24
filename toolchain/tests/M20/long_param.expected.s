@@ -54,8 +54,7 @@ _long_param_L0
                 BVC     _long_param_L3
                 EOR     #$8000
 _long_param_L3
-                BMI     *+5
-                BRL     _long_param_L2
+                BPL     _long_param_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2

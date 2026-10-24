@@ -66,13 +66,12 @@ _commacond_L0
                 TXA
                 JSR     _fcc_lts16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L1
+                BEQ     _commacond_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 STA     5,S   ; fccstk d=0 b=5
-                BRL     _commacond_L0
+                BRA     _commacond_L0
 _commacond_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -86,8 +85,7 @@ _commacond_L1
                 TXA
                 JSR     _fcc_eq16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L2
+                BEQ     _commacond_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -119,8 +117,7 @@ _commacond_L3
                 TXA
                 JSR     _fcc_lts16
                 CMP     #0
-                BNE     *+5
-                BRL     _commacond_L5
+                BEQ     _commacond_L5
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -132,7 +129,7 @@ _commacond_L4
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _commacond_L3
+                BRA     _commacond_L3
 _commacond_L5
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -143,8 +140,7 @@ _commacond_L5
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _commacond_L6
+                BNE     _commacond_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

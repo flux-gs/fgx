@@ -95,8 +95,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L0
+                BEQ     _nestlongstore_L0
                 LDA     #1
                 TAY
                 TSC
@@ -112,8 +111,7 @@ _nestlongstore_L0
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _nestlongstore_L1
+                BEQ     _nestlongstore_L1
                 LDA     #2
                 TAY
                 TSC
@@ -129,8 +127,7 @@ _nestlongstore_L1
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _nestlongstore_L2
+                BEQ     _nestlongstore_L2
                 LDA     #3
                 TAY
                 TSC
@@ -146,22 +143,19 @@ _nestlongstore_L2
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _nestlongstore_L4
+                BNE     _nestlongstore_L4
                 LDA     _nestlongstore_o+16
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _nestlongstore_L4
+                BNE     _nestlongstore_L4
                 LDA     #0
-                BRL     _nestlongstore_L5
+                BRA     _nestlongstore_L5
 _nestlongstore_L4
                 LDA     #1
 _nestlongstore_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L3
+                BEQ     _nestlongstore_L3
                 LDA     #4
                 TAY
                 TSC
@@ -226,8 +220,7 @@ _nestlongstore_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L6
+                BEQ     _nestlongstore_L6
                 LDA     #5
                 TAY
                 TSC
@@ -243,8 +236,7 @@ _nestlongstore_L6
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _nestlongstore_L7
+                BEQ     _nestlongstore_L7
                 LDA     #6
                 TAY
                 TSC
@@ -308,8 +300,7 @@ _nestlongstore_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L8
+                BEQ     _nestlongstore_L8
                 LDA     #7
                 TAY
                 TSC
@@ -325,8 +316,7 @@ _nestlongstore_L8
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _nestlongstore_L9
+                BEQ     _nestlongstore_L9
                 LDA     #8
                 TAY
                 TSC
@@ -391,8 +381,7 @@ _nestlongstore_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L10
+                BEQ     _nestlongstore_L10
                 LDA     #9
                 TAY
                 TSC
@@ -452,8 +441,7 @@ _nestlongstore_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L11
+                BEQ     _nestlongstore_L11
                 LDA     #10
                 TAY
                 TSC
@@ -550,8 +538,7 @@ _nestlongstore_L11
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L12
+                BEQ     _nestlongstore_L12
                 LDA     #11
                 TAY
                 TSC
@@ -567,8 +554,7 @@ _nestlongstore_L12
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _nestlongstore_L13
+                BEQ     _nestlongstore_L13
                 LDA     #12
                 TAY
                 TSC
@@ -584,8 +570,7 @@ _nestlongstore_L13
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _nestlongstore_L14
+                BEQ     _nestlongstore_L14
                 LDA     #13
                 TAY
                 TSC
@@ -670,8 +655,7 @@ _nestlongstore_L14
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L15
+                BEQ     _nestlongstore_L15
                 LDA     #14
                 TAY
                 TSC
@@ -699,8 +683,7 @@ _nestlongstore_L15
                 TAX
                 TXA
                 CMP     #41
-                BNE     *+5
-                BRL     _nestlongstore_L16
+                BEQ     _nestlongstore_L16
                 LDA     #15
                 TAY
                 TSC
@@ -752,8 +735,7 @@ _nestlongstore_L16
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _nestlongstore_L17
+                BEQ     _nestlongstore_L17
                 LDA     #16
                 TAY
                 TSC
@@ -769,8 +751,7 @@ _nestlongstore_L17
                 TAX
                 TXA
                 CMP     #41
-                BNE     *+5
-                BRL     _nestlongstore_L18
+                BEQ     _nestlongstore_L18
                 LDA     #17
                 TAY
                 TSC

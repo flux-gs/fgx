@@ -93,8 +93,7 @@ _vasum_L0
                 BVC     _vasum_L2
                 EOR     #$8000
 _vasum_L2
-                BMI     *+5
-                BRL     _vasum_L1
+                BPL     _vasum_L1
                 LDA     _fcc_img0
                 PHA
                 LDA     _fcc_img2
@@ -267,8 +266,7 @@ _vasum_L3
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _vasum_L4
+                BNE     _vasum_L4
                 LDA     _fcc_img0
                 TAX
                 TXA

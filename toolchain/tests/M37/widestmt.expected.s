@@ -138,8 +138,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L0
+                BEQ     _widestmt_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -258,8 +257,7 @@ _widestmt_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L1
+                BEQ     _widestmt_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -312,8 +310,7 @@ _widestmt_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L2
+                BEQ     _widestmt_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -350,24 +347,21 @@ _widestmt_L2
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _widestmt_L6
+                BNE     _widestmt_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _widestmt_L6
+                BNE     _widestmt_L6
                 LDA     #1
-                BRL     _widestmt_L7
+                BRA     _widestmt_L7
 _widestmt_L6
                 LDA     #0
 _widestmt_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L4
+                BEQ     _widestmt_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_ptr
                 LDA     3,S   ; fccstk d=0 b=3
@@ -394,16 +388,14 @@ _widestmt_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L4
+                BEQ     _widestmt_L4
                 LDA     #1
-                BRL     _widestmt_L5
+                BRA     _widestmt_L5
 _widestmt_L4
                 LDA     #0
 _widestmt_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L3
+                BEQ     _widestmt_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -477,8 +469,7 @@ _widestmt_L3
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _widestmt_L8
+                BNE     _widestmt_L8
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -531,8 +522,7 @@ _widestmt_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _widestmt_L9
+                BEQ     _widestmt_L9
                 LDA     _fcc_img0
                 TAX
                 TXA

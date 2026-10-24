@@ -51,8 +51,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _memchain2_L0
+                BNE     _memchain2_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -117,8 +116,7 @@ _memchain2_L0
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _memchain2_L1
+                BNE     _memchain2_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -160,8 +158,7 @@ _memchain2_L1
                 TAX
                 TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _memchain2_L2
+                BNE     _memchain2_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -240,22 +237,19 @@ _memchain2_L2
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _memchain2_L4
+                BNE     _memchain2_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _memchain2_L4
+                BNE     _memchain2_L4
                 LDA     #1
-                BRL     _memchain2_L5
+                BRA     _memchain2_L5
 _memchain2_L4
                 LDA     #0
 _memchain2_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _memchain2_L3
+                BEQ     _memchain2_L3
                 LDA     _fcc_img0
                 TAX
                 TXA

@@ -170,8 +170,7 @@ _long_double_bits_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L0
+                BEQ     _long_double_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -228,10 +227,9 @@ _long_double_bits_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L0
+                BEQ     _long_double_L0
                 LDA     #1
-                BRL     _long_double_L1
+                BRA     _long_double_L1
 _long_double_L0
                 LDA     #0
 _long_double_L1
@@ -394,8 +392,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L2
+                BEQ     _long_double_L2
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -407,38 +404,33 @@ _long_double_L2
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _long_double_L6
+                BNE     _long_double_L6
                 LDA     #8
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _long_double_L6
+                BNE     _long_double_L6
                 LDA     #1
-                BRL     _long_double_L7
+                BRA     _long_double_L7
 _long_double_L6
                 LDA     #0
 _long_double_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L4
+                BEQ     _long_double_L4
                 LDA     #8
                 SEC
                 SBC     #8
                 BVC     _long_double_L8
                 EOR     #$8000
 _long_double_L8
-                BPL     *+5
-                BRL     _long_double_L4
+                BMI     _long_double_L4
                 LDA     #1
-                BRL     _long_double_L5
+                BRA     _long_double_L5
 _long_double_L4
                 LDA     #0
 _long_double_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L3
+                BEQ     _long_double_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -514,8 +506,7 @@ _long_double_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L10
+                BEQ     _long_double_L10
                 LDA     #10
                 PHA
                 LDA     #2
@@ -526,16 +517,14 @@ _long_double_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _long_double_L10
+                BNE     _long_double_L10
                 LDA     #1
-                BRL     _long_double_L11
+                BRA     _long_double_L11
 _long_double_L10
                 LDA     #0
 _long_double_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L9
+                BEQ     _long_double_L9
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -611,8 +600,7 @@ _long_double_L9
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _long_double_L12
+                BEQ     _long_double_L12
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA

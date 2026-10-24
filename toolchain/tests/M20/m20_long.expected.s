@@ -54,8 +54,7 @@ _m20_long_L0
                 BVC     _m20_long_L3
                 EOR     #$8000
 _m20_long_L3
-                BMI     *+5
-                BRL     _m20_long_L2
+                BPL     _m20_long_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2

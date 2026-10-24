@@ -98,8 +98,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BMI     *+5
-                BRL     _libcadds_L0
+                BPL     _libcadds_L0
                 LDA     #1
                 TAY
                 TSC
@@ -164,24 +163,21 @@ _libcadds_L0
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _libcadds_L2
+                BNE     _libcadds_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _libcadds_L2
+                BNE     _libcadds_L2
                 LDA     #0
-                BRL     _libcadds_L3
+                BRA     _libcadds_L3
 _libcadds_L2
                 LDA     #1
 _libcadds_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _libcadds_L1
+                BEQ     _libcadds_L1
                 LDA     #2
                 TAY
                 TSC
@@ -225,8 +221,7 @@ _libcadds_L1
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _libcadds_L4
+                BEQ     _libcadds_L4
                 LDA     #3
                 TAY
                 TSC
@@ -304,8 +299,7 @@ _libcadds_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _libcadds_L5
+                BEQ     _libcadds_L5
                 LDA     #4
                 TAY
                 TSC
@@ -389,8 +383,7 @@ _libcadds_L5
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _libcadds_L6
+                BEQ     _libcadds_L6
                 LDA     #5
                 TAY
                 TSC

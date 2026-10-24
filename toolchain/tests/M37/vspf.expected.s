@@ -82,8 +82,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _vspf_L0
+                BNE     _vspf_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -107,8 +106,7 @@ _vspf_L1
                 BVC     _vspf_L4
                 EOR     #$8000
 _vspf_L4
-                BMI     *+5
-                BRL     _vspf_L3
+                BPL     _vspf_L3
                 LDA     #ov
                 PHA
                 LDA     _fcc_img0
@@ -133,7 +131,7 @@ _vspf_L4
                 PLA
 _vspf_L2
                 INC     _fcc_img0
-                BRL     _vspf_L1
+                BRA     _vspf_L1
 _vspf_L3
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -178,8 +176,7 @@ _vspf_L3
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _vspf_L8
+                BNE     _vspf_L8
                 LDA     #6
                 TAX
                 LDA:    ov,X
@@ -187,16 +184,14 @@ _vspf_L3
                 TAX
                 TXA
                 CMP     #69
-                BEQ     *+5
-                BRL     _vspf_L8
+                BNE     _vspf_L8
                 LDA     #1
-                BRL     _vspf_L9
+                BRA     _vspf_L9
 _vspf_L8
                 LDA     #0
 _vspf_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _vspf_L6
+                BEQ     _vspf_L6
                 LDA     #7
                 TAX
                 LDA:    ov,X
@@ -204,16 +199,14 @@ _vspf_L9
                 TAX
                 TXA
                 CMP     #72
-                BEQ     *+5
-                BRL     _vspf_L6
+                BNE     _vspf_L6
                 LDA     #1
-                BRL     _vspf_L7
+                BRA     _vspf_L7
 _vspf_L6
                 LDA     #0
 _vspf_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _vspf_L5
+                BEQ     _vspf_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -262,8 +255,7 @@ _vspf_L5
                 TAX
                 TXA
                 CMP     #68
-                BEQ     *+5
-                BRL     _vspf_L11
+                BNE     _vspf_L11
                 LDA     #1
                 TAX
                 LDA:    ov,X
@@ -271,16 +263,14 @@ _vspf_L5
                 TAX
                 TXA
                 CMP     #69
-                BEQ     *+5
-                BRL     _vspf_L11
+                BNE     _vspf_L11
                 LDA     #1
-                BRL     _vspf_L12
+                BRA     _vspf_L12
 _vspf_L11
                 LDA     #0
 _vspf_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _vspf_L10
+                BEQ     _vspf_L10
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

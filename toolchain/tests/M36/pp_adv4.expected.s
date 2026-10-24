@@ -114,15 +114,14 @@ _pp_adv4_L0
                 BVC     _pp_adv4_L2
                 EOR     #$8000
 _pp_adv4_L2
-                BMI     *+5
-                BRL     _pp_adv4_L1
+                BPL     _pp_adv4_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _pp_adv4_L0
+                BRA     _pp_adv4_L0
 _pp_adv4_L1
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -176,8 +175,7 @@ _pp_adv4_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _pp_adv4_L3
+                BEQ     _pp_adv4_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -212,8 +210,7 @@ _pp_adv4_L3
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _pp_adv4_L4
+                BNE     _pp_adv4_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

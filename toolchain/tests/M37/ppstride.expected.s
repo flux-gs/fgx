@@ -383,8 +383,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _ppstride_L0
+                BEQ     _ppstride_L0
                 LDA     #1
                 TAY
                 TSC
@@ -418,8 +417,7 @@ _ppstride_L0
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _ppstride_L1
+                BEQ     _ppstride_L1
                 LDA     #2
                 TAY
                 TSC
@@ -435,8 +433,7 @@ _ppstride_L1
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _ppstride_L2
+                BEQ     _ppstride_L2
                 LDA     #3
                 TAY
                 TSC

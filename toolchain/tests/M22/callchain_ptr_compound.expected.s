@@ -265,8 +265,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L0
+                BEQ     _callchain_ptr_compound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -331,8 +330,7 @@ _callchain_ptr_compound_L0
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L1
+                BEQ     _callchain_ptr_compound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -395,8 +393,7 @@ _callchain_ptr_compound_L1
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L2
+                BEQ     _callchain_ptr_compound_L2
                 LDA     #3
                 TAY
                 TSC
@@ -461,8 +458,7 @@ _callchain_ptr_compound_L2
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L3
+                BEQ     _callchain_ptr_compound_L3
                 LDA     #4
                 TAY
                 TSC
@@ -535,8 +531,7 @@ _callchain_ptr_compound_L3
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L4
+                BEQ     _callchain_ptr_compound_L4
                 LDA     #5
                 TAY
                 TSC
@@ -611,8 +606,7 @@ _callchain_ptr_compound_L4
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L5
+                BEQ     _callchain_ptr_compound_L5
                 LDA     #6
                 TAY
                 TSC
@@ -675,8 +669,7 @@ _callchain_ptr_compound_L5
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L6
+                BEQ     _callchain_ptr_compound_L6
                 LDA     #7
                 TAY
                 TSC
@@ -739,8 +732,7 @@ _callchain_ptr_compound_L6
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L7
+                BEQ     _callchain_ptr_compound_L7
                 LDA     #8
                 TAY
                 TSC
@@ -805,8 +797,7 @@ _callchain_ptr_compound_L7
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L8
+                BEQ     _callchain_ptr_compound_L8
                 LDA     #9
                 TAY
                 TSC
@@ -830,8 +821,7 @@ _callchain_ptr_compound_L8
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L9
+                BEQ     _callchain_ptr_compound_L9
                 LDA     #10
                 TAY
                 TSC
@@ -898,8 +888,7 @@ _callchain_ptr_compound_L9
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L10
+                BEQ     _callchain_ptr_compound_L10
                 LDA     #11
                 TAY
                 TSC
@@ -956,8 +945,7 @@ _callchain_ptr_compound_L10
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L11
+                BEQ     _callchain_ptr_compound_L11
                 LDA     #12
                 TAY
                 TSC
@@ -1005,8 +993,7 @@ _callchain_ptr_compound_L11
                 TAX
                 TXA
                 CMP     #51
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L12
+                BEQ     _callchain_ptr_compound_L12
                 LDA     #13
                 TAY
                 TSC
@@ -1022,8 +1009,7 @@ _callchain_ptr_compound_L12
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L13
+                BEQ     _callchain_ptr_compound_L13
                 LDA     #14
                 TAY
                 TSC
@@ -1053,8 +1039,7 @@ _callchain_ptr_compound_L13
                 TAX
                 TXA
                 CMP     #48
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L14
+                BEQ     _callchain_ptr_compound_L14
                 LDA     #15
                 TAY
                 TSC
@@ -1142,8 +1127,7 @@ _callchain_ptr_compound_L14
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L15
+                BEQ     _callchain_ptr_compound_L15
                 LDA     #16
                 TAY
                 TSC
@@ -1159,8 +1143,7 @@ _callchain_ptr_compound_L15
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L16
+                BEQ     _callchain_ptr_compound_L16
                 LDA     #17
                 TAY
                 TSC
@@ -1248,8 +1231,7 @@ _callchain_ptr_compound_L16
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L17
+                BEQ     _callchain_ptr_compound_L17
                 LDA     #18
                 TAY
                 TSC
@@ -1337,8 +1319,7 @@ _callchain_ptr_compound_L17
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _callchain_ptr_compound_L18
+                BEQ     _callchain_ptr_compound_L18
                 LDA     #19
                 TAY
                 TSC

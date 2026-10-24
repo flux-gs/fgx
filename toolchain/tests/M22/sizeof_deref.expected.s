@@ -23,8 +23,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _sizeof_deref_L0
+                BEQ     _sizeof_deref_L0
                 LDA     #1
                 TAY
                 TSC
@@ -38,8 +37,7 @@ main_stkok        TCS
 _sizeof_deref_L0
                 LDA     #1
                 CMP     #1
-                BNE     *+5
-                BRL     _sizeof_deref_L1
+                BEQ     _sizeof_deref_L1
                 LDA     #2
                 TAY
                 TSC
@@ -53,8 +51,7 @@ _sizeof_deref_L0
 _sizeof_deref_L1
                 LDA     #4
                 CMP     #4
-                BNE     *+5
-                BRL     _sizeof_deref_L2
+                BEQ     _sizeof_deref_L2
                 LDA     #3
                 TAY
                 TSC
@@ -68,8 +65,7 @@ _sizeof_deref_L1
 _sizeof_deref_L2
                 LDA     #4
                 CMP     #4
-                BNE     *+5
-                BRL     _sizeof_deref_L3
+                BEQ     _sizeof_deref_L3
                 LDA     #4
                 TAY
                 TSC
@@ -83,8 +79,7 @@ _sizeof_deref_L2
 _sizeof_deref_L3
                 LDA     #16
                 CMP     #16
-                BNE     *+5
-                BRL     _sizeof_deref_L4
+                BEQ     _sizeof_deref_L4
                 LDA     #5
                 TAY
                 TSC

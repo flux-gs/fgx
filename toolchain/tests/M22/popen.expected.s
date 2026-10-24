@@ -57,24 +57,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _popen_L1
+                BNE     _popen_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _popen_L1
+                BNE     _popen_L1
                 LDA     #1
-                BRL     _popen_L2
+                BRA     _popen_L2
 _popen_L1
                 LDA     #0
 _popen_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L0
+                BEQ     _popen_L0
                 LDA     #1
                 TAY
                 TSC
@@ -118,24 +115,21 @@ _popen_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _popen_L4
+                BNE     _popen_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _popen_L4
+                BNE     _popen_L4
                 LDA     #1
-                BRL     _popen_L5
+                BRA     _popen_L5
 _popen_L4
                 LDA     #0
 _popen_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L3
+                BEQ     _popen_L3
                 LDA     #2
                 TAY
                 TSC
@@ -167,8 +161,7 @@ _popen_L3
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _popen_L9
+                BNE     _popen_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -189,16 +182,14 @@ _popen_L3
                 TAX
                 TXA
                 CMP     #105
-                BEQ     *+5
-                BRL     _popen_L9
+                BNE     _popen_L9
                 LDA     #0
-                BRL     _popen_L10
+                BRA     _popen_L10
 _popen_L9
                 LDA     #1
 _popen_L10
                 CMP     #0
-                BEQ     *+5
-                BRL     _popen_L7
+                BNE     _popen_L7
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -219,16 +210,14 @@ _popen_L10
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _popen_L7
+                BNE     _popen_L7
                 LDA     #0
-                BRL     _popen_L8
+                BRA     _popen_L8
 _popen_L7
                 LDA     #1
 _popen_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L6
+                BEQ     _popen_L6
                 LDA     #3
                 TAY
                 TSC
@@ -272,24 +261,21 @@ _popen_L6
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _popen_L12
+                BNE     _popen_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _popen_L12
+                BNE     _popen_L12
                 LDA     #0
-                BRL     _popen_L13
+                BRA     _popen_L13
 _popen_L12
                 LDA     #1
 _popen_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L11
+                BEQ     _popen_L11
                 LDA     #4
                 TAY
                 TSC
@@ -315,8 +301,7 @@ _popen_L11
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L14
+                BEQ     _popen_L14
                 LDA     #5
                 TAY
                 TSC
@@ -366,24 +351,21 @@ _popen_L14
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _popen_L16
+                BNE     _popen_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _popen_L16
+                BNE     _popen_L16
                 LDA     #1
-                BRL     _popen_L17
+                BRA     _popen_L17
 _popen_L16
                 LDA     #0
 _popen_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L15
+                BEQ     _popen_L15
                 LDA     #6
                 TAY
                 TSC
@@ -431,8 +413,7 @@ _popen_L15
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L18
+                BEQ     _popen_L18
                 LDA     #7
                 TAY
                 TSC
@@ -482,24 +463,21 @@ _popen_L18
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _popen_L20
+                BNE     _popen_L20
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _popen_L20
+                BNE     _popen_L20
                 LDA     #1
-                BRL     _popen_L21
+                BRA     _popen_L21
 _popen_L20
                 LDA     #0
 _popen_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _popen_L19
+                BEQ     _popen_L19
                 LDA     #8
                 TAY
                 TSC
@@ -537,8 +515,7 @@ _popen_L19
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _popen_L22
+                BEQ     _popen_L22
                 LDA     #9
                 TAY
                 TSC
@@ -571,8 +548,7 @@ _popen_L22
                 TCS
                 TYA
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _popen_L23
+                BEQ     _popen_L23
                 LDA     #10
                 TAY
                 TSC

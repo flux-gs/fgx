@@ -274,8 +274,7 @@ _memchain3_L0
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _memchain3_L1
+                BNE     _memchain3_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -321,8 +320,7 @@ _memchain3_L1
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _memchain3_L2
+                BNE     _memchain3_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -369,8 +367,7 @@ _memchain3_L2
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _memchain3_L3
+                BNE     _memchain3_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -426,8 +423,7 @@ _memchain3_L3
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _memchain3_L4
+                BEQ     _memchain3_L4
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -489,8 +485,7 @@ _memchain3_L3
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _memchain3_L5
+                BNE     _memchain3_L5
                 LDA     _fcc_img0
                 TAX
                 TXA

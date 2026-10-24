@@ -35,8 +35,7 @@ _for_empty_L0
                 BVC     _for_empty_L3
                 EOR     #$8000
 _for_empty_L3
-                BMI     *+5
-                BRL     _for_empty_L2
+                BPL     _for_empty_L2
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -50,7 +49,7 @@ _for_empty_L3
                 ADC     #1
                 STA     _fcc_img0
 _for_empty_L1
-                BRL     _for_empty_L0
+                BRA     _for_empty_L0
 _for_empty_L2
                 LDA     _fcc_img1
                 TAY

@@ -157,8 +157,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L3
+                BEQ     _wide_bump_L3
                 LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+6
@@ -180,16 +179,14 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L3
+                BEQ     _wide_bump_L3
                 LDA     #1
-                BRL     _wide_bump_L4
+                BRA     _wide_bump_L4
 _wide_bump_L3
                 LDA     #0
 _wide_bump_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L1
+                BEQ     _wide_bump_L1
                 LDA     _wide_bump_gobj+4
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+2
@@ -210,16 +207,14 @@ _wide_bump_L4
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L1
+                BEQ     _wide_bump_L1
                 LDA     #1
-                BRL     _wide_bump_L2
+                BRA     _wide_bump_L2
 _wide_bump_L1
                 LDA     #0
 _wide_bump_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L0
+                BEQ     _wide_bump_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -290,8 +285,7 @@ _wide_bump_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L6
+                BEQ     _wide_bump_L6
                 LDA     _wide_bump_gobj+8
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+6
@@ -313,16 +307,14 @@ _wide_bump_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L6
+                BEQ     _wide_bump_L6
                 LDA     #1
-                BRL     _wide_bump_L7
+                BRA     _wide_bump_L7
 _wide_bump_L6
                 LDA     #0
 _wide_bump_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L5
+                BEQ     _wide_bump_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -492,8 +484,7 @@ _wide_bump_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L9
+                BEQ     _wide_bump_L9
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -538,16 +529,14 @@ _wide_bump_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L9
+                BEQ     _wide_bump_L9
                 LDA     #1
-                BRL     _wide_bump_L10
+                BRA     _wide_bump_L10
 _wide_bump_L9
                 LDA     #0
 _wide_bump_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L8
+                BEQ     _wide_bump_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -684,8 +673,7 @@ _wide_bump_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L11
+                BEQ     _wide_bump_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -770,8 +758,7 @@ _wide_bump_L11
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L12
+                BEQ     _wide_bump_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -851,8 +838,7 @@ _wide_bump_L12
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L16
+                BEQ     _wide_bump_L16
                 LDA     _wide_bump_gobj+12
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+10
@@ -874,30 +860,26 @@ _wide_bump_L12
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L16
+                BEQ     _wide_bump_L16
                 LDA     #1
-                BRL     _wide_bump_L17
+                BRA     _wide_bump_L17
 _wide_bump_L16
                 LDA     #0
 _wide_bump_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L14
+                BEQ     _wide_bump_L14
                 LDA     _wide_bump_gobj+0
                 TAX
                 TXA
                 CMP     #1234
-                BEQ     *+5
-                BRL     _wide_bump_L14
+                BNE     _wide_bump_L14
                 LDA     #1
-                BRL     _wide_bump_L15
+                BRA     _wide_bump_L15
 _wide_bump_L14
                 LDA     #0
 _wide_bump_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L13
+                BEQ     _wide_bump_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -987,8 +969,7 @@ _wide_bump_L13
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L18
+                BEQ     _wide_bump_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -1069,8 +1050,7 @@ _wide_bump_L18
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L20
+                BEQ     _wide_bump_L20
                 LDA     _wide_bump_gobj+16
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+14
@@ -1113,16 +1093,14 @@ _wide_bump_L18
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L20
+                BEQ     _wide_bump_L20
                 LDA     #1
-                BRL     _wide_bump_L21
+                BRA     _wide_bump_L21
 _wide_bump_L20
                 LDA     #0
 _wide_bump_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L19
+                BEQ     _wide_bump_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -1284,8 +1262,7 @@ _wide_bump_L19
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L25
+                BEQ     _wide_bump_L25
                 LDA     _wide_bump_gobj+20
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+18
@@ -1328,16 +1305,14 @@ _wide_bump_L19
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L25
+                BEQ     _wide_bump_L25
                 LDA     #1
-                BRL     _wide_bump_L26
+                BRA     _wide_bump_L26
 _wide_bump_L25
                 LDA     #0
 _wide_bump_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L23
+                BEQ     _wide_bump_L23
                 LDA     _wide_bump_gobj+24
                 STA     _fcc_long_hi
                 LDA     _wide_bump_gobj+22
@@ -1380,16 +1355,14 @@ _wide_bump_L26
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L23
+                BEQ     _wide_bump_L23
                 LDA     #1
-                BRL     _wide_bump_L24
+                BRA     _wide_bump_L24
 _wide_bump_L23
                 LDA     #0
 _wide_bump_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L22
+                BEQ     _wide_bump_L22
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -1559,8 +1532,7 @@ _wide_bump_L22
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L27
+                BEQ     _wide_bump_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -1676,8 +1648,7 @@ _wide_bump_L27
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L29
+                BEQ     _wide_bump_L29
                 LDA     _wide_bump_chain+16
                 STA     _fcc_long_hi
                 LDA     _wide_bump_chain+14
@@ -1720,16 +1691,14 @@ _wide_bump_L27
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L29
+                BEQ     _wide_bump_L29
                 LDA     #1
-                BRL     _wide_bump_L30
+                BRA     _wide_bump_L30
 _wide_bump_L29
                 LDA     #0
 _wide_bump_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L28
+                BEQ     _wide_bump_L28
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -1833,8 +1802,7 @@ _wide_bump_L28
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L32
+                BEQ     _wide_bump_L32
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_long_hi
                 LDA     13,S   ; fccstk d=0 b=13
@@ -1877,16 +1845,14 @@ _wide_bump_L28
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L32
+                BEQ     _wide_bump_L32
                 LDA     #1
-                BRL     _wide_bump_L33
+                BRA     _wide_bump_L33
 _wide_bump_L32
                 LDA     #0
 _wide_bump_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L31
+                BEQ     _wide_bump_L31
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -2008,8 +1974,7 @@ _wide_bump_L31
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L35
+                BEQ     _wide_bump_L35
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_long_hi
                 LDA     9,S   ; fccstk d=0 b=9
@@ -2052,16 +2017,14 @@ _wide_bump_L31
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L35
+                BEQ     _wide_bump_L35
                 LDA     #1
-                BRL     _wide_bump_L36
+                BRA     _wide_bump_L36
 _wide_bump_L35
                 LDA     #0
 _wide_bump_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L34
+                BEQ     _wide_bump_L34
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -2187,8 +2150,7 @@ _wide_bump_L34
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _wide_bump_L37
+                BEQ     _wide_bump_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA

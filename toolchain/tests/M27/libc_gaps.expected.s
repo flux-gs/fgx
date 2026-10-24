@@ -80,24 +80,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _libc_gaps_L4
+                BNE     _libc_gaps_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _libc_gaps_L4
+                BNE     _libc_gaps_L4
                 LDA     #0
-                BRL     _libc_gaps_L5
+                BRA     _libc_gaps_L5
 _libc_gaps_L4
                 LDA     #1
 _libc_gaps_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _libc_gaps_L2
+                BEQ     _libc_gaps_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_ptr
                 LDA     7,S   ; fccstk d=0 b=7
@@ -107,18 +104,16 @@ _libc_gaps_L5
                 TAX
                 TXA
                 CMP     #119
-                BEQ     *+5
-                BRL     _libc_gaps_L2
+                BNE     _libc_gaps_L2
                 LDA     #1
-                BRL     _libc_gaps_L3
+                BRA     _libc_gaps_L3
 _libc_gaps_L2
                 LDA     #0
 _libc_gaps_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _libc_gaps_L0
+                BEQ     _libc_gaps_L0
                 LDA     #6
-                BRL     _libc_gaps_L1
+                BRA     _libc_gaps_L1
 _libc_gaps_L0
                 LDA     #0
 _libc_gaps_L1

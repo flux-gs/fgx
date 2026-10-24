@@ -131,8 +131,7 @@ addr_of_sfok         STA     _fcc_sfp
                 BVC     _p33_soft_addr_L1
                 EOR     #$8000
 _p33_soft_addr_L1
-                BMI     *+5
-                BRL     _p33_soft_addr_L0
+                BPL     _p33_soft_addr_L0
                 LDY     #4
                 LDA     [_fcc_sfp],Y
                 STA     _fcc_fpr0+2
@@ -254,8 +253,7 @@ _p33_soft_addr_L2
                 BVC     _p33_soft_addr_L5
                 EOR     #$8000
 _p33_soft_addr_L5
-                BMI     *+5
-                BRL     _p33_soft_addr_L4
+                BPL     _p33_soft_addr_L4
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -293,7 +291,7 @@ _p33_soft_addr_L5
                 PLA
 _p33_soft_addr_L3
                 INC     _fcc_img0
-                BRL     _p33_soft_addr_L2
+                BRA     _p33_soft_addr_L2
 _p33_soft_addr_L4
                 LDA     _fcc_img0
                 LDY     #12
@@ -457,8 +455,7 @@ _p33_soft_addr_L4
                 BVC     _p33_soft_addr_L7
                 EOR     #$8000
 _p33_soft_addr_L7
-                BMI     *+5
-                BRL     _p33_soft_addr_L6
+                BPL     _p33_soft_addr_L6
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -634,8 +631,7 @@ _p33_soft_addr_L8
                 BVC     _p33_soft_addr_L11
                 EOR     #$8000
 _p33_soft_addr_L11
-                BMI     *+5
-                BRL     _p33_soft_addr_L10
+                BPL     _p33_soft_addr_L10
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -833,8 +829,7 @@ _p33_soft_addr_L10
                 BVC     _p33_soft_addr_L13
                 EOR     #$8000
 _p33_soft_addr_L13
-                BMI     *+5
-                BRL     _p33_soft_addr_L12
+                BPL     _p33_soft_addr_L12
                 LDY     #6
                 LDA     [_fcc_sfp],Y
                 PHA
@@ -971,8 +966,7 @@ crosspath_sfok         STA     _fcc_sfp
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _p33_soft_addr_L14
+                BEQ     _p33_soft_addr_L14
                 LDA     #$FFFF
                 TAY
                 LDA     _fcc_sfp
@@ -1008,8 +1002,7 @@ _p33_soft_addr_L14
                 BVC     _p33_soft_addr_L16
                 EOR     #$8000
 _p33_soft_addr_L16
-                BMI     *+5
-                BRL     _p33_soft_addr_L15
+                BPL     _p33_soft_addr_L15
                 DO      6+crosspath_FRAMESIZE/256
                 TSC
                 CLC
@@ -1033,8 +1026,7 @@ _p33_soft_addr_L16
                 LDY     #6
                 LDA     [_fcc_sfp],Y
                 CMP     #0
-                BMI     *+5
-                BRL     _p33_soft_addr_L17
+                BPL     _p33_soft_addr_L17
                 LDA     #$FFFF
                 TAY
                 LDA     _fcc_sfp
@@ -1100,8 +1092,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _p33_soft_addr_L18
+                BEQ     _p33_soft_addr_L18
                 LDA     #1
                 TAY
                 TSC
@@ -1137,8 +1128,7 @@ _p33_soft_addr_L18
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_soft_addr_L19
+                BEQ     _p33_soft_addr_L19
                 LDA     #2
                 TAY
                 TSC
@@ -1159,8 +1149,7 @@ _p33_soft_addr_L19
                 TAX
                 TXA
                 CMP     #18
-                BNE     *+5
-                BRL     _p33_soft_addr_L20
+                BEQ     _p33_soft_addr_L20
                 LDA     #3
                 TAY
                 TSC
@@ -1181,8 +1170,7 @@ _p33_soft_addr_L20
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _p33_soft_addr_L21
+                BEQ     _p33_soft_addr_L21
                 LDA     #4
                 TAY
                 TSC

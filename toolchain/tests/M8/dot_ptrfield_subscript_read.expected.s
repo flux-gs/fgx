@@ -294,8 +294,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L0
+                BEQ     _dot_ptrfield_subscript_rea_L0
                 LDA     #1
                 TAY
                 TSC
@@ -367,8 +366,7 @@ _dot_ptrfield_subscript_rea_L0
                 TAX
                 TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L1
+                BEQ     _dot_ptrfield_subscript_rea_L1
                 LDA     #2
                 TAY
                 TSC
@@ -421,8 +419,7 @@ _dot_ptrfield_subscript_rea_L1
                 TAX
                 TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L2
+                BEQ     _dot_ptrfield_subscript_rea_L2
                 LDA     #3
                 TAY
                 TSC
@@ -460,8 +457,7 @@ _dot_ptrfield_subscript_rea_L2
                 TAX
                 TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L3
+                BEQ     _dot_ptrfield_subscript_rea_L3
                 LDA     #4
                 TAY
                 TSC
@@ -519,8 +515,7 @@ _dot_ptrfield_subscript_rea_L3
                 TAX
                 TXA
                 CMP     #67
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L4
+                BEQ     _dot_ptrfield_subscript_rea_L4
                 LDA     #5
                 TAY
                 TSC
@@ -575,8 +570,7 @@ _dot_ptrfield_subscript_rea_L6
                 LDA     #1
 _dot_ptrfield_subscript_rea_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L5
+                BEQ     _dot_ptrfield_subscript_rea_L5
                 LDA     #6
                 TAY
                 TSC
@@ -614,24 +608,21 @@ _dot_ptrfield_subscript_rea_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dot_ptrfield_subscript_rea_L9
+                BNE     _dot_ptrfield_subscript_rea_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dot_ptrfield_subscript_rea_L9
+                BNE     _dot_ptrfield_subscript_rea_L9
                 LDA     #0
-                BRL     _dot_ptrfield_subscript_rea_L10
+                BRA     _dot_ptrfield_subscript_rea_L10
 _dot_ptrfield_subscript_rea_L9
                 LDA     #1
 _dot_ptrfield_subscript_rea_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L8
+                BEQ     _dot_ptrfield_subscript_rea_L8
                 LDA     #7
                 TAY
                 TSC
@@ -692,8 +683,7 @@ _dot_ptrfield_subscript_rea_L8
                 TAX
                 TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _dot_ptrfield_subscript_rea_L11
+                BEQ     _dot_ptrfield_subscript_rea_L11
                 LDA     #8
                 TAY
                 TSC

@@ -180,31 +180,28 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dotptr_arrow_store_L2
+                BNE     _dotptr_arrow_store_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dotptr_arrow_store_L2
+                BNE     _dotptr_arrow_store_L2
                 LDA     #1
-                BRL     _dotptr_arrow_store_L3
+                BRA     _dotptr_arrow_store_L3
 _dotptr_arrow_store_L2
                 LDA     #0
 _dotptr_arrow_store_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _dotptr_arrow_store_L0
+                BEQ     _dotptr_arrow_store_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
-                BRL     _dotptr_arrow_store_L1
+                BRA     _dotptr_arrow_store_L1
 _dotptr_arrow_store_L0
                 LDA     #0
 _dotptr_arrow_store_L1

@@ -284,8 +284,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _addr2d_L1
+                BNE     _addr2d_L1
                 LDA     #2
                 TAX
                 LDA:    r1,X
@@ -293,16 +292,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _addr2d_L1
+                BNE     _addr2d_L1
                 LDA     #1
-                BRL     _addr2d_L2
+                BRA     _addr2d_L2
 _addr2d_L1
                 LDA     #0
 _addr2d_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2d_L0
+                BEQ     _addr2d_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -404,8 +401,7 @@ _addr2d_L0
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _addr2d_L4
+                BNE     _addr2d_L4
                 LDA     #2
                 TAX
                 LDA:    r0,X
@@ -413,16 +409,14 @@ _addr2d_L0
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _addr2d_L4
+                BNE     _addr2d_L4
                 LDA     #1
-                BRL     _addr2d_L5
+                BRA     _addr2d_L5
 _addr2d_L4
                 LDA     #0
 _addr2d_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2d_L3
+                BEQ     _addr2d_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -498,8 +492,7 @@ _addr2d_L3
                 TAX
                 TXA
                 CMP     #4242
-                BEQ     *+5
-                BRL     _addr2d_L9
+                BNE     _addr2d_L9
                 LDA     #2
                 ASL
                 TAX
@@ -507,31 +500,27 @@ _addr2d_L3
                 TAX
                 TXA
                 CMP     #4242
-                BEQ     *+5
-                BRL     _addr2d_L9
+                BNE     _addr2d_L9
                 LDA     #1
-                BRL     _addr2d_L10
+                BRA     _addr2d_L10
 _addr2d_L9
                 LDA     #0
 _addr2d_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2d_L7
+                BEQ     _addr2d_L7
                 LDA     #1
                 ASL
                 TAX
                 LDA:    i0,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _addr2d_L7
+                BNE     _addr2d_L7
                 LDA     #1
-                BRL     _addr2d_L8
+                BRA     _addr2d_L8
 _addr2d_L7
                 LDA     #0
 _addr2d_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2d_L6
+                BEQ     _addr2d_L6
                 LDA     _fcc_img0
                 TAX
                 TXA

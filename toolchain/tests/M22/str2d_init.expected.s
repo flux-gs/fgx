@@ -34,8 +34,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #67
-                BNE     *+5
-                BRL     _str2d_init_L0
+                BEQ     _str2d_init_L0
                 LDA     #1
                 TAY
                 TSC
@@ -62,8 +61,7 @@ _str2d_init_L0
                 TAX
                 TXA
                 CMP     #44
-                BNE     *+5
-                BRL     _str2d_init_L1
+                BEQ     _str2d_init_L1
                 LDA     #2
                 TAY
                 TSC
@@ -90,8 +88,7 @@ _str2d_init_L1
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _str2d_init_L2
+                BEQ     _str2d_init_L2
                 LDA     #3
                 TAY
                 TSC
@@ -116,8 +113,7 @@ _str2d_init_L2
                 LDA:    dig,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _str2d_init_L3
+                BEQ     _str2d_init_L3
                 LDA     #4
                 TAY
                 TSC
@@ -144,8 +140,7 @@ _str2d_init_L3
                 TAX
                 TXA
                 CMP     #97
-                BNE     *+5
-                BRL     _str2d_init_L4
+                BEQ     _str2d_init_L4
                 LDA     #5
                 TAY
                 TSC
@@ -170,8 +165,7 @@ _str2d_init_L4
                 LDA:    dig,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _str2d_init_L5
+                BEQ     _str2d_init_L5
                 LDA     #6
                 TAY
                 TSC
@@ -196,8 +190,7 @@ _str2d_init_L5
                 LDA:    dig,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _str2d_init_L6
+                BEQ     _str2d_init_L6
                 LDA     #7
                 TAY
                 TSC

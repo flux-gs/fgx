@@ -249,8 +249,7 @@ _od_probe5_L0
                 BVC     _od_probe5_L3
                 EOR     #$8000
 _od_probe5_L3
-                BMI     *+5
-                BRL     _od_probe5_L2
+                BPL     _od_probe5_L2
                 LDA     7,S   ; fccstk d=0 b=7
                 ASL
                 ASL
@@ -299,7 +298,7 @@ _od_probe5_L1
                 CLC
                 ADC     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _od_probe5_L0
+                BRA     _od_probe5_L0
 _od_probe5_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX

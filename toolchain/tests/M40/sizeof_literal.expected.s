@@ -21,20 +21,17 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_literal_L1
+                BNE     _sizeof_literal_L1
                 LDA     #2
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_literal_L1
+                BNE     _sizeof_literal_L1
                 LDA     #0
-                BRL     _sizeof_literal_L2
+                BRA     _sizeof_literal_L2
 _sizeof_literal_L1
                 LDA     #1
 _sizeof_literal_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _sizeof_literal_L0
+                BEQ     _sizeof_literal_L0
                 LDA     #1
                 TAY
                 TSC
@@ -48,20 +45,17 @@ _sizeof_literal_L2
 _sizeof_literal_L0
                 LDA     #4
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_literal_L4
+                BNE     _sizeof_literal_L4
                 LDA     #4
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_literal_L4
+                BNE     _sizeof_literal_L4
                 LDA     #0
-                BRL     _sizeof_literal_L5
+                BRA     _sizeof_literal_L5
 _sizeof_literal_L4
                 LDA     #1
 _sizeof_literal_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _sizeof_literal_L3
+                BEQ     _sizeof_literal_L3
                 LDA     #2
                 TAY
                 TSC
@@ -75,20 +69,17 @@ _sizeof_literal_L5
 _sizeof_literal_L3
                 LDA     #2
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_literal_L7
+                BNE     _sizeof_literal_L7
                 LDA     #2
                 CMP     #2
-                BEQ     *+5
-                BRL     _sizeof_literal_L7
+                BNE     _sizeof_literal_L7
                 LDA     #0
-                BRL     _sizeof_literal_L8
+                BRA     _sizeof_literal_L8
 _sizeof_literal_L7
                 LDA     #1
 _sizeof_literal_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _sizeof_literal_L6
+                BEQ     _sizeof_literal_L6
                 LDA     #3
                 TAY
                 TSC
@@ -102,20 +93,17 @@ _sizeof_literal_L8
 _sizeof_literal_L6
                 LDA     #8
                 CMP     #8
-                BEQ     *+5
-                BRL     _sizeof_literal_L10
+                BNE     _sizeof_literal_L10
                 LDA     #4
                 CMP     #4
-                BEQ     *+5
-                BRL     _sizeof_literal_L10
+                BNE     _sizeof_literal_L10
                 LDA     #0
-                BRL     _sizeof_literal_L11
+                BRA     _sizeof_literal_L11
 _sizeof_literal_L10
                 LDA     #1
 _sizeof_literal_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _sizeof_literal_L9
+                BEQ     _sizeof_literal_L9
                 LDA     #4
                 TAY
                 TSC

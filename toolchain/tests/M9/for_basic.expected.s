@@ -35,8 +35,7 @@ _for_basic_L0
                 BVC     _for_basic_L3
                 EOR     #$8000
 _for_basic_L3
-                BMI     *+5
-                BRL     _for_basic_L2
+                BPL     _for_basic_L2
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -50,7 +49,7 @@ _for_basic_L1
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _for_basic_L0
+                BRA     _for_basic_L0
 _for_basic_L2
                 LDA     _fcc_img1
                 TAY

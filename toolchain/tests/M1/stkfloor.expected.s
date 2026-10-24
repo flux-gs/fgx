@@ -157,8 +157,7 @@ rec_stkok        TCS
                 BVC     _stkfloor_L1
                 EOR     #$8000
 _stkfloor_L1
-                BMI     *+5
-                BRL     _stkfloor_L0
+                BPL     _stkfloor_L0
                 DO      6+rec_FRAMESIZE/256
                 TSC
                 CLC

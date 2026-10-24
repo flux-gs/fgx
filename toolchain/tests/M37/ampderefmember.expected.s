@@ -297,8 +297,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #77
-                BNE     *+5
-                BRL     _ampderefmember_L0
+                BEQ     _ampderefmember_L0
                 LDA     #1
                 TAY
                 TSC
@@ -348,8 +347,7 @@ _ampderefmember_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ampderefmember_L1
+                BEQ     _ampderefmember_L1
                 LDA     #2
                 TAY
                 TSC
@@ -368,8 +366,7 @@ _ampderefmember_L1
                 TAX
                 TXA
                 CMP     #55
-                BNE     *+5
-                BRL     _ampderefmember_L2
+                BEQ     _ampderefmember_L2
                 LDA     #3
                 TAY
                 TSC
@@ -420,8 +417,7 @@ _ampderefmember_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ampderefmember_L3
+                BEQ     _ampderefmember_L3
                 LDA     #4
                 TAY
                 TSC
@@ -473,8 +469,7 @@ _ampderefmember_L3
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _ampderefmember_L4
+                BEQ     _ampderefmember_L4
                 LDA     #5
                 TAY
                 TSC
@@ -516,24 +511,21 @@ _ampderefmember_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ampderefmember_L8
+                BNE     _ampderefmember_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ampderefmember_L8
+                BNE     _ampderefmember_L8
                 LDA     #0
-                BRL     _ampderefmember_L9
+                BRA     _ampderefmember_L9
 _ampderefmember_L8
                 LDA     #1
 _ampderefmember_L9
                 CMP     #0
-                BEQ     *+5
-                BRL     _ampderefmember_L6
+                BNE     _ampderefmember_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -557,32 +549,28 @@ _ampderefmember_L9
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ampderefmember_L10
+                BNE     _ampderefmember_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ampderefmember_L10
+                BNE     _ampderefmember_L10
                 LDA     #1
-                BRL     _ampderefmember_L11
+                BRA     _ampderefmember_L11
 _ampderefmember_L10
                 LDA     #0
 _ampderefmember_L11
                 CMP     #0
-                BEQ     *+5
-                BRL     _ampderefmember_L6
+                BNE     _ampderefmember_L6
                 LDA     #0
-                BRL     _ampderefmember_L7
+                BRA     _ampderefmember_L7
 _ampderefmember_L6
                 LDA     #1
 _ampderefmember_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _ampderefmember_L5
+                BEQ     _ampderefmember_L5
                 LDA     #6
                 TAY
                 TSC
@@ -650,8 +638,7 @@ _ampderefmember_L5
                 TAX
                 TXA
                 CMP     #77
-                BNE     *+5
-                BRL     _ampderefmember_L12
+                BEQ     _ampderefmember_L12
                 LDA     #7
                 TAY
                 TSC

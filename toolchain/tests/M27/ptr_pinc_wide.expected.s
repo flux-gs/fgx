@@ -52,8 +52,7 @@ _ptr_pinc_wide_L0
                 BVC     _ptr_pinc_wide_L2
                 EOR     #$8000
 _ptr_pinc_wide_L2
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L1
+                BPL     _ptr_pinc_wide_L1
                 LDA     _fcc_img2
                 STA     _fcc_long_hi
                 LDA     _fcc_img1
@@ -189,8 +188,7 @@ _ptr_pinc_wide_L4
                 BVC     _ptr_pinc_wide_L6
                 EOR     #$8000
 _ptr_pinc_wide_L6
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L5
+                BPL     _ptr_pinc_wide_L5
                 DO      8+_ptr_pinc_wide_sum_float_FRAMESIZE/256
                 TSC
                 CLC
@@ -312,8 +310,7 @@ _ptr_pinc_wide_L7
                 BVC     _ptr_pinc_wide_L9
                 EOR     #$8000
 _ptr_pinc_wide_L9
-                BMI     *+5
-                BRL     _ptr_pinc_wide_L8
+                BPL     _ptr_pinc_wide_L8
                 DO      8+_ptr_pinc_wide_sum_pp_FRAMESIZE/256
                 TSC
                 CLC

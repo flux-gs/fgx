@@ -25,8 +25,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _char_cmp_L0
+                BNE     _char_cmp_L0
                 LDA     #42
                 TAY
                 TSC

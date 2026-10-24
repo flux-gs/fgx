@@ -579,8 +579,7 @@ _ntp_model_mag_stkok        TCS
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L0
+                BEQ     _ntp_model_L0
                 DO      12+_ntp_model_mag_FRAMESIZE/256
                 TSC
                 CLC
@@ -629,7 +628,7 @@ _ntp_model_mag_stkok        TCS
                 EOR     #$8000
                 STA     _fcc_q3
                 TYA
-                BRL     _ntp_model_L1
+                BRA     _ntp_model_L1
 _ntp_model_L0
                 DO      12+_ntp_model_mag_FRAMESIZE/256
                 TSC
@@ -1558,8 +1557,7 @@ _ntp_model_L5
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L6
+                BEQ     _ntp_model_L6
                 LDA     #1
                 TAY
                 TSC
@@ -1666,8 +1664,7 @@ _ntp_model_L6
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L7
+                BEQ     _ntp_model_L7
                 LDA     #2
                 TAY
                 TSC
@@ -1777,8 +1774,7 @@ _ntp_model_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ntp_model_L8
+                BEQ     _ntp_model_L8
                 LDA     #3
                 TAY
                 TSC

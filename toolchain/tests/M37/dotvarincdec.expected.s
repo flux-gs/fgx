@@ -164,50 +164,43 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L5
+                BNE     _dotvarincdec_L5
                 LDA     gi+2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L5
+                BNE     _dotvarincdec_L5
                 LDA     #1
-                BRL     _dotvarincdec_L6
+                BRA     _dotvarincdec_L6
 _dotvarincdec_L5
                 LDA     #0
 _dotvarincdec_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L3
+                BEQ     _dotvarincdec_L3
                 LDA     gi+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L3
+                BNE     _dotvarincdec_L3
                 LDA     #1
-                BRL     _dotvarincdec_L4
+                BRA     _dotvarincdec_L4
 _dotvarincdec_L3
                 LDA     #0
 _dotvarincdec_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L1
+                BEQ     _dotvarincdec_L1
                 LDA     gi+4
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L1
+                BNE     _dotvarincdec_L1
                 LDA     #1
-                BRL     _dotvarincdec_L2
+                BRA     _dotvarincdec_L2
 _dotvarincdec_L1
                 LDA     #0
 _dotvarincdec_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L0
+                BEQ     _dotvarincdec_L0
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -236,50 +229,43 @@ _dotvarincdec_L0
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L12
+                BNE     _dotvarincdec_L12
                 LDA     gi+2
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _dotvarincdec_L12
+                BNE     _dotvarincdec_L12
                 LDA     #1
-                BRL     _dotvarincdec_L13
+                BRA     _dotvarincdec_L13
 _dotvarincdec_L12
                 LDA     #0
 _dotvarincdec_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L10
+                BEQ     _dotvarincdec_L10
                 LDA     gi+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L10
+                BNE     _dotvarincdec_L10
                 LDA     #1
-                BRL     _dotvarincdec_L11
+                BRA     _dotvarincdec_L11
 _dotvarincdec_L10
                 LDA     #0
 _dotvarincdec_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L8
+                BEQ     _dotvarincdec_L8
                 LDA     gi+4
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L8
+                BNE     _dotvarincdec_L8
                 LDA     #1
-                BRL     _dotvarincdec_L9
+                BRA     _dotvarincdec_L9
 _dotvarincdec_L8
                 LDA     #0
 _dotvarincdec_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L7
+                BEQ     _dotvarincdec_L7
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -295,50 +281,43 @@ _dotvarincdec_L7
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L19
+                BNE     _dotvarincdec_L19
                 LDA     gi+2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L19
+                BNE     _dotvarincdec_L19
                 LDA     #1
-                BRL     _dotvarincdec_L20
+                BRA     _dotvarincdec_L20
 _dotvarincdec_L19
                 LDA     #0
 _dotvarincdec_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L17
+                BEQ     _dotvarincdec_L17
                 LDA     gi+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L17
+                BNE     _dotvarincdec_L17
                 LDA     #1
-                BRL     _dotvarincdec_L18
+                BRA     _dotvarincdec_L18
 _dotvarincdec_L17
                 LDA     #0
 _dotvarincdec_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L15
+                BEQ     _dotvarincdec_L15
                 LDA     gi+4
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L15
+                BNE     _dotvarincdec_L15
                 LDA     #1
-                BRL     _dotvarincdec_L16
+                BRA     _dotvarincdec_L16
 _dotvarincdec_L15
                 LDA     #0
 _dotvarincdec_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L14
+                BEQ     _dotvarincdec_L14
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -371,53 +350,46 @@ _dotvarincdec_L14
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L26
+                BNE     _dotvarincdec_L26
                 LDA     gc+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L26
+                BNE     _dotvarincdec_L26
                 LDA     #1
-                BRL     _dotvarincdec_L27
+                BRA     _dotvarincdec_L27
 _dotvarincdec_L26
                 LDA     #0
 _dotvarincdec_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L24
+                BEQ     _dotvarincdec_L24
                 LDA     gc+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L24
+                BNE     _dotvarincdec_L24
                 LDA     #1
-                BRL     _dotvarincdec_L25
+                BRA     _dotvarincdec_L25
 _dotvarincdec_L24
                 LDA     #0
 _dotvarincdec_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L22
+                BEQ     _dotvarincdec_L22
                 LDA     gc+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L22
+                BNE     _dotvarincdec_L22
                 LDA     #1
-                BRL     _dotvarincdec_L23
+                BRA     _dotvarincdec_L23
 _dotvarincdec_L22
                 LDA     #0
 _dotvarincdec_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L21
+                BEQ     _dotvarincdec_L21
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -439,53 +411,46 @@ _dotvarincdec_L21
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L33
+                BNE     _dotvarincdec_L33
                 LDA     gc+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L33
+                BNE     _dotvarincdec_L33
                 LDA     #1
-                BRL     _dotvarincdec_L34
+                BRA     _dotvarincdec_L34
 _dotvarincdec_L33
                 LDA     #0
 _dotvarincdec_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L31
+                BEQ     _dotvarincdec_L31
                 LDA     gc+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L31
+                BNE     _dotvarincdec_L31
                 LDA     #1
-                BRL     _dotvarincdec_L32
+                BRA     _dotvarincdec_L32
 _dotvarincdec_L31
                 LDA     #0
 _dotvarincdec_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L29
+                BEQ     _dotvarincdec_L29
                 LDA     gc+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L29
+                BNE     _dotvarincdec_L29
                 LDA     #1
-                BRL     _dotvarincdec_L30
+                BRA     _dotvarincdec_L30
 _dotvarincdec_L29
                 LDA     #0
 _dotvarincdec_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L28
+                BEQ     _dotvarincdec_L28
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -520,50 +485,43 @@ _dotvarincdec_L28
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L40
+                BNE     _dotvarincdec_L40
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L40
+                BNE     _dotvarincdec_L40
                 LDA     #1
-                BRL     _dotvarincdec_L41
+                BRA     _dotvarincdec_L41
 _dotvarincdec_L40
                 LDA     #0
 _dotvarincdec_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L38
+                BEQ     _dotvarincdec_L38
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _dotvarincdec_L38
+                BNE     _dotvarincdec_L38
                 LDA     #1
-                BRL     _dotvarincdec_L39
+                BRA     _dotvarincdec_L39
 _dotvarincdec_L38
                 LDA     #0
 _dotvarincdec_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L36
+                BEQ     _dotvarincdec_L36
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _dotvarincdec_L36
+                BNE     _dotvarincdec_L36
                 LDA     #1
-                BRL     _dotvarincdec_L37
+                BRA     _dotvarincdec_L37
 _dotvarincdec_L36
                 LDA     #0
 _dotvarincdec_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L35
+                BEQ     _dotvarincdec_L35
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -610,53 +568,46 @@ _dotvarincdec_L35
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L47
+                BNE     _dotvarincdec_L47
                 LDA     8,S   ; fccstk d=0 b=8
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L47
+                BNE     _dotvarincdec_L47
                 LDA     #1
-                BRL     _dotvarincdec_L48
+                BRA     _dotvarincdec_L48
 _dotvarincdec_L47
                 LDA     #0
 _dotvarincdec_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L45
+                BEQ     _dotvarincdec_L45
                 LDA     7,S   ; fccstk d=0 b=7
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #113
-                BEQ     *+5
-                BRL     _dotvarincdec_L45
+                BNE     _dotvarincdec_L45
                 LDA     #1
-                BRL     _dotvarincdec_L46
+                BRA     _dotvarincdec_L46
 _dotvarincdec_L45
                 LDA     #0
 _dotvarincdec_L46
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L43
+                BEQ     _dotvarincdec_L43
                 LDA     9,S   ; fccstk d=0 b=9
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #115
-                BEQ     *+5
-                BRL     _dotvarincdec_L43
+                BNE     _dotvarincdec_L43
                 LDA     #1
-                BRL     _dotvarincdec_L44
+                BRA     _dotvarincdec_L44
 _dotvarincdec_L43
                 LDA     #0
 _dotvarincdec_L44
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L42
+                BEQ     _dotvarincdec_L42
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -683,34 +634,29 @@ _dotvarincdec_L42
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _dotvarincdec_L52
+                BNE     _dotvarincdec_L52
                 LDA     clocks+0
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _dotvarincdec_L52
+                BNE     _dotvarincdec_L52
                 LDA     #1
-                BRL     _dotvarincdec_L53
+                BRA     _dotvarincdec_L53
 _dotvarincdec_L52
                 LDA     #0
 _dotvarincdec_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L50
+                BEQ     _dotvarincdec_L50
                 LDA     clocks+4
                 CMP     #0
-                BEQ     *+5
-                BRL     _dotvarincdec_L50
+                BNE     _dotvarincdec_L50
                 LDA     #1
-                BRL     _dotvarincdec_L51
+                BRA     _dotvarincdec_L51
 _dotvarincdec_L50
                 LDA     #0
 _dotvarincdec_L51
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L49
+                BEQ     _dotvarincdec_L49
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -734,50 +680,43 @@ _dotvarincdec_L49
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L59
+                BNE     _dotvarincdec_L59
                 LDA     gi+2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L59
+                BNE     _dotvarincdec_L59
                 LDA     #1
-                BRL     _dotvarincdec_L60
+                BRA     _dotvarincdec_L60
 _dotvarincdec_L59
                 LDA     #0
 _dotvarincdec_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L57
+                BEQ     _dotvarincdec_L57
                 LDA     gi+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L57
+                BNE     _dotvarincdec_L57
                 LDA     #1
-                BRL     _dotvarincdec_L58
+                BRA     _dotvarincdec_L58
 _dotvarincdec_L57
                 LDA     #0
 _dotvarincdec_L58
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L55
+                BEQ     _dotvarincdec_L55
                 LDA     gi+4
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L55
+                BNE     _dotvarincdec_L55
                 LDA     #1
-                BRL     _dotvarincdec_L56
+                BRA     _dotvarincdec_L56
 _dotvarincdec_L55
                 LDA     #0
 _dotvarincdec_L56
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L54
+                BEQ     _dotvarincdec_L54
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -805,53 +744,46 @@ _dotvarincdec_L54
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L66
+                BNE     _dotvarincdec_L66
                 LDA     gc+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L66
+                BNE     _dotvarincdec_L66
                 LDA     #1
-                BRL     _dotvarincdec_L67
+                BRA     _dotvarincdec_L67
 _dotvarincdec_L66
                 LDA     #0
 _dotvarincdec_L67
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L64
+                BEQ     _dotvarincdec_L64
                 LDA     gc+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L64
+                BNE     _dotvarincdec_L64
                 LDA     #1
-                BRL     _dotvarincdec_L65
+                BRA     _dotvarincdec_L65
 _dotvarincdec_L64
                 LDA     #0
 _dotvarincdec_L65
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L62
+                BEQ     _dotvarincdec_L62
                 LDA     gc+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L62
+                BNE     _dotvarincdec_L62
                 LDA     #1
-                BRL     _dotvarincdec_L63
+                BRA     _dotvarincdec_L63
 _dotvarincdec_L62
                 LDA     #0
 _dotvarincdec_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L61
+                BEQ     _dotvarincdec_L61
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -900,24 +832,21 @@ _dotvarincdec_L61
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dotvarincdec_L75
+                BNE     _dotvarincdec_L75
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dotvarincdec_L75
+                BNE     _dotvarincdec_L75
                 LDA     #1
-                BRL     _dotvarincdec_L76
+                BRA     _dotvarincdec_L76
 _dotvarincdec_L75
                 LDA     #0
 _dotvarincdec_L76
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L73
+                BEQ     _dotvarincdec_L73
                 LDA     gp+4
                 STA     _fcc_fpr0+2
                 LDA     gp+2
@@ -935,60 +864,52 @@ _dotvarincdec_L76
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dotvarincdec_L77
+                BNE     _dotvarincdec_L77
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dotvarincdec_L77
+                BNE     _dotvarincdec_L77
                 LDA     #1
-                BRL     _dotvarincdec_L78
+                BRA     _dotvarincdec_L78
 _dotvarincdec_L77
                 LDA     #0
 _dotvarincdec_L78
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L73
+                BEQ     _dotvarincdec_L73
                 LDA     #1
-                BRL     _dotvarincdec_L74
+                BRA     _dotvarincdec_L74
 _dotvarincdec_L73
                 LDA     #0
 _dotvarincdec_L74
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L71
+                BEQ     _dotvarincdec_L71
                 LDA     gp+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L71
+                BNE     _dotvarincdec_L71
                 LDA     #1
-                BRL     _dotvarincdec_L72
+                BRA     _dotvarincdec_L72
 _dotvarincdec_L71
                 LDA     #0
 _dotvarincdec_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L69
+                BEQ     _dotvarincdec_L69
                 LDA     gp+6
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _dotvarincdec_L69
+                BNE     _dotvarincdec_L69
                 LDA     #1
-                BRL     _dotvarincdec_L70
+                BRA     _dotvarincdec_L70
 _dotvarincdec_L69
                 LDA     #0
 _dotvarincdec_L70
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L68
+                BEQ     _dotvarincdec_L68
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -1069,8 +990,7 @@ _dotvarincdec_L68
                 TAX
                 TXA
                 CMP     #33
-                BEQ     *+5
-                BRL     _dotvarincdec_L82
+                BNE     _dotvarincdec_L82
                 LDA     gp+4
                 STA     _fcc_fpr0+2
                 LDA     gp+2
@@ -1080,30 +1000,26 @@ _dotvarincdec_L68
                 TAX
                 TXA
                 CMP     #34
-                BEQ     *+5
-                BRL     _dotvarincdec_L82
+                BNE     _dotvarincdec_L82
                 LDA     #1
-                BRL     _dotvarincdec_L83
+                BRA     _dotvarincdec_L83
 _dotvarincdec_L82
                 LDA     #0
 _dotvarincdec_L83
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L80
+                BEQ     _dotvarincdec_L80
                 LDA     gp+0
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dotvarincdec_L80
+                BNE     _dotvarincdec_L80
                 LDA     #1
-                BRL     _dotvarincdec_L81
+                BRA     _dotvarincdec_L81
 _dotvarincdec_L80
                 LDA     #0
 _dotvarincdec_L81
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L79
+                BEQ     _dotvarincdec_L79
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -1132,64 +1048,55 @@ _dotvarincdec_L79
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L91
+                BNE     _dotvarincdec_L91
                 LDA     gn+2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L91
+                BNE     _dotvarincdec_L91
                 LDA     #1
-                BRL     _dotvarincdec_L92
+                BRA     _dotvarincdec_L92
 _dotvarincdec_L91
                 LDA     #0
 _dotvarincdec_L92
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L89
+                BEQ     _dotvarincdec_L89
                 LDA     gn+0
                 TAX
                 TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _dotvarincdec_L89
+                BNE     _dotvarincdec_L89
                 LDA     #1
-                BRL     _dotvarincdec_L90
+                BRA     _dotvarincdec_L90
 _dotvarincdec_L89
                 LDA     #0
 _dotvarincdec_L90
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L87
+                BEQ     _dotvarincdec_L87
                 LDA     gn+4
                 TAX
                 TXA
                 CMP     #83
-                BEQ     *+5
-                BRL     _dotvarincdec_L87
+                BNE     _dotvarincdec_L87
                 LDA     #1
-                BRL     _dotvarincdec_L88
+                BRA     _dotvarincdec_L88
 _dotvarincdec_L87
                 LDA     #0
 _dotvarincdec_L88
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L85
+                BEQ     _dotvarincdec_L85
                 LDA     gn+6
                 TAX
                 TXA
                 CMP     #84
-                BEQ     *+5
-                BRL     _dotvarincdec_L85
+                BNE     _dotvarincdec_L85
                 LDA     #1
-                BRL     _dotvarincdec_L86
+                BRA     _dotvarincdec_L86
 _dotvarincdec_L85
                 LDA     #0
 _dotvarincdec_L86
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L84
+                BEQ     _dotvarincdec_L84
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
@@ -1260,36 +1167,31 @@ _dotvarincdec_L84
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dotvarincdec_L100
+                BNE     _dotvarincdec_L100
                 LDA     gi+2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dotvarincdec_L100
+                BNE     _dotvarincdec_L100
                 LDA     #1
-                BRL     _dotvarincdec_L101
+                BRA     _dotvarincdec_L101
 _dotvarincdec_L100
                 LDA     #0
 _dotvarincdec_L101
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L98
+                BEQ     _dotvarincdec_L98
                 LDA     gi+0
                 TAX
                 TXA
                 CMP     #256
-                BEQ     *+5
-                BRL     _dotvarincdec_L98
+                BNE     _dotvarincdec_L98
                 LDA     #1
-                BRL     _dotvarincdec_L99
+                BRA     _dotvarincdec_L99
 _dotvarincdec_L98
                 LDA     #0
 _dotvarincdec_L99
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L96
+                BEQ     _dotvarincdec_L96
                 LDA     #0
                 TAX
                 LDA:    buf,X
@@ -1297,16 +1199,14 @@ _dotvarincdec_L99
                 TAX
                 TXA
                 CMP     #49
-                BEQ     *+5
-                BRL     _dotvarincdec_L96
+                BNE     _dotvarincdec_L96
                 LDA     #1
-                BRL     _dotvarincdec_L97
+                BRA     _dotvarincdec_L97
 _dotvarincdec_L96
                 LDA     #0
 _dotvarincdec_L97
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L94
+                BEQ     _dotvarincdec_L94
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -1314,16 +1214,14 @@ _dotvarincdec_L97
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _dotvarincdec_L94
+                BNE     _dotvarincdec_L94
                 LDA     #1
-                BRL     _dotvarincdec_L95
+                BRA     _dotvarincdec_L95
 _dotvarincdec_L94
                 LDA     #0
 _dotvarincdec_L95
                 CMP     #0
-                BNE     *+5
-                BRL     _dotvarincdec_L93
+                BEQ     _dotvarincdec_L93
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA

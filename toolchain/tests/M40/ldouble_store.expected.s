@@ -253,8 +253,7 @@ _ldouble_store_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L0
+                BEQ     _ldouble_store_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -311,10 +310,9 @@ _ldouble_store_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L0
+                BEQ     _ldouble_store_L0
                 LDA     #1
-                BRL     _ldouble_store_L1
+                BRA     _ldouble_store_L1
 _ldouble_store_L0
                 LDA     #0
 _ldouble_store_L1
@@ -509,8 +507,7 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L2
+                BEQ     _ldouble_store_L2
                 DO      14+pick_FRAMESIZE/256
                 TSC
                 CLC
@@ -554,7 +551,7 @@ pick_stkok        TCS
                 ELSE
                 LDA     8+pick_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                BRL     _ldouble_store_L3
+                BRA     _ldouble_store_L3
 _ldouble_store_L2
                 DO      22+pick_FRAMESIZE/256
                 TSC
@@ -648,36 +645,31 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _ldouble_store_L7
+                BNE     _ldouble_store_L7
                 LDA     #8
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _ldouble_store_L7
+                BNE     _ldouble_store_L7
                 LDA     #0
-                BRL     _ldouble_store_L8
+                BRA     _ldouble_store_L8
 _ldouble_store_L7
                 LDA     #1
 _ldouble_store_L8
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L5
+                BNE     _ldouble_store_L5
                 LDA     #32
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _ldouble_store_L5
+                BNE     _ldouble_store_L5
                 LDA     #0
-                BRL     _ldouble_store_L6
+                BRA     _ldouble_store_L6
 _ldouble_store_L5
                 LDA     #1
 _ldouble_store_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L4
+                BEQ     _ldouble_store_L4
                 LDA     #1
                 TAY
                 TSC
@@ -693,22 +685,19 @@ _ldouble_store_L4
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _ldouble_store_L10
+                BNE     _ldouble_store_L10
                 LDA     #8
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _ldouble_store_L10
+                BNE     _ldouble_store_L10
                 LDA     #0
-                BRL     _ldouble_store_L11
+                BRA     _ldouble_store_L11
 _ldouble_store_L10
                 LDA     #1
 _ldouble_store_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L9
+                BEQ     _ldouble_store_L9
                 LDA     #2
                 TAY
                 TSC
@@ -814,8 +803,7 @@ _ldouble_store_L13
                 LDA     #1
 _ldouble_store_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L12
+                BEQ     _ldouble_store_L12
                 LDA     #3
                 TAY
                 TSC
@@ -887,8 +875,7 @@ _ldouble_store_L16
                 LDA     #1
 _ldouble_store_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L15
+                BEQ     _ldouble_store_L15
                 LDA     #4
                 TAY
                 TSC
@@ -994,8 +981,7 @@ _ldouble_store_L19
                 LDA     #1
 _ldouble_store_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L18
+                BEQ     _ldouble_store_L18
                 LDA     #5
                 TAY
                 TSC
@@ -1084,8 +1070,7 @@ _ldouble_store_L22
                 LDA     #1
 _ldouble_store_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L21
+                BEQ     _ldouble_store_L21
                 LDA     #6
                 TAY
                 TSC
@@ -1180,8 +1165,7 @@ _ldouble_store_L25
                 LDA     #1
 _ldouble_store_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L24
+                BEQ     _ldouble_store_L24
                 LDA     #7
                 TAY
                 TSC
@@ -1268,8 +1252,7 @@ _ldouble_store_L28
                 LDA     #1
 _ldouble_store_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L27
+                BEQ     _ldouble_store_L27
                 LDA     #8
                 TAY
                 TSC
@@ -1358,8 +1341,7 @@ _ldouble_store_L31
                 LDA     #1
 _ldouble_store_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L30
+                BEQ     _ldouble_store_L30
                 LDA     #9
                 TAY
                 TSC
@@ -1456,8 +1438,7 @@ _ldouble_store_L34
                 LDA     #1
 _ldouble_store_L35
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L33
+                BEQ     _ldouble_store_L33
                 LDA     #10
                 TAY
                 TSC
@@ -1557,8 +1538,7 @@ _ldouble_store_L37
                 LDA     #1
 _ldouble_store_L38
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L36
+                BEQ     _ldouble_store_L36
                 LDA     #11
                 TAY
                 TSC
@@ -1661,8 +1641,7 @@ _ldouble_store_L40
                 LDA     #1
 _ldouble_store_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L39
+                BEQ     _ldouble_store_L39
                 LDA     #12
                 TAY
                 TSC
@@ -1772,8 +1751,7 @@ _ldouble_store_L43
                 LDA     #1
 _ldouble_store_L44
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L42
+                BEQ     _ldouble_store_L42
                 LDA     #13
                 TAY
                 TSC
@@ -1866,8 +1844,7 @@ _ldouble_store_L46
                 LDA     #1
 _ldouble_store_L47
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L45
+                BEQ     _ldouble_store_L45
                 LDA     #14
                 TAY
                 TSC
@@ -1883,22 +1860,19 @@ _ldouble_store_L45
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _ldouble_store_L49
+                BNE     _ldouble_store_L49
                 LDA     69,S   ; fccstk d=0 b=69
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _ldouble_store_L49
+                BNE     _ldouble_store_L49
                 LDA     #0
-                BRL     _ldouble_store_L50
+                BRA     _ldouble_store_L50
 _ldouble_store_L49
                 LDA     #1
 _ldouble_store_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L48
+                BEQ     _ldouble_store_L48
                 LDA     #15
                 TAY
                 TSC
@@ -2012,8 +1986,7 @@ _ldouble_store_L52
                 LDA     #1
 _ldouble_store_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L51
+                BEQ     _ldouble_store_L51
                 LDA     #16
                 TAY
                 TSC
@@ -2100,8 +2073,7 @@ _ldouble_store_L56
                 LDA     #1
 _ldouble_store_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L55
+                BEQ     _ldouble_store_L55
                 LDA     #17
                 TAY
                 TSC
@@ -2180,8 +2152,7 @@ _ldouble_store_L59
                 LDA     #1
 _ldouble_store_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L58
+                BEQ     _ldouble_store_L58
                 LDA     #18
                 TAY
                 TSC
@@ -2268,8 +2239,7 @@ _ldouble_store_L62
                 LDA     #1
 _ldouble_store_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L61
+                BEQ     _ldouble_store_L61
                 LDA     #19
                 TAY
                 TSC
@@ -2356,8 +2326,7 @@ _ldouble_store_L65
                 LDA     #1
 _ldouble_store_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L64
+                BEQ     _ldouble_store_L64
                 LDA     #20
                 TAY
                 TSC
@@ -2462,8 +2431,7 @@ _ldouble_store_L68
                 LDA     #1
 _ldouble_store_L69
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L67
+                BEQ     _ldouble_store_L67
                 LDA     #21
                 TAY
                 TSC
@@ -2568,8 +2536,7 @@ _ldouble_store_L71
                 LDA     #1
 _ldouble_store_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L70
+                BEQ     _ldouble_store_L70
                 LDA     #22
                 TAY
                 TSC
@@ -2583,8 +2550,7 @@ _ldouble_store_L72
 _ldouble_store_L70
                 LDA     25,S   ; fccstk d=0 b=25
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L73
+                BEQ     _ldouble_store_L73
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_q3
                 LDA     13,S   ; fccstk d=0 b=13
@@ -2592,7 +2558,7 @@ _ldouble_store_L70
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_long_hi
                 LDA     9,S   ; fccstk d=0 b=9
-                BRL     _ldouble_store_L74
+                BRA     _ldouble_store_L74
 _ldouble_store_L73
                 LDA     g+6
                 STA     _fcc_q3
@@ -2654,8 +2620,7 @@ _ldouble_store_L76
                 LDA     #1
 _ldouble_store_L77
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L75
+                BEQ     _ldouble_store_L75
                 LDA     #23
                 TAY
                 TSC
@@ -2726,8 +2691,7 @@ _ldouble_store_L79
                 LDA     #1
 _ldouble_store_L80
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L78
+                BEQ     _ldouble_store_L78
                 LDA     #24
                 TAY
                 TSC
@@ -2823,8 +2787,7 @@ _ldouble_store_L84
                 LDA     #1
 _ldouble_store_L85
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L82
+                BNE     _ldouble_store_L82
                 LDA     #$51EB
                 STA     _fcc_long_hi
                 LDA     #$851F
@@ -2870,16 +2833,14 @@ _ldouble_store_L86
                 LDA     #1
 _ldouble_store_L87
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L82
+                BNE     _ldouble_store_L82
                 LDA     #0
-                BRL     _ldouble_store_L83
+                BRA     _ldouble_store_L83
 _ldouble_store_L82
                 LDA     #1
 _ldouble_store_L83
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L81
+                BEQ     _ldouble_store_L81
                 LDA     #25
                 TAY
                 TSC
@@ -2895,8 +2856,7 @@ _ldouble_store_L81
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ldouble_store_L91
+                BNE     _ldouble_store_L91
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -2942,28 +2902,24 @@ _ldouble_store_L93
                 LDA     #1
 _ldouble_store_L94
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L91
+                BNE     _ldouble_store_L91
                 LDA     #0
-                BRL     _ldouble_store_L92
+                BRA     _ldouble_store_L92
 _ldouble_store_L91
                 LDA     #1
 _ldouble_store_L92
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L89
+                BNE     _ldouble_store_L89
                 LDA     81,S   ; fccstk d=0 b=81
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_store_L89
+                BNE     _ldouble_store_L89
                 LDA     #0
-                BRL     _ldouble_store_L90
+                BRA     _ldouble_store_L90
 _ldouble_store_L89
                 LDA     #1
 _ldouble_store_L90
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_store_L88
+                BEQ     _ldouble_store_L88
                 LDA     #26
                 TAY
                 TSC

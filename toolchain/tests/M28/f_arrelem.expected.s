@@ -88,8 +88,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L0
+                BEQ     _f_arrelem_L0
                 LDA     #1
                 TAY
                 TSC
@@ -126,8 +125,7 @@ _f_arrelem_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L1
+                BEQ     _f_arrelem_L1
                 LDA     #2
                 TAY
                 TSC
@@ -231,8 +229,7 @@ _f_arrelem_L1
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _f_arrelem_L2
+                BEQ     _f_arrelem_L2
                 LDA     #3
                 TAY
                 TSC
@@ -289,8 +286,7 @@ _f_arrelem_L2
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _f_arrelem_L3
+                BEQ     _f_arrelem_L3
                 LDA     #4
                 TAY
                 TSC
@@ -328,8 +324,7 @@ _f_arrelem_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_arrelem_L4
+                BEQ     _f_arrelem_L4
                 LDA     #5
                 TAY
                 TSC
@@ -352,8 +347,7 @@ _f_arrelem_L4
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _f_arrelem_L5
+                BEQ     _f_arrelem_L5
                 LDA     #6
                 TAY
                 TSC

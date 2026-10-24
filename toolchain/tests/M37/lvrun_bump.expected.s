@@ -89,50 +89,43 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _lvrun_bump_L5
+                BNE     _lvrun_bump_L5
                 LDA     _lvrun_bump_obj+8
                 TAX
                 TXA
                 CMP     #21
-                BEQ     *+5
-                BRL     _lvrun_bump_L5
+                BNE     _lvrun_bump_L5
                 LDA     #1
-                BRL     _lvrun_bump_L6
+                BRA     _lvrun_bump_L6
 _lvrun_bump_L5
                 LDA     #0
 _lvrun_bump_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L3
+                BEQ     _lvrun_bump_L3
                 LDA     _lvrun_bump_obj+6
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _lvrun_bump_L3
+                BNE     _lvrun_bump_L3
                 LDA     #1
-                BRL     _lvrun_bump_L4
+                BRA     _lvrun_bump_L4
 _lvrun_bump_L3
                 LDA     #0
 _lvrun_bump_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L1
+                BEQ     _lvrun_bump_L1
                 LDA     _lvrun_bump_obj+10
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _lvrun_bump_L1
+                BNE     _lvrun_bump_L1
                 LDA     #1
-                BRL     _lvrun_bump_L2
+                BRA     _lvrun_bump_L2
 _lvrun_bump_L1
                 LDA     #0
 _lvrun_bump_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L0
+                BEQ     _lvrun_bump_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -234,53 +227,46 @@ _lvrun_bump_L0
                 TAX
                 TXA
                 CMP     #98
-                BEQ     *+5
-                BRL     _lvrun_bump_L12
+                BNE     _lvrun_bump_L12
                 LDA     _lvrun_bump_obj+3
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _lvrun_bump_L12
+                BNE     _lvrun_bump_L12
                 LDA     #1
-                BRL     _lvrun_bump_L13
+                BRA     _lvrun_bump_L13
 _lvrun_bump_L12
                 LDA     #0
 _lvrun_bump_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L10
+                BEQ     _lvrun_bump_L10
                 LDA     _lvrun_bump_obj+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _lvrun_bump_L10
+                BNE     _lvrun_bump_L10
                 LDA     #1
-                BRL     _lvrun_bump_L11
+                BRA     _lvrun_bump_L11
 _lvrun_bump_L10
                 LDA     #0
 _lvrun_bump_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L8
+                BEQ     _lvrun_bump_L8
                 LDA     _lvrun_bump_obj+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _lvrun_bump_L8
+                BNE     _lvrun_bump_L8
                 LDA     #1
-                BRL     _lvrun_bump_L9
+                BRA     _lvrun_bump_L9
 _lvrun_bump_L8
                 LDA     #0
 _lvrun_bump_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L7
+                BEQ     _lvrun_bump_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -384,8 +370,7 @@ _lvrun_bump_L7
                 TAX
                 TXA
                 CMP     #200
-                BEQ     *+5
-                BRL     _lvrun_bump_L19
+                BNE     _lvrun_bump_L19
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -410,16 +395,14 @@ _lvrun_bump_L7
                 TAX
                 TXA
                 CMP     #201
-                BEQ     *+5
-                BRL     _lvrun_bump_L19
+                BNE     _lvrun_bump_L19
                 LDA     #1
-                BRL     _lvrun_bump_L20
+                BRA     _lvrun_bump_L20
 _lvrun_bump_L19
                 LDA     #0
 _lvrun_bump_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L17
+                BEQ     _lvrun_bump_L17
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -444,16 +427,14 @@ _lvrun_bump_L20
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _lvrun_bump_L17
+                BNE     _lvrun_bump_L17
                 LDA     #1
-                BRL     _lvrun_bump_L18
+                BRA     _lvrun_bump_L18
 _lvrun_bump_L17
                 LDA     #0
 _lvrun_bump_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L15
+                BEQ     _lvrun_bump_L15
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -478,16 +459,14 @@ _lvrun_bump_L18
                 TAX
                 TXA
                 CMP     #300
-                BEQ     *+5
-                BRL     _lvrun_bump_L15
+                BNE     _lvrun_bump_L15
                 LDA     #1
-                BRL     _lvrun_bump_L16
+                BRA     _lvrun_bump_L16
 _lvrun_bump_L15
                 LDA     #0
 _lvrun_bump_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L14
+                BEQ     _lvrun_bump_L14
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -531,50 +510,43 @@ _lvrun_bump_L14
                 TAX
                 TXA
                 CMP     #40
-                BEQ     *+5
-                BRL     _lvrun_bump_L26
+                BNE     _lvrun_bump_L26
                 LDA     _lvrun_bump_obj+18
                 TAX
                 TXA
                 CMP     #41
-                BEQ     *+5
-                BRL     _lvrun_bump_L26
+                BNE     _lvrun_bump_L26
                 LDA     #1
-                BRL     _lvrun_bump_L27
+                BRA     _lvrun_bump_L27
 _lvrun_bump_L26
                 LDA     #0
 _lvrun_bump_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L24
+                BEQ     _lvrun_bump_L24
                 LDA     _lvrun_bump_obj+20
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _lvrun_bump_L24
+                BNE     _lvrun_bump_L24
                 LDA     #1
-                BRL     _lvrun_bump_L25
+                BRA     _lvrun_bump_L25
 _lvrun_bump_L24
                 LDA     #0
 _lvrun_bump_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L22
+                BEQ     _lvrun_bump_L22
                 LDA     _lvrun_bump_obj+0
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _lvrun_bump_L22
+                BNE     _lvrun_bump_L22
                 LDA     #1
-                BRL     _lvrun_bump_L23
+                BRA     _lvrun_bump_L23
 _lvrun_bump_L22
                 LDA     #0
 _lvrun_bump_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L21
+                BEQ     _lvrun_bump_L21
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -711,8 +683,7 @@ _lvrun_bump_L21
                 TAX
                 TXA
                 CMP     #60
-                BEQ     *+5
-                BRL     _lvrun_bump_L33
+                BNE     _lvrun_bump_L33
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -746,16 +717,14 @@ _lvrun_bump_L21
                 TAX
                 TXA
                 CMP     #59
-                BEQ     *+5
-                BRL     _lvrun_bump_L33
+                BNE     _lvrun_bump_L33
                 LDA     #1
-                BRL     _lvrun_bump_L34
+                BRA     _lvrun_bump_L34
 _lvrun_bump_L33
                 LDA     #0
 _lvrun_bump_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L31
+                BEQ     _lvrun_bump_L31
                 LDA     #2
                 STA     _fcc_tmp_b
                 ASL
@@ -789,16 +758,14 @@ _lvrun_bump_L34
                 TAX
                 TXA
                 CMP     #70
-                BEQ     *+5
-                BRL     _lvrun_bump_L31
+                BNE     _lvrun_bump_L31
                 LDA     #1
-                BRL     _lvrun_bump_L32
+                BRA     _lvrun_bump_L32
 _lvrun_bump_L31
                 LDA     #0
 _lvrun_bump_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L29
+                BEQ     _lvrun_bump_L29
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -832,16 +799,14 @@ _lvrun_bump_L32
                 TAX
                 TXA
                 CMP     #80
-                BEQ     *+5
-                BRL     _lvrun_bump_L29
+                BNE     _lvrun_bump_L29
                 LDA     #1
-                BRL     _lvrun_bump_L30
+                BRA     _lvrun_bump_L30
 _lvrun_bump_L29
                 LDA     #0
 _lvrun_bump_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L28
+                BEQ     _lvrun_bump_L28
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -917,8 +882,7 @@ _lvrun_bump_L28
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _lvrun_bump_L36
+                BNE     _lvrun_bump_L36
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -950,16 +914,14 @@ _lvrun_bump_L28
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BEQ     *+5
-                BRL     _lvrun_bump_L36
+                BNE     _lvrun_bump_L36
                 LDA     #1
-                BRL     _lvrun_bump_L37
+                BRA     _lvrun_bump_L37
 _lvrun_bump_L36
                 LDA     #0
 _lvrun_bump_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L35
+                BEQ     _lvrun_bump_L35
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -973,22 +935,19 @@ _lvrun_bump_L35
                 TAX
                 TXA
                 CMP     #29
-                BEQ     *+5
-                BRL     _lvrun_bump_L39
+                BNE     _lvrun_bump_L39
                 LDA     _lvrun_bump_obj+8
                 TAX
                 TXA
                 CMP     #21
-                BEQ     *+5
-                BRL     _lvrun_bump_L39
+                BNE     _lvrun_bump_L39
                 LDA     #1
-                BRL     _lvrun_bump_L40
+                BRA     _lvrun_bump_L40
 _lvrun_bump_L39
                 LDA     #0
 _lvrun_bump_L40
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L38
+                BEQ     _lvrun_bump_L38
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1026,22 +985,19 @@ _lvrun_bump_L38
                 TAX
                 TXA
                 CMP     #51
-                BEQ     *+5
-                BRL     _lvrun_bump_L42
+                BNE     _lvrun_bump_L42
                 LDA     _lvrun_bump_obj+18
                 TAX
                 TXA
                 CMP     #41
-                BEQ     *+5
-                BRL     _lvrun_bump_L42
+                BNE     _lvrun_bump_L42
                 LDA     #1
-                BRL     _lvrun_bump_L43
+                BRA     _lvrun_bump_L43
 _lvrun_bump_L42
                 LDA     #0
 _lvrun_bump_L43
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L41
+                BEQ     _lvrun_bump_L41
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1211,22 +1167,19 @@ _lvrun_bump_L41
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _lvrun_bump_L51
+                BNE     _lvrun_bump_L51
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #122
-                BEQ     *+5
-                BRL     _lvrun_bump_L51
+                BNE     _lvrun_bump_L51
                 LDA     #1
-                BRL     _lvrun_bump_L52
+                BRA     _lvrun_bump_L52
 _lvrun_bump_L51
                 LDA     #0
 _lvrun_bump_L52
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L49
+                BEQ     _lvrun_bump_L49
                 LDA     #2
                 TAX
                 LDA:    _lvrun_bump_buf,X
@@ -1239,16 +1192,14 @@ _lvrun_bump_L52
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _lvrun_bump_L49
+                BNE     _lvrun_bump_L49
                 LDA     #1
-                BRL     _lvrun_bump_L50
+                BRA     _lvrun_bump_L50
 _lvrun_bump_L49
                 LDA     #0
 _lvrun_bump_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L47
+                BEQ     _lvrun_bump_L47
                 LDA     #0
                 TAX
                 LDA:    _lvrun_bump_buf,X
@@ -1256,16 +1207,14 @@ _lvrun_bump_L50
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _lvrun_bump_L47
+                BNE     _lvrun_bump_L47
                 LDA     #1
-                BRL     _lvrun_bump_L48
+                BRA     _lvrun_bump_L48
 _lvrun_bump_L47
                 LDA     #0
 _lvrun_bump_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L45
+                BEQ     _lvrun_bump_L45
                 LDA     _lvrun_bump_obj+16
                 STA     _fcc_fpr0+2
                 LDA     _lvrun_bump_obj+14
@@ -1283,32 +1232,28 @@ _lvrun_bump_L48
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _lvrun_bump_L53
+                BNE     _lvrun_bump_L53
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _lvrun_bump_L53
+                BNE     _lvrun_bump_L53
                 LDA     #1
-                BRL     _lvrun_bump_L54
+                BRA     _lvrun_bump_L54
 _lvrun_bump_L53
                 LDA     #0
 _lvrun_bump_L54
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L45
+                BEQ     _lvrun_bump_L45
                 LDA     #1
-                BRL     _lvrun_bump_L46
+                BRA     _lvrun_bump_L46
 _lvrun_bump_L45
                 LDA     #0
 _lvrun_bump_L46
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L44
+                BEQ     _lvrun_bump_L44
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1386,8 +1331,7 @@ _lvrun_bump_L44
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _lvrun_bump_L56
+                BNE     _lvrun_bump_L56
                 LDA     #1
                 TAX
                 LDA:    _lvrun_bump_buf,X
@@ -1395,16 +1339,14 @@ _lvrun_bump_L44
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _lvrun_bump_L56
+                BNE     _lvrun_bump_L56
                 LDA     #1
-                BRL     _lvrun_bump_L57
+                BRA     _lvrun_bump_L57
 _lvrun_bump_L56
                 LDA     #0
 _lvrun_bump_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L55
+                BEQ     _lvrun_bump_L55
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1446,36 +1388,31 @@ _lvrun_bump_L55
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _lvrun_bump_L61
+                BNE     _lvrun_bump_L61
                 LDA     _lvrun_bump_obj+12
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _lvrun_bump_L61
+                BNE     _lvrun_bump_L61
                 LDA     #1
-                BRL     _lvrun_bump_L62
+                BRA     _lvrun_bump_L62
 _lvrun_bump_L61
                 LDA     #0
 _lvrun_bump_L62
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L59
+                BEQ     _lvrun_bump_L59
                 LDA     _lvrun_bump_obj+10
                 TAX
                 TXA
                 CMP     #29
-                BEQ     *+5
-                BRL     _lvrun_bump_L59
+                BNE     _lvrun_bump_L59
                 LDA     #1
-                BRL     _lvrun_bump_L60
+                BRA     _lvrun_bump_L60
 _lvrun_bump_L59
                 LDA     #0
 _lvrun_bump_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L58
+                BEQ     _lvrun_bump_L58
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1571,8 +1508,7 @@ _lvrun_bump_L58
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _lvrun_bump_L68
+                BNE     _lvrun_bump_L68
                 LDA     #1
                 ASL
                 INC
@@ -1589,16 +1525,14 @@ _lvrun_bump_L58
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _lvrun_bump_L68
+                BNE     _lvrun_bump_L68
                 LDA     #1
-                BRL     _lvrun_bump_L69
+                BRA     _lvrun_bump_L69
 _lvrun_bump_L68
                 LDA     #0
 _lvrun_bump_L69
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L66
+                BEQ     _lvrun_bump_L66
                 LDA     #0
                 ASL
                 CLC
@@ -1616,16 +1550,14 @@ _lvrun_bump_L69
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _lvrun_bump_L66
+                BNE     _lvrun_bump_L66
                 LDA     #1
-                BRL     _lvrun_bump_L67
+                BRA     _lvrun_bump_L67
 _lvrun_bump_L66
                 LDA     #0
 _lvrun_bump_L67
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L64
+                BEQ     _lvrun_bump_L64
                 LDA     #1
                 ASL
                 INC
@@ -1642,16 +1574,14 @@ _lvrun_bump_L67
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _lvrun_bump_L64
+                BNE     _lvrun_bump_L64
                 LDA     #1
-                BRL     _lvrun_bump_L65
+                BRA     _lvrun_bump_L65
 _lvrun_bump_L64
                 LDA     #0
 _lvrun_bump_L65
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L63
+                BEQ     _lvrun_bump_L63
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1689,8 +1619,7 @@ _lvrun_bump_L63
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _lvrun_bump_L75
+                BNE     _lvrun_bump_L75
                 LDA     #1
                 ASL
                 INC
@@ -1707,16 +1636,14 @@ _lvrun_bump_L63
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _lvrun_bump_L75
+                BNE     _lvrun_bump_L75
                 LDA     #1
-                BRL     _lvrun_bump_L76
+                BRA     _lvrun_bump_L76
 _lvrun_bump_L75
                 LDA     #0
 _lvrun_bump_L76
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L73
+                BEQ     _lvrun_bump_L73
                 LDA     #0
                 ASL
                 CLC
@@ -1732,16 +1659,14 @@ _lvrun_bump_L76
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _lvrun_bump_L73
+                BNE     _lvrun_bump_L73
                 LDA     #1
-                BRL     _lvrun_bump_L74
+                BRA     _lvrun_bump_L74
 _lvrun_bump_L73
                 LDA     #0
 _lvrun_bump_L74
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L71
+                BEQ     _lvrun_bump_L71
                 LDA     #1
                 ASL
                 INC
@@ -1758,16 +1683,14 @@ _lvrun_bump_L74
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _lvrun_bump_L71
+                BNE     _lvrun_bump_L71
                 LDA     #1
-                BRL     _lvrun_bump_L72
+                BRA     _lvrun_bump_L72
 _lvrun_bump_L71
                 LDA     #0
 _lvrun_bump_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L70
+                BEQ     _lvrun_bump_L70
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -1796,8 +1719,7 @@ _lvrun_bump_L70
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _lvrun_bump_L78
+                BNE     _lvrun_bump_L78
                 LDA     #0
                 ASL
                 CLC
@@ -1813,16 +1735,14 @@ _lvrun_bump_L70
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _lvrun_bump_L78
+                BNE     _lvrun_bump_L78
                 LDA     #1
-                BRL     _lvrun_bump_L79
+                BRA     _lvrun_bump_L79
 _lvrun_bump_L78
                 LDA     #0
 _lvrun_bump_L79
                 CMP     #0
-                BNE     *+5
-                BRL     _lvrun_bump_L77
+                BEQ     _lvrun_bump_L77
                 LDA     _fcc_img0
                 TAX
                 TXA

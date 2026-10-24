@@ -99,8 +99,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _drefpreinc_L0
+                BEQ     _drefpreinc_L0
                 LDA     #1
                 TAY
                 TSC
@@ -133,24 +132,21 @@ _drefpreinc_L0
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _drefpreinc_L2
+                BNE     _drefpreinc_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _drefpreinc_L2
+                BNE     _drefpreinc_L2
                 LDA     #0
-                BRL     _drefpreinc_L3
+                BRA     _drefpreinc_L3
 _drefpreinc_L2
                 LDA     #1
 _drefpreinc_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _drefpreinc_L1
+                BEQ     _drefpreinc_L1
                 LDA     #2
                 TAY
                 TSC
@@ -209,8 +205,7 @@ _drefpreinc_L1
                 TAX
                 TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _drefpreinc_L4
+                BEQ     _drefpreinc_L4
                 LDA     #3
                 TAY
                 TSC
@@ -243,24 +238,21 @@ _drefpreinc_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _drefpreinc_L6
+                BNE     _drefpreinc_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _drefpreinc_L6
+                BNE     _drefpreinc_L6
                 LDA     #0
-                BRL     _drefpreinc_L7
+                BRA     _drefpreinc_L7
 _drefpreinc_L6
                 LDA     #1
 _drefpreinc_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _drefpreinc_L5
+                BEQ     _drefpreinc_L5
                 LDA     #4
                 TAY
                 TSC

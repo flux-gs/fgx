@@ -59,8 +59,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _preincparen_L0
+                BNE     _preincparen_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -79,8 +78,7 @@ _preincparen_L0
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _preincparen_L1
+                BNE     _preincparen_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -137,8 +135,7 @@ _preincparen_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _preincparen_L2
+                BEQ     _preincparen_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -157,22 +154,19 @@ _preincparen_L2
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _preincparen_L4
+                BNE     _preincparen_L4
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _preincparen_L4
+                BNE     _preincparen_L4
                 LDA     #1
-                BRL     _preincparen_L5
+                BRA     _preincparen_L5
 _preincparen_L4
                 LDA     #0
 _preincparen_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _preincparen_L3
+                BEQ     _preincparen_L3
                 LDA     _fcc_img0
                 TAX
                 TXA

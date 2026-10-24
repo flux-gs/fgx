@@ -172,22 +172,19 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _p33_localagg_L1
+                BNE     _p33_localagg_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _p33_localagg_L1
+                BNE     _p33_localagg_L1
                 LDA     #0
-                BRL     _p33_localagg_L2
+                BRA     _p33_localagg_L2
 _p33_localagg_L1
                 LDA     #1
 _p33_localagg_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_localagg_L0
+                BEQ     _p33_localagg_L0
                 LDA     #1
                 TAY
                 TSC
@@ -221,8 +218,7 @@ _p33_localagg_L0
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _p33_localagg_L3
+                BEQ     _p33_localagg_L3
                 LDA     #2
                 TAY
                 TSC
@@ -252,8 +248,7 @@ _p33_localagg_L4
                 BVC     _p33_localagg_L7
                 EOR     #$8000
 _p33_localagg_L7
-                BMI     *+5
-                BRL     _p33_localagg_L6
+                BPL     _p33_localagg_L6
                 LDA     #0
                 STA     _fcc_img0
 _p33_localagg_L8
@@ -268,8 +263,7 @@ _p33_localagg_L8
                 BVC     _p33_localagg_L11
                 EOR     #$8000
 _p33_localagg_L11
-                BMI     *+5
-                BRL     _p33_localagg_L10
+                BPL     _p33_localagg_L10
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -317,11 +311,11 @@ _p33_localagg_L11
                 PLA
 _p33_localagg_L9
                 INC     _fcc_img0
-                BRL     _p33_localagg_L8
+                BRA     _p33_localagg_L8
 _p33_localagg_L10
 _p33_localagg_L5
                 INC     _fcc_img1
-                BRL     _p33_localagg_L4
+                BRA     _p33_localagg_L4
 _p33_localagg_L6
                 LDA     _fcc_img0
                 STA     7,S   ; fccstk d=0 b=7
@@ -353,8 +347,7 @@ _p33_localagg_L6
                 PLA
                 LDA     [_fcc_ptr]
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_localagg_L12
+                BEQ     _p33_localagg_L12
                 LDA     #3
                 TAY
                 TSC
@@ -394,8 +387,7 @@ _p33_localagg_L12
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _p33_localagg_L13
+                BEQ     _p33_localagg_L13
                 LDA     #4
                 TAY
                 TSC
@@ -435,8 +427,7 @@ _p33_localagg_L13
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _p33_localagg_L14
+                BEQ     _p33_localagg_L14
                 LDA     #5
                 TAY
                 TSC

@@ -54,8 +54,7 @@ _arrmemberdecay_L0
                 BVC     _arrmemberdecay_L3
                 EOR     #$8000
 _arrmemberdecay_L3
-                BMI     *+5
-                BRL     _arrmemberdecay_L2
+                BPL     _arrmemberdecay_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
@@ -118,7 +117,7 @@ _arrmemberdecay_L3
                 TYA
 _arrmemberdecay_L1
                 INC     _fcc_img0
-                BRL     _arrmemberdecay_L0
+                BRA     _arrmemberdecay_L0
 _arrmemberdecay_L2
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
@@ -361,8 +360,7 @@ _arrmemberdecay_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L8
+                BEQ     _arrmemberdecay_L8
                 LDA     #1
                 TAY
                 TSC
@@ -412,8 +410,7 @@ _arrmemberdecay_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L9
+                BEQ     _arrmemberdecay_L9
                 LDA     #2
                 TAY
                 TSC
@@ -478,8 +475,7 @@ _arrmemberdecay_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L10
+                BEQ     _arrmemberdecay_L10
                 LDA     #3
                 TAY
                 TSC
@@ -558,8 +554,7 @@ _arrmemberdecay_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L11
+                BEQ     _arrmemberdecay_L11
                 LDA     #4
                 TAY
                 TSC
@@ -605,8 +600,7 @@ _arrmemberdecay_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L12
+                BEQ     _arrmemberdecay_L12
                 LDA     #5
                 TAY
                 TSC
@@ -652,8 +646,7 @@ _arrmemberdecay_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L13
+                BEQ     _arrmemberdecay_L13
                 LDA     #6
                 TAY
                 TSC
@@ -701,24 +694,21 @@ _arrmemberdecay_L13
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arrmemberdecay_L15
+                BNE     _arrmemberdecay_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arrmemberdecay_L15
+                BNE     _arrmemberdecay_L15
                 LDA     #0
-                BRL     _arrmemberdecay_L16
+                BRA     _arrmemberdecay_L16
 _arrmemberdecay_L15
                 LDA     #1
 _arrmemberdecay_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L14
+                BEQ     _arrmemberdecay_L14
                 LDA     #7
                 TAY
                 TSC
@@ -754,8 +744,7 @@ _arrmemberdecay_L14
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _arrmemberdecay_L18
+                BNE     _arrmemberdecay_L18
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_ptr+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -770,16 +759,14 @@ _arrmemberdecay_L14
                 TAX
                 TXA
                 CMP     #40
-                BEQ     *+5
-                BRL     _arrmemberdecay_L18
+                BNE     _arrmemberdecay_L18
                 LDA     #0
-                BRL     _arrmemberdecay_L19
+                BRA     _arrmemberdecay_L19
 _arrmemberdecay_L18
                 LDA     #1
 _arrmemberdecay_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L17
+                BEQ     _arrmemberdecay_L17
                 LDA     #8
                 TAY
                 TSC
@@ -815,8 +802,7 @@ _arrmemberdecay_L17
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _arrmemberdecay_L21
+                BNE     _arrmemberdecay_L21
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -831,16 +817,14 @@ _arrmemberdecay_L17
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _arrmemberdecay_L21
+                BNE     _arrmemberdecay_L21
                 LDA     #0
-                BRL     _arrmemberdecay_L22
+                BRA     _arrmemberdecay_L22
 _arrmemberdecay_L21
                 LDA     #1
 _arrmemberdecay_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberdecay_L20
+                BEQ     _arrmemberdecay_L20
                 LDA     #9
                 TAY
                 TSC
@@ -867,8 +851,7 @@ _arrmemberdecay_L20
                 TAX
                 TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _arrmemberdecay_L23
+                BEQ     _arrmemberdecay_L23
                 LDA     #10
                 TAY
                 TSC
@@ -895,8 +878,7 @@ _arrmemberdecay_L23
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _arrmemberdecay_L24
+                BEQ     _arrmemberdecay_L24
                 LDA     #11
                 TAY
                 TSC
@@ -912,8 +894,7 @@ _arrmemberdecay_L24
                 TAX
                 TXA
                 CMP     #23130
-                BNE     *+5
-                BRL     _arrmemberdecay_L25
+                BEQ     _arrmemberdecay_L25
                 LDA     #12
                 TAY
                 TSC

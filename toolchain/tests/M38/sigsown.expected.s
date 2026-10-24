@@ -159,8 +159,7 @@ fill_stkok        TCS
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _sigsown_L3
+                BNE     _sigsown_L3
                 DO      12+fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -193,16 +192,14 @@ fill_stkok        TCS
                 TAX
                 TXA
                 CMP     #98
-                BEQ     *+5
-                BRL     _sigsown_L3
+                BNE     _sigsown_L3
                 LDA     #1
-                BRL     _sigsown_L4
+                BRA     _sigsown_L4
 _sigsown_L3
                 LDA     #0
 _sigsown_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsown_L1
+                BEQ     _sigsown_L1
                 DO      16+fill_FRAMESIZE/256
                 TSC
                 CLC
@@ -235,16 +232,14 @@ _sigsown_L4
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _sigsown_L1
+                BNE     _sigsown_L1
                 LDA     #1
-                BRL     _sigsown_L2
+                BRA     _sigsown_L2
 _sigsown_L1
                 LDA     #0
 _sigsown_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsown_L0
+                BEQ     _sigsown_L0
                 LDA     #42
                 TAY
                 TSC

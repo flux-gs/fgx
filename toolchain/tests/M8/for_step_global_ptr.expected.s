@@ -131,8 +131,7 @@ _for_step_global_ptr_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _for_step_global_ptr_L2
+                BEQ     _for_step_global_ptr_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -154,7 +153,7 @@ _for_step_global_ptr_L1
                 LDA     _fcc_ptr+2
                 STA     Cursor+2
                 TYA
-                BRL     _for_step_global_ptr_L0
+                BRA     _for_step_global_ptr_L0
 _for_step_global_ptr_L2
                 LDA     _fcc_img0
                 TAY

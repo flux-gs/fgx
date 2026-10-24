@@ -36,8 +36,7 @@ fib_stkok        TCS
                 BVC     _p33_recurse_L1
                 EOR     #$8000
 _p33_recurse_L1
-                BMI     *+5
-                BRL     _p33_recurse_L0
+                BPL     _p33_recurse_L0
                 DO      6+fib_FRAMESIZE/256
                 TSC
                 CLC
@@ -146,8 +145,7 @@ fact_stkok        TCS
                 BVC     _p33_recurse_L3
                 EOR     #$8000
 _p33_recurse_L3
-                BPL     *+5
-                BRL     _p33_recurse_L2
+                BMI     _p33_recurse_L2
                 LDA     #1
                 TAY
                 TSC
@@ -228,8 +226,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #55
-                BNE     *+5
-                BRL     _p33_recurse_L4
+                BEQ     _p33_recurse_L4
                 LDA     #1
                 TAY
                 TSC
@@ -250,8 +247,7 @@ _p33_recurse_L4
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _p33_recurse_L5
+                BEQ     _p33_recurse_L5
                 LDA     #2
                 TAY
                 TSC
@@ -272,8 +268,7 @@ _p33_recurse_L5
                 TAX
                 TXA
                 CMP     #610
-                BNE     *+5
-                BRL     _p33_recurse_L6
+                BEQ     _p33_recurse_L6
                 LDA     #3
                 TAY
                 TSC

@@ -426,15 +426,18 @@ def check_fn(fn, equs, path):
                             err(lineno, f"annotation b+d={want} != operand {val} "
                                         f"(displacement format bug)")
 
-        if mnem in UNCOND and not operand.startswith("*"):
-            dead = True
         # A PC-relative forward jump (`BRA *+5`) skips one instruction that
         # another PC-relative branch lands on -- fcc's boolean idiom, `BNE *+7
         # / LDA #0 / BRA *+5 / LDA #1` -- so the code after it is reached, at
         # this depth.  Marking it dead lost every push until the next label:
         # a long double compare followed by the pushes of the next operation
         # (ecvt.c's cvt) read as a pull below the frame.
-        elif mnem in COND_BR:
+        if mnem in UNCOND and not operand.startswith("*"):
+            dead = True
+        # A branch carries its depth to its label, an unconditional one as
+        # much as a conditional one: after `BRA L' the walk is dead, and L
+        # takes its depth from here.
+        if mnem in COND_BR or mnem in ("BRA", "BRL"):
             tgt = operand.strip()
             if tgt.startswith("*"):
                 pass                     # PC-relative skip (`*+5`), not a label

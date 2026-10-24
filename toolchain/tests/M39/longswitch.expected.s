@@ -43,50 +43,40 @@ _longswitch_pick_stkok        TCS
                 STA     _fcc_long_b_lo
                 LDA     _fcc_long_hi
                 CMP     #17229
-                BEQ     *+5
-                BRL     _longswitch_L7
+                BNE     _longswitch_L7
                 LDA     _fcc_long_b_lo
                 CMP     #25965
-                BNE     *+5
-                BRL     _longswitch_L1
+                BEQ     _longswitch_L1
 _longswitch_L7
                 LDA     _fcc_long_hi
                 CMP     #21837
-                BEQ     *+5
-                BRL     _longswitch_L8
+                BNE     _longswitch_L8
                 LDA     _fcc_long_b_lo
                 CMP     #25965
-                BNE     *+5
-                BRL     _longswitch_L2
+                BEQ     _longswitch_L2
 _longswitch_L8
                 LDA     _fcc_long_hi
                 CMP     #21364
-                BEQ     *+5
-                BRL     _longswitch_L9
+                BNE     _longswitch_L9
                 LDA     _fcc_long_b_lo
                 CMP     #27507
-                BNE     *+5
-                BRL     _longswitch_L3
+                BEQ     _longswitch_L3
 _longswitch_L9
                 LDA     _fcc_long_hi
                 CMP     #0
-                BEQ     *+5
-                BRL     _longswitch_L10
+                BNE     _longswitch_L10
                 LDA     _fcc_long_b_lo
                 CMP     #5
-                BNE     *+5
-                BRL     _longswitch_L4
+                BEQ     _longswitch_L4
 _longswitch_L10
                 LDA     _fcc_long_hi
                 CMP     #65535
-                BEQ     *+5
-                BRL     _longswitch_L11
+                BNE     _longswitch_L11
                 LDA     _fcc_long_b_lo
                 CMP     #65534
-                BNE     *+5
-                BRL     _longswitch_L5
+                BEQ     _longswitch_L5
 _longswitch_L11
-                BRL     _longswitch_L6
+                BRA     _longswitch_L6
 _longswitch_L1
                 LDA     #1
                 TAY
@@ -289,8 +279,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _longswitch_L12
+                BEQ     _longswitch_L12
                 LDA     #1
                 TAY
                 TSC
@@ -395,8 +384,7 @@ _longswitch_L12
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _longswitch_L13
+                BEQ     _longswitch_L13
                 LDA     #2
                 TAY
                 TSC
@@ -501,8 +489,7 @@ _longswitch_L13
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _longswitch_L14
+                BEQ     _longswitch_L14
                 LDA     #3
                 TAY
                 TSC
@@ -531,8 +518,7 @@ _longswitch_L14
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _longswitch_L15
+                BEQ     _longswitch_L15
                 LDA     #4
                 TAY
                 TSC
@@ -562,8 +548,7 @@ _longswitch_L15
                 TAX
                 TXA
                 CMP     #16
-                BNE     *+5
-                BRL     _longswitch_L16
+                BEQ     _longswitch_L16
                 LDA     #5
                 TAY
                 TSC
@@ -668,8 +653,7 @@ _longswitch_L16
                 TAX
                 TXA
                 CMP     #32
-                BNE     *+5
-                BRL     _longswitch_L17
+                BEQ     _longswitch_L17
                 LDA     #6
                 TAY
                 TSC
@@ -699,8 +683,7 @@ _longswitch_L17
                 TAX
                 TXA
                 CMP     #32
-                BNE     *+5
-                BRL     _longswitch_L18
+                BEQ     _longswitch_L18
                 LDA     #7
                 TAY
                 TSC

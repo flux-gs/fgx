@@ -34,9 +34,8 @@ _dowhile_once_L0
 _dowhile_once_L1
                 LDA     _fcc_img0
                 CMP     #0
-                BMI     *+5
-                BRL     _dowhile_once_L2
-                BRL     _dowhile_once_L0
+                BPL     _dowhile_once_L2
+                BRA     _dowhile_once_L0
 _dowhile_once_L2
                 LDA     _fcc_img0
                 TAY

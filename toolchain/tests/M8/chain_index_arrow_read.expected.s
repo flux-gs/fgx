@@ -312,15 +312,14 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _chain_index_arrow_read_L0
+                BCS     _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CLC
                 ADC     #0
                 STA     _fcc_img0
-                BRL     _chain_index_arrow_read_L1
+                BRA     _chain_index_arrow_read_L1
 _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
@@ -495,15 +494,14 @@ _chain_index_arrow_read_L1
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _chain_index_arrow_read_L2
+                BCS     _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CLC
                 ADC     #0
                 STA     _fcc_img0
-                BRL     _chain_index_arrow_read_L3
+                BRA     _chain_index_arrow_read_L3
 _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX

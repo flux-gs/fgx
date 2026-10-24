@@ -39,8 +39,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L0
+                BEQ     _long_truth_L0
                 LDA     #1
                 TAY
                 TSC
@@ -72,8 +71,7 @@ _long_truth_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L1
+                BEQ     _long_truth_L1
                 LDA     #2
                 TAY
                 TSC
@@ -96,8 +94,7 @@ _long_truth_L3
                 LDA     #1
 _long_truth_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L2
+                BEQ     _long_truth_L2
                 LDA     #3
                 TAY
                 TSC
@@ -115,8 +112,7 @@ _long_truth_L2
                 STA     _fcc_long_hi
                 LDA     lt_hi
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L5
+                BEQ     _long_truth_L5
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
 _long_truth_L5
@@ -129,8 +125,7 @@ _long_truth_L7
                 LDA     #1
 _long_truth_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L6
+                BEQ     _long_truth_L6
                 LDA     #4
                 TAY
                 TSC
@@ -146,18 +141,16 @@ _long_truth_L6
                 STA     _fcc_long_hi
                 LDA     lt_hi
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L10
+                BEQ     _long_truth_L10
                 LDA     #1
-                BRL     _long_truth_L11
+                BRA     _long_truth_L11
 _long_truth_L10
                 LDA     #0
 _long_truth_L11
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L9
+                BEQ     _long_truth_L9
                 LDA     #5
                 TAY
                 TSC
@@ -173,16 +166,14 @@ _long_truth_L9
                 STA     _fcc_long_hi
                 LDA     lt_hi
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L13
+                BEQ     _long_truth_L13
                 LDA     lt_lo+2
                 STA     _fcc_long_hi
                 LDA     lt_lo
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L13
+                BEQ     _long_truth_L13
                 LDA     #1
-                BRL     _long_truth_L14
+                BRA     _long_truth_L14
 _long_truth_L13
                 LDA     #0
 _long_truth_L14
@@ -194,8 +185,7 @@ _long_truth_L15
                 LDA     #1
 _long_truth_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L12
+                BEQ     _long_truth_L12
                 LDA     #6
                 TAY
                 TSC
@@ -211,16 +201,14 @@ _long_truth_L12
                 STA     _fcc_long_hi
                 LDA     lt_hi
                 ORA     _fcc_long_hi
-                BEQ     *+5
-                BRL     _long_truth_L18
+                BNE     _long_truth_L18
                 LDA     lt_zero+2
                 STA     _fcc_long_hi
                 LDA     lt_zero
                 ORA     _fcc_long_hi
-                BEQ     *+5
-                BRL     _long_truth_L18
+                BNE     _long_truth_L18
                 LDA     #0
-                BRL     _long_truth_L19
+                BRA     _long_truth_L19
 _long_truth_L18
                 LDA     #1
 _long_truth_L19
@@ -232,8 +220,7 @@ _long_truth_L20
                 LDA     #1
 _long_truth_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L17
+                BEQ     _long_truth_L17
                 LDA     #7
                 TAY
                 TSC
@@ -249,8 +236,7 @@ _long_truth_L17
                 STA     _fcc_long_hi
                 LDA     lt_zero
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L22
+                BEQ     _long_truth_L22
                 LDA     #8
                 TAY
                 TSC
@@ -275,8 +261,7 @@ _long_truth_L24
                 LDA     #1
 _long_truth_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L23
+                BEQ     _long_truth_L23
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
 _long_truth_L23
@@ -289,8 +274,7 @@ _long_truth_L27
                 LDA     #1
 _long_truth_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L26
+                BEQ     _long_truth_L26
                 LDA     #9
                 TAY
                 TSC
@@ -306,16 +290,14 @@ _long_truth_L26
                 STA     _fcc_long_hi
                 LDA     lt_zero
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L30
+                BEQ     _long_truth_L30
                 LDA     #1
-                BRL     _long_truth_L31
+                BRA     _long_truth_L31
 _long_truth_L30
                 LDA     #0
 _long_truth_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L29
+                BEQ     _long_truth_L29
                 LDA     #10
                 TAY
                 TSC
@@ -331,22 +313,19 @@ _long_truth_L29
                 STA     _fcc_long_hi
                 LDA     lt_zero
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L33
+                BEQ     _long_truth_L33
                 LDA     lt_lo+2
                 STA     _fcc_long_hi
                 LDA     lt_lo
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L33
+                BEQ     _long_truth_L33
                 LDA     #1
-                BRL     _long_truth_L34
+                BRA     _long_truth_L34
 _long_truth_L33
                 LDA     #0
 _long_truth_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L32
+                BEQ     _long_truth_L32
                 LDA     #11
                 TAY
                 TSC
@@ -369,8 +348,7 @@ _long_truth_L36
                 LDA     #1
 _long_truth_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L35
+                BEQ     _long_truth_L35
                 LDA     #12
                 TAY
                 TSC
@@ -386,16 +364,14 @@ _long_truth_L35
                 STA     _fcc_long_hi
                 LDA     lt_lo
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L39
+                BEQ     _long_truth_L39
                 LDA     #0
-                BRL     _long_truth_L40
+                BRA     _long_truth_L40
 _long_truth_L39
                 LDA     #1
 _long_truth_L40
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L38
+                BEQ     _long_truth_L38
                 LDA     #13
                 TAY
                 TSC
@@ -427,8 +403,7 @@ _long_truth_L41
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L42
+                BEQ     _long_truth_L42
                 INC     _fcc_img0
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -438,15 +413,14 @@ _long_truth_L41
                 LDA     _fcc_long_hi
                 STA     7,S   ; fccstk d=0 b=7
                 TYA
-                BRL     _long_truth_L41
+                BRA     _long_truth_L41
 _long_truth_L42
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L43
+                BEQ     _long_truth_L43
                 LDA     #14
                 TAY
                 TSC
@@ -476,8 +450,7 @@ _long_truth_L44
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L46
+                BEQ     _long_truth_L46
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC
                 ADC     #1
@@ -491,14 +464,13 @@ _long_truth_L45
                 LDA     _fcc_long_hi
                 STA     7,S   ; fccstk d=0 b=7
                 TYA
-                BRL     _long_truth_L44
+                BRA     _long_truth_L44
 _long_truth_L46
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L47
+                BEQ     _long_truth_L47
                 LDA     #15
                 TAY
                 TSC
@@ -541,16 +513,14 @@ _long_truth_L49
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L50
-                BRL     _long_truth_L48
+                BEQ     _long_truth_L50
+                BRA     _long_truth_L48
 _long_truth_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L51
+                BEQ     _long_truth_L51
                 LDA     #16
                 TAY
                 TSC
@@ -580,8 +550,7 @@ _long_truth_L52
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L53
+                BEQ     _long_truth_L53
                 LDA     3,S   ; fccstk d=0 b=3
                 INC
                 STA     3,S   ; fccstk d=0 b=3
@@ -595,16 +564,14 @@ _long_truth_L52
                 BVC     _long_truth_L55
                 EOR     #$8000
 _long_truth_L55
-                BMI     *+5
-                BRL     _long_truth_L54
-                BRL     _long_truth_L53
+                BPL     _long_truth_L54
+                BRA     _long_truth_L53
 _long_truth_L54
-                BRL     _long_truth_L52
+                BRA     _long_truth_L52
 _long_truth_L53
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L56
+                BEQ     _long_truth_L56
                 LDA     #17
                 TAY
                 TSC
@@ -661,8 +628,7 @@ _long_truth_L56
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L57
+                BEQ     _long_truth_L57
                 LDA     #18
                 TAY
                 TSC
@@ -688,8 +654,7 @@ _long_truth_L57
                 ORA     _fcc_long_hi
                 STY     _fcc_tmp_b
                 ORA     _fcc_tmp_b
-                BNE     *+5
-                BRL     _long_truth_L58
+                BEQ     _long_truth_L58
                 LDA     #19
                 TAY
                 TSC
@@ -729,8 +694,7 @@ _long_truth_L62
                 LDA     #1
 _long_truth_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L59
+                BEQ     _long_truth_L59
                 LDA     #20
                 TAY
                 TSC
@@ -763,8 +727,7 @@ _long_truth_L65
                 LDA     #1
 _long_truth_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L64
+                BEQ     _long_truth_L64
                 LDA     #21
                 TAY
                 TSC
@@ -790,18 +753,16 @@ _long_truth_L64
                 ORA     _fcc_long_hi
                 STY     _fcc_tmp_b
                 ORA     _fcc_tmp_b
-                BNE     *+5
-                BRL     _long_truth_L68
+                BEQ     _long_truth_L68
                 LDA     #1
-                BRL     _long_truth_L69
+                BRA     _long_truth_L69
 _long_truth_L68
                 LDA     #0
 _long_truth_L69
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L67
+                BEQ     _long_truth_L67
                 LDA     #22
                 TAY
                 TSC
@@ -822,8 +783,7 @@ _long_truth_L71
                 LDA     #1
 _long_truth_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L70
+                BEQ     _long_truth_L70
                 LDA     #23
                 TAY
                 TSC
@@ -853,8 +813,7 @@ _long_truth_L70
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_truth_L73
+                BEQ     _long_truth_L73
                 LDA     #24
                 TAY
                 TSC
@@ -868,18 +827,16 @@ _long_truth_L70
 _long_truth_L73
                 FGX2_FARCALL lt_ret
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _long_truth_L75
+                BEQ     _long_truth_L75
                 LDA     #1
-                BRL     _long_truth_L76
+                BRA     _long_truth_L76
 _long_truth_L75
                 LDA     #0
 _long_truth_L76
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _long_truth_L74
+                BEQ     _long_truth_L74
                 LDA     #25
                 TAY
                 TSC

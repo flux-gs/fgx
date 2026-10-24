@@ -81,8 +81,7 @@ _dirops_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L2
+                BEQ     _dirops_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _dirops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _dirops_L2
+                BNE     _dirops_L2
                 LDA     #1
-                BRL     _dirops_L3
+                BRA     _dirops_L3
 _dirops_L2
                 LDA     #0
 _dirops_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L1
+                BEQ     _dirops_L1
                 INC     _fcc_img0
-                BRL     _dirops_L0
+                BRA     _dirops_L0
 _dirops_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -211,24 +208,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L5
+                BNE     _dirops_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L5
+                BNE     _dirops_L5
                 LDA     #1
-                BRL     _dirops_L6
+                BRA     _dirops_L6
 _dirops_L5
                 LDA     #0
 _dirops_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L4
+                BEQ     _dirops_L4
                 LDA     #1
                 TAY
                 TSC
@@ -267,18 +261,16 @@ _dirops_L4
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L8
+                BNE     _dirops_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L8
+                BNE     _dirops_L8
                 LDA     #0
-                BRL     _dirops_L9
+                BRA     _dirops_L9
 _dirops_L8
                 LDA     #1
 _dirops_L9
@@ -307,24 +299,21 @@ _dirops_L9
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L13
+                BNE     _dirops_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L13
+                BNE     _dirops_L13
                 LDA     #0
-                BRL     _dirops_L14
+                BRA     _dirops_L14
 _dirops_L13
                 LDA     #1
 _dirops_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L11
+                BEQ     _dirops_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -332,16 +321,14 @@ _dirops_L14
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _dirops_L11
+                BNE     _dirops_L11
                 LDA     #1
-                BRL     _dirops_L12
+                BRA     _dirops_L12
 _dirops_L11
                 LDA     #0
 _dirops_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L10
+                BEQ     _dirops_L10
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
@@ -387,18 +374,16 @@ _dirops_L15
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L17
+                BNE     _dirops_L17
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L17
+                BNE     _dirops_L17
                 LDA     #0
-                BRL     _dirops_L18
+                BRA     _dirops_L18
 _dirops_L17
                 LDA     #1
 _dirops_L18
@@ -421,8 +406,7 @@ _dirops_L18
                 BVC     _dirops_L22
                 EOR     #$8000
 _dirops_L22
-                BPL     *+5
-                BRL     _dirops_L20
+                BMI     _dirops_L20
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -439,16 +423,14 @@ _dirops_L22
                 BVC     _dirops_L23
                 EOR     #$8000
 _dirops_L23
-                BPL     *+5
-                BRL     _dirops_L20
+                BMI     _dirops_L20
                 LDA     #0
-                BRL     _dirops_L21
+                BRA     _dirops_L21
 _dirops_L20
                 LDA     #1
 _dirops_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L19
+                BEQ     _dirops_L19
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
 _dirops_L19
@@ -458,8 +440,7 @@ _dirops_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BEQ     *+5
-                BRL     _dirops_L24
+                BNE     _dirops_L24
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
 _dirops_L24
@@ -490,8 +471,7 @@ _dirops_L24
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L25
+                BEQ     _dirops_L25
                 LDA     #1
                 STA     15,S   ; fccstk d=0 b=15
 _dirops_L25
@@ -522,8 +502,7 @@ _dirops_L25
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L26
+                BEQ     _dirops_L26
                 LDA     #1
                 STA     17,S   ; fccstk d=0 b=17
 _dirops_L26
@@ -540,8 +519,7 @@ _dirops_L16
                 BVC     _dirops_L28
                 EOR     #$8000
 _dirops_L28
-                BMI     *+5
-                BRL     _dirops_L27
+                BPL     _dirops_L27
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
@@ -551,8 +529,7 @@ _dirops_L28
 _dirops_L27
                 LDA     19,S   ; fccstk d=0 b=19
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L29
+                BEQ     _dirops_L29
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
@@ -562,20 +539,17 @@ _dirops_L27
 _dirops_L29
                 LDA     15,S   ; fccstk d=0 b=15
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L31
+                BEQ     _dirops_L31
                 LDA     17,S   ; fccstk d=0 b=17
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L31
+                BEQ     _dirops_L31
                 LDA     #1
-                BRL     _dirops_L32
+                BRA     _dirops_L32
 _dirops_L31
                 LDA     #0
 _dirops_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L30
+                BEQ     _dirops_L30
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA
@@ -626,18 +600,16 @@ _dirops_L30
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L35
+                BNE     _dirops_L35
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L35
+                BNE     _dirops_L35
                 LDA     #0
-                BRL     _dirops_L36
+                BRA     _dirops_L36
 _dirops_L35
                 LDA     #1
 _dirops_L36
@@ -666,24 +638,21 @@ _dirops_L36
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirops_L40
+                BNE     _dirops_L40
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirops_L40
+                BNE     _dirops_L40
                 LDA     #0
-                BRL     _dirops_L41
+                BRA     _dirops_L41
 _dirops_L40
                 LDA     #1
 _dirops_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L38
+                BEQ     _dirops_L38
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -700,16 +669,14 @@ _dirops_L41
                 BVC     _dirops_L42
                 EOR     #$8000
 _dirops_L42
-                BMI     *+5
-                BRL     _dirops_L38
+                BPL     _dirops_L38
                 LDA     #1
-                BRL     _dirops_L39
+                BRA     _dirops_L39
 _dirops_L38
                 LDA     #0
 _dirops_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L37
+                BEQ     _dirops_L37
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
                 TXA

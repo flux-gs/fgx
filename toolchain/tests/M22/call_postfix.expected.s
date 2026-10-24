@@ -30,8 +30,7 @@ getn_stkok        TCS
                 LDA     6+getn_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _call_postfix_L0
+                BEQ     _call_postfix_L0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -43,7 +42,7 @@ getn_stkok        TCS
                 LDA     #n1
                 STA     _fcc_fpr0
                 PLA
-                BRL     _call_postfix_L1
+                BRA     _call_postfix_L1
 _call_postfix_L0
                 PHA
                 SEP     #$20
@@ -191,8 +190,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _call_postfix_L2
+                BEQ     _call_postfix_L2
                 LDA     #1
                 TAY
                 TSC
@@ -226,8 +224,7 @@ _call_postfix_L2
                 TAX
                 TXA
                 CMP     #30
-                BNE     *+5
-                BRL     _call_postfix_L3
+                BEQ     _call_postfix_L3
                 LDA     #2
                 TAY
                 TSC
@@ -258,8 +255,7 @@ _call_postfix_L3
                 TAX
                 TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _call_postfix_L4
+                BEQ     _call_postfix_L4
                 LDA     #3
                 TAY
                 TSC
@@ -281,8 +277,7 @@ _call_postfix_L4
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _call_postfix_L5
+                BEQ     _call_postfix_L5
                 LDA     #4
                 TAY
                 TSC

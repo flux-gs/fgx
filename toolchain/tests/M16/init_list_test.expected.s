@@ -119,8 +119,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _init_list_test_L0
+                BEQ     _init_list_test_L0
                 LDA     #1
                 TAY
                 TSC
@@ -136,8 +135,7 @@ _init_list_test_L0
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _init_list_test_L1
+                BEQ     _init_list_test_L1
                 LDA     #2
                 TAY
                 TSC
@@ -153,8 +151,7 @@ _init_list_test_L1
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _init_list_test_L2
+                BEQ     _init_list_test_L2
                 LDA     #3
                 TAY
                 TSC

@@ -114,8 +114,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ampcastmember_L0
+                BEQ     _ampcastmember_L0
                 LDA     #1
                 TAY
                 TSC
@@ -136,8 +135,7 @@ _ampcastmember_L0
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ampcastmember_L1
+                BEQ     _ampcastmember_L1
                 LDA     #2
                 TAY
                 TSC
@@ -176,8 +174,7 @@ _ampcastmember_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ampcastmember_L2
+                BEQ     _ampcastmember_L2
                 LDA     #3
                 TAY
                 TSC
@@ -199,24 +196,21 @@ _ampcastmember_L2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ampcastmember_L4
+                BNE     _ampcastmember_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ampcastmember_L4
+                BNE     _ampcastmember_L4
                 LDA     #1
-                BRL     _ampcastmember_L5
+                BRA     _ampcastmember_L5
 _ampcastmember_L4
                 LDA     #0
 _ampcastmember_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _ampcastmember_L3
+                BEQ     _ampcastmember_L3
                 LDA     #4
                 TAY
                 TSC
@@ -242,8 +236,7 @@ _ampcastmember_L3
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _ampcastmember_L6
+                BEQ     _ampcastmember_L6
                 LDA     #5
                 TAY
                 TSC
@@ -269,8 +262,7 @@ _ampcastmember_L6
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _ampcastmember_L7
+                BEQ     _ampcastmember_L7
                 LDA     #6
                 TAY
                 TSC
@@ -307,8 +299,7 @@ _ampcastmember_L7
                 TAX
                 TXA
                 CMP     #99
-                BNE     *+5
-                BRL     _ampcastmember_L8
+                BEQ     _ampcastmember_L8
                 LDA     #7
                 TAY
                 TSC
@@ -328,8 +319,7 @@ _ampcastmember_L8
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ampcastmember_L9
+                BEQ     _ampcastmember_L9
                 LDA     #8
                 TAY
                 TSC
@@ -381,8 +371,7 @@ _ampcastmember_L9
                 TAX
                 TXA
                 CMP     #77
-                BNE     *+5
-                BRL     _ampcastmember_L10
+                BEQ     _ampcastmember_L10
                 LDA     #9
                 TAY
                 TSC

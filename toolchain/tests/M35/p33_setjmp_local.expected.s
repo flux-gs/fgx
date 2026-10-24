@@ -35,8 +35,7 @@ _p33_setjmp_local_L0
                 BVC     _p33_setjmp_local_L3
                 EOR     #$8000
 _p33_setjmp_local_L3
-                BMI     *+5
-                BRL     _p33_setjmp_local_L2
+                BPL     _p33_setjmp_local_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -68,7 +67,7 @@ _p33_setjmp_local_L3
                 PLA
 _p33_setjmp_local_L1
                 INC     _fcc_img0
-                BRL     _p33_setjmp_local_L0
+                BRA     _p33_setjmp_local_L0
 _p33_setjmp_local_L2
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -162,16 +161,14 @@ main_stkok        TCS
                 FGX2_FARCALL setjmp
                 STA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L4
+                BNE     _p33_setjmp_local_L4
                 FGX2_FARCALL deep
 _p33_setjmp_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L5
+                BEQ     _p33_setjmp_local_L5
                 LDA     #1
                 TAY
                 TSC
@@ -191,8 +188,7 @@ _p33_setjmp_local_L5
                 TAX
                 TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L6
+                BEQ     _p33_setjmp_local_L6
                 LDA     #2
                 TAY
                 TSC
@@ -208,8 +204,7 @@ _p33_setjmp_local_L6
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _p33_setjmp_local_L7
+                BEQ     _p33_setjmp_local_L7
                 LDA     #3
                 TAY
                 TSC
@@ -225,8 +220,7 @@ _p33_setjmp_local_L7
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _p33_setjmp_local_L8
+                BEQ     _p33_setjmp_local_L8
                 LDA     #4
                 TAY
                 TSC
@@ -258,24 +252,21 @@ _p33_setjmp_local_L8
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L10
+                BNE     _p33_setjmp_local_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _p33_setjmp_local_L10
+                BNE     _p33_setjmp_local_L10
                 LDA     #0
-                BRL     _p33_setjmp_local_L11
+                BRA     _p33_setjmp_local_L11
 _p33_setjmp_local_L10
                 LDA     #1
 _p33_setjmp_local_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _p33_setjmp_local_L9
+                BEQ     _p33_setjmp_local_L9
                 LDA     #5
                 TAY
                 TSC
@@ -295,8 +286,7 @@ _p33_setjmp_local_L9
                 TAX
                 TXA
                 CMP     #314
-                BNE     *+5
-                BRL     _p33_setjmp_local_L12
+                BEQ     _p33_setjmp_local_L12
                 LDA     #6
                 TAY
                 TSC

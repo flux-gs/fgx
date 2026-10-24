@@ -34,8 +34,7 @@ main_stkok        TCS
                 JSR     _fcc_divs16
                 STA     _fcc_img1
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _uchar_compound_L0
+                BNE     _uchar_compound_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -56,8 +55,7 @@ _uchar_compound_L0
                 TAX
                 TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L1
+                BNE     _uchar_compound_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -88,8 +86,7 @@ _uchar_compound_L1
                 TAX
                 TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L2
+                BNE     _uchar_compound_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -107,8 +104,7 @@ _uchar_compound_L2
                 JSR     _fcc_divs16
                 STA     GI
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _uchar_compound_L3
+                BNE     _uchar_compound_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -162,8 +158,7 @@ _uchar_compound_L3
                 TAX
                 TXA
                 CMP     #156
-                BEQ     *+5
-                BRL     _uchar_compound_L4
+                BNE     _uchar_compound_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -188,8 +183,7 @@ _uchar_compound_L4
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _uchar_compound_L5
+                BNE     _uchar_compound_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -208,8 +202,7 @@ _uchar_compound_L5
                 TAX
                 TXA
                 CMP     #246
-                BEQ     *+5
-                BRL     _uchar_compound_L6
+                BNE     _uchar_compound_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -229,8 +222,7 @@ _uchar_compound_L6
                 TAX
                 TXA
                 CMP     #245
-                BEQ     *+5
-                BRL     _uchar_compound_L7
+                BNE     _uchar_compound_L7
                 LDA     _fcc_img0
                 TAX
                 TXA

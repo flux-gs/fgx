@@ -33,10 +33,9 @@ main_stkok        TCS
                 BVC     _ternary_basic_L2
                 EOR     #$8000
 _ternary_basic_L2
-                BMI     *+5
-                BRL     _ternary_basic_L0
+                BPL     _ternary_basic_L0
                 LDA     _fcc_img0
-                BRL     _ternary_basic_L1
+                BRA     _ternary_basic_L1
 _ternary_basic_L0
                 LDA     _fcc_img1
 _ternary_basic_L1

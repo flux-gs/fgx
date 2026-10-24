@@ -117,10 +117,9 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _libso_lit_L0
+                BNE     _libso_lit_L0
                 LDA     #42
-                BRL     _libso_lit_L1
+                BRA     _libso_lit_L1
 _libso_lit_L0
                 LDA     #1
 _libso_lit_L1

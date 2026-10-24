@@ -59,8 +59,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _iplusp_scale_L0
+                BEQ     _iplusp_scale_L0
                 LDA     #1
                 TAY
                 TSC
@@ -94,8 +93,7 @@ _iplusp_scale_L0
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _iplusp_scale_L1
+                BEQ     _iplusp_scale_L1
                 LDA     #2
                 TAY
                 TSC
@@ -174,8 +172,7 @@ _iplusp_scale_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _iplusp_scale_L2
+                BEQ     _iplusp_scale_L2
                 LDA     #3
                 TAY
                 TSC
@@ -215,24 +212,21 @@ _iplusp_scale_L2
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _iplusp_scale_L4
+                BNE     _iplusp_scale_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _iplusp_scale_L4
+                BNE     _iplusp_scale_L4
                 LDA     #0
-                BRL     _iplusp_scale_L5
+                BRA     _iplusp_scale_L5
 _iplusp_scale_L4
                 LDA     #1
 _iplusp_scale_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _iplusp_scale_L3
+                BEQ     _iplusp_scale_L3
                 LDA     #4
                 TAY
                 TSC

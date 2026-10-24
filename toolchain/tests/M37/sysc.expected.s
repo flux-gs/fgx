@@ -70,8 +70,7 @@ _sysc_L1
                 STX     __sys_c
                 STY     __sys_y
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L0
+                BNE     _sysc_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -83,8 +82,7 @@ _sysc_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _sysc_L2
+                BNE     _sysc_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -94,8 +92,7 @@ _sysc_L0
 _sysc_L2
                 LDA     __sys_y
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L3
+                BNE     _sysc_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -131,8 +128,7 @@ _sysc_L4
                 STY     __sys_y
                 LDA     __sys_c
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysc_L5
+                BNE     _sysc_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

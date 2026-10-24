@@ -367,8 +367,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _pre_deref_rmw_L0
+                BEQ     _pre_deref_rmw_L0
                 LDA     #1
                 TAY
                 TSC

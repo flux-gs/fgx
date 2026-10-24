@@ -30,8 +30,7 @@ retneg_stkok        TCS
                 LDA     6+retneg_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _retlongneg_L0
+                BEQ     _retlongneg_L0
                 LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 TAY
@@ -126,8 +125,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _retlongneg_L1
+                BEQ     _retlongneg_L1
                 LDA     #1
                 TAY
                 TSC
@@ -162,8 +160,7 @@ _retlongneg_L1
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _retlongneg_L2
+                BEQ     _retlongneg_L2
                 LDA     #2
                 TAY
                 TSC
@@ -199,8 +196,7 @@ _retlongneg_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _retlongneg_L3
+                BEQ     _retlongneg_L3
                 LDA     #3
                 TAY
                 TSC
@@ -231,8 +227,7 @@ _retlongneg_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _retlongneg_L4
+                BEQ     _retlongneg_L4
                 LDA     #4
                 TAY
                 TSC

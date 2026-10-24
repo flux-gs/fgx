@@ -65,8 +65,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _uderef_L0
+                BEQ     _uderef_L0
                 LDA     #1
                 TAY
                 TSC
@@ -111,8 +110,7 @@ _uderef_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _uderef_L1
+                BEQ     _uderef_L1
                 LDA     #2
                 TAY
                 TSC
@@ -166,8 +164,7 @@ _uderef_L1
                 TAX
                 TXA
                 CMP     #54
-                BEQ     *+5
-                BRL     _uderef_L5
+                BNE     _uderef_L5
                 LDA     #4
                 TAX
                 LDA:    buf,X
@@ -175,31 +172,27 @@ _uderef_L1
                 TAX
                 TXA
                 CMP     #56
-                BEQ     *+5
-                BRL     _uderef_L5
+                BNE     _uderef_L5
                 LDA     #0
-                BRL     _uderef_L6
+                BRA     _uderef_L6
 _uderef_L5
                 LDA     #1
 _uderef_L6
                 CMP     #0
-                BEQ     *+5
-                BRL     _uderef_L3
+                BNE     _uderef_L3
                 LDA     #5
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _uderef_L3
+                BNE     _uderef_L3
                 LDA     #0
-                BRL     _uderef_L4
+                BRA     _uderef_L4
 _uderef_L3
                 LDA     #1
 _uderef_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _uderef_L2
+                BEQ     _uderef_L2
                 LDA     #3
                 TAY
                 TSC

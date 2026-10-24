@@ -702,8 +702,7 @@ main_stkok        TCS
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L4
+                BEQ     _float_promote_L4
                 LDA     #1
                 TAY
                 TSC
@@ -829,8 +828,7 @@ _float_promote_L4
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L5
+                BEQ     _float_promote_L5
                 LDA     #2
                 TAY
                 TSC
@@ -880,8 +878,7 @@ _float_promote_L5
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L6
+                BEQ     _float_promote_L6
                 LDA     #3
                 TAY
                 TSC
@@ -930,8 +927,7 @@ _float_promote_L6
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L7
+                BEQ     _float_promote_L7
                 LDA     #4
                 TAY
                 TSC
@@ -991,8 +987,7 @@ _float_promote_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L8
+                BEQ     _float_promote_L8
                 LDA     #5
                 TAY
                 TSC
@@ -1058,8 +1053,7 @@ _float_promote_L10
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _float_promote_L9
+                BEQ     _float_promote_L9
                 LDA     #6
                 TAY
                 TSC

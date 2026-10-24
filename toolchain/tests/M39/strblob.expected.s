@@ -30,17 +30,15 @@ _strblob_L0
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _strblob_L1
+                BEQ     _strblob_L1
                 INC     _fcc_img0
-                BRL     _strblob_L0
+                BRA     _strblob_L0
 _strblob_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #2109
-                BNE     *+5
-                BRL     _strblob_L2
+                BEQ     _strblob_L2
                 LDA     #1
                 TAY
                 TSC
@@ -59,8 +57,7 @@ _strblob_L2
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _strblob_L4
+                BNE     _strblob_L4
                 LDA     #61
                 TAX
                 LDA:    _strblob_big,X
@@ -68,16 +65,14 @@ _strblob_L2
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _strblob_L4
+                BNE     _strblob_L4
                 LDA     #0
-                BRL     _strblob_L5
+                BRA     _strblob_L5
 _strblob_L4
                 LDA     #1
 _strblob_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _strblob_L3
+                BEQ     _strblob_L3
                 LDA     #2
                 TAY
                 TSC
@@ -96,8 +91,7 @@ _strblob_L3
                 TAX
                 TXA
                 CMP     #66
-                BNE     *+5
-                BRL     _strblob_L6
+                BEQ     _strblob_L6
                 LDA     #3
                 TAY
                 TSC
@@ -116,8 +110,7 @@ _strblob_L6
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _strblob_L7
+                BEQ     _strblob_L7
                 LDA     #4
                 TAY
                 TSC
@@ -134,8 +127,7 @@ _strblob_L7
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _strblob_L8
+                BEQ     _strblob_L8
                 LDA     #5
                 TAY
                 TSC

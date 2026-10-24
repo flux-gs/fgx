@@ -85,8 +85,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _aud_shr_or_L0
+                BNE     _aud_shr_or_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -96,8 +95,7 @@ main_stkok        TCS
 _aud_shr_or_L0
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _aud_shr_or_L2
+                BNE     _aud_shr_or_L2
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -118,16 +116,14 @@ _aud_shr_or_L0
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _aud_shr_or_L2
+                BNE     _aud_shr_or_L2
                 LDA     #0
-                BRL     _aud_shr_or_L3
+                BRA     _aud_shr_or_L3
 _aud_shr_or_L2
                 LDA     #1
 _aud_shr_or_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _aud_shr_or_L1
+                BEQ     _aud_shr_or_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -137,8 +133,7 @@ _aud_shr_or_L3
 _aud_shr_or_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BEQ     *+5
-                BRL     _aud_shr_or_L4
+                BNE     _aud_shr_or_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

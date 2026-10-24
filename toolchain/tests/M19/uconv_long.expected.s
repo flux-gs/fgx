@@ -79,8 +79,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L0
+                BEQ     _uconv_long_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -109,8 +108,7 @@ _uconv_long_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L1
+                BEQ     _uconv_long_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -139,8 +137,7 @@ _uconv_long_L1
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L2
+                BEQ     _uconv_long_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -184,8 +181,7 @@ _uconv_long_L4
                 LDA     #1
 _uconv_long_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L3
+                BEQ     _uconv_long_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -239,8 +235,7 @@ _uconv_long_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L6
+                BEQ     _uconv_long_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -286,8 +281,7 @@ _uconv_long_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L7
+                BEQ     _uconv_long_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -316,8 +310,7 @@ _uconv_long_L7
                 TYA
                 JSR     _fcc_long_gtu
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L8
+                BEQ     _uconv_long_L8
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -371,8 +364,7 @@ _uconv_long_L8
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_long_L9
+                BEQ     _uconv_long_L9
                 LDA     _fcc_img0
                 TAX
                 TXA

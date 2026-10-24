@@ -118,8 +118,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _addr_member_L0
+                BEQ     _addr_member_L0
                 LDA     #1
                 TAY
                 TSC
@@ -164,8 +163,7 @@ _addr_member_L0
                 TAX
                 TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _addr_member_L1
+                BEQ     _addr_member_L1
                 LDA     #2
                 TAY
                 TSC
@@ -207,8 +205,7 @@ _addr_member_L1
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _addr_member_L2
+                BEQ     _addr_member_L2
                 LDA     #3
                 TAY
                 TSC
@@ -254,8 +251,7 @@ _addr_member_L2
                 TAX
                 TXA
                 CMP     #76
-                BNE     *+5
-                BRL     _addr_member_L3
+                BEQ     _addr_member_L3
                 LDA     #4
                 TAY
                 TSC
@@ -292,8 +288,7 @@ _addr_member_L3
                 TAX
                 TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _addr_member_L4
+                BEQ     _addr_member_L4
                 LDA     #5
                 TAY
                 TSC

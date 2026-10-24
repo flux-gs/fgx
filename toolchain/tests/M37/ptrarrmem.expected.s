@@ -75,8 +75,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptrarrmem_L0
+                BEQ     _ptrarrmem_L0
                 LDA     #1
                 TAY
                 TSC
@@ -134,8 +133,7 @@ _ptrarrmem_L0
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptrarrmem_L1
+                BEQ     _ptrarrmem_L1
                 LDA     #2
                 TAY
                 TSC
@@ -197,8 +195,7 @@ _ptrarrmem_L1
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _ptrarrmem_L2
+                BEQ     _ptrarrmem_L2
                 LDA     #3
                 TAY
                 TSC
@@ -214,8 +211,7 @@ _ptrarrmem_L2
                 TAX
                 TXA
                 CMP     #111
-                BNE     *+5
-                BRL     _ptrarrmem_L3
+                BEQ     _ptrarrmem_L3
                 LDA     #4
                 TAY
                 TSC
@@ -231,8 +227,7 @@ _ptrarrmem_L3
                 TAX
                 TXA
                 CMP     #222
-                BNE     *+5
-                BRL     _ptrarrmem_L4
+                BEQ     _ptrarrmem_L4
                 LDA     #5
                 TAY
                 TSC
@@ -257,24 +252,21 @@ _ptrarrmem_L4
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarrmem_L6
+                BNE     _ptrarrmem_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarrmem_L6
+                BNE     _ptrarrmem_L6
                 LDA     #0
-                BRL     _ptrarrmem_L7
+                BRA     _ptrarrmem_L7
 _ptrarrmem_L6
                 LDA     #1
 _ptrarrmem_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarrmem_L5
+                BEQ     _ptrarrmem_L5
                 LDA     #6
                 TAY
                 TSC
@@ -325,24 +317,21 @@ _ptrarrmem_L5
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarrmem_L9
+                BNE     _ptrarrmem_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarrmem_L9
+                BNE     _ptrarrmem_L9
                 LDA     #0
-                BRL     _ptrarrmem_L10
+                BRA     _ptrarrmem_L10
 _ptrarrmem_L9
                 LDA     #1
 _ptrarrmem_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarrmem_L8
+                BEQ     _ptrarrmem_L8
                 LDA     #7
                 TAY
                 TSC
@@ -366,8 +355,7 @@ _ptrarrmem_L8
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptrarrmem_L11
+                BEQ     _ptrarrmem_L11
                 LDA     #8
                 TAY
                 TSC
@@ -500,8 +488,7 @@ _ptrarrmem_L11
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptrarrmem_L12
+                BEQ     _ptrarrmem_L12
                 LDA     #9
                 TAY
                 TSC
@@ -541,24 +528,21 @@ _ptrarrmem_L12
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarrmem_L14
+                BNE     _ptrarrmem_L14
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarrmem_L14
+                BNE     _ptrarrmem_L14
                 LDA     #0
-                BRL     _ptrarrmem_L15
+                BRA     _ptrarrmem_L15
 _ptrarrmem_L14
                 LDA     #1
 _ptrarrmem_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarrmem_L13
+                BEQ     _ptrarrmem_L13
                 LDA     #11
                 TAY
                 TSC
@@ -625,8 +609,7 @@ _ptrarrmem_L13
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _ptrarrmem_L16
+                BEQ     _ptrarrmem_L16
                 LDA     #10
                 TAY
                 TSC
@@ -666,24 +649,21 @@ _ptrarrmem_L16
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrarrmem_L18
+                BNE     _ptrarrmem_L18
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrarrmem_L18
+                BNE     _ptrarrmem_L18
                 LDA     #0
-                BRL     _ptrarrmem_L19
+                BRA     _ptrarrmem_L19
 _ptrarrmem_L18
                 LDA     #1
 _ptrarrmem_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrarrmem_L17
+                BEQ     _ptrarrmem_L17
                 LDA     #12
                 TAY
                 TSC
@@ -778,8 +758,7 @@ _ptrarrmem_L17
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptrarrmem_L20
+                BEQ     _ptrarrmem_L20
                 LDA     #13
                 TAY
                 TSC
@@ -803,8 +782,7 @@ _ptrarrmem_L20
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptrarrmem_L21
+                BEQ     _ptrarrmem_L21
                 LDA     #14
                 TAY
                 TSC
@@ -897,8 +875,7 @@ _ptrarrmem_L21
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptrarrmem_L22
+                BEQ     _ptrarrmem_L22
                 LDA     #15
                 TAY
                 TSC

@@ -32,8 +32,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #18432
-                BEQ     *+5
-                BRL     _u_comp_L0
+                BNE     _u_comp_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -52,8 +51,7 @@ _u_comp_L0
                 TAX
                 TXA
                 CMP     #2304
-                BEQ     *+5
-                BRL     _u_comp_L1
+                BNE     _u_comp_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -70,8 +68,7 @@ _u_comp_L1
                 JSR     _fcc_modu16
                 STA     u
                 CMP     #0
-                BEQ     *+5
-                BRL     _u_comp_L2
+                BNE     _u_comp_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -83,10 +80,9 @@ _u_comp_L2
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _u_comp_L3
+                BNE     _u_comp_L3
                 LDA     #42
-                BRL     _u_comp_L4
+                BRA     _u_comp_L4
 _u_comp_L3
                 LDA     _fcc_img0
 _u_comp_L4

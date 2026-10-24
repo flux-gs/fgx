@@ -70,10 +70,9 @@ _typedef_ary_param_L0
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _typedef_ary_param_L1
+                BEQ     _typedef_ary_param_L1
                 INC     _fcc_img0
-                BRL     _typedef_ary_param_L0
+                BRA     _typedef_ary_param_L0
 _typedef_ary_param_L1
                 LDA     _fcc_img0
                 TAY
@@ -152,8 +151,7 @@ _typedef_ary_param_L2
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _typedef_ary_param_L4
+                BEQ     _typedef_ary_param_L4
                 INC     _fcc_img0
 _typedef_ary_param_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -162,7 +160,7 @@ _typedef_ary_param_L3
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _typedef_ary_param_L2
+                BRA     _typedef_ary_param_L2
 _typedef_ary_param_L4
                 LDA     _fcc_img0
                 TAY

@@ -197,8 +197,7 @@ chrtoblk_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _namecache_L0
+                BNE     _namecache_L0
                 LDA     #0
                 TAY
                 TSC
@@ -223,8 +222,7 @@ _namecache_L0
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _namecache_L1
+                BNE     _namecache_L1
                 LDA     #1
                 TAY
                 TSC
@@ -249,8 +247,7 @@ _namecache_L1
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _namecache_L2
+                BNE     _namecache_L2
                 LDA     #2
                 TAY
                 TSC
@@ -275,8 +272,7 @@ _namecache_L2
                 TAX
                 TXA
                 CMP     #13
-                BEQ     *+5
-                BRL     _namecache_L3
+                BNE     _namecache_L3
                 LDA     #3
                 TAY
                 TSC
@@ -301,8 +297,7 @@ _namecache_L3
                 TAX
                 TXA
                 CMP     #14
-                BEQ     *+5
-                BRL     _namecache_L4
+                BNE     _namecache_L4
                 LDA     #4
                 TAY
                 TSC
@@ -327,8 +322,7 @@ _namecache_L4
                 TAX
                 TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _namecache_L5
+                BNE     _namecache_L5
                 LDA     #5
                 TAY
                 TSC
@@ -353,8 +347,7 @@ _namecache_L5
                 TAX
                 TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _namecache_L6
+                BNE     _namecache_L6
                 LDA     #6
                 TAY
                 TSC
@@ -379,8 +372,7 @@ _namecache_L6
                 TAX
                 TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _namecache_L7
+                BNE     _namecache_L7
                 LDA     #7
                 TAY
                 TSC
@@ -569,8 +561,7 @@ _namecache_L8
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _namecache_L9
+                BCS     _namecache_L9
                 LDA     #0
                 SEP     #$20
                 MX      %10
@@ -578,7 +569,7 @@ _namecache_L8
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _namecache_L8
+                BRA     _namecache_L8
 _namecache_L9
                 TAY
                 TSC
@@ -654,8 +645,7 @@ _namecache_L10
                 BVC     _namecache_L13
                 EOR     #$8000
 _namecache_L13
-                BMI     *+5
-                BRL     _namecache_L12
+                BPL     _namecache_L12
                 LDA     #speclisth
                 PHA
                 LDA     _fcc_img0
@@ -682,7 +672,7 @@ _namecache_L13
                 PLA
 _namecache_L11
                 INC     _fcc_img0
-                BRL     _namecache_L10
+                BRA     _namecache_L10
 _namecache_L12
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -759,8 +749,7 @@ _namecache_L14
                 BVC     _namecache_L17
                 EOR     #$8000
 _namecache_L17
-                BMI     *+5
-                BRL     _namecache_L16
+                BPL     _namecache_L16
                 SEP     #$20
                 MX      %10
                 LDA     vnode_pool+2
@@ -805,7 +794,7 @@ _namecache_L15
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _namecache_L14
+                BRA     _namecache_L14
 _namecache_L16
                 DO      8+vntblinit_FRAMESIZE/256
                 TSC
@@ -1146,8 +1135,7 @@ vremfree_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L18
+                BEQ     _namecache_L18
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
                 CLC
@@ -1225,7 +1213,7 @@ vremfree_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _namecache_L19
+                BRA     _namecache_L19
 _namecache_L18
                 DO      8+vremfree_FRAMESIZE/256
                 TSC
@@ -1386,24 +1374,21 @@ getnewvnode_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L21
+                BNE     _namecache_L21
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L21
+                BNE     _namecache_L21
                 LDA     #1
-                BRL     _namecache_L22
+                BRA     _namecache_L22
 _namecache_L21
                 LDA     #0
 _namecache_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L20
+                BEQ     _namecache_L20
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1456,8 +1441,7 @@ _namecache_L20
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L23
+                BEQ     _namecache_L23
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1495,8 +1479,7 @@ _namecache_L23
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _namecache_L24
+                BEQ     _namecache_L24
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1667,8 +1650,7 @@ _namecache_L24
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L25
+                BEQ     _namecache_L25
                 SEP     #$20
                 MX      %10
                 LDA     _namecache_vfs_cacheops+2
@@ -1850,8 +1832,7 @@ vref_stkok        TCS
                 BVC     _namecache_L28
                 EOR     #$8000
 _namecache_L28
-                BPL     *+5
-                BRL     _namecache_L27
+                BMI     _namecache_L27
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1949,8 +1930,7 @@ vget_stkok        TCS
                 TXA
                 AND     #256
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L29
+                BEQ     _namecache_L29
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -2000,8 +1980,7 @@ _namecache_L29
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L30
+                BNE     _namecache_L30
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2099,8 +2078,7 @@ vrele_stkok        TCS
                 BVC     _namecache_L32
                 EOR     #$8000
 _namecache_L32
-                BPL     *+5
-                BRL     _namecache_L31
+                BMI     _namecache_L31
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2157,8 +2135,7 @@ _namecache_L31
                 BVC     _namecache_L34
                 EOR     #$8000
 _namecache_L34
-                BMI     *+5
-                BRL     _namecache_L33
+                BPL     _namecache_L33
                 TAY
                 TSC
                 CLC
@@ -2406,8 +2383,7 @@ holdrele_stkok        TCS
                 BVC     _namecache_L37
                 EOR     #$8000
 _namecache_L37
-                BPL     *+5
-                BRL     _namecache_L36
+                BMI     _namecache_L36
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2630,8 +2606,7 @@ insmntque_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L39
+                BEQ     _namecache_L39
                 DO      8+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -2864,24 +2839,21 @@ _namecache_L38
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L41
+                BNE     _namecache_L41
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L41
+                BNE     _namecache_L41
                 LDA     #1
-                BRL     _namecache_L42
+                BRA     _namecache_L42
 _namecache_L41
                 LDA     #0
 _namecache_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L40
+                BEQ     _namecache_L40
                 TAY
                 TSC
                 CLC
@@ -2995,8 +2967,7 @@ _namecache_L40
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L43
+                BEQ     _namecache_L43
                 DO      12+insmntque_FRAMESIZE/256
                 TSC
                 CLC
@@ -3258,18 +3229,16 @@ _namecache_L47
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L49
+                BNE     _namecache_L49
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L49
+                BNE     _namecache_L49
                 LDA     #1
-                BRL     _namecache_L50
+                BRA     _namecache_L50
 _namecache_L49
                 LDA     #0
 _namecache_L50
@@ -3583,23 +3552,20 @@ checkalias_stkok        TCS
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _namecache_L52
+                BEQ     _namecache_L52
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _namecache_L52
+                BEQ     _namecache_L52
                 LDA     #1
-                BRL     _namecache_L53
+                BRA     _namecache_L53
 _namecache_L52
                 LDA     #0
 _namecache_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L51
+                BEQ     _namecache_L51
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -3734,8 +3700,7 @@ _namecache_L54
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L58
+                BNE     _namecache_L58
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -3770,17 +3735,15 @@ _namecache_L54
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L58
+                BNE     _namecache_L58
                 LDA     #0
-                BRL     _namecache_L59
+                BRA     _namecache_L59
 _namecache_L58
                 LDA     #1
 _namecache_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L57
-                BRL     _namecache_L55
+                BEQ     _namecache_L57
+                BRA     _namecache_L55
 _namecache_L57
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -3789,8 +3752,7 @@ _namecache_L57
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L60
+                BNE     _namecache_L60
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -3818,14 +3780,13 @@ _namecache_L60
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L61
+                BEQ     _namecache_L61
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 BRL     checkalias_uL_loop
 _namecache_L61
-                BRL     _namecache_L56
+                BRA     _namecache_L56
 _namecache_L55
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -3870,24 +3831,21 @@ _namecache_L56
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L65
+                BNE     _namecache_L65
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L65
+                BNE     _namecache_L65
                 LDA     #1
-                BRL     _namecache_L66
+                BRA     _namecache_L66
 _namecache_L65
                 LDA     #0
 _namecache_L66
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L63
+                BNE     _namecache_L63
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -3895,10 +3853,9 @@ _namecache_L66
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L63
+                BNE     _namecache_L63
                 LDA     #0
-                BRL     _namecache_L64
+                BRA     _namecache_L64
 _namecache_L63
                 LDA     #1
 _namecache_L64
@@ -4159,24 +4116,21 @@ _namecache_L64
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L68
+                BNE     _namecache_L68
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L68
+                BNE     _namecache_L68
                 LDA     #0
-                BRL     _namecache_L69
+                BRA     _namecache_L69
 _namecache_L68
                 LDA     #1
 _namecache_L69
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L67
+                BEQ     _namecache_L67
                 DO      8+checkalias_FRAMESIZE/256
                 TSC
                 CLC
@@ -4428,24 +4382,21 @@ bdevvp_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L71
+                BNE     _namecache_L71
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L71
+                BNE     _namecache_L71
                 LDA     #1
-                BRL     _namecache_L72
+                BRA     _namecache_L72
 _namecache_L71
                 LDA     #0
 _namecache_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L70
+                BEQ     _namecache_L70
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4529,8 +4480,7 @@ _namecache_L70
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L73
+                BEQ     _namecache_L73
                 DO      10+bdevvp_FRAMESIZE/256
                 TSC
                 CLC
@@ -4627,8 +4577,7 @@ _namecache_L73
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L74
+                BEQ     _namecache_L74
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -4797,8 +4746,7 @@ _namecache_L75
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L79
+                BNE     _namecache_L79
                 LDA     _fcc_img1
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -4810,17 +4758,15 @@ _namecache_L75
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L79
+                BNE     _namecache_L79
                 LDA     #0
-                BRL     _namecache_L80
+                BRA     _namecache_L80
 _namecache_L79
                 LDA     #1
 _namecache_L80
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L78
-                BRL     _namecache_L76
+                BEQ     _namecache_L78
+                BRA     _namecache_L76
 _namecache_L78
                 DO      12+vfinddev_FRAMESIZE/256
                 TSC
@@ -4936,8 +4882,7 @@ spec_securechr_stkok        TCS
                 BVC     _namecache_L82
                 EOR     #$8000
 _namecache_L82
-                BMI     *+5
-                BRL     _namecache_L81
+                BPL     _namecache_L81
                 LDA     #0
                 TAY
                 TSC
@@ -4968,8 +4913,7 @@ _namecache_L81
                 TAX
                 TXA
                 CMP     #65535
-                BEQ     *+5
-                BRL     _namecache_L83
+                BNE     _namecache_L83
                 LDA     #0
                 TAY
                 TSC
@@ -5048,8 +4992,7 @@ _namecache_L84
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L88
+                BNE     _namecache_L88
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5059,17 +5002,15 @@ _namecache_L84
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _namecache_L88
+                BNE     _namecache_L88
                 LDA     #0
-                BRL     _namecache_L89
+                BRA     _namecache_L89
 _namecache_L88
                 LDA     #1
 _namecache_L89
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L87
-                BRL     _namecache_L85
+                BEQ     _namecache_L87
+                BRA     _namecache_L85
 _namecache_L87
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -5109,8 +5050,7 @@ _namecache_L87
                 TYA
                 JSR     _fcc_long_and
                 ORA     _fcc_long_hi
-                BNE     *+5
-                BRL     _namecache_L90
+                BEQ     _namecache_L90
                 LDA     #16
                 TAY
                 TSC
@@ -5233,8 +5173,7 @@ vfs_setsecurelevel_stkok        TCS
                 BVC     _namecache_L92
                 EOR     #$8000
 _namecache_L92
-                BMI     *+5
-                BRL     _namecache_L91
+                BPL     _namecache_L91
                 LDA     #22
                 TAY
                 TSC
@@ -5311,8 +5250,7 @@ vcount_stkok        TCS
                 TXA
                 AND     #2048
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L93
+                BNE     _namecache_L93
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAY
@@ -5455,8 +5393,7 @@ _namecache_L94
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L98
+                BNE     _namecache_L98
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -5491,17 +5428,15 @@ _namecache_L94
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L98
+                BNE     _namecache_L98
                 LDA     #0
-                BRL     _namecache_L99
+                BRA     _namecache_L99
 _namecache_L98
                 LDA     #1
 _namecache_L99
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L97
-                BRL     _namecache_L95
+                BEQ     _namecache_L97
+                BRA     _namecache_L95
 _namecache_L97
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -5510,8 +5445,7 @@ _namecache_L97
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L100
+                BNE     _namecache_L100
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -5776,8 +5710,7 @@ vclean_stkok        TCS
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L102
+                BEQ     _namecache_L102
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -5814,8 +5747,7 @@ _namecache_L102
                 TXA
                 AND     #256
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L103
+                BEQ     _namecache_L103
                 SEP     #$20
                 MX      %10
                 PHB
@@ -5947,8 +5879,7 @@ _namecache_L104
                 TXA
                 AND     #4
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L105
+                BEQ     _namecache_L105
                 LDA     #1
                 PHA
                 DO      10+vclean_FRAMESIZE/256
@@ -6171,8 +6102,7 @@ _namecache_L106
                 TXA
                 AND     #4
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L108
+                BEQ     _namecache_L108
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -6378,8 +6308,7 @@ _namecache_L112
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L111
+                BEQ     _namecache_L111
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6399,8 +6328,7 @@ _namecache_L112
 _namecache_L111
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L113
+                BEQ     _namecache_L113
                 DO      8+vclean_FRAMESIZE/256
                 TSC
                 CLC
@@ -6466,8 +6394,7 @@ _namecache_L113
                 TXA
                 AND     #512
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L114
+                BEQ     _namecache_L114
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #512
@@ -6538,8 +6465,7 @@ vgone_stkok        TCS
                 TXA
                 AND     #256
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L115
+                BEQ     _namecache_L115
                 LDA     [_fcc_fpr0]
                 TAX
                 TXA
@@ -6655,17 +6581,15 @@ _namecache_L115
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _namecache_L117
+                BEQ     _namecache_L117
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _namecache_L117
+                BEQ     _namecache_L117
                 LDA     #0
-                BRL     _namecache_L118
+                BRA     _namecache_L118
 _namecache_L117
                 LDA     #1
 _namecache_L118
@@ -6711,24 +6635,21 @@ _namecache_L118
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L120
+                BNE     _namecache_L120
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L120
+                BNE     _namecache_L120
                 LDA     #1
-                BRL     _namecache_L121
+                BRA     _namecache_L121
 _namecache_L120
                 LDA     #0
 _namecache_L121
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L119
+                BEQ     _namecache_L119
                 SEP     #$20
                 MX      %10
                 PHB
@@ -6826,18 +6747,16 @@ _namecache_L119
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L123
+                BNE     _namecache_L123
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L123
+                BNE     _namecache_L123
                 LDA     #1
-                BRL     _namecache_L124
+                BRA     _namecache_L124
 _namecache_L123
                 LDA     #0
 _namecache_L124
@@ -7066,25 +6985,22 @@ _namecache_L126
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L130
+                BNE     _namecache_L130
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L130
+                BNE     _namecache_L130
                 LDA     #0
-                BRL     _namecache_L131
+                BRA     _namecache_L131
 _namecache_L130
                 LDA     #1
 _namecache_L131
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L129
-                BRL     _namecache_L127
+                BEQ     _namecache_L129
+                BRA     _namecache_L127
 _namecache_L129
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -7157,7 +7073,7 @@ _namecache_L129
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _namecache_L128
+                BRA     _namecache_L128
 _namecache_L127
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -7202,24 +7118,21 @@ _namecache_L128
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L133
+                BNE     _namecache_L133
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L133
+                BNE     _namecache_L133
                 LDA     #1
-                BRL     _namecache_L134
+                BRA     _namecache_L134
 _namecache_L133
                 LDA     #0
 _namecache_L134
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L132
+                BEQ     _namecache_L132
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7380,8 +7293,7 @@ _namecache_L136
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L140
+                BNE     _namecache_L140
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7416,17 +7328,15 @@ _namecache_L136
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L140
+                BNE     _namecache_L140
                 LDA     #0
-                BRL     _namecache_L141
+                BRA     _namecache_L141
 _namecache_L140
                 LDA     #1
 _namecache_L141
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L139
-                BRL     _namecache_L137
+                BEQ     _namecache_L139
+                BRA     _namecache_L137
 _namecache_L139
                 INC     _fcc_img0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -7475,8 +7385,7 @@ _namecache_L138
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L142
+                BNE     _namecache_L142
                 SEP     #$20
                 MX      %10
                 PHB
@@ -7498,8 +7407,7 @@ _namecache_L142
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _namecache_L143
+                BNE     _namecache_L143
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7788,8 +7696,7 @@ _namecache_L116
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L145
+                BEQ     _namecache_L145
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -7835,7 +7742,7 @@ _namecache_L116
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _namecache_L146
+                BRA     _namecache_L146
 _namecache_L145
                 DO      8+vgone_FRAMESIZE/256
                 TSC
@@ -8007,8 +7914,7 @@ vflush_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L147
+                BEQ     _namecache_L147
                 SEP     #$20
                 MX      %10
                 PHB
@@ -8116,24 +8022,21 @@ _namecache_L148
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L152
+                BNE     _namecache_L152
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L152
+                BNE     _namecache_L152
                 LDA     #0
-                BRL     _namecache_L153
+                BRA     _namecache_L153
 _namecache_L152
                 LDA     #1
 _namecache_L153
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L151
+                BEQ     _namecache_L151
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -8187,24 +8090,21 @@ _namecache_L151
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L155
+                BNE     _namecache_L155
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L155
+                BNE     _namecache_L155
                 LDA     #1
-                BRL     _namecache_L156
+                BRA     _namecache_L156
 _namecache_L155
                 LDA     #0
 _namecache_L156
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L154
+                BEQ     _namecache_L154
                 BRL     _namecache_L149
 _namecache_L154
                 DO      14+vflush_FRAMESIZE/256
@@ -8221,8 +8121,7 @@ _namecache_L154
                 TXA
                 AND     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L158
+                BEQ     _namecache_L158
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8232,16 +8131,14 @@ _namecache_L154
                 TXA
                 AND     #4
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L158
+                BEQ     _namecache_L158
                 LDA     #1
-                BRL     _namecache_L159
+                BRA     _namecache_L159
 _namecache_L158
                 LDA     #0
 _namecache_L159
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L157
+                BEQ     _namecache_L157
                 BRL     _namecache_L149
 _namecache_L157
                 LDA     3,S   ; fccstk d=0 b=3
@@ -8251,8 +8148,7 @@ _namecache_L157
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L160
+                BNE     _namecache_L160
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -8288,23 +8184,20 @@ _namecache_L160
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _namecache_L163
+                BEQ     _namecache_L163
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _namecache_L163
+                BEQ     _namecache_L163
                 LDA     #1
-                BRL     _namecache_L164
+                BRA     _namecache_L164
 _namecache_L163
                 LDA     #0
 _namecache_L164
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L162
+                BEQ     _namecache_L162
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8344,24 +8237,21 @@ _namecache_L162
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L167
+                BNE     _namecache_L167
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L167
+                BNE     _namecache_L167
                 LDA     #1
-                BRL     _namecache_L168
+                BRA     _namecache_L168
 _namecache_L167
                 LDA     #0
 _namecache_L168
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L166
+                BEQ     _namecache_L166
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8373,7 +8263,7 @@ _namecache_L168
                 CLC
                 ADC     #4
                 TCS
-                BRL     _namecache_L149
+                BRA     _namecache_L149
 _namecache_L166
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -8415,7 +8305,7 @@ _namecache_L166
                 ADC     #8
                 TCS
 _namecache_L165
-                BRL     _namecache_L149
+                BRA     _namecache_L149
 _namecache_L161
                 LDA     9,S   ; fccstk d=0 b=9
                 CLC
@@ -8434,8 +8324,7 @@ _namecache_L149
 _namecache_L150
                 LDA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L169
+                BEQ     _namecache_L169
                 LDA     #16
                 TAY
                 TSC
@@ -8575,8 +8464,7 @@ ndslot_stkok        TCS
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 CMP     #0
-                BPL     *+5
-                BRL     _namecache_L171
+                BMI     _namecache_L171
                 DO      8+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -8594,16 +8482,14 @@ ndslot_stkok        TCS
                 BVC     _namecache_L173
                 EOR     #$8000
 _namecache_L173
-                BMI     *+5
-                BRL     _namecache_L171
+                BPL     _namecache_L171
                 LDA     #0
-                BRL     _namecache_L172
+                BRA     _namecache_L172
 _namecache_L171
                 LDA     #1
 _namecache_L172
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L170
+                BEQ     _namecache_L170
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8634,8 +8520,7 @@ _namecache_L170
                 BVC     _namecache_L177
                 EOR     #$8000
 _namecache_L177
-                BPL     *+5
-                BRL     _namecache_L175
+                BMI     _namecache_L175
                 DO      6+ndslot_FRAMESIZE/256
                 TSC
                 CLC
@@ -8656,16 +8541,14 @@ _namecache_L177
                 BVC     _namecache_L178
                 EOR     #$8000
 _namecache_L178
-                BPL     *+5
-                BRL     _namecache_L175
+                BMI     _namecache_L175
                 LDA     #0
-                BRL     _namecache_L176
+                BRA     _namecache_L176
 _namecache_L175
                 LDA     #1
 _namecache_L176
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L174
+                BEQ     _namecache_L174
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8692,24 +8575,21 @@ _namecache_L174
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L180
+                BNE     _namecache_L180
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L180
+                BNE     _namecache_L180
                 LDA     #1
-                BRL     _namecache_L181
+                BRA     _namecache_L181
 _namecache_L180
                 LDA     #0
 _namecache_L181
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L179
+                BEQ     _namecache_L179
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -8784,8 +8664,7 @@ _namecache_L182
                 BVC     _namecache_L185
                 EOR     #$8000
 _namecache_L185
-                BMI     *+5
-                BRL     _namecache_L184
+                BPL     _namecache_L184
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -8802,7 +8681,7 @@ _namecache_L185
                 MX      %00
 _namecache_L183
                 INC     _fcc_img0
-                BRL     _namecache_L182
+                BRA     _namecache_L182
 _namecache_L184
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -9038,24 +8917,21 @@ vfs_dounmount_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L189
+                BNE     _namecache_L189
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L189
+                BNE     _namecache_L189
                 LDA     #1
-                BRL     _namecache_L190
+                BRA     _namecache_L190
 _namecache_L189
                 LDA     #0
 _namecache_L190
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L187
+                BNE     _namecache_L187
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9095,32 +8971,28 @@ _namecache_L190
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L191
+                BNE     _namecache_L191
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L191
+                BNE     _namecache_L191
                 LDA     #1
-                BRL     _namecache_L192
+                BRA     _namecache_L192
 _namecache_L191
                 LDA     #0
 _namecache_L192
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L187
+                BNE     _namecache_L187
                 LDA     #0
-                BRL     _namecache_L188
+                BRA     _namecache_L188
 _namecache_L187
                 LDA     #1
 _namecache_L188
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L186
+                BEQ     _namecache_L186
                 LDA     #22
                 TAY
                 TSC
@@ -9232,8 +9104,7 @@ _namecache_L186
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L193
+                BEQ     _namecache_L193
                 SEP     #$20
                 MX      %10
                 LDA     _namecache_vfs_cacheops+2
@@ -9412,8 +9283,7 @@ _namecache_L195
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L196
+                BEQ     _namecache_L196
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9515,24 +9385,21 @@ _namecache_L196
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L200
+                BNE     _namecache_L200
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L200
+                BNE     _namecache_L200
                 LDA     #0
-                BRL     _namecache_L201
+                BRA     _namecache_L201
 _namecache_L200
                 LDA     #1
 _namecache_L201
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L198
+                BEQ     _namecache_L198
                 DO      8+vfs_dounmount_FRAMESIZE/256
                 TSC
                 CLC
@@ -9572,26 +9439,23 @@ _namecache_L201
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L202
+                BNE     _namecache_L202
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L202
+                BNE     _namecache_L202
                 LDA     #0
-                BRL     _namecache_L203
+                BRA     _namecache_L203
 _namecache_L202
                 LDA     #1
 _namecache_L203
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L198
+                BEQ     _namecache_L198
                 LDA     #1
-                BRL     _namecache_L199
+                BRA     _namecache_L199
 _namecache_L198
                 LDA     #0
 _namecache_L199
@@ -9831,24 +9695,21 @@ _namecache_L197
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L205
+                BNE     _namecache_L205
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L205
+                BNE     _namecache_L205
                 LDA     #0
-                BRL     _namecache_L206
+                BRA     _namecache_L206
 _namecache_L205
                 LDA     #1
 _namecache_L206
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L204
+                BEQ     _namecache_L204
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -10532,24 +10393,21 @@ _namecache_nclru_totail_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L208
+                BNE     _namecache_L208
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L208
+                BNE     _namecache_L208
                 LDA     #1
-                BRL     _namecache_L209
+                BRA     _namecache_L209
 _namecache_L208
                 LDA     #0
 _namecache_L209
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L207
+                BEQ     _namecache_L207
                 TAY
                 TSC
                 CLC
@@ -10991,8 +10849,7 @@ _namecache_nclru_remove_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L210
+                BEQ     _namecache_L210
                 DO      8+_namecache_nclru_remove_FRAMESIZE/256
                 TSC
                 CLC
@@ -11070,7 +10927,7 @@ _namecache_nclru_remove_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                BRL     _namecache_L211
+                BRA     _namecache_L211
 _namecache_L210
                 DO      8+_namecache_nclru_remove_FRAMESIZE/256
                 TSC
@@ -11231,8 +11088,7 @@ _namecache_nclru_tohead_stkok        TCS
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L212
+                BEQ     _namecache_L212
                 SEP     #$20
                 MX      %10
                 LDA     nchhead+2
@@ -11278,7 +11134,7 @@ _namecache_nclru_tohead_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                BRL     _namecache_L213
+                BRA     _namecache_L213
 _namecache_L212
                 DO      8+_namecache_nclru_tohead_FRAMESIZE/256
                 TSC
@@ -11607,8 +11463,7 @@ _namecache_L214
                 BVC     _namecache_L217
                 EOR     #$8000
 _namecache_L217
-                BMI     *+5
-                BRL     _namecache_L216
+                BPL     _namecache_L216
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -11659,7 +11514,7 @@ _namecache_L217
                 STA     _fcc_fpr0+2
 _namecache_L215
                 INC     _fcc_img0
-                BRL     _namecache_L214
+                BRA     _namecache_L214
 _namecache_L216
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -11697,24 +11552,21 @@ _namecache_L216
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L219
+                BNE     _namecache_L219
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L219
+                BNE     _namecache_L219
                 LDA     #1
-                BRL     _namecache_L220
+                BRA     _namecache_L220
 _namecache_L219
                 LDA     #0
 _namecache_L220
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L218
+                BEQ     _namecache_L218
                 LDA     #0
                 STA     doingcache
                 LDA     #0
@@ -12166,8 +12018,7 @@ _namecache_L228
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L229
+                BEQ     _namecache_L229
                 LDA     [_fcc_img1]
                 INC     _fcc_img1
                 AND     #$00FF
@@ -12178,8 +12029,7 @@ _namecache_L228
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _namecache_L230
+                BEQ     _namecache_L230
                 LDA     #1
                 TAY
                 TSC
@@ -12191,7 +12041,7 @@ _namecache_L228
                 TYA
                 RTL
 _namecache_L230
-                BRL     _namecache_L228
+                BRA     _namecache_L228
 _namecache_L229
                 LDA     #0
                 TAY
@@ -12314,8 +12164,7 @@ cache_purge_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L231
+                BEQ     _namecache_L231
                 TAY
                 TSC
                 CLC
@@ -12389,24 +12238,21 @@ _namecache_L236
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L239
+                BNE     _namecache_L239
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L239
+                BNE     _namecache_L239
                 LDA     #0
-                BRL     _namecache_L240
+                BRA     _namecache_L240
 _namecache_L239
                 LDA     #1
 _namecache_L240
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L238
+                BEQ     _namecache_L238
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12598,18 +12444,16 @@ _namecache_L245
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L248
+                BNE     _namecache_L248
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L248
+                BNE     _namecache_L248
                 LDA     #0
-                BRL     _namecache_L249
+                BRA     _namecache_L249
 _namecache_L248
                 LDA     #1
 _namecache_L249
@@ -12656,24 +12500,21 @@ _namecache_L249
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L253
+                BNE     _namecache_L253
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L253
+                BNE     _namecache_L253
                 LDA     #1
-                BRL     _namecache_L254
+                BRA     _namecache_L254
 _namecache_L253
                 LDA     #0
 _namecache_L254
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L251
+                BNE     _namecache_L251
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12726,32 +12567,28 @@ _namecache_L254
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L255
+                BNE     _namecache_L255
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L255
+                BNE     _namecache_L255
                 LDA     #0
-                BRL     _namecache_L256
+                BRA     _namecache_L256
 _namecache_L255
                 LDA     #1
 _namecache_L256
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L251
+                BNE     _namecache_L251
                 LDA     #0
-                BRL     _namecache_L252
+                BRA     _namecache_L252
 _namecache_L251
                 LDA     #1
 _namecache_L252
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L250
+                BEQ     _namecache_L250
                 BRL     _namecache_L246
 _namecache_L250
                 LDA     3,S   ; fccstk d=0 b=3
@@ -12882,8 +12719,7 @@ _namecache_L258
                 LDA     #1
 _namecache_L259
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L257
+                BEQ     _namecache_L257
                 LDA     #0
                 TAY
                 TSC
@@ -12929,8 +12765,7 @@ _namecache_L257
                 BVC     _namecache_L261
                 EOR     #$8000
 _namecache_L261
-                BMI     *+5
-                BRL     _namecache_L260
+                BPL     _namecache_L260
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13108,18 +12943,16 @@ _namecache_L262
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L265
+                BNE     _namecache_L265
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L265
+                BNE     _namecache_L265
                 LDA     #0
-                BRL     _namecache_L266
+                BRA     _namecache_L266
 _namecache_L265
                 LDA     #1
 _namecache_L266
@@ -13148,24 +12981,21 @@ _namecache_L266
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L274
+                BNE     _namecache_L274
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L274
+                BNE     _namecache_L274
                 LDA     #1
-                BRL     _namecache_L275
+                BRA     _namecache_L275
 _namecache_L274
                 LDA     #0
 _namecache_L275
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L272
+                BEQ     _namecache_L272
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13199,16 +13029,14 @@ _namecache_L275
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L272
+                BEQ     _namecache_L272
                 LDA     #1
-                BRL     _namecache_L273
+                BRA     _namecache_L273
 _namecache_L272
                 LDA     #0
 _namecache_L273
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L270
+                BEQ     _namecache_L270
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13244,16 +13072,14 @@ _namecache_L273
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L270
+                BNE     _namecache_L270
                 LDA     #1
-                BRL     _namecache_L271
+                BRA     _namecache_L271
 _namecache_L270
                 LDA     #0
 _namecache_L271
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L268
+                BEQ     _namecache_L268
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13314,17 +13140,15 @@ _namecache_L271
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L268
+                BNE     _namecache_L268
                 LDA     #1
-                BRL     _namecache_L269
+                BRA     _namecache_L269
 _namecache_L268
                 LDA     #0
 _namecache_L269
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L267
-                BRL     _namecache_L264
+                BEQ     _namecache_L267
+                BRA     _namecache_L264
 _namecache_L267
 _namecache_L263
                 LDA     3,S   ; fccstk d=0 b=3
@@ -13358,24 +13182,21 @@ _namecache_L264
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L277
+                BNE     _namecache_L277
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L277
+                BNE     _namecache_L277
                 LDA     #1
-                BRL     _namecache_L278
+                BRA     _namecache_L278
 _namecache_L277
                 LDA     #0
 _namecache_L278
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L276
+                BEQ     _namecache_L276
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13447,8 +13268,7 @@ _namecache_L280
                 LDA     #1
 _namecache_L281
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L279
+                BEQ     _namecache_L279
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13499,24 +13319,21 @@ _namecache_L279
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L284
+                BNE     _namecache_L284
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L284
+                BNE     _namecache_L284
                 LDA     #1
-                BRL     _namecache_L285
+                BRA     _namecache_L285
 _namecache_L284
                 LDA     #0
 _namecache_L285
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L283
+                BEQ     _namecache_L283
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13608,8 +13425,7 @@ _namecache_L283
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L287
+                BEQ     _namecache_L287
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13810,8 +13626,7 @@ _namecache_L290
                 LDA     #1
 _namecache_L291
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L289
+                BEQ     _namecache_L289
                 TAY
                 TSC
                 CLC
@@ -13856,8 +13671,7 @@ _namecache_L289
                 BVC     _namecache_L293
                 EOR     #$8000
 _namecache_L293
-                BMI     *+5
-                BRL     _namecache_L292
+                BPL     _namecache_L292
                 TAY
                 TSC
                 CLC
@@ -13885,24 +13699,21 @@ _namecache_L292
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L295
+                BNE     _namecache_L295
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L295
+                BNE     _namecache_L295
                 LDA     #1
-                BRL     _namecache_L296
+                BRA     _namecache_L296
 _namecache_L295
                 LDA     #0
 _namecache_L296
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L294
+                BEQ     _namecache_L294
                 TAY
                 TSC
                 CLC
@@ -14020,8 +13831,7 @@ _namecache_L294
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _namecache_L297
+                BEQ     _namecache_L297
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14072,7 +13882,7 @@ _namecache_L294
                 LDY     #30
                 STA     [_fcc_fpr0],Y
                 TXA
-                BRL     _namecache_L298
+                BRA     _namecache_L298
 _namecache_L297
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -14258,8 +14068,7 @@ _namecache_L299
                 BVC     _namecache_L302
                 EOR     #$8000
 _namecache_L302
-                BMI     *+5
-                BRL     _namecache_L301
+                BPL     _namecache_L301
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14504,10 +14313,9 @@ _namecache_L303
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L304
+                BEQ     _namecache_L304
                 INC     _fcc_img0
-                BRL     _namecache_L303
+                BRA     _namecache_L303
 _namecache_L304
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -14703,24 +14511,21 @@ _namecache_L309
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L312
+                BNE     _namecache_L312
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L312
+                BNE     _namecache_L312
                 LDA     #0
-                BRL     _namecache_L313
+                BRA     _namecache_L313
 _namecache_L312
                 LDA     #1
 _namecache_L313
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L311
+                BEQ     _namecache_L311
                 LDA     _fcc_img1
                 INC
                 STA     _fcc_img1
@@ -14740,8 +14545,7 @@ _namecache_L313
                 BVC     _namecache_L315
                 EOR     #$8000
 _namecache_L315
-                BMI     *+5
-                BRL     _namecache_L314
+                BPL     _namecache_L314
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -14850,24 +14654,21 @@ _namecache_L316
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L322
+                BNE     _namecache_L322
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L322
+                BNE     _namecache_L322
                 LDA     #1
-                BRL     _namecache_L323
+                BRA     _namecache_L323
 _namecache_L322
                 LDA     #0
 _namecache_L323
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L320
+                BNE     _namecache_L320
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14901,32 +14702,28 @@ _namecache_L323
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L324
+                BNE     _namecache_L324
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L324
+                BNE     _namecache_L324
                 LDA     #0
-                BRL     _namecache_L325
+                BRA     _namecache_L325
 _namecache_L324
                 LDA     #1
 _namecache_L325
                 CMP     #0
-                BEQ     *+5
-                BRL     _namecache_L320
+                BNE     _namecache_L320
                 LDA     #0
-                BRL     _namecache_L321
+                BRA     _namecache_L321
 _namecache_L320
                 LDA     #1
 _namecache_L321
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L319
+                BEQ     _namecache_L319
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -14957,8 +14754,7 @@ _namecache_L319
                 BVC     _namecache_L327
                 EOR     #$8000
 _namecache_L327
-                BMI     *+5
-                BRL     _namecache_L326
+                BPL     _namecache_L326
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -15125,8 +14921,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _namecache_L328
+                BEQ     _namecache_L328
                 LDA     #51
                 TAY
                 TSC
@@ -15168,8 +14963,7 @@ _namecache_L328
                 SEC
                 SBC     _fcc_fpr1
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L329
+                BEQ     _namecache_L329
                 LDA     #52
                 TAY
                 TSC
@@ -15215,8 +15009,7 @@ _namecache_L329
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _namecache_L330
+                BEQ     _namecache_L330
                 LDA     #53
                 TAY
                 TSC
@@ -15232,8 +15025,7 @@ _namecache_L330
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L331
+                BEQ     _namecache_L331
                 LDA     #54
                 TAY
                 TSC
@@ -15250,8 +15042,7 @@ _namecache_L331
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L332
+                BEQ     _namecache_L332
                 LDA     #55
                 TAY
                 TSC
@@ -15265,8 +15056,7 @@ _namecache_L331
 _namecache_L332
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L333
+                BEQ     _namecache_L333
                 LDA     #56
                 TAY
                 TSC
@@ -15306,24 +15096,21 @@ _namecache_L333
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L335
+                BNE     _namecache_L335
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L335
+                BNE     _namecache_L335
                 LDA     #0
-                BRL     _namecache_L336
+                BRA     _namecache_L336
 _namecache_L335
                 LDA     #1
 _namecache_L336
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L334
+                BEQ     _namecache_L334
                 LDA     #57
                 TAY
                 TSC
@@ -15383,8 +15170,7 @@ _namecache_L334
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L337
+                BEQ     _namecache_L337
                 LDA     #58
                 TAY
                 TSC
@@ -15451,8 +15237,7 @@ _namecache_L337
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L338
+                BEQ     _namecache_L338
                 LDA     #59
                 TAY
                 TSC
@@ -15514,8 +15299,7 @@ _namecache_L338
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L339
+                BEQ     _namecache_L339
                 LDA     #60
                 TAY
                 TSC
@@ -15547,8 +15331,7 @@ _namecache_L339
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L340
+                BEQ     _namecache_L340
                 LDA     #61
                 TAY
                 TSC
@@ -15598,8 +15381,7 @@ _namecache_L340
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _namecache_L341
+                BEQ     _namecache_L341
                 LDA     #62
                 TAY
                 TSC
@@ -15654,8 +15436,7 @@ _namecache_L341
                 TCS
                 TYA
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _namecache_L342
+                BEQ     _namecache_L342
                 LDA     #63
                 TAY
                 TSC
@@ -15677,24 +15458,21 @@ _namecache_L342
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L344
+                BNE     _namecache_L344
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L344
+                BNE     _namecache_L344
                 LDA     #0
-                BRL     _namecache_L345
+                BRA     _namecache_L345
 _namecache_L344
                 LDA     #1
 _namecache_L345
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L343
+                BEQ     _namecache_L343
                 LDA     #64
                 TAY
                 TSC
@@ -15726,8 +15504,7 @@ _namecache_L343
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L346
+                BEQ     _namecache_L346
                 LDA     #65
                 TAY
                 TSC
@@ -15787,8 +15564,7 @@ _namecache_L346
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L347
+                BEQ     _namecache_L347
                 LDA     #66
                 TAY
                 TSC
@@ -15850,8 +15626,7 @@ _namecache_L347
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L348
+                BEQ     _namecache_L348
                 LDA     #67
                 TAY
                 TSC
@@ -15906,8 +15681,7 @@ _namecache_L348
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L349
+                BEQ     _namecache_L349
                 LDA     #68
                 TAY
                 TSC
@@ -15962,8 +15736,7 @@ _namecache_L349
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L350
+                BEQ     _namecache_L350
                 LDA     #69
                 TAY
                 TSC
@@ -16049,8 +15822,7 @@ _namecache_L350
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _namecache_L351
+                BEQ     _namecache_L351
                 LDA     #70
                 TAY
                 TSC
@@ -16086,8 +15858,7 @@ _namecache_L351
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L352
+                BEQ     _namecache_L352
                 LDA     #71
                 TAY
                 TSC
@@ -16148,8 +15919,7 @@ _namecache_L352
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L353
+                BEQ     _namecache_L353
                 LDA     #72
                 TAY
                 TSC
@@ -16216,8 +15986,7 @@ _namecache_L353
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L354
+                BEQ     _namecache_L354
                 LDA     #73
                 TAY
                 TSC
@@ -16362,8 +16131,7 @@ _namecache_L354
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L355
+                BEQ     _namecache_L355
                 LDA     #74
                 TAY
                 TSC
@@ -16385,24 +16153,21 @@ _namecache_L355
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _namecache_L357
+                BNE     _namecache_L357
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _namecache_L357
+                BNE     _namecache_L357
                 LDA     #0
-                BRL     _namecache_L358
+                BRA     _namecache_L358
 _namecache_L357
                 LDA     #1
 _namecache_L358
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L356
+                BEQ     _namecache_L356
                 LDA     #75
                 TAY
                 TSC
@@ -16468,8 +16233,7 @@ _namecache_L356
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _namecache_L359
+                BNE     _namecache_L359
                 LDA     #76
                 TAY
                 TSC
@@ -16505,8 +16269,7 @@ _namecache_L359
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L360
+                BEQ     _namecache_L360
                 LDA     #77
                 TAY
                 TSC
@@ -16520,8 +16283,7 @@ _namecache_L359
 _namecache_L360
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L361
+                BEQ     _namecache_L361
                 LDA     #78
                 TAY
                 TSC
@@ -16582,8 +16344,7 @@ _namecache_L361
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L362
+                BEQ     _namecache_L362
                 LDA     #79
                 TAY
                 TSC
@@ -16650,8 +16411,7 @@ _namecache_L362
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L363
+                BEQ     _namecache_L363
                 LDA     #80
                 TAY
                 TSC
@@ -16780,8 +16540,7 @@ _namecache_L363
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L364
+                BEQ     _namecache_L364
                 LDA     #81
                 TAY
                 TSC
@@ -16842,8 +16601,7 @@ _namecache_L364
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L365
+                BEQ     _namecache_L365
                 LDA     #82
                 TAY
                 TSC
@@ -16890,8 +16648,7 @@ _namecache_L365
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _namecache_L366
+                BNE     _namecache_L366
                 LDA     #83
                 TAY
                 TSC
@@ -16952,8 +16709,7 @@ _namecache_L366
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L367
+                BEQ     _namecache_L367
                 LDA     #84
                 TAY
                 TSC
@@ -16987,8 +16743,7 @@ _namecache_L368
                 BVC     _namecache_L371
                 EOR     #$8000
 _namecache_L371
-                BMI     *+5
-                BRL     _namecache_L370
+                BPL     _namecache_L370
                 LDA     #main_sl_toolong
                 PHA
                 LDA     _fcc_img0
@@ -17011,7 +16766,7 @@ _namecache_L371
                 PLA
 _namecache_L369
                 INC     _fcc_img0
-                BRL     _namecache_L368
+                BRA     _namecache_L368
 _namecache_L370
                 LDA     _fcc_img0
                 STA     21,S   ; fccstk d=0 b=21
@@ -17088,8 +16843,7 @@ _namecache_L370
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L372
+                BEQ     _namecache_L372
                 LDA     #85
                 TAY
                 TSC
@@ -17125,8 +16879,7 @@ _namecache_L372
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L373
+                BEQ     _namecache_L373
                 LDA     #86
                 TAY
                 TSC
@@ -17141,8 +16894,7 @@ _namecache_L373
                 LDA     nd+46
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L374
+                BEQ     _namecache_L374
                 LDA     #87
                 TAY
                 TSC
@@ -17190,8 +16942,7 @@ _namecache_L374
                 TCS
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L375
+                BEQ     _namecache_L375
                 LDA     #88
                 TAY
                 TSC
@@ -17252,8 +17003,7 @@ _namecache_L375
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L376
+                BEQ     _namecache_L376
                 LDA     #89
                 TAY
                 TSC
@@ -17320,8 +17070,7 @@ _namecache_L376
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L377
+                BEQ     _namecache_L377
                 LDA     #90
                 TAY
                 TSC
@@ -17518,8 +17267,7 @@ _namecache_L380
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L382
+                BEQ     _namecache_L382
                 LDA     #91
                 TAY
                 TSC
@@ -17535,8 +17283,7 @@ _namecache_L382
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L383
+                BEQ     _namecache_L383
                 LDA     #92
                 TAY
                 TSC
@@ -17633,8 +17380,7 @@ _namecache_L383
                 TCS
                 TYA
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _namecache_L384
+                BEQ     _namecache_L384
                 LDA     #93
                 TAY
                 TSC
@@ -17787,8 +17533,7 @@ _namecache_L384
                 TCS
                 TYA
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _namecache_L385
+                BEQ     _namecache_L385
                 LDA     #94
                 TAY
                 TSC
@@ -17885,8 +17630,7 @@ _namecache_L385
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L386
+                BEQ     _namecache_L386
                 LDA     #95
                 TAY
                 TSC
@@ -17902,8 +17646,7 @@ _namecache_L386
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L387
+                BEQ     _namecache_L387
                 LDA     #96
                 TAY
                 TSC
@@ -17919,8 +17662,7 @@ _namecache_L387
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L388
+                BEQ     _namecache_L388
                 LDA     #97
                 TAY
                 TSC
@@ -17981,8 +17723,7 @@ _namecache_L388
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L389
+                BEQ     _namecache_L389
                 LDA     #98
                 TAY
                 TSC
@@ -18049,8 +17790,7 @@ _namecache_L389
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L390
+                BEQ     _namecache_L390
                 LDA     #100
                 TAY
                 TSC
@@ -18117,8 +17857,7 @@ _namecache_L390
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L391
+                BEQ     _namecache_L391
                 LDA     #101
                 TAY
                 TSC
@@ -18246,8 +17985,7 @@ _namecache_L391
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _namecache_L392
+                BEQ     _namecache_L392
                 LDA     #102
                 TAY
                 TSC
@@ -18281,8 +18019,7 @@ _namecache_L392
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _namecache_L393
+                BEQ     _namecache_L393
                 LDA     #103
                 TAY
                 TSC
@@ -18337,8 +18074,7 @@ _namecache_L393
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L394
+                BEQ     _namecache_L394
                 LDA     #104
                 TAY
                 TSC
@@ -18393,8 +18129,7 @@ _namecache_L394
                 TCS
                 TYA
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _namecache_L395
+                BEQ     _namecache_L395
                 LDA     #105
                 TAY
                 TSC
@@ -18410,8 +18145,7 @@ _namecache_L395
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _namecache_L396
+                BEQ     _namecache_L396
                 LDA     #106
                 TAY
                 TSC
@@ -18472,8 +18206,7 @@ _namecache_L396
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L397
+                BEQ     _namecache_L397
                 LDA     #107
                 TAY
                 TSC
@@ -18533,8 +18266,7 @@ _namecache_L397
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L398
+                BEQ     _namecache_L398
                 LDA     #108
                 TAY
                 TSC
@@ -18647,8 +18379,7 @@ _namecache_L398
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L399
+                BEQ     _namecache_L399
                 LDA     #109
                 TAY
                 TSC
@@ -18722,8 +18453,7 @@ _namecache_L399
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _namecache_L400
+                BEQ     _namecache_L400
                 LDA     #110
                 TAY
                 TSC

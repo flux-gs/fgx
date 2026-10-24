@@ -30,15 +30,12 @@ classify_stkok        TCS
                 LDA     6+classify_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #1
-                BNE     *+5
-                BRL     _switch_basic_L1
+                BEQ     _switch_basic_L1
                 CMP     #2
-                BNE     *+5
-                BRL     _switch_basic_L2
+                BEQ     _switch_basic_L2
                 CMP     #3
-                BNE     *+5
-                BRL     _switch_basic_L3
-                BRL     _switch_basic_L4
+                BEQ     _switch_basic_L3
+                BRA     _switch_basic_L4
 _switch_basic_L1
                 LDA     #100
                 TAY

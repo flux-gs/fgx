@@ -69,8 +69,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _f_mul_L0
+                BEQ     _f_mul_L0
                 LDA     #1
                 TAY
                 TSC
@@ -126,8 +125,7 @@ _f_mul_L0
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _f_mul_L1
+                BEQ     _f_mul_L1
                 LDA     #2
                 TAY
                 TSC
@@ -158,8 +156,7 @@ _f_mul_L1
                 JSR     _fcc_fneg
                 JSR     _fcc_ftoi
                 CMP     #$FFFE
-                BNE     *+5
-                BRL     _f_mul_L2
+                BEQ     _f_mul_L2
                 LDA     #3
                 TAY
                 TSC
@@ -207,8 +204,7 @@ _f_mul_L2
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _f_mul_L3
+                BEQ     _f_mul_L3
                 LDA     #4
                 TAY
                 TSC
@@ -270,8 +266,7 @@ _f_mul_L3
                 TAX
                 TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _f_mul_L4
+                BNE     _f_mul_L4
                 LDA     #42
                 TAY
                 TSC

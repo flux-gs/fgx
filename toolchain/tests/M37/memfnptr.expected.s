@@ -289,8 +289,7 @@ _memfnptr_L4
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _memfnptr_L3
+                BNE     _memfnptr_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -354,8 +353,7 @@ _memfnptr_L6
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _memfnptr_L5
+                BNE     _memfnptr_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -460,8 +458,7 @@ _memfnptr_L8
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _memfnptr_L9
+                BNE     _memfnptr_L9
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -567,8 +564,7 @@ _memfnptr_L10
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _memfnptr_L11
+                BNE     _memfnptr_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA

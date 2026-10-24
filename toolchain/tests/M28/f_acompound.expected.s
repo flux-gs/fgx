@@ -107,8 +107,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_acompound_L0
+                BEQ     _f_acompound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -207,8 +206,7 @@ _f_acompound_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_acompound_L1
+                BEQ     _f_acompound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -310,8 +308,7 @@ _f_acompound_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_acompound_L2
+                BEQ     _f_acompound_L2
                 LDA     #3
                 TAY
                 TSC
@@ -474,8 +471,7 @@ _f_acompound_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_acompound_L3
+                BEQ     _f_acompound_L3
                 LDA     #4
                 TAY
                 TSC
@@ -637,8 +633,7 @@ _f_acompound_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_acompound_L4
+                BEQ     _f_acompound_L4
                 LDA     #5
                 TAY
                 TSC
@@ -801,8 +796,7 @@ _f_acompound_L4
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _f_acompound_L5
+                BEQ     _f_acompound_L5
                 LDA     #6
                 TAY
                 TSC
@@ -931,8 +925,7 @@ _f_acompound_L5
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _f_acompound_L6
+                BEQ     _f_acompound_L6
                 LDA     #7
                 TAY
                 TSC
@@ -1098,8 +1091,7 @@ _f_acompound_L6
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _f_acompound_L7
+                BEQ     _f_acompound_L7
                 LDA     #8
                 TAY
                 TSC
@@ -1254,8 +1246,7 @@ _f_acompound_L7
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _f_acompound_L8
+                BEQ     _f_acompound_L8
                 LDA     #9
                 TAY
                 TSC

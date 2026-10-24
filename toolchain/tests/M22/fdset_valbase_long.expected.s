@@ -293,8 +293,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fdset_valbase_long_L0
+                BEQ     _fdset_valbase_long_L0
                 LDA     #1
                 TAY
                 TSC
@@ -375,8 +374,7 @@ _fdset_valbase_long_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fdset_valbase_long_L1
+                BEQ     _fdset_valbase_long_L1
                 LDA     #2
                 TAY
                 TSC
@@ -464,8 +462,7 @@ _fdset_valbase_long_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _fdset_valbase_long_L2
+                BEQ     _fdset_valbase_long_L2
                 LDA     #3
                 TAY
                 TSC
@@ -515,8 +512,7 @@ _fdset_valbase_long_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _fdset_valbase_long_L3
+                BEQ     _fdset_valbase_long_L3
                 LDA     #4
                 TAY
                 TSC

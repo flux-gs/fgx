@@ -29,8 +29,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #255
-                BNE     *+5
-                BRL     _init_constcast_L0
+                BEQ     _init_constcast_L0
                 LDA     #1
                 TAY
                 TSC
@@ -49,8 +48,7 @@ _init_constcast_L0
                 TAX
                 TXA
                 CMP     #16
-                BNE     *+5
-                BRL     _init_constcast_L1
+                BEQ     _init_constcast_L1
                 LDA     #2
                 TAY
                 TSC
@@ -69,8 +67,7 @@ _init_constcast_L1
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _init_constcast_L2
+                BEQ     _init_constcast_L2
                 LDA     #3
                 TAY
                 TSC
@@ -118,8 +115,7 @@ _init_constcast_L2
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _init_constcast_L3
+                BEQ     _init_constcast_L3
                 LDA     #4
                 TAY
                 TSC
@@ -151,8 +147,7 @@ _init_constcast_L3
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _init_constcast_L4
+                BEQ     _init_constcast_L4
                 LDA     #5
                 TAY
                 TSC
@@ -195,8 +190,7 @@ _init_constcast_L4
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _init_constcast_L5
+                BEQ     _init_constcast_L5
                 LDA     #6
                 TAY
                 TSC
@@ -238,8 +232,7 @@ _init_constcast_L5
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _init_constcast_L6
+                BEQ     _init_constcast_L6
                 LDA     #7
                 TAY
                 TSC

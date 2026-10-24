@@ -80,24 +80,21 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _cfield_gaddr_L1
+                BNE     _cfield_gaddr_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _cfield_gaddr_L1
+                BNE     _cfield_gaddr_L1
                 LDA     #0
-                BRL     _cfield_gaddr_L2
+                BRA     _cfield_gaddr_L2
 _cfield_gaddr_L1
                 LDA     #1
 _cfield_gaddr_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _cfield_gaddr_L0
+                BEQ     _cfield_gaddr_L0
                 LDA     #1
                 TAY
                 TSC
@@ -141,24 +138,21 @@ _cfield_gaddr_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _cfield_gaddr_L4
+                BNE     _cfield_gaddr_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _cfield_gaddr_L4
+                BNE     _cfield_gaddr_L4
                 LDA     #0
-                BRL     _cfield_gaddr_L5
+                BRA     _cfield_gaddr_L5
 _cfield_gaddr_L4
                 LDA     #1
 _cfield_gaddr_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _cfield_gaddr_L3
+                BEQ     _cfield_gaddr_L3
                 LDA     #2
                 TAY
                 TSC
@@ -206,8 +200,7 @@ _cfield_gaddr_L3
                 TAX
                 TXA
                 CMP     #97
-                BNE     *+5
-                BRL     _cfield_gaddr_L6
+                BEQ     _cfield_gaddr_L6
                 LDA     #3
                 TAY
                 TSC

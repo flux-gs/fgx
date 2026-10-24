@@ -25,82 +25,71 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #4369
-                BEQ     *+5
-                BRL     _struct_chararray_init_L9
+                BNE     _struct_chararray_init_L9
                 LDA     braced+6
                 TAX
                 TXA
                 CMP     #8738
-                BEQ     *+5
-                BRL     _struct_chararray_init_L9
+                BNE     _struct_chararray_init_L9
                 LDA     #1
-                BRL     _struct_chararray_init_L10
+                BRA     _struct_chararray_init_L10
 _struct_chararray_init_L9
                 LDA     #0
 _struct_chararray_init_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L7
+                BEQ     _struct_chararray_init_L7
                 LDA     braced+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _struct_chararray_init_L7
+                BNE     _struct_chararray_init_L7
                 LDA     #1
-                BRL     _struct_chararray_init_L8
+                BRA     _struct_chararray_init_L8
 _struct_chararray_init_L7
                 LDA     #0
 _struct_chararray_init_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L5
+                BEQ     _struct_chararray_init_L5
                 LDA     braced+3
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _struct_chararray_init_L5
+                BNE     _struct_chararray_init_L5
                 LDA     #1
-                BRL     _struct_chararray_init_L6
+                BRA     _struct_chararray_init_L6
 _struct_chararray_init_L5
                 LDA     #0
 _struct_chararray_init_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L3
+                BEQ     _struct_chararray_init_L3
                 LDA     braced+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _struct_chararray_init_L3
+                BNE     _struct_chararray_init_L3
                 LDA     #1
-                BRL     _struct_chararray_init_L4
+                BRA     _struct_chararray_init_L4
 _struct_chararray_init_L3
                 LDA     #0
 _struct_chararray_init_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L1
+                BEQ     _struct_chararray_init_L1
                 LDA     braced+5
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #68
-                BEQ     *+5
-                BRL     _struct_chararray_init_L1
+                BNE     _struct_chararray_init_L1
                 LDA     #1
-                BRL     _struct_chararray_init_L2
+                BRA     _struct_chararray_init_L2
 _struct_chararray_init_L1
                 LDA     #0
 _struct_chararray_init_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L0
+                BEQ     _struct_chararray_init_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -112,76 +101,65 @@ _struct_chararray_init_L0
                 TAX
                 TXA
                 CMP     #13107
-                BEQ     *+5
-                BRL     _struct_chararray_init_L20
+                BNE     _struct_chararray_init_L20
                 LDA     shortb+6
                 TAX
                 TXA
                 CMP     #17476
-                BEQ     *+5
-                BRL     _struct_chararray_init_L20
+                BNE     _struct_chararray_init_L20
                 LDA     #1
-                BRL     _struct_chararray_init_L21
+                BRA     _struct_chararray_init_L21
 _struct_chararray_init_L20
                 LDA     #0
 _struct_chararray_init_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L18
+                BEQ     _struct_chararray_init_L18
                 LDA     shortb+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _struct_chararray_init_L18
+                BNE     _struct_chararray_init_L18
                 LDA     #1
-                BRL     _struct_chararray_init_L19
+                BRA     _struct_chararray_init_L19
 _struct_chararray_init_L18
                 LDA     #0
 _struct_chararray_init_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L16
+                BEQ     _struct_chararray_init_L16
                 LDA     shortb+3
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_chararray_init_L16
+                BNE     _struct_chararray_init_L16
                 LDA     #1
-                BRL     _struct_chararray_init_L17
+                BRA     _struct_chararray_init_L17
 _struct_chararray_init_L16
                 LDA     #0
 _struct_chararray_init_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L14
+                BEQ     _struct_chararray_init_L14
                 LDA     shortb+4
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_chararray_init_L14
+                BNE     _struct_chararray_init_L14
                 LDA     #1
-                BRL     _struct_chararray_init_L15
+                BRA     _struct_chararray_init_L15
 _struct_chararray_init_L14
                 LDA     #0
 _struct_chararray_init_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L12
+                BEQ     _struct_chararray_init_L12
                 LDA     shortb+5
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_chararray_init_L12
+                BNE     _struct_chararray_init_L12
                 LDA     #1
-                BRL     _struct_chararray_init_L13
+                BRA     _struct_chararray_init_L13
 _struct_chararray_init_L12
                 LDA     #0
 _struct_chararray_init_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L11
+                BEQ     _struct_chararray_init_L11
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -193,136 +171,117 @@ _struct_chararray_init_L11
                 TAX
                 TXA
                 CMP     #21845
-                BEQ     *+5
-                BRL     _struct_chararray_init_L39
+                BNE     _struct_chararray_init_L39
                 LDA     fromstr+6
                 TAX
                 TXA
                 CMP     #26214
-                BEQ     *+5
-                BRL     _struct_chararray_init_L39
+                BNE     _struct_chararray_init_L39
                 LDA     #1
-                BRL     _struct_chararray_init_L40
+                BRA     _struct_chararray_init_L40
 _struct_chararray_init_L39
                 LDA     #0
 _struct_chararray_init_L40
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L37
+                BEQ     _struct_chararray_init_L37
                 LDA     fromstr+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _struct_chararray_init_L37
+                BNE     _struct_chararray_init_L37
                 LDA     #1
-                BRL     _struct_chararray_init_L38
+                BRA     _struct_chararray_init_L38
 _struct_chararray_init_L37
                 LDA     #0
 _struct_chararray_init_L38
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L35
+                BEQ     _struct_chararray_init_L35
                 LDA     fromstr+3
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #105
-                BEQ     *+5
-                BRL     _struct_chararray_init_L35
+                BNE     _struct_chararray_init_L35
                 LDA     #1
-                BRL     _struct_chararray_init_L36
+                BRA     _struct_chararray_init_L36
 _struct_chararray_init_L35
                 LDA     #0
 _struct_chararray_init_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L33
+                BEQ     _struct_chararray_init_L33
                 LDA     fromstr+4
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_chararray_init_L33
+                BNE     _struct_chararray_init_L33
                 LDA     #1
-                BRL     _struct_chararray_init_L34
+                BRA     _struct_chararray_init_L34
 _struct_chararray_init_L33
                 LDA     #0
 _struct_chararray_init_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L31
+                BEQ     _struct_chararray_init_L31
                 LDA     fromstr+5
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_chararray_init_L31
+                BNE     _struct_chararray_init_L31
                 LDA     #1
-                BRL     _struct_chararray_init_L32
+                BRA     _struct_chararray_init_L32
 _struct_chararray_init_L31
                 LDA     #0
 _struct_chararray_init_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L29
+                BEQ     _struct_chararray_init_L29
                 LDA     exact+0
                 TAX
                 TXA
                 CMP     #30583
-                BEQ     *+5
-                BRL     _struct_chararray_init_L29
+                BNE     _struct_chararray_init_L29
                 LDA     #1
-                BRL     _struct_chararray_init_L30
+                BRA     _struct_chararray_init_L30
 _struct_chararray_init_L29
                 LDA     #0
 _struct_chararray_init_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L27
+                BEQ     _struct_chararray_init_L27
                 LDA     exact+6
                 TAX
                 TXA
                 CMP     #4660
-                BEQ     *+5
-                BRL     _struct_chararray_init_L27
+                BNE     _struct_chararray_init_L27
                 LDA     #1
-                BRL     _struct_chararray_init_L28
+                BRA     _struct_chararray_init_L28
 _struct_chararray_init_L27
                 LDA     #0
 _struct_chararray_init_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L25
+                BEQ     _struct_chararray_init_L25
                 LDA     exact+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _struct_chararray_init_L25
+                BNE     _struct_chararray_init_L25
                 LDA     #1
-                BRL     _struct_chararray_init_L26
+                BRA     _struct_chararray_init_L26
 _struct_chararray_init_L25
                 LDA     #0
 _struct_chararray_init_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L23
+                BEQ     _struct_chararray_init_L23
                 LDA     exact+5
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _struct_chararray_init_L23
+                BNE     _struct_chararray_init_L23
                 LDA     #1
-                BRL     _struct_chararray_init_L24
+                BRA     _struct_chararray_init_L24
 _struct_chararray_init_L23
                 LDA     #0
 _struct_chararray_init_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_chararray_init_L22
+                BEQ     _struct_chararray_init_L22
                 LDA     _fcc_img0
                 TAX
                 TXA

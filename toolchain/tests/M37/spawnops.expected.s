@@ -130,8 +130,7 @@ main_stkok        TCS
                 BVC     _spawnops_L1
                 EOR     #$8000
 _spawnops_L1
-                BMI     *+5
-                BRL     _spawnops_L0
+                BPL     _spawnops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -167,8 +166,7 @@ _spawnops_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _spawnops_L2
+                BNE     _spawnops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -178,8 +176,7 @@ _spawnops_L0
 _spawnops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BEQ     *+5
-                BRL     _spawnops_L3
+                BNE     _spawnops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -219,8 +216,7 @@ _spawnops_L3
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _spawnops_L4
+                BNE     _spawnops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -277,8 +273,7 @@ _spawnops_L4
                 BVC     _spawnops_L8
                 EOR     #$8000
 _spawnops_L8
-                BMI     *+5
-                BRL     _spawnops_L6
+                BPL     _spawnops_L6
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -307,16 +302,14 @@ _spawnops_L8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _spawnops_L6
+                BNE     _spawnops_L6
                 LDA     #1
-                BRL     _spawnops_L7
+                BRA     _spawnops_L7
 _spawnops_L6
                 LDA     #0
 _spawnops_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _spawnops_L5
+                BEQ     _spawnops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

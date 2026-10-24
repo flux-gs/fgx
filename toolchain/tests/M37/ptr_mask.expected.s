@@ -57,8 +57,7 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L0
+                BNE     _ptr_mask_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -80,8 +79,7 @@ _ptr_mask_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L1
+                BNE     _ptr_mask_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -105,8 +103,7 @@ _ptr_mask_L1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L2
+                BNE     _ptr_mask_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -130,8 +127,7 @@ _ptr_mask_L2
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L3
+                BNE     _ptr_mask_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -154,8 +150,7 @@ _ptr_mask_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _ptr_mask_L4
+                BNE     _ptr_mask_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -180,24 +175,21 @@ _ptr_mask_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_mask_L6
+                BNE     _ptr_mask_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_mask_L6
+                BNE     _ptr_mask_L6
                 LDA     #1
-                BRL     _ptr_mask_L7
+                BRA     _ptr_mask_L7
 _ptr_mask_L6
                 LDA     #0
 _ptr_mask_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_mask_L5
+                BEQ     _ptr_mask_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -213,8 +205,7 @@ _ptr_mask_L5
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _ptr_mask_L8
+                BNE     _ptr_mask_L8
                 LDA     _fcc_img0
                 TAX
                 TXA

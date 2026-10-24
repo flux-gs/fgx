@@ -63,8 +63,7 @@ store_stkok        TCS
                 LDA     8+store_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 CMP     #0
-                BMI     *+5
-                BRL     _longparamseed_L0
+                BPL     _longparamseed_L0
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
@@ -100,7 +99,7 @@ store_stkok        TCS
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
-                BRL     _longparamseed_L1
+                BRA     _longparamseed_L1
 _longparamseed_L0
                 LDA     _fcc_img3
                 STA     _fcc_long_hi
@@ -148,8 +147,7 @@ _longparamseed_L2
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _longparamseed_L4
+                BCS     _longparamseed_L4
                 LDA     #img
                 PHA
                 LDA     _fcc_img0
@@ -197,7 +195,7 @@ _longparamseed_L2
                 TYA
 _longparamseed_L3
                 INC     _fcc_img0
-                BRL     _longparamseed_L2
+                BRA     _longparamseed_L2
 _longparamseed_L4
                 LDA     #0
                 TAY
@@ -277,8 +275,7 @@ _longparamseed_L5
                 BVC     _longparamseed_L8
                 EOR     #$8000
 _longparamseed_L8
-                BMI     *+5
-                BRL     _longparamseed_L7
+                BPL     _longparamseed_L7
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -322,7 +319,7 @@ _longparamseed_L9
                 STA     _fcc_img1
 _longparamseed_L6
                 INC     _fcc_img0
-                BRL     _longparamseed_L5
+                BRA     _longparamseed_L5
 _longparamseed_L7
                 LDA     _fcc_img1
                 TAY
@@ -375,8 +372,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _longparamseed_L11
+                BNE     _longparamseed_L11
                 LDA     #1
                 TAX
                 LDA:    img,X
@@ -384,16 +380,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #86
-                BEQ     *+5
-                BRL     _longparamseed_L11
+                BNE     _longparamseed_L11
                 LDA     #0
-                BRL     _longparamseed_L12
+                BRA     _longparamseed_L12
 _longparamseed_L11
                 LDA     #1
 _longparamseed_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _longparamseed_L10
+                BEQ     _longparamseed_L10
                 LDA     #1
                 TAY
                 TSC
@@ -412,8 +406,7 @@ _longparamseed_L10
                 TAX
                 TXA
                 CMP     #52
-                BEQ     *+5
-                BRL     _longparamseed_L14
+                BNE     _longparamseed_L14
                 LDA     #3
                 TAX
                 LDA:    img,X
@@ -421,16 +414,14 @@ _longparamseed_L10
                 TAX
                 TXA
                 CMP     #18
-                BEQ     *+5
-                BRL     _longparamseed_L14
+                BNE     _longparamseed_L14
                 LDA     #0
-                BRL     _longparamseed_L15
+                BRA     _longparamseed_L15
 _longparamseed_L14
                 LDA     #1
 _longparamseed_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _longparamseed_L13
+                BEQ     _longparamseed_L13
                 LDA     #2
                 TAY
                 TSC
@@ -466,8 +457,7 @@ _longparamseed_L13
                 TAX
                 TXA
                 CMP     #186
-                BEQ     *+5
-                BRL     _longparamseed_L19
+                BNE     _longparamseed_L19
                 LDA     #1
                 TAX
                 LDA:    img,X
@@ -475,16 +465,14 @@ _longparamseed_L13
                 TAX
                 TXA
                 CMP     #254
-                BEQ     *+5
-                BRL     _longparamseed_L19
+                BNE     _longparamseed_L19
                 LDA     #0
-                BRL     _longparamseed_L20
+                BRA     _longparamseed_L20
 _longparamseed_L19
                 LDA     #1
 _longparamseed_L20
                 CMP     #0
-                BEQ     *+5
-                BRL     _longparamseed_L17
+                BNE     _longparamseed_L17
                 LDA     #2
                 TAX
                 LDA:    img,X
@@ -492,16 +480,14 @@ _longparamseed_L20
                 TAX
                 TXA
                 CMP     #202
-                BEQ     *+5
-                BRL     _longparamseed_L17
+                BNE     _longparamseed_L17
                 LDA     #0
-                BRL     _longparamseed_L18
+                BRA     _longparamseed_L18
 _longparamseed_L17
                 LDA     #1
 _longparamseed_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _longparamseed_L16
+                BEQ     _longparamseed_L16
                 LDA     #3
                 TAY
                 TSC
@@ -537,8 +523,7 @@ _longparamseed_L16
                 TAX
                 TXA
                 CMP     #240
-                BEQ     *+5
-                BRL     _longparamseed_L24
+                BNE     _longparamseed_L24
                 LDA     #1
                 TAX
                 LDA:    img,X
@@ -546,16 +531,14 @@ _longparamseed_L16
                 TAX
                 TXA
                 CMP     #222
-                BEQ     *+5
-                BRL     _longparamseed_L24
+                BNE     _longparamseed_L24
                 LDA     #0
-                BRL     _longparamseed_L25
+                BRA     _longparamseed_L25
 _longparamseed_L24
                 LDA     #1
 _longparamseed_L25
                 CMP     #0
-                BEQ     *+5
-                BRL     _longparamseed_L22
+                BNE     _longparamseed_L22
                 LDA     #2
                 TAX
                 LDA:    img,X
@@ -563,16 +546,14 @@ _longparamseed_L25
                 TAX
                 TXA
                 CMP     #188
-                BEQ     *+5
-                BRL     _longparamseed_L22
+                BNE     _longparamseed_L22
                 LDA     #0
-                BRL     _longparamseed_L23
+                BRA     _longparamseed_L23
 _longparamseed_L22
                 LDA     #1
 _longparamseed_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _longparamseed_L21
+                BEQ     _longparamseed_L21
                 LDA     #4
                 TAY
                 TSC
@@ -604,8 +585,7 @@ _longparamseed_L21
                 TAX
                 TXA
                 CMP     #18
-                BNE     *+5
-                BRL     _longparamseed_L26
+                BEQ     _longparamseed_L26
                 LDA     #5
                 TAY
                 TSC
@@ -637,8 +617,7 @@ _longparamseed_L26
                 TAX
                 TXA
                 CMP     #14
-                BNE     *+5
-                BRL     _longparamseed_L27
+                BEQ     _longparamseed_L27
                 LDA     #6
                 TAY
                 TSC

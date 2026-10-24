@@ -33,8 +33,7 @@ _ss_array_L0
                 BVC     _ss_array_L3
                 EOR     #$8000
 _ss_array_L3
-                BMI     *+5
-                BRL     _ss_array_L2
+                BPL     _ss_array_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -70,7 +69,7 @@ _ss_array_L3
                 PLA
 _ss_array_L1
                 INC     _fcc_img0
-                BRL     _ss_array_L0
+                BRA     _ss_array_L0
 _ss_array_L2
                 LDA     #0
                 STA     _fcc_img0
@@ -86,8 +85,7 @@ _ss_array_L4
                 BVC     _ss_array_L7
                 EOR     #$8000
 _ss_array_L7
-                BMI     *+5
-                BRL     _ss_array_L6
+                BPL     _ss_array_L6
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -126,7 +124,7 @@ _ss_array_L7
                 PLA
 _ss_array_L5
                 INC     _fcc_img0
-                BRL     _ss_array_L4
+                BRA     _ss_array_L4
 _ss_array_L6
                 LDA     #0
                 STA     _fcc_img1
@@ -144,8 +142,7 @@ _ss_array_L8
                 BVC     _ss_array_L11
                 EOR     #$8000
 _ss_array_L11
-                BMI     *+5
-                BRL     _ss_array_L10
+                BPL     _ss_array_L10
                 LDA     _fcc_img1
                 PHA
                 SEP     #$20
@@ -194,7 +191,7 @@ _ss_array_L11
                 STA     _fcc_img1
 _ss_array_L9
                 INC     _fcc_img0
-                BRL     _ss_array_L8
+                BRA     _ss_array_L8
 _ss_array_L10
                 LDA     _fcc_img1
                 TAX

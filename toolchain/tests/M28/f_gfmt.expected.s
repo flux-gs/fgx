@@ -81,8 +81,7 @@ _f_gfmt_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L2
+                BEQ     _f_gfmt_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _f_gfmt_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _f_gfmt_L2
+                BNE     _f_gfmt_L2
                 LDA     #1
-                BRL     _f_gfmt_L3
+                BRA     _f_gfmt_L3
 _f_gfmt_L2
                 LDA     #0
 _f_gfmt_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L1
+                BEQ     _f_gfmt_L1
                 INC     _fcc_img0
-                BRL     _f_gfmt_L0
+                BRA     _f_gfmt_L0
 _f_gfmt_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -258,8 +255,7 @@ _f_gfmt_L5
                 LDA     #1
 _f_gfmt_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L4
+                BEQ     _f_gfmt_L4
                 LDA     #1
                 TAY
                 TSC
@@ -355,8 +351,7 @@ _f_gfmt_L8
                 LDA     #1
 _f_gfmt_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L7
+                BEQ     _f_gfmt_L7
                 LDA     #2
                 TAY
                 TSC
@@ -452,8 +447,7 @@ _f_gfmt_L11
                 LDA     #1
 _f_gfmt_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L10
+                BEQ     _f_gfmt_L10
                 LDA     #3
                 TAY
                 TSC
@@ -549,8 +543,7 @@ _f_gfmt_L14
                 LDA     #1
 _f_gfmt_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L13
+                BEQ     _f_gfmt_L13
                 LDA     #4
                 TAY
                 TSC
@@ -646,8 +639,7 @@ _f_gfmt_L17
                 LDA     #1
 _f_gfmt_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L16
+                BEQ     _f_gfmt_L16
                 LDA     #5
                 TAY
                 TSC
@@ -743,8 +735,7 @@ _f_gfmt_L20
                 LDA     #1
 _f_gfmt_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L19
+                BEQ     _f_gfmt_L19
                 LDA     #6
                 TAY
                 TSC
@@ -840,8 +831,7 @@ _f_gfmt_L23
                 LDA     #1
 _f_gfmt_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L22
+                BEQ     _f_gfmt_L22
                 LDA     #7
                 TAY
                 TSC
@@ -937,8 +927,7 @@ _f_gfmt_L26
                 LDA     #1
 _f_gfmt_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L25
+                BEQ     _f_gfmt_L25
                 LDA     #8
                 TAY
                 TSC
@@ -1034,8 +1023,7 @@ _f_gfmt_L29
                 LDA     #1
 _f_gfmt_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L28
+                BEQ     _f_gfmt_L28
                 LDA     #9
                 TAY
                 TSC
@@ -1136,8 +1124,7 @@ _f_gfmt_L32
                 LDA     #1
 _f_gfmt_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _f_gfmt_L31
+                BEQ     _f_gfmt_L31
                 LDA     #10
                 TAY
                 TSC

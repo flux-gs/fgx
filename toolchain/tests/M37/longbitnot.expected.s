@@ -49,8 +49,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L0
+                BEQ     _longbitnot_L0
                 LDA     #1
                 TAY
                 TSC
@@ -92,8 +91,7 @@ _longbitnot_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L1
+                BEQ     _longbitnot_L1
                 LDA     #2
                 TAY
                 TSC
@@ -160,8 +158,7 @@ _longbitnot_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L2
+                BEQ     _longbitnot_L2
                 LDA     #10
                 TAY
                 TSC
@@ -228,8 +225,7 @@ _longbitnot_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L3
+                BEQ     _longbitnot_L3
                 LDA     #11
                 TAY
                 TSC
@@ -296,8 +292,7 @@ _longbitnot_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L4
+                BEQ     _longbitnot_L4
                 LDA     #12
                 TAY
                 TSC
@@ -347,8 +342,7 @@ _longbitnot_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L5
+                BEQ     _longbitnot_L5
                 LDA     #20
                 TAY
                 TSC
@@ -398,8 +392,7 @@ _longbitnot_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L6
+                BEQ     _longbitnot_L6
                 LDA     #21
                 TAY
                 TSC
@@ -466,8 +459,7 @@ _longbitnot_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longbitnot_L7
+                BEQ     _longbitnot_L7
                 LDA     #30
                 TAY
                 TSC
@@ -491,8 +483,7 @@ _longbitnot_L7
                 TAX
                 TXA
                 CMP     #240
-                BNE     *+5
-                BRL     _longbitnot_L8
+                BEQ     _longbitnot_L8
                 LDA     #40
                 TAY
                 TSC

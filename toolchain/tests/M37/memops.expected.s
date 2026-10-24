@@ -114,8 +114,7 @@ _memops_L0
                 BVC     _memops_L3
                 EOR     #$8000
 _memops_L3
-                BMI     *+5
-                BRL     _memops_L2
+                BPL     _memops_L2
                 LDA     _fcc_img0
                 TAX
                 LDA:    gbuf,X
@@ -139,8 +138,7 @@ _memops_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _memops_L4
+                BNE     _memops_L4
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -150,7 +148,7 @@ _memops_L3
 _memops_L4
 _memops_L1
                 INC     _fcc_img0
-                BRL     _memops_L0
+                BRA     _memops_L0
 _memops_L2
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
@@ -193,24 +191,21 @@ _memops_L2
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _memops_L6
+                BNE     _memops_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _memops_L6
+                BNE     _memops_L6
                 LDA     #1
-                BRL     _memops_L7
+                BRA     _memops_L7
 _memops_L6
                 LDA     #0
 _memops_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _memops_L5
+                BEQ     _memops_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA

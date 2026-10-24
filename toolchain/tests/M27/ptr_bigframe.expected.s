@@ -107,8 +107,7 @@ _ptr_bigframe_L0
                 BVC     _ptr_bigframe_L3
                 EOR     #$8000
 _ptr_bigframe_L3
-                BMI     *+5
-                BRL     _ptr_bigframe_L2
+                BPL     _ptr_bigframe_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_img3]
@@ -126,7 +125,7 @@ _ptr_bigframe_L3
                 STA     _fcc_img3
 _ptr_bigframe_L1
                 INC     _fcc_img0
-                BRL     _ptr_bigframe_L0
+                BRA     _ptr_bigframe_L0
 _ptr_bigframe_L2
                 LDA     _fcc_img1
                 PHA

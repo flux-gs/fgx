@@ -247,8 +247,7 @@ _llong_arith_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L0
+                BEQ     _llong_arith_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -305,10 +304,9 @@ _llong_arith_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L0
+                BEQ     _llong_arith_L0
                 LDA     #1
-                BRL     _llong_arith_L1
+                BRA     _llong_arith_L1
 _llong_arith_L0
                 LDA     #0
 _llong_arith_L1
@@ -414,8 +412,7 @@ _llong_arith_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L2
+                BEQ     _llong_arith_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -472,10 +469,9 @@ _llong_arith_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L2
+                BEQ     _llong_arith_L2
                 LDA     #1
-                BRL     _llong_arith_L3
+                BRA     _llong_arith_L3
 _llong_arith_L2
                 LDA     #0
 _llong_arith_L3
@@ -673,8 +669,7 @@ _llong_arith_L5
                 LDA     #1
 _llong_arith_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L4
+                BEQ     _llong_arith_L4
                 LDA     #1
                 TAY
                 TSC
@@ -854,8 +849,7 @@ _llong_arith_L8
                 LDA     #1
 _llong_arith_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L7
+                BEQ     _llong_arith_L7
                 LDA     #2
                 TAY
                 TSC
@@ -1035,8 +1029,7 @@ _llong_arith_L11
                 LDA     #1
 _llong_arith_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L10
+                BEQ     _llong_arith_L10
                 LDA     #3
                 TAY
                 TSC
@@ -1216,8 +1209,7 @@ _llong_arith_L14
                 LDA     #1
 _llong_arith_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L13
+                BEQ     _llong_arith_L13
                 LDA     #4
                 TAY
                 TSC
@@ -1397,8 +1389,7 @@ _llong_arith_L17
                 LDA     #1
 _llong_arith_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L16
+                BEQ     _llong_arith_L16
                 LDA     #5
                 TAY
                 TSC
@@ -1546,8 +1537,7 @@ _llong_arith_L20
                 LDA     #1
 _llong_arith_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L19
+                BEQ     _llong_arith_L19
                 LDA     #6
                 TAY
                 TSC
@@ -1695,8 +1685,7 @@ _llong_arith_L23
                 LDA     #1
 _llong_arith_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L22
+                BEQ     _llong_arith_L22
                 LDA     #7
                 TAY
                 TSC
@@ -1876,8 +1865,7 @@ _llong_arith_L26
                 LDA     #1
 _llong_arith_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L25
+                BEQ     _llong_arith_L25
                 LDA     #8
                 TAY
                 TSC
@@ -2057,8 +2045,7 @@ _llong_arith_L29
                 LDA     #1
 _llong_arith_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L28
+                BEQ     _llong_arith_L28
                 LDA     #9
                 TAY
                 TSC
@@ -2238,8 +2225,7 @@ _llong_arith_L32
                 LDA     #1
 _llong_arith_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L31
+                BEQ     _llong_arith_L31
                 LDA     #10
                 TAY
                 TSC
@@ -2419,8 +2405,7 @@ _llong_arith_L35
                 LDA     #1
 _llong_arith_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L34
+                BEQ     _llong_arith_L34
                 LDA     #11
                 TAY
                 TSC
@@ -2600,8 +2585,7 @@ _llong_arith_L38
                 LDA     #1
 _llong_arith_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L37
+                BEQ     _llong_arith_L37
                 LDA     #12
                 TAY
                 TSC
@@ -2749,8 +2733,7 @@ _llong_arith_L41
                 LDA     #1
 _llong_arith_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L40
+                BEQ     _llong_arith_L40
                 LDA     #13
                 TAY
                 TSC
@@ -2898,8 +2881,7 @@ _llong_arith_L44
                 LDA     #1
 _llong_arith_L45
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L43
+                BEQ     _llong_arith_L43
                 LDA     #14
                 TAY
                 TSC
@@ -3079,8 +3061,7 @@ _llong_arith_L47
                 LDA     #1
 _llong_arith_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L46
+                BEQ     _llong_arith_L46
                 LDA     #15
                 TAY
                 TSC
@@ -3260,8 +3241,7 @@ _llong_arith_L50
                 LDA     #1
 _llong_arith_L51
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L49
+                BEQ     _llong_arith_L49
                 LDA     #16
                 TAY
                 TSC
@@ -3441,8 +3421,7 @@ _llong_arith_L53
                 LDA     #1
 _llong_arith_L54
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L52
+                BEQ     _llong_arith_L52
                 LDA     #17
                 TAY
                 TSC
@@ -3622,8 +3601,7 @@ _llong_arith_L56
                 LDA     #1
 _llong_arith_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L55
+                BEQ     _llong_arith_L55
                 LDA     #18
                 TAY
                 TSC
@@ -3803,8 +3781,7 @@ _llong_arith_L59
                 LDA     #1
 _llong_arith_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L58
+                BEQ     _llong_arith_L58
                 LDA     #19
                 TAY
                 TSC
@@ -3952,8 +3929,7 @@ _llong_arith_L62
                 LDA     #1
 _llong_arith_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L61
+                BEQ     _llong_arith_L61
                 LDA     #20
                 TAY
                 TSC
@@ -4101,8 +4077,7 @@ _llong_arith_L65
                 LDA     #1
 _llong_arith_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L64
+                BEQ     _llong_arith_L64
                 LDA     #21
                 TAY
                 TSC
@@ -4282,8 +4257,7 @@ _llong_arith_L68
                 LDA     #1
 _llong_arith_L69
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L67
+                BEQ     _llong_arith_L67
                 LDA     #22
                 TAY
                 TSC
@@ -4463,8 +4437,7 @@ _llong_arith_L71
                 LDA     #1
 _llong_arith_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L70
+                BEQ     _llong_arith_L70
                 LDA     #23
                 TAY
                 TSC
@@ -4644,8 +4617,7 @@ _llong_arith_L74
                 LDA     #1
 _llong_arith_L75
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L73
+                BEQ     _llong_arith_L73
                 LDA     #24
                 TAY
                 TSC
@@ -4825,8 +4797,7 @@ _llong_arith_L77
                 LDA     #1
 _llong_arith_L78
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L76
+                BEQ     _llong_arith_L76
                 LDA     #25
                 TAY
                 TSC
@@ -5006,8 +4977,7 @@ _llong_arith_L80
                 LDA     #1
 _llong_arith_L81
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L79
+                BEQ     _llong_arith_L79
                 LDA     #26
                 TAY
                 TSC
@@ -5155,8 +5125,7 @@ _llong_arith_L83
                 LDA     #1
 _llong_arith_L84
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L82
+                BEQ     _llong_arith_L82
                 LDA     #27
                 TAY
                 TSC
@@ -5304,8 +5273,7 @@ _llong_arith_L86
                 LDA     #1
 _llong_arith_L87
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L85
+                BEQ     _llong_arith_L85
                 LDA     #28
                 TAY
                 TSC
@@ -5485,8 +5453,7 @@ _llong_arith_L89
                 LDA     #1
 _llong_arith_L90
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L88
+                BEQ     _llong_arith_L88
                 LDA     #29
                 TAY
                 TSC
@@ -5666,8 +5633,7 @@ _llong_arith_L92
                 LDA     #1
 _llong_arith_L93
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L91
+                BEQ     _llong_arith_L91
                 LDA     #30
                 TAY
                 TSC
@@ -5847,8 +5813,7 @@ _llong_arith_L95
                 LDA     #1
 _llong_arith_L96
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L94
+                BEQ     _llong_arith_L94
                 LDA     #31
                 TAY
                 TSC
@@ -6028,8 +5993,7 @@ _llong_arith_L98
                 LDA     #1
 _llong_arith_L99
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L97
+                BEQ     _llong_arith_L97
                 LDA     #32
                 TAY
                 TSC
@@ -6209,8 +6173,7 @@ _llong_arith_L101
                 LDA     #1
 _llong_arith_L102
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L100
+                BEQ     _llong_arith_L100
                 LDA     #33
                 TAY
                 TSC
@@ -6358,8 +6321,7 @@ _llong_arith_L104
                 LDA     #1
 _llong_arith_L105
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L103
+                BEQ     _llong_arith_L103
                 LDA     #34
                 TAY
                 TSC
@@ -6507,8 +6469,7 @@ _llong_arith_L107
                 LDA     #1
 _llong_arith_L108
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L106
+                BEQ     _llong_arith_L106
                 LDA     #35
                 TAY
                 TSC
@@ -6688,8 +6649,7 @@ _llong_arith_L110
                 LDA     #1
 _llong_arith_L111
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L109
+                BEQ     _llong_arith_L109
                 LDA     #36
                 TAY
                 TSC
@@ -6869,8 +6829,7 @@ _llong_arith_L113
                 LDA     #1
 _llong_arith_L114
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L112
+                BEQ     _llong_arith_L112
                 LDA     #37
                 TAY
                 TSC
@@ -7050,8 +7009,7 @@ _llong_arith_L116
                 LDA     #1
 _llong_arith_L117
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L115
+                BEQ     _llong_arith_L115
                 LDA     #38
                 TAY
                 TSC
@@ -7231,8 +7189,7 @@ _llong_arith_L119
                 LDA     #1
 _llong_arith_L120
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L118
+                BEQ     _llong_arith_L118
                 LDA     #39
                 TAY
                 TSC
@@ -7412,8 +7369,7 @@ _llong_arith_L122
                 LDA     #1
 _llong_arith_L123
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L121
+                BEQ     _llong_arith_L121
                 LDA     #40
                 TAY
                 TSC
@@ -7561,8 +7517,7 @@ _llong_arith_L125
                 LDA     #1
 _llong_arith_L126
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L124
+                BEQ     _llong_arith_L124
                 LDA     #41
                 TAY
                 TSC
@@ -7710,8 +7665,7 @@ _llong_arith_L128
                 LDA     #1
 _llong_arith_L129
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L127
+                BEQ     _llong_arith_L127
                 LDA     #43
                 TAY
                 TSC
@@ -7891,8 +7845,7 @@ _llong_arith_L131
                 LDA     #1
 _llong_arith_L132
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L130
+                BEQ     _llong_arith_L130
                 LDA     #44
                 TAY
                 TSC
@@ -8072,8 +8025,7 @@ _llong_arith_L134
                 LDA     #1
 _llong_arith_L135
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L133
+                BEQ     _llong_arith_L133
                 LDA     #45
                 TAY
                 TSC
@@ -8253,8 +8205,7 @@ _llong_arith_L137
                 LDA     #1
 _llong_arith_L138
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L136
+                BEQ     _llong_arith_L136
                 LDA     #46
                 TAY
                 TSC
@@ -8434,8 +8385,7 @@ _llong_arith_L140
                 LDA     #1
 _llong_arith_L141
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L139
+                BEQ     _llong_arith_L139
                 LDA     #47
                 TAY
                 TSC
@@ -8615,8 +8565,7 @@ _llong_arith_L143
                 LDA     #1
 _llong_arith_L144
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L142
+                BEQ     _llong_arith_L142
                 LDA     #48
                 TAY
                 TSC
@@ -8764,8 +8713,7 @@ _llong_arith_L146
                 LDA     #1
 _llong_arith_L147
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L145
+                BEQ     _llong_arith_L145
                 LDA     #49
                 TAY
                 TSC
@@ -8913,8 +8861,7 @@ _llong_arith_L149
                 LDA     #1
 _llong_arith_L150
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L148
+                BEQ     _llong_arith_L148
                 LDA     #50
                 TAY
                 TSC
@@ -9048,8 +8995,7 @@ _llong_arith_L152
                 LDA     #1
 _llong_arith_L153
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L151
+                BEQ     _llong_arith_L151
                 LDA     #51
                 TAY
                 TSC
@@ -9183,8 +9129,7 @@ _llong_arith_L155
                 LDA     #1
 _llong_arith_L156
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L154
+                BEQ     _llong_arith_L154
                 LDA     #52
                 TAY
                 TSC
@@ -9318,8 +9263,7 @@ _llong_arith_L158
                 LDA     #1
 _llong_arith_L159
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L157
+                BEQ     _llong_arith_L157
                 LDA     #53
                 TAY
                 TSC
@@ -9453,8 +9397,7 @@ _llong_arith_L161
                 LDA     #1
 _llong_arith_L162
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L160
+                BEQ     _llong_arith_L160
                 LDA     #54
                 TAY
                 TSC
@@ -9588,8 +9531,7 @@ _llong_arith_L164
                 LDA     #1
 _llong_arith_L165
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L163
+                BEQ     _llong_arith_L163
                 LDA     #55
                 TAY
                 TSC
@@ -9723,8 +9665,7 @@ _llong_arith_L167
                 LDA     #1
 _llong_arith_L168
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L166
+                BEQ     _llong_arith_L166
                 LDA     #56
                 TAY
                 TSC
@@ -9858,8 +9799,7 @@ _llong_arith_L170
                 LDA     #1
 _llong_arith_L171
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L169
+                BEQ     _llong_arith_L169
                 LDA     #57
                 TAY
                 TSC
@@ -9993,8 +9933,7 @@ _llong_arith_L173
                 LDA     #1
 _llong_arith_L174
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L172
+                BEQ     _llong_arith_L172
                 LDA     #58
                 TAY
                 TSC
@@ -10128,8 +10067,7 @@ _llong_arith_L176
                 LDA     #1
 _llong_arith_L177
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L175
+                BEQ     _llong_arith_L175
                 LDA     #59
                 TAY
                 TSC
@@ -10263,8 +10201,7 @@ _llong_arith_L179
                 LDA     #1
 _llong_arith_L180
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L178
+                BEQ     _llong_arith_L178
                 LDA     #60
                 TAY
                 TSC
@@ -10398,8 +10335,7 @@ _llong_arith_L182
                 LDA     #1
 _llong_arith_L183
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L181
+                BEQ     _llong_arith_L181
                 LDA     #61
                 TAY
                 TSC
@@ -10533,8 +10469,7 @@ _llong_arith_L185
                 LDA     #1
 _llong_arith_L186
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L184
+                BEQ     _llong_arith_L184
                 LDA     #62
                 TAY
                 TSC
@@ -10668,8 +10603,7 @@ _llong_arith_L188
                 LDA     #1
 _llong_arith_L189
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L187
+                BEQ     _llong_arith_L187
                 LDA     #63
                 TAY
                 TSC
@@ -10803,8 +10737,7 @@ _llong_arith_L191
                 LDA     #1
 _llong_arith_L192
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L190
+                BEQ     _llong_arith_L190
                 LDA     #64
                 TAY
                 TSC
@@ -10938,8 +10871,7 @@ _llong_arith_L194
                 LDA     #1
 _llong_arith_L195
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L193
+                BEQ     _llong_arith_L193
                 LDA     #65
                 TAY
                 TSC
@@ -11073,8 +11005,7 @@ _llong_arith_L197
                 LDA     #1
 _llong_arith_L198
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L196
+                BEQ     _llong_arith_L196
                 LDA     #66
                 TAY
                 TSC
@@ -11208,8 +11139,7 @@ _llong_arith_L200
                 LDA     #1
 _llong_arith_L201
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L199
+                BEQ     _llong_arith_L199
                 LDA     #67
                 TAY
                 TSC
@@ -11343,8 +11273,7 @@ _llong_arith_L203
                 LDA     #1
 _llong_arith_L204
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L202
+                BEQ     _llong_arith_L202
                 LDA     #68
                 TAY
                 TSC
@@ -11478,8 +11407,7 @@ _llong_arith_L206
                 LDA     #1
 _llong_arith_L207
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L205
+                BEQ     _llong_arith_L205
                 LDA     #69
                 TAY
                 TSC
@@ -11613,8 +11541,7 @@ _llong_arith_L209
                 LDA     #1
 _llong_arith_L210
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L208
+                BEQ     _llong_arith_L208
                 LDA     #70
                 TAY
                 TSC
@@ -11748,8 +11675,7 @@ _llong_arith_L212
                 LDA     #1
 _llong_arith_L213
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L211
+                BEQ     _llong_arith_L211
                 LDA     #71
                 TAY
                 TSC
@@ -11883,8 +11809,7 @@ _llong_arith_L215
                 LDA     #1
 _llong_arith_L216
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L214
+                BEQ     _llong_arith_L214
                 LDA     #72
                 TAY
                 TSC
@@ -12018,8 +11943,7 @@ _llong_arith_L218
                 LDA     #1
 _llong_arith_L219
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L217
+                BEQ     _llong_arith_L217
                 LDA     #73
                 TAY
                 TSC
@@ -12153,8 +12077,7 @@ _llong_arith_L221
                 LDA     #1
 _llong_arith_L222
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L220
+                BEQ     _llong_arith_L220
                 LDA     #74
                 TAY
                 TSC
@@ -12288,8 +12211,7 @@ _llong_arith_L224
                 LDA     #1
 _llong_arith_L225
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L223
+                BEQ     _llong_arith_L223
                 LDA     #75
                 TAY
                 TSC
@@ -12423,8 +12345,7 @@ _llong_arith_L227
                 LDA     #1
 _llong_arith_L228
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L226
+                BEQ     _llong_arith_L226
                 LDA     #76
                 TAY
                 TSC
@@ -12558,8 +12479,7 @@ _llong_arith_L230
                 LDA     #1
 _llong_arith_L231
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L229
+                BEQ     _llong_arith_L229
                 LDA     #77
                 TAY
                 TSC
@@ -12693,8 +12613,7 @@ _llong_arith_L233
                 LDA     #1
 _llong_arith_L234
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L232
+                BEQ     _llong_arith_L232
                 LDA     #78
                 TAY
                 TSC
@@ -12828,8 +12747,7 @@ _llong_arith_L236
                 LDA     #1
 _llong_arith_L237
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L235
+                BEQ     _llong_arith_L235
                 LDA     #79
                 TAY
                 TSC
@@ -12963,8 +12881,7 @@ _llong_arith_L239
                 LDA     #1
 _llong_arith_L240
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L238
+                BEQ     _llong_arith_L238
                 LDA     #80
                 TAY
                 TSC
@@ -13098,8 +13015,7 @@ _llong_arith_L242
                 LDA     #1
 _llong_arith_L243
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L241
+                BEQ     _llong_arith_L241
                 LDA     #81
                 TAY
                 TSC
@@ -13233,8 +13149,7 @@ _llong_arith_L245
                 LDA     #1
 _llong_arith_L246
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L244
+                BEQ     _llong_arith_L244
                 LDA     #82
                 TAY
                 TSC
@@ -13368,8 +13283,7 @@ _llong_arith_L248
                 LDA     #1
 _llong_arith_L249
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L247
+                BEQ     _llong_arith_L247
                 LDA     #83
                 TAY
                 TSC
@@ -13503,8 +13417,7 @@ _llong_arith_L251
                 LDA     #1
 _llong_arith_L252
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L250
+                BEQ     _llong_arith_L250
                 LDA     #84
                 TAY
                 TSC
@@ -13638,8 +13551,7 @@ _llong_arith_L254
                 LDA     #1
 _llong_arith_L255
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L253
+                BEQ     _llong_arith_L253
                 LDA     #85
                 TAY
                 TSC
@@ -13773,8 +13685,7 @@ _llong_arith_L257
                 LDA     #1
 _llong_arith_L258
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L256
+                BEQ     _llong_arith_L256
                 LDA     #86
                 TAY
                 TSC
@@ -13908,8 +13819,7 @@ _llong_arith_L260
                 LDA     #1
 _llong_arith_L261
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L259
+                BEQ     _llong_arith_L259
                 LDA     #87
                 TAY
                 TSC
@@ -14043,8 +13953,7 @@ _llong_arith_L263
                 LDA     #1
 _llong_arith_L264
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L262
+                BEQ     _llong_arith_L262
                 LDA     #88
                 TAY
                 TSC
@@ -14178,8 +14087,7 @@ _llong_arith_L266
                 LDA     #1
 _llong_arith_L267
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L265
+                BEQ     _llong_arith_L265
                 LDA     #89
                 TAY
                 TSC
@@ -14313,8 +14221,7 @@ _llong_arith_L269
                 LDA     #1
 _llong_arith_L270
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L268
+                BEQ     _llong_arith_L268
                 LDA     #90
                 TAY
                 TSC
@@ -14448,8 +14355,7 @@ _llong_arith_L272
                 LDA     #1
 _llong_arith_L273
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L271
+                BEQ     _llong_arith_L271
                 LDA     #91
                 TAY
                 TSC
@@ -14583,8 +14489,7 @@ _llong_arith_L275
                 LDA     #1
 _llong_arith_L276
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L274
+                BEQ     _llong_arith_L274
                 LDA     #92
                 TAY
                 TSC
@@ -14718,8 +14623,7 @@ _llong_arith_L278
                 LDA     #1
 _llong_arith_L279
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L277
+                BEQ     _llong_arith_L277
                 LDA     #93
                 TAY
                 TSC
@@ -14853,8 +14757,7 @@ _llong_arith_L281
                 LDA     #1
 _llong_arith_L282
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L280
+                BEQ     _llong_arith_L280
                 LDA     #94
                 TAY
                 TSC
@@ -14988,8 +14891,7 @@ _llong_arith_L284
                 LDA     #1
 _llong_arith_L285
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L283
+                BEQ     _llong_arith_L283
                 LDA     #95
                 TAY
                 TSC
@@ -15123,8 +15025,7 @@ _llong_arith_L287
                 LDA     #1
 _llong_arith_L288
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L286
+                BEQ     _llong_arith_L286
                 LDA     #96
                 TAY
                 TSC
@@ -15258,8 +15159,7 @@ _llong_arith_L290
                 LDA     #1
 _llong_arith_L291
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L289
+                BEQ     _llong_arith_L289
                 LDA     #97
                 TAY
                 TSC
@@ -15393,8 +15293,7 @@ _llong_arith_L293
                 LDA     #1
 _llong_arith_L294
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L292
+                BEQ     _llong_arith_L292
                 LDA     #98
                 TAY
                 TSC
@@ -15528,8 +15427,7 @@ _llong_arith_L296
                 LDA     #1
 _llong_arith_L297
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L295
+                BEQ     _llong_arith_L295
                 LDA     #99
                 TAY
                 TSC
@@ -15663,8 +15561,7 @@ _llong_arith_L299
                 LDA     #1
 _llong_arith_L300
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L298
+                BEQ     _llong_arith_L298
                 LDA     #100
                 TAY
                 TSC
@@ -15798,8 +15695,7 @@ _llong_arith_L302
                 LDA     #1
 _llong_arith_L303
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L301
+                BEQ     _llong_arith_L301
                 LDA     #101
                 TAY
                 TSC
@@ -15933,8 +15829,7 @@ _llong_arith_L305
                 LDA     #1
 _llong_arith_L306
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L304
+                BEQ     _llong_arith_L304
                 LDA     #102
                 TAY
                 TSC
@@ -16068,8 +15963,7 @@ _llong_arith_L308
                 LDA     #1
 _llong_arith_L309
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L307
+                BEQ     _llong_arith_L307
                 LDA     #103
                 TAY
                 TSC
@@ -16203,8 +16097,7 @@ _llong_arith_L311
                 LDA     #1
 _llong_arith_L312
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L310
+                BEQ     _llong_arith_L310
                 LDA     #104
                 TAY
                 TSC
@@ -16338,8 +16231,7 @@ _llong_arith_L314
                 LDA     #1
 _llong_arith_L315
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L313
+                BEQ     _llong_arith_L313
                 LDA     #105
                 TAY
                 TSC
@@ -16473,8 +16365,7 @@ _llong_arith_L317
                 LDA     #1
 _llong_arith_L318
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L316
+                BEQ     _llong_arith_L316
                 LDA     #106
                 TAY
                 TSC
@@ -16608,8 +16499,7 @@ _llong_arith_L320
                 LDA     #1
 _llong_arith_L321
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L319
+                BEQ     _llong_arith_L319
                 LDA     #107
                 TAY
                 TSC
@@ -16743,8 +16633,7 @@ _llong_arith_L323
                 LDA     #1
 _llong_arith_L324
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L322
+                BEQ     _llong_arith_L322
                 LDA     #108
                 TAY
                 TSC
@@ -16878,8 +16767,7 @@ _llong_arith_L326
                 LDA     #1
 _llong_arith_L327
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L325
+                BEQ     _llong_arith_L325
                 LDA     #109
                 TAY
                 TSC
@@ -17013,8 +16901,7 @@ _llong_arith_L329
                 LDA     #1
 _llong_arith_L330
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L328
+                BEQ     _llong_arith_L328
                 LDA     #110
                 TAY
                 TSC
@@ -17144,8 +17031,7 @@ _llong_arith_L328
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L331
+                BEQ     _llong_arith_L331
                 LDA     #111
                 TAY
                 TSC
@@ -17275,8 +17161,7 @@ _llong_arith_L331
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L332
+                BEQ     _llong_arith_L332
                 LDA     #112
                 TAY
                 TSC
@@ -17409,8 +17294,7 @@ _llong_arith_L332
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L333
+                BEQ     _llong_arith_L333
                 LDA     #113
                 TAY
                 TSC
@@ -17543,8 +17427,7 @@ _llong_arith_L333
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L334
+                BEQ     _llong_arith_L334
                 LDA     #114
                 TAY
                 TSC
@@ -17675,8 +17558,7 @@ _llong_arith_L334
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L335
+                BEQ     _llong_arith_L335
                 LDA     #115
                 TAY
                 TSC
@@ -17807,8 +17689,7 @@ _llong_arith_L335
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L336
+                BEQ     _llong_arith_L336
                 LDA     #116
                 TAY
                 TSC
@@ -17940,8 +17821,7 @@ _llong_arith_L336
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L337
+                BEQ     _llong_arith_L337
                 LDA     #117
                 TAY
                 TSC
@@ -18073,8 +17953,7 @@ _llong_arith_L337
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L338
+                BEQ     _llong_arith_L338
                 LDA     #118
                 TAY
                 TSC
@@ -18204,8 +18083,7 @@ _llong_arith_L338
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L339
+                BEQ     _llong_arith_L339
                 LDA     #119
                 TAY
                 TSC
@@ -18335,8 +18213,7 @@ _llong_arith_L339
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L340
+                BEQ     _llong_arith_L340
                 LDA     #120
                 TAY
                 TSC
@@ -18468,8 +18345,7 @@ _llong_arith_L340
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L341
+                BEQ     _llong_arith_L341
                 LDA     #121
                 TAY
                 TSC
@@ -18601,8 +18477,7 @@ _llong_arith_L341
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L342
+                BEQ     _llong_arith_L342
                 LDA     #122
                 TAY
                 TSC
@@ -18734,8 +18609,7 @@ _llong_arith_L342
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L343
+                BEQ     _llong_arith_L343
                 LDA     #123
                 TAY
                 TSC
@@ -18865,8 +18739,7 @@ _llong_arith_L343
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L344
+                BEQ     _llong_arith_L344
                 LDA     #124
                 TAY
                 TSC
@@ -18997,8 +18870,7 @@ _llong_arith_L344
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L345
+                BEQ     _llong_arith_L345
                 LDA     #125
                 TAY
                 TSC
@@ -19131,8 +19003,7 @@ _llong_arith_L345
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L346
+                BEQ     _llong_arith_L346
                 LDA     #126
                 TAY
                 TSC
@@ -19265,8 +19136,7 @@ _llong_arith_L346
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L347
+                BEQ     _llong_arith_L347
                 LDA     #127
                 TAY
                 TSC
@@ -19397,8 +19267,7 @@ _llong_arith_L347
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L348
+                BEQ     _llong_arith_L348
                 LDA     #128
                 TAY
                 TSC
@@ -19528,8 +19397,7 @@ _llong_arith_L348
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L349
+                BEQ     _llong_arith_L349
                 LDA     #129
                 TAY
                 TSC
@@ -19661,8 +19529,7 @@ _llong_arith_L349
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L350
+                BEQ     _llong_arith_L350
                 LDA     #130
                 TAY
                 TSC
@@ -19792,8 +19659,7 @@ _llong_arith_L350
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L351
+                BEQ     _llong_arith_L351
                 LDA     #131
                 TAY
                 TSC
@@ -19923,8 +19789,7 @@ _llong_arith_L351
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L352
+                BEQ     _llong_arith_L352
                 LDA     #132
                 TAY
                 TSC
@@ -20056,8 +19921,7 @@ _llong_arith_L352
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L353
+                BEQ     _llong_arith_L353
                 LDA     #133
                 TAY
                 TSC
@@ -20189,8 +20053,7 @@ _llong_arith_L353
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L354
+                BEQ     _llong_arith_L354
                 LDA     #134
                 TAY
                 TSC
@@ -20320,8 +20183,7 @@ _llong_arith_L354
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L355
+                BEQ     _llong_arith_L355
                 LDA     #135
                 TAY
                 TSC
@@ -20451,8 +20313,7 @@ _llong_arith_L355
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L356
+                BEQ     _llong_arith_L356
                 LDA     #136
                 TAY
                 TSC
@@ -20583,8 +20444,7 @@ _llong_arith_L356
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L357
+                BEQ     _llong_arith_L357
                 LDA     #137
                 TAY
                 TSC
@@ -20715,8 +20575,7 @@ _llong_arith_L357
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L358
+                BEQ     _llong_arith_L358
                 LDA     #138
                 TAY
                 TSC
@@ -20849,8 +20708,7 @@ _llong_arith_L358
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L359
+                BEQ     _llong_arith_L359
                 LDA     #139
                 TAY
                 TSC
@@ -20983,8 +20841,7 @@ _llong_arith_L359
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L360
+                BEQ     _llong_arith_L360
                 LDA     #140
                 TAY
                 TSC
@@ -21116,8 +20973,7 @@ _llong_arith_L360
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L361
+                BEQ     _llong_arith_L361
                 LDA     #141
                 TAY
                 TSC
@@ -21249,8 +21105,7 @@ _llong_arith_L361
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L362
+                BEQ     _llong_arith_L362
                 LDA     #142
                 TAY
                 TSC
@@ -21382,8 +21237,7 @@ _llong_arith_L362
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L363
+                BEQ     _llong_arith_L363
                 LDA     #143
                 TAY
                 TSC
@@ -21515,8 +21369,7 @@ _llong_arith_L363
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L364
+                BEQ     _llong_arith_L364
                 LDA     #144
                 TAY
                 TSC
@@ -21646,8 +21499,7 @@ _llong_arith_L364
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L365
+                BEQ     _llong_arith_L365
                 LDA     #145
                 TAY
                 TSC
@@ -21777,8 +21629,7 @@ _llong_arith_L365
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L366
+                BEQ     _llong_arith_L366
                 LDA     #146
                 TAY
                 TSC
@@ -21910,8 +21761,7 @@ _llong_arith_L366
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L367
+                BEQ     _llong_arith_L367
                 LDA     #147
                 TAY
                 TSC
@@ -22041,8 +21891,7 @@ _llong_arith_L367
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L368
+                BEQ     _llong_arith_L368
                 LDA     #148
                 TAY
                 TSC
@@ -22173,8 +22022,7 @@ _llong_arith_L368
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L369
+                BEQ     _llong_arith_L369
                 LDA     #149
                 TAY
                 TSC
@@ -22307,8 +22155,7 @@ _llong_arith_L369
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L370
+                BEQ     _llong_arith_L370
                 LDA     #150
                 TAY
                 TSC
@@ -22441,8 +22288,7 @@ _llong_arith_L370
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L371
+                BEQ     _llong_arith_L371
                 LDA     #151
                 TAY
                 TSC
@@ -22573,8 +22419,7 @@ _llong_arith_L371
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L372
+                BEQ     _llong_arith_L372
                 LDA     #152
                 TAY
                 TSC
@@ -22704,8 +22549,7 @@ _llong_arith_L372
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L373
+                BEQ     _llong_arith_L373
                 LDA     #153
                 TAY
                 TSC
@@ -22837,8 +22681,7 @@ _llong_arith_L373
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L374
+                BEQ     _llong_arith_L374
                 LDA     #154
                 TAY
                 TSC
@@ -22968,8 +22811,7 @@ _llong_arith_L374
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L375
+                BEQ     _llong_arith_L375
                 LDA     #155
                 TAY
                 TSC
@@ -23099,8 +22941,7 @@ _llong_arith_L375
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L376
+                BEQ     _llong_arith_L376
                 LDA     #156
                 TAY
                 TSC
@@ -23232,8 +23073,7 @@ _llong_arith_L376
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L377
+                BEQ     _llong_arith_L377
                 LDA     #157
                 TAY
                 TSC
@@ -23365,8 +23205,7 @@ _llong_arith_L377
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L378
+                BEQ     _llong_arith_L378
                 LDA     #158
                 TAY
                 TSC
@@ -23498,8 +23337,7 @@ _llong_arith_L378
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L379
+                BEQ     _llong_arith_L379
                 LDA     #159
                 TAY
                 TSC
@@ -23631,8 +23469,7 @@ _llong_arith_L379
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L380
+                BEQ     _llong_arith_L380
                 LDA     #160
                 TAY
                 TSC
@@ -23763,8 +23600,7 @@ _llong_arith_L380
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L381
+                BEQ     _llong_arith_L381
                 LDA     #161
                 TAY
                 TSC
@@ -23895,8 +23731,7 @@ _llong_arith_L381
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L382
+                BEQ     _llong_arith_L382
                 LDA     #162
                 TAY
                 TSC
@@ -24029,8 +23864,7 @@ _llong_arith_L382
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L383
+                BEQ     _llong_arith_L383
                 LDA     #163
                 TAY
                 TSC
@@ -24163,8 +23997,7 @@ _llong_arith_L383
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L384
+                BEQ     _llong_arith_L384
                 LDA     #164
                 TAY
                 TSC
@@ -24294,8 +24127,7 @@ _llong_arith_L384
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L385
+                BEQ     _llong_arith_L385
                 LDA     #165
                 TAY
                 TSC
@@ -24425,8 +24257,7 @@ _llong_arith_L385
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L386
+                BEQ     _llong_arith_L386
                 LDA     #166
                 TAY
                 TSC
@@ -24556,8 +24387,7 @@ _llong_arith_L386
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L387
+                BEQ     _llong_arith_L387
                 LDA     #167
                 TAY
                 TSC
@@ -24687,8 +24517,7 @@ _llong_arith_L387
                 LDA     #1
                 STA     i
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L388
+                BEQ     _llong_arith_L388
                 LDA     #168
                 TAY
                 TSC
@@ -24820,8 +24649,7 @@ _llong_arith_L388
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L389
+                BEQ     _llong_arith_L389
                 LDA     #169
                 TAY
                 TSC
@@ -24953,8 +24781,7 @@ _llong_arith_L389
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _llong_arith_L390
+                BEQ     _llong_arith_L390
                 LDA     #170
                 TAY
                 TSC
@@ -24996,8 +24823,7 @@ main_stkok        TCS
                 FGX2_FARCALL _llong_arith_run
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L391
+                BEQ     _llong_arith_L391
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -25054,8 +24880,7 @@ _llong_arith_L391
                 ORA     _fcc_long_hi
                 ORA     _fcc_q2
                 ORA     _fcc_q3
-                BEQ     *+5
-                BRL     _llong_arith_L393
+                BNE     _llong_arith_L393
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_q3
                 LDA     7,S   ; fccstk d=0 b=7
@@ -25080,16 +24905,14 @@ _llong_arith_L397
                 LDA     #1
 _llong_arith_L398
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_arith_L393
+                BNE     _llong_arith_L393
                 LDA     #0
-                BRL     _llong_arith_L394
+                BRA     _llong_arith_L394
 _llong_arith_L393
                 LDA     #1
 _llong_arith_L394
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L392
+                BEQ     _llong_arith_L392
                 LDA     #200
                 TAY
                 TSC
@@ -25153,8 +24976,7 @@ _llong_arith_L400
                 LDA     #1
 _llong_arith_L401
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L399
+                BEQ     _llong_arith_L399
                 LDA     #201
                 TAY
                 TSC
@@ -25301,8 +25123,7 @@ _llong_arith_L403
                 LDA     #1
 _llong_arith_L404
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L402
+                BEQ     _llong_arith_L402
                 LDA     #202
                 TAY
                 TSC
@@ -25396,8 +25217,7 @@ _llong_arith_L406
                 LDA     #1
 _llong_arith_L407
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L405
+                BEQ     _llong_arith_L405
                 LDA     #203
                 TAY
                 TSC
@@ -25508,8 +25328,7 @@ _llong_arith_L409
                 LDA     #1
 _llong_arith_L410
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L408
+                BEQ     _llong_arith_L408
                 LDA     #204
                 TAY
                 TSC
@@ -25582,8 +25401,7 @@ _llong_arith_L408
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_arith_L412
+                BNE     _llong_arith_L412
                 LDA     a+6
                 STA     _fcc_q3
                 LDA     a+4
@@ -25594,16 +25412,14 @@ _llong_arith_L408
                 TAX
                 TXA
                 CMP     #52719
-                BEQ     *+5
-                BRL     _llong_arith_L412
+                BNE     _llong_arith_L412
                 LDA     #0
-                BRL     _llong_arith_L413
+                BRA     _llong_arith_L413
 _llong_arith_L412
                 LDA     #1
 _llong_arith_L413
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_arith_L411
+                BEQ     _llong_arith_L411
                 LDA     #205
                 TAY
                 TSC

@@ -122,8 +122,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sigdbr_L0
+                BNE     _sigdbr_L0
                 LDA     #1
                 TAY
                 TSC
@@ -156,8 +155,7 @@ _sigdbr_L0
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _sigdbr_L2
+                BEQ     _sigdbr_L2
                 LDA     #2
                 TAY
                 TSC
@@ -182,8 +180,7 @@ _sigdbr_L2
                 TAX
                 TXA
                 CMP     #16898
-                BNE     *+5
-                BRL     _sigdbr_L3
+                BEQ     _sigdbr_L3
                 LDA     #3
                 TAY
                 TSC

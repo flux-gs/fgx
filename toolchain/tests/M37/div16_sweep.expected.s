@@ -53,8 +53,7 @@ _div16_sweep_L0
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCS     *+5
-                BRL     _div16_sweep_L1
+                BCC     _div16_sweep_L1
                 LDA     ur
                 SEC
                 SBC     _fcc_img0
@@ -63,7 +62,7 @@ _div16_sweep_L0
                 CLC
                 ADC     #1
                 STA     uq
-                BRL     _div16_sweep_L0
+                BRA     _div16_sweep_L0
 _div16_sweep_L1
                 LDA     #0
                 TAY
@@ -142,8 +141,7 @@ _div16_sweep_L9
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _div16_sweep_L11
+                BCS     _div16_sweep_L11
                 LDA     15,S   ; fccstk d=0 b=15
                 LSR
                 PHA
@@ -154,17 +152,15 @@ _div16_sweep_L9
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _div16_sweep_L11
+                BCS     _div16_sweep_L11
                 LDA     #1
-                BRL     _div16_sweep_L12
+                BRA     _div16_sweep_L12
 _div16_sweep_L11
                 LDA     #0
 _div16_sweep_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _div16_sweep_L10
-                BRL     _div16_sweep_L7
+                BEQ     _div16_sweep_L10
+                BRA     _div16_sweep_L7
 _div16_sweep_L10
                 LDA     17,S   ; fccstk d=0 b=17
                 PHA
@@ -186,8 +182,7 @@ _div16_sweep_L10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _div16_sweep_L13
+                BEQ     _div16_sweep_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     #1
@@ -204,8 +199,7 @@ _div16_sweep_L13
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _div16_sweep_L14
+                BEQ     _div16_sweep_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 CLC
                 ADC     #1
@@ -310,20 +304,17 @@ _div16_sweep_L22
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _div16_sweep_L24
+                BEQ     _div16_sweep_L24
                 LDA     _fcc_img0
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _div16_sweep_L24
+                BNE     _div16_sweep_L24
                 LDA     #1
-                BRL     _div16_sweep_L25
+                BRA     _div16_sweep_L25
 _div16_sweep_L24
                 LDA     #0
 _div16_sweep_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _div16_sweep_L23
+                BEQ     _div16_sweep_L23
                 BRL     _div16_sweep_L20
 _div16_sweep_L23
                 LDA     _fcc_img2
@@ -353,14 +344,12 @@ _div16_sweep_L23
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _div16_sweep_L26
+                BEQ     _div16_sweep_L26
                 INC     _fcc_img5
 _div16_sweep_L26
                 LDA     _fcc_img1
                 CMP     #0
-                BNE     *+5
-                BRL     _div16_sweep_L28
+                BEQ     _div16_sweep_L28
                 LDA     _fcc_img1
                 TAX
                 LDA     #0
@@ -377,38 +366,34 @@ _div16_sweep_L26
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _div16_sweep_L28
+                BEQ     _div16_sweep_L28
                 LDA     #1
-                BRL     _div16_sweep_L29
+                BRA     _div16_sweep_L29
 _div16_sweep_L28
                 LDA     #0
 _div16_sweep_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _div16_sweep_L27
+                BEQ     _div16_sweep_L27
                 INC     _fcc_img5
 _div16_sweep_L27
                 LDA     _fcc_img1
                 CMP     #0
-                BMI     *+5
-                BRL     _div16_sweep_L31
+                BPL     _div16_sweep_L31
                 LDA     _fcc_img1
                 EOR     #$FFFF
                 INC
-                BRL     _div16_sweep_L32
+                BRA     _div16_sweep_L32
 _div16_sweep_L31
                 LDA     _fcc_img1
 _div16_sweep_L32
                 PHA
                 LDA     _fcc_img0
                 CMP     #0
-                BMI     *+5
-                BRL     _div16_sweep_L33
+                BPL     _div16_sweep_L33
                 LDA     _fcc_img0
                 EOR     #$FFFF
                 INC
-                BRL     _div16_sweep_L34
+                BRA     _div16_sweep_L34
 _div16_sweep_L33
                 LDA     _fcc_img0
 _div16_sweep_L34
@@ -419,8 +404,7 @@ _div16_sweep_L34
                 BVC     _div16_sweep_L35
                 EOR     #$8000
 _div16_sweep_L35
-                BPL     *+5
-                BRL     _div16_sweep_L30
+                BMI     _div16_sweep_L30
                 INC     _fcc_img5
 _div16_sweep_L30
 _div16_sweep_L20
@@ -447,10 +431,9 @@ _div16_sweep_L17
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BEQ     *+5
-                BRL     _div16_sweep_L36
+                BNE     _div16_sweep_L36
                 LDA     #42
-                BRL     _div16_sweep_L37
+                BRA     _div16_sweep_L37
 _div16_sweep_L36
                 LDA     5,S   ; fccstk d=0 b=5
 _div16_sweep_L37

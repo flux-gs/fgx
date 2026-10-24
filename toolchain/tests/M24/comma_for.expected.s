@@ -39,8 +39,7 @@ _comma_for_L0
                 BVC     _comma_for_L3
                 EOR     #$8000
 _comma_for_L3
-                BMI     *+5
-                BRL     _comma_for_L2
+                BPL     _comma_for_L2
                 LDA     _fcc_img2
                 TAX
                 TXA
@@ -59,7 +58,7 @@ _comma_for_L1
                 SEC
                 SBC     #1
                 STA     _fcc_img1
-                BRL     _comma_for_L0
+                BRA     _comma_for_L0
 _comma_for_L2
                 LDA     _fcc_img2
                 TAY

@@ -694,5 +694,6 @@
   "parmhome": 42,
   "fprhold": 42,
   "specorder": 42,
-  "idxcall": 42
+  "idxcall": 42,
+  "putcsize": 42
 }

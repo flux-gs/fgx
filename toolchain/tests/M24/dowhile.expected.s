@@ -45,9 +45,8 @@ _dowhile_L1
                 BVC     _dowhile_L3
                 EOR     #$8000
 _dowhile_L3
-                BMI     *+5
-                BRL     _dowhile_L2
-                BRL     _dowhile_L0
+                BPL     _dowhile_L2
+                BRA     _dowhile_L0
 _dowhile_L2
                 LDA     _fcc_img1
                 TAY

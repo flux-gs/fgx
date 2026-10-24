@@ -67,8 +67,7 @@ _arrfieldlong_L0
                 BVC     _arrfieldlong_L3
                 EOR     #$8000
 _arrfieldlong_L3
-                BMI     *+5
-                BRL     _arrfieldlong_L2
+                BPL     _arrfieldlong_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -121,7 +120,7 @@ _arrfieldlong_L3
                 MX      %00
 _arrfieldlong_L1
                 INC     _fcc_img0
-                BRL     _arrfieldlong_L0
+                BRA     _arrfieldlong_L0
 _arrfieldlong_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -178,8 +177,7 @@ _arrfieldlong_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L4
+                BEQ     _arrfieldlong_L4
                 LDA     #50
                 TAY
                 TSC
@@ -225,8 +223,7 @@ _arrfieldlong_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L5
+                BEQ     _arrfieldlong_L5
                 LDA     #51
                 TAY
                 TSC
@@ -272,8 +269,7 @@ _arrfieldlong_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L6
+                BEQ     _arrfieldlong_L6
                 LDA     #52
                 TAY
                 TSC
@@ -310,8 +306,7 @@ _arrfieldlong_L8
                 TAX
                 TXA
                 CMP     #2571
-                BNE     *+5
-                BRL     _arrfieldlong_L7
+                BEQ     _arrfieldlong_L7
                 LDA     #53
                 TAY
                 TSC
@@ -359,8 +354,7 @@ _arrfieldlong_L7
                 TAX
                 TXA
                 CMP     #3085
-                BNE     *+5
-                BRL     _arrfieldlong_L9
+                BEQ     _arrfieldlong_L9
                 LDA     #54
                 TAY
                 TSC
@@ -429,8 +423,7 @@ _arrfieldlong_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L10
+                BEQ     _arrfieldlong_L10
                 LDA     #55
                 TAY
                 TSC
@@ -476,8 +469,7 @@ _arrfieldlong_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L11
+                BEQ     _arrfieldlong_L11
                 LDA     #56
                 TAY
                 TSC
@@ -545,8 +537,7 @@ _arrfieldlong_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L12
+                BEQ     _arrfieldlong_L12
                 LDA     #57
                 TAY
                 TSC
@@ -581,8 +572,7 @@ _arrfieldlong_L12
 _arrfieldlong_L14
                 STX     _fcc_long_hi
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L13
+                BEQ     _arrfieldlong_L13
                 LDA     #58
                 TAY
                 TSC
@@ -651,8 +641,7 @@ _arrfieldlong_L13
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L15
+                BEQ     _arrfieldlong_L15
                 LDA     #59
                 TAY
                 TSC
@@ -692,8 +681,7 @@ _arrfieldlong_L15
                 TAX
                 TXA
                 CMP     #17185
-                BNE     *+5
-                BRL     _arrfieldlong_L16
+                BEQ     _arrfieldlong_L16
                 LDA     #60
                 TAY
                 TSC
@@ -718,8 +706,7 @@ _arrfieldlong_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BEQ     *+5
-                BRL     _arrfieldlong_L18
+                BNE     _arrfieldlong_L18
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -733,16 +720,14 @@ _arrfieldlong_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BEQ     *+5
-                BRL     _arrfieldlong_L18
+                BNE     _arrfieldlong_L18
                 LDA     #0
-                BRL     _arrfieldlong_L19
+                BRA     _arrfieldlong_L19
 _arrfieldlong_L18
                 LDA     #1
 _arrfieldlong_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L17
+                BEQ     _arrfieldlong_L17
                 LDA     #61
                 TAY
                 TSC
@@ -789,8 +774,7 @@ _arrfieldlong_L17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrfieldlong_L20
+                BEQ     _arrfieldlong_L20
                 LDA     #62
                 TAY
                 TSC
@@ -820,8 +804,7 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _arrfieldlong_L22
+                BNE     _arrfieldlong_L22
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -840,16 +823,14 @@ _arrfieldlong_L20
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _arrfieldlong_L22
+                BNE     _arrfieldlong_L22
                 LDA     #0
-                BRL     _arrfieldlong_L23
+                BRA     _arrfieldlong_L23
 _arrfieldlong_L22
                 LDA     #1
 _arrfieldlong_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L21
+                BEQ     _arrfieldlong_L21
                 LDA     #63
                 TAY
                 TSC
@@ -887,8 +868,7 @@ _arrfieldlong_L21
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L24
+                BEQ     _arrfieldlong_L24
                 LDA     #64
                 TAY
                 TSC
@@ -927,8 +907,7 @@ _arrfieldlong_L24
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L25
+                BEQ     _arrfieldlong_L25
                 LDA     #65
                 TAY
                 TSC
@@ -974,8 +953,7 @@ _arrfieldlong_L25
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L26
+                BEQ     _arrfieldlong_L26
                 LDA     #66
                 TAY
                 TSC
@@ -1021,8 +999,7 @@ _arrfieldlong_L26
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L27
+                BEQ     _arrfieldlong_L27
                 LDA     #67
                 TAY
                 TSC
@@ -1069,8 +1046,7 @@ _arrfieldlong_L27
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L28
+                BEQ     _arrfieldlong_L28
                 LDA     #68
                 TAY
                 TSC
@@ -1116,8 +1092,7 @@ _arrfieldlong_L28
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfieldlong_L29
+                BEQ     _arrfieldlong_L29
                 LDA     #69
                 TAY
                 TSC

@@ -252,8 +252,7 @@ main_stkok        TCS
                 TYA
                 FGX2_FARCALL ri
                 CMP     #$FFFE
-                BEQ     *+5
-                BRL     _fconv_call_L0
+                BNE     _fconv_call_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -281,8 +280,7 @@ _fconv_call_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L1
+                BEQ     _fconv_call_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -302,8 +300,7 @@ _fconv_call_L1
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _fconv_call_L2
+                BNE     _fconv_call_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -345,8 +342,7 @@ _fconv_call_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L3
+                BEQ     _fconv_call_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -389,8 +385,7 @@ _fconv_call_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L4
+                BEQ     _fconv_call_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -402,8 +397,7 @@ _fconv_call_L4
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fconv_call_L5
+                BNE     _fconv_call_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -433,8 +427,7 @@ _fconv_call_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_call_L6
+                BEQ     _fconv_call_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -447,8 +440,7 @@ _fconv_call_L6
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _fconv_call_L7
+                BNE     _fconv_call_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

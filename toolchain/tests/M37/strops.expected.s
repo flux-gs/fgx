@@ -139,8 +139,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strops_L0
+                BNE     _strops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -171,8 +170,7 @@ _strops_L0
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _strops_L1
+                BNE     _strops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -214,8 +212,7 @@ _strops_L1
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strops_L2
+                BNE     _strops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -257,8 +254,7 @@ _strops_L2
                 TCS
                 TYA
                 CMP     #0
-                BMI     *+5
-                BRL     _strops_L3
+                BPL     _strops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -304,23 +300,20 @@ _strops_L3
                 LDA:    g2,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _strops_L5
+                BNE     _strops_L5
                 LDA     #7
                 TAX
                 LDA:    g2,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _strops_L5
+                BNE     _strops_L5
                 LDA     #1
-                BRL     _strops_L6
+                BRA     _strops_L6
 _strops_L5
                 LDA     #0
 _strops_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _strops_L4
+                BEQ     _strops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -364,8 +357,7 @@ _strops_L4
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strops_L7
+                BNE     _strops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -408,24 +400,21 @@ _strops_L7
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _strops_L9
+                BNE     _strops_L9
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _strops_L9
+                BNE     _strops_L9
                 LDA     #1
-                BRL     _strops_L10
+                BRA     _strops_L10
 _strops_L9
                 LDA     #0
 _strops_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _strops_L8
+                BEQ     _strops_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -468,24 +457,21 @@ _strops_L8
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _strops_L12
+                BNE     _strops_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _strops_L12
+                BNE     _strops_L12
                 LDA     #1
-                BRL     _strops_L13
+                BRA     _strops_L13
 _strops_L12
                 LDA     #0
 _strops_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _strops_L11
+                BEQ     _strops_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -520,24 +506,21 @@ _strops_L11
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _strops_L15
+                BNE     _strops_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _strops_L15
+                BNE     _strops_L15
                 LDA     #1
-                BRL     _strops_L16
+                BRA     _strops_L16
 _strops_L15
                 LDA     #0
 _strops_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _strops_L14
+                BEQ     _strops_L14
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -580,24 +563,21 @@ _strops_L14
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _strops_L18
+                BNE     _strops_L18
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _strops_L18
+                BNE     _strops_L18
                 LDA     #1
-                BRL     _strops_L19
+                BRA     _strops_L19
 _strops_L18
                 LDA     #0
 _strops_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _strops_L17
+                BEQ     _strops_L17
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

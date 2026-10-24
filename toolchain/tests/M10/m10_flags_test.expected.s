@@ -35,8 +35,7 @@ score_stkok        TCS
                 TXA
                 AND     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _m10_flags_test_L0
+                BEQ     _m10_flags_test_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -58,8 +57,7 @@ _m10_flags_test_L0
                 TXA
                 AND     #2
                 CMP     #0
-                BNE     *+5
-                BRL     _m10_flags_test_L1
+                BEQ     _m10_flags_test_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -80,8 +78,7 @@ _m10_flags_test_L1
                 TXA
                 AND     #4
                 CMP     #0
-                BNE     *+5
-                BRL     _m10_flags_test_L3
+                BEQ     _m10_flags_test_L3
                 DO      6+score_FRAMESIZE/256
                 TSC
                 CLC
@@ -103,16 +100,14 @@ _m10_flags_test_L5
                 LDA     #1
 _m10_flags_test_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _m10_flags_test_L3
+                BEQ     _m10_flags_test_L3
                 LDA     #1
-                BRL     _m10_flags_test_L4
+                BRA     _m10_flags_test_L4
 _m10_flags_test_L3
                 LDA     #0
 _m10_flags_test_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _m10_flags_test_L2
+                BEQ     _m10_flags_test_L2
                 LDA     _fcc_img0
                 TAX
                 LDA     #1
@@ -167,8 +162,7 @@ _m10_flags_test_L7
                 BVC     _m10_flags_test_L10
                 EOR     #$8000
 _m10_flags_test_L10
-                BMI     *+5
-                BRL     _m10_flags_test_L9
+                BPL     _m10_flags_test_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 LDA     #1
@@ -195,7 +189,7 @@ _m10_flags_test_L8
                 CLC
                 ADC     #1
                 STA     3,S   ; fccstk d=0 b=3
-                BRL     _m10_flags_test_L7
+                BRA     _m10_flags_test_L7
 _m10_flags_test_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL

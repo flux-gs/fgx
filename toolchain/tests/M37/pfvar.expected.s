@@ -81,8 +81,7 @@ _pfvar_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L2
+                BEQ     _pfvar_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _pfvar_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _pfvar_L2
+                BNE     _pfvar_L2
                 LDA     #1
-                BRL     _pfvar_L3
+                BRA     _pfvar_L3
 _pfvar_L2
                 LDA     #0
 _pfvar_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L1
+                BEQ     _pfvar_L1
                 INC     _fcc_img0
-                BRL     _pfvar_L0
+                BRA     _pfvar_L0
 _pfvar_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -287,8 +284,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L4
+                BEQ     _pfvar_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -364,22 +360,19 @@ _pfvar_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L6
+                BEQ     _pfvar_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _pfvar_L6
+                BNE     _pfvar_L6
                 LDA     #1
-                BRL     _pfvar_L7
+                BRA     _pfvar_L7
 _pfvar_L6
                 LDA     #0
 _pfvar_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L5
+                BEQ     _pfvar_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -456,8 +449,7 @@ _pfvar_L5
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L8
+                BEQ     _pfvar_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -537,8 +529,7 @@ _pfvar_L8
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L9
+                BEQ     _pfvar_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -612,8 +603,7 @@ _pfvar_L9
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L10
+                BEQ     _pfvar_L10
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -695,8 +685,7 @@ _pfvar_L10
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L11
+                BEQ     _pfvar_L11
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -778,8 +767,7 @@ _pfvar_L11
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pfvar_L12
+                BEQ     _pfvar_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -824,8 +812,7 @@ _pfvar_L12
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _pfvar_L13
+                BNE     _pfvar_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

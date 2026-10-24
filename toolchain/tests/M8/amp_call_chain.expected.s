@@ -103,8 +103,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _amp_call_chain_L0
+                BNE     _amp_call_chain_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -122,8 +121,7 @@ _amp_call_chain_L0
                 TAX
                 TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _amp_call_chain_L1
+                BNE     _amp_call_chain_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -154,22 +152,19 @@ _amp_call_chain_L1
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _amp_call_chain_L3
+                BNE     _amp_call_chain_L3
                 LDA     slot+4
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _amp_call_chain_L3
+                BNE     _amp_call_chain_L3
                 LDA     #1
-                BRL     _amp_call_chain_L4
+                BRA     _amp_call_chain_L4
 _amp_call_chain_L3
                 LDA     #0
 _amp_call_chain_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _amp_call_chain_L2
+                BEQ     _amp_call_chain_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA

@@ -47,8 +47,7 @@ _lc_atol_L1
                 LDA     #1
 _lc_atol_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_atol_L0
+                BEQ     _lc_atol_L0
                 LDA     #1
                 TAY
                 TSC
@@ -340,8 +339,7 @@ _lc_atol_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_atol_L3
+                BEQ     _lc_atol_L3
                 LDA     #42
                 TAY
                 TSC

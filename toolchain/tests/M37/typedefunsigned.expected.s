@@ -75,8 +75,7 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L0
+                BEQ     _typedefunsigned_L0
                 LDA     #43
                 TAY
                 TSC
@@ -109,8 +108,7 @@ _typedefunsigned_L0
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _typedefunsigned_L1
+                BEQ     _typedefunsigned_L1
                 LDA     #44
                 TAY
                 TSC
@@ -172,8 +170,7 @@ _typedefunsigned_L1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L2
+                BEQ     _typedefunsigned_L2
                 LDA     #45
                 TAY
                 TSC
@@ -206,8 +203,7 @@ _typedefunsigned_L2
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _typedefunsigned_L3
+                BEQ     _typedefunsigned_L3
                 LDA     #46
                 TAY
                 TSC
@@ -241,8 +237,7 @@ _typedefunsigned_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L4
+                BEQ     _typedefunsigned_L4
                 LDA     #47
                 TAY
                 TSC
@@ -268,8 +263,7 @@ _typedefunsigned_L6
                 LDA     #1
 _typedefunsigned_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _typedefunsigned_L5
+                BEQ     _typedefunsigned_L5
                 LDA     #48
                 TAY
                 TSC
@@ -299,8 +293,7 @@ _typedefunsigned_L5
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L8
+                BEQ     _typedefunsigned_L8
                 LDA     #49
                 TAY
                 TSC
@@ -319,8 +312,7 @@ _typedefunsigned_L8
                 TAX
                 TXA
                 CMP     #400
-                BNE     *+5
-                BRL     _typedefunsigned_L9
+                BEQ     _typedefunsigned_L9
                 LDA     #50
                 TAY
                 TSC
@@ -350,8 +342,7 @@ _typedefunsigned_L9
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L10
+                BEQ     _typedefunsigned_L10
                 LDA     #51
                 TAY
                 TSC
@@ -371,8 +362,7 @@ _typedefunsigned_L10
                 TAX
                 TXA
                 CMP     #2048
-                BNE     *+5
-                BRL     _typedefunsigned_L11
+                BEQ     _typedefunsigned_L11
                 LDA     #52
                 TAY
                 TSC
@@ -400,8 +390,7 @@ _typedefunsigned_L11
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L12
+                BEQ     _typedefunsigned_L12
                 LDA     #53
                 TAY
                 TSC
@@ -440,8 +429,7 @@ _typedefunsigned_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _typedefunsigned_L13
+                BEQ     _typedefunsigned_L13
                 LDA     #54
                 TAY
                 TSC
@@ -474,8 +462,7 @@ _typedefunsigned_L13
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _typedefunsigned_L14
+                BEQ     _typedefunsigned_L14
                 LDA     #55
                 TAY
                 TSC
@@ -499,8 +486,7 @@ _typedefunsigned_L14
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _typedefunsigned_L15
+                BEQ     _typedefunsigned_L15
                 LDA     #56
                 TAY
                 TSC
@@ -517,8 +503,7 @@ _typedefunsigned_L15
                 TAX
                 TXA
                 CMP     #200
-                BNE     *+5
-                BRL     _typedefunsigned_L16
+                BEQ     _typedefunsigned_L16
                 LDA     #57
                 TAY
                 TSC

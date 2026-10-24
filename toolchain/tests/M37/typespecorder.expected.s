@@ -47,8 +47,7 @@ pick_stkok        TCS
                 BVC     _typespecorder_L2
                 EOR     #$8000
 _typespecorder_L2
-                BMI     *+5
-                BRL     _typespecorder_L0
+                BPL     _typespecorder_L0
                 DO      6+pick_FRAMESIZE/256
                 TSC
                 CLC
@@ -59,7 +58,7 @@ _typespecorder_L2
                 ELSE
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                BRL     _typespecorder_L1
+                BRA     _typespecorder_L1
 _typespecorder_L0
                 DO      8+pick_FRAMESIZE/256
                 TSC

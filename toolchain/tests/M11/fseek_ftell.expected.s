@@ -62,8 +62,7 @@ _fseek_ftell_L1
                 LDA     #1
 _fseek_ftell_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _fseek_ftell_L0
+                BEQ     _fseek_ftell_L0
                 LDA     #1
                 TAY
                 TSC

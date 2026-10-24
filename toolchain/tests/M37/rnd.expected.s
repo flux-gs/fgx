@@ -29,8 +29,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #16838
-                BNE     *+5
-                BRL     _rnd_L0
+                BEQ     _rnd_L0
                 LDA     #1
                 TAY
                 TSC
@@ -46,8 +45,7 @@ _rnd_L0
                 TAX
                 TXA
                 CMP     #5758
-                BNE     *+5
-                BRL     _rnd_L1
+                BEQ     _rnd_L1
                 LDA     #2
                 TAY
                 TSC
@@ -63,8 +61,7 @@ _rnd_L1
                 TAX
                 TXA
                 CMP     #10113
-                BNE     *+5
-                BRL     _rnd_L2
+                BEQ     _rnd_L2
                 LDA     #3
                 TAY
                 TSC
@@ -109,8 +106,7 @@ _rnd_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _rnd_L3
+                BEQ     _rnd_L3
                 LDA     #4
                 TAY
                 TSC
@@ -149,8 +145,7 @@ _rnd_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _rnd_L4
+                BEQ     _rnd_L4
                 LDA     #5
                 TAY
                 TSC
@@ -200,8 +195,7 @@ _rnd_L4
                 BVC     _rnd_L6
                 EOR     #$8000
 _rnd_L6
-                BPL     *+5
-                BRL     _rnd_L5
+                BMI     _rnd_L5
                 LDA     #6
                 TAY
                 TSC
@@ -222,8 +216,7 @@ _rnd_L5
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _rnd_L8
+                BNE     _rnd_L8
                 LDA     #7
                 PHA
                 FGX2_FARCALL abs
@@ -233,16 +226,14 @@ _rnd_L5
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _rnd_L8
+                BNE     _rnd_L8
                 LDA     #0
-                BRL     _rnd_L9
+                BRA     _rnd_L9
 _rnd_L8
                 LDA     #1
 _rnd_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _rnd_L7
+                BEQ     _rnd_L7
                 LDA     #7
                 TAY
                 TSC

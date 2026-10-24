@@ -76,50 +76,43 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _arrowdot_compound_L5
+                BNE     _arrowdot_compound_L5
                 LDA     g+4
                 TAX
                 TXA
                 CMP     #4660
-                BEQ     *+5
-                BRL     _arrowdot_compound_L5
+                BNE     _arrowdot_compound_L5
                 LDA     #1
-                BRL     _arrowdot_compound_L6
+                BRA     _arrowdot_compound_L6
 _arrowdot_compound_L5
                 LDA     #0
 _arrowdot_compound_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L3
+                BEQ     _arrowdot_compound_L3
                 LDA     g+0
                 TAX
                 TXA
                 CMP     #43690
-                BEQ     *+5
-                BRL     _arrowdot_compound_L3
+                BNE     _arrowdot_compound_L3
                 LDA     #1
-                BRL     _arrowdot_compound_L4
+                BRA     _arrowdot_compound_L4
 _arrowdot_compound_L3
                 LDA     #0
 _arrowdot_compound_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L1
+                BEQ     _arrowdot_compound_L1
                 LDA     g+6
                 TAX
                 TXA
                 CMP     #21845
-                BEQ     *+5
-                BRL     _arrowdot_compound_L1
+                BNE     _arrowdot_compound_L1
                 LDA     #1
-                BRL     _arrowdot_compound_L2
+                BRA     _arrowdot_compound_L2
 _arrowdot_compound_L1
                 LDA     #0
 _arrowdot_compound_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L0
+                BEQ     _arrowdot_compound_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -161,50 +154,43 @@ _arrowdot_compound_L0
                 TAX
                 TXA
                 CMP     #4660
-                BEQ     *+5
-                BRL     _arrowdot_compound_L12
+                BNE     _arrowdot_compound_L12
                 LDA     g+2
                 TAX
                 TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _arrowdot_compound_L12
+                BNE     _arrowdot_compound_L12
                 LDA     #1
-                BRL     _arrowdot_compound_L13
+                BRA     _arrowdot_compound_L13
 _arrowdot_compound_L12
                 LDA     #0
 _arrowdot_compound_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L10
+                BEQ     _arrowdot_compound_L10
                 LDA     g+0
                 TAX
                 TXA
                 CMP     #43690
-                BEQ     *+5
-                BRL     _arrowdot_compound_L10
+                BNE     _arrowdot_compound_L10
                 LDA     #1
-                BRL     _arrowdot_compound_L11
+                BRA     _arrowdot_compound_L11
 _arrowdot_compound_L10
                 LDA     #0
 _arrowdot_compound_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L8
+                BEQ     _arrowdot_compound_L8
                 LDA     g+6
                 TAX
                 TXA
                 CMP     #21845
-                BEQ     *+5
-                BRL     _arrowdot_compound_L8
+                BNE     _arrowdot_compound_L8
                 LDA     #1
-                BRL     _arrowdot_compound_L9
+                BRA     _arrowdot_compound_L9
 _arrowdot_compound_L8
                 LDA     #0
 _arrowdot_compound_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L7
+                BEQ     _arrowdot_compound_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -247,50 +233,43 @@ _arrowdot_compound_L7
                 TAX
                 TXA
                 CMP     #123
-                BEQ     *+5
-                BRL     _arrowdot_compound_L19
+                BNE     _arrowdot_compound_L19
                 LDA     g+4
                 TAX
                 TXA
                 CMP     #4660
-                BEQ     *+5
-                BRL     _arrowdot_compound_L19
+                BNE     _arrowdot_compound_L19
                 LDA     #1
-                BRL     _arrowdot_compound_L20
+                BRA     _arrowdot_compound_L20
 _arrowdot_compound_L19
                 LDA     #0
 _arrowdot_compound_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L17
+                BEQ     _arrowdot_compound_L17
                 LDA     g+0
                 TAX
                 TXA
                 CMP     #43690
-                BEQ     *+5
-                BRL     _arrowdot_compound_L17
+                BNE     _arrowdot_compound_L17
                 LDA     #1
-                BRL     _arrowdot_compound_L18
+                BRA     _arrowdot_compound_L18
 _arrowdot_compound_L17
                 LDA     #0
 _arrowdot_compound_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L15
+                BEQ     _arrowdot_compound_L15
                 LDA     g+6
                 TAX
                 TXA
                 CMP     #21845
-                BEQ     *+5
-                BRL     _arrowdot_compound_L15
+                BNE     _arrowdot_compound_L15
                 LDA     #1
-                BRL     _arrowdot_compound_L16
+                BRA     _arrowdot_compound_L16
 _arrowdot_compound_L15
                 LDA     #0
 _arrowdot_compound_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowdot_compound_L14
+                BEQ     _arrowdot_compound_L14
                 LDA     _fcc_img0
                 TAX
                 TXA

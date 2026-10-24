@@ -136,8 +136,7 @@ _fnptrvoid_L1
                 BVC     _fnptrvoid_L4
                 EOR     #$8000
 _fnptrvoid_L4
-                BMI     *+5
-                BRL     _fnptrvoid_L3
+                BPL     _fnptrvoid_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
@@ -181,7 +180,7 @@ _fnptrvoid_L2
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _fnptrvoid_L1
+                BRA     _fnptrvoid_L1
 _fnptrvoid_L3
                 LDA     #0
                 ASL

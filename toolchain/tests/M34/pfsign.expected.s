@@ -59,8 +59,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L11
+                BNE     _pfsign_L11
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -68,16 +67,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L11
+                BNE     _pfsign_L11
                 LDA     #1
-                BRL     _pfsign_L12
+                BRA     _pfsign_L12
 _pfsign_L11
                 LDA     #0
 _pfsign_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L9
+                BEQ     _pfsign_L9
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -85,16 +82,14 @@ _pfsign_L12
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L9
+                BNE     _pfsign_L9
                 LDA     #1
-                BRL     _pfsign_L10
+                BRA     _pfsign_L10
 _pfsign_L9
                 LDA     #0
 _pfsign_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L7
+                BEQ     _pfsign_L7
                 LDA     #3
                 TAX
                 LDA:    buf,X
@@ -102,16 +97,14 @@ _pfsign_L10
                 TAX
                 TXA
                 CMP     #45
-                BEQ     *+5
-                BRL     _pfsign_L7
+                BNE     _pfsign_L7
                 LDA     #1
-                BRL     _pfsign_L8
+                BRA     _pfsign_L8
 _pfsign_L7
                 LDA     #0
 _pfsign_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L5
+                BEQ     _pfsign_L5
                 LDA     #4
                 TAX
                 LDA:    buf,X
@@ -119,16 +112,14 @@ _pfsign_L8
                 TAX
                 TXA
                 CMP     #52
-                BEQ     *+5
-                BRL     _pfsign_L5
+                BNE     _pfsign_L5
                 LDA     #1
-                BRL     _pfsign_L6
+                BRA     _pfsign_L6
 _pfsign_L5
                 LDA     #0
 _pfsign_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L3
+                BEQ     _pfsign_L3
                 LDA     #5
                 TAX
                 LDA:    buf,X
@@ -136,31 +127,27 @@ _pfsign_L6
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _pfsign_L3
+                BNE     _pfsign_L3
                 LDA     #1
-                BRL     _pfsign_L4
+                BRA     _pfsign_L4
 _pfsign_L3
                 LDA     #0
 _pfsign_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L1
+                BEQ     _pfsign_L1
                 LDA     #6
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _pfsign_L1
+                BNE     _pfsign_L1
                 LDA     #1
-                BRL     _pfsign_L2
+                BRA     _pfsign_L2
 _pfsign_L1
                 LDA     #0
 _pfsign_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L0
+                BEQ     _pfsign_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -206,8 +193,7 @@ _pfsign_L0
                 TAX
                 TXA
                 CMP     #45
-                BEQ     *+5
-                BRL     _pfsign_L22
+                BNE     _pfsign_L22
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -215,16 +201,14 @@ _pfsign_L0
                 TAX
                 TXA
                 CMP     #48
-                BEQ     *+5
-                BRL     _pfsign_L22
+                BNE     _pfsign_L22
                 LDA     #1
-                BRL     _pfsign_L23
+                BRA     _pfsign_L23
 _pfsign_L22
                 LDA     #0
 _pfsign_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L20
+                BEQ     _pfsign_L20
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -232,16 +216,14 @@ _pfsign_L23
                 TAX
                 TXA
                 CMP     #48
-                BEQ     *+5
-                BRL     _pfsign_L20
+                BNE     _pfsign_L20
                 LDA     #1
-                BRL     _pfsign_L21
+                BRA     _pfsign_L21
 _pfsign_L20
                 LDA     #0
 _pfsign_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L18
+                BEQ     _pfsign_L18
                 LDA     #3
                 TAX
                 LDA:    buf,X
@@ -249,16 +231,14 @@ _pfsign_L21
                 TAX
                 TXA
                 CMP     #48
-                BEQ     *+5
-                BRL     _pfsign_L18
+                BNE     _pfsign_L18
                 LDA     #1
-                BRL     _pfsign_L19
+                BRA     _pfsign_L19
 _pfsign_L18
                 LDA     #0
 _pfsign_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L16
+                BEQ     _pfsign_L16
                 LDA     #4
                 TAX
                 LDA:    buf,X
@@ -266,16 +246,14 @@ _pfsign_L19
                 TAX
                 TXA
                 CMP     #52
-                BEQ     *+5
-                BRL     _pfsign_L16
+                BNE     _pfsign_L16
                 LDA     #1
-                BRL     _pfsign_L17
+                BRA     _pfsign_L17
 _pfsign_L16
                 LDA     #0
 _pfsign_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L14
+                BEQ     _pfsign_L14
                 LDA     #5
                 TAX
                 LDA:    buf,X
@@ -283,16 +261,14 @@ _pfsign_L17
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _pfsign_L14
+                BNE     _pfsign_L14
                 LDA     #1
-                BRL     _pfsign_L15
+                BRA     _pfsign_L15
 _pfsign_L14
                 LDA     #0
 _pfsign_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L13
+                BEQ     _pfsign_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -338,8 +314,7 @@ _pfsign_L13
                 TAX
                 TXA
                 CMP     #45
-                BEQ     *+5
-                BRL     _pfsign_L33
+                BNE     _pfsign_L33
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -347,16 +322,14 @@ _pfsign_L13
                 TAX
                 TXA
                 CMP     #52
-                BEQ     *+5
-                BRL     _pfsign_L33
+                BNE     _pfsign_L33
                 LDA     #1
-                BRL     _pfsign_L34
+                BRA     _pfsign_L34
 _pfsign_L33
                 LDA     #0
 _pfsign_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L31
+                BEQ     _pfsign_L31
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -364,16 +337,14 @@ _pfsign_L34
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _pfsign_L31
+                BNE     _pfsign_L31
                 LDA     #1
-                BRL     _pfsign_L32
+                BRA     _pfsign_L32
 _pfsign_L31
                 LDA     #0
 _pfsign_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L29
+                BEQ     _pfsign_L29
                 LDA     #3
                 TAX
                 LDA:    buf,X
@@ -381,16 +352,14 @@ _pfsign_L32
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L29
+                BNE     _pfsign_L29
                 LDA     #1
-                BRL     _pfsign_L30
+                BRA     _pfsign_L30
 _pfsign_L29
                 LDA     #0
 _pfsign_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L27
+                BEQ     _pfsign_L27
                 LDA     #5
                 TAX
                 LDA:    buf,X
@@ -398,16 +367,14 @@ _pfsign_L30
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L27
+                BNE     _pfsign_L27
                 LDA     #1
-                BRL     _pfsign_L28
+                BRA     _pfsign_L28
 _pfsign_L27
                 LDA     #0
 _pfsign_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L25
+                BEQ     _pfsign_L25
                 LDA     #6
                 TAX
                 LDA:    buf,X
@@ -415,16 +382,14 @@ _pfsign_L28
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _pfsign_L25
+                BNE     _pfsign_L25
                 LDA     #1
-                BRL     _pfsign_L26
+                BRA     _pfsign_L26
 _pfsign_L25
                 LDA     #0
 _pfsign_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L24
+                BEQ     _pfsign_L24
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -477,8 +442,7 @@ _pfsign_L24
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L40
+                BNE     _pfsign_L40
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -486,16 +450,14 @@ _pfsign_L24
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _pfsign_L40
+                BNE     _pfsign_L40
                 LDA     #1
-                BRL     _pfsign_L41
+                BRA     _pfsign_L41
 _pfsign_L40
                 LDA     #0
 _pfsign_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L38
+                BEQ     _pfsign_L38
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -503,16 +465,14 @@ _pfsign_L41
                 TAX
                 TXA
                 CMP     #45
-                BEQ     *+5
-                BRL     _pfsign_L38
+                BNE     _pfsign_L38
                 LDA     #1
-                BRL     _pfsign_L39
+                BRA     _pfsign_L39
 _pfsign_L38
                 LDA     #0
 _pfsign_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L36
+                BEQ     _pfsign_L36
                 LDA     #3
                 TAX
                 LDA:    buf,X
@@ -520,16 +480,14 @@ _pfsign_L39
                 TAX
                 TXA
                 CMP     #55
-                BEQ     *+5
-                BRL     _pfsign_L36
+                BNE     _pfsign_L36
                 LDA     #1
-                BRL     _pfsign_L37
+                BRA     _pfsign_L37
 _pfsign_L36
                 LDA     #0
 _pfsign_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _pfsign_L35
+                BEQ     _pfsign_L35
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

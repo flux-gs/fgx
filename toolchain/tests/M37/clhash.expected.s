@@ -504,8 +504,7 @@ _clhash_L1
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L2
+                BEQ     _clhash_L2
                 BRL     _clhash_L0
 _clhash_L2
                 LDA     _fcc_img3
@@ -556,8 +555,7 @@ _clhash_L3
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L5
+                BEQ     _clhash_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -595,7 +593,7 @@ _clhash_L4
                 LDA     _fcc_long_hi
                 STA     _fcc_img3
                 TYA
-                BRL     _clhash_L3
+                BRA     _clhash_L3
 _clhash_L5
                 LDA     #0
                 TAY
@@ -640,8 +638,7 @@ _clhash_L6
                 BVC     _clhash_L9
                 EOR     #$8000
 _clhash_L9
-                BMI     *+5
-                BRL     _clhash_L8
+                BPL     _clhash_L8
                 LDA     #arr
                 PHA
                 LDA     _fcc_img0
@@ -666,7 +663,7 @@ _clhash_L9
                 PLA
 _clhash_L7
                 INC     _fcc_img0
-                BRL     _clhash_L6
+                BRA     _clhash_L6
 _clhash_L8
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -725,8 +722,7 @@ _clhash_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L10
+                BEQ     _clhash_L10
                 LDA     #1
                 TAY
                 TSC
@@ -763,8 +759,7 @@ _clhash_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L11
+                BEQ     _clhash_L11
                 LDA     #2
                 TAY
                 TSC
@@ -801,8 +796,7 @@ _clhash_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L12
+                BEQ     _clhash_L12
                 LDA     #3
                 TAY
                 TSC
@@ -828,8 +822,7 @@ _clhash_L13
                 BVC     _clhash_L16
                 EOR     #$8000
 _clhash_L16
-                BMI     *+5
-                BRL     _clhash_L15
+                BPL     _clhash_L15
                 LDA     #1
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
@@ -858,8 +851,7 @@ _clhash_L16
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _clhash_L17
+                BEQ     _clhash_L17
                 LDA     #4
                 TAY
                 TSC
@@ -876,7 +868,7 @@ _clhash_L14
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _clhash_L13
+                BRA     _clhash_L13
 _clhash_L15
                 LDA     #42
                 TAY

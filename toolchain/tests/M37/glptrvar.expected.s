@@ -48,8 +48,7 @@ _glptrvar_L0
                 BVC     _glptrvar_L3
                 EOR     #$8000
 _glptrvar_L3
-                BMI     *+5
-                BRL     _glptrvar_L2
+                BPL     _glptrvar_L2
                 SEP     #$20
                 MX      %10
                 LDA     htab+2
@@ -89,7 +88,7 @@ _glptrvar_L3
                 PLA
 _glptrvar_L1
                 INC     _fcc_img0
-                BRL     _glptrvar_L0
+                BRA     _glptrvar_L0
 _glptrvar_L2
                 LDA     #0
                 STA     _fcc_img0
@@ -105,8 +104,7 @@ _glptrvar_L4
                 BVC     _glptrvar_L7
                 EOR     #$8000
 _glptrvar_L7
-                BMI     *+5
-                BRL     _glptrvar_L6
+                BPL     _glptrvar_L6
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -146,8 +144,7 @@ _glptrvar_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrvar_L8
+                BEQ     _glptrvar_L8
                 LDA     #1
                 TAY
                 TSC
@@ -161,7 +158,7 @@ _glptrvar_L7
 _glptrvar_L8
 _glptrvar_L5
                 INC     _fcc_img0
-                BRL     _glptrvar_L4
+                BRA     _glptrvar_L4
 _glptrvar_L6
                 LDA     #271
                 STA     _fcc_img1
@@ -252,8 +249,7 @@ _glptrvar_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrvar_L9
+                BEQ     _glptrvar_L9
                 LDA     #2
                 TAY
                 TSC
@@ -290,8 +286,7 @@ _glptrvar_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrvar_L10
+                BEQ     _glptrvar_L10
                 LDA     #3
                 TAY
                 TSC
@@ -341,8 +336,7 @@ _glptrvar_L10
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrvar_L11
+                BEQ     _glptrvar_L11
                 LDA     #4
                 TAY
                 TSC
@@ -422,8 +416,7 @@ _glptrvar_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrvar_L12
+                BEQ     _glptrvar_L12
                 LDA     #5
                 TAY
                 TSC

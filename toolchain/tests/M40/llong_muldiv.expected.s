@@ -247,8 +247,7 @@ _llong_muldiv_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L0
+                BEQ     _llong_muldiv_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -305,10 +304,9 @@ _llong_muldiv_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L0
+                BEQ     _llong_muldiv_L0
                 LDA     #1
-                BRL     _llong_muldiv_L1
+                BRA     _llong_muldiv_L1
 _llong_muldiv_L0
                 LDA     #0
 _llong_muldiv_L1
@@ -414,8 +412,7 @@ _llong_muldiv_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L2
+                BEQ     _llong_muldiv_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -472,10 +469,9 @@ _llong_muldiv_uis_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L2
+                BEQ     _llong_muldiv_L2
                 LDA     #1
-                BRL     _llong_muldiv_L3
+                BRA     _llong_muldiv_L3
 _llong_muldiv_L2
                 LDA     #0
 _llong_muldiv_L3
@@ -673,8 +669,7 @@ _llong_muldiv_L5
                 LDA     #1
 _llong_muldiv_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L4
+                BEQ     _llong_muldiv_L4
                 LDA     #1
                 TAY
                 TSC
@@ -854,8 +849,7 @@ _llong_muldiv_L8
                 LDA     #1
 _llong_muldiv_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L7
+                BEQ     _llong_muldiv_L7
                 LDA     #2
                 TAY
                 TSC
@@ -1035,8 +1029,7 @@ _llong_muldiv_L11
                 LDA     #1
 _llong_muldiv_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L10
+                BEQ     _llong_muldiv_L10
                 LDA     #3
                 TAY
                 TSC
@@ -1216,8 +1209,7 @@ _llong_muldiv_L14
                 LDA     #1
 _llong_muldiv_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L13
+                BEQ     _llong_muldiv_L13
                 LDA     #4
                 TAY
                 TSC
@@ -1397,8 +1389,7 @@ _llong_muldiv_L17
                 LDA     #1
 _llong_muldiv_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L16
+                BEQ     _llong_muldiv_L16
                 LDA     #5
                 TAY
                 TSC
@@ -1578,8 +1569,7 @@ _llong_muldiv_L20
                 LDA     #1
 _llong_muldiv_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L19
+                BEQ     _llong_muldiv_L19
                 LDA     #6
                 TAY
                 TSC
@@ -1759,8 +1749,7 @@ _llong_muldiv_L23
                 LDA     #1
 _llong_muldiv_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L22
+                BEQ     _llong_muldiv_L22
                 LDA     #7
                 TAY
                 TSC
@@ -1940,8 +1929,7 @@ _llong_muldiv_L26
                 LDA     #1
 _llong_muldiv_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L25
+                BEQ     _llong_muldiv_L25
                 LDA     #8
                 TAY
                 TSC
@@ -2121,8 +2109,7 @@ _llong_muldiv_L29
                 LDA     #1
 _llong_muldiv_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L28
+                BEQ     _llong_muldiv_L28
                 LDA     #9
                 TAY
                 TSC
@@ -2302,8 +2289,7 @@ _llong_muldiv_L32
                 LDA     #1
 _llong_muldiv_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L31
+                BEQ     _llong_muldiv_L31
                 LDA     #10
                 TAY
                 TSC
@@ -2483,8 +2469,7 @@ _llong_muldiv_L35
                 LDA     #1
 _llong_muldiv_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L34
+                BEQ     _llong_muldiv_L34
                 LDA     #11
                 TAY
                 TSC
@@ -2664,8 +2649,7 @@ _llong_muldiv_L38
                 LDA     #1
 _llong_muldiv_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L37
+                BEQ     _llong_muldiv_L37
                 LDA     #12
                 TAY
                 TSC
@@ -2845,8 +2829,7 @@ _llong_muldiv_L41
                 LDA     #1
 _llong_muldiv_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L40
+                BEQ     _llong_muldiv_L40
                 LDA     #13
                 TAY
                 TSC
@@ -3026,8 +3009,7 @@ _llong_muldiv_L44
                 LDA     #1
 _llong_muldiv_L45
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L43
+                BEQ     _llong_muldiv_L43
                 LDA     #14
                 TAY
                 TSC
@@ -3207,8 +3189,7 @@ _llong_muldiv_L47
                 LDA     #1
 _llong_muldiv_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L46
+                BEQ     _llong_muldiv_L46
                 LDA     #15
                 TAY
                 TSC
@@ -3388,8 +3369,7 @@ _llong_muldiv_L50
                 LDA     #1
 _llong_muldiv_L51
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L49
+                BEQ     _llong_muldiv_L49
                 LDA     #16
                 TAY
                 TSC
@@ -3569,8 +3549,7 @@ _llong_muldiv_L53
                 LDA     #1
 _llong_muldiv_L54
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L52
+                BEQ     _llong_muldiv_L52
                 LDA     #17
                 TAY
                 TSC
@@ -3750,8 +3729,7 @@ _llong_muldiv_L56
                 LDA     #1
 _llong_muldiv_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L55
+                BEQ     _llong_muldiv_L55
                 LDA     #18
                 TAY
                 TSC
@@ -3931,8 +3909,7 @@ _llong_muldiv_L59
                 LDA     #1
 _llong_muldiv_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L58
+                BEQ     _llong_muldiv_L58
                 LDA     #19
                 TAY
                 TSC
@@ -4112,8 +4089,7 @@ _llong_muldiv_L62
                 LDA     #1
 _llong_muldiv_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L61
+                BEQ     _llong_muldiv_L61
                 LDA     #20
                 TAY
                 TSC
@@ -4293,8 +4269,7 @@ _llong_muldiv_L65
                 LDA     #1
 _llong_muldiv_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L64
+                BEQ     _llong_muldiv_L64
                 LDA     #21
                 TAY
                 TSC
@@ -4474,8 +4449,7 @@ _llong_muldiv_L68
                 LDA     #1
 _llong_muldiv_L69
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L67
+                BEQ     _llong_muldiv_L67
                 LDA     #22
                 TAY
                 TSC
@@ -4655,8 +4629,7 @@ _llong_muldiv_L71
                 LDA     #1
 _llong_muldiv_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L70
+                BEQ     _llong_muldiv_L70
                 LDA     #23
                 TAY
                 TSC
@@ -4836,8 +4809,7 @@ _llong_muldiv_L74
                 LDA     #1
 _llong_muldiv_L75
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L73
+                BEQ     _llong_muldiv_L73
                 LDA     #24
                 TAY
                 TSC
@@ -5017,8 +4989,7 @@ _llong_muldiv_L77
                 LDA     #1
 _llong_muldiv_L78
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L76
+                BEQ     _llong_muldiv_L76
                 LDA     #25
                 TAY
                 TSC
@@ -5198,8 +5169,7 @@ _llong_muldiv_L80
                 LDA     #1
 _llong_muldiv_L81
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L79
+                BEQ     _llong_muldiv_L79
                 LDA     #26
                 TAY
                 TSC
@@ -5379,8 +5349,7 @@ _llong_muldiv_L83
                 LDA     #1
 _llong_muldiv_L84
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L82
+                BEQ     _llong_muldiv_L82
                 LDA     #27
                 TAY
                 TSC
@@ -5560,8 +5529,7 @@ _llong_muldiv_L86
                 LDA     #1
 _llong_muldiv_L87
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L85
+                BEQ     _llong_muldiv_L85
                 LDA     #28
                 TAY
                 TSC
@@ -5741,8 +5709,7 @@ _llong_muldiv_L89
                 LDA     #1
 _llong_muldiv_L90
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L88
+                BEQ     _llong_muldiv_L88
                 LDA     #29
                 TAY
                 TSC
@@ -5922,8 +5889,7 @@ _llong_muldiv_L92
                 LDA     #1
 _llong_muldiv_L93
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L91
+                BEQ     _llong_muldiv_L91
                 LDA     #30
                 TAY
                 TSC
@@ -6103,8 +6069,7 @@ _llong_muldiv_L95
                 LDA     #1
 _llong_muldiv_L96
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L94
+                BEQ     _llong_muldiv_L94
                 LDA     #31
                 TAY
                 TSC
@@ -6284,8 +6249,7 @@ _llong_muldiv_L98
                 LDA     #1
 _llong_muldiv_L99
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L97
+                BEQ     _llong_muldiv_L97
                 LDA     #32
                 TAY
                 TSC
@@ -6465,8 +6429,7 @@ _llong_muldiv_L101
                 LDA     #1
 _llong_muldiv_L102
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L100
+                BEQ     _llong_muldiv_L100
                 LDA     #33
                 TAY
                 TSC
@@ -6646,8 +6609,7 @@ _llong_muldiv_L104
                 LDA     #1
 _llong_muldiv_L105
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L103
+                BEQ     _llong_muldiv_L103
                 LDA     #34
                 TAY
                 TSC
@@ -6827,8 +6789,7 @@ _llong_muldiv_L107
                 LDA     #1
 _llong_muldiv_L108
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L106
+                BEQ     _llong_muldiv_L106
                 LDA     #35
                 TAY
                 TSC
@@ -7008,8 +6969,7 @@ _llong_muldiv_L110
                 LDA     #1
 _llong_muldiv_L111
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L109
+                BEQ     _llong_muldiv_L109
                 LDA     #36
                 TAY
                 TSC
@@ -7189,8 +7149,7 @@ _llong_muldiv_L113
                 LDA     #1
 _llong_muldiv_L114
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L112
+                BEQ     _llong_muldiv_L112
                 LDA     #37
                 TAY
                 TSC
@@ -7370,8 +7329,7 @@ _llong_muldiv_L116
                 LDA     #1
 _llong_muldiv_L117
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L115
+                BEQ     _llong_muldiv_L115
                 LDA     #38
                 TAY
                 TSC
@@ -7551,8 +7509,7 @@ _llong_muldiv_L119
                 LDA     #1
 _llong_muldiv_L120
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L118
+                BEQ     _llong_muldiv_L118
                 LDA     #39
                 TAY
                 TSC
@@ -7732,8 +7689,7 @@ _llong_muldiv_L122
                 LDA     #1
 _llong_muldiv_L123
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L121
+                BEQ     _llong_muldiv_L121
                 LDA     #40
                 TAY
                 TSC
@@ -7913,8 +7869,7 @@ _llong_muldiv_L125
                 LDA     #1
 _llong_muldiv_L126
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L124
+                BEQ     _llong_muldiv_L124
                 LDA     #41
                 TAY
                 TSC
@@ -8206,10 +8161,9 @@ _llong_muldiv_L124
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_muldiv_L130
+                BNE     _llong_muldiv_L130
                 LDA     #0
-                BRL     _llong_muldiv_L131
+                BRA     _llong_muldiv_L131
 _llong_muldiv_L130
                 LDA     #1
 _llong_muldiv_L131
@@ -8279,16 +8233,14 @@ _llong_muldiv_L131
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_muldiv_L128
+                BNE     _llong_muldiv_L128
                 LDA     #0
-                BRL     _llong_muldiv_L129
+                BRA     _llong_muldiv_L129
 _llong_muldiv_L128
                 LDA     #1
 _llong_muldiv_L129
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L127
+                BEQ     _llong_muldiv_L127
                 LDA     #43
                 TAY
                 TSC
@@ -8380,8 +8332,7 @@ _llong_muldiv_L133
                 LDA     #1
 _llong_muldiv_L134
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L132
+                BEQ     _llong_muldiv_L132
                 LDA     #44
                 TAY
                 TSC
@@ -8601,10 +8552,9 @@ _llong_muldiv_L132
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_muldiv_L138
+                BNE     _llong_muldiv_L138
                 LDA     #0
-                BRL     _llong_muldiv_L139
+                BRA     _llong_muldiv_L139
 _llong_muldiv_L138
                 LDA     #1
 _llong_muldiv_L139
@@ -8756,16 +8706,14 @@ _llong_muldiv_L139
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_muldiv_L136
+                BNE     _llong_muldiv_L136
                 LDA     #0
-                BRL     _llong_muldiv_L137
+                BRA     _llong_muldiv_L137
 _llong_muldiv_L136
                 LDA     #1
 _llong_muldiv_L137
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_muldiv_L135
+                BEQ     _llong_muldiv_L135
                 LDA     #45
                 TAY
                 TSC

@@ -147,24 +147,21 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arwdotread_L1
+                BNE     _arwdotread_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arwdotread_L1
+                BNE     _arwdotread_L1
                 LDA     #1
-                BRL     _arwdotread_L2
+                BRA     _arwdotread_L2
 _arwdotread_L1
                 LDA     #0
 _arwdotread_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _arwdotread_L0
+                BEQ     _arwdotread_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -181,8 +178,7 @@ _arwdotread_L0
                 TAX
                 TXA
                 CMP     #44
-                BEQ     *+5
-                BRL     _arwdotread_L3
+                BNE     _arwdotread_L3
                 LDA     _fcc_img0
                 TAX
                 TXA

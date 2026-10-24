@@ -243,8 +243,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L0
+                BEQ     _ptr_stride_struct_L0
                 LDA     #1
                 TAY
                 TSC
@@ -297,8 +296,7 @@ _ptr_stride_struct_L0
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L1
+                BEQ     _ptr_stride_struct_L1
                 LDA     #2
                 TAY
                 TSC
@@ -351,8 +349,7 @@ _ptr_stride_struct_L1
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L2
+                BEQ     _ptr_stride_struct_L2
                 LDA     #3
                 TAY
                 TSC
@@ -407,8 +404,7 @@ _ptr_stride_struct_L2
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L3
+                BEQ     _ptr_stride_struct_L3
                 LDA     #4
                 TAY
                 TSC
@@ -465,8 +461,7 @@ _ptr_stride_struct_L3
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L4
+                BEQ     _ptr_stride_struct_L4
                 LDA     #5
                 TAY
                 TSC
@@ -521,8 +516,7 @@ _ptr_stride_struct_L4
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L5
+                BEQ     _ptr_stride_struct_L5
                 LDA     #6
                 TAY
                 TSC
@@ -575,8 +569,7 @@ _ptr_stride_struct_L5
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L6
+                BEQ     _ptr_stride_struct_L6
                 LDA     #7
                 TAY
                 TSC
@@ -632,8 +625,7 @@ _ptr_stride_struct_L6
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L7
+                BEQ     _ptr_stride_struct_L7
                 LDA     #8
                 TAY
                 TSC
@@ -690,8 +682,7 @@ _ptr_stride_struct_L7
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L8
+                BEQ     _ptr_stride_struct_L8
                 LDA     #9
                 TAY
                 TSC
@@ -750,8 +741,7 @@ _ptr_stride_struct_L8
                 TAX
                 TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _ptr_stride_struct_L9
+                BEQ     _ptr_stride_struct_L9
                 LDA     #10
                 TAY
                 TSC
@@ -804,8 +794,7 @@ _ptr_stride_struct_L9
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L10
+                BEQ     _ptr_stride_struct_L10
                 LDA     #11
                 TAY
                 TSC
@@ -867,8 +856,7 @@ _ptr_stride_struct_L10
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L11
+                BEQ     _ptr_stride_struct_L11
                 LDA     #12
                 TAY
                 TSC
@@ -936,8 +924,7 @@ _ptr_stride_struct_L11
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L12
+                BEQ     _ptr_stride_struct_L12
                 LDA     #13
                 TAY
                 TSC
@@ -999,8 +986,7 @@ _ptr_stride_struct_L12
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L13
+                BEQ     _ptr_stride_struct_L13
                 LDA     #14
                 TAY
                 TSC
@@ -1068,8 +1054,7 @@ _ptr_stride_struct_L13
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L14
+                BEQ     _ptr_stride_struct_L14
                 LDA     #15
                 TAY
                 TSC
@@ -1142,8 +1127,7 @@ _ptr_stride_struct_L14
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L15
+                BEQ     _ptr_stride_struct_L15
                 LDA     #16
                 TAY
                 TSC
@@ -1208,8 +1192,7 @@ _ptr_stride_struct_L15
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L16
+                BEQ     _ptr_stride_struct_L16
                 LDA     #17
                 TAY
                 TSC
@@ -1260,8 +1243,7 @@ _ptr_stride_struct_L16
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L17
+                BEQ     _ptr_stride_struct_L17
                 LDA     #18
                 TAY
                 TSC
@@ -1318,8 +1300,7 @@ _ptr_stride_struct_L17
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L18
+                BEQ     _ptr_stride_struct_L18
                 LDA     #19
                 TAY
                 TSC
@@ -1370,8 +1351,7 @@ _ptr_stride_struct_L18
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L19
+                BEQ     _ptr_stride_struct_L19
                 LDA     #20
                 TAY
                 TSC
@@ -1474,8 +1454,7 @@ _ptr_stride_struct_L19
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L20
+                BEQ     _ptr_stride_struct_L20
                 LDA     #21
                 TAY
                 TSC
@@ -1578,8 +1557,7 @@ _ptr_stride_struct_L20
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L21
+                BEQ     _ptr_stride_struct_L21
                 LDA     #22
                 TAY
                 TSC
@@ -1675,8 +1653,7 @@ _ptr_stride_struct_L21
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L22
+                BEQ     _ptr_stride_struct_L22
                 LDA     #23
                 TAY
                 TSC
@@ -1740,8 +1717,7 @@ _ptr_stride_struct_L22
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L23
+                BEQ     _ptr_stride_struct_L23
                 LDA     #24
                 TAY
                 TSC
@@ -1799,8 +1775,7 @@ _ptr_stride_struct_L23
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L24
+                BEQ     _ptr_stride_struct_L24
                 LDA     #25
                 TAY
                 TSC
@@ -1865,8 +1840,7 @@ _ptr_stride_struct_L24
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L25
+                BEQ     _ptr_stride_struct_L25
                 LDA     #26
                 TAY
                 TSC
@@ -1923,8 +1897,7 @@ _ptr_stride_struct_L25
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L26
+                BEQ     _ptr_stride_struct_L26
                 LDA     #27
                 TAY
                 TSC
@@ -1982,8 +1955,7 @@ _ptr_stride_struct_L26
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L27
+                BEQ     _ptr_stride_struct_L27
                 LDA     #28
                 TAY
                 TSC
@@ -2053,8 +2025,7 @@ _ptr_stride_struct_L27
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L28
+                BEQ     _ptr_stride_struct_L28
                 LDA     #29
                 TAY
                 TSC
@@ -2111,8 +2082,7 @@ _ptr_stride_struct_L28
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L29
+                BEQ     _ptr_stride_struct_L29
                 LDA     #30
                 TAY
                 TSC
@@ -2204,8 +2174,7 @@ _ptr_stride_struct_L29
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L30
+                BEQ     _ptr_stride_struct_L30
                 LDA     #31
                 TAY
                 TSC
@@ -2269,8 +2238,7 @@ _ptr_stride_struct_L30
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L31
+                BEQ     _ptr_stride_struct_L31
                 LDA     #32
                 TAY
                 TSC
@@ -2344,8 +2312,7 @@ _ptr_stride_struct_L31
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L32
+                BEQ     _ptr_stride_struct_L32
                 LDA     #33
                 TAY
                 TSC
@@ -2415,8 +2382,7 @@ _ptr_stride_struct_L32
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L33
+                BEQ     _ptr_stride_struct_L33
                 LDA     #34
                 TAY
                 TSC
@@ -2473,8 +2439,7 @@ _ptr_stride_struct_L33
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L34
+                BEQ     _ptr_stride_struct_L34
                 LDA     #35
                 TAY
                 TSC
@@ -2566,8 +2531,7 @@ _ptr_stride_struct_L34
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L35
+                BEQ     _ptr_stride_struct_L35
                 LDA     #36
                 TAY
                 TSC
@@ -2631,8 +2595,7 @@ _ptr_stride_struct_L35
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L36
+                BEQ     _ptr_stride_struct_L36
                 LDA     #37
                 TAY
                 TSC
@@ -2704,8 +2667,7 @@ _ptr_stride_struct_L36
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L37
+                BEQ     _ptr_stride_struct_L37
                 LDA     #38
                 TAY
                 TSC
@@ -2779,8 +2741,7 @@ _ptr_stride_struct_L37
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L38
+                BEQ     _ptr_stride_struct_L38
                 LDA     #39
                 TAY
                 TSC
@@ -2849,8 +2810,7 @@ _ptr_stride_struct_L38
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L39
+                BEQ     _ptr_stride_struct_L39
                 LDA     #40
                 TAY
                 TSC
@@ -2919,8 +2879,7 @@ _ptr_stride_struct_L39
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L40
+                BEQ     _ptr_stride_struct_L40
                 LDA     #41
                 TAY
                 TSC
@@ -3074,8 +3033,7 @@ _ptr_stride_struct_L40
                 TAX
                 TXA
                 CMP     #61
-                BNE     *+5
-                BRL     _ptr_stride_struct_L41
+                BEQ     _ptr_stride_struct_L41
                 LDA     #43
                 TAY
                 TSC
@@ -3131,8 +3089,7 @@ _ptr_stride_struct_L41
                 TAX
                 TXA
                 CMP     #61
-                BNE     *+5
-                BRL     _ptr_stride_struct_L42
+                BEQ     _ptr_stride_struct_L42
                 LDA     #44
                 TAY
                 TSC
@@ -3188,8 +3145,7 @@ _ptr_stride_struct_L42
                 TAX
                 TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L43
+                BEQ     _ptr_stride_struct_L43
                 LDA     #45
                 TAY
                 TSC
@@ -3247,8 +3203,7 @@ _ptr_stride_struct_L43
                 TAX
                 TXA
                 CMP     #60
-                BNE     *+5
-                BRL     _ptr_stride_struct_L44
+                BEQ     _ptr_stride_struct_L44
                 LDA     #46
                 TAY
                 TSC
@@ -3320,8 +3275,7 @@ _ptr_stride_struct_L44
                 TAX
                 TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L45
+                BEQ     _ptr_stride_struct_L45
                 LDA     #47
                 TAY
                 TSC
@@ -3397,8 +3351,7 @@ _ptr_stride_struct_L45
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L46
+                BEQ     _ptr_stride_struct_L46
                 LDA     #48
                 TAY
                 TSC
@@ -3455,8 +3408,7 @@ _ptr_stride_struct_L46
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L47
+                BEQ     _ptr_stride_struct_L47
                 LDA     #49
                 TAY
                 TSC
@@ -3556,8 +3508,7 @@ _ptr_stride_struct_L47
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L48
+                BEQ     _ptr_stride_struct_L48
                 LDA     #50
                 TAY
                 TSC
@@ -3663,8 +3614,7 @@ _ptr_stride_struct_L48
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L49
+                BEQ     _ptr_stride_struct_L49
                 LDA     #51
                 TAY
                 TSC
@@ -3768,8 +3718,7 @@ _ptr_stride_struct_L49
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _ptr_stride_struct_L50
+                BEQ     _ptr_stride_struct_L50
                 LDA     #52
                 TAY
                 TSC
@@ -3873,8 +3822,7 @@ _ptr_stride_struct_L50
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptr_stride_struct_L51
+                BEQ     _ptr_stride_struct_L51
                 LDA     #53
                 TAY
                 TSC
@@ -3979,8 +3927,7 @@ _ptr_stride_struct_L51
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L52
+                BEQ     _ptr_stride_struct_L52
                 LDA     #54
                 TAY
                 TSC
@@ -4087,8 +4034,7 @@ _ptr_stride_struct_L52
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L53
+                BEQ     _ptr_stride_struct_L53
                 LDA     #55
                 TAY
                 TSC
@@ -4191,8 +4137,7 @@ _ptr_stride_struct_L53
                 TAX
                 TXA
                 CMP     #71
-                BNE     *+5
-                BRL     _ptr_stride_struct_L54
+                BEQ     _ptr_stride_struct_L54
                 LDA     #56
                 TAY
                 TSC
@@ -4295,8 +4240,7 @@ _ptr_stride_struct_L54
                 TAX
                 TXA
                 CMP     #72
-                BNE     *+5
-                BRL     _ptr_stride_struct_L55
+                BEQ     _ptr_stride_struct_L55
                 LDA     #57
                 TAY
                 TSC
@@ -4399,8 +4343,7 @@ _ptr_stride_struct_L55
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L56
+                BEQ     _ptr_stride_struct_L56
                 LDA     #58
                 TAY
                 TSC
@@ -4478,24 +4421,21 @@ _ptr_stride_struct_L56
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L58
+                BNE     _ptr_stride_struct_L58
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L58
+                BNE     _ptr_stride_struct_L58
                 LDA     #0
-                BRL     _ptr_stride_struct_L59
+                BRA     _ptr_stride_struct_L59
 _ptr_stride_struct_L58
                 LDA     #1
 _ptr_stride_struct_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L57
+                BEQ     _ptr_stride_struct_L57
                 LDA     #59
                 TAY
                 TSC
@@ -4538,8 +4478,7 @@ _ptr_stride_struct_L57
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L60
+                BEQ     _ptr_stride_struct_L60
                 LDA     #60
                 TAY
                 TSC
@@ -4594,24 +4533,21 @@ _ptr_stride_struct_L60
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L62
+                BNE     _ptr_stride_struct_L62
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L62
+                BNE     _ptr_stride_struct_L62
                 LDA     #0
-                BRL     _ptr_stride_struct_L63
+                BRA     _ptr_stride_struct_L63
 _ptr_stride_struct_L62
                 LDA     #1
 _ptr_stride_struct_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L61
+                BEQ     _ptr_stride_struct_L61
                 LDA     #61
                 TAY
                 TSC
@@ -4655,8 +4591,7 @@ _ptr_stride_struct_L61
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L64
+                BEQ     _ptr_stride_struct_L64
                 LDA     #62
                 TAY
                 TSC
@@ -4730,24 +4665,21 @@ _ptr_stride_struct_L64
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L66
+                BNE     _ptr_stride_struct_L66
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L66
+                BNE     _ptr_stride_struct_L66
                 LDA     #0
-                BRL     _ptr_stride_struct_L67
+                BRA     _ptr_stride_struct_L67
 _ptr_stride_struct_L66
                 LDA     #1
 _ptr_stride_struct_L67
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L65
+                BEQ     _ptr_stride_struct_L65
                 LDA     #63
                 TAY
                 TSC
@@ -4788,8 +4720,7 @@ _ptr_stride_struct_L65
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _ptr_stride_struct_L68
+                BEQ     _ptr_stride_struct_L68
                 LDA     #64
                 TAY
                 TSC
@@ -4878,24 +4809,21 @@ _ptr_stride_struct_L68
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L70
+                BNE     _ptr_stride_struct_L70
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L70
+                BNE     _ptr_stride_struct_L70
                 LDA     #0
-                BRL     _ptr_stride_struct_L71
+                BRA     _ptr_stride_struct_L71
 _ptr_stride_struct_L70
                 LDA     #1
 _ptr_stride_struct_L71
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L69
+                BEQ     _ptr_stride_struct_L69
                 LDA     #65
                 TAY
                 TSC
@@ -4951,8 +4879,7 @@ _ptr_stride_struct_L69
                 TAX
                 TXA
                 CMP     #22
-                BNE     *+5
-                BRL     _ptr_stride_struct_L72
+                BEQ     _ptr_stride_struct_L72
                 LDA     #66
                 TAY
                 TSC
@@ -5015,24 +4942,21 @@ _ptr_stride_struct_L72
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L74
+                BNE     _ptr_stride_struct_L74
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L74
+                BNE     _ptr_stride_struct_L74
                 LDA     #0
-                BRL     _ptr_stride_struct_L75
+                BRA     _ptr_stride_struct_L75
 _ptr_stride_struct_L74
                 LDA     #1
 _ptr_stride_struct_L75
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L73
+                BEQ     _ptr_stride_struct_L73
                 LDA     #67
                 TAY
                 TSC
@@ -5069,8 +4993,7 @@ _ptr_stride_struct_L73
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L76
+                BEQ     _ptr_stride_struct_L76
                 LDA     #68
                 TAY
                 TSC
@@ -5148,24 +5071,21 @@ _ptr_stride_struct_L76
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L78
+                BNE     _ptr_stride_struct_L78
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L78
+                BNE     _ptr_stride_struct_L78
                 LDA     #0
-                BRL     _ptr_stride_struct_L79
+                BRA     _ptr_stride_struct_L79
 _ptr_stride_struct_L78
                 LDA     #1
 _ptr_stride_struct_L79
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L77
+                BEQ     _ptr_stride_struct_L77
                 LDA     #69
                 TAY
                 TSC
@@ -5208,8 +5128,7 @@ _ptr_stride_struct_L77
                 TAX
                 TXA
                 CMP     #62
-                BNE     *+5
-                BRL     _ptr_stride_struct_L80
+                BEQ     _ptr_stride_struct_L80
                 LDA     #70
                 TAY
                 TSC
@@ -5306,24 +5225,21 @@ _ptr_stride_struct_L80
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L82
+                BNE     _ptr_stride_struct_L82
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L82
+                BNE     _ptr_stride_struct_L82
                 LDA     #0
-                BRL     _ptr_stride_struct_L83
+                BRA     _ptr_stride_struct_L83
 _ptr_stride_struct_L82
                 LDA     #1
 _ptr_stride_struct_L83
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L81
+                BEQ     _ptr_stride_struct_L81
                 LDA     #71
                 TAY
                 TSC
@@ -5372,8 +5288,7 @@ _ptr_stride_struct_L81
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L84
+                BEQ     _ptr_stride_struct_L84
                 LDA     #72
                 TAY
                 TSC
@@ -5450,24 +5365,21 @@ _ptr_stride_struct_L84
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L86
+                BNE     _ptr_stride_struct_L86
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptr_stride_struct_L86
+                BNE     _ptr_stride_struct_L86
                 LDA     #0
-                BRL     _ptr_stride_struct_L87
+                BRA     _ptr_stride_struct_L87
 _ptr_stride_struct_L86
                 LDA     #1
 _ptr_stride_struct_L87
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_stride_struct_L85
+                BEQ     _ptr_stride_struct_L85
                 LDA     #73
                 TAY
                 TSC
@@ -5518,8 +5430,7 @@ _ptr_stride_struct_L85
                 TAX
                 TXA
                 CMP     #21
-                BNE     *+5
-                BRL     _ptr_stride_struct_L88
+                BEQ     _ptr_stride_struct_L88
                 LDA     #74
                 TAY
                 TSC

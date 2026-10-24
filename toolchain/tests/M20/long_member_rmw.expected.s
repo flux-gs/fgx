@@ -80,10 +80,9 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L0
+                BEQ     _long_member_rmw_L0
                 LDA     #10
-                BRL     _long_member_rmw_L1
+                BRA     _long_member_rmw_L1
 _long_member_rmw_L0
                 LDA     #0
 _long_member_rmw_L1
@@ -137,10 +136,9 @@ _long_member_rmw_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L2
+                BEQ     _long_member_rmw_L2
                 LDA     #10
-                BRL     _long_member_rmw_L3
+                BRA     _long_member_rmw_L3
 _long_member_rmw_L2
                 LDA     #0
 _long_member_rmw_L3
@@ -207,8 +205,7 @@ _long_member_rmw_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L6
+                BEQ     _long_member_rmw_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
@@ -230,18 +227,16 @@ _long_member_rmw_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L6
+                BEQ     _long_member_rmw_L6
                 LDA     #1
-                BRL     _long_member_rmw_L7
+                BRA     _long_member_rmw_L7
 _long_member_rmw_L6
                 LDA     #0
 _long_member_rmw_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L4
+                BEQ     _long_member_rmw_L4
                 LDA     #10
-                BRL     _long_member_rmw_L5
+                BRA     _long_member_rmw_L5
 _long_member_rmw_L4
                 LDA     #0
 _long_member_rmw_L5
@@ -300,10 +295,9 @@ _long_member_rmw_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _long_member_rmw_L8
+                BEQ     _long_member_rmw_L8
                 LDA     #12
-                BRL     _long_member_rmw_L9
+                BRA     _long_member_rmw_L9
 _long_member_rmw_L8
                 LDA     #0
 _long_member_rmw_L9

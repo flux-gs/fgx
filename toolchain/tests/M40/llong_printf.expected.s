@@ -114,8 +114,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L0
+                BEQ     _llong_printf_L0
                 LDA     #1
                 TAY
                 TSC
@@ -240,8 +239,7 @@ _llong_printf_L0
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L1
+                BEQ     _llong_printf_L1
                 LDA     #2
                 TAY
                 TSC
@@ -332,8 +330,7 @@ _llong_printf_L1
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L2
+                BEQ     _llong_printf_L2
                 LDA     #3
                 TAY
                 TSC
@@ -440,8 +437,7 @@ _llong_printf_L2
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L3
+                BEQ     _llong_printf_L3
                 LDA     #4
                 TAY
                 TSC
@@ -532,8 +528,7 @@ _llong_printf_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L4
+                BEQ     _llong_printf_L4
                 LDA     #5
                 TAY
                 TSC
@@ -641,8 +636,7 @@ _llong_printf_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L5
+                BEQ     _llong_printf_L5
                 LDA     #6
                 TAY
                 TSC
@@ -767,8 +761,7 @@ _llong_printf_L5
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L6
+                BEQ     _llong_printf_L6
                 LDA     #7
                 TAY
                 TSC
@@ -871,8 +864,7 @@ _llong_printf_L6
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L7
+                BEQ     _llong_printf_L7
                 LDA     #8
                 TAY
                 TSC
@@ -1011,10 +1003,9 @@ _llong_printf_L7
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L13
+                BNE     _llong_printf_L13
                 LDA     #0
-                BRL     _llong_printf_L14
+                BRA     _llong_printf_L14
 _llong_printf_L13
                 LDA     #1
 _llong_printf_L14
@@ -1134,16 +1125,14 @@ _llong_printf_L14
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L11
+                BNE     _llong_printf_L11
                 LDA     #0
-                BRL     _llong_printf_L12
+                BRA     _llong_printf_L12
 _llong_printf_L11
                 LDA     #1
 _llong_printf_L12
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L9
+                BNE     _llong_printf_L9
                 LDA     #65535
                 STA     _fcc_q3
                 LDA     #65535
@@ -1189,16 +1178,14 @@ _llong_printf_L12
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BEQ     *+5
-                BRL     _llong_printf_L9
+                BNE     _llong_printf_L9
                 LDA     #0
-                BRL     _llong_printf_L10
+                BRA     _llong_printf_L10
 _llong_printf_L9
                 LDA     #1
 _llong_printf_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _llong_printf_L8
+                BEQ     _llong_printf_L8
                 LDA     #9
                 TAY
                 TSC

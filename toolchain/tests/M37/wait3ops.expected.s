@@ -100,8 +100,7 @@ _wait3ops_L0
                 BVC     _wait3ops_L3
                 EOR     #$8000
 _wait3ops_L3
-                BMI     *+5
-                BRL     _wait3ops_L2
+                BPL     _wait3ops_L2
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -134,7 +133,7 @@ _wait3ops_L3
                 TYA
 _wait3ops_L1
                 INC     _fcc_img0
-                BRL     _wait3ops_L0
+                BRA     _wait3ops_L0
 _wait3ops_L2
                 LDA     _fcc_img0
                 STA     7,S   ; fccstk d=0 b=7
@@ -152,8 +151,7 @@ _wait3ops_L4
                 BVC     _wait3ops_L7
                 EOR     #$8000
 _wait3ops_L7
-                BMI     *+5
-                BRL     _wait3ops_L6
+                BPL     _wait3ops_L6
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -168,8 +166,7 @@ _wait3ops_L7
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _wait3ops_L8
+                BNE     _wait3ops_L8
                 LDA     #1
                 STA     _fcc_img1
 _wait3ops_L8
@@ -178,13 +175,12 @@ _wait3ops_L5
                 CLC
                 ADC     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _wait3ops_L4
+                BRA     _wait3ops_L4
 _wait3ops_L6
                 LDA     _fcc_img1
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BNE     *+5
-                BRL     _wait3ops_L9
+                BEQ     _wait3ops_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -238,8 +234,7 @@ _wait3ops_L9
                 BVC     _wait3ops_L11
                 EOR     #$8000
 _wait3ops_L11
-                BMI     *+5
-                BRL     _wait3ops_L10
+                BPL     _wait3ops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -285,8 +280,7 @@ _wait3ops_L10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _wait3ops_L12
+                BNE     _wait3ops_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -296,8 +290,7 @@ _wait3ops_L10
 _wait3ops_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BEQ     *+5
-                BRL     _wait3ops_L13
+                BNE     _wait3ops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -319,8 +312,7 @@ _wait3ops_L14
                 BVC     _wait3ops_L17
                 EOR     #$8000
 _wait3ops_L17
-                BMI     *+5
-                BRL     _wait3ops_L16
+                BPL     _wait3ops_L16
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -333,8 +325,7 @@ _wait3ops_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _wait3ops_L18
+                BEQ     _wait3ops_L18
                 LDA     #0
                 STA     _fcc_img2
 _wait3ops_L18
@@ -343,13 +334,12 @@ _wait3ops_L15
                 CLC
                 ADC     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _wait3ops_L14
+                BRA     _wait3ops_L14
 _wait3ops_L16
                 LDA     _fcc_img2
                 STA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BNE     *+5
-                BRL     _wait3ops_L19
+                BEQ     _wait3ops_L19
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

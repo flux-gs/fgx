@@ -179,8 +179,7 @@ _char_walk_L0
                 BVC     _char_walk_L2
                 EOR     #$8000
 _char_walk_L2
-                BMI     *+5
-                BRL     _char_walk_L1
+                BPL     _char_walk_L1
                 LDA     _fcc_img1
                 PHA
                 SEP     #$20
@@ -211,7 +210,7 @@ _char_walk_L2
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _char_walk_L0
+                BRA     _char_walk_L0
 _char_walk_L1
                 LDA     _fcc_img1
                 TAY

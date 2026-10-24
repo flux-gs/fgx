@@ -59,10 +59,9 @@ _m2d_row_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L1
+                BEQ     _m2d_row_L1
                 INC     _fcc_img0
-                BRL     _m2d_row_L0
+                BRA     _m2d_row_L0
 _m2d_row_L1
                 LDA     _fcc_img0
                 TAY
@@ -161,24 +160,21 @@ main_stkok        TCS
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L3
+                BNE     _m2d_row_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L3
+                BNE     _m2d_row_L3
                 LDA     #1
-                BRL     _m2d_row_L4
+                BRA     _m2d_row_L4
 _m2d_row_L3
                 LDA     #0
 _m2d_row_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L2
+                BEQ     _m2d_row_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -227,24 +223,21 @@ _m2d_row_L2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L8
+                BNE     _m2d_row_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L8
+                BNE     _m2d_row_L8
                 LDA     #1
-                BRL     _m2d_row_L9
+                BRA     _m2d_row_L9
 _m2d_row_L8
                 LDA     #0
 _m2d_row_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L6
+                BEQ     _m2d_row_L6
                 SEP     #$20
                 MX      %10
                 LDA     ph+2
@@ -297,32 +290,28 @@ _m2d_row_L9
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L10
+                BNE     _m2d_row_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L10
+                BNE     _m2d_row_L10
                 LDA     #1
-                BRL     _m2d_row_L11
+                BRA     _m2d_row_L11
 _m2d_row_L10
                 LDA     #0
 _m2d_row_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L6
+                BEQ     _m2d_row_L6
                 LDA     #1
-                BRL     _m2d_row_L7
+                BRA     _m2d_row_L7
 _m2d_row_L6
                 LDA     #0
 _m2d_row_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L5
+                BEQ     _m2d_row_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -367,24 +356,21 @@ _m2d_row_L5
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L13
+                BNE     _m2d_row_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L13
+                BNE     _m2d_row_L13
                 LDA     #1
-                BRL     _m2d_row_L14
+                BRA     _m2d_row_L14
 _m2d_row_L13
                 LDA     #0
 _m2d_row_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L12
+                BEQ     _m2d_row_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -460,24 +446,21 @@ _m2d_row_L12
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L16
+                BNE     _m2d_row_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L16
+                BNE     _m2d_row_L16
                 LDA     #1
-                BRL     _m2d_row_L17
+                BRA     _m2d_row_L17
 _m2d_row_L16
                 LDA     #0
 _m2d_row_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L15
+                BEQ     _m2d_row_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -552,24 +535,21 @@ _m2d_row_L15
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L19
+                BNE     _m2d_row_L19
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L19
+                BNE     _m2d_row_L19
                 LDA     #1
-                BRL     _m2d_row_L20
+                BRA     _m2d_row_L20
 _m2d_row_L19
                 LDA     #0
 _m2d_row_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L18
+                BEQ     _m2d_row_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -619,8 +599,7 @@ _m2d_row_L18
                 TAX
                 TXA
                 CMP     #113
-                BEQ     *+5
-                BRL     _m2d_row_L21
+                BNE     _m2d_row_L21
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -665,24 +644,21 @@ _m2d_row_L21
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row_L23
+                BNE     _m2d_row_L23
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row_L23
+                BNE     _m2d_row_L23
                 LDA     #1
-                BRL     _m2d_row_L24
+                BRA     _m2d_row_L24
 _m2d_row_L23
                 LDA     #0
 _m2d_row_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L22
+                BEQ     _m2d_row_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -778,22 +754,19 @@ _m2d_row_L22
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _m2d_row_L26
+                BNE     _m2d_row_L26
                 LDA     #6
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _m2d_row_L26
+                BNE     _m2d_row_L26
                 LDA     #1
-                BRL     _m2d_row_L27
+                BRA     _m2d_row_L27
 _m2d_row_L26
                 LDA     #0
 _m2d_row_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row_L25
+                BEQ     _m2d_row_L25
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

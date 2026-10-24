@@ -254,8 +254,7 @@ _struct_arg_member_L3
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _struct_arg_member_L2
+                BEQ     _struct_arg_member_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -301,8 +300,7 @@ _struct_arg_member_L5
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _struct_arg_member_L4
+                BEQ     _struct_arg_member_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -357,8 +355,7 @@ _struct_arg_member_L7
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _struct_arg_member_L6
+                BEQ     _struct_arg_member_L6
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -413,8 +410,7 @@ _struct_arg_member_L9
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _struct_arg_member_L8
+                BEQ     _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -423,10 +419,9 @@ _struct_arg_member_L9
 _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_arg_member_L10
+                BEQ     _struct_arg_member_L10
                 LDA     9,S   ; fccstk d=0 b=9
-                BRL     _struct_arg_member_L11
+                BRA     _struct_arg_member_L11
 _struct_arg_member_L10
                 LDA     #42
 _struct_arg_member_L11

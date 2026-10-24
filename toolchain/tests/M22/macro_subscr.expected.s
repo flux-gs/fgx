@@ -33,8 +33,7 @@ _macro_subscr_L0
                 BVC     _macro_subscr_L3
                 EOR     #$8000
 _macro_subscr_L3
-                BMI     *+5
-                BRL     _macro_subscr_L2
+                BPL     _macro_subscr_L2
                 LDA     #up_tab
                 PHA
                 LDA     _fcc_img0
@@ -79,7 +78,7 @@ _macro_subscr_L3
                 PLA
 _macro_subscr_L1
                 INC     _fcc_img0
-                BRL     _macro_subscr_L0
+                BRA     _macro_subscr_L0
 _macro_subscr_L2
                 LDA     #up_tab
                 PHA
@@ -284,8 +283,7 @@ _macro_subscr_L2
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _macro_subscr_L4
+                BNE     _macro_subscr_L4
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -300,8 +298,7 @@ _macro_subscr_L4
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _macro_subscr_L5
+                BNE     _macro_subscr_L5
                 LDA     _fcc_img1
                 TAX
                 TXA

@@ -256,24 +256,21 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _amp_dot_ptrfield_index_L1
+                BNE     _amp_dot_ptrfield_index_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _amp_dot_ptrfield_index_L1
+                BNE     _amp_dot_ptrfield_index_L1
                 LDA     #1
-                BRL     _amp_dot_ptrfield_index_L2
+                BRA     _amp_dot_ptrfield_index_L2
 _amp_dot_ptrfield_index_L1
                 LDA     #0
 _amp_dot_ptrfield_index_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _amp_dot_ptrfield_index_L0
+                BEQ     _amp_dot_ptrfield_index_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -311,8 +308,7 @@ _amp_dot_ptrfield_index_L0
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _amp_dot_ptrfield_index_L3
+                BNE     _amp_dot_ptrfield_index_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -340,8 +336,7 @@ _amp_dot_ptrfield_index_L3
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _amp_dot_ptrfield_index_L4
+                BNE     _amp_dot_ptrfield_index_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -359,8 +354,7 @@ _amp_dot_ptrfield_index_L4
                 TAX
                 TXA
                 CMP     #14
-                BEQ     *+5
-                BRL     _amp_dot_ptrfield_index_L5
+                BNE     _amp_dot_ptrfield_index_L5
                 LDA     _fcc_img0
                 TAX
                 TXA

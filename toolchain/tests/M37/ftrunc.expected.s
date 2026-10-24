@@ -63,8 +63,7 @@ _ftrunc_sizeof_path_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BMI     *+5
-                BRL     _ftrunc_L0
+                BPL     _ftrunc_L0
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0001
@@ -140,8 +139,7 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BMI     *+5
-                BRL     _ftrunc_L1
+                BPL     _ftrunc_L1
                 LDA     #1
                 TAY
                 TSC
@@ -178,8 +176,7 @@ _ftrunc_L1
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ftrunc_L2
+                BEQ     _ftrunc_L2
                 LDA     #2
                 TAY
                 TSC
@@ -209,8 +206,7 @@ _ftrunc_L2
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _ftrunc_L3
+                BNE     _ftrunc_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -263,8 +259,7 @@ _ftrunc_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L4
+                BEQ     _ftrunc_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -338,8 +333,7 @@ _ftrunc_L4
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _ftrunc_L9
+                BNE     _ftrunc_L9
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -360,16 +354,14 @@ _ftrunc_L4
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _ftrunc_L9
+                BNE     _ftrunc_L9
                 LDA     #1
-                BRL     _ftrunc_L10
+                BRA     _ftrunc_L10
 _ftrunc_L9
                 LDA     #0
 _ftrunc_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L7
+                BEQ     _ftrunc_L7
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -390,16 +382,14 @@ _ftrunc_L10
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _ftrunc_L7
+                BNE     _ftrunc_L7
                 LDA     #1
-                BRL     _ftrunc_L8
+                BRA     _ftrunc_L8
 _ftrunc_L7
                 LDA     #0
 _ftrunc_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L6
+                BEQ     _ftrunc_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -450,8 +440,7 @@ _ftrunc_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L11
+                BEQ     _ftrunc_L11
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -501,8 +490,7 @@ _ftrunc_L11
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _ftrunc_L22
+                BNE     _ftrunc_L22
                 LDA     #0
                 PHA
                 LDA     #$0000
@@ -540,16 +528,14 @@ _ftrunc_L11
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L22
+                BEQ     _ftrunc_L22
                 LDA     #1
-                BRL     _ftrunc_L23
+                BRA     _ftrunc_L23
 _ftrunc_L22
                 LDA     #0
 _ftrunc_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L20
+                BEQ     _ftrunc_L20
                 LDA     #32
                 PHA
                 SEP     #$20
@@ -576,16 +562,14 @@ _ftrunc_L23
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _ftrunc_L20
+                BNE     _ftrunc_L20
                 LDA     #1
-                BRL     _ftrunc_L21
+                BRA     _ftrunc_L21
 _ftrunc_L20
                 LDA     #0
 _ftrunc_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L18
+                BEQ     _ftrunc_L18
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -606,16 +590,14 @@ _ftrunc_L21
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _ftrunc_L18
+                BNE     _ftrunc_L18
                 LDA     #1
-                BRL     _ftrunc_L19
+                BRA     _ftrunc_L19
 _ftrunc_L18
                 LDA     #0
 _ftrunc_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L16
+                BEQ     _ftrunc_L16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -634,16 +616,14 @@ _ftrunc_L19
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _ftrunc_L16
+                BNE     _ftrunc_L16
                 LDA     #1
-                BRL     _ftrunc_L17
+                BRA     _ftrunc_L17
 _ftrunc_L16
                 LDA     #0
 _ftrunc_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L14
+                BEQ     _ftrunc_L14
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -662,16 +642,14 @@ _ftrunc_L17
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _ftrunc_L14
+                BNE     _ftrunc_L14
                 LDA     #1
-                BRL     _ftrunc_L15
+                BRA     _ftrunc_L15
 _ftrunc_L14
                 LDA     #0
 _ftrunc_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L13
+                BEQ     _ftrunc_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -713,8 +691,7 @@ _ftrunc_L12
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _ftrunc_L25
+                BNE     _ftrunc_L25
                 SEP     #$20
                 MX      %10
                 PHB
@@ -751,10 +728,9 @@ _ftrunc_L12
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L25
+                BEQ     _ftrunc_L25
                 LDA     #1
-                BRL     _ftrunc_L26
+                BRA     _ftrunc_L26
 _ftrunc_L25
                 LDA     #0
 _ftrunc_L26
@@ -783,8 +759,7 @@ _ftrunc_L26
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BPL     *+5
-                BRL     _ftrunc_L27
+                BMI     _ftrunc_L27
                 LDA     #0
                 STA     errno
                 LDA     #$0000
@@ -805,22 +780,19 @@ _ftrunc_L26
                 TCS
                 TYA
                 CMP     #0
-                BMI     *+5
-                BRL     _ftrunc_L29
+                BPL     _ftrunc_L29
                 LDA     errno
                 TAX
                 TXA
                 CMP     #22
-                BEQ     *+5
-                BRL     _ftrunc_L29
+                BNE     _ftrunc_L29
                 LDA     #1
-                BRL     _ftrunc_L30
+                BRA     _ftrunc_L30
 _ftrunc_L29
                 LDA     #0
 _ftrunc_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _ftrunc_L28
+                BEQ     _ftrunc_L28
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

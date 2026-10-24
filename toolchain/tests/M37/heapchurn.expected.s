@@ -41,24 +41,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapchurn_L1
+                BNE     _heapchurn_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapchurn_L1
+                BNE     _heapchurn_L1
                 LDA     #1
-                BRL     _heapchurn_L2
+                BRA     _heapchurn_L2
 _heapchurn_L1
                 LDA     #0
 _heapchurn_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _heapchurn_L0
+                BEQ     _heapchurn_L0
                 LDA     #1
                 TAY
                 TSC
@@ -195,24 +192,21 @@ _heapchurn_L6
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapchurn_L8
+                BNE     _heapchurn_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapchurn_L8
+                BNE     _heapchurn_L8
                 LDA     #1
-                BRL     _heapchurn_L9
+                BRA     _heapchurn_L9
 _heapchurn_L8
                 LDA     #0
 _heapchurn_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _heapchurn_L7
+                BEQ     _heapchurn_L7
                 LDA     #2
                 TAY
                 TSC
@@ -281,24 +275,21 @@ _heapchurn_L7
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _heapchurn_L12
+                BNE     _heapchurn_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _heapchurn_L12
+                BNE     _heapchurn_L12
                 LDA     #1
-                BRL     _heapchurn_L13
+                BRA     _heapchurn_L13
 _heapchurn_L12
                 LDA     #0
 _heapchurn_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _heapchurn_L11
+                BEQ     _heapchurn_L11
                 LDA     #3
                 TAY
                 TSC
@@ -413,8 +404,7 @@ _heapchurn_L17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _heapchurn_L18
+                BEQ     _heapchurn_L18
                 LDA     #200
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
@@ -442,8 +432,7 @@ _heapchurn_L19
                 LDA:    nbuf,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _heapchurn_L21
+                BEQ     _heapchurn_L21
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -474,8 +463,7 @@ _heapchurn_L19
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _heapchurn_L22
+                BEQ     _heapchurn_L22
                 LDA     #100
                 CLC
                 ADC     _fcc_img1
@@ -491,7 +479,7 @@ _heapchurn_L19
 _heapchurn_L22
 _heapchurn_L20
                 INC     _fcc_img0
-                BRL     _heapchurn_L19
+                BRA     _heapchurn_L19
 _heapchurn_L21
                 LDA     _fcc_img0
                 STA     11,S   ; fccstk d=0 b=11
@@ -520,8 +508,7 @@ _heapchurn_L21
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _heapchurn_L23
+                BEQ     _heapchurn_L23
                 LDA     #100
                 CLC
                 ADC     9,S   ; fccstk d=0 b=9
@@ -570,8 +557,7 @@ _heapchurn_L24
                 BVC     _heapchurn_L27
                 EOR     #$8000
 _heapchurn_L27
-                BMI     *+5
-                BRL     _heapchurn_L26
+                BPL     _heapchurn_L26
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -606,7 +592,7 @@ _heapchurn_L25
                 CLC
                 ADC     #1
                 STA     9,S   ; fccstk d=0 b=9
-                BRL     _heapchurn_L24
+                BRA     _heapchurn_L24
 _heapchurn_L26
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2

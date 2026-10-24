@@ -182,24 +182,21 @@ _fprloop_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _fprloop_L5
+                BNE     _fprloop_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _fprloop_L5
+                BNE     _fprloop_L5
                 LDA     #1
-                BRL     _fprloop_L6
+                BRA     _fprloop_L6
 _fprloop_L5
                 LDA     #0
 _fprloop_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _fprloop_L4
+                BEQ     _fprloop_L4
                 LDA     #9
                 TAY
                 TSC
@@ -221,8 +218,7 @@ _fprloop_L4
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _fprloop_L7
+                BNE     _fprloop_L7
                 PHA
                 SEP     #$20
                 MX      %10
@@ -270,8 +266,7 @@ _fprloop_L2
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _fprloop_L8
+                BNE     _fprloop_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -303,8 +298,7 @@ _fprloop_L8
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fprloop_L9
+                BNE     _fprloop_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -336,8 +330,7 @@ _fprloop_L9
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _fprloop_L10
+                BNE     _fprloop_L10
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -369,8 +362,7 @@ _fprloop_L10
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _fprloop_L11
+                BNE     _fprloop_L11
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -402,8 +394,7 @@ _fprloop_L11
                 TAX
                 TXA
                 CMP     #77
-                BEQ     *+5
-                BRL     _fprloop_L12
+                BNE     _fprloop_L12
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -435,8 +426,7 @@ _fprloop_L12
                 TAX
                 TXA
                 CMP     #78
-                BEQ     *+5
-                BRL     _fprloop_L13
+                BNE     _fprloop_L13
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -466,8 +456,7 @@ _fprloop_L13
                 MX      %00
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BEQ     *+5
-                BRL     _fprloop_L14
+                BNE     _fprloop_L14
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA

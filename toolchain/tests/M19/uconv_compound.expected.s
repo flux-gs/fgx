@@ -92,8 +92,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L0
+                BEQ     _uconv_compound_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -155,8 +154,7 @@ _uconv_compound_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L1
+                BEQ     _uconv_compound_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -220,8 +218,7 @@ _uconv_compound_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L2
+                BEQ     _uconv_compound_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -295,8 +292,7 @@ _uconv_compound_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L3
+                BEQ     _uconv_compound_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -358,8 +354,7 @@ _uconv_compound_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L4
+                BEQ     _uconv_compound_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -421,8 +416,7 @@ _uconv_compound_L4
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L5
+                BEQ     _uconv_compound_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -484,8 +478,7 @@ _uconv_compound_L5
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L6
+                BEQ     _uconv_compound_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -549,8 +542,7 @@ _uconv_compound_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uconv_compound_L7
+                BEQ     _uconv_compound_L7
                 LDA     _fcc_img0
                 TAX
                 TXA

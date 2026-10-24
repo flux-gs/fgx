@@ -70,8 +70,7 @@ _m19_2d_L0
                 BVC     _m19_2d_L3
                 EOR     #$8000
 _m19_2d_L3
-                BMI     *+5
-                BRL     _m19_2d_L2
+                BPL     _m19_2d_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img4
@@ -97,7 +96,7 @@ _m19_2d_L1
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _m19_2d_L0
+                BRA     _m19_2d_L0
 _m19_2d_L2
                 LDA     _fcc_img1
                 TAY
@@ -153,8 +152,7 @@ _m19_2d_L4
                 BVC     _m19_2d_L7
                 EOR     #$8000
 _m19_2d_L7
-                BMI     *+5
-                BRL     _m19_2d_L6
+                BPL     _m19_2d_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
                 LDA     #3

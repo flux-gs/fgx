@@ -83,8 +83,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _arrdimexpr_L0
+                BEQ     _arrdimexpr_L0
                 LDA     #1
                 TAY
                 TSC
@@ -103,8 +102,7 @@ _arrdimexpr_L0
                 TAX
                 TXA
                 CMP     #9
-                BNE     *+5
-                BRL     _arrdimexpr_L1
+                BEQ     _arrdimexpr_L1
                 LDA     #2
                 TAY
                 TSC
@@ -132,8 +130,7 @@ _arrdimexpr_L1
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _arrdimexpr_L2
+                BEQ     _arrdimexpr_L2
                 LDA     #3
                 TAY
                 TSC

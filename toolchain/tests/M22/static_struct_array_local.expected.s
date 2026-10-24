@@ -134,8 +134,7 @@ _static_struct_array_local_L0
                 BVC     _static_struct_array_local_L3
                 EOR     #$8000
 _static_struct_array_local_L3
-                BMI     *+5
-                BRL     _static_struct_array_local_L2
+                BPL     _static_struct_array_local_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img0
@@ -179,7 +178,7 @@ _static_struct_array_local_L3
                 STA     _fcc_img1
 _static_struct_array_local_L1
                 INC     _fcc_img0
-                BRL     _static_struct_array_local_L0
+                BRA     _static_struct_array_local_L0
 _static_struct_array_local_L2
                 LDA     _fcc_img1
                 TAY
@@ -214,8 +213,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _static_struct_array_local_L4
+                BNE     _static_struct_array_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -227,8 +225,7 @@ _static_struct_array_local_L4
                 TAX
                 TXA
                 CMP     #45
-                BEQ     *+5
-                BRL     _static_struct_array_local_L5
+                BNE     _static_struct_array_local_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

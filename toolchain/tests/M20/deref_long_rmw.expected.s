@@ -147,10 +147,9 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L0
+                BEQ     _deref_long_rmw_L0
                 LDA     #14
-                BRL     _deref_long_rmw_L1
+                BRA     _deref_long_rmw_L1
 _deref_long_rmw_L0
                 LDA     #0
 _deref_long_rmw_L1
@@ -206,10 +205,9 @@ _deref_long_rmw_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L2
+                BEQ     _deref_long_rmw_L2
                 LDA     #14
-                BRL     _deref_long_rmw_L3
+                BRA     _deref_long_rmw_L3
 _deref_long_rmw_L2
                 LDA     #0
 _deref_long_rmw_L3
@@ -267,10 +265,9 @@ _deref_long_rmw_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _deref_long_rmw_L4
+                BEQ     _deref_long_rmw_L4
                 LDA     #14
-                BRL     _deref_long_rmw_L5
+                BRA     _deref_long_rmw_L5
 _deref_long_rmw_L4
                 LDA     #0
 _deref_long_rmw_L5

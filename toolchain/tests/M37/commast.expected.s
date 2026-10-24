@@ -37,22 +37,19 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _commast_L1
+                BNE     _commast_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _commast_L1
+                BNE     _commast_L1
                 LDA     #1
-                BRL     _commast_L2
+                BRA     _commast_L2
 _commast_L1
                 LDA     #0
 _commast_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L0
+                BEQ     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -93,50 +90,43 @@ _commast_L0
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _commast_L8
+                BNE     _commast_L8
                 LDA     _rawmode
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _commast_L8
+                BNE     _commast_L8
                 LDA     #1
-                BRL     _commast_L9
+                BRA     _commast_L9
 _commast_L8
                 LDA     #0
 _commast_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L6
+                BEQ     _commast_L6
                 LDA     nxstty
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _commast_L6
+                BNE     _commast_L6
                 LDA     #1
-                BRL     _commast_L7
+                BRA     _commast_L7
 _commast_L6
                 LDA     #0
 _commast_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L4
+                BEQ     _commast_L4
                 LDA     seen_flags
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _commast_L4
+                BNE     _commast_L4
                 LDA     #1
-                BRL     _commast_L5
+                BRA     _commast_L5
 _commast_L4
                 LDA     #0
 _commast_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L3
+                BEQ     _commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -180,48 +170,41 @@ _commast_L3
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _commast_L15
+                BNE     _commast_L15
                 LDA     _rawmode
                 CMP     #0
-                BEQ     *+5
-                BRL     _commast_L15
+                BNE     _commast_L15
                 LDA     #1
-                BRL     _commast_L16
+                BRA     _commast_L16
 _commast_L15
                 LDA     #0
 _commast_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L13
+                BEQ     _commast_L13
                 LDA     nxstty
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _commast_L13
+                BNE     _commast_L13
                 LDA     #1
-                BRL     _commast_L14
+                BRA     _commast_L14
 _commast_L13
                 LDA     #0
 _commast_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L11
+                BEQ     _commast_L11
                 LDA     seen_flags
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _commast_L11
+                BNE     _commast_L11
                 LDA     #1
-                BRL     _commast_L12
+                BRA     _commast_L12
 _commast_L11
                 LDA     #0
 _commast_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L10
+                BEQ     _commast_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA
@@ -261,22 +244,19 @@ _commast_L10
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _commast_L18
+                BNE     _commast_L18
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _commast_L18
+                BNE     _commast_L18
                 LDA     #1
-                BRL     _commast_L19
+                BRA     _commast_L19
 _commast_L18
                 LDA     #0
 _commast_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _commast_L17
+                BEQ     _commast_L17
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
                 TXA

@@ -93,8 +93,7 @@ _rtlraw_L0
                 BVC     _rtlraw_L2
                 EOR     #$8000
 _rtlraw_L2
-                BMI     *+5
-                BRL     _rtlraw_L1
+                BPL     _rtlraw_L1
                 LDA     _fcc_img0
                 PHA
                 LDA     _fcc_img2

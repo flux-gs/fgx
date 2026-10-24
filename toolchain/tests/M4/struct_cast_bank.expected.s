@@ -93,8 +93,7 @@ _struct_cast_bank_L0
                 BVC     _struct_cast_bank_L2
                 EOR     #$8000
 _struct_cast_bank_L2
-                BMI     *+5
-                BRL     _struct_cast_bank_L1
+                BPL     _struct_cast_bank_L1
                 LDA     [_fcc_img3]
                 INC     _fcc_img3
                 AND     #$00FF
@@ -104,7 +103,7 @@ _struct_cast_bank_L2
                 REP     #$20
                 MX      %00
                 INC     _fcc_img1
-                BRL     _struct_cast_bank_L0
+                BRA     _struct_cast_bank_L0
 _struct_cast_bank_L1
                 LDA     #0
                 TAY

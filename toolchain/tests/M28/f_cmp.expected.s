@@ -73,8 +73,7 @@ _f_cmp_L1
                 LDA     #1
 _f_cmp_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L0
+                BEQ     _f_cmp_L0
                 LDA     #1
                 TAY
                 TSC
@@ -114,8 +113,7 @@ _f_cmp_L4
                 LDA     #1
 _f_cmp_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L3
+                BEQ     _f_cmp_L3
                 LDA     #2
                 TAY
                 TSC
@@ -148,8 +146,7 @@ _f_cmp_L3
                 TYA
                 JSR     _fcc_fgt
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L6
+                BEQ     _f_cmp_L6
                 LDA     #3
                 TAY
                 TSC
@@ -189,8 +186,7 @@ _f_cmp_L8
                 LDA     #1
 _f_cmp_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L7
+                BEQ     _f_cmp_L7
                 LDA     #4
                 TAY
                 TSC
@@ -230,8 +226,7 @@ _f_cmp_L11
                 LDA     #1
 _f_cmp_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L10
+                BEQ     _f_cmp_L10
                 LDA     #5
                 TAY
                 TSC
@@ -264,8 +259,7 @@ _f_cmp_L10
                 TYA
                 JSR     _fcc_feq
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L13
+                BEQ     _f_cmp_L13
                 LDA     #6
                 TAY
                 TSC
@@ -305,8 +299,7 @@ _f_cmp_L15
                 LDA     #1
 _f_cmp_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L14
+                BEQ     _f_cmp_L14
                 LDA     #7
                 TAY
                 TSC
@@ -359,8 +352,7 @@ _f_cmp_L18
                 LDA     #1
 _f_cmp_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L17
+                BEQ     _f_cmp_L17
                 LDA     #8
                 TAY
                 TSC
@@ -393,8 +385,7 @@ _f_cmp_L17
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L20
+                BEQ     _f_cmp_L20
                 LDA     #9
                 TAY
                 TSC
@@ -434,8 +425,7 @@ _f_cmp_L22
                 LDA     #1
 _f_cmp_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L21
+                BEQ     _f_cmp_L21
                 LDA     #10
                 TAY
                 TSC
@@ -475,8 +465,7 @@ _f_cmp_L25
                 LDA     #1
 _f_cmp_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L24
+                BEQ     _f_cmp_L24
                 LDA     #11
                 TAY
                 TSC
@@ -547,8 +536,7 @@ _f_cmp_L28
                 LDA     #1
 _f_cmp_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L27
+                BEQ     _f_cmp_L27
                 LDA     #12
                 TAY
                 TSC
@@ -581,8 +569,7 @@ _f_cmp_L27
                 TYA
                 JSR     _fcc_fgt
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L30
+                BEQ     _f_cmp_L30
                 LDA     #13
                 TAY
                 TSC
@@ -658,8 +645,7 @@ _f_cmp_L32
                 LDA     #1
 _f_cmp_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L31
+                BEQ     _f_cmp_L31
                 LDA     #14
                 TAY
                 TSC
@@ -692,8 +678,7 @@ _f_cmp_L31
                 TYA
                 JSR     _fcc_fge
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L34
+                BEQ     _f_cmp_L34
                 LDA     #15
                 TAY
                 TSC
@@ -750,8 +735,7 @@ _f_cmp_L34
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _f_cmp_L35
+                BEQ     _f_cmp_L35
                 LDA     #16
                 TAY
                 TSC

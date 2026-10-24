@@ -161,8 +161,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #19
-                BEQ     *+5
-                BRL     _ptrsub_L0
+                BNE     _ptrsub_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -177,8 +176,7 @@ _ptrsub_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ptrsub_L1
+                BNE     _ptrsub_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -197,8 +195,7 @@ _ptrsub_L1
                 BVC     _ptrsub_L3
                 EOR     #$8000
 _ptrsub_L3
-                BMI     *+5
-                BRL     _ptrsub_L2
+                BPL     _ptrsub_L2
                 LDA     _fcc_img0
                 TAX
                 TXA

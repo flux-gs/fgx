@@ -207,8 +207,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _voidcomma_L0
+                BNE     _voidcomma_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA

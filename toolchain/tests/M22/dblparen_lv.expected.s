@@ -38,8 +38,7 @@ main_stkok        TCS
                 PLA
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _dblparen_lv_L0
+                BEQ     _dblparen_lv_L0
                 LDA     #gv
                 PHA
                 LDA     #0
@@ -83,8 +82,7 @@ _dblparen_lv_L0
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _dblparen_lv_L1
+                BEQ     _dblparen_lv_L1
                 LDA     #1
                 TAY
                 TSC
@@ -100,8 +98,7 @@ _dblparen_lv_L1
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _dblparen_lv_L2
+                BEQ     _dblparen_lv_L2
                 LDA     #2
                 TAY
                 TSC

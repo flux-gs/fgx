@@ -91,8 +91,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longginc_L0
+                BEQ     _longginc_L0
                 LDA     #1
                 TAY
                 TSC
@@ -124,8 +123,7 @@ _longginc_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longginc_L1
+                BEQ     _longginc_L1
                 LDA     #2
                 TAY
                 TSC
@@ -157,8 +155,7 @@ _longginc_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longginc_L2
+                BEQ     _longginc_L2
                 LDA     #3
                 TAY
                 TSC

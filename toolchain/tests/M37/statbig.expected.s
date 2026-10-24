@@ -41,8 +41,7 @@ main_stkok        TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BMI     *+5
-                BRL     _statbig_L0
+                BPL     _statbig_L0
                 LDA     #1
                 TAY
                 TSC
@@ -68,8 +67,7 @@ _statbig_L1
                 BVC     _statbig_L4
                 EOR     #$8000
 _statbig_L4
-                BMI     *+5
-                BRL     _statbig_L3
+                BPL     _statbig_L3
                 LDA     #500
                 PHA
                 PHA
@@ -97,7 +95,7 @@ _statbig_L2
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _statbig_L1
+                BRA     _statbig_L1
 _statbig_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
@@ -136,8 +134,7 @@ _statbig_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _statbig_L5
+                BEQ     _statbig_L5
                 SEP     #$20
                 MX      %10
                 PHB
@@ -210,8 +207,7 @@ _statbig_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _statbig_L6
+                BEQ     _statbig_L6
                 LDA     #3
                 TAY
                 TSC

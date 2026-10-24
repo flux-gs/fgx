@@ -90,8 +90,7 @@ _addrarrfieldidx_L4
                 BVC     _addrarrfieldidx_L7
                 EOR     #$8000
 _addrarrfieldidx_L7
-                BMI     *+5
-                BRL     _addrarrfieldidx_L6
+                BPL     _addrarrfieldidx_L6
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -131,7 +130,7 @@ _addrarrfieldidx_L7
                 TXA
 _addrarrfieldidx_L5
                 INC     _fcc_img1
-                BRL     _addrarrfieldidx_L4
+                BRA     _addrarrfieldidx_L4
 _addrarrfieldidx_L6
 _addrarrfieldidx_L1
                 INC     _fcc_img0
@@ -230,8 +229,7 @@ _addrarrfieldidx_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L8
+                BEQ     _addrarrfieldidx_L8
                 LDA     #2
                 TAY
                 TSC
@@ -291,8 +289,7 @@ _addrarrfieldidx_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L9
+                BEQ     _addrarrfieldidx_L9
                 LDA     #3
                 TAY
                 TSC
@@ -352,8 +349,7 @@ _addrarrfieldidx_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L10
+                BEQ     _addrarrfieldidx_L10
                 LDA     #4
                 TAY
                 TSC
@@ -414,8 +410,7 @@ _addrarrfieldidx_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L11
+                BEQ     _addrarrfieldidx_L11
                 LDA     #5
                 TAY
                 TSC
@@ -476,8 +471,7 @@ _addrarrfieldidx_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L12
+                BEQ     _addrarrfieldidx_L12
                 LDA     #6
                 TAY
                 TSC
@@ -509,8 +503,7 @@ _addrarrfieldidx_L12
                 TAX
                 TXA
                 CMP     #4369
-                BNE     *+5
-                BRL     _addrarrfieldidx_L13
+                BEQ     _addrarrfieldidx_L13
                 LDA     #7
                 TAY
                 TSC
@@ -543,8 +536,7 @@ _addrarrfieldidx_L13
                 TAX
                 TXA
                 CMP     #8738
-                BNE     *+5
-                BRL     _addrarrfieldidx_L14
+                BEQ     _addrarrfieldidx_L14
                 LDA     #8
                 TAY
                 TSC
@@ -650,8 +642,7 @@ _addrarrfieldidx_L14
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L15
+                BEQ     _addrarrfieldidx_L15
                 LDA     #10
                 TAY
                 TSC
@@ -684,8 +675,7 @@ _addrarrfieldidx_L15
                 TAX
                 TXA
                 CMP     #4369
-                BNE     *+5
-                BRL     _addrarrfieldidx_L16
+                BEQ     _addrarrfieldidx_L16
                 LDA     #11
                 TAY
                 TSC
@@ -791,8 +781,7 @@ _addrarrfieldidx_L16
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L17
+                BEQ     _addrarrfieldidx_L17
                 LDA     #12
                 TAY
                 TSC
@@ -826,8 +815,7 @@ _addrarrfieldidx_L17
                 TAX
                 TXA
                 CMP     #8738
-                BNE     *+5
-                BRL     _addrarrfieldidx_L18
+                BEQ     _addrarrfieldidx_L18
                 LDA     #13
                 TAY
                 TSC
@@ -908,24 +896,21 @@ _addrarrfieldidx_L18
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _addrarrfieldidx_L20
+                BNE     _addrarrfieldidx_L20
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _addrarrfieldidx_L20
+                BNE     _addrarrfieldidx_L20
                 LDA     #0
-                BRL     _addrarrfieldidx_L21
+                BRA     _addrarrfieldidx_L21
 _addrarrfieldidx_L20
                 LDA     #1
 _addrarrfieldidx_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L19
+                BEQ     _addrarrfieldidx_L19
                 LDA     #20
                 TAY
                 TSC
@@ -1002,8 +987,7 @@ _addrarrfieldidx_L26
                 BVC     _addrarrfieldidx_L29
                 EOR     #$8000
 _addrarrfieldidx_L29
-                BMI     *+5
-                BRL     _addrarrfieldidx_L28
+                BPL     _addrarrfieldidx_L28
                 LDA     _fcc_img0
                 ASL
                 ASL
@@ -1040,7 +1024,7 @@ _addrarrfieldidx_L29
                 STA     [_fcc_fpr0],Y
 _addrarrfieldidx_L27
                 INC     _fcc_img1
-                BRL     _addrarrfieldidx_L26
+                BRA     _addrarrfieldidx_L26
 _addrarrfieldidx_L28
 _addrarrfieldidx_L23
                 INC     _fcc_img0
@@ -1105,8 +1089,7 @@ _addrarrfieldidx_L24
                 TAX
                 TXA
                 CMP     #21845
-                BNE     *+5
-                BRL     _addrarrfieldidx_L30
+                BEQ     _addrarrfieldidx_L30
                 LDA     #30
                 TAY
                 TSC
@@ -1127,8 +1110,7 @@ _addrarrfieldidx_L30
                 TAX
                 TXA
                 CMP     #26214
-                BNE     *+5
-                BRL     _addrarrfieldidx_L31
+                BEQ     _addrarrfieldidx_L31
                 LDA     #31
                 TAY
                 TSC
@@ -1159,8 +1141,7 @@ _addrarrfieldidx_L31
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L32
+                BEQ     _addrarrfieldidx_L32
                 LDA     #32
                 TAY
                 TSC
@@ -1191,8 +1172,7 @@ _addrarrfieldidx_L32
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L33
+                BEQ     _addrarrfieldidx_L33
                 LDA     #33
                 TAY
                 TSC
@@ -1223,8 +1203,7 @@ _addrarrfieldidx_L33
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrfieldidx_L34
+                BEQ     _addrarrfieldidx_L34
                 LDA     #34
                 TAY
                 TSC
@@ -1255,8 +1234,7 @@ _addrarrfieldidx_L34
                 TAX
                 TXA
                 CMP     #13107
-                BNE     *+5
-                BRL     _addrarrfieldidx_L35
+                BEQ     _addrarrfieldidx_L35
                 LDA     #35
                 TAY
                 TSC
@@ -1288,8 +1266,7 @@ _addrarrfieldidx_L35
                 TAX
                 TXA
                 CMP     #17476
-                BNE     *+5
-                BRL     _addrarrfieldidx_L36
+                BEQ     _addrarrfieldidx_L36
                 LDA     #36
                 TAY
                 TSC

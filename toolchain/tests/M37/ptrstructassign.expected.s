@@ -23,8 +23,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _ptrstructassign_L0
+                BEQ     _ptrstructassign_L0
                 LDA     #10
                 TAY
                 TSC
@@ -40,8 +39,7 @@ _ptrstructassign_L0
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _ptrstructassign_L1
+                BEQ     _ptrstructassign_L1
                 LDA     #11
                 TAY
                 TSC
@@ -179,8 +177,7 @@ _ptrstructassign_L2
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L3
+                BEQ     _ptrstructassign_L3
                 LDA     #20
                 TAY
                 TSC
@@ -209,24 +206,21 @@ _ptrstructassign_L3
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L5
+                BNE     _ptrstructassign_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L5
+                BNE     _ptrstructassign_L5
                 LDA     #0
-                BRL     _ptrstructassign_L6
+                BRA     _ptrstructassign_L6
 _ptrstructassign_L5
                 LDA     #1
 _ptrstructassign_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L4
+                BEQ     _ptrstructassign_L4
                 LDA     #21
                 TAY
                 TSC
@@ -255,24 +249,21 @@ _ptrstructassign_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L8
+                BNE     _ptrstructassign_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L8
+                BNE     _ptrstructassign_L8
                 LDA     #0
-                BRL     _ptrstructassign_L9
+                BRA     _ptrstructassign_L9
 _ptrstructassign_L8
                 LDA     #1
 _ptrstructassign_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L7
+                BEQ     _ptrstructassign_L7
                 LDA     #22
                 TAY
                 TSC
@@ -353,8 +344,7 @@ _ptrstructassign_L10
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L11
+                BEQ     _ptrstructassign_L11
                 LDA     #23
                 TAY
                 TSC
@@ -383,24 +373,21 @@ _ptrstructassign_L11
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L13
+                BNE     _ptrstructassign_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L13
+                BNE     _ptrstructassign_L13
                 LDA     #0
-                BRL     _ptrstructassign_L14
+                BRA     _ptrstructassign_L14
 _ptrstructassign_L13
                 LDA     #1
 _ptrstructassign_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L12
+                BEQ     _ptrstructassign_L12
                 LDA     #24
                 TAY
                 TSC
@@ -429,24 +416,21 @@ _ptrstructassign_L12
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L16
+                BNE     _ptrstructassign_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L16
+                BNE     _ptrstructassign_L16
                 LDA     #0
-                BRL     _ptrstructassign_L17
+                BRA     _ptrstructassign_L17
 _ptrstructassign_L16
                 LDA     #1
 _ptrstructassign_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L15
+                BEQ     _ptrstructassign_L15
                 LDA     #25
                 TAY
                 TSC
@@ -518,8 +502,7 @@ _ptrstructassign_L18
                 TAX
                 TXA
                 CMP     #273
-                BNE     *+5
-                BRL     _ptrstructassign_L19
+                BEQ     _ptrstructassign_L19
                 LDA     #26
                 TAY
                 TSC
@@ -552,8 +535,7 @@ _ptrstructassign_L19
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L20
+                BEQ     _ptrstructassign_L20
                 LDA     #27
                 TAY
                 TSC
@@ -569,8 +551,7 @@ _ptrstructassign_L20
                 TAX
                 TXA
                 CMP     #1092
-                BNE     *+5
-                BRL     _ptrstructassign_L21
+                BEQ     _ptrstructassign_L21
                 LDA     #28
                 TAY
                 TSC
@@ -624,8 +605,7 @@ _ptrstructassign_L22
                 TAX
                 TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _ptrstructassign_L23
+                BEQ     _ptrstructassign_L23
                 LDA     #29
                 TAY
                 TSC
@@ -927,8 +907,7 @@ _ptrstructassign_L24
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L25
+                BEQ     _ptrstructassign_L25
                 LDA     #30
                 TAY
                 TSC
@@ -984,24 +963,21 @@ _ptrstructassign_L25
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L27
+                BNE     _ptrstructassign_L27
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L27
+                BNE     _ptrstructassign_L27
                 LDA     #0
-                BRL     _ptrstructassign_L28
+                BRA     _ptrstructassign_L28
 _ptrstructassign_L27
                 LDA     #1
 _ptrstructassign_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L26
+                BEQ     _ptrstructassign_L26
                 LDA     #31
                 TAY
                 TSC
@@ -1057,24 +1033,21 @@ _ptrstructassign_L26
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L30
+                BNE     _ptrstructassign_L30
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L30
+                BNE     _ptrstructassign_L30
                 LDA     #0
-                BRL     _ptrstructassign_L31
+                BRA     _ptrstructassign_L31
 _ptrstructassign_L30
                 LDA     #1
 _ptrstructassign_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L29
+                BEQ     _ptrstructassign_L29
                 LDA     #32
                 TAY
                 TSC
@@ -1104,24 +1077,21 @@ _ptrstructassign_L29
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L33
+                BNE     _ptrstructassign_L33
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L33
+                BNE     _ptrstructassign_L33
                 LDA     #0
-                BRL     _ptrstructassign_L34
+                BRA     _ptrstructassign_L34
 _ptrstructassign_L33
                 LDA     #1
 _ptrstructassign_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L32
+                BEQ     _ptrstructassign_L32
                 LDA     #33
                 TAY
                 TSC
@@ -1154,24 +1124,21 @@ _ptrstructassign_L32
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L36
+                BNE     _ptrstructassign_L36
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L36
+                BNE     _ptrstructassign_L36
                 LDA     #0
-                BRL     _ptrstructassign_L37
+                BRA     _ptrstructassign_L37
 _ptrstructassign_L36
                 LDA     #1
 _ptrstructassign_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L35
+                BEQ     _ptrstructassign_L35
                 LDA     #34
                 TAY
                 TSC
@@ -1203,8 +1170,7 @@ _ptrstructassign_L35
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L38
+                BEQ     _ptrstructassign_L38
                 LDA     #35
                 TAY
                 TSC
@@ -1283,8 +1249,7 @@ _ptrstructassign_L39
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L40
+                BEQ     _ptrstructassign_L40
                 LDA     #40
                 TAY
                 TSC
@@ -1313,24 +1278,21 @@ _ptrstructassign_L40
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L42
+                BNE     _ptrstructassign_L42
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L42
+                BNE     _ptrstructassign_L42
                 LDA     #0
-                BRL     _ptrstructassign_L43
+                BRA     _ptrstructassign_L43
 _ptrstructassign_L42
                 LDA     #1
 _ptrstructassign_L43
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L41
+                BEQ     _ptrstructassign_L41
                 LDA     #41
                 TAY
                 TSC
@@ -1410,8 +1372,7 @@ _ptrstructassign_L44
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L45
+                BEQ     _ptrstructassign_L45
                 LDA     #42
                 TAX
                 TXA
@@ -1443,24 +1404,21 @@ _ptrstructassign_L45
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L47
+                BNE     _ptrstructassign_L47
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L47
+                BNE     _ptrstructassign_L47
                 LDA     #0
-                BRL     _ptrstructassign_L48
+                BRA     _ptrstructassign_L48
 _ptrstructassign_L47
                 LDA     #1
 _ptrstructassign_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L46
+                BEQ     _ptrstructassign_L46
                 LDA     #44
                 TAY
                 TSC
@@ -1544,8 +1502,7 @@ _ptrstructassign_L49
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _ptrstructassign_L50
+                BEQ     _ptrstructassign_L50
                 LDA     #45
                 TAY
                 TSC
@@ -1574,24 +1531,21 @@ _ptrstructassign_L50
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ptrstructassign_L52
+                BNE     _ptrstructassign_L52
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ptrstructassign_L52
+                BNE     _ptrstructassign_L52
                 LDA     #0
-                BRL     _ptrstructassign_L53
+                BRA     _ptrstructassign_L53
 _ptrstructassign_L52
                 LDA     #1
 _ptrstructassign_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrstructassign_L51
+                BEQ     _ptrstructassign_L51
                 LDA     #46
                 TAY
                 TSC

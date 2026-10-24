@@ -210,8 +210,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _od_probe3_L0
+                BEQ     _od_probe3_L0
                 LDA     #1
                 TAY
                 TSC
@@ -227,8 +226,7 @@ _od_probe3_L0
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _od_probe3_L1
+                BEQ     _od_probe3_L1
                 LDA     #2
                 TAY
                 TSC
@@ -244,8 +242,7 @@ _od_probe3_L1
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _od_probe3_L2
+                BEQ     _od_probe3_L2
                 LDA     #3
                 TAY
                 TSC
@@ -259,8 +256,7 @@ _od_probe3_L1
 _od_probe3_L2
                 LDA     a+10
                 CMP     #0
-                BNE     *+5
-                BRL     _od_probe3_L3
+                BEQ     _od_probe3_L3
                 LDA     #4
                 TAY
                 TSC
@@ -390,24 +386,21 @@ _od_probe3_L3
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _od_probe3_L5
+                BNE     _od_probe3_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _od_probe3_L5
+                BNE     _od_probe3_L5
                 LDA     #0
-                BRL     _od_probe3_L6
+                BRA     _od_probe3_L6
 _od_probe3_L5
                 LDA     #1
 _od_probe3_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _od_probe3_L4
+                BEQ     _od_probe3_L4
                 LDA     #5
                 TAY
                 TSC
@@ -427,8 +420,7 @@ _od_probe3_L4
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _od_probe3_L7
+                BEQ     _od_probe3_L7
                 LDA     #6
                 TAY
                 TSC
@@ -449,8 +441,7 @@ _od_probe3_L7
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _od_probe3_L8
+                BEQ     _od_probe3_L8
                 LDA     #7
                 TAY
                 TSC
@@ -528,8 +519,7 @@ _od_probe3_L10
                 TAX
                 TXA
                 CMP     #16
-                BNE     *+5
-                BRL     _od_probe3_L9
+                BEQ     _od_probe3_L9
                 LDA     #8
                 TAY
                 TSC

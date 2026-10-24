@@ -208,10 +208,9 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _strinit_L0
+                BNE     _strinit_L0
                 LDA     #5
-                BRL     _strinit_L1
+                BRA     _strinit_L1
 _strinit_L0
                 LDA     #0
 _strinit_L1
@@ -289,10 +288,9 @@ _strinit_L1
                 TAX
                 TXA
                 CMP     #105
-                BEQ     *+5
-                BRL     _strinit_L2
+                BNE     _strinit_L2
                 LDA     #3
-                BRL     _strinit_L3
+                BRA     _strinit_L3
 _strinit_L2
                 LDA     #0
 _strinit_L3

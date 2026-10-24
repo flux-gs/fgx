@@ -94,8 +94,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _preinc_chain_member_L0
+                BNE     _preinc_chain_member_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -107,8 +106,7 @@ _preinc_chain_member_L0
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _preinc_chain_member_L1
+                BNE     _preinc_chain_member_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -141,8 +139,7 @@ _preinc_chain_member_L1
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _preinc_chain_member_L2
+                BNE     _preinc_chain_member_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -154,8 +151,7 @@ _preinc_chain_member_L2
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _preinc_chain_member_L3
+                BNE     _preinc_chain_member_L3
                 LDA     _fcc_img0
                 TAX
                 TXA

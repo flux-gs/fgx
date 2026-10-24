@@ -117,8 +117,7 @@ _mulconst_L0
                 BVC     _mulconst_L3
                 EOR     #$8000
 _mulconst_L3
-                BMI     *+5
-                BRL     _mulconst_L2
+                BPL     _mulconst_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -145,7 +144,7 @@ _mulconst_L3
                 STA     [_fcc_fpr0],Y
 _mulconst_L1
                 INC     _fcc_img0
-                BRL     _mulconst_L0
+                BRA     _mulconst_L0
 _mulconst_L2
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -165,8 +164,7 @@ _mulconst_L4
                 BVC     _mulconst_L7
                 EOR     #$8000
 _mulconst_L7
-                BMI     *+5
-                BRL     _mulconst_L6
+                BPL     _mulconst_L6
                 LDA     _fcc_img1
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1
@@ -198,7 +196,7 @@ _mulconst_L5
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _mulconst_L4
+                BRA     _mulconst_L4
 _mulconst_L6
                 LDA     _fcc_img1
                 STA     3,S   ; fccstk d=0 b=3

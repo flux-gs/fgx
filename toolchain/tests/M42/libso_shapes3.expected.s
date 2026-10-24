@@ -84,8 +84,7 @@ _libso_shapes3_L0
                 BVC     _libso_shapes3_L3
                 EOR     #$8000
 _libso_shapes3_L3
-                BMI     *+5
-                BRL     _libso_shapes3_L2
+                BPL     _libso_shapes3_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 SEP     #$20
@@ -123,7 +122,7 @@ _libso_shapes3_L1
                 ADC     #1
                 STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                BRL     _libso_shapes3_L0
+                BRA     _libso_shapes3_L0
 _libso_shapes3_L2
 _libso_shapes3_L4
                 LDAL    KFGX_YIELD_MIRROR
@@ -148,8 +147,7 @@ _libso_shapes3_L4
                 BVC     _libso_shapes3_L7
                 EOR     #$8000
 _libso_shapes3_L7
-                BMI     *+5
-                BRL     _libso_shapes3_L6
+                BPL     _libso_shapes3_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     #1
@@ -172,7 +170,7 @@ _libso_shapes3_L5
                 ADC     #1
                 STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                BRL     _libso_shapes3_L4
+                BRA     _libso_shapes3_L4
 _libso_shapes3_L6
                 SEP     #$20
                 MX      %10
@@ -301,8 +299,7 @@ _libso_shapes3_L6
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L20
+                BNE     _libso_shapes3_L20
                 SEP     #$20
                 MX      %10
                 PHB
@@ -318,16 +315,14 @@ _libso_shapes3_L6
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _libso_shapes3_L20
+                BNE     _libso_shapes3_L20
                 LDA     #1
-                BRL     _libso_shapes3_L21
+                BRA     _libso_shapes3_L21
 _libso_shapes3_L20
                 LDA     #0
 _libso_shapes3_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L18
+                BEQ     _libso_shapes3_L18
                 SEP     #$20
                 MX      %10
                 PHB
@@ -345,16 +340,14 @@ _libso_shapes3_L21
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _libso_shapes3_L18
+                BNE     _libso_shapes3_L18
                 LDA     #1
-                BRL     _libso_shapes3_L19
+                BRA     _libso_shapes3_L19
 _libso_shapes3_L18
                 LDA     #0
 _libso_shapes3_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L16
+                BEQ     _libso_shapes3_L16
                 SEP     #$20
                 MX      %10
                 PHB
@@ -407,16 +400,14 @@ _libso_shapes3_L22
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L16
+                BNE     _libso_shapes3_L16
                 LDA     #1
-                BRL     _libso_shapes3_L17
+                BRA     _libso_shapes3_L17
 _libso_shapes3_L16
                 LDA     #0
 _libso_shapes3_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L14
+                BEQ     _libso_shapes3_L14
                 SEP     #$20
                 MX      %10
                 PHB
@@ -469,16 +460,14 @@ _libso_shapes3_L23
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L14
+                BNE     _libso_shapes3_L14
                 LDA     #1
-                BRL     _libso_shapes3_L15
+                BRA     _libso_shapes3_L15
 _libso_shapes3_L14
                 LDA     #0
 _libso_shapes3_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L12
+                BEQ     _libso_shapes3_L12
                 SEP     #$20
                 MX      %10
                 PHB
@@ -529,18 +518,16 @@ _libso_shapes3_L24
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _libso_shapes3_L12
+                BNE     _libso_shapes3_L12
                 LDA     #1
-                BRL     _libso_shapes3_L13
+                BRA     _libso_shapes3_L13
 _libso_shapes3_L12
                 LDA     #0
 _libso_shapes3_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _libso_shapes3_L10
+                BEQ     _libso_shapes3_L10
                 LDA     #42
-                BRL     _libso_shapes3_L11
+                BRA     _libso_shapes3_L11
 _libso_shapes3_L10
                 LDA     #1
 _libso_shapes3_L11

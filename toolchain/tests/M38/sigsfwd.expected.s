@@ -154,8 +154,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _sigsfwd_L0
+                BEQ     _sigsfwd_L0
                 LDA     #6
                 TAY
                 TSC
@@ -202,8 +201,7 @@ _sigsfwd_L0
                 TAX
                 TXA
                 CMP     #42
-                BNE     *+5
-                BRL     _sigsfwd_L1
+                BEQ     _sigsfwd_L1
                 LDA     #7
                 TAY
                 TSC
@@ -389,8 +387,7 @@ chk_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L4
+                BEQ     _sigsfwd_L4
                 DO      12+chk_FRAMESIZE/256
                 TSC
                 CLC
@@ -426,34 +423,30 @@ chk_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _sigsfwd_L6
+                BNE     _sigsfwd_L6
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _sigsfwd_L6
+                BNE     _sigsfwd_L6
                 LDA     #1
-                BRL     _sigsfwd_L7
+                BRA     _sigsfwd_L7
 _sigsfwd_L6
                 LDA     #0
 _sigsfwd_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L4
+                BEQ     _sigsfwd_L4
                 LDA     #1
-                BRL     _sigsfwd_L5
+                BRA     _sigsfwd_L5
 _sigsfwd_L4
                 LDA     #0
 _sigsfwd_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsfwd_L2
+                BEQ     _sigsfwd_L2
                 LDA     #42
-                BRL     _sigsfwd_L3
+                BRA     _sigsfwd_L3
 _sigsfwd_L2
                 LDA     #7
 _sigsfwd_L3

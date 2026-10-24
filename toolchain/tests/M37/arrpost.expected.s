@@ -103,8 +103,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _arrpost_L0
+                BNE     _arrpost_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -119,8 +118,7 @@ _arrpost_L0
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _arrpost_L1
+                BNE     _arrpost_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -132,8 +130,7 @@ _arrpost_L1
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _arrpost_L2
+                BNE     _arrpost_L2
                 LDA     _fcc_img0
                 TAX
                 TXA

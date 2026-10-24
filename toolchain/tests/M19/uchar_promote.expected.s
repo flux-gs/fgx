@@ -72,8 +72,7 @@ _uchar_promote_L1
                 LDA     #1
 _uchar_promote_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _uchar_promote_L0
+                BEQ     _uchar_promote_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -96,8 +95,7 @@ _uchar_promote_L4
                 LDA     #1
 _uchar_promote_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _uchar_promote_L3
+                BEQ     _uchar_promote_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -113,8 +111,7 @@ _uchar_promote_L3
                 PLA
                 JSR     _fcc_divs16
                 CMP     #$FF9C
-                BEQ     *+5
-                BRL     _uchar_promote_L6
+                BNE     _uchar_promote_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -139,8 +136,7 @@ _uchar_promote_L8
                 LDA     #1
 _uchar_promote_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _uchar_promote_L7
+                BEQ     _uchar_promote_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -163,8 +159,7 @@ _uchar_promote_L11
                 LDA     #1
 _uchar_promote_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _uchar_promote_L10
+                BEQ     _uchar_promote_L10
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -182,8 +177,7 @@ _uchar_promote_L10
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _uchar_promote_L13
+                BNE     _uchar_promote_L13
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -201,8 +195,7 @@ _uchar_promote_L13
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _uchar_promote_L14
+                BNE     _uchar_promote_L14
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -215,8 +208,7 @@ _uchar_promote_L14
                 EOR     #$FFFF
                 INC
                 CMP     #0
-                BMI     *+5
-                BRL     _uchar_promote_L15
+                BPL     _uchar_promote_L15
                 LDA     _fcc_img0
                 TAX
                 TXA

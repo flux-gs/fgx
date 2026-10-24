@@ -162,8 +162,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_L0
+                BEQ     _arrfield_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -408,8 +407,7 @@ _arrfield_L0
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_L1
+                BEQ     _arrfield_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -461,8 +459,7 @@ _arrfield_L1
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _arrfield_L2
+                BNE     _arrfield_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -617,8 +614,7 @@ _arrfield_L2
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_L3
+                BEQ     _arrfield_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -647,8 +643,7 @@ _arrfield_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_L4
+                BEQ     _arrfield_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

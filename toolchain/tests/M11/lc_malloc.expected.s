@@ -47,8 +47,7 @@ _lc_malloc_L1
                 LDA     #1
 _lc_malloc_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_malloc_L0
+                BEQ     _lc_malloc_L0
                 SEP     #$20
                 MX      %10
                 PHB
@@ -194,8 +193,7 @@ _lc_malloc_L4
                 LDA     #1
 _lc_malloc_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_malloc_L3
+                BEQ     _lc_malloc_L3
                 SEP     #$20
                 MX      %10
                 PHB
@@ -311,22 +309,19 @@ _lc_malloc_L3
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _lc_malloc_L7
+                BNE     _lc_malloc_L7
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
                 CMP     #89
-                BEQ     *+5
-                BRL     _lc_malloc_L7
+                BNE     _lc_malloc_L7
                 LDA     #0
-                BRL     _lc_malloc_L8
+                BRA     _lc_malloc_L8
 _lc_malloc_L7
                 LDA     #1
 _lc_malloc_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_malloc_L6
+                BEQ     _lc_malloc_L6
                 LDA     11,S   ; fccstk d=0 b=11
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9

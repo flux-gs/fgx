@@ -70,8 +70,7 @@ _walkcopy_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _walkcopy_L1
+                BEQ     _walkcopy_L1
                 LDA     [_fcc_img0]
                 INC     _fcc_img0
                 AND     #$00FF
@@ -81,7 +80,7 @@ _walkcopy_L0
                 REP     #$20
                 MX      %00
                 INC     _fcc_img2
-                BRL     _walkcopy_L0
+                BRA     _walkcopy_L0
 _walkcopy_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
@@ -189,8 +188,7 @@ _walkcopy_L2
                 BVC     _walkcopy_L4
                 EOR     #$8000
 _walkcopy_L4
-                BMI     *+5
-                BRL     _walkcopy_L3
+                BPL     _walkcopy_L3
                 LDA     [_fcc_img3]
                 PHA
                 LDA     _fcc_img3
@@ -209,7 +207,7 @@ _walkcopy_L4
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _walkcopy_L2
+                BRA     _walkcopy_L2
 _walkcopy_L3
                 TAY
                 TSC

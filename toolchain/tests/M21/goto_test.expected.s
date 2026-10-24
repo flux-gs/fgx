@@ -23,7 +23,7 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #0
                 STA     _fcc_img1
-                BRL     main_uL_inc_loop
+                BRA     main_uL_inc_loop
 main_uL_dec_block
                 LDA     _fcc_img0
                 TAX
@@ -31,15 +31,14 @@ main_uL_dec_block
                 SEC
                 SBC     #100
                 STA     _fcc_img0
-                BRL     main_uL_done
+                BRA     main_uL_done
 main_uL_inc_loop
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _goto_test_L0
-                BRL     main_uL_done
+                BNE     _goto_test_L0
+                BRA     main_uL_done
 _goto_test_L0
                 LDA     _fcc_img0
                 TAX
@@ -56,7 +55,7 @@ _goto_test_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                BRL     main_uL_inc_loop
+                BRA     main_uL_inc_loop
 main_uL_done
                 LDA     _fcc_img0
                 TAY

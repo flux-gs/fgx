@@ -62,8 +62,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #58
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L1
+                BNE     _preinc_deref_expr_L1
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -81,32 +80,28 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L3
+                BNE     _preinc_deref_expr_L3
                 LDA     #0
-                BRL     _preinc_deref_expr_L4
+                BRA     _preinc_deref_expr_L4
 _preinc_deref_expr_L3
                 LDA     #1
 _preinc_deref_expr_L4
                 CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L1
+                BNE     _preinc_deref_expr_L1
                 LDA     #0
-                BRL     _preinc_deref_expr_L2
+                BRA     _preinc_deref_expr_L2
 _preinc_deref_expr_L1
                 LDA     #1
 _preinc_deref_expr_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L0
+                BEQ     _preinc_deref_expr_L0
                 LDA     #1
                 TAY
                 TSC
@@ -146,8 +141,7 @@ _preinc_deref_expr_L0
                 TAX
                 TXA
                 CMP     #56
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L6
+                BNE     _preinc_deref_expr_L6
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -165,32 +159,28 @@ _preinc_deref_expr_L0
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L8
+                BNE     _preinc_deref_expr_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L8
+                BNE     _preinc_deref_expr_L8
                 LDA     #0
-                BRL     _preinc_deref_expr_L9
+                BRA     _preinc_deref_expr_L9
 _preinc_deref_expr_L8
                 LDA     #1
 _preinc_deref_expr_L9
                 CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L6
+                BNE     _preinc_deref_expr_L6
                 LDA     #0
-                BRL     _preinc_deref_expr_L7
+                BRA     _preinc_deref_expr_L7
 _preinc_deref_expr_L6
                 LDA     #1
 _preinc_deref_expr_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L5
+                BEQ     _preinc_deref_expr_L5
                 LDA     #2
                 TAY
                 TSC
@@ -223,8 +213,7 @@ _preinc_deref_expr_L5
                 TAX
                 TXA
                 CMP     #50
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L11
+                BNE     _preinc_deref_expr_L11
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img0
@@ -242,32 +231,28 @@ _preinc_deref_expr_L5
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L13
+                BNE     _preinc_deref_expr_L13
                 LDA     #0
-                BRL     _preinc_deref_expr_L14
+                BRA     _preinc_deref_expr_L14
 _preinc_deref_expr_L13
                 LDA     #1
 _preinc_deref_expr_L14
                 CMP     #0
-                BEQ     *+5
-                BRL     _preinc_deref_expr_L11
+                BNE     _preinc_deref_expr_L11
                 LDA     #0
-                BRL     _preinc_deref_expr_L12
+                BRA     _preinc_deref_expr_L12
 _preinc_deref_expr_L11
                 LDA     #1
 _preinc_deref_expr_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_deref_expr_L10
+                BEQ     _preinc_deref_expr_L10
                 LDA     #3
                 TAY
                 TSC

@@ -187,8 +187,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #55
-                BEQ     *+5
-                BRL     _idxcall_L0
+                BNE     _idxcall_L0
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -217,8 +216,7 @@ _idxcall_L0
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _idxcall_L1
+                BNE     _idxcall_L1
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -273,8 +271,7 @@ _idxcall_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _idxcall_L2
+                BEQ     _idxcall_L2
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -313,8 +310,7 @@ _idxcall_L2
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _idxcall_L3
+                BNE     _idxcall_L3
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -368,8 +364,7 @@ _idxcall_L3
                 TAX
                 TXA
                 CMP     #120
-                BEQ     *+5
-                BRL     _idxcall_L4
+                BNE     _idxcall_L4
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -431,8 +426,7 @@ _idxcall_L4
                 TAX
                 TXA
                 CMP     #121
-                BEQ     *+5
-                BRL     _idxcall_L5
+                BNE     _idxcall_L5
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA

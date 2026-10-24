@@ -35,15 +35,13 @@ _break_while_L0
                 BVC     _break_while_L2
                 EOR     #$8000
 _break_while_L2
-                BMI     *+5
-                BRL     _break_while_L1
+                BPL     _break_while_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _break_while_L3
-                BRL     _break_while_L1
+                BNE     _break_while_L3
+                BRA     _break_while_L1
 _break_while_L3
                 LDA     _fcc_img1
                 TAX
@@ -57,7 +55,7 @@ _break_while_L3
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _break_while_L0
+                BRA     _break_while_L0
 _break_while_L1
                 LDA     _fcc_img1
                 TAY

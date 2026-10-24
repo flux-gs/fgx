@@ -262,8 +262,7 @@ _dirchurn_L2
                 BVC     _dirchurn_L6
                 EOR     #$8000
 _dirchurn_L6
-                BMI     *+5
-                BRL     _dirchurn_L4
+                BPL     _dirchurn_L4
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -289,16 +288,14 @@ _dirchurn_L6
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L4
+                BEQ     _dirchurn_L4
                 LDA     #1
-                BRL     _dirchurn_L5
+                BRA     _dirchurn_L5
 _dirchurn_L4
                 LDA     #0
 _dirchurn_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L3
+                BEQ     _dirchurn_L3
                 LDA     #$FFEC
                 TAY
                 TSC
@@ -336,8 +333,7 @@ _dirchurn_L3
                 BVC     _dirchurn_L10
                 EOR     #$8000
 _dirchurn_L10
-                BMI     *+5
-                BRL     _dirchurn_L8
+                BPL     _dirchurn_L8
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -363,16 +359,14 @@ _dirchurn_L10
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L8
+                BEQ     _dirchurn_L8
                 LDA     #1
-                BRL     _dirchurn_L9
+                BRA     _dirchurn_L9
 _dirchurn_L8
                 LDA     #0
 _dirchurn_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L7
+                BEQ     _dirchurn_L7
                 LDA     #$FFF3
                 TAY
                 TSC
@@ -401,8 +395,7 @@ _dirchurn_L7
                 BVC     _dirchurn_L14
                 EOR     #$8000
 _dirchurn_L14
-                BMI     *+5
-                BRL     _dirchurn_L12
+                BPL     _dirchurn_L12
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -428,16 +421,14 @@ _dirchurn_L14
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L12
+                BEQ     _dirchurn_L12
                 LDA     #1
-                BRL     _dirchurn_L13
+                BRA     _dirchurn_L13
 _dirchurn_L12
                 LDA     #0
 _dirchurn_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L11
+                BEQ     _dirchurn_L11
                 LDA     #$FFF1
                 TAY
                 TSC
@@ -516,24 +507,21 @@ _dirchurn_L11
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirchurn_L16
+                BNE     _dirchurn_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirchurn_L16
+                BNE     _dirchurn_L16
                 LDA     #1
-                BRL     _dirchurn_L17
+                BRA     _dirchurn_L17
 _dirchurn_L16
                 LDA     #0
 _dirchurn_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L15
+                BEQ     _dirchurn_L15
                 LDA     #$FFFE
                 TAY
                 TSC
@@ -556,8 +544,7 @@ _dirchurn_L15
                 BVC     _dirchurn_L21
                 EOR     #$8000
 _dirchurn_L21
-                BMI     *+5
-                BRL     _dirchurn_L19
+                BPL     _dirchurn_L19
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -583,16 +570,14 @@ _dirchurn_L21
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L19
+                BEQ     _dirchurn_L19
                 LDA     #1
-                BRL     _dirchurn_L20
+                BRA     _dirchurn_L20
 _dirchurn_L19
                 LDA     #0
 _dirchurn_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L18
+                BEQ     _dirchurn_L18
                 LDA     #$FFF2
                 TAY
                 TSC
@@ -656,18 +641,16 @@ _dirchurn_L18
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirchurn_L23
+                BNE     _dirchurn_L23
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirchurn_L23
+                BNE     _dirchurn_L23
                 LDA     #1
-                BRL     _dirchurn_L24
+                BRA     _dirchurn_L24
 _dirchurn_L23
                 LDA     #0
 _dirchurn_L24
@@ -785,8 +768,7 @@ _dirchurn_L24
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L25
+                BEQ     _dirchurn_L25
                 LDA     #$FFF6
                 TAY
                 TSC
@@ -952,24 +934,21 @@ _dirchurn_L25
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirchurn_L27
+                BNE     _dirchurn_L27
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirchurn_L27
+                BNE     _dirchurn_L27
                 LDA     #1
-                BRL     _dirchurn_L28
+                BRA     _dirchurn_L28
 _dirchurn_L27
                 LDA     #0
 _dirchurn_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L26
+                BEQ     _dirchurn_L26
                 LDA     #$FFEE
                 TAY
                 TSC
@@ -1025,24 +1004,21 @@ _dirchurn_L26
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirchurn_L30
+                BNE     _dirchurn_L30
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirchurn_L30
+                BNE     _dirchurn_L30
                 LDA     #1
-                BRL     _dirchurn_L31
+                BRA     _dirchurn_L31
 _dirchurn_L30
                 LDA     #0
 _dirchurn_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L29
+                BEQ     _dirchurn_L29
                 LDA     #$FFFD
                 TAY
                 TSC
@@ -1118,8 +1094,7 @@ _dirchurn_L29
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L32
+                BEQ     _dirchurn_L32
                 LDA     #$FFF5
                 TAY
                 TSC
@@ -1206,24 +1181,21 @@ _dirchurn_L32
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _dirchurn_L34
+                BNE     _dirchurn_L34
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _dirchurn_L34
+                BNE     _dirchurn_L34
                 LDA     #0
-                BRL     _dirchurn_L35
+                BRA     _dirchurn_L35
 _dirchurn_L34
                 LDA     #1
 _dirchurn_L35
                 CMP     #0
-                BNE     *+5
-                BRL     _dirchurn_L33
+                BEQ     _dirchurn_L33
                 LDA     #$FFF0
                 TAY
                 TSC
@@ -1281,8 +1253,7 @@ _dirchurn_L36
                 BVC     _dirchurn_L39
                 EOR     #$8000
 _dirchurn_L39
-                BMI     *+5
-                BRL     _dirchurn_L38
+                BPL     _dirchurn_L38
                 LDA     23,S   ; fccstk d=0 b=23
                 STA     _fcc_ptr+2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -1315,7 +1286,7 @@ _dirchurn_L39
                 TYA
 _dirchurn_L37
                 INC     _fcc_img0
-                BRL     _dirchurn_L36
+                BRA     _dirchurn_L36
 _dirchurn_L38
                 LDA     _fcc_img0
                 STA     25,S   ; fccstk d=0 b=25
@@ -1346,8 +1317,7 @@ _dirchurn_L38
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L40
+                BEQ     _dirchurn_L40
                 LDA     #$FFEF
                 TAY
                 TSC
@@ -1438,8 +1408,7 @@ _dirchurn_L40
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L41
+                BEQ     _dirchurn_L41
                 LDA     #$FFF4
                 TAY
                 TSC
@@ -1559,8 +1528,7 @@ main_stkok        TCS
                 TYA
                 STA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF6
-                BEQ     *+5
-                BRL     _dirchurn_L42
+                BNE     _dirchurn_L42
                 LDA     #50
                 TAY
                 TSC
@@ -1574,8 +1542,7 @@ main_stkok        TCS
 _dirchurn_L42
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF5
-                BEQ     *+5
-                BRL     _dirchurn_L43
+                BNE     _dirchurn_L43
                 LDA     #51
                 TAY
                 TSC
@@ -1589,8 +1556,7 @@ _dirchurn_L42
 _dirchurn_L43
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF4
-                BEQ     *+5
-                BRL     _dirchurn_L44
+                BNE     _dirchurn_L44
                 LDA     #52
                 TAY
                 TSC
@@ -1604,8 +1570,7 @@ _dirchurn_L43
 _dirchurn_L44
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFEC
-                BEQ     *+5
-                BRL     _dirchurn_L45
+                BNE     _dirchurn_L45
                 LDA     #53
                 TAY
                 TSC
@@ -1619,8 +1584,7 @@ _dirchurn_L44
 _dirchurn_L45
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF3
-                BEQ     *+5
-                BRL     _dirchurn_L46
+                BNE     _dirchurn_L46
                 LDA     #54
                 TAY
                 TSC
@@ -1634,8 +1598,7 @@ _dirchurn_L45
 _dirchurn_L46
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF1
-                BEQ     *+5
-                BRL     _dirchurn_L47
+                BNE     _dirchurn_L47
                 LDA     #55
                 TAY
                 TSC
@@ -1649,8 +1612,7 @@ _dirchurn_L46
 _dirchurn_L47
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF2
-                BEQ     *+5
-                BRL     _dirchurn_L48
+                BNE     _dirchurn_L48
                 LDA     #56
                 TAY
                 TSC
@@ -1664,8 +1626,7 @@ _dirchurn_L47
 _dirchurn_L48
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFF0
-                BEQ     *+5
-                BRL     _dirchurn_L49
+                BNE     _dirchurn_L49
                 LDA     #57
                 TAY
                 TSC
@@ -1679,8 +1640,7 @@ _dirchurn_L48
 _dirchurn_L49
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFEF
-                BEQ     *+5
-                BRL     _dirchurn_L50
+                BNE     _dirchurn_L50
                 LDA     #58
                 TAY
                 TSC
@@ -1694,8 +1654,7 @@ _dirchurn_L49
 _dirchurn_L50
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #$FFEE
-                BEQ     *+5
-                BRL     _dirchurn_L51
+                BNE     _dirchurn_L51
                 LDA     #59
                 TAY
                 TSC
@@ -1709,8 +1668,7 @@ _dirchurn_L50
 _dirchurn_L51
                 LDA     13,S   ; fccstk d=0 b=13
                 CMP     #0
-                BMI     *+5
-                BRL     _dirchurn_L52
+                BPL     _dirchurn_L52
                 LDA     #1
                 TAY
                 TSC
@@ -1730,8 +1688,7 @@ _dirchurn_L52
                 BVC     _dirchurn_L54
                 EOR     #$8000
 _dirchurn_L54
-                BMI     *+5
-                BRL     _dirchurn_L53
+                BPL     _dirchurn_L53
                 LDA     #60
                 CLC
                 ADC     13,S   ; fccstk d=0 b=13
@@ -1784,8 +1741,7 @@ _dirchurn_L58
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _dirchurn_L59
+                BEQ     _dirchurn_L59
                 LDA     #200
                 PHA
                 LDA     _fcc_img0
@@ -1799,10 +1755,9 @@ _dirchurn_L58
                 BVC     _dirchurn_L62
                 EOR     #$8000
 _dirchurn_L62
-                BMI     *+5
-                BRL     _dirchurn_L60
+                BPL     _dirchurn_L60
                 LDA     #54
-                BRL     _dirchurn_L61
+                BRA     _dirchurn_L61
 _dirchurn_L60
                 LDA     _fcc_img0
 _dirchurn_L61
@@ -1845,8 +1800,7 @@ _dirchurn_L59
                 TAX
                 TXA
                 CMP     #110
-                BNE     *+5
-                BRL     _dirchurn_L63
+                BEQ     _dirchurn_L63
                 LDA     #100
                 PHA
                 LDA     _fcc_img0
@@ -1860,10 +1814,9 @@ _dirchurn_L59
                 BVC     _dirchurn_L66
                 EOR     #$8000
 _dirchurn_L66
-                BMI     *+5
-                BRL     _dirchurn_L64
+                BPL     _dirchurn_L64
                 LDA     #54
-                BRL     _dirchurn_L65
+                BRA     _dirchurn_L65
 _dirchurn_L64
                 LDA     _fcc_img0
 _dirchurn_L65

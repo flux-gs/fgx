@@ -179,8 +179,7 @@ _struct_ecopy_L4
                 BVC     _struct_ecopy_L7
                 EOR     #$8000
 _struct_ecopy_L7
-                BMI     *+5
-                BRL     _struct_ecopy_L6
+                BPL     _struct_ecopy_L6
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -228,7 +227,7 @@ _struct_ecopy_L8
                 BPL     _struct_ecopy_L8
 _struct_ecopy_L5
                 DEC     _fcc_img0
-                BRL     _struct_ecopy_L4
+                BRA     _struct_ecopy_L4
 _struct_ecopy_L6
                 LDA     #0
                 ASL
@@ -248,8 +247,7 @@ _struct_ecopy_L6
                 MX      %00
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_ecopy_L9
+                BEQ     _struct_ecopy_L9
                 LDA     #1
                 TAY
                 TSC
@@ -278,8 +276,7 @@ _struct_ecopy_L9
                 MX      %00
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_ecopy_L10
+                BEQ     _struct_ecopy_L10
                 LDA     #2
                 TAY
                 TSC
@@ -311,8 +308,7 @@ _struct_ecopy_L10
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _struct_ecopy_L11
+                BEQ     _struct_ecopy_L11
                 LDA     #3
                 TAY
                 TSC
@@ -344,8 +340,7 @@ _struct_ecopy_L11
                 TAX
                 TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _struct_ecopy_L12
+                BEQ     _struct_ecopy_L12
                 LDA     #4
                 TAY
                 TSC
@@ -394,8 +389,7 @@ _struct_ecopy_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_ecopy_L13
+                BEQ     _struct_ecopy_L13
                 LDA     #5
                 TAY
                 TSC
@@ -443,8 +437,7 @@ _struct_ecopy_L13
                 TAX
                 TXA
                 CMP     #104
-                BNE     *+5
-                BRL     _struct_ecopy_L14
+                BEQ     _struct_ecopy_L14
                 LDA     #6
                 TAY
                 TSC
@@ -493,8 +486,7 @@ _struct_ecopy_L14
                 TAX
                 TXA
                 CMP     #105
-                BNE     *+5
-                BRL     _struct_ecopy_L15
+                BEQ     _struct_ecopy_L15
                 LDA     #7
                 TAY
                 TSC

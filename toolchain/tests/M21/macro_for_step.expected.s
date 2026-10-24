@@ -39,8 +39,7 @@ _macro_for_step_L0
                 JSR     _fcc_safepoint
                 LDA     gv
                 CMP     #0
-                BNE     *+5
-                BRL     _macro_for_step_L3
+                BEQ     _macro_for_step_L3
                 LDA     gbody
                 TAX
                 TXA
@@ -49,16 +48,14 @@ _macro_for_step_L0
                 BVC     _macro_for_step_L5
                 EOR     #$8000
 _macro_for_step_L5
-                BMI     *+5
-                BRL     _macro_for_step_L3
+                BPL     _macro_for_step_L3
                 LDA     #1
-                BRL     _macro_for_step_L4
+                BRA     _macro_for_step_L4
 _macro_for_step_L3
                 LDA     #0
 _macro_for_step_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _macro_for_step_L2
+                BEQ     _macro_for_step_L2
                 LDA     gbody
                 TAX
                 TXA
@@ -74,14 +71,13 @@ _macro_for_step_L1
                 STA     gafter
                 LDA     #1
                 STA     gv
-                BRL     _macro_for_step_L0
+                BRA     _macro_for_step_L0
 _macro_for_step_L2
                 LDA     gbefore
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _macro_for_step_L6
+                BEQ     _macro_for_step_L6
                 LDA     #1
                 TAY
                 TSC
@@ -97,8 +93,7 @@ _macro_for_step_L6
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _macro_for_step_L7
+                BEQ     _macro_for_step_L7
                 LDA     #2
                 TAY
                 TSC
@@ -114,8 +109,7 @@ _macro_for_step_L7
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _macro_for_step_L8
+                BEQ     _macro_for_step_L8
                 LDA     #3
                 TAY
                 TSC

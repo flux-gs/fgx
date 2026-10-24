@@ -245,8 +245,7 @@ main_stkok        TCS
                 MX      %00
                 LDA     _fcc_tmp_b
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L0
+                BNE     _charincdec_L0
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L0
@@ -254,53 +253,46 @@ _charincdec_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charincdec_L6
+                BNE     _charincdec_L6
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _charincdec_L6
+                BNE     _charincdec_L6
                 LDA     #1
-                BRL     _charincdec_L7
+                BRA     _charincdec_L7
 _charincdec_L6
                 LDA     #0
 _charincdec_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L4
+                BEQ     _charincdec_L4
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L4
+                BNE     _charincdec_L4
                 LDA     #1
-                BRL     _charincdec_L5
+                BRA     _charincdec_L5
 _charincdec_L4
                 LDA     #0
 _charincdec_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L2
+                BEQ     _charincdec_L2
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L2
+                BNE     _charincdec_L2
                 LDA     #1
-                BRL     _charincdec_L3
+                BRA     _charincdec_L3
 _charincdec_L2
                 LDA     #0
 _charincdec_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L1
+                BEQ     _charincdec_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -333,53 +325,46 @@ _charincdec_L1
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _charincdec_L13
+                BNE     _charincdec_L13
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L13
+                BNE     _charincdec_L13
                 LDA     #1
-                BRL     _charincdec_L14
+                BRA     _charincdec_L14
 _charincdec_L13
                 LDA     #0
 _charincdec_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L11
+                BEQ     _charincdec_L11
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L11
+                BNE     _charincdec_L11
                 LDA     #1
-                BRL     _charincdec_L12
+                BRA     _charincdec_L12
 _charincdec_L11
                 LDA     #0
 _charincdec_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L9
+                BEQ     _charincdec_L9
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L9
+                BNE     _charincdec_L9
                 LDA     #1
-                BRL     _charincdec_L10
+                BRA     _charincdec_L10
 _charincdec_L9
                 LDA     #0
 _charincdec_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L8
+                BEQ     _charincdec_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -406,53 +391,46 @@ _charincdec_L8
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L20
+                BNE     _charincdec_L20
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L20
+                BNE     _charincdec_L20
                 LDA     #1
-                BRL     _charincdec_L21
+                BRA     _charincdec_L21
 _charincdec_L20
                 LDA     #0
 _charincdec_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L18
+                BEQ     _charincdec_L18
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L18
+                BNE     _charincdec_L18
                 LDA     #1
-                BRL     _charincdec_L19
+                BRA     _charincdec_L19
 _charincdec_L18
                 LDA     #0
 _charincdec_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L16
+                BEQ     _charincdec_L16
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L16
+                BNE     _charincdec_L16
                 LDA     #1
-                BRL     _charincdec_L17
+                BRA     _charincdec_L17
 _charincdec_L16
                 LDA     #0
 _charincdec_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L15
+                BEQ     _charincdec_L15
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -474,53 +452,46 @@ _charincdec_L15
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L27
+                BNE     _charincdec_L27
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L27
+                BNE     _charincdec_L27
                 LDA     #1
-                BRL     _charincdec_L28
+                BRA     _charincdec_L28
 _charincdec_L27
                 LDA     #0
 _charincdec_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L25
+                BEQ     _charincdec_L25
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L25
+                BNE     _charincdec_L25
                 LDA     #1
-                BRL     _charincdec_L26
+                BRA     _charincdec_L26
 _charincdec_L25
                 LDA     #0
 _charincdec_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L23
+                BEQ     _charincdec_L23
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L23
+                BNE     _charincdec_L23
                 LDA     #1
-                BRL     _charincdec_L24
+                BRA     _charincdec_L24
 _charincdec_L23
                 LDA     #0
 _charincdec_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L22
+                BEQ     _charincdec_L22
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -554,8 +525,7 @@ _charincdec_L22
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L36
+                BNE     _charincdec_L36
                 LDA     #1
                 TAX
                 LDA:    carr,X
@@ -563,16 +533,14 @@ _charincdec_L22
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L36
+                BNE     _charincdec_L36
                 LDA     #1
-                BRL     _charincdec_L37
+                BRA     _charincdec_L37
 _charincdec_L36
                 LDA     #0
 _charincdec_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L34
+                BEQ     _charincdec_L34
                 LDA     #0
                 TAX
                 LDA:    carr,X
@@ -580,16 +548,14 @@ _charincdec_L37
                 TAX
                 TXA
                 CMP     #113
-                BEQ     *+5
-                BRL     _charincdec_L34
+                BNE     _charincdec_L34
                 LDA     #1
-                BRL     _charincdec_L35
+                BRA     _charincdec_L35
 _charincdec_L34
                 LDA     #0
 _charincdec_L35
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L32
+                BEQ     _charincdec_L32
                 LDA     #2
                 TAX
                 LDA:    carr,X
@@ -597,16 +563,14 @@ _charincdec_L35
                 TAX
                 TXA
                 CMP     #115
-                BEQ     *+5
-                BRL     _charincdec_L32
+                BNE     _charincdec_L32
                 LDA     #1
-                BRL     _charincdec_L33
+                BRA     _charincdec_L33
 _charincdec_L32
                 LDA     #0
 _charincdec_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L30
+                BEQ     _charincdec_L30
                 LDA     #3
                 TAX
                 LDA:    carr,X
@@ -614,16 +578,14 @@ _charincdec_L33
                 TAX
                 TXA
                 CMP     #116
-                BEQ     *+5
-                BRL     _charincdec_L30
+                BNE     _charincdec_L30
                 LDA     #1
-                BRL     _charincdec_L31
+                BRA     _charincdec_L31
 _charincdec_L30
                 LDA     #0
 _charincdec_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L29
+                BEQ     _charincdec_L29
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -667,68 +629,59 @@ _charincdec_L29
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L45
+                BNE     _charincdec_L45
                 LDA     gq+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _charincdec_L45
+                BNE     _charincdec_L45
                 LDA     #1
-                BRL     _charincdec_L46
+                BRA     _charincdec_L46
 _charincdec_L45
                 LDA     #0
 _charincdec_L46
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L43
+                BEQ     _charincdec_L43
                 LDA     gq+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _charincdec_L43
+                BNE     _charincdec_L43
                 LDA     #1
-                BRL     _charincdec_L44
+                BRA     _charincdec_L44
 _charincdec_L43
                 LDA     #0
 _charincdec_L44
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L41
+                BEQ     _charincdec_L41
                 LDA     gq+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #83
-                BEQ     *+5
-                BRL     _charincdec_L41
+                BNE     _charincdec_L41
                 LDA     #1
-                BRL     _charincdec_L42
+                BRA     _charincdec_L42
 _charincdec_L41
                 LDA     #0
 _charincdec_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L39
+                BEQ     _charincdec_L39
                 LDA     gq+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #84
-                BEQ     *+5
-                BRL     _charincdec_L39
+                BNE     _charincdec_L39
                 LDA     #1
-                BRL     _charincdec_L40
+                BRA     _charincdec_L40
 _charincdec_L39
                 LDA     #0
 _charincdec_L40
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L38
+                BEQ     _charincdec_L38
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -755,58 +708,50 @@ _charincdec_L38
                 MX      %00
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L47
+                BNE     _charincdec_L47
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
 _charincdec_L47
                 LDA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L53
+                BNE     _charincdec_L53
                 LDA     gs+1
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L53
+                BNE     _charincdec_L53
                 LDA     #1
-                BRL     _charincdec_L54
+                BRA     _charincdec_L54
 _charincdec_L53
                 LDA     #0
 _charincdec_L54
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L51
+                BEQ     _charincdec_L51
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L51
+                BNE     _charincdec_L51
                 LDA     #1
-                BRL     _charincdec_L52
+                BRA     _charincdec_L52
 _charincdec_L51
                 LDA     #0
 _charincdec_L52
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L49
+                BEQ     _charincdec_L49
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L49
+                BNE     _charincdec_L49
                 LDA     #1
-                BRL     _charincdec_L50
+                BRA     _charincdec_L50
 _charincdec_L49
                 LDA     #0
 _charincdec_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L48
+                BEQ     _charincdec_L48
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -841,51 +786,44 @@ _charincdec_L48
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L60
+                BNE     _charincdec_L60
                 LDA     gs+1
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L60
+                BNE     _charincdec_L60
                 LDA     #1
-                BRL     _charincdec_L61
+                BRA     _charincdec_L61
 _charincdec_L60
                 LDA     #0
 _charincdec_L61
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L58
+                BEQ     _charincdec_L58
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L58
+                BNE     _charincdec_L58
                 LDA     #1
-                BRL     _charincdec_L59
+                BRA     _charincdec_L59
 _charincdec_L58
                 LDA     #0
 _charincdec_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L56
+                BEQ     _charincdec_L56
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L56
+                BNE     _charincdec_L56
                 LDA     #1
-                BRL     _charincdec_L57
+                BRA     _charincdec_L57
 _charincdec_L56
                 LDA     #0
 _charincdec_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L55
+                BEQ     _charincdec_L55
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -913,53 +851,46 @@ _charincdec_L55
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L67
+                BNE     _charincdec_L67
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L67
+                BNE     _charincdec_L67
                 LDA     #1
-                BRL     _charincdec_L68
+                BRA     _charincdec_L68
 _charincdec_L67
                 LDA     #0
 _charincdec_L68
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L65
+                BEQ     _charincdec_L65
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L65
+                BNE     _charincdec_L65
                 LDA     #1
-                BRL     _charincdec_L66
+                BRA     _charincdec_L66
 _charincdec_L65
                 LDA     #0
 _charincdec_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L63
+                BEQ     _charincdec_L63
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L63
+                BNE     _charincdec_L63
                 LDA     #1
-                BRL     _charincdec_L64
+                BRA     _charincdec_L64
 _charincdec_L63
                 LDA     #0
 _charincdec_L64
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L62
+                BEQ     _charincdec_L62
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -992,53 +923,46 @@ _charincdec_L62
                 LDA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L74
+                BNE     _charincdec_L74
                 LDA     gs+1
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L74
+                BNE     _charincdec_L74
                 LDA     #1
-                BRL     _charincdec_L75
+                BRA     _charincdec_L75
 _charincdec_L74
                 LDA     #0
 _charincdec_L75
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L72
+                BEQ     _charincdec_L72
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L72
+                BNE     _charincdec_L72
                 LDA     #1
-                BRL     _charincdec_L73
+                BRA     _charincdec_L73
 _charincdec_L72
                 LDA     #0
 _charincdec_L73
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L70
+                BEQ     _charincdec_L70
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L70
+                BNE     _charincdec_L70
                 LDA     #1
-                BRL     _charincdec_L71
+                BRA     _charincdec_L71
 _charincdec_L70
                 LDA     #0
 _charincdec_L71
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L69
+                BEQ     _charincdec_L69
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -1074,50 +998,43 @@ _charincdec_L69
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L81
+                BNE     _charincdec_L81
                 LDA     go+2
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L81
+                BNE     _charincdec_L81
                 LDA     #1
-                BRL     _charincdec_L82
+                BRA     _charincdec_L82
 _charincdec_L81
                 LDA     #0
 _charincdec_L82
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L79
+                BEQ     _charincdec_L79
                 LDA     go+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _charincdec_L79
+                BNE     _charincdec_L79
                 LDA     #1
-                BRL     _charincdec_L80
+                BRA     _charincdec_L80
 _charincdec_L79
                 LDA     #0
 _charincdec_L80
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L77
+                BEQ     _charincdec_L77
                 LDA     go+0
                 TAX
                 TXA
                 CMP     #24930
-                BEQ     *+5
-                BRL     _charincdec_L77
+                BNE     _charincdec_L77
                 LDA     #1
-                BRL     _charincdec_L78
+                BRA     _charincdec_L78
 _charincdec_L77
                 LDA     #0
 _charincdec_L78
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L76
+                BEQ     _charincdec_L76
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -1146,21 +1063,18 @@ _charincdec_L76
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _charincdec_L84
+                BNE     _charincdec_L84
                 LDA     gu
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L84
+                BNE     _charincdec_L84
                 LDA     #1
-                BRL     _charincdec_L85
+                BRA     _charincdec_L85
 _charincdec_L84
                 LDA     #0
 _charincdec_L85
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L83
+                BEQ     _charincdec_L83
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -1218,36 +1132,31 @@ _charincdec_L83
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L89
+                BEQ     _charincdec_L89
                 LDA     gs+1
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _charincdec_L89
+                BNE     _charincdec_L89
                 LDA     #1
-                BRL     _charincdec_L90
+                BRA     _charincdec_L90
 _charincdec_L89
                 LDA     #0
 _charincdec_L90
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L87
+                BEQ     _charincdec_L87
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _charincdec_L87
+                BNE     _charincdec_L87
                 LDA     #1
-                BRL     _charincdec_L88
+                BRA     _charincdec_L88
 _charincdec_L87
                 LDA     #0
 _charincdec_L88
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L86
+                BEQ     _charincdec_L86
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -1302,38 +1211,33 @@ _charincdec_L86
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _charincdec_L94
+                BNE     _charincdec_L94
                 LDA     gs+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #42
-                BEQ     *+5
-                BRL     _charincdec_L94
+                BNE     _charincdec_L94
                 LDA     #1
-                BRL     _charincdec_L95
+                BRA     _charincdec_L95
 _charincdec_L94
                 LDA     #0
 _charincdec_L95
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L92
+                BEQ     _charincdec_L92
                 LDA     gs+0
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _charincdec_L92
+                BNE     _charincdec_L92
                 LDA     #1
-                BRL     _charincdec_L93
+                BRA     _charincdec_L93
 _charincdec_L92
                 LDA     #0
 _charincdec_L93
                 CMP     #0
-                BNE     *+5
-                BRL     _charincdec_L91
+                BEQ     _charincdec_L91
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA

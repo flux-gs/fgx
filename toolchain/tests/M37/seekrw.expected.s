@@ -56,8 +56,7 @@ _seekrw_filesize_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BMI     *+5
-                BRL     _seekrw_L0
+                BPL     _seekrw_L0
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -138,8 +137,7 @@ _seekrw_L1
                 BVC     _seekrw_L4
                 EOR     #$8000
 _seekrw_L4
-                BMI     *+5
-                BRL     _seekrw_L3
+                BPL     _seekrw_L3
                 LDA     #buf
                 PHA
                 LDA     _fcc_img0
@@ -162,7 +160,7 @@ _seekrw_L4
                 PLA
 _seekrw_L2
                 INC     _fcc_img0
-                BRL     _seekrw_L1
+                BRA     _seekrw_L1
 _seekrw_L3
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -203,8 +201,7 @@ _seekrw_L3
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BMI     *+5
-                BRL     _seekrw_L5
+                BPL     _seekrw_L5
                 LDA     #$FFFF
                 TAY
                 TSC
@@ -297,8 +294,7 @@ main_stkok        TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BMI     *+5
-                BRL     _seekrw_L6
+                BPL     _seekrw_L6
                 LDA     #0
                 TAY
                 TSC
@@ -426,21 +422,19 @@ _seekrw_L7
                 BVC     _seekrw_L10
                 EOR     #$8000
 _seekrw_L10
-                BMI     *+5
-                BRL     _seekrw_L9
+                BPL     _seekrw_L9
                 LDA     _fcc_img0
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L11
+                BEQ     _seekrw_L11
                 LDA     #0
                 STA     _fcc_img1
 _seekrw_L11
 _seekrw_L8
                 INC     _fcc_img0
-                BRL     _seekrw_L7
+                BRA     _seekrw_L7
 _seekrw_L9
                 LDA     _fcc_img0
                 STA     7,S   ; fccstk d=0 b=7
@@ -450,20 +444,17 @@ _seekrw_L9
                 TAX
                 TXA
                 CMP     #35
-                BEQ     *+5
-                BRL     _seekrw_L17
+                BNE     _seekrw_L17
                 LDA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L17
+                BEQ     _seekrw_L17
                 LDA     #1
-                BRL     _seekrw_L18
+                BRA     _seekrw_L18
 _seekrw_L17
                 LDA     #0
 _seekrw_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L15
+                BEQ     _seekrw_L15
                 LDA     #32
                 TAX
                 LDA:    buf,X
@@ -471,16 +462,14 @@ _seekrw_L18
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _seekrw_L15
+                BNE     _seekrw_L15
                 LDA     #1
-                BRL     _seekrw_L16
+                BRA     _seekrw_L16
 _seekrw_L15
                 LDA     #0
 _seekrw_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L13
+                BEQ     _seekrw_L13
                 LDA     #34
                 TAX
                 LDA:    buf,X
@@ -488,16 +477,14 @@ _seekrw_L16
                 TAX
                 TXA
                 CMP     #90
-                BEQ     *+5
-                BRL     _seekrw_L13
+                BNE     _seekrw_L13
                 LDA     #1
-                BRL     _seekrw_L14
+                BRA     _seekrw_L14
 _seekrw_L13
                 LDA     #0
 _seekrw_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L12
+                BEQ     _seekrw_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -661,8 +648,7 @@ _seekrw_L12
                 TAX
                 TXA
                 CMP     #35
-                BEQ     *+5
-                BRL     _seekrw_L24
+                BNE     _seekrw_L24
                 LDA     #0
                 TAX
                 LDA:    buf,X
@@ -670,16 +656,14 @@ _seekrw_L12
                 TAX
                 TXA
                 CMP     #48
-                BEQ     *+5
-                BRL     _seekrw_L24
+                BNE     _seekrw_L24
                 LDA     #1
-                BRL     _seekrw_L25
+                BRA     _seekrw_L25
 _seekrw_L24
                 LDA     #0
 _seekrw_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L22
+                BEQ     _seekrw_L22
                 LDA     #7
                 TAX
                 LDA:    buf,X
@@ -687,16 +671,14 @@ _seekrw_L25
                 TAX
                 TXA
                 CMP     #55
-                BEQ     *+5
-                BRL     _seekrw_L22
+                BNE     _seekrw_L22
                 LDA     #1
-                BRL     _seekrw_L23
+                BRA     _seekrw_L23
 _seekrw_L22
                 LDA     #0
 _seekrw_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L20
+                BEQ     _seekrw_L20
                 LDA     #8
                 TAX
                 LDA:    buf,X
@@ -704,16 +686,14 @@ _seekrw_L23
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _seekrw_L20
+                BNE     _seekrw_L20
                 LDA     #1
-                BRL     _seekrw_L21
+                BRA     _seekrw_L21
 _seekrw_L20
                 LDA     #0
 _seekrw_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L19
+                BEQ     _seekrw_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -806,8 +786,7 @@ _seekrw_L19
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _seekrw_L27
+                BNE     _seekrw_L27
                 LDA     #8
                 PHA
                 SEP     #$20
@@ -833,19 +812,17 @@ _seekrw_L19
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _seekrw_L27
+                BNE     _seekrw_L27
                 LDA     #1
-                BRL     _seekrw_L28
+                BRA     _seekrw_L28
 _seekrw_L27
                 LDA     #0
 _seekrw_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L26
+                BEQ     _seekrw_L26
                 LDA     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _seekrw_L29
+                BRA     _seekrw_L29
 _seekrw_L26
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
@@ -928,22 +905,19 @@ _seekrw_L29
                 TYA
                 LDA     7,S   ; fccstk d=0 b=7
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L37
+                BEQ     _seekrw_L37
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #35
-                BEQ     *+5
-                BRL     _seekrw_L37
+                BNE     _seekrw_L37
                 LDA     #1
-                BRL     _seekrw_L38
+                BRA     _seekrw_L38
 _seekrw_L37
                 LDA     #0
 _seekrw_L38
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L35
+                BEQ     _seekrw_L35
                 LDA     #0
                 TAX
                 LDA:    buf,X
@@ -951,16 +925,14 @@ _seekrw_L38
                 TAX
                 TXA
                 CMP     #56
-                BEQ     *+5
-                BRL     _seekrw_L35
+                BNE     _seekrw_L35
                 LDA     #1
-                BRL     _seekrw_L36
+                BRA     _seekrw_L36
 _seekrw_L35
                 LDA     #0
 _seekrw_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L33
+                BEQ     _seekrw_L33
                 LDA     #7
                 TAX
                 LDA:    buf,X
@@ -968,16 +940,14 @@ _seekrw_L36
                 TAX
                 TXA
                 CMP     #102
-                BEQ     *+5
-                BRL     _seekrw_L33
+                BNE     _seekrw_L33
                 LDA     #1
-                BRL     _seekrw_L34
+                BRA     _seekrw_L34
 _seekrw_L33
                 LDA     #0
 _seekrw_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L31
+                BEQ     _seekrw_L31
                 LDA     #8
                 TAX
                 LDA:    buf,X
@@ -985,16 +955,14 @@ _seekrw_L34
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _seekrw_L31
+                BNE     _seekrw_L31
                 LDA     #1
-                BRL     _seekrw_L32
+                BRA     _seekrw_L32
 _seekrw_L31
                 LDA     #0
 _seekrw_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L30
+                BEQ     _seekrw_L30
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -1091,22 +1059,19 @@ _seekrw_L30
                 TAX
                 TXA
                 CMP     #16
-                BEQ     *+5
-                BRL     _seekrw_L42
+                BNE     _seekrw_L42
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _seekrw_L42
+                BNE     _seekrw_L42
                 LDA     #1
-                BRL     _seekrw_L43
+                BRA     _seekrw_L43
 _seekrw_L42
                 LDA     #0
 _seekrw_L43
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L40
+                BEQ     _seekrw_L40
                 LDA     #8
                 PHA
                 SEP     #$20
@@ -1132,19 +1097,17 @@ _seekrw_L43
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _seekrw_L40
+                BNE     _seekrw_L40
                 LDA     #1
-                BRL     _seekrw_L41
+                BRA     _seekrw_L41
 _seekrw_L40
                 LDA     #0
 _seekrw_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L39
+                BEQ     _seekrw_L39
                 LDA     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _seekrw_L44
+                BRA     _seekrw_L44
 _seekrw_L39
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
@@ -1171,8 +1134,7 @@ _seekrw_L44
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BEQ     *+5
-                BRL     _seekrw_L46
+                BNE     _seekrw_L46
                 LDA     #8
                 PHA
                 SEP     #$20
@@ -1198,16 +1160,14 @@ _seekrw_L44
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _seekrw_L46
+                BNE     _seekrw_L46
                 LDA     #0
-                BRL     _seekrw_L47
+                BRA     _seekrw_L47
 _seekrw_L46
                 LDA     #1
 _seekrw_L47
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L45
+                BEQ     _seekrw_L45
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
 _seekrw_L45
@@ -1289,22 +1249,19 @@ _seekrw_L45
                 TYA
                 LDA     7,S   ; fccstk d=0 b=7
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L59
+                BEQ     _seekrw_L59
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #35
-                BEQ     *+5
-                BRL     _seekrw_L59
+                BNE     _seekrw_L59
                 LDA     #1
-                BRL     _seekrw_L60
+                BRA     _seekrw_L60
 _seekrw_L59
                 LDA     #0
 _seekrw_L60
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L57
+                BEQ     _seekrw_L57
                 LDA     #0
                 TAX
                 LDA:    buf,X
@@ -1312,16 +1269,14 @@ _seekrw_L60
                 TAX
                 TXA
                 CMP     #48
-                BEQ     *+5
-                BRL     _seekrw_L57
+                BNE     _seekrw_L57
                 LDA     #1
-                BRL     _seekrw_L58
+                BRA     _seekrw_L58
 _seekrw_L57
                 LDA     #0
 _seekrw_L58
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L55
+                BEQ     _seekrw_L55
                 LDA     #7
                 TAX
                 LDA:    buf,X
@@ -1329,16 +1284,14 @@ _seekrw_L58
                 TAX
                 TXA
                 CMP     #55
-                BEQ     *+5
-                BRL     _seekrw_L55
+                BNE     _seekrw_L55
                 LDA     #1
-                BRL     _seekrw_L56
+                BRA     _seekrw_L56
 _seekrw_L55
                 LDA     #0
 _seekrw_L56
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L53
+                BEQ     _seekrw_L53
                 LDA     #8
                 TAX
                 LDA:    buf,X
@@ -1346,16 +1299,14 @@ _seekrw_L56
                 TAX
                 TXA
                 CMP     #73
-                BEQ     *+5
-                BRL     _seekrw_L53
+                BNE     _seekrw_L53
                 LDA     #1
-                BRL     _seekrw_L54
+                BRA     _seekrw_L54
 _seekrw_L53
                 LDA     #0
 _seekrw_L54
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L51
+                BEQ     _seekrw_L51
                 LDA     #15
                 TAX
                 LDA:    buf,X
@@ -1363,16 +1314,14 @@ _seekrw_L54
                 TAX
                 TXA
                 CMP     #80
-                BEQ     *+5
-                BRL     _seekrw_L51
+                BNE     _seekrw_L51
                 LDA     #1
-                BRL     _seekrw_L52
+                BRA     _seekrw_L52
 _seekrw_L51
                 LDA     #0
 _seekrw_L52
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L49
+                BEQ     _seekrw_L49
                 LDA     #16
                 TAX
                 LDA:    buf,X
@@ -1380,16 +1329,14 @@ _seekrw_L52
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _seekrw_L49
+                BNE     _seekrw_L49
                 LDA     #1
-                BRL     _seekrw_L50
+                BRA     _seekrw_L50
 _seekrw_L49
                 LDA     #0
 _seekrw_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _seekrw_L48
+                BEQ     _seekrw_L48
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

@@ -107,8 +107,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L0
+                BEQ     _ptrinit_const_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -154,8 +153,7 @@ _ptrinit_const_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L1
+                BEQ     _ptrinit_const_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -184,8 +182,7 @@ _ptrinit_const_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ptrinit_const_L2
+                BEQ     _ptrinit_const_L2
                 LDA     _fcc_img0
                 TAX
                 TXA

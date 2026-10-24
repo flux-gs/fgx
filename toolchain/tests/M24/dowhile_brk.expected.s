@@ -33,9 +33,8 @@ _dowhile_brk_L0
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _dowhile_brk_L3
-                BRL     _dowhile_brk_L2
+                BNE     _dowhile_brk_L3
+                BRA     _dowhile_brk_L2
 _dowhile_brk_L3
 _dowhile_brk_L1
                 LDA     _fcc_img0
@@ -46,9 +45,8 @@ _dowhile_brk_L1
                 BVC     _dowhile_brk_L4
                 EOR     #$8000
 _dowhile_brk_L4
-                BMI     *+5
-                BRL     _dowhile_brk_L2
-                BRL     _dowhile_brk_L0
+                BPL     _dowhile_brk_L2
+                BRA     _dowhile_brk_L0
 _dowhile_brk_L2
                 LDA     _fcc_img0
                 TAY

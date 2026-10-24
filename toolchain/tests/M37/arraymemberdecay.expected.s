@@ -133,8 +133,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L0
+                BEQ     _arraymemberdecay_L0
                 LDA     #43
                 TAY
                 TSC
@@ -208,8 +207,7 @@ _arraymemberdecay_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L1
+                BEQ     _arraymemberdecay_L1
                 LDA     #44
                 TAY
                 TSC
@@ -283,8 +281,7 @@ _arraymemberdecay_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L2
+                BEQ     _arraymemberdecay_L2
                 LDA     #45
                 TAY
                 TSC
@@ -392,8 +389,7 @@ _arraymemberdecay_L2
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L3
+                BEQ     _arraymemberdecay_L3
                 LDA     #46
                 TAY
                 TSC
@@ -483,24 +479,21 @@ _arraymemberdecay_L3
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arraymemberdecay_L5
+                BNE     _arraymemberdecay_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arraymemberdecay_L5
+                BNE     _arraymemberdecay_L5
                 LDA     #0
-                BRL     _arraymemberdecay_L6
+                BRA     _arraymemberdecay_L6
 _arraymemberdecay_L5
                 LDA     #1
 _arraymemberdecay_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L4
+                BEQ     _arraymemberdecay_L4
                 LDA     #47
                 TAY
                 TSC
@@ -548,8 +541,7 @@ _arraymemberdecay_L4
                 TAX
                 TXA
                 CMP     #4242
-                BNE     *+5
-                BRL     _arraymemberdecay_L7
+                BEQ     _arraymemberdecay_L7
                 LDA     #48
                 TAY
                 TSC
@@ -601,8 +593,7 @@ _arraymemberdecay_L7
                 TAX
                 TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _arraymemberdecay_L8
+                BEQ     _arraymemberdecay_L8
                 LDA     #49
                 TAY
                 TSC
@@ -659,8 +650,7 @@ _arraymemberdecay_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L9
+                BEQ     _arraymemberdecay_L9
                 LDA     #50
                 TAY
                 TSC
@@ -732,8 +722,7 @@ _arraymemberdecay_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L10
+                BEQ     _arraymemberdecay_L10
                 LDA     #51
                 TAY
                 TSC
@@ -805,8 +794,7 @@ _arraymemberdecay_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L11
+                BEQ     _arraymemberdecay_L11
                 LDA     #52
                 TAY
                 TSC
@@ -915,8 +903,7 @@ _arraymemberdecay_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arraymemberdecay_L12
+                BEQ     _arraymemberdecay_L12
                 LDA     #53
                 TAY
                 TSC

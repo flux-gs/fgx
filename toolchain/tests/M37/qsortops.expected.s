@@ -422,8 +422,7 @@ _qsortops_L1
                 BVC     _qsortops_L4
                 EOR     #$8000
 _qsortops_L4
-                BMI     *+5
-                BRL     _qsortops_L3
+                BPL     _qsortops_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -446,37 +445,33 @@ _qsortops_L4
                 BVC     _qsortops_L6
                 EOR     #$8000
 _qsortops_L6
-                BMI     *+5
-                BRL     _qsortops_L5
+                BPL     _qsortops_L5
                 LDA     #0
                 STA     _fcc_img1
 _qsortops_L5
 _qsortops_L2
                 INC     _fcc_img0
-                BRL     _qsortops_L1
+                BRA     _qsortops_L1
 _qsortops_L3
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_img1
                 STA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L10
+                BEQ     _qsortops_L10
                 LDA     #0
                 ASL
                 TAX
                 LDA:    iv,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _qsortops_L10
+                BNE     _qsortops_L10
                 LDA     #1
-                BRL     _qsortops_L11
+                BRA     _qsortops_L11
 _qsortops_L10
                 LDA     #0
 _qsortops_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L8
+                BEQ     _qsortops_L8
                 LDA     #6
                 ASL
                 TAX
@@ -484,16 +479,14 @@ _qsortops_L11
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _qsortops_L8
+                BNE     _qsortops_L8
                 LDA     #1
-                BRL     _qsortops_L9
+                BRA     _qsortops_L9
 _qsortops_L8
                 LDA     #0
 _qsortops_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L7
+                BEQ     _qsortops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -673,8 +666,7 @@ _qsortops_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _qsortops_L18
+                BNE     _qsortops_L18
                 LDA     #1
                 ASL
                 ASL
@@ -693,16 +685,14 @@ _qsortops_L7
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _qsortops_L18
+                BNE     _qsortops_L18
                 LDA     #1
-                BRL     _qsortops_L19
+                BRA     _qsortops_L19
 _qsortops_L18
                 LDA     #0
 _qsortops_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L16
+                BEQ     _qsortops_L16
                 LDA     #2
                 ASL
                 ASL
@@ -721,16 +711,14 @@ _qsortops_L19
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _qsortops_L16
+                BNE     _qsortops_L16
                 LDA     #1
-                BRL     _qsortops_L17
+                BRA     _qsortops_L17
 _qsortops_L16
                 LDA     #0
 _qsortops_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L14
+                BEQ     _qsortops_L14
                 LDA     #3
                 ASL
                 ASL
@@ -749,16 +737,14 @@ _qsortops_L17
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _qsortops_L14
+                BNE     _qsortops_L14
                 LDA     #1
-                BRL     _qsortops_L15
+                BRA     _qsortops_L15
 _qsortops_L14
                 LDA     #0
 _qsortops_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L13
+                BEQ     _qsortops_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -805,23 +791,20 @@ _qsortops_L13
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _qsortops_L22
+                BNE     _qsortops_L22
                 LDA     #6
                 ASL
                 TAX
                 LDA:    iv,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _qsortops_L22
+                BNE     _qsortops_L22
                 LDA     #1
-                BRL     _qsortops_L23
+                BRA     _qsortops_L23
 _qsortops_L22
                 LDA     #0
 _qsortops_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _qsortops_L21
+                BEQ     _qsortops_L21
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

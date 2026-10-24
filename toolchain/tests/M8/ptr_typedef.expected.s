@@ -100,8 +100,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #65
-                BNE     *+5
-                BRL     _ptr_typedef_L0
+                BEQ     _ptr_typedef_L0
                 LDA     #1
                 TAY
                 TSC
@@ -250,8 +249,7 @@ _ptr_typedef_L0
                 TAX
                 TXA
                 CMP     #90
-                BNE     *+5
-                BRL     _ptr_typedef_L1
+                BEQ     _ptr_typedef_L1
                 LDA     #2
                 TAY
                 TSC

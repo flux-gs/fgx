@@ -29,10 +29,9 @@ lt_stkok        TCS
                 BVC     _cmp_branch_L2
                 EOR     #$8000
 _cmp_branch_L2
-                BMI     *+5
-                BRL     _cmp_branch_L0
+                BPL     _cmp_branch_L0
                 LDA     #1
-                BRL     _cmp_branch_L1
+                BRA     _cmp_branch_L1
 _cmp_branch_L0
                 LDA     #0
 _cmp_branch_L1
@@ -75,10 +74,9 @@ gt_stkok        TCS
                 BVC     _cmp_branch_L5
                 EOR     #$8000
 _cmp_branch_L5
-                BMI     *+5
-                BRL     _cmp_branch_L3
+                BPL     _cmp_branch_L3
                 LDA     #1
-                BRL     _cmp_branch_L4
+                BRA     _cmp_branch_L4
 _cmp_branch_L3
                 LDA     #0
 _cmp_branch_L4
@@ -121,10 +119,9 @@ le_stkok        TCS
                 BVC     _cmp_branch_L8
                 EOR     #$8000
 _cmp_branch_L8
-                BPL     *+5
-                BRL     _cmp_branch_L6
+                BMI     _cmp_branch_L6
                 LDA     #1
-                BRL     _cmp_branch_L7
+                BRA     _cmp_branch_L7
 _cmp_branch_L6
                 LDA     #0
 _cmp_branch_L7
@@ -164,10 +161,9 @@ ge_stkok        TCS
                 BVC     _cmp_branch_L11
                 EOR     #$8000
 _cmp_branch_L11
-                BPL     *+5
-                BRL     _cmp_branch_L9
+                BMI     _cmp_branch_L9
                 LDA     #1
-                BRL     _cmp_branch_L10
+                BRA     _cmp_branch_L10
 _cmp_branch_L9
                 LDA     #0
 _cmp_branch_L10
@@ -203,10 +199,9 @@ eq_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L12
+                BNE     _cmp_branch_L12
                 LDA     #1
-                BRL     _cmp_branch_L13
+                BRA     _cmp_branch_L13
 _cmp_branch_L12
                 LDA     #0
 _cmp_branch_L13
@@ -242,10 +237,9 @@ ne_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _cmp_branch_L14
+                BEQ     _cmp_branch_L14
                 LDA     #1
-                BRL     _cmp_branch_L15
+                BRA     _cmp_branch_L15
 _cmp_branch_L14
                 LDA     #0
 _cmp_branch_L15
@@ -281,10 +275,9 @@ ult_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _cmp_branch_L16
+                BCS     _cmp_branch_L16
                 LDA     #1
-                BRL     _cmp_branch_L17
+                BRA     _cmp_branch_L17
 _cmp_branch_L16
                 LDA     #0
 _cmp_branch_L17
@@ -323,10 +316,9 @@ ugt_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _cmp_branch_L18
+                BCS     _cmp_branch_L18
                 LDA     #1
-                BRL     _cmp_branch_L19
+                BRA     _cmp_branch_L19
 _cmp_branch_L18
                 LDA     #0
 _cmp_branch_L19
@@ -365,10 +357,9 @@ ule_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCS     *+5
-                BRL     _cmp_branch_L20
+                BCC     _cmp_branch_L20
                 LDA     #1
-                BRL     _cmp_branch_L21
+                BRA     _cmp_branch_L21
 _cmp_branch_L20
                 LDA     #0
 _cmp_branch_L21
@@ -404,10 +395,9 @@ uge_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCS     *+5
-                BRL     _cmp_branch_L22
+                BCC     _cmp_branch_L22
                 LDA     #1
-                BRL     _cmp_branch_L23
+                BRA     _cmp_branch_L23
 _cmp_branch_L22
                 LDA     #0
 _cmp_branch_L23
@@ -449,8 +439,7 @@ allrel_stkok        TCS
                 BVC     _cmp_branch_L25
                 EOR     #$8000
 _cmp_branch_L25
-                BMI     *+5
-                BRL     _cmp_branch_L24
+                BPL     _cmp_branch_L24
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -471,8 +460,7 @@ _cmp_branch_L24
                 BVC     _cmp_branch_L27
                 EOR     #$8000
 _cmp_branch_L27
-                BMI     *+5
-                BRL     _cmp_branch_L26
+                BPL     _cmp_branch_L26
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -493,8 +481,7 @@ _cmp_branch_L26
                 BVC     _cmp_branch_L29
                 EOR     #$8000
 _cmp_branch_L29
-                BPL     *+5
-                BRL     _cmp_branch_L28
+                BMI     _cmp_branch_L28
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -512,8 +499,7 @@ _cmp_branch_L28
                 BVC     _cmp_branch_L31
                 EOR     #$8000
 _cmp_branch_L31
-                BPL     *+5
-                BRL     _cmp_branch_L30
+                BMI     _cmp_branch_L30
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -527,8 +513,7 @@ _cmp_branch_L30
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L32
+                BNE     _cmp_branch_L32
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -542,8 +527,7 @@ _cmp_branch_L32
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _cmp_branch_L33
+                BEQ     _cmp_branch_L33
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -586,8 +570,7 @@ uallrel_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _cmp_branch_L34
+                BCS     _cmp_branch_L34
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -604,8 +587,7 @@ _cmp_branch_L34
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _cmp_branch_L35
+                BCS     _cmp_branch_L35
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -622,8 +604,7 @@ _cmp_branch_L35
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCS     *+5
-                BRL     _cmp_branch_L36
+                BCC     _cmp_branch_L36
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -637,8 +618,7 @@ _cmp_branch_L36
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCS     *+5
-                BRL     _cmp_branch_L37
+                BCC     _cmp_branch_L37
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -693,8 +673,7 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L38
+                BNE     _cmp_branch_L38
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -720,8 +699,7 @@ _cmp_branch_L38
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L39
+                BNE     _cmp_branch_L39
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -747,8 +725,7 @@ _cmp_branch_L39
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L40
+                BNE     _cmp_branch_L40
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -777,8 +754,7 @@ _cmp_branch_L40
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L41
+                BNE     _cmp_branch_L41
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -804,8 +780,7 @@ _cmp_branch_L41
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L42
+                BNE     _cmp_branch_L42
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -831,8 +806,7 @@ _cmp_branch_L42
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L43
+                BNE     _cmp_branch_L43
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -861,8 +835,7 @@ _cmp_branch_L43
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L44
+                BNE     _cmp_branch_L44
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -888,8 +861,7 @@ _cmp_branch_L44
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L45
+                BNE     _cmp_branch_L45
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -911,8 +883,7 @@ _cmp_branch_L45
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L46
+                BNE     _cmp_branch_L46
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -934,8 +905,7 @@ _cmp_branch_L46
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L47
+                BNE     _cmp_branch_L47
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -957,8 +927,7 @@ _cmp_branch_L47
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _cmp_branch_L48
+                BNE     _cmp_branch_L48
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -972,8 +941,7 @@ _cmp_branch_L48
                 STA     b
                 FGX2_FARCALL lt
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L58
+                BEQ     _cmp_branch_L58
                 FGX2_FARCALL gt
                 CMP     #0
                 BEQ     _cmp_branch_L60
@@ -983,28 +951,24 @@ _cmp_branch_L60
                 LDA     #1
 _cmp_branch_L61
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L58
+                BEQ     _cmp_branch_L58
                 LDA     #1
-                BRL     _cmp_branch_L59
+                BRA     _cmp_branch_L59
 _cmp_branch_L58
                 LDA     #0
 _cmp_branch_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L56
+                BEQ     _cmp_branch_L56
                 FGX2_FARCALL le
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L56
+                BEQ     _cmp_branch_L56
                 LDA     #1
-                BRL     _cmp_branch_L57
+                BRA     _cmp_branch_L57
 _cmp_branch_L56
                 LDA     #0
 _cmp_branch_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L54
+                BEQ     _cmp_branch_L54
                 FGX2_FARCALL ge
                 CMP     #0
                 BEQ     _cmp_branch_L62
@@ -1014,16 +978,14 @@ _cmp_branch_L62
                 LDA     #1
 _cmp_branch_L63
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L54
+                BEQ     _cmp_branch_L54
                 LDA     #1
-                BRL     _cmp_branch_L55
+                BRA     _cmp_branch_L55
 _cmp_branch_L54
                 LDA     #0
 _cmp_branch_L55
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L52
+                BEQ     _cmp_branch_L52
                 FGX2_FARCALL eq
                 CMP     #0
                 BEQ     _cmp_branch_L64
@@ -1033,28 +995,24 @@ _cmp_branch_L64
                 LDA     #1
 _cmp_branch_L65
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L52
+                BEQ     _cmp_branch_L52
                 LDA     #1
-                BRL     _cmp_branch_L53
+                BRA     _cmp_branch_L53
 _cmp_branch_L52
                 LDA     #0
 _cmp_branch_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L50
+                BEQ     _cmp_branch_L50
                 FGX2_FARCALL ne
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L50
+                BEQ     _cmp_branch_L50
                 LDA     #1
-                BRL     _cmp_branch_L51
+                BRA     _cmp_branch_L51
 _cmp_branch_L50
                 LDA     #0
 _cmp_branch_L51
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L49
+                BEQ     _cmp_branch_L49
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -1075,20 +1033,17 @@ _cmp_branch_L73
                 LDA     #1
 _cmp_branch_L74
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L71
+                BEQ     _cmp_branch_L71
                 FGX2_FARCALL ugt
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L71
+                BEQ     _cmp_branch_L71
                 LDA     #1
-                BRL     _cmp_branch_L72
+                BRA     _cmp_branch_L72
 _cmp_branch_L71
                 LDA     #0
 _cmp_branch_L72
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L69
+                BEQ     _cmp_branch_L69
                 FGX2_FARCALL ule
                 CMP     #0
                 BEQ     _cmp_branch_L75
@@ -1098,28 +1053,24 @@ _cmp_branch_L75
                 LDA     #1
 _cmp_branch_L76
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L69
+                BEQ     _cmp_branch_L69
                 LDA     #1
-                BRL     _cmp_branch_L70
+                BRA     _cmp_branch_L70
 _cmp_branch_L69
                 LDA     #0
 _cmp_branch_L70
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L67
+                BEQ     _cmp_branch_L67
                 FGX2_FARCALL uge
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L67
+                BEQ     _cmp_branch_L67
                 LDA     #1
-                BRL     _cmp_branch_L68
+                BRA     _cmp_branch_L68
 _cmp_branch_L67
                 LDA     #0
 _cmp_branch_L68
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L66
+                BEQ     _cmp_branch_L66
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -1143,8 +1094,7 @@ _cmp_branch_L66
                 BVC     _cmp_branch_L80
                 EOR     #$8000
 _cmp_branch_L80
-                BPL     *+5
-                BRL     _cmp_branch_L78
+                BMI     _cmp_branch_L78
                 LDA     a
                 TAX
                 LDA     b
@@ -1158,16 +1108,14 @@ _cmp_branch_L80
                 BVC     _cmp_branch_L81
                 EOR     #$8000
 _cmp_branch_L81
-                BPL     *+5
-                BRL     _cmp_branch_L78
+                BMI     _cmp_branch_L78
                 LDA     #0
-                BRL     _cmp_branch_L79
+                BRA     _cmp_branch_L79
 _cmp_branch_L78
                 LDA     #1
 _cmp_branch_L79
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L77
+                BEQ     _cmp_branch_L77
                 LDA     hits
                 TAX
                 TXA
@@ -1185,8 +1133,7 @@ _cmp_branch_L77
                 BVC     _cmp_branch_L85
                 EOR     #$8000
 _cmp_branch_L85
-                BMI     *+5
-                BRL     _cmp_branch_L83
+                BPL     _cmp_branch_L83
                 LDA     b
                 TAX
                 TXA
@@ -1195,16 +1142,14 @@ _cmp_branch_L85
                 BVC     _cmp_branch_L86
                 EOR     #$8000
 _cmp_branch_L86
-                BMI     *+5
-                BRL     _cmp_branch_L83
+                BPL     _cmp_branch_L83
                 LDA     #1
-                BRL     _cmp_branch_L84
+                BRA     _cmp_branch_L84
 _cmp_branch_L83
                 LDA     #0
 _cmp_branch_L84
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L82
+                BEQ     _cmp_branch_L82
                 LDA     hits
                 TAX
                 TXA
@@ -1225,8 +1170,7 @@ _cmp_branch_L82
                 BVC     _cmp_branch_L90
                 EOR     #$8000
 _cmp_branch_L90
-                BMI     *+5
-                BRL     _cmp_branch_L88
+                BPL     _cmp_branch_L88
                 LDA     b
                 TAX
                 TXA
@@ -1235,16 +1179,14 @@ _cmp_branch_L90
                 BVC     _cmp_branch_L91
                 EOR     #$8000
 _cmp_branch_L91
-                BMI     *+5
-                BRL     _cmp_branch_L88
+                BPL     _cmp_branch_L88
                 LDA     #1
-                BRL     _cmp_branch_L89
+                BRA     _cmp_branch_L89
 _cmp_branch_L88
                 LDA     #0
 _cmp_branch_L89
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L87
+                BEQ     _cmp_branch_L87
                 LDA     hits
                 TAX
                 TXA
@@ -1256,8 +1198,7 @@ _cmp_branch_L87
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _cmp_branch_L92
+                BNE     _cmp_branch_L92
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -1284,12 +1225,11 @@ _cmp_branch_L93
                 BVC     _cmp_branch_L96
                 EOR     #$8000
 _cmp_branch_L96
-                BMI     *+5
-                BRL     _cmp_branch_L95
+                BPL     _cmp_branch_L95
                 INC     _fcc_img1
 _cmp_branch_L94
                 INC     _fcc_img0
-                BRL     _cmp_branch_L93
+                BRA     _cmp_branch_L93
 _cmp_branch_L95
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -1314,30 +1254,26 @@ _cmp_branch_L98
                 BVC     _cmp_branch_L100
                 EOR     #$8000
 _cmp_branch_L100
-                BMI     *+5
-                BRL     _cmp_branch_L99
-                BRL     _cmp_branch_L97
+                BPL     _cmp_branch_L99
+                BRA     _cmp_branch_L97
 _cmp_branch_L99
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _cmp_branch_L102
+                BNE     _cmp_branch_L102
                 LDA     a
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _cmp_branch_L102
+                BNE     _cmp_branch_L102
                 LDA     #1
-                BRL     _cmp_branch_L103
+                BRA     _cmp_branch_L103
 _cmp_branch_L102
                 LDA     #0
 _cmp_branch_L103
                 CMP     #0
-                BNE     *+5
-                BRL     _cmp_branch_L101
+                BEQ     _cmp_branch_L101
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -1349,10 +1285,9 @@ _cmp_branch_L101
                 TAX
                 TXA
                 CMP     #32767
-                BEQ     *+5
-                BRL     _cmp_branch_L104
+                BNE     _cmp_branch_L104
                 LDA     #42
-                BRL     _cmp_branch_L105
+                BRA     _cmp_branch_L105
 _cmp_branch_L104
                 LDA     1,S   ; fccstk d=0 b=1
 _cmp_branch_L105

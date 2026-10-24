@@ -75,8 +75,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _ttyops_L0
+                BNE     _ttyops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -107,8 +106,7 @@ _ttyops_L0
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _ttyops_L1
+                BNE     _ttyops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -141,8 +139,7 @@ _ttyops_L1
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _ttyops_L2
+                BNE     _ttyops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -174,24 +171,21 @@ _ttyops_L2
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ttyops_L5
+                BNE     _ttyops_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ttyops_L5
+                BNE     _ttyops_L5
                 LDA     #1
-                BRL     _ttyops_L6
+                BRA     _ttyops_L6
 _ttyops_L5
                 LDA     #0
 _ttyops_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _ttyops_L3
+                BEQ     _ttyops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -222,24 +216,21 @@ _ttyops_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ttyops_L8
+                BNE     _ttyops_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ttyops_L8
+                BNE     _ttyops_L8
                 LDA     #0
-                BRL     _ttyops_L9
+                BRA     _ttyops_L9
 _ttyops_L8
                 LDA     #1
 _ttyops_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _ttyops_L7
+                BEQ     _ttyops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -267,24 +258,21 @@ _ttyops_L7
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ttyops_L11
+                BNE     _ttyops_L11
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ttyops_L11
+                BNE     _ttyops_L11
                 LDA     #1
-                BRL     _ttyops_L12
+                BRA     _ttyops_L12
 _ttyops_L11
                 LDA     #0
 _ttyops_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _ttyops_L10
+                BEQ     _ttyops_L10
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -312,24 +300,21 @@ _ttyops_L10
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ttyops_L14
+                BNE     _ttyops_L14
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ttyops_L14
+                BNE     _ttyops_L14
                 LDA     #1
-                BRL     _ttyops_L15
+                BRA     _ttyops_L15
 _ttyops_L14
                 LDA     #0
 _ttyops_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _ttyops_L13
+                BEQ     _ttyops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

@@ -82,8 +82,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fconv_store_L0
+                BNE     _fconv_store_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -118,8 +117,7 @@ _fconv_store_L0
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fconv_store_L1
+                BNE     _fconv_store_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -163,8 +161,7 @@ _fconv_store_L1
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _fconv_store_L3
+                BNE     _fconv_store_L3
                 LDA     GS+6
                 STA     _fcc_long_hi
                 LDA     GS+4
@@ -186,16 +183,14 @@ _fconv_store_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L3
+                BEQ     _fconv_store_L3
                 LDA     #1
-                BRL     _fconv_store_L4
+                BRA     _fconv_store_L4
 _fconv_store_L3
                 LDA     #0
 _fconv_store_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L2
+                BEQ     _fconv_store_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -262,8 +257,7 @@ _fconv_store_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L5
+                BEQ     _fconv_store_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -314,8 +308,7 @@ _fconv_store_L5
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _fconv_store_L6
+                BNE     _fconv_store_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -395,8 +388,7 @@ _fconv_store_L6
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L7
+                BEQ     _fconv_store_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -468,8 +460,7 @@ _fconv_store_L7
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L8
+                BEQ     _fconv_store_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -521,8 +512,7 @@ _fconv_store_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _fconv_store_L9
+                BEQ     _fconv_store_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

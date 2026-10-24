@@ -73,8 +73,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #22
-                BEQ     *+5
-                BRL     _elemdot_chain_L1
+                BNE     _elemdot_chain_L1
                 LDA     #0
                 ASL
                 ASL
@@ -93,16 +92,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _elemdot_chain_L1
+                BNE     _elemdot_chain_L1
                 LDA     #1
-                BRL     _elemdot_chain_L2
+                BRA     _elemdot_chain_L2
 _elemdot_chain_L1
                 LDA     #0
 _elemdot_chain_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L0
+                BEQ     _elemdot_chain_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -164,8 +161,7 @@ _elemdot_chain_L0
                 TAX
                 TXA
                 CMP     #44
-                BEQ     *+5
-                BRL     _elemdot_chain_L6
+                BNE     _elemdot_chain_L6
                 LDA     #1
                 ASL
                 ASL
@@ -184,16 +180,14 @@ _elemdot_chain_L0
                 TAX
                 TXA
                 CMP     #33
-                BEQ     *+5
-                BRL     _elemdot_chain_L6
+                BNE     _elemdot_chain_L6
                 LDA     #1
-                BRL     _elemdot_chain_L7
+                BRA     _elemdot_chain_L7
 _elemdot_chain_L6
                 LDA     #0
 _elemdot_chain_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L4
+                BEQ     _elemdot_chain_L4
                 LDA     #0
                 ASL
                 ASL
@@ -213,16 +207,14 @@ _elemdot_chain_L7
                 TAX
                 TXA
                 CMP     #22
-                BEQ     *+5
-                BRL     _elemdot_chain_L4
+                BNE     _elemdot_chain_L4
                 LDA     #1
-                BRL     _elemdot_chain_L5
+                BRA     _elemdot_chain_L5
 _elemdot_chain_L4
                 LDA     #0
 _elemdot_chain_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L3
+                BEQ     _elemdot_chain_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -290,8 +282,7 @@ _elemdot_chain_L3
                 TAX
                 TXA
                 CMP     #47
-                BEQ     *+5
-                BRL     _elemdot_chain_L9
+                BNE     _elemdot_chain_L9
                 LDA     #1
                 ASL
                 ASL
@@ -310,16 +301,14 @@ _elemdot_chain_L3
                 TAX
                 TXA
                 CMP     #33
-                BEQ     *+5
-                BRL     _elemdot_chain_L9
+                BNE     _elemdot_chain_L9
                 LDA     #1
-                BRL     _elemdot_chain_L10
+                BRA     _elemdot_chain_L10
 _elemdot_chain_L9
                 LDA     #0
 _elemdot_chain_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L8
+                BEQ     _elemdot_chain_L8
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -410,8 +399,7 @@ _elemdot_chain_L8
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _elemdot_chain_L14
+                BNE     _elemdot_chain_L14
                 LDA     #1
                 ASL
                 ASL
@@ -439,16 +427,14 @@ _elemdot_chain_L8
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _elemdot_chain_L14
+                BNE     _elemdot_chain_L14
                 LDA     #1
-                BRL     _elemdot_chain_L15
+                BRA     _elemdot_chain_L15
 _elemdot_chain_L14
                 LDA     #0
 _elemdot_chain_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L12
+                BEQ     _elemdot_chain_L12
                 LDA     #1
                 ASL
                 ASL
@@ -468,16 +454,14 @@ _elemdot_chain_L15
                 TAX
                 TXA
                 CMP     #47
-                BEQ     *+5
-                BRL     _elemdot_chain_L12
+                BNE     _elemdot_chain_L12
                 LDA     #1
-                BRL     _elemdot_chain_L13
+                BRA     _elemdot_chain_L13
 _elemdot_chain_L12
                 LDA     #0
 _elemdot_chain_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L11
+                BEQ     _elemdot_chain_L11
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -558,8 +542,7 @@ _elemdot_chain_L11
                 TAX
                 TXA
                 CMP     #77
-                BEQ     *+5
-                BRL     _elemdot_chain_L19
+                BNE     _elemdot_chain_L19
                 LDA     #1
                 ASL
                 ASL
@@ -580,16 +563,14 @@ _elemdot_chain_L11
                 TAX
                 TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _elemdot_chain_L19
+                BNE     _elemdot_chain_L19
                 LDA     #1
-                BRL     _elemdot_chain_L20
+                BRA     _elemdot_chain_L20
 _elemdot_chain_L19
                 LDA     #0
 _elemdot_chain_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L17
+                BEQ     _elemdot_chain_L17
                 LDA     #1
                 ASL
                 ASL
@@ -609,16 +590,14 @@ _elemdot_chain_L20
                 TAX
                 TXA
                 CMP     #55
-                BEQ     *+5
-                BRL     _elemdot_chain_L17
+                BNE     _elemdot_chain_L17
                 LDA     #1
-                BRL     _elemdot_chain_L18
+                BRA     _elemdot_chain_L18
 _elemdot_chain_L17
                 LDA     #0
 _elemdot_chain_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L16
+                BEQ     _elemdot_chain_L16
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -698,8 +677,7 @@ _elemdot_chain_L16
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _elemdot_chain_L24
+                BNE     _elemdot_chain_L24
                 LDA     #0
                 ASL
                 CLC
@@ -719,16 +697,14 @@ _elemdot_chain_L16
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _elemdot_chain_L24
+                BNE     _elemdot_chain_L24
                 LDA     #1
-                BRL     _elemdot_chain_L25
+                BRA     _elemdot_chain_L25
 _elemdot_chain_L24
                 LDA     #0
 _elemdot_chain_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L22
+                BEQ     _elemdot_chain_L22
                 LDA     #1
                 ASL
                 INC
@@ -748,16 +724,14 @@ _elemdot_chain_L25
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _elemdot_chain_L22
+                BNE     _elemdot_chain_L22
                 LDA     #1
-                BRL     _elemdot_chain_L23
+                BRA     _elemdot_chain_L23
 _elemdot_chain_L22
                 LDA     #0
 _elemdot_chain_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L21
+                BEQ     _elemdot_chain_L21
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -836,8 +810,7 @@ _elemdot_chain_L26
                 TAX
                 TXA
                 CMP     #123
-                BEQ     *+5
-                BRL     _elemdot_chain_L28
+                BNE     _elemdot_chain_L28
                 LDA     #2
                 ASL
                 ASL
@@ -856,16 +829,14 @@ _elemdot_chain_L26
                 TAX
                 TXA
                 CMP     #121
-                BEQ     *+5
-                BRL     _elemdot_chain_L28
+                BNE     _elemdot_chain_L28
                 LDA     #1
-                BRL     _elemdot_chain_L29
+                BRA     _elemdot_chain_L29
 _elemdot_chain_L28
                 LDA     #0
 _elemdot_chain_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _elemdot_chain_L27
+                BEQ     _elemdot_chain_L27
                 LDA     _fcc_img0
                 TAX
                 TXA

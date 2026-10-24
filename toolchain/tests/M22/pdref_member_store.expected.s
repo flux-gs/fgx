@@ -311,8 +311,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _pdref_member_store_L0
+                BEQ     _pdref_member_store_L0
                 LDA     #1
                 TAY
                 TSC
@@ -326,8 +325,7 @@ main_stkok        TCS
 _pdref_member_store_L0
                 LDA     b
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _pdref_member_store_L1
+                BEQ     _pdref_member_store_L1
                 LDA     #2
                 TAY
                 TSC
@@ -343,8 +341,7 @@ _pdref_member_store_L1
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _pdref_member_store_L2
+                BEQ     _pdref_member_store_L2
                 LDA     #3
                 TAY
                 TSC

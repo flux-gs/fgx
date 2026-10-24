@@ -48,8 +48,7 @@ _indir_promote_L0
                 BVC     _indir_promote_L3
                 EOR     #$8000
 _indir_promote_L3
-                BMI     *+5
-                BRL     _indir_promote_L2
+                BPL     _indir_promote_L2
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -58,7 +57,7 @@ _indir_promote_L3
                 STA     _fcc_img1
 _indir_promote_L1
                 INC     _fcc_img0
-                BRL     _indir_promote_L0
+                BRA     _indir_promote_L0
 _indir_promote_L2
                 LDA     _fcc_img1
                 TAY
@@ -115,8 +114,7 @@ _indir_promote_L5
                 BVC     _indir_promote_L8
                 EOR     #$8000
 _indir_promote_L8
-                BMI     *+5
-                BRL     _indir_promote_L7
+                BPL     _indir_promote_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     #7
@@ -151,7 +149,7 @@ _indir_promote_L6
                 CLC
                 ADC     #1
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _indir_promote_L5
+                BRA     _indir_promote_L5
 _indir_promote_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY

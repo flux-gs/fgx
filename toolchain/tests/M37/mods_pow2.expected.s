@@ -70,8 +70,7 @@ _mods_pow2_L6
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _mods_pow2_L4
+                BEQ     _mods_pow2_L4
                 INC     _fcc_img2
 _mods_pow2_L4
                 LDA     _fcc_img0
@@ -96,8 +95,7 @@ _mods_pow2_L9
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _mods_pow2_L7
+                BEQ     _mods_pow2_L7
                 INC     _fcc_img2
 _mods_pow2_L7
                 LDA     _fcc_img0
@@ -134,8 +132,7 @@ _mods_pow2_L13
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _mods_pow2_L10
+                BEQ     _mods_pow2_L10
                 INC     _fcc_img2
 _mods_pow2_L10
 _mods_pow2_L1
@@ -144,8 +141,7 @@ _mods_pow2_L1
 _mods_pow2_L2
                 LDA     _fcc_img2
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L14
+                BNE     _mods_pow2_L14
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -167,8 +163,7 @@ _mods_pow2_L16
                 AND     #3
 _mods_pow2_L17
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _mods_pow2_L15
+                BNE     _mods_pow2_L15
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -190,8 +185,7 @@ _mods_pow2_L19
                 AND     #3
 _mods_pow2_L20
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L18
+                BNE     _mods_pow2_L18
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -213,8 +207,7 @@ _mods_pow2_L22
                 AND     #3
 _mods_pow2_L23
                 CMP     #$FFFD
-                BEQ     *+5
-                BRL     _mods_pow2_L21
+                BNE     _mods_pow2_L21
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -238,8 +231,7 @@ _mods_pow2_L26
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _mods_pow2_L24
+                BNE     _mods_pow2_L24
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -264,8 +256,7 @@ _mods_pow2_L28
                 AND     #1
 _mods_pow2_L29
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L27
+                BNE     _mods_pow2_L27
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -290,8 +281,7 @@ _mods_pow2_L31
                 AND     #16383
 _mods_pow2_L32
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L30
+                BNE     _mods_pow2_L30
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -313,8 +303,7 @@ _mods_pow2_L34
                 AND     #16383
 _mods_pow2_L35
                 CMP     #$C001
-                BEQ     *+5
-                BRL     _mods_pow2_L33
+                BNE     _mods_pow2_L33
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -338,8 +327,7 @@ _mods_pow2_L38
                 TAX
                 TXA
                 CMP     #16383
-                BEQ     *+5
-                BRL     _mods_pow2_L36
+                BNE     _mods_pow2_L36
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -351,8 +339,7 @@ _mods_pow2_L36
                 STA     a
                 LDA     #0
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L40
+                BNE     _mods_pow2_L40
                 LDA     a
                 TAX
                 LDA     m1
@@ -360,16 +347,14 @@ _mods_pow2_L36
                 TXA
                 JSR     _fcc_mods16
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L40
+                BNE     _mods_pow2_L40
                 LDA     #1
-                BRL     _mods_pow2_L41
+                BRA     _mods_pow2_L41
 _mods_pow2_L40
                 LDA     #0
 _mods_pow2_L41
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L39
+                BEQ     _mods_pow2_L39
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -391,23 +376,20 @@ _mods_pow2_L45
                 AND     #3
 _mods_pow2_L46
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L43
+                BNE     _mods_pow2_L43
                 LDA     a
                 LDX     #100
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L43
+                BEQ     _mods_pow2_L43
                 LDA     #1
-                BRL     _mods_pow2_L44
+                BRA     _mods_pow2_L44
 _mods_pow2_L43
                 LDA     #0
 _mods_pow2_L44
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L42
+                BEQ     _mods_pow2_L42
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -429,32 +411,28 @@ _mods_pow2_L52
                 AND     #3
 _mods_pow2_L53
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L50
+                BNE     _mods_pow2_L50
                 LDA     a
                 LDX     #100
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L50
+                BEQ     _mods_pow2_L50
                 LDA     #1
-                BRL     _mods_pow2_L51
+                BRA     _mods_pow2_L51
 _mods_pow2_L50
                 LDA     #0
 _mods_pow2_L51
                 CMP     #0
-                BEQ     *+5
-                BRL     _mods_pow2_L48
+                BNE     _mods_pow2_L48
                 LDA     a
                 LDX     #400
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L48
+                BEQ     _mods_pow2_L48
                 LDA     #0
-                BRL     _mods_pow2_L49
+                BRA     _mods_pow2_L49
 _mods_pow2_L48
                 LDA     #1
 _mods_pow2_L49
@@ -466,8 +444,7 @@ _mods_pow2_L54
                 LDA     #1
 _mods_pow2_L55
                 CMP     #0
-                BNE     *+5
-                BRL     _mods_pow2_L47
+                BEQ     _mods_pow2_L47
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -479,10 +456,9 @@ _mods_pow2_L47
                 TAX
                 TXA
                 CMP     #4095
-                BEQ     *+5
-                BRL     _mods_pow2_L56
+                BNE     _mods_pow2_L56
                 LDA     #42
-                BRL     _mods_pow2_L57
+                BRA     _mods_pow2_L57
 _mods_pow2_L56
                 LDA     _fcc_img1
 _mods_pow2_L57

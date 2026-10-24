@@ -63,8 +63,7 @@ _glptrhash_L0
                 BVC     _glptrhash_L3
                 EOR     #$8000
 _glptrhash_L3
-                BMI     *+5
-                BRL     _glptrhash_L2
+                BPL     _glptrhash_L2
                 SEP     #$20
                 MX      %10
                 LDA     htab+2
@@ -254,8 +253,7 @@ _glptrhash_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L4
+                BEQ     _glptrhash_L4
                 LDA     #10
                 TAY
                 TSC
@@ -306,8 +304,7 @@ _glptrhash_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L5
+                BEQ     _glptrhash_L5
                 LDA     #11
                 TAY
                 TSC
@@ -356,8 +353,7 @@ _glptrhash_L5
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L6
+                BEQ     _glptrhash_L6
                 LDA     #12
                 TAY
                 TSC
@@ -481,8 +477,7 @@ _glptrhash_L6
                 TAX
                 TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _glptrhash_L7
+                BEQ     _glptrhash_L7
                 LDA     #1
                 TAY
                 TSC
@@ -514,8 +509,7 @@ _glptrhash_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L8
+                BEQ     _glptrhash_L8
                 LDA     #2
                 TAY
                 TSC
@@ -565,8 +559,7 @@ _glptrhash_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L9
+                BEQ     _glptrhash_L9
                 LDA     #3
                 TAY
                 TSC
@@ -603,8 +596,7 @@ _glptrhash_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrhash_L10
+                BEQ     _glptrhash_L10
                 LDA     #4
                 TAY
                 TSC
@@ -623,8 +615,7 @@ _glptrhash_L10
                 TAX
                 TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _glptrhash_L11
+                BEQ     _glptrhash_L11
                 LDA     #5
                 TAY
                 TSC

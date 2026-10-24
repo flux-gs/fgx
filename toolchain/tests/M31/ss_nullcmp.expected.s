@@ -53,24 +53,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ss_nullcmp_L1
+                BNE     _ss_nullcmp_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ss_nullcmp_L1
+                BNE     _ss_nullcmp_L1
                 LDA     #1
-                BRL     _ss_nullcmp_L2
+                BRA     _ss_nullcmp_L2
 _ss_nullcmp_L1
                 LDA     #0
 _ss_nullcmp_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _ss_nullcmp_L0
+                BEQ     _ss_nullcmp_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -95,24 +92,21 @@ _ss_nullcmp_L0
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ss_nullcmp_L4
+                BNE     _ss_nullcmp_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ss_nullcmp_L4
+                BNE     _ss_nullcmp_L4
                 LDA     #1
-                BRL     _ss_nullcmp_L5
+                BRA     _ss_nullcmp_L5
 _ss_nullcmp_L4
                 LDA     #0
 _ss_nullcmp_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _ss_nullcmp_L3
+                BEQ     _ss_nullcmp_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -137,24 +131,21 @@ _ss_nullcmp_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _ss_nullcmp_L7
+                BNE     _ss_nullcmp_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _ss_nullcmp_L7
+                BNE     _ss_nullcmp_L7
                 LDA     #0
-                BRL     _ss_nullcmp_L8
+                BRA     _ss_nullcmp_L8
 _ss_nullcmp_L7
                 LDA     #1
 _ss_nullcmp_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _ss_nullcmp_L6
+                BEQ     _ss_nullcmp_L6
                 LDA     _fcc_img0
                 TAX
                 TXA

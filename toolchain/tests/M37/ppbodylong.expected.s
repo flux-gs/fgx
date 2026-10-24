@@ -78,9 +78,8 @@ _ppbodylong_L0
 _ppbodylong_L1
                 LDA     #0
                 CMP     #0
-                BNE     *+5
-                BRL     _ppbodylong_L2
-                BRL     _ppbodylong_L0
+                BEQ     _ppbodylong_L2
+                BRA     _ppbodylong_L0
 _ppbodylong_L2
                 LDA     acc
                 TAX

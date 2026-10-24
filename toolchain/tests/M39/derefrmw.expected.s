@@ -111,8 +111,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _derefrmw_L1
+                BNE     _derefrmw_L1
                 LDA     #2
                 ASL
                 TAX
@@ -120,16 +119,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _derefrmw_L1
+                BNE     _derefrmw_L1
                 LDA     #0
-                BRL     _derefrmw_L2
+                BRA     _derefrmw_L2
 _derefrmw_L1
                 LDA     #1
 _derefrmw_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _derefrmw_L0
+                BEQ     _derefrmw_L0
                 LDA     #1
                 TAY
                 TSC
@@ -186,8 +183,7 @@ _derefrmw_L0
                 TAX
                 TXA
                 CMP     #165
-                BNE     *+5
-                BRL     _derefrmw_L3
+                BEQ     _derefrmw_L3
                 LDA     #2
                 TAY
                 TSC
@@ -222,8 +218,7 @@ _derefrmw_L3
                 TAX
                 TXA
                 CMP     #168
-                BNE     *+5
-                BRL     _derefrmw_L4
+                BEQ     _derefrmw_L4
                 LDA     #3
                 TAY
                 TSC
@@ -288,8 +283,7 @@ _derefrmw_L4
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _derefrmw_L6
+                BNE     _derefrmw_L6
                 LDA     #0
                 ASL
                 TAX
@@ -297,16 +291,14 @@ _derefrmw_L4
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _derefrmw_L6
+                BNE     _derefrmw_L6
                 LDA     #0
-                BRL     _derefrmw_L7
+                BRA     _derefrmw_L7
 _derefrmw_L6
                 LDA     #1
 _derefrmw_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _derefrmw_L5
+                BEQ     _derefrmw_L5
                 LDA     #4
                 TAY
                 TSC

@@ -25,8 +25,7 @@ feed_stkok        TCS
                 DEC
                 STA     g_n
                 CMP     #0
-                BMI     *+5
-                BRL     _assign_in_while_L0
+                BPL     _assign_in_while_L0
                 LDA     #0
                 TAX
                 TXA
@@ -79,13 +78,12 @@ _assign_in_while_L1
                 FGX2_FARCALL feed
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BPL     *+5
-                BRL     _assign_in_while_L2
+                BMI     _assign_in_while_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
-                BRL     _assign_in_while_L1
+                BRA     _assign_in_while_L1
 _assign_in_while_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC

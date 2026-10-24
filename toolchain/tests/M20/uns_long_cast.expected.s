@@ -64,8 +64,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _uns_long_cast_L0
+                BEQ     _uns_long_cast_L0
                 LDA     #42
                 TAY
                 TSC

@@ -112,8 +112,7 @@ _compound_arr_L0
                 BVC     _compound_arr_L3
                 EOR     #$8000
 _compound_arr_L3
-                BMI     *+5
-                BRL     _compound_arr_L2
+                BPL     _compound_arr_L2
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -157,7 +156,7 @@ _compound_arr_L1
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _compound_arr_L0
+                BRA     _compound_arr_L0
 _compound_arr_L2
                 SEP     #$20
                 MX      %10

@@ -40,8 +40,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _stdcells_L0
+                BEQ     _stdcells_L0
                 LDA     #1
                 TAY
                 TSC
@@ -70,24 +69,21 @@ _stdcells_L0
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdcells_L2
+                BNE     _stdcells_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdcells_L2
+                BNE     _stdcells_L2
                 LDA     #0
-                BRL     _stdcells_L3
+                BRA     _stdcells_L3
 _stdcells_L2
                 LDA     #1
 _stdcells_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L1
+                BEQ     _stdcells_L1
                 LDA     #2
                 TAY
                 TSC
@@ -137,24 +133,21 @@ _stdcells_L1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdcells_L5
+                BNE     _stdcells_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdcells_L5
+                BNE     _stdcells_L5
                 LDA     #1
-                BRL     _stdcells_L6
+                BRA     _stdcells_L6
 _stdcells_L5
                 LDA     #0
 _stdcells_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L4
+                BEQ     _stdcells_L4
                 LDA     #3
                 TAY
                 TSC
@@ -204,8 +197,7 @@ _stdcells_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L7
+                BEQ     _stdcells_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -289,8 +281,7 @@ _stdcells_L7
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _stdcells_L8
+                BEQ     _stdcells_L8
                 LDA     #5
                 TAY
                 TSC
@@ -305,8 +296,7 @@ _stdcells_L8
                 LDA     _iob+14
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _stdcells_L9
+                BEQ     _stdcells_L9
                 LDA     #6
                 TAY
                 TSC

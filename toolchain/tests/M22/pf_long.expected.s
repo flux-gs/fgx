@@ -81,8 +81,7 @@ _pf_long_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L2
+                BEQ     _pf_long_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _pf_long_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _pf_long_L2
+                BNE     _pf_long_L2
                 LDA     #1
-                BRL     _pf_long_L3
+                BRA     _pf_long_L3
 _pf_long_L2
                 LDA     #0
 _pf_long_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L1
+                BEQ     _pf_long_L1
                 INC     _fcc_img0
-                BRL     _pf_long_L0
+                BRA     _pf_long_L0
 _pf_long_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -510,8 +507,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L13
+                BEQ     _pf_long_L13
                 SEP     #$20
                 MX      %10
                 PHB
@@ -544,16 +540,14 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L13
+                BEQ     _pf_long_L13
                 LDA     #1
-                BRL     _pf_long_L14
+                BRA     _pf_long_L14
 _pf_long_L13
                 LDA     #0
 _pf_long_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L11
+                BEQ     _pf_long_L11
                 SEP     #$20
                 MX      %10
                 PHB
@@ -586,16 +580,14 @@ _pf_long_L14
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L11
+                BEQ     _pf_long_L11
                 LDA     #1
-                BRL     _pf_long_L12
+                BRA     _pf_long_L12
 _pf_long_L11
                 LDA     #0
 _pf_long_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L9
+                BEQ     _pf_long_L9
                 SEP     #$20
                 MX      %10
                 PHB
@@ -628,16 +620,14 @@ _pf_long_L12
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L9
+                BEQ     _pf_long_L9
                 LDA     #1
-                BRL     _pf_long_L10
+                BRA     _pf_long_L10
 _pf_long_L9
                 LDA     #0
 _pf_long_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L7
+                BEQ     _pf_long_L7
                 SEP     #$20
                 MX      %10
                 PHB
@@ -670,16 +660,14 @@ _pf_long_L10
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L7
+                BEQ     _pf_long_L7
                 LDA     #1
-                BRL     _pf_long_L8
+                BRA     _pf_long_L8
 _pf_long_L7
                 LDA     #0
 _pf_long_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L5
+                BEQ     _pf_long_L5
                 SEP     #$20
                 MX      %10
                 PHB
@@ -712,16 +700,14 @@ _pf_long_L8
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L5
+                BEQ     _pf_long_L5
                 LDA     #1
-                BRL     _pf_long_L6
+                BRA     _pf_long_L6
 _pf_long_L5
                 LDA     #0
 _pf_long_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _pf_long_L4
+                BEQ     _pf_long_L4
                 LDA     #42
                 TAY
                 TSC

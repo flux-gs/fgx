@@ -56,8 +56,7 @@ _ptr_cmp_L0
                 PLA
                 JSR     _fcc_leu16
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L2
+                BEQ     _ptr_cmp_L2
                 INC     _fcc_img0
 _ptr_cmp_L1
                 LDA     _fcc_img2
@@ -66,7 +65,7 @@ _ptr_cmp_L1
                 CLC
                 ADC     #2
                 STA     _fcc_img1
-                BRL     _ptr_cmp_L0
+                BRA     _ptr_cmp_L0
 _ptr_cmp_L2
                 LDA     _fcc_img0
                 TAY
@@ -180,8 +179,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _ptr_cmp_L3
+                BEQ     _ptr_cmp_L3
                 LDA     #1
                 TAY
                 TSC
@@ -223,8 +221,7 @@ _ptr_cmp_L5
                 LDA     #1
 _ptr_cmp_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L4
+                BEQ     _ptr_cmp_L4
                 LDA     #2
                 TAY
                 TSC
@@ -266,8 +263,7 @@ _ptr_cmp_L8
                 LDA     #1
 _ptr_cmp_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L7
+                BEQ     _ptr_cmp_L7
                 LDA     #3
                 TAY
                 TSC
@@ -309,8 +305,7 @@ _ptr_cmp_L11
                 LDA     #1
 _ptr_cmp_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_cmp_L10
+                BEQ     _ptr_cmp_L10
                 LDA     #4
                 TAY
                 TSC
@@ -334,8 +329,7 @@ _ptr_cmp_L10
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _ptr_cmp_L13
+                BEQ     _ptr_cmp_L13
                 LDA     #5
                 TAY
                 TSC
@@ -359,8 +353,7 @@ _ptr_cmp_L13
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _ptr_cmp_L14
+                BEQ     _ptr_cmp_L14
                 LDA     #6
                 TAY
                 TSC

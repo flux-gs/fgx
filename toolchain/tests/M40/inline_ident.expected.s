@@ -24,8 +24,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     inline
                 CMP     #0
-                BEQ     *+5
-                BRL     _inline_ident_L0
+                BNE     _inline_ident_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -38,8 +37,7 @@ _inline_ident_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _inline_ident_L1
+                BNE     _inline_ident_L1
                 LDA     _fcc_img0
                 TAX
                 TXA

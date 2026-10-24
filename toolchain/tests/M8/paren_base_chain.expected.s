@@ -248,24 +248,21 @@ main_stkok        TCS
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L1
+                BNE     _paren_base_chain_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L1
+                BNE     _paren_base_chain_L1
                 LDA     #1
-                BRL     _paren_base_chain_L2
+                BRA     _paren_base_chain_L2
 _paren_base_chain_L1
                 LDA     #0
 _paren_base_chain_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L0
+                BEQ     _paren_base_chain_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -292,8 +289,7 @@ _paren_base_chain_L0
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _paren_base_chain_L3
+                BNE     _paren_base_chain_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -320,8 +316,7 @@ _paren_base_chain_L3
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _paren_base_chain_L4
+                BNE     _paren_base_chain_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -388,24 +383,21 @@ _paren_base_chain_L4
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L8
+                BNE     _paren_base_chain_L8
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L8
+                BNE     _paren_base_chain_L8
                 LDA     #1
-                BRL     _paren_base_chain_L9
+                BRA     _paren_base_chain_L9
 _paren_base_chain_L8
                 LDA     #0
 _paren_base_chain_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L6
+                BEQ     _paren_base_chain_L6
                 SEP     #$20
                 MX      %10
                 LDA     t+2
@@ -419,16 +411,14 @@ _paren_base_chain_L9
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _paren_base_chain_L6
+                BNE     _paren_base_chain_L6
                 LDA     #1
-                BRL     _paren_base_chain_L7
+                BRA     _paren_base_chain_L7
 _paren_base_chain_L6
                 LDA     #0
 _paren_base_chain_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L5
+                BEQ     _paren_base_chain_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -498,24 +488,21 @@ _paren_base_chain_L5
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L11
+                BNE     _paren_base_chain_L11
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L11
+                BNE     _paren_base_chain_L11
                 LDA     #1
-                BRL     _paren_base_chain_L12
+                BRA     _paren_base_chain_L12
 _paren_base_chain_L11
                 LDA     #0
 _paren_base_chain_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L10
+                BEQ     _paren_base_chain_L10
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -544,24 +531,21 @@ _paren_base_chain_L10
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L14
+                BNE     _paren_base_chain_L14
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L14
+                BNE     _paren_base_chain_L14
                 LDA     #1
-                BRL     _paren_base_chain_L15
+                BRA     _paren_base_chain_L15
 _paren_base_chain_L14
                 LDA     #0
 _paren_base_chain_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L13
+                BEQ     _paren_base_chain_L13
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -620,16 +604,14 @@ _paren_base_chain_L13
                 STA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _paren_base_chain_L17
+                BEQ     _paren_base_chain_L17
                 LDA     #1
-                BRL     _paren_base_chain_L18
+                BRA     _paren_base_chain_L18
 _paren_base_chain_L17
                 LDA     #0
 _paren_base_chain_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L16
+                BEQ     _paren_base_chain_L16
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -658,24 +640,21 @@ _paren_base_chain_L16
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_base_chain_L20
+                BNE     _paren_base_chain_L20
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_base_chain_L20
+                BNE     _paren_base_chain_L20
                 LDA     #1
-                BRL     _paren_base_chain_L21
+                BRA     _paren_base_chain_L21
 _paren_base_chain_L20
                 LDA     #0
 _paren_base_chain_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_base_chain_L19
+                BEQ     _paren_base_chain_L19
                 LDA     _fcc_img0
                 TAX
                 TXA

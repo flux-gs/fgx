@@ -96,15 +96,14 @@ _loopreg_L0
                 BVC     _loopreg_L3
                 EOR     #$8000
 _loopreg_L3
-                BMI     *+5
-                BRL     _loopreg_L2
+                BPL     _loopreg_L2
                 LDA     _fcc_img1
                 CLC
                 ADC     _fcc_img0
                 STA     _fcc_img1
 _loopreg_L1
                 INC     _fcc_img0
-                BRL     _loopreg_L0
+                BRA     _loopreg_L0
 _loopreg_L2
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -188,15 +187,13 @@ _loopreg_L4
                 BVC     _loopreg_L7
                 EOR     #$8000
 _loopreg_L7
-                BMI     *+5
-                BRL     _loopreg_L6
+                BPL     _loopreg_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _loopreg_L8
-                BRL     _loopreg_L6
+                BNE     _loopreg_L8
+                BRA     _loopreg_L6
 _loopreg_L8
                 LDA     _fcc_img1
                 CLC
@@ -204,7 +201,7 @@ _loopreg_L8
                 STA     _fcc_img1
 _loopreg_L5
                 INC     _fcc_img0
-                BRL     _loopreg_L4
+                BRA     _loopreg_L4
 _loopreg_L6
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -288,15 +285,13 @@ _loopreg_L9
                 BVC     _loopreg_L12
                 EOR     #$8000
 _loopreg_L12
-                BMI     *+5
-                BRL     _loopreg_L11
+                BPL     _loopreg_L11
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _loopreg_L13
-                BRL     _loopreg_L10
+                BNE     _loopreg_L13
+                BRA     _loopreg_L10
 _loopreg_L13
                 LDA     _fcc_img1
                 CLC
@@ -304,7 +299,7 @@ _loopreg_L13
                 STA     _fcc_img1
 _loopreg_L10
                 INC     _fcc_img0
-                BRL     _loopreg_L9
+                BRA     _loopreg_L9
 _loopreg_L11
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -383,8 +378,7 @@ _loopreg_L14
                 BVC     _loopreg_L17
                 EOR     #$8000
 _loopreg_L17
-                BMI     *+5
-                BRL     _loopreg_L16
+                BPL     _loopreg_L16
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
                 ADC     3,S   ; fccstk d=0 b=3
@@ -393,16 +387,15 @@ _loopreg_L17
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _loopreg_L18
-                BRL     _loopreg_with_goto_uL_done
+                BNE     _loopreg_L18
+                BRA     _loopreg_with_goto_uL_done
 _loopreg_L18
 _loopreg_L15
                 LDA     3,S   ; fccstk d=0 b=3
                 CLC
                 ADC     #1
                 STA     3,S   ; fccstk d=0 b=3
-                BRL     _loopreg_L14
+                BRA     _loopreg_L14
 _loopreg_L16
 _loopreg_with_goto_uL_done
                 LDA     1,S   ; fccstk d=0 b=1

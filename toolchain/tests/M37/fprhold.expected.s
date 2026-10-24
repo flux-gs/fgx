@@ -221,8 +221,7 @@ _fprhold_L3
                 BVC     _fprhold_L6
                 EOR     #$8000
 _fprhold_L6
-                BMI     *+5
-                BRL     _fprhold_L4
+                BPL     _fprhold_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -241,7 +240,7 @@ _fprhold_L6
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr1
-                BRL     _fprhold_L5
+                BRA     _fprhold_L5
 _fprhold_L4
                 LDA     #0
                 STA     _fcc_fpr1
@@ -307,8 +306,7 @@ _fprhold_L2
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _fprhold_L7
+                BEQ     _fprhold_L7
                 LDA     #1
                 TAY
                 TSC
@@ -334,23 +332,20 @@ _fprhold_L7
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _fprhold_L9
+                BNE     _fprhold_L9
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _fprhold_L9
+                BNE     _fprhold_L9
                 LDA     #0
-                BRL     _fprhold_L10
+                BRA     _fprhold_L10
 _fprhold_L9
                 LDA     #1
 _fprhold_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _fprhold_L8
+                BEQ     _fprhold_L8
                 LDA     #2
                 TAY
                 TSC
@@ -436,8 +431,7 @@ _fprhold_L8
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _fprhold_L11
+                BEQ     _fprhold_L11
                 LDA     #3
                 TAY
                 TSC
@@ -502,8 +496,7 @@ _fprhold_L11
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _fprhold_L12
+                BEQ     _fprhold_L12
                 LDA     #4
                 TAY
                 TSC
@@ -575,8 +568,7 @@ _fprhold_L12
                 TAX
                 TXA
                 CMP     #15
-                BNE     *+5
-                BRL     _fprhold_L13
+                BEQ     _fprhold_L13
                 LDA     #5
                 TAY
                 TSC
@@ -618,8 +610,7 @@ _fprhold_L14
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _fprhold_L16
+                BEQ     _fprhold_L16
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_fpr0]
@@ -633,15 +624,14 @@ _fprhold_L14
                 BVC     _fprhold_L19
                 EOR     #$8000
 _fprhold_L19
-                BMI     *+5
-                BRL     _fprhold_L17
+                BPL     _fprhold_L17
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
                 LDA     3,S   ; fccstk d=2 b=1
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                BRL     _fprhold_L18
+                BRA     _fprhold_L18
 _fprhold_L17
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2
@@ -675,15 +665,14 @@ _fprhold_L15
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _fprhold_L14
+                BRA     _fprhold_L14
 _fprhold_L16
                 LDA     _fcc_img1
                 STA     19,S   ; fccstk d=0 b=19
                 TAX
                 TXA
                 CMP     #73
-                BNE     *+5
-                BRL     _fprhold_L20
+                BEQ     _fprhold_L20
                 LDA     #6
                 TAY
                 TSC
@@ -741,8 +730,7 @@ _fprhold_L20
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _fprhold_L21
+                BEQ     _fprhold_L21
                 LDA     #7
                 TAY
                 TSC
@@ -794,8 +782,7 @@ _fprhold_L21
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _fprhold_L22
+                BEQ     _fprhold_L22
                 LDA     #8
                 TAY
                 TSC

@@ -23,8 +23,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L0
+                BEQ     _pdplayout_L0
                 LDA     #1
                 TAY
                 TSC
@@ -40,8 +39,7 @@ _pdplayout_L0
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L1
+                BEQ     _pdplayout_L1
                 LDA     #2
                 TAY
                 TSC
@@ -57,8 +55,7 @@ _pdplayout_L1
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L2
+                BEQ     _pdplayout_L2
                 LDA     #3
                 TAY
                 TSC
@@ -74,8 +71,7 @@ _pdplayout_L2
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L3
+                BEQ     _pdplayout_L3
                 LDA     #4
                 TAY
                 TSC
@@ -91,8 +87,7 @@ _pdplayout_L3
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L4
+                BEQ     _pdplayout_L4
                 LDA     #5
                 TAY
                 TSC
@@ -132,8 +127,7 @@ _pdplayout_L4
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L5
+                BEQ     _pdplayout_L5
                 LDA     #6
                 TAY
                 TSC
@@ -173,8 +167,7 @@ _pdplayout_L5
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L6
+                BEQ     _pdplayout_L6
                 LDA     #7
                 TAY
                 TSC
@@ -214,8 +207,7 @@ _pdplayout_L6
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L7
+                BEQ     _pdplayout_L7
                 LDA     #8
                 TAY
                 TSC
@@ -255,8 +247,7 @@ _pdplayout_L7
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _pdplayout_L8
+                BEQ     _pdplayout_L8
                 LDA     #9
                 TAY
                 TSC
@@ -296,8 +287,7 @@ _pdplayout_L8
                 TAX
                 TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _pdplayout_L9
+                BEQ     _pdplayout_L9
                 LDA     #10
                 TAY
                 TSC
@@ -313,8 +303,7 @@ _pdplayout_L9
                 TAX
                 TXA
                 CMP     #24
-                BNE     *+5
-                BRL     _pdplayout_L10
+                BEQ     _pdplayout_L10
                 LDA     #11
                 TAY
                 TSC
@@ -330,8 +319,7 @@ _pdplayout_L10
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _pdplayout_L11
+                BEQ     _pdplayout_L11
                 LDA     #12
                 TAY
                 TSC
@@ -369,8 +357,7 @@ _pdplayout_L11
                 SEC
                 SBC     _fcc_fpr1
                 CMP     #0
-                BNE     *+5
-                BRL     _pdplayout_L12
+                BEQ     _pdplayout_L12
                 LDA     #13
                 TAY
                 TSC
@@ -410,8 +397,7 @@ _pdplayout_L12
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L13
+                BEQ     _pdplayout_L13
                 LDA     #14
                 TAY
                 TSC
@@ -451,8 +437,7 @@ _pdplayout_L13
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L14
+                BEQ     _pdplayout_L14
                 LDA     #15
                 TAY
                 TSC
@@ -492,8 +477,7 @@ _pdplayout_L14
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L15
+                BEQ     _pdplayout_L15
                 LDA     #16
                 TAY
                 TSC
@@ -533,8 +517,7 @@ _pdplayout_L15
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L16
+                BEQ     _pdplayout_L16
                 LDA     #17
                 TAY
                 TSC
@@ -574,8 +557,7 @@ _pdplayout_L16
                 TAX
                 TXA
                 CMP     #12
-                BNE     *+5
-                BRL     _pdplayout_L17
+                BEQ     _pdplayout_L17
                 LDA     #18
                 TAY
                 TSC
@@ -615,8 +597,7 @@ _pdplayout_L17
                 TAX
                 TXA
                 CMP     #40
-                BNE     *+5
-                BRL     _pdplayout_L18
+                BEQ     _pdplayout_L18
                 LDA     #19
                 TAY
                 TSC
@@ -656,8 +637,7 @@ _pdplayout_L18
                 TAX
                 TXA
                 CMP     #50
-                BNE     *+5
-                BRL     _pdplayout_L19
+                BEQ     _pdplayout_L19
                 LDA     #20
                 TAY
                 TSC
@@ -697,8 +677,7 @@ _pdplayout_L19
                 TAX
                 TXA
                 CMP     #52
-                BNE     *+5
-                BRL     _pdplayout_L20
+                BEQ     _pdplayout_L20
                 LDA     #21
                 TAY
                 TSC
@@ -738,8 +717,7 @@ _pdplayout_L20
                 TAX
                 TXA
                 CMP     #60
-                BNE     *+5
-                BRL     _pdplayout_L21
+                BEQ     _pdplayout_L21
                 LDA     #22
                 TAY
                 TSC
@@ -755,8 +733,7 @@ _pdplayout_L21
                 TAX
                 TXA
                 CMP     #70
-                BNE     *+5
-                BRL     _pdplayout_L22
+                BEQ     _pdplayout_L22
                 LDA     #23
                 TAY
                 TSC
@@ -796,8 +773,7 @@ _pdplayout_L22
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L23
+                BEQ     _pdplayout_L23
                 LDA     #24
                 TAY
                 TSC
@@ -837,8 +813,7 @@ _pdplayout_L23
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L24
+                BEQ     _pdplayout_L24
                 LDA     #25
                 TAY
                 TSC
@@ -878,8 +853,7 @@ _pdplayout_L24
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L25
+                BEQ     _pdplayout_L25
                 LDA     #26
                 TAY
                 TSC
@@ -895,8 +869,7 @@ _pdplayout_L25
                 TAX
                 TXA
                 CMP     #446
-                BNE     *+5
-                BRL     _pdplayout_L26
+                BEQ     _pdplayout_L26
                 LDA     #27
                 TAY
                 TSC
@@ -936,8 +909,7 @@ _pdplayout_L26
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L27
+                BEQ     _pdplayout_L27
                 LDA     #28
                 TAY
                 TSC
@@ -977,8 +949,7 @@ _pdplayout_L27
                 TAX
                 TXA
                 CMP     #6
-                BNE     *+5
-                BRL     _pdplayout_L28
+                BEQ     _pdplayout_L28
                 LDA     #29
                 TAY
                 TSC
@@ -1018,8 +989,7 @@ _pdplayout_L28
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _pdplayout_L29
+                BEQ     _pdplayout_L29
                 LDA     #30
                 TAY
                 TSC
@@ -1059,8 +1029,7 @@ _pdplayout_L29
                 TAX
                 TXA
                 CMP     #208
-                BNE     *+5
-                BRL     _pdplayout_L30
+                BEQ     _pdplayout_L30
                 LDA     #31
                 TAY
                 TSC
@@ -1100,8 +1069,7 @@ _pdplayout_L30
                 TAX
                 TXA
                 CMP     #210
-                BNE     *+5
-                BRL     _pdplayout_L31
+                BEQ     _pdplayout_L31
                 LDA     #32
                 TAY
                 TSC
@@ -1141,8 +1109,7 @@ _pdplayout_L31
                 TAX
                 TXA
                 CMP     #410
-                BNE     *+5
-                BRL     _pdplayout_L32
+                BEQ     _pdplayout_L32
                 LDA     #33
                 TAY
                 TSC
@@ -1182,8 +1149,7 @@ _pdplayout_L32
                 TAX
                 TXA
                 CMP     #414
-                BNE     *+5
-                BRL     _pdplayout_L33
+                BEQ     _pdplayout_L33
                 LDA     #34
                 TAY
                 TSC
@@ -1223,8 +1189,7 @@ _pdplayout_L33
                 TAX
                 TXA
                 CMP     #418
-                BNE     *+5
-                BRL     _pdplayout_L34
+                BEQ     _pdplayout_L34
                 LDA     #35
                 TAY
                 TSC
@@ -1264,8 +1229,7 @@ _pdplayout_L34
                 TAX
                 TXA
                 CMP     #422
-                BNE     *+5
-                BRL     _pdplayout_L35
+                BEQ     _pdplayout_L35
                 LDA     #36
                 TAY
                 TSC
@@ -1305,8 +1269,7 @@ _pdplayout_L35
                 TAX
                 TXA
                 CMP     #428
-                BNE     *+5
-                BRL     _pdplayout_L36
+                BEQ     _pdplayout_L36
                 LDA     #37
                 TAY
                 TSC
@@ -1346,8 +1309,7 @@ _pdplayout_L36
                 TAX
                 TXA
                 CMP     #440
-                BNE     *+5
-                BRL     _pdplayout_L37
+                BEQ     _pdplayout_L37
                 LDA     #38
                 TAY
                 TSC
@@ -1387,8 +1349,7 @@ _pdplayout_L37
                 TAX
                 TXA
                 CMP     #444
-                BNE     *+5
-                BRL     _pdplayout_L38
+                BEQ     _pdplayout_L38
                 LDA     #39
                 TAY
                 TSC
@@ -1432,8 +1393,7 @@ _pdplayout_L38
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L39
+                BEQ     _pdplayout_L39
                 LDA     #40
                 TAY
                 TSC
@@ -1475,8 +1435,7 @@ _pdplayout_L39
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L40
+                BEQ     _pdplayout_L40
                 LDA     #41
                 TAY
                 TSC
@@ -1520,8 +1479,7 @@ _pdplayout_L40
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L41
+                BEQ     _pdplayout_L41
                 LDA     #42
                 TAX
                 TXA
@@ -1575,8 +1533,7 @@ _pdplayout_L41
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _pdplayout_L42
+                BEQ     _pdplayout_L42
                 LDA     #44
                 TAY
                 TSC
@@ -1605,8 +1562,7 @@ _pdplayout_L42
                 TAX
                 TXA
                 CMP     #3
-                BNE     *+5
-                BRL     _pdplayout_L43
+                BEQ     _pdplayout_L43
                 LDA     #45
                 TAY
                 TSC
@@ -1635,8 +1591,7 @@ _pdplayout_L43
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _pdplayout_L44
+                BEQ     _pdplayout_L44
                 LDA     #46
                 TAY
                 TSC
@@ -1665,8 +1620,7 @@ _pdplayout_L44
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _pdplayout_L45
+                BEQ     _pdplayout_L45
                 LDA     #47
                 TAY
                 TSC

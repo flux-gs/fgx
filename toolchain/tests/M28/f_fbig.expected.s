@@ -81,8 +81,7 @@ _f_fbig_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _f_fbig_L2
+                BEQ     _f_fbig_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _f_fbig_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _f_fbig_L2
+                BNE     _f_fbig_L2
                 LDA     #1
-                BRL     _f_fbig_L3
+                BRA     _f_fbig_L3
 _f_fbig_L2
                 LDA     #0
 _f_fbig_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _f_fbig_L1
+                BEQ     _f_fbig_L1
                 INC     _fcc_img0
-                BRL     _f_fbig_L0
+                BRA     _f_fbig_L0
 _f_fbig_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -258,8 +255,7 @@ _f_fbig_L5
                 LDA     #1
 _f_fbig_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _f_fbig_L4
+                BEQ     _f_fbig_L4
                 LDA     #1
                 TAY
                 TSC
@@ -355,8 +351,7 @@ _f_fbig_L8
                 LDA     #1
 _f_fbig_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _f_fbig_L7
+                BEQ     _f_fbig_L7
                 LDA     #2
                 TAY
                 TSC
@@ -452,8 +447,7 @@ _f_fbig_L11
                 LDA     #1
 _f_fbig_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _f_fbig_L10
+                BEQ     _f_fbig_L10
                 LDA     #3
                 TAY
                 TSC

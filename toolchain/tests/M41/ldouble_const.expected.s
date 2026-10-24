@@ -101,8 +101,7 @@ _ldouble_const_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L0
+                BEQ     _ldouble_const_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -159,10 +158,9 @@ _ldouble_const_is_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L0
+                BEQ     _ldouble_const_L0
                 LDA     #1
-                BRL     _ldouble_const_L1
+                BRA     _ldouble_const_L1
 _ldouble_const_L0
                 LDA     #0
 _ldouble_const_L1
@@ -284,8 +282,7 @@ _ldouble_const_L3
                 LDA     #1
 _ldouble_const_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L2
+                BEQ     _ldouble_const_L2
                 LDA     #1
                 TAY
                 TSC
@@ -356,8 +353,7 @@ _ldouble_const_L6
                 LDA     #1
 _ldouble_const_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L5
+                BEQ     _ldouble_const_L5
                 LDA     #2
                 TAY
                 TSC
@@ -475,8 +471,7 @@ _ldouble_const_L5
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L8
+                BEQ     _ldouble_const_L8
                 LDA     #3
                 TAY
                 TSC
@@ -576,8 +571,7 @@ _ldouble_const_L10
                 LDA     #1
 _ldouble_const_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L9
+                BEQ     _ldouble_const_L9
                 LDA     #4
                 TAY
                 TSC
@@ -653,8 +647,7 @@ _ldouble_const_L13
                 LDA     #1
 _ldouble_const_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L12
+                BEQ     _ldouble_const_L12
                 LDA     #5
                 TAY
                 TSC
@@ -725,8 +718,7 @@ _ldouble_const_L16
                 LDA     #1
 _ldouble_const_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L15
+                BEQ     _ldouble_const_L15
                 LDA     #6
                 TAY
                 TSC
@@ -794,8 +786,7 @@ _ldouble_const_L19
                 LDA     #1
 _ldouble_const_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L18
+                BEQ     _ldouble_const_L18
                 LDA     #31
                 TAY
                 TSC
@@ -841,8 +832,7 @@ _ldouble_const_L18
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L21
+                BEQ     _ldouble_const_L21
                 LDA     #7
                 TAY
                 TSC
@@ -858,20 +848,17 @@ _ldouble_const_L21
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _ldouble_const_L23
+                BNE     _ldouble_const_L23
                 LDA     #8
                 CMP     #8
-                BEQ     *+5
-                BRL     _ldouble_const_L23
+                BNE     _ldouble_const_L23
                 LDA     #0
-                BRL     _ldouble_const_L24
+                BRA     _ldouble_const_L24
 _ldouble_const_L23
                 LDA     #1
 _ldouble_const_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L22
+                BEQ     _ldouble_const_L22
                 LDA     #8
                 TAY
                 TSC
@@ -887,8 +874,7 @@ _ldouble_const_L22
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _ldouble_const_L25
+                BEQ     _ldouble_const_L25
                 LDA     #9
                 TAY
                 TSC
@@ -944,8 +930,7 @@ _ldouble_const_L27
                 LDA     #1
 _ldouble_const_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L26
+                BEQ     _ldouble_const_L26
                 LDA     #10
                 TAY
                 TSC
@@ -1001,8 +986,7 @@ _ldouble_const_L30
                 LDA     #1
 _ldouble_const_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L29
+                BEQ     _ldouble_const_L29
                 LDA     #11
                 TAY
                 TSC
@@ -1058,8 +1042,7 @@ _ldouble_const_L33
                 LDA     #1
 _ldouble_const_L34
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L32
+                BEQ     _ldouble_const_L32
                 LDA     #12
                 TAY
                 TSC
@@ -1115,8 +1098,7 @@ _ldouble_const_L36
                 LDA     #1
 _ldouble_const_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L35
+                BEQ     _ldouble_const_L35
                 LDA     #13
                 TAY
                 TSC
@@ -1172,8 +1154,7 @@ _ldouble_const_L39
                 LDA     #1
 _ldouble_const_L40
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L38
+                BEQ     _ldouble_const_L38
                 LDA     #14
                 TAY
                 TSC
@@ -1229,8 +1210,7 @@ _ldouble_const_L42
                 LDA     #1
 _ldouble_const_L43
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L41
+                BEQ     _ldouble_const_L41
                 LDA     #15
                 TAY
                 TSC
@@ -1286,8 +1266,7 @@ _ldouble_const_L45
                 LDA     #1
 _ldouble_const_L46
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L44
+                BEQ     _ldouble_const_L44
                 LDA     #16
                 TAY
                 TSC
@@ -1343,8 +1322,7 @@ _ldouble_const_L48
                 LDA     #1
 _ldouble_const_L49
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L47
+                BEQ     _ldouble_const_L47
                 LDA     #17
                 TAY
                 TSC
@@ -1400,8 +1378,7 @@ _ldouble_const_L51
                 LDA     #1
 _ldouble_const_L52
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L50
+                BEQ     _ldouble_const_L50
                 LDA     #18
                 TAY
                 TSC
@@ -1474,8 +1451,7 @@ _ldouble_const_L50
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L53
+                BEQ     _ldouble_const_L53
                 LDA     #19
                 TAY
                 TSC
@@ -1531,8 +1507,7 @@ _ldouble_const_L55
                 LDA     #1
 _ldouble_const_L56
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L54
+                BEQ     _ldouble_const_L54
                 LDA     #20
                 TAY
                 TSC
@@ -1588,8 +1563,7 @@ _ldouble_const_L58
                 LDA     #1
 _ldouble_const_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L57
+                BEQ     _ldouble_const_L57
                 LDA     #21
                 TAY
                 TSC
@@ -1645,8 +1619,7 @@ _ldouble_const_L61
                 LDA     #1
 _ldouble_const_L62
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L60
+                BEQ     _ldouble_const_L60
                 LDA     #22
                 TAY
                 TSC
@@ -1716,8 +1689,7 @@ _ldouble_const_L64
                 LDA     #1
 _ldouble_const_L65
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L63
+                BEQ     _ldouble_const_L63
                 LDA     #23
                 TAY
                 TSC
@@ -1787,8 +1759,7 @@ _ldouble_const_L67
                 LDA     #1
 _ldouble_const_L68
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L66
+                BEQ     _ldouble_const_L66
                 LDA     #24
                 TAY
                 TSC
@@ -1804,8 +1775,7 @@ _ldouble_const_L66
                 TAX
                 TXA
                 CMP     #24
-                BEQ     *+5
-                BRL     _ldouble_const_L70
+                BNE     _ldouble_const_L70
                 LDA     #$0000
                 STA     _fcc_long_hi
                 LDA     #$0000
@@ -1850,16 +1820,14 @@ _ldouble_const_L72
                 LDA     #1
 _ldouble_const_L73
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_const_L70
+                BNE     _ldouble_const_L70
                 LDA     #0
-                BRL     _ldouble_const_L71
+                BRA     _ldouble_const_L71
 _ldouble_const_L70
                 LDA     #1
 _ldouble_const_L71
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L69
+                BEQ     _ldouble_const_L69
                 LDA     #25
                 TAY
                 TSC
@@ -1875,8 +1843,7 @@ _ldouble_const_L69
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _ldouble_const_L75
+                BNE     _ldouble_const_L75
                 LDA     #$9999
                 STA     _fcc_long_hi
                 LDA     #$999A
@@ -1921,16 +1888,14 @@ _ldouble_const_L77
                 LDA     #1
 _ldouble_const_L78
                 CMP     #0
-                BEQ     *+5
-                BRL     _ldouble_const_L75
+                BNE     _ldouble_const_L75
                 LDA     #0
-                BRL     _ldouble_const_L76
+                BRA     _ldouble_const_L76
 _ldouble_const_L75
                 LDA     #1
 _ldouble_const_L76
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L74
+                BEQ     _ldouble_const_L74
                 LDA     #26
                 TAY
                 TSC
@@ -1995,8 +1960,7 @@ _ldouble_const_L80
                 LDA     #1
 _ldouble_const_L81
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L79
+                BEQ     _ldouble_const_L79
                 LDA     #27
                 TAY
                 TSC
@@ -2012,8 +1976,7 @@ _ldouble_const_L79
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _ldouble_const_L82
+                BEQ     _ldouble_const_L82
                 LDA     #28
                 TAY
                 TSC
@@ -2046,8 +2009,7 @@ _ldouble_const_L82
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L83
+                BEQ     _ldouble_const_L83
                 LDA     #29
                 TAY
                 TSC
@@ -2103,8 +2065,7 @@ _ldouble_const_L85
                 LDA     #1
 _ldouble_const_L86
                 CMP     #0
-                BNE     *+5
-                BRL     _ldouble_const_L84
+                BEQ     _ldouble_const_L84
                 LDA     #30
                 TAY
                 TSC

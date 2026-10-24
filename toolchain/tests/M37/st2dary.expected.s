@@ -618,8 +618,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _st2dary_L5
+                BNE     _st2dary_L5
                 LDA     #1
                 TAX
                 LDA:    r0,X
@@ -627,16 +626,14 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _st2dary_L5
+                BNE     _st2dary_L5
                 LDA     #1
-                BRL     _st2dary_L6
+                BRA     _st2dary_L6
 _st2dary_L5
                 LDA     #0
 _st2dary_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L3
+                BEQ     _st2dary_L3
                 LDA     #2
                 TAX
                 LDA:    r0,X
@@ -644,16 +641,14 @@ _st2dary_L6
                 TAX
                 TXA
                 CMP     #67
-                BEQ     *+5
-                BRL     _st2dary_L3
+                BNE     _st2dary_L3
                 LDA     #1
-                BRL     _st2dary_L4
+                BRA     _st2dary_L4
 _st2dary_L3
                 LDA     #0
 _st2dary_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L1
+                BEQ     _st2dary_L1
                 LDA     #3
                 TAX
                 LDA:    r0,X
@@ -661,16 +656,14 @@ _st2dary_L4
                 TAX
                 TXA
                 CMP     #68
-                BEQ     *+5
-                BRL     _st2dary_L1
+                BNE     _st2dary_L1
                 LDA     #1
-                BRL     _st2dary_L2
+                BRA     _st2dary_L2
 _st2dary_L1
                 LDA     #0
 _st2dary_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L0
+                BEQ     _st2dary_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -682,8 +675,7 @@ _st2dary_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _st2dary_L14
+                BNE     _st2dary_L14
                 LDA     #0
                 TAX
                 LDA:    r1,X
@@ -691,16 +683,14 @@ _st2dary_L0
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _st2dary_L14
+                BNE     _st2dary_L14
                 LDA     #1
-                BRL     _st2dary_L15
+                BRA     _st2dary_L15
 _st2dary_L14
                 LDA     #0
 _st2dary_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L12
+                BEQ     _st2dary_L12
                 LDA     #1
                 TAX
                 LDA:    r1,X
@@ -708,16 +698,14 @@ _st2dary_L15
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _st2dary_L12
+                BNE     _st2dary_L12
                 LDA     #1
-                BRL     _st2dary_L13
+                BRA     _st2dary_L13
 _st2dary_L12
                 LDA     #0
 _st2dary_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L10
+                BEQ     _st2dary_L10
                 LDA     #2
                 TAX
                 LDA:    r1,X
@@ -725,16 +713,14 @@ _st2dary_L13
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _st2dary_L10
+                BNE     _st2dary_L10
                 LDA     #1
-                BRL     _st2dary_L11
+                BRA     _st2dary_L11
 _st2dary_L10
                 LDA     #0
 _st2dary_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L8
+                BEQ     _st2dary_L8
                 LDA     #3
                 TAX
                 LDA:    r1,X
@@ -742,16 +728,14 @@ _st2dary_L11
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _st2dary_L8
+                BNE     _st2dary_L8
                 LDA     #1
-                BRL     _st2dary_L9
+                BRA     _st2dary_L9
 _st2dary_L8
                 LDA     #0
 _st2dary_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _st2dary_L7
+                BEQ     _st2dary_L7
                 LDA     _fcc_img0
                 TAX
                 TXA

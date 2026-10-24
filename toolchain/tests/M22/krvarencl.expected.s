@@ -31,8 +31,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #235
-                BEQ     *+5
-                BRL     _krvarencl_L0
+                BNE     _krvarencl_L0
                 LDA     #42
                 TAY
                 TSC

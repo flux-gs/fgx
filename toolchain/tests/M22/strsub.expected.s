@@ -57,8 +57,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #54
-                BNE     *+5
-                BRL     _strsub_L0
+                BEQ     _strsub_L0
                 LDA     #1
                 TAY
                 TSC
@@ -74,8 +73,7 @@ _strsub_L0
                 TAX
                 TXA
                 CMP     #48
-                BNE     *+5
-                BRL     _strsub_L1
+                BEQ     _strsub_L1
                 LDA     #2
                 TAY
                 TSC
@@ -105,8 +103,7 @@ _strsub_L1
                 TAX
                 TXA
                 CMP     #67
-                BNE     *+5
-                BRL     _strsub_L2
+                BEQ     _strsub_L2
                 LDA     #3
                 TAY
                 TSC
@@ -136,8 +133,7 @@ _strsub_L2
                 TAX
                 TXA
                 CMP     #122
-                BNE     *+5
-                BRL     _strsub_L3
+                BEQ     _strsub_L3
                 LDA     #4
                 TAY
                 TSC
@@ -170,8 +166,7 @@ _strsub_L3
                 TAX
                 TXA
                 CMP     #49
-                BNE     *+5
-                BRL     _strsub_L4
+                BEQ     _strsub_L4
                 LDA     #5
                 TAY
                 TSC

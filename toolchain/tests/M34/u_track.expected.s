@@ -92,8 +92,7 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L0
+                BCS     _u_track_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -108,8 +107,7 @@ _u_track_L0
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L1
+                BCS     _u_track_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -132,8 +130,7 @@ _u_track_L1
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L2
+                BCS     _u_track_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -149,8 +146,7 @@ _u_track_L2
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _u_track_L3
+                BCS     _u_track_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -205,8 +201,7 @@ _u_track_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _u_track_L4
+                BEQ     _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
                 TXA
@@ -218,10 +213,9 @@ _u_track_L4
                 TAX
                 TXA
                 CMP     #31
-                BEQ     *+5
-                BRL     _u_track_L5
+                BNE     _u_track_L5
                 LDA     #42
-                BRL     _u_track_L6
+                BRA     _u_track_L6
 _u_track_L5
                 LDA     9,S   ; fccstk d=0 b=9
 _u_track_L6

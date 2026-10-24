@@ -51,8 +51,7 @@ _incstepfor_L0
                 BVC     _incstepfor_L3
                 EOR     #$8000
 _incstepfor_L3
-                BPL     *+5
-                BRL     _incstepfor_L2
+                BMI     _incstepfor_L2
                 LDA     _fcc_img1
                 CLC
                 ADC     _fcc_img0
@@ -64,7 +63,7 @@ _incstepfor_L1
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _incstepfor_L0
+                BRA     _incstepfor_L0
 _incstepfor_L2
                 LDA     _fcc_img1
                 TAY
@@ -102,8 +101,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #15
-                BNE     *+5
-                BRL     _incstepfor_L4
+                BEQ     _incstepfor_L4
                 LDA     #1
                 TAY
                 TSC
@@ -124,8 +122,7 @@ _incstepfor_L4
                 TAX
                 TXA
                 CMP     #55
-                BNE     *+5
-                BRL     _incstepfor_L5
+                BEQ     _incstepfor_L5
                 LDA     #2
                 TAY
                 TSC

@@ -44,8 +44,7 @@ _g53_layout_L0
                 BVC     _g53_layout_L3
                 EOR     #$8000
 _g53_layout_L3
-                BMI     *+5
-                BRL     _g53_layout_L2
+                BPL     _g53_layout_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -84,7 +83,7 @@ _g53_layout_L3
                 PLA
 _g53_layout_L1
                 INC     _fcc_img0
-                BRL     _g53_layout_L0
+                BRA     _g53_layout_L0
 _g53_layout_L2
                 LDA     #0
                 STA     _fcc_img0
@@ -100,8 +99,7 @@ _g53_layout_L4
                 BVC     _g53_layout_L7
                 EOR     #$8000
 _g53_layout_L7
-                BMI     *+5
-                BRL     _g53_layout_L6
+                BPL     _g53_layout_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -121,7 +119,7 @@ _g53_layout_L7
                 STA     [_fcc_fpr0]
 _g53_layout_L5
                 INC     _fcc_img0
-                BRL     _g53_layout_L4
+                BRA     _g53_layout_L4
 _g53_layout_L6
                 SEP     #$20
                 MX      %10
@@ -158,8 +156,7 @@ _g53_layout_L8
                 BVC     _g53_layout_L11
                 EOR     #$8000
 _g53_layout_L11
-                BMI     *+5
-                BRL     _g53_layout_L10
+                BPL     _g53_layout_L10
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -191,7 +188,7 @@ _g53_layout_L11
                 PLA
 _g53_layout_L9
                 INC     _fcc_img1
-                BRL     _g53_layout_L8
+                BRA     _g53_layout_L8
 _g53_layout_L10
                 SEP     #$20
                 MX      %10

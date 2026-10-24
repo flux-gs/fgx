@@ -119,8 +119,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _callchain_stmt_L0
+                BEQ     _callchain_stmt_L0
                 LDA     #1
                 TAY
                 TSC
@@ -151,8 +150,7 @@ _callchain_stmt_L0
                 TAX
                 TXA
                 CMP     #20
-                BNE     *+5
-                BRL     _callchain_stmt_L1
+                BEQ     _callchain_stmt_L1
                 LDA     #2
                 TAY
                 TSC
@@ -183,8 +181,7 @@ _callchain_stmt_L1
                 TAX
                 TXA
                 CMP     #28
-                BNE     *+5
-                BRL     _callchain_stmt_L2
+                BEQ     _callchain_stmt_L2
                 LDA     #3
                 TAY
                 TSC
@@ -211,8 +208,7 @@ _callchain_stmt_L2
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _callchain_stmt_L3
+                BEQ     _callchain_stmt_L3
                 LDA     #4
                 TAY
                 TSC
@@ -242,8 +238,7 @@ _callchain_stmt_L3
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _callchain_stmt_L4
+                BEQ     _callchain_stmt_L4
                 LDA     #5
                 TAY
                 TSC
@@ -259,8 +254,7 @@ _callchain_stmt_L4
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _callchain_stmt_L5
+                BEQ     _callchain_stmt_L5
                 LDA     #6
                 TAY
                 TSC

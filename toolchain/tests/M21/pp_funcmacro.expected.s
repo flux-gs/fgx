@@ -39,11 +39,10 @@ main_stkok        TCS
                 BVC     _pp_funcmacro_L2
                 EOR     #$8000
 _pp_funcmacro_L2
-                BMI     *+5
-                BRL     _pp_funcmacro_L0
+                BPL     _pp_funcmacro_L0
                 LDA     #20
                 ASL
-                BRL     _pp_funcmacro_L1
+                BRA     _pp_funcmacro_L1
 _pp_funcmacro_L0
                 LDA     _fcc_img0
 _pp_funcmacro_L1

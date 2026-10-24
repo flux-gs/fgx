@@ -80,8 +80,7 @@ _structval_take_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L2
+                BNE     _structval_L2
                 DO      8+_structval_take_FRAMESIZE/256
                 TSC
                 CLC
@@ -106,16 +105,14 @@ _structval_take_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L2
+                BNE     _structval_L2
                 LDA     #1
-                BRL     _structval_L3
+                BRA     _structval_L3
 _structval_L2
                 LDA     #0
 _structval_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L0
+                BEQ     _structval_L0
                 DO      10+_structval_take_FRAMESIZE/256
                 TSC
                 CLC
@@ -140,10 +137,9 @@ _structval_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L0
+                BNE     _structval_L0
                 LDA     #1
-                BRL     _structval_L1
+                BRA     _structval_L1
 _structval_L0
                 LDA     #0
 _structval_L1
@@ -210,8 +206,7 @@ _structval_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L6
+                BNE     _structval_L6
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -228,16 +223,14 @@ _structval_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L6
+                BNE     _structval_L6
                 LDA     #1
-                BRL     _structval_L7
+                BRA     _structval_L7
 _structval_L6
                 LDA     #0
 _structval_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L4
+                BEQ     _structval_L4
                 DO      8+_structval_same_FRAMESIZE/256
                 TSC
                 CLC
@@ -276,10 +269,9 @@ _structval_L7
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _structval_L4
+                BNE     _structval_L4
                 LDA     #1
-                BRL     _structval_L5
+                BRA     _structval_L5
 _structval_L4
                 LDA     #0
 _structval_L5
@@ -658,8 +650,7 @@ _structval_L13
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L11
+                BEQ     _structval_L11
                 LDA     #22
                 PHA
                 LDA     #21
@@ -711,16 +702,14 @@ _structval_L14
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L11
+                BEQ     _structval_L11
                 LDA     #1
-                BRL     _structval_L12
+                BRA     _structval_L12
 _structval_L11
                 LDA     #0
 _structval_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L9
+                BEQ     _structval_L9
                 LDA     #32
                 PHA
                 LDA     #31
@@ -755,16 +744,14 @@ _structval_L15
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L9
+                BEQ     _structval_L9
                 LDA     #1
-                BRL     _structval_L10
+                BRA     _structval_L10
 _structval_L9
                 LDA     #0
 _structval_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L8
+                BEQ     _structval_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -820,8 +807,7 @@ _structval_L23
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L21
+                BEQ     _structval_L21
                 LDA     #25
                 PHA
                 LDA     #24
@@ -875,16 +861,14 @@ _structval_L24
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L21
+                BEQ     _structval_L21
                 LDA     #1
-                BRL     _structval_L22
+                BRA     _structval_L22
 _structval_L21
                 LDA     #0
 _structval_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L19
+                BEQ     _structval_L19
                 LDA     #35
                 PHA
                 LDA     #34
@@ -928,16 +912,14 @@ _structval_L25
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L19
+                BEQ     _structval_L19
                 LDA     #1
-                BRL     _structval_L20
+                BRA     _structval_L20
 _structval_L19
                 LDA     #0
 _structval_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L17
+                BEQ     _structval_L17
                 LDA     #45
                 PHA
                 LDA     #44
@@ -993,16 +975,14 @@ _structval_L26
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L17
+                BEQ     _structval_L17
                 LDA     #1
-                BRL     _structval_L18
+                BRA     _structval_L18
 _structval_L17
                 LDA     #0
 _structval_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L16
+                BEQ     _structval_L16
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -1027,8 +1007,7 @@ _structval_L16
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _structval_L32
+                BNE     _structval_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1057,16 +1036,14 @@ _structval_L16
                 TAX
                 TXA
                 CMP     #41
-                BEQ     *+5
-                BRL     _structval_L32
+                BNE     _structval_L32
                 LDA     #1
-                BRL     _structval_L33
+                BRA     _structval_L33
 _structval_L32
                 LDA     #0
 _structval_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L30
+                BEQ     _structval_L30
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
                 ASL
@@ -1099,20 +1076,17 @@ _structval_L33
                 TAX
                 TXA
                 CMP     #44
-                BEQ     *+5
-                BRL     _structval_L30
+                BNE     _structval_L30
                 LDA     #1
-                BRL     _structval_L31
+                BRA     _structval_L31
 _structval_L30
                 LDA     #0
 _structval_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L28
+                BEQ     _structval_L28
                 LDA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L34
+                BEQ     _structval_L34
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -1135,7 +1109,7 @@ _structval_L31
                 CLC
                 ADC     #2
                 STA     _fcc_fpr0
-                BRL     _structval_L35
+                BRA     _structval_L35
 _structval_L34
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_tmp_b
@@ -1163,16 +1137,14 @@ _structval_L35
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _structval_L28
+                BNE     _structval_L28
                 LDA     #1
-                BRL     _structval_L29
+                BRA     _structval_L29
 _structval_L28
                 LDA     #0
 _structval_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L27
+                BEQ     _structval_L27
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -1226,8 +1198,7 @@ _structval_L36
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _structval_L38
+                BNE     _structval_L38
                 LDA     #22
                 PHA
                 LDA     #21
@@ -1255,16 +1226,14 @@ _structval_L36
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L38
+                BEQ     _structval_L38
                 LDA     #1
-                BRL     _structval_L39
+                BRA     _structval_L39
 _structval_L38
                 LDA     #0
 _structval_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L37
+                BEQ     _structval_L37
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -1289,8 +1258,7 @@ _structval_L40
                 BVC     _structval_L43
                 EOR     #$8000
 _structval_L43
-                BMI     *+5
-                BRL     _structval_L42
+                BPL     _structval_L42
                 INC     _fcc_img0
 _structval_L41
                 LDA     _fcc_img1
@@ -1333,7 +1301,7 @@ _structval_L44
                 DEY
                 BPL     _structval_L44
                 LDA     _fcc_fpr0
-                BRL     _structval_L40
+                BRA     _structval_L40
 _structval_L42
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
@@ -1343,8 +1311,7 @@ _structval_L42
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _structval_L46
+                BNE     _structval_L46
                 LDA     #42
                 PHA
                 LDA     #41
@@ -1372,16 +1339,14 @@ _structval_L42
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L46
+                BEQ     _structval_L46
                 LDA     #1
-                BRL     _structval_L47
+                BRA     _structval_L47
 _structval_L46
                 LDA     #0
 _structval_L47
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L45
+                BEQ     _structval_L45
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -1537,8 +1502,7 @@ _structval_L52
                 LDA     #1
 _structval_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L50
+                BEQ     _structval_L50
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -1549,7 +1513,7 @@ _structval_L53
                 CLC
                 ADC     #2
                 STA     _fcc_fpr1
-                BRL     _structval_L51
+                BRA     _structval_L51
 _structval_L50
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -1585,20 +1549,17 @@ _structval_L54
                 STA     [_fcc_fpr0]
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L60
+                BEQ     _structval_L60
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L60
+                BEQ     _structval_L60
                 LDA     #1
-                BRL     _structval_L61
+                BRA     _structval_L61
 _structval_L60
                 LDA     #0
 _structval_L61
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L58
+                BEQ     _structval_L58
                 LDA     #32
                 PHA
                 LDA     #31
@@ -1626,30 +1587,26 @@ _structval_L61
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L58
+                BEQ     _structval_L58
                 LDA     #1
-                BRL     _structval_L59
+                BRA     _structval_L59
 _structval_L58
                 LDA     #0
 _structval_L59
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L56
+                BEQ     _structval_L56
                 LDA     _structval_g2+20
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _structval_L56
+                BNE     _structval_L56
                 LDA     #1
-                BRL     _structval_L57
+                BRA     _structval_L57
 _structval_L56
                 LDA     #0
 _structval_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L55
+                BEQ     _structval_L55
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
@@ -1684,8 +1641,7 @@ _structval_L55
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L69
+                BEQ     _structval_L69
                 LDA     #25
                 PHA
                 LDA     #24
@@ -1717,16 +1673,14 @@ _structval_L55
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L69
+                BEQ     _structval_L69
                 LDA     #1
-                BRL     _structval_L70
+                BRA     _structval_L70
 _structval_L69
                 LDA     #0
 _structval_L70
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L67
+                BEQ     _structval_L67
                 LDA     #42
                 PHA
                 LDA     #41
@@ -1754,40 +1708,34 @@ _structval_L70
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L67
+                BEQ     _structval_L67
                 LDA     #1
-                BRL     _structval_L68
+                BRA     _structval_L68
 _structval_L67
                 LDA     #0
 _structval_L68
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L65
+                BEQ     _structval_L65
                 LDA     _structval_g0+0
                 CMP     #0
-                BEQ     *+5
-                BRL     _structval_L65
+                BNE     _structval_L65
                 LDA     #1
-                BRL     _structval_L66
+                BRA     _structval_L66
 _structval_L65
                 LDA     #0
 _structval_L66
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L63
+                BEQ     _structval_L63
                 LDA     _structval_g0+20
                 CMP     #0
-                BEQ     *+5
-                BRL     _structval_L63
+                BNE     _structval_L63
                 LDA     #1
-                BRL     _structval_L64
+                BRA     _structval_L64
 _structval_L63
                 LDA     #0
 _structval_L64
                 CMP     #0
-                BNE     *+5
-                BRL     _structval_L62
+                BEQ     _structval_L62
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA

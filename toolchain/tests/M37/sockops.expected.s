@@ -35,8 +35,7 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #0
-                BPL     *+5
-                BRL     _sockops_L0
+                BMI     _sockops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -69,8 +68,7 @@ _sockops_L0
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L1
+                BNE     _sockops_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -103,8 +101,7 @@ _sockops_L1
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L2
+                BNE     _sockops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -139,8 +136,7 @@ _sockops_L2
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L3
+                BNE     _sockops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -175,8 +171,7 @@ _sockops_L3
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L4
+                BNE     _sockops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -213,8 +208,7 @@ _sockops_L4
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L5
+                BNE     _sockops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -264,8 +258,7 @@ _sockops_L5
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L6
+                BNE     _sockops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -315,8 +308,7 @@ _sockops_L6
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L7
+                BNE     _sockops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -347,8 +339,7 @@ _sockops_L7
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _sockops_L8
+                BNE     _sockops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA

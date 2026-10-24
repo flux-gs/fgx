@@ -70,8 +70,7 @@ _strcopy_test_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _strcopy_test_L1
+                BEQ     _strcopy_test_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -92,7 +91,7 @@ _strcopy_test_L0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strcopy_test_L0
+                BRA     _strcopy_test_L0
 _strcopy_test_L1
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
@@ -163,15 +162,14 @@ _strcopy_test_L2
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _strcopy_test_L3
+                BEQ     _strcopy_test_L3
                 LDA     _fcc_img1
                 STA     _fcc_ptr+2
                 LDA     _fcc_img0
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _strcopy_test_L2
+                BRA     _strcopy_test_L2
 _strcopy_test_L3
                 LDA     _fcc_img1
                 STA     _fcc_fpr0+2

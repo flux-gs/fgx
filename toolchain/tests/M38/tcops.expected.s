@@ -47,8 +47,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _tcops_L0
+                BNE     _tcops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -77,8 +76,7 @@ _tcops_L0
                 TAX
                 TXA
                 CMP     #80
-                BEQ     *+5
-                BRL     _tcops_L1
+                BNE     _tcops_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -118,24 +116,21 @@ _tcops_L1
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _tcops_L5
+                BNE     _tcops_L5
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _tcops_L5
+                BNE     _tcops_L5
                 LDA     #0
-                BRL     _tcops_L6
+                BRA     _tcops_L6
 _tcops_L5
                 LDA     #1
 _tcops_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _tcops_L3
+                BEQ     _tcops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_ptr
                 LDA     3,S   ; fccstk d=0 b=3
@@ -145,16 +140,14 @@ _tcops_L6
                 TAX
                 TXA
                 CMP     #27
-                BEQ     *+5
-                BRL     _tcops_L3
+                BNE     _tcops_L3
                 LDA     #1
-                BRL     _tcops_L4
+                BRA     _tcops_L4
 _tcops_L3
                 LDA     #0
 _tcops_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _tcops_L2
+                BEQ     _tcops_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -181,8 +174,7 @@ _tcops_L2
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _tcops_L7
+                BNE     _tcops_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

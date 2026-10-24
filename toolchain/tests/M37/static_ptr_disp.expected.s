@@ -42,38 +42,33 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #81
-                BEQ     *+5
-                BRL     _static_ptr_disp_L3
+                BNE     _static_ptr_disp_L3
                 LDA     #13
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _static_ptr_disp_L3
+                BNE     _static_ptr_disp_L3
                 LDA     #1
-                BRL     _static_ptr_disp_L4
+                BRA     _static_ptr_disp_L4
 _static_ptr_disp_L3
                 LDA     #0
 _static_ptr_disp_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L1
+                BEQ     _static_ptr_disp_L1
                 LDA     #15
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _static_ptr_disp_L1
+                BNE     _static_ptr_disp_L1
                 LDA     #1
-                BRL     _static_ptr_disp_L2
+                BRA     _static_ptr_disp_L2
 _static_ptr_disp_L1
                 LDA     #0
 _static_ptr_disp_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L0
+                BEQ     _static_ptr_disp_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -98,38 +93,33 @@ _static_ptr_disp_L0
                 TAX
                 TXA
                 CMP     #4660
-                BEQ     *+5
-                BRL     _static_ptr_disp_L10
+                BNE     _static_ptr_disp_L10
                 LDA     #1
                 ASL
                 TAX
                 LDA:    iarr,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _static_ptr_disp_L10
+                BNE     _static_ptr_disp_L10
                 LDA     #1
-                BRL     _static_ptr_disp_L11
+                BRA     _static_ptr_disp_L11
 _static_ptr_disp_L10
                 LDA     #0
 _static_ptr_disp_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L8
+                BEQ     _static_ptr_disp_L8
                 LDA     #3
                 ASL
                 TAX
                 LDA:    iarr,X
                 CMP     #0
-                BEQ     *+5
-                BRL     _static_ptr_disp_L8
+                BNE     _static_ptr_disp_L8
                 LDA     #1
-                BRL     _static_ptr_disp_L9
+                BRA     _static_ptr_disp_L9
 _static_ptr_disp_L8
                 LDA     #0
 _static_ptr_disp_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L6
+                BEQ     _static_ptr_disp_L6
                 SEP     #$20
                 MX      %10
                 LDA     ip+2
@@ -148,32 +138,28 @@ _static_ptr_disp_L9
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _static_ptr_disp_L12
+                BNE     _static_ptr_disp_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _static_ptr_disp_L12
+                BNE     _static_ptr_disp_L12
                 LDA     #1
-                BRL     _static_ptr_disp_L13
+                BRA     _static_ptr_disp_L13
 _static_ptr_disp_L12
                 LDA     #0
 _static_ptr_disp_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L6
+                BEQ     _static_ptr_disp_L6
                 LDA     #1
-                BRL     _static_ptr_disp_L7
+                BRA     _static_ptr_disp_L7
 _static_ptr_disp_L6
                 LDA     #0
 _static_ptr_disp_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L5
+                BEQ     _static_ptr_disp_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -197,22 +183,19 @@ _static_ptr_disp_L5
                 TAX
                 TXA
                 CMP     #4369
-                BEQ     *+5
-                BRL     _static_ptr_disp_L17
+                BNE     _static_ptr_disp_L17
                 LDA     obj+2
                 TAX
                 TXA
                 CMP     #8738
-                BEQ     *+5
-                BRL     _static_ptr_disp_L17
+                BNE     _static_ptr_disp_L17
                 LDA     #1
-                BRL     _static_ptr_disp_L18
+                BRA     _static_ptr_disp_L18
 _static_ptr_disp_L17
                 LDA     #0
 _static_ptr_disp_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L15
+                BEQ     _static_ptr_disp_L15
                 SEP     #$20
                 MX      %10
                 LDA     op+2
@@ -234,32 +217,28 @@ _static_ptr_disp_L18
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _static_ptr_disp_L19
+                BNE     _static_ptr_disp_L19
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _static_ptr_disp_L19
+                BNE     _static_ptr_disp_L19
                 LDA     #1
-                BRL     _static_ptr_disp_L20
+                BRA     _static_ptr_disp_L20
 _static_ptr_disp_L19
                 LDA     #0
 _static_ptr_disp_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L15
+                BEQ     _static_ptr_disp_L15
                 LDA     #1
-                BRL     _static_ptr_disp_L16
+                BRA     _static_ptr_disp_L16
 _static_ptr_disp_L15
                 LDA     #0
 _static_ptr_disp_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _static_ptr_disp_L14
+                BEQ     _static_ptr_disp_L14
                 LDA     _fcc_img0
                 TAX
                 TXA

@@ -324,6 +324,33 @@ int main(void)
     check("clcadc_keep_v_read",
           "                CLC\n                ADC     #1\n                BVC     L5\n", "                CLC\n                ADC     #1\n                BVC     L5\n");
 
+    /* a far conditional within reach becomes the inverse short branch */
+    check("relax_pair",
+          "                BNE     *+5\n                BRL     L1\n                NOP\nL1                 ENT\n",
+          "                BEQ     L1\n                NOP\nL1                 ENT\n");
+    /* backward, and a lone BRL becomes BRA */
+    check("relax_back_brl",
+          "L2                 ENT\n                NOP\n                BRL     L2\n",
+          "L2                 ENT\n                NOP\n                BRA     L2\n");
+    /* 43 four-byte stores put L3 at 172, beyond +127: the pair stays */
+    {
+        static char in[4096];
+        size_t k;
+        strcpy(in, "                BMI     *+5\n                BRL     L3\n");
+        for (k = 0; k < 43; k++)
+            strcat(in, "                STA     far\n");
+        strcat(in, "L3                 ENT\n");
+        check("relax_out_of_reach", in, in);
+    }
+    /* a line it cannot size refuses every branch across it */
+    check("relax_unknown_line",
+          "                BRL     L4\n                HEX     0102\nL4                 ENT\n",
+          "                BRL     L4\n                HEX     0102\nL4                 ENT\n");
+    /* a BRL inside the reach of a `*+7' keeps its 3 bytes */
+    check("relax_pinned_by_skip",
+          "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n",
+          "                BEQ     *+7\n                LDA     #0\n                BRL     L5\n                NOP\nL5                 ENT\n");
+
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 
     printf("\n%d/%d passed\n", g_tests - g_fails, g_tests);

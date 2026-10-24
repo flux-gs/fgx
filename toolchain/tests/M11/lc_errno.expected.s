@@ -43,8 +43,7 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #$FFFF
-                BNE     *+5
-                BRL     _lc_errno_L0
+                BEQ     _lc_errno_L0
                 LDA     #1
                 TAY
                 TSC
@@ -60,8 +59,7 @@ _lc_errno_L0
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _lc_errno_L1
+                BEQ     _lc_errno_L1
                 LDA     #2
                 TAY
                 TSC
@@ -106,8 +104,7 @@ _lc_errno_L1
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L2
+                BEQ     _lc_errno_L2
                 LDA     #3
                 TAY
                 TSC
@@ -123,8 +120,7 @@ _lc_errno_L2
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _lc_errno_L3
+                BEQ     _lc_errno_L3
                 LDA     #4
                 TAY
                 TSC
@@ -163,8 +159,7 @@ _lc_errno_L3
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L4
+                BEQ     _lc_errno_L4
                 LDA     #5
                 TAY
                 TSC
@@ -203,8 +198,7 @@ _lc_errno_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L5
+                BEQ     _lc_errno_L5
                 LDA     #6
                 TAY
                 TSC
@@ -243,8 +237,7 @@ _lc_errno_L5
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_errno_L6
+                BEQ     _lc_errno_L6
                 LDA     #7
                 TAY
                 TSC

@@ -288,8 +288,7 @@ _arrowarraychain_L4
                 BVC     _arrowarraychain_L7
                 EOR     #$8000
 _arrowarraychain_L7
-                BMI     *+5
-                BRL     _arrowarraychain_L6
+                BPL     _arrowarraychain_L6
                 LDA     #0
                 ASL
                 CLC
@@ -349,7 +348,7 @@ _arrowarraychain_L7
                 STA     [_fcc_fpr0]
 _arrowarraychain_L5
                 INC     _fcc_img0
-                BRL     _arrowarraychain_L4
+                BRA     _arrowarraychain_L4
 _arrowarraychain_L6
                 LDA     #0
                 ASL
@@ -428,8 +427,7 @@ _arrowarraychain_L6
                 TAX
                 TXA
                 CMP     #32
-                BNE     *+5
-                BRL     _arrowarraychain_L8
+                BEQ     _arrowarraychain_L8
                 LDA     #10
                 TAY
                 TSC
@@ -474,8 +472,7 @@ _arrowarraychain_L8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L9
+                BEQ     _arrowarraychain_L9
                 LDA     #20
                 TAY
                 TSC
@@ -533,8 +530,7 @@ _arrowarraychain_L9
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L10
+                BEQ     _arrowarraychain_L10
                 LDA     #21
                 TAY
                 TSC
@@ -563,8 +559,7 @@ _arrowarraychain_L10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L11
+                BEQ     _arrowarraychain_L11
                 LDA     #22
                 TAY
                 TSC
@@ -633,8 +628,7 @@ _arrowarraychain_L11
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L12
+                BEQ     _arrowarraychain_L12
                 LDA     #23
                 TAY
                 TSC
@@ -679,8 +673,7 @@ _arrowarraychain_L12
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L13
+                BEQ     _arrowarraychain_L13
                 LDA     #24
                 TAY
                 TSC
@@ -749,24 +742,21 @@ _arrowarraychain_L13
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arrowarraychain_L15
+                BNE     _arrowarraychain_L15
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arrowarraychain_L15
+                BNE     _arrowarraychain_L15
                 LDA     #0
-                BRL     _arrowarraychain_L16
+                BRA     _arrowarraychain_L16
 _arrowarraychain_L15
                 LDA     #1
 _arrowarraychain_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowarraychain_L14
+                BEQ     _arrowarraychain_L14
                 LDA     #25
                 TAY
                 TSC
@@ -839,24 +829,21 @@ _arrowarraychain_L14
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arrowarraychain_L18
+                BNE     _arrowarraychain_L18
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arrowarraychain_L18
+                BNE     _arrowarraychain_L18
                 LDA     #0
-                BRL     _arrowarraychain_L19
+                BRA     _arrowarraychain_L19
 _arrowarraychain_L18
                 LDA     #1
 _arrowarraychain_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowarraychain_L17
+                BEQ     _arrowarraychain_L17
                 LDA     #26
                 TAY
                 TSC
@@ -912,8 +899,7 @@ _arrowarraychain_L17
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L20
+                BEQ     _arrowarraychain_L20
                 LDA     #27
                 TAY
                 TSC
@@ -982,8 +968,7 @@ _arrowarraychain_L20
                 TAX
                 TXA
                 CMP     #512
-                BNE     *+5
-                BRL     _arrowarraychain_L21
+                BEQ     _arrowarraychain_L21
                 LDA     #28
                 TAY
                 TSC
@@ -1035,8 +1020,7 @@ _arrowarraychain_L21
                 TAX
                 TXA
                 CMP     #514
-                BNE     *+5
-                BRL     _arrowarraychain_L22
+                BEQ     _arrowarraychain_L22
                 LDA     #29
                 TAY
                 TSC
@@ -1123,8 +1107,7 @@ _arrowarraychain_L22
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L23
+                BEQ     _arrowarraychain_L23
                 LDA     #30
                 TAY
                 TSC
@@ -1209,8 +1192,7 @@ _arrowarraychain_L23
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L24
+                BEQ     _arrowarraychain_L24
                 LDA     #40
                 TAY
                 TSC
@@ -1253,8 +1235,7 @@ _arrowarraychain_L24
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L25
+                BEQ     _arrowarraychain_L25
                 LDA     #41
                 TAY
                 TSC
@@ -1296,24 +1277,21 @@ _arrowarraychain_L25
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arrowarraychain_L27
+                BNE     _arrowarraychain_L27
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arrowarraychain_L27
+                BNE     _arrowarraychain_L27
                 LDA     #0
-                BRL     _arrowarraychain_L28
+                BRA     _arrowarraychain_L28
 _arrowarraychain_L27
                 LDA     #1
 _arrowarraychain_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowarraychain_L26
+                BEQ     _arrowarraychain_L26
                 LDA     #42
                 TAY
                 TSC
@@ -1356,8 +1334,7 @@ _arrowarraychain_L26
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L29
+                BEQ     _arrowarraychain_L29
                 LDA     #43
                 TAY
                 TSC
@@ -1400,8 +1377,7 @@ _arrowarraychain_L29
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L30
+                BEQ     _arrowarraychain_L30
                 LDA     #44
                 TAY
                 TSC
@@ -1429,8 +1405,7 @@ _arrowarraychain_L30
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L31
+                BEQ     _arrowarraychain_L31
                 LDA     #45
                 TAY
                 TSC
@@ -1456,8 +1431,7 @@ _arrowarraychain_L31
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L32
+                BEQ     _arrowarraychain_L32
                 LDA     #46
                 TAY
                 TSC
@@ -1495,8 +1469,7 @@ _arrowarraychain_L32
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _arrowarraychain_L33
+                BEQ     _arrowarraychain_L33
                 LDA     #47
                 TAY
                 TSC
@@ -1534,24 +1507,21 @@ _arrowarraychain_L33
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _arrowarraychain_L35
+                BNE     _arrowarraychain_L35
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _arrowarraychain_L35
+                BNE     _arrowarraychain_L35
                 LDA     #0
-                BRL     _arrowarraychain_L36
+                BRA     _arrowarraychain_L36
 _arrowarraychain_L35
                 LDA     #1
 _arrowarraychain_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _arrowarraychain_L34
+                BEQ     _arrowarraychain_L34
                 LDA     #48
                 TAY
                 TSC

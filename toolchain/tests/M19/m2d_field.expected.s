@@ -149,10 +149,9 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _m2d_field_L0
+                BNE     _m2d_field_L0
                 LDA     #16
-                BRL     _m2d_field_L1
+                BRA     _m2d_field_L1
 _m2d_field_L0
                 LDA     #0
 _m2d_field_L1
@@ -167,10 +166,9 @@ _m2d_field_L1
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _m2d_field_L2
+                BNE     _m2d_field_L2
                 LDA     #32
-                BRL     _m2d_field_L3
+                BRA     _m2d_field_L3
 _m2d_field_L2
                 LDA     #0
 _m2d_field_L3
@@ -184,10 +182,9 @@ _m2d_field_L3
                 TAX
                 TXA
                 CMP     #24
-                BEQ     *+5
-                BRL     _m2d_field_L4
+                BNE     _m2d_field_L4
                 LDA     #64
-                BRL     _m2d_field_L5
+                BRA     _m2d_field_L5
 _m2d_field_L4
                 LDA     #0
 _m2d_field_L5
@@ -201,24 +198,21 @@ _m2d_field_L5
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _m2d_field_L8
+                BNE     _m2d_field_L8
                 LDA     F+26
                 TAX
                 TXA
                 CMP     #200
-                BEQ     *+5
-                BRL     _m2d_field_L8
+                BNE     _m2d_field_L8
                 LDA     #1
-                BRL     _m2d_field_L9
+                BRA     _m2d_field_L9
 _m2d_field_L8
                 LDA     #0
 _m2d_field_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_field_L6
+                BEQ     _m2d_field_L6
                 LDA     #128
-                BRL     _m2d_field_L7
+                BRA     _m2d_field_L7
 _m2d_field_L6
                 LDA     #0
 _m2d_field_L7

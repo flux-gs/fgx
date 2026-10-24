@@ -82,8 +82,7 @@ _lshiftvar_L3
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _lshiftvar_L5
+                BNE     _lshiftvar_L5
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -105,16 +104,14 @@ _lshiftvar_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L5
+                BEQ     _lshiftvar_L5
                 LDA     #1
-                BRL     _lshiftvar_L6
+                BRA     _lshiftvar_L6
 _lshiftvar_L5
                 LDA     #0
 _lshiftvar_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L4
+                BEQ     _lshiftvar_L4
                 LDA     #1
                 TAY
                 TSC
@@ -130,8 +127,7 @@ _lshiftvar_L4
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _lshiftvar_L8
+                BNE     _lshiftvar_L8
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -153,16 +149,14 @@ _lshiftvar_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L8
+                BEQ     _lshiftvar_L8
                 LDA     #1
-                BRL     _lshiftvar_L9
+                BRA     _lshiftvar_L9
 _lshiftvar_L8
                 LDA     #0
 _lshiftvar_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L7
+                BEQ     _lshiftvar_L7
                 LDA     #2
                 TAY
                 TSC
@@ -178,8 +172,7 @@ _lshiftvar_L7
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _lshiftvar_L11
+                BNE     _lshiftvar_L11
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -201,16 +194,14 @@ _lshiftvar_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L11
+                BEQ     _lshiftvar_L11
                 LDA     #1
-                BRL     _lshiftvar_L12
+                BRA     _lshiftvar_L12
 _lshiftvar_L11
                 LDA     #0
 _lshiftvar_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L10
+                BEQ     _lshiftvar_L10
                 LDA     #3
                 TAY
                 TSC
@@ -226,8 +217,7 @@ _lshiftvar_L10
                 TAX
                 TXA
                 CMP     #12
-                BEQ     *+5
-                BRL     _lshiftvar_L14
+                BNE     _lshiftvar_L14
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
@@ -249,16 +239,14 @@ _lshiftvar_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L14
+                BEQ     _lshiftvar_L14
                 LDA     #1
-                BRL     _lshiftvar_L15
+                BRA     _lshiftvar_L15
 _lshiftvar_L14
                 LDA     #0
 _lshiftvar_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L13
+                BEQ     _lshiftvar_L13
                 LDA     #4
                 TAY
                 TSC
@@ -384,8 +372,7 @@ _lshiftvar_L20
                 BVC     _lshiftvar_L22
                 EOR     #$8000
 _lshiftvar_L22
-                BMI     *+5
-                BRL     _lshiftvar_L21
+                BPL     _lshiftvar_L21
                 LDA     _fcc_img9
                 STA     _fcc_long_hi
                 LDA     _fcc_img8
@@ -410,7 +397,7 @@ _lshiftvar_L22
                 LDA     _fcc_long_hi
                 STA     _fcc_img9
                 TYA
-                BRL     _lshiftvar_L20
+                BRA     _lshiftvar_L20
 _lshiftvar_L21
                 LDA     _fcc_img13
                 STA     _fcc_long_hi
@@ -433,8 +420,7 @@ _lshiftvar_L21
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L23
+                BEQ     _lshiftvar_L23
                 LDA     #10
                 CLC
                 ADC     _fcc_img0
@@ -532,8 +518,7 @@ _lshiftvar_L28
                 BVC     _lshiftvar_L30
                 EOR     #$8000
 _lshiftvar_L30
-                BMI     *+5
-                BRL     _lshiftvar_L29
+                BPL     _lshiftvar_L29
                 LDA     _fcc_img11
                 STA     _fcc_long_hi
                 LDA     _fcc_img10
@@ -544,7 +529,7 @@ _lshiftvar_L30
                 LDA     _fcc_long_hi
                 STA     _fcc_img11
                 TYA
-                BRL     _lshiftvar_L28
+                BRA     _lshiftvar_L28
 _lshiftvar_L29
                 LDA     _fcc_img15
                 STA     _fcc_long_hi
@@ -567,8 +552,7 @@ _lshiftvar_L29
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lshiftvar_L31
+                BEQ     _lshiftvar_L31
                 LDA     #20
                 CLC
                 ADC     _fcc_img0

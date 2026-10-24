@@ -24,18 +24,14 @@ main_stkok        TCS
                 LDA     #1
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #1
-                BNE     *+5
-                BRL     _switch_fall_L1
+                BEQ     _switch_fall_L1
                 CMP     #2
-                BNE     *+5
-                BRL     _switch_fall_L2
+                BEQ     _switch_fall_L2
                 CMP     #3
-                BNE     *+5
-                BRL     _switch_fall_L3
+                BEQ     _switch_fall_L3
                 CMP     #4
-                BNE     *+5
-                BRL     _switch_fall_L4
-                BRL     _switch_fall_L0
+                BEQ     _switch_fall_L4
+                BRA     _switch_fall_L0
 _switch_fall_L1
                 LDA     _fcc_img0
                 TAX
@@ -57,7 +53,7 @@ _switch_fall_L3
                 CLC
                 ADC     #14
                 STA     _fcc_img0
-                BRL     _switch_fall_L0
+                BRA     _switch_fall_L0
 _switch_fall_L4
                 LDA     #999
                 STA     _fcc_img0

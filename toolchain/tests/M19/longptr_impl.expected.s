@@ -120,18 +120,16 @@ arg_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L0
+                BNE     _longptr_impl_L0
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L0
+                BNE     _longptr_impl_L0
                 LDA     #1
-                BRL     _longptr_impl_L1
+                BRA     _longptr_impl_L1
 _longptr_impl_L0
                 LDA     #0
 _longptr_impl_L1
@@ -289,8 +287,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L2
+                BEQ     _longptr_impl_L2
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -315,24 +312,21 @@ _longptr_impl_L2
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L4
+                BNE     _longptr_impl_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L4
+                BNE     _longptr_impl_L4
                 LDA     #1
-                BRL     _longptr_impl_L5
+                BRA     _longptr_impl_L5
 _longptr_impl_L4
                 LDA     #0
 _longptr_impl_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L3
+                BEQ     _longptr_impl_L3
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -363,24 +357,21 @@ _longptr_impl_L3
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L7
+                BNE     _longptr_impl_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L7
+                BNE     _longptr_impl_L7
                 LDA     #1
-                BRL     _longptr_impl_L8
+                BRA     _longptr_impl_L8
 _longptr_impl_L7
                 LDA     #0
 _longptr_impl_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L6
+                BEQ     _longptr_impl_L6
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -458,24 +449,21 @@ _longptr_impl_L6
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L10
+                BNE     _longptr_impl_L10
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L10
+                BNE     _longptr_impl_L10
                 LDA     #1
-                BRL     _longptr_impl_L11
+                BRA     _longptr_impl_L11
 _longptr_impl_L10
                 LDA     #0
 _longptr_impl_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L9
+                BEQ     _longptr_impl_L9
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -529,24 +517,21 @@ _longptr_impl_L9
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L13
+                BNE     _longptr_impl_L13
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L13
+                BNE     _longptr_impl_L13
                 LDA     #1
-                BRL     _longptr_impl_L14
+                BRA     _longptr_impl_L14
 _longptr_impl_L13
                 LDA     #0
 _longptr_impl_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L12
+                BEQ     _longptr_impl_L12
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -575,24 +560,21 @@ _longptr_impl_L12
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L16
+                BNE     _longptr_impl_L16
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L16
+                BNE     _longptr_impl_L16
                 LDA     #1
-                BRL     _longptr_impl_L17
+                BRA     _longptr_impl_L17
 _longptr_impl_L16
                 LDA     #0
 _longptr_impl_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L15
+                BEQ     _longptr_impl_L15
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -657,24 +639,21 @@ _longptr_impl_L15
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L19
+                BNE     _longptr_impl_L19
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L19
+                BNE     _longptr_impl_L19
                 LDA     #1
-                BRL     _longptr_impl_L20
+                BRA     _longptr_impl_L20
 _longptr_impl_L19
                 LDA     #0
 _longptr_impl_L20
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L18
+                BEQ     _longptr_impl_L18
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA
@@ -709,8 +688,7 @@ _longptr_impl_L18
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L22
+                BEQ     _longptr_impl_L22
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
                 LDA     19,S   ; fccstk d=0 b=19
@@ -732,32 +710,28 @@ _longptr_impl_L18
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _longptr_impl_L24
+                BNE     _longptr_impl_L24
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _longptr_impl_L24
+                BNE     _longptr_impl_L24
                 LDA     #1
-                BRL     _longptr_impl_L25
+                BRA     _longptr_impl_L25
 _longptr_impl_L24
                 LDA     #0
 _longptr_impl_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L22
+                BEQ     _longptr_impl_L22
                 LDA     #1
-                BRL     _longptr_impl_L23
+                BRA     _longptr_impl_L23
 _longptr_impl_L22
                 LDA     #0
 _longptr_impl_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _longptr_impl_L21
+                BEQ     _longptr_impl_L21
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
                 TXA

@@ -131,8 +131,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #101
-                BEQ     *+5
-                BRL     _m2d_row2_L0
+                BNE     _m2d_row2_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -179,8 +178,7 @@ _m2d_row2_L0
                 TAX
                 TXA
                 CMP     #101
-                BEQ     *+5
-                BRL     _m2d_row2_L1
+                BNE     _m2d_row2_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -192,22 +190,19 @@ _m2d_row2_L1
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _m2d_row2_L3
+                BNE     _m2d_row2_L3
                 LDA     #6
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _m2d_row2_L3
+                BNE     _m2d_row2_L3
                 LDA     #1
-                BRL     _m2d_row2_L4
+                BRA     _m2d_row2_L4
 _m2d_row2_L3
                 LDA     #0
 _m2d_row2_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row2_L2
+                BEQ     _m2d_row2_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -219,22 +214,19 @@ _m2d_row2_L2
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _m2d_row2_L6
+                BNE     _m2d_row2_L6
                 LDA     #1
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _m2d_row2_L6
+                BNE     _m2d_row2_L6
                 LDA     #1
-                BRL     _m2d_row2_L7
+                BRA     _m2d_row2_L7
 _m2d_row2_L6
                 LDA     #0
 _m2d_row2_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row2_L5
+                BEQ     _m2d_row2_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -296,8 +288,7 @@ _m2d_row2_L5
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _m2d_row2_L8
+                BNE     _m2d_row2_L8
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -344,8 +335,7 @@ _m2d_row2_L8
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _m2d_row2_L9
+                BNE     _m2d_row2_L9
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -401,8 +391,7 @@ _m2d_row2_L9
                 TAX
                 TXA
                 CMP     #122
-                BEQ     *+5
-                BRL     _m2d_row2_L10
+                BNE     _m2d_row2_L10
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -463,24 +452,21 @@ _m2d_row2_L10
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _m2d_row2_L12
+                BNE     _m2d_row2_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _m2d_row2_L12
+                BNE     _m2d_row2_L12
                 LDA     #1
-                BRL     _m2d_row2_L13
+                BRA     _m2d_row2_L13
 _m2d_row2_L12
                 LDA     #0
 _m2d_row2_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _m2d_row2_L11
+                BEQ     _m2d_row2_L11
                 LDA     _fcc_img0
                 TAX
                 TXA

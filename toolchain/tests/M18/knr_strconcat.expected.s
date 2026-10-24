@@ -87,8 +87,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #100
-                BNE     *+5
-                BRL     _knr_strconcat_L0
+                BEQ     _knr_strconcat_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -108,8 +107,7 @@ _knr_strconcat_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _knr_strconcat_L1
+                BEQ     _knr_strconcat_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -131,8 +129,7 @@ _knr_strconcat_L1
                 TAX
                 TXA
                 CMP     #33
-                BNE     *+5
-                BRL     _knr_strconcat_L2
+                BEQ     _knr_strconcat_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -154,8 +151,7 @@ _knr_strconcat_L2
                 TAX
                 TXA
                 CMP     #100
-                BNE     *+5
-                BRL     _knr_strconcat_L3
+                BEQ     _knr_strconcat_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -177,8 +173,7 @@ _knr_strconcat_L3
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _knr_strconcat_L4
+                BEQ     _knr_strconcat_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -200,8 +195,7 @@ _knr_strconcat_L4
                 TAX
                 TXA
                 CMP     #50
-                BNE     *+5
-                BRL     _knr_strconcat_L5
+                BEQ     _knr_strconcat_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -221,8 +215,7 @@ _knr_strconcat_L5
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _knr_strconcat_L6
+                BEQ     _knr_strconcat_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -232,8 +225,7 @@ _knr_strconcat_L5
 _knr_strconcat_L6
                 LDA     _fcc_img0
                 CMP     #0
-                BNE     *+5
-                BRL     _knr_strconcat_L7
+                BEQ     _knr_strconcat_L7
                 LDA     _fcc_img0
                 TAY
                 TSC

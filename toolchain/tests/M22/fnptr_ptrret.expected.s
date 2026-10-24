@@ -152,24 +152,21 @@ _fnptr_ptrret_L1
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _fnptr_ptrret_L3
+                BNE     _fnptr_ptrret_L3
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _fnptr_ptrret_L3
+                BNE     _fnptr_ptrret_L3
                 LDA     #0
-                BRL     _fnptr_ptrret_L4
+                BRA     _fnptr_ptrret_L4
 _fnptr_ptrret_L3
                 LDA     #1
 _fnptr_ptrret_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _fnptr_ptrret_L2
+                BEQ     _fnptr_ptrret_L2
                 LDA     #1
                 TAY
                 TSC

@@ -77,8 +77,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #64
-                BNE     *+5
-                BRL     _pre_gincdec_L0
+                BEQ     _pre_gincdec_L0
                 LDA     #1
                 TAY
                 TSC
@@ -110,8 +109,7 @@ _pre_gincdec_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _pre_gincdec_L1
+                BEQ     _pre_gincdec_L1
                 LDA     #2
                 TAY
                 TSC

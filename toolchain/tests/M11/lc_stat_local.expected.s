@@ -79,8 +79,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _lc_stat_local_L0
+                BEQ     _lc_stat_local_L0
                 LDA     #1
                 TAY
                 TSC
@@ -97,8 +96,7 @@ _lc_stat_local_L0
                 TXA
                 AND     #32768
                 CMP     #0
-                BEQ     *+5
-                BRL     _lc_stat_local_L1
+                BNE     _lc_stat_local_L1
                 LDA     #2
                 TAY
                 TSC

@@ -33,8 +33,7 @@ _glptrsub_L0
                 BVC     _glptrsub_L3
                 EOR     #$8000
 _glptrsub_L3
-                BMI     *+5
-                BRL     _glptrsub_L2
+                BPL     _glptrsub_L2
                 LDA     #larr
                 PHA
                 LDA     _fcc_img0
@@ -59,7 +58,7 @@ _glptrsub_L3
                 PLA
 _glptrsub_L1
                 INC     _fcc_img0
-                BRL     _glptrsub_L0
+                BRA     _glptrsub_L0
 _glptrsub_L2
                 PHA
                 SEP     #$20
@@ -173,8 +172,7 @@ _glptrsub_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L4
+                BEQ     _glptrsub_L4
                 LDA     #1
                 TAY
                 TSC
@@ -211,8 +209,7 @@ _glptrsub_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L5
+                BEQ     _glptrsub_L5
                 LDA     #2
                 TAY
                 TSC
@@ -284,8 +281,7 @@ _glptrsub_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L6
+                BEQ     _glptrsub_L6
                 LDA     #3
                 TAY
                 TSC
@@ -335,8 +331,7 @@ _glptrsub_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L7
+                BEQ     _glptrsub_L7
                 LDA     #4
                 TAY
                 TSC
@@ -386,8 +381,7 @@ _glptrsub_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _glptrsub_L8
+                BEQ     _glptrsub_L8
                 LDA     #5
                 TAY
                 TSC

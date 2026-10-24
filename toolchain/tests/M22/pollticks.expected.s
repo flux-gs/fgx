@@ -25,14 +25,12 @@ _pollticks_L0
                 JSR     _fcc_safepoint
                 FGX2_FARCALL pollkey
                 CMP     #0
-                BPL     *+5
-                BRL     _pollticks_L1
-                BRL     _pollticks_L0
+                BMI     _pollticks_L1
+                BRA     _pollticks_L0
 _pollticks_L1
                 FGX2_FARCALL yield
                 CMP     #0
-                BNE     *+5
-                BRL     _pollticks_L2
+                BEQ     _pollticks_L2
                 LDA     #1
                 TAY
                 TSC
@@ -46,8 +44,7 @@ _pollticks_L1
 _pollticks_L2
                 FGX2_FARCALL pollkey
                 CMP     #0
-                BPL     *+5
-                BRL     _pollticks_L3
+                BMI     _pollticks_L3
                 LDA     #2
                 TAY
                 TSC
@@ -67,8 +64,7 @@ _pollticks_L3
                 SBC     1,S   ; fccstk d=0 b=1
                 STA     3,S   ; fccstk d=0 b=3
                 CMP     #0
-                BMI     *+5
-                BRL     _pollticks_L4
+                BPL     _pollticks_L4
                 LDA     #3
                 TAY
                 TSC

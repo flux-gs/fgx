@@ -117,8 +117,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L0
+                BEQ     _longfield_L0
                 LDA     #1
                 TAY
                 TSC
@@ -170,8 +169,7 @@ _longfield_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L1
+                BEQ     _longfield_L1
                 LDA     #2
                 TAY
                 TSC
@@ -214,8 +212,7 @@ _longfield_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L2
+                BEQ     _longfield_L2
                 LDA     #3
                 TAY
                 TSC
@@ -232,8 +229,7 @@ _longfield_L2
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _longfield_L3
+                BEQ     _longfield_L3
                 LDA     #4
                 TAY
                 TSC
@@ -266,8 +262,7 @@ _longfield_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L4
+                BEQ     _longfield_L4
                 LDA     #5
                 TAY
                 TSC
@@ -300,22 +295,19 @@ _longfield_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _longfield_L6
+                BNE     _longfield_L6
                 LDA     gt+4
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _longfield_L6
+                BNE     _longfield_L6
                 LDA     #0
-                BRL     _longfield_L7
+                BRA     _longfield_L7
 _longfield_L6
                 LDA     #1
 _longfield_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L5
+                BEQ     _longfield_L5
                 LDA     #6
                 TAY
                 TSC
@@ -363,8 +355,7 @@ _longfield_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _longfield_L9
+                BNE     _longfield_L9
                 LDA     #1
                 ASL
                 INC
@@ -384,16 +375,14 @@ _longfield_L5
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _longfield_L9
+                BNE     _longfield_L9
                 LDA     #0
-                BRL     _longfield_L10
+                BRA     _longfield_L10
 _longfield_L9
                 LDA     #1
 _longfield_L10
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L8
+                BEQ     _longfield_L8
                 LDA     #7
                 TAY
                 TSC
@@ -441,8 +430,7 @@ _longfield_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _longfield_L12
+                BNE     _longfield_L12
                 LDA     #0
                 ASL
                 CLC
@@ -463,16 +451,14 @@ _longfield_L8
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _longfield_L12
+                BNE     _longfield_L12
                 LDA     #0
-                BRL     _longfield_L13
+                BRA     _longfield_L13
 _longfield_L12
                 LDA     #1
 _longfield_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _longfield_L11
+                BEQ     _longfield_L11
                 LDA     #8
                 TAY
                 TSC

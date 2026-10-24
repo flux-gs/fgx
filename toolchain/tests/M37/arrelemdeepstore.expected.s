@@ -311,8 +311,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #21930
-                BNE     *+5
-                BRL     _arrelemdeepstore_L4
+                BEQ     _arrelemdeepstore_L4
                 LDA     #1
                 TAY
                 TSC
@@ -328,8 +327,7 @@ _arrelemdeepstore_L4
                 TAX
                 TXA
                 CMP     #12288
-                BNE     *+5
-                BRL     _arrelemdeepstore_L5
+                BEQ     _arrelemdeepstore_L5
                 LDA     #2
                 TAY
                 TSC
@@ -345,8 +343,7 @@ _arrelemdeepstore_L5
                 TAX
                 TXA
                 CMP     #12290
-                BNE     *+5
-                BRL     _arrelemdeepstore_L6
+                BEQ     _arrelemdeepstore_L6
                 LDA     #3
                 TAY
                 TSC
@@ -362,8 +359,7 @@ _arrelemdeepstore_L6
                 TAX
                 TXA
                 CMP     #8193
-                BNE     *+5
-                BRL     _arrelemdeepstore_L7
+                BEQ     _arrelemdeepstore_L7
                 LDA     #4
                 TAY
                 TSC
@@ -379,8 +375,7 @@ _arrelemdeepstore_L7
                 TAX
                 TXA
                 CMP     #4097
-                BNE     *+5
-                BRL     _arrelemdeepstore_L8
+                BEQ     _arrelemdeepstore_L8
                 LDA     #5
                 TAY
                 TSC
@@ -396,8 +391,7 @@ _arrelemdeepstore_L8
                 TAX
                 TXA
                 CMP     #32768
-                BNE     *+5
-                BRL     _arrelemdeepstore_L9
+                BEQ     _arrelemdeepstore_L9
                 LDA     #6
                 TAY
                 TSC
@@ -439,8 +433,7 @@ _arrelemdeepstore_L9
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _arrelemdeepstore_L10
+                BEQ     _arrelemdeepstore_L10
                 LDA     #10
                 TAY
                 TSC
@@ -456,8 +449,7 @@ _arrelemdeepstore_L10
                 TAX
                 TXA
                 CMP     #12289
-                BNE     *+5
-                BRL     _arrelemdeepstore_L11
+                BEQ     _arrelemdeepstore_L11
                 LDA     #11
                 TAY
                 TSC
@@ -473,8 +465,7 @@ _arrelemdeepstore_L11
                 TAX
                 TXA
                 CMP     #8194
-                BNE     *+5
-                BRL     _arrelemdeepstore_L12
+                BEQ     _arrelemdeepstore_L12
                 LDA     #12
                 TAY
                 TSC
@@ -490,8 +481,7 @@ _arrelemdeepstore_L12
                 TAX
                 TXA
                 CMP     #4098
-                BNE     *+5
-                BRL     _arrelemdeepstore_L13
+                BEQ     _arrelemdeepstore_L13
                 LDA     #13
                 TAY
                 TSC
@@ -533,8 +523,7 @@ _arrelemdeepstore_L13
                 TAX
                 TXA
                 CMP     #3855
-                BNE     *+5
-                BRL     _arrelemdeepstore_L14
+                BEQ     _arrelemdeepstore_L14
                 LDA     #20
                 TAY
                 TSC
@@ -550,8 +539,7 @@ _arrelemdeepstore_L14
                 TAX
                 TXA
                 CMP     #24576
-                BNE     *+5
-                BRL     _arrelemdeepstore_L15
+                BEQ     _arrelemdeepstore_L15
                 LDA     #21
                 TAY
                 TSC
@@ -567,8 +555,7 @@ _arrelemdeepstore_L15
                 TAX
                 TXA
                 CMP     #20480
-                BNE     *+5
-                BRL     _arrelemdeepstore_L16
+                BEQ     _arrelemdeepstore_L16
                 LDA     #22
                 TAY
                 TSC
@@ -584,8 +571,7 @@ _arrelemdeepstore_L16
                 TAX
                 TXA
                 CMP     #12288
-                BNE     *+5
-                BRL     _arrelemdeepstore_L17
+                BEQ     _arrelemdeepstore_L17
                 LDA     #23
                 TAY
                 TSC
@@ -601,8 +587,7 @@ _arrelemdeepstore_L17
                 TAX
                 TXA
                 CMP     #28673
-                BNE     *+5
-                BRL     _arrelemdeepstore_L18
+                BEQ     _arrelemdeepstore_L18
                 LDA     #24
                 TAY
                 TSC
@@ -668,8 +653,7 @@ _arrelemdeepstore_L18
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemdeepstore_L19
+                BEQ     _arrelemdeepstore_L19
                 LDA     #30
                 TAY
                 TSC
@@ -702,8 +686,7 @@ _arrelemdeepstore_L19
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrelemdeepstore_L20
+                BEQ     _arrelemdeepstore_L20
                 LDA     #31
                 TAY
                 TSC
@@ -719,8 +702,7 @@ _arrelemdeepstore_L20
                 TAX
                 TXA
                 CMP     #12290
-                BNE     *+5
-                BRL     _arrelemdeepstore_L21
+                BEQ     _arrelemdeepstore_L21
                 LDA     #32
                 TAY
                 TSC
@@ -784,8 +766,7 @@ _arrelemdeepstore_L21
                 TAX
                 TXA
                 CMP     #32382
-                BNE     *+5
-                BRL     _arrelemdeepstore_L22
+                BEQ     _arrelemdeepstore_L22
                 LDA     #50
                 TAY
                 TSC

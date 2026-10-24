@@ -57,8 +57,7 @@ _pidx_param_L0
                 BVC     _pidx_param_L3
                 EOR     #$8000
 _pidx_param_L3
-                BMI     *+5
-                BRL     _pidx_param_L2
+                BPL     _pidx_param_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img3
@@ -79,7 +78,7 @@ _pidx_param_L3
                 STA     _fcc_img1
 _pidx_param_L1
                 INC     _fcc_img0
-                BRL     _pidx_param_L0
+                BRA     _pidx_param_L0
 _pidx_param_L2
                 LDA     _fcc_img1
                 TAY

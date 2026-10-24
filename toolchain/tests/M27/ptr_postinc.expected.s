@@ -52,13 +52,12 @@ _ptr_postinc_L0
                 AND     #$00FF
                 STA     _fcc_img1
                 CMP     #0
-                BNE     *+5
-                BRL     _ptr_postinc_L1
+                BEQ     _ptr_postinc_L1
                 LDA     _fcc_img0
                 CLC
                 ADC     _fcc_img1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L0
+                BRA     _ptr_postinc_L0
 _ptr_postinc_L1
                 LDA     _fcc_img0
                 TAY
@@ -137,8 +136,7 @@ _ptr_postinc_L2
                 BVC     _ptr_postinc_L4
                 EOR     #$8000
 _ptr_postinc_L4
-                BMI     *+5
-                BRL     _ptr_postinc_L3
+                BPL     _ptr_postinc_L3
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_img2]
@@ -155,7 +153,7 @@ _ptr_postinc_L4
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L2
+                BRA     _ptr_postinc_L2
 _ptr_postinc_L3
                 LDA     _fcc_img1
                 TAY
@@ -234,8 +232,7 @@ _ptr_postinc_L5
                 BVC     _ptr_postinc_L7
                 EOR     #$8000
 _ptr_postinc_L7
-                BMI     *+5
-                BRL     _ptr_postinc_L6
+                BPL     _ptr_postinc_L6
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_img2]
@@ -256,7 +253,7 @@ _ptr_postinc_L7
                 SEC
                 SBC     #1
                 STA     _fcc_img0
-                BRL     _ptr_postinc_L5
+                BRA     _ptr_postinc_L5
 _ptr_postinc_L6
                 LDA     _fcc_img1
                 TAY

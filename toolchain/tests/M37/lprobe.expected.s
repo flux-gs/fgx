@@ -65,8 +65,7 @@ _lprobe_L0
                 BVC     _lprobe_L3
                 EOR     #$8000
 _lprobe_L3
-                BMI     *+5
-                BRL     _lprobe_L2
+                BPL     _lprobe_L2
                 SEP     #$20
                 MX      %10
                 LDA     htab+2
@@ -271,8 +270,7 @@ _lprobe_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L4
+                BEQ     _lprobe_L4
                 LDA     #1
                 STA     9,S   ; fccstk d=0 b=9
 _lprobe_L4
@@ -318,8 +316,7 @@ main_uL_probe
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L5
+                BEQ     _lprobe_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
@@ -366,8 +363,7 @@ _lprobe_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L6
+                BEQ     _lprobe_L6
                 LDA     #1
                 TAY
                 TSC
@@ -426,8 +422,7 @@ _lprobe_L6
                 TAX
                 TXA
                 CMP     #77
-                BNE     *+5
-                BRL     _lprobe_L8
+                BEQ     _lprobe_L8
                 LDA     #2
                 TAY
                 TSC
@@ -477,8 +472,7 @@ _lprobe_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L9
+                BEQ     _lprobe_L9
                 LDA     #3
                 TAY
                 TSC
@@ -527,8 +521,7 @@ _lprobe_L9
                 TYA
                 JSR     _fcc_long_les
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L10
+                BEQ     _lprobe_L10
                 LDA     #4
                 TAY
                 TSC
@@ -616,8 +609,7 @@ _lprobe_L10
                 TAX
                 TXA
                 CMP     #88
-                BNE     *+5
-                BRL     _lprobe_L11
+                BEQ     _lprobe_L11
                 LDA     #5
                 TAY
                 TSC
@@ -654,8 +646,7 @@ _lprobe_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _lprobe_L12
+                BEQ     _lprobe_L12
                 LDA     #6
                 TAY
                 TSC

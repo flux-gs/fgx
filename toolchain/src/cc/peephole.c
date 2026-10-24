@@ -1024,6 +1024,274 @@ pat_tmpb_dead_store(Line *lines, size_t n)
     }
 }
 
+/* --- branch relaxation --- */
+
+static int
+mn_is(const char *m, const char *const *t)
+{
+    for (; *t; t++) if (strcmp(m, *t) == 0) return 1;
+    return 0;
+}
+
+static const char *const ph_cond_br[] = {
+    "BEQ","BNE","BCC","BCS","BMI","BPL","BVC","BVS", NULL
+};
+
+/* The runtime's direct-page cells (fcc_runtime.s): an operand naming one,
+ * with or without a +k, assembles to a one-byte address. */
+static int
+dp_operand(const char *o)
+{
+    static const char *const dp[] = {
+        "_fcc_fb","_fcc_sfp","_fcc_stkfloor","_fcc_ptr","_fcc_ptr2",
+        "_fcc_fp","_fcc_long_hi","_fcc_long_b_lo","_fcc_long_b_hi", NULL
+    };
+    char nm[PH_TOK];
+    size_t k = 0;
+    while (o[k] && o[k] != '+' && o[k] != ',' && k + 1 < sizeof nm) {
+        nm[k] = o[k];
+        k++;
+    }
+    nm[k] = '\0';
+    if ((strncmp(nm, "_fcc_fpr", 8) == 0 && nm[8] >= '0' && nm[8] <= '7' && !nm[9]) ||
+        (strncmp(nm, "_fcc_img", 8) == 0 && isdigit((unsigned char)nm[8])))
+        return 1;
+    return mn_is(nm, dp);
+}
+
+/* An upper bound on the bytes Merlin32 assembles line L to, or -1 when this
+ * does not know the line. */
+static int
+insn_size_ub(const Line *L)
+{
+    static const char *const none[] = {
+        "MX","ENT","EQU","=","ANOP","FGX2_EXPORT","FGX_SECT","FGX_ENDS",
+        "FGX2_MODE","FGX2_RELOC_COUNT", NULL
+    };
+    static const char *const one[] = {
+        "CLC","SEC","CLI","SEI","CLV","CLD","SED","TAX","TAY","TXA","TYA",
+        "TSX","TXS","TCS","TSC","TCD","TDC","TXY","TYX","XBA","XCE","INX",
+        "INY","DEX","DEY","NOP","PHA","PLA","PHX","PLX","PHY","PLY","PHB",
+        "PLB","PHD","PLD","PHK","PHP","PLP","RTS","RTL","RTI","INA","DEA", NULL
+    };
+    static const char *const acc[] = {
+        "INC","DEC","ASL","LSR","ROL","ROR", NULL
+    };
+    static const char *const longable[] = {
+        "LDA","STA","ADC","SBC","AND","ORA","EOR","CMP", NULL
+    };
+    static const char *const mem[] = {
+        "LDX","LDY","STX","STY","STZ","INC","DEC","ASL","LSR","ROL","ROR",
+        "BIT","CPX","CPY","TSB","TRB", NULL
+    };
+    static const char *const lng[] = {
+        "LDAL","STAL","ADCL","SBCL","ANDL","ORAL","EORL","CMPL","JSL","JML",
+        "FGX2_FARCALL", NULL
+    };
+    const char *m = L->mnem, *o = L->operand;
+    size_t ml = strlen(m);
+
+    if (!m[0] || mn_is(m, none)) return 0;
+    if (mn_is(m, one)) return 1;
+    if (mn_is(m, acc) && (!o[0] || strcmp(o, "A") == 0)) return 1;
+    if (mn_is(m, ph_cond_br) || strcmp(m, "BRA") == 0) return 2;
+    if (strcmp(m, "BRL") == 0 || strcmp(m, "PER") == 0 ||
+        strcmp(m, "PEA") == 0 || strcmp(m, "JSR") == 0) return 3;
+    if (strcmp(m, "PEI") == 0 || strcmp(m, "REP") == 0 ||
+        strcmp(m, "SEP") == 0) return 2;
+    if (mn_is(m, lng) || strcmp(m, "JMP") == 0) return 4;
+    if (!o[0]) return -1;
+    if (ml > 1 && m[ml - 1] == ':') return 3;      /* forced absolute */
+    if (!mn_is(m, longable) && !mn_is(m, mem)) return -1;
+    if (o[0] == '#') return 3;
+    if (o[0] == '(' || o[0] == '[' || strstr(o, ",S")) return 2;
+    if (dp_operand(o)) return 2;
+    return mn_is(m, longable) && !strstr(o, ",Y") ? 4 : 3;
+}
+
+/* A lower bound on the same, 0 when not known. */
+static int
+insn_size_lb(const Line *L)
+{
+    static const char *const exact[] = {
+        "BRL","PER","PEA","JSR","LDAL","STAL","ADCL","SBCL","ANDL","ORAL",
+        "EORL","CMPL","JSL","JML","FGX2_FARCALL", NULL
+    };
+    int ub = insn_size_ub(L);
+    if (ub <= 1) return ub < 0 ? 0 : ub;
+    return mn_is(L->mnem, exact) ? ub : 2;
+}
+
+typedef struct { const char *name; size_t line; } LabelRef;
+
+static int
+labelref_cmp(const void *a, const void *b)
+{
+    return strcmp(((const LabelRef *)a)->name, ((const LabelRef *)b)->name);
+}
+
+/* The unit's code labels, sorted by name.  Labels are never added, removed
+ * or moved by a pattern, so one table serves the whole run. */
+static LabelRef *g_lab;
+static size_t    g_nlab;
+
+static int
+labels_build(Line *lines, size_t n)
+{
+    size_t i;
+    g_nlab = 0;
+    g_lab = malloc((n + 1) * sizeof *g_lab);
+    if (!g_lab) return 0;
+    for (i = 0; i < n; i++)
+        if (lines[i].label[0] && strcmp(lines[i].mnem, "EQU") != 0 &&
+            strcmp(lines[i].mnem, "=") != 0) {
+            g_lab[g_nlab].name = lines[i].label;
+            g_lab[g_nlab].line = i;
+            g_nlab++;
+        }
+    qsort(g_lab, g_nlab, sizeof *g_lab, labelref_cmp);
+    return 1;
+}
+
+/* The line a code label is defined on, or -1 if none or more than one. */
+static long
+label_line(const char *name)
+{
+    LabelRef key, *r;
+    if (!g_lab) return -1;
+    key.name = name;
+    r = bsearch(&key, g_lab, g_nlab, sizeof *g_lab, labelref_cmp);
+    if (!r) return -1;
+    if ((r > g_lab && strcmp(r[-1].name, name) == 0) ||
+        (r + 1 < g_lab + g_nlab && strcmp(r[1].name, name) == 0))
+        return -1;
+    return (long)r->line;
+}
+
+/* Pattern: a far branch whose target is in reach.  `B!cc *+5 ; BRL L'
+ * becomes `Bcc L', and a lone `BRL L' becomes `BRA L', when L lies within
+ * a branch's -128..+127.  The distance is summed from an upper bound on each
+ * line's size, and a DO/ELSE/FIN block counts as its larger arm, so the real
+ * distance is never greater; shortening a branch only shrinks the others, so
+ * each pass stays sound and a second one finds what the first enabled.  A
+ * line this cannot size refuses every branch across it.  A branch inside the
+ * reach of a `*+N' or `*-N' is left as it is: the skip counts its bytes. */
+static void
+pat_relax_branches(Line *lines, size_t n)
+{
+    long     *off = malloc((n + 1) * sizeof *off);
+    long     *unk = malloc((n + 1) * sizeof *unk);
+    char     *pinned = calloc(n + 1, 1);
+    size_t    i;
+    int       pass, changed = 1;
+
+    if (!off || !unk || !pinned) goto out;
+
+    for (i = 0; i < n; i++) {                  /* the `*+N' skips' reach */
+        const char *o = lines[i].operand;
+        long span, at;
+        size_t j;
+        if (lines[i].dead || lines[i].mnem[0] != 'B' || o[0] != '*') continue;
+        span = strtol(o + 2, NULL, 10);
+        if (o[1] == '-') {                     /* every line it may cross */
+            for (j = i; j-- > 0 && span > 0; )
+                if (lines[j].mnem[0]) { pinned[j] = 1; span--; }
+            continue;
+        }
+        /* Forward: a line is inside while its offset is surely below N.  An
+         * instruction with an operand is at least 2 bytes; a line this does
+         * not size, or a directive, counts 0; past a DO/ELSE/FIN every line
+         * the walk reaches is pinned. */
+        at = 2;
+        for (j = i + 1; j < n && j < i + 64 && at < span; j++) {
+            if (lines[j].dead || !lines[j].mnem[0]) continue;
+            pinned[j] = 1;
+            if (strcmp(lines[j].mnem, "DO") == 0 ||
+                strcmp(lines[j].mnem, "ELSE") == 0 ||
+                strcmp(lines[j].mnem, "FIN") == 0)
+                at = -64 * 4;          /* an arm may not assemble: pin on */
+            else
+                at += insn_size_lb(&lines[j]);
+        }
+    }
+    for (pass = 0; pass < 4 && changed; pass++) {
+        long pos = 0, nunk = 0, base[16], arm[16];
+        int  depth = 0;
+        changed = 0;
+        for (i = 0; i < n; i++) {
+            const char *m = lines[i].mnem;
+            int sz;
+            off[i] = pos;
+            unk[i] = nunk;
+            if (lines[i].dead || !m[0]) continue;
+            if (strcmp(m, "DO") == 0) {
+                if (depth == 16) goto out;     /* nested this deep: none */
+                base[depth] = pos;
+                arm[depth++] = -1;
+                continue;
+            }
+            if (strcmp(m, "ELSE") == 0 && depth > 0) {
+                arm[depth - 1] = pos - base[depth - 1];
+                pos = base[depth - 1];
+                continue;
+            }
+            if (strcmp(m, "FIN") == 0 && depth > 0) {
+                long b = pos - base[--depth];
+                if (arm[depth] > b) b = arm[depth];
+                pos = base[depth] + b;
+                continue;
+            }
+            sz = insn_size_ub(&lines[i]);
+            if (sz < 0) nunk++;
+            else        pos += sz;
+        }
+        off[n] = pos;
+        unk[n] = nunk;
+        if (depth != 0) goto out;
+
+        for (i = 0; i < n; i++) {
+            long j = -1, t, d, lo, hi;
+            int  pair;
+            if (lines[i].dead || pinned[i]) continue;
+            pair = mn_is(lines[i].mnem, ph_cond_br) &&
+                   strcmp(lines[i].operand, "*+5") == 0;
+            if (pair) {
+                j = next_insn_no_label(lines, n, i + 1);
+                if (j < 0 || strcmp(lines[j].mnem, "BRL") != 0)
+                    continue;
+            } else if (strcmp(lines[i].mnem, "BRL") != 0) {
+                continue;
+            }
+            t = label_line(lines[pair ? (size_t)j : i].operand);
+            if (t < 0) continue;
+            lo = t < (long)i ? t : (long)i;
+            hi = t < (long)i ? (long)i : t;
+            if (unk[hi] != unk[lo]) continue;
+            d = off[t] - (off[i] + 2);
+            if (d < -128 || d > 127) continue;
+            if (pair) {
+                static const char *const inv[] = {
+                    "BNE","BEQ","BCS","BCC","BPL","BMI","BVS","BVC"
+                };
+                size_t c;
+                for (c = 0; strcmp(ph_cond_br[c], lines[i].mnem) != 0; c++)
+                    ;
+                if (!set_insn(&lines[i], inv[c], lines[j].operand)) goto out;
+                lines[j].dead = 1;
+            } else {
+                char op[PH_TOK];
+                snprintf(op, sizeof op, "%s", lines[i].operand);
+                if (!set_insn(&lines[i], "BRA", op)) goto out;
+            }
+            changed = 1;
+        }
+    }
+out:
+    free(off);
+    free(unk);
+    free(pinned);
+}
+
 char *
 peephole_optimize(const char *asm_text)
 {
@@ -1057,6 +1325,11 @@ peephole_optimize(const char *asm_text)
     pat_dead_store(lines, n);
     pat_dead_lda(lines, n);
     pat_empty_width_roundtrip(lines, n);
+    if (labels_build(lines, n)) {
+        pat_relax_branches(lines, n);
+    }
+    free(g_lab);
+    g_lab = NULL;
 
     out = render(lines, n, had_nl);
     free_lines(lines, n);

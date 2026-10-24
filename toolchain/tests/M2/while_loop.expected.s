@@ -33,15 +33,14 @@ _while_loop_L0
                 BVC     _while_loop_L2
                 EOR     #$8000
 _while_loop_L2
-                BMI     *+5
-                BRL     _while_loop_L1
+                BPL     _while_loop_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _while_loop_L0
+                BRA     _while_loop_L0
 _while_loop_L1
                 LDA     _fcc_img0
                 TAY

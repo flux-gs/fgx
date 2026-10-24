@@ -83,8 +83,7 @@ _for_long_init_L0
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _for_long_init_L2
+                BEQ     _for_long_init_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -116,7 +115,7 @@ _for_long_init_L1
                 LDA     _fcc_long_hi
                 STA     9,S   ; fccstk d=0 b=9
                 TYA
-                BRL     _for_long_init_L0
+                BRA     _for_long_init_L0
 _for_long_init_L2
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1

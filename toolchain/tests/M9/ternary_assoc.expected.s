@@ -24,19 +24,17 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ternary_assoc_L0
+                BNE     _ternary_assoc_L0
                 LDA     #10
-                BRL     _ternary_assoc_L1
+                BRA     _ternary_assoc_L1
 _ternary_assoc_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _ternary_assoc_L2
+                BNE     _ternary_assoc_L2
                 LDA     #42
-                BRL     _ternary_assoc_L3
+                BRA     _ternary_assoc_L3
 _ternary_assoc_L2
                 LDA     #99
 _ternary_assoc_L3

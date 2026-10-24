@@ -33,8 +33,7 @@ probe_stkok        TCS
                 LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _labelarm_L0
+                BEQ     _labelarm_L0
                 DO      8+probe_FRAMESIZE/256
                 TSC
                 CLC
@@ -46,11 +45,10 @@ probe_stkok        TCS
                 LDA     8+probe_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _labelarm_L1
+                BEQ     _labelarm_L1
                 LDA     #99
                 STA     r1
-                BRL     _labelarm_L2
+                BRA     _labelarm_L2
 _labelarm_L1
                 DO      10+probe_FRAMESIZE/256
                 TSC
@@ -63,16 +61,15 @@ _labelarm_L1
                 LDA     10+probe_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _labelarm_L3
+                BEQ     _labelarm_L3
                 LDA     #1
                 STA     r1
-                BRL     _labelarm_L4
+                BRA     _labelarm_L4
 _labelarm_L3
-                BRL     probe_uL_nondes
+                BRA     probe_uL_nondes
 _labelarm_L4
 _labelarm_L2
-                BRL     _labelarm_L5
+                BRA     _labelarm_L5
 _labelarm_L0
 probe_uL_nondes
                 DO      12+probe_FRAMESIZE/256
@@ -86,11 +83,10 @@ probe_uL_nondes
                 LDA     12+probe_FRAMESIZE,S   ; fccstk d=0 b=12 fs
                 FIN
                 CMP     #0
-                BNE     *+5
-                BRL     _labelarm_L6
+                BEQ     _labelarm_L6
                 LDA     #1
                 STA     r2
-                BRL     _labelarm_L7
+                BRA     _labelarm_L7
 _labelarm_L6
                 LDA     #2
                 STA     r2
@@ -149,8 +145,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #10
-                BNE     *+5
-                BRL     _labelarm_L8
+                BEQ     _labelarm_L8
                 LDA     #1
                 TAY
                 TSC
@@ -180,8 +175,7 @@ _labelarm_L8
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _labelarm_L9
+                BEQ     _labelarm_L9
                 LDA     #2
                 TAY
                 TSC
@@ -211,8 +205,7 @@ _labelarm_L9
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _labelarm_L10
+                BEQ     _labelarm_L10
                 LDA     #3
                 TAY
                 TSC
@@ -242,8 +235,7 @@ _labelarm_L10
                 TAX
                 TXA
                 CMP     #990
-                BNE     *+5
-                BRL     _labelarm_L11
+                BEQ     _labelarm_L11
                 LDA     #4
                 TAY
                 TSC

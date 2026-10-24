@@ -59,24 +59,21 @@ main_stkok        TCS
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdioops_L1
+                BNE     _stdioops_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdioops_L1
+                BNE     _stdioops_L1
                 LDA     #0
-                BRL     _stdioops_L2
+                BRA     _stdioops_L2
 _stdioops_L1
                 LDA     #1
 _stdioops_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L0
+                BEQ     _stdioops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -109,8 +106,7 @@ _stdioops_L0
                 TCS
                 TYA
                 CMP     #0
-                BPL     *+5
-                BRL     _stdioops_L3
+                BMI     _stdioops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -136,8 +132,7 @@ _stdioops_L3
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _stdioops_L4
+                BNE     _stdioops_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -194,24 +189,21 @@ _stdioops_L4
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdioops_L12
+                BNE     _stdioops_L12
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdioops_L12
+                BNE     _stdioops_L12
                 LDA     #0
-                BRL     _stdioops_L13
+                BRA     _stdioops_L13
 _stdioops_L12
                 LDA     #1
 _stdioops_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L10
+                BEQ     _stdioops_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -244,32 +236,28 @@ _stdioops_L13
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdioops_L14
+                BNE     _stdioops_L14
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdioops_L14
+                BNE     _stdioops_L14
                 LDA     #0
-                BRL     _stdioops_L15
+                BRA     _stdioops_L15
 _stdioops_L14
                 LDA     #1
 _stdioops_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L10
+                BEQ     _stdioops_L10
                 LDA     #1
-                BRL     _stdioops_L11
+                BRA     _stdioops_L11
 _stdioops_L10
                 LDA     #0
 _stdioops_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L8
+                BEQ     _stdioops_L8
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -290,16 +278,14 @@ _stdioops_L11
                 TAX
                 TXA
                 CMP     #104
-                BEQ     *+5
-                BRL     _stdioops_L8
+                BNE     _stdioops_L8
                 LDA     #1
-                BRL     _stdioops_L9
+                BRA     _stdioops_L9
 _stdioops_L8
                 LDA     #0
 _stdioops_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L6
+                BEQ     _stdioops_L6
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -320,16 +306,14 @@ _stdioops_L9
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _stdioops_L6
+                BNE     _stdioops_L6
                 LDA     #1
-                BRL     _stdioops_L7
+                BRA     _stdioops_L7
 _stdioops_L6
                 LDA     #0
 _stdioops_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L5
+                BEQ     _stdioops_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -351,8 +335,7 @@ _stdioops_L5
                 BVC     _stdioops_L17
                 EOR     #$8000
 _stdioops_L17
-                BPL     *+5
-                BRL     _stdioops_L16
+                BMI     _stdioops_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -376,8 +359,7 @@ _stdioops_L16
                 TAX
                 TXA
                 CMP     #88
-                BEQ     *+5
-                BRL     _stdioops_L18
+                BNE     _stdioops_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -399,8 +381,7 @@ _stdioops_L18
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _stdioops_L20
+                BNE     _stdioops_L20
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -416,16 +397,14 @@ _stdioops_L18
                 TXA
                 JSR     _fcc_ne16
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L20
+                BEQ     _stdioops_L20
                 LDA     #1
-                BRL     _stdioops_L21
+                BRA     _stdioops_L21
 _stdioops_L20
                 LDA     #0
 _stdioops_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L19
+                BEQ     _stdioops_L19
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -456,8 +435,7 @@ _stdioops_L19
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _stdioops_L27
+                BNE     _stdioops_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -473,16 +451,14 @@ _stdioops_L19
                 TXA
                 JSR     _fcc_ne16
                 CMP     #0
-                BEQ     *+5
-                BRL     _stdioops_L27
+                BNE     _stdioops_L27
                 LDA     #1
-                BRL     _stdioops_L28
+                BRA     _stdioops_L28
 _stdioops_L27
                 LDA     #0
 _stdioops_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L25
+                BEQ     _stdioops_L25
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -499,16 +475,14 @@ _stdioops_L28
                 TAX
                 TXA
                 CMP     #101
-                BEQ     *+5
-                BRL     _stdioops_L25
+                BNE     _stdioops_L25
                 LDA     #1
-                BRL     _stdioops_L26
+                BRA     _stdioops_L26
 _stdioops_L25
                 LDA     #0
 _stdioops_L26
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L23
+                BEQ     _stdioops_L23
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -539,16 +513,14 @@ _stdioops_L26
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L23
+                BEQ     _stdioops_L23
                 LDA     #1
-                BRL     _stdioops_L24
+                BRA     _stdioops_L24
 _stdioops_L23
                 LDA     #0
 _stdioops_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L22
+                BEQ     _stdioops_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -693,8 +665,7 @@ _stdioops_L22
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _stdioops_L29
+                BNE     _stdioops_L29
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -736,24 +707,21 @@ _stdioops_L29
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _stdioops_L31
+                BNE     _stdioops_L31
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _stdioops_L31
+                BNE     _stdioops_L31
                 LDA     #1
-                BRL     _stdioops_L32
+                BRA     _stdioops_L32
 _stdioops_L31
                 LDA     #0
 _stdioops_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _stdioops_L30
+                BEQ     _stdioops_L30
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

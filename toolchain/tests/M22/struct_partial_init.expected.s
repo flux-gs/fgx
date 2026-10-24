@@ -21,20 +21,17 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     _struct_partial_init_g+0
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L1
+                BNE     _struct_partial_init_L1
                 LDA     _struct_partial_init_g+2
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L1
+                BNE     _struct_partial_init_L1
                 LDA     #0
-                BRL     _struct_partial_init_L2
+                BRA     _struct_partial_init_L2
 _struct_partial_init_L1
                 LDA     #1
 _struct_partial_init_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L0
+                BEQ     _struct_partial_init_L0
                 LDA     #1
                 TAY
                 TSC
@@ -63,8 +60,7 @@ _struct_partial_init_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _struct_partial_init_L4
+                BNE     _struct_partial_init_L4
                 LDA     #0
                 ASL
                 ASL
@@ -83,16 +79,14 @@ _struct_partial_init_L0
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _struct_partial_init_L4
+                BNE     _struct_partial_init_L4
                 LDA     #0
-                BRL     _struct_partial_init_L5
+                BRA     _struct_partial_init_L5
 _struct_partial_init_L4
                 LDA     #1
 _struct_partial_init_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L3
+                BEQ     _struct_partial_init_L3
                 LDA     #2
                 TAY
                 TSC
@@ -121,8 +115,7 @@ _struct_partial_init_L3
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _struct_partial_init_L7
+                BNE     _struct_partial_init_L7
                 LDA     #1
                 ASL
                 ASL
@@ -139,16 +132,14 @@ _struct_partial_init_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 CMP     #0
-                BEQ     *+5
-                BRL     _struct_partial_init_L7
+                BNE     _struct_partial_init_L7
                 LDA     #0
-                BRL     _struct_partial_init_L8
+                BRA     _struct_partial_init_L8
 _struct_partial_init_L7
                 LDA     #1
 _struct_partial_init_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_partial_init_L6
+                BEQ     _struct_partial_init_L6
                 LDA     #3
                 TAY
                 TSC

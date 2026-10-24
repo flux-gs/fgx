@@ -69,8 +69,7 @@ _ptr_promote_L0
                 BVC     _ptr_promote_L2
                 EOR     #$8000
 _ptr_promote_L2
-                BMI     *+5
-                BRL     _ptr_promote_L1
+                BPL     _ptr_promote_L1
                 LDA     _fcc_img0
                 PHA
                 LDA     [_fcc_img2]
@@ -87,7 +86,7 @@ _ptr_promote_L2
                 ADC     #1
                 STA     _fcc_img2
                 DEC     _fcc_img1
-                BRL     _ptr_promote_L0
+                BRA     _ptr_promote_L0
 _ptr_promote_L1
                 LDA     _fcc_img0
                 TAY

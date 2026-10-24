@@ -39,8 +39,7 @@ fact_stkok        TCS
                 BVC     _fn_recurse_L1
                 EOR     #$8000
 _fn_recurse_L1
-                BPL     *+5
-                BRL     _fn_recurse_L0
+                BMI     _fn_recurse_L0
                 LDA     #1
                 TAY
                 TSC

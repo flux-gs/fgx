@@ -33,8 +33,7 @@ _addrlongelem_L0
                 BVC     _addrlongelem_L3
                 EOR     #$8000
 _addrlongelem_L3
-                BMI     *+5
-                BRL     _addrlongelem_L2
+                BPL     _addrlongelem_L2
                 LDA     #_addrlongelem_al
                 PHA
                 LDA     _fcc_img0
@@ -94,7 +93,7 @@ _addrlongelem_L3
                 PLA
 _addrlongelem_L1
                 INC     _fcc_img0
-                BRL     _addrlongelem_L0
+                BRA     _addrlongelem_L0
 _addrlongelem_L2
                 PHA
                 SEP     #$20
@@ -136,8 +135,7 @@ _addrlongelem_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L4
+                BEQ     _addrlongelem_L4
                 LDA     #50
                 TAY
                 TSC
@@ -187,8 +185,7 @@ _addrlongelem_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L5
+                BEQ     _addrlongelem_L5
                 LDA     #51
                 TAY
                 TSC
@@ -225,8 +222,7 @@ _addrlongelem_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L6
+                BEQ     _addrlongelem_L6
                 LDA     #52
                 TAY
                 TSC
@@ -263,8 +259,7 @@ _addrlongelem_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L7
+                BEQ     _addrlongelem_L7
                 LDA     #53
                 TAY
                 TSC
@@ -329,8 +324,7 @@ _addrlongelem_L9
                 TAX
                 TXA
                 CMP     #4369
-                BNE     *+5
-                BRL     _addrlongelem_L8
+                BEQ     _addrlongelem_L8
                 LDA     #54
                 TAY
                 TSC
@@ -370,8 +364,7 @@ _addrlongelem_L8
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _addrlongelem_L10
+                BEQ     _addrlongelem_L10
                 LDA     #55
                 TAY
                 TSC
@@ -426,8 +419,7 @@ _addrlongelem_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L11
+                BEQ     _addrlongelem_L11
                 LDA     #56
                 TAY
                 TSC
@@ -482,8 +474,7 @@ _addrlongelem_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L12
+                BEQ     _addrlongelem_L12
                 LDA     #57
                 TAY
                 TSC
@@ -535,8 +526,7 @@ _addrlongelem_L12
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addrlongelem_L13
+                BEQ     _addrlongelem_L13
                 LDA     #58
                 TAY
                 TSC
@@ -567,8 +557,7 @@ _addrlongelem_L13
                 TAX
                 TXA
                 CMP     #258
-                BNE     *+5
-                BRL     _addrlongelem_L14
+                BEQ     _addrlongelem_L14
                 LDA     #59
                 TAY
                 TSC
@@ -593,8 +582,7 @@ _addrlongelem_L14
                 TAX
                 TXA
                 CMP     #819
-                BNE     *+5
-                BRL     _addrlongelem_L15
+                BEQ     _addrlongelem_L15
                 LDA     #60
                 TAY
                 TSC
@@ -613,8 +601,7 @@ _addrlongelem_L15
                 TAX
                 TXA
                 CMP     #257
-                BNE     *+5
-                BRL     _addrlongelem_L16
+                BEQ     _addrlongelem_L16
                 LDA     #61
                 TAY
                 TSC
@@ -633,8 +620,7 @@ _addrlongelem_L16
                 TAX
                 TXA
                 CMP     #259
-                BNE     *+5
-                BRL     _addrlongelem_L17
+                BEQ     _addrlongelem_L17
                 LDA     #62
                 TAY
                 TSC

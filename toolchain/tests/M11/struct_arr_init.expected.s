@@ -38,8 +38,7 @@ _struct_arr_init_L0
                 BVC     _struct_arr_init_L3
                 EOR     #$8000
 _struct_arr_init_L3
-                BMI     *+5
-                BRL     _struct_arr_init_L2
+                BPL     _struct_arr_init_L2
                 LDA     _fcc_img1
                 PHA
                 LDA     _fcc_img0
@@ -72,7 +71,7 @@ _struct_arr_init_L1
                 CLC
                 ADC     #1
                 STA     _fcc_img0
-                BRL     _struct_arr_init_L0
+                BRA     _struct_arr_init_L0
 _struct_arr_init_L2
                 LDA     _fcc_img0
                 STA     1,S   ; fccstk d=0 b=1
@@ -124,8 +123,7 @@ _struct_arr_init_L2
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _struct_arr_init_L4
+                BEQ     _struct_arr_init_L4
                 LDA     #0
                 TAY
                 TSC

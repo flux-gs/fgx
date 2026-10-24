@@ -45,8 +45,7 @@ _arrmemberassign_L0
                 BVC     _arrmemberassign_L3
                 EOR     #$8000
 _arrmemberassign_L3
-                BMI     *+5
-                BRL     _arrmemberassign_L2
+                BPL     _arrmemberassign_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -171,8 +170,7 @@ _arrmemberassign_L4
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _arrmemberassign_L5
+                BEQ     _arrmemberassign_L5
                 LDA     #1
                 TAY
                 TSC
@@ -212,8 +210,7 @@ _arrmemberassign_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L6
+                BEQ     _arrmemberassign_L6
                 LDA     #2
                 TAY
                 TSC
@@ -235,8 +232,7 @@ _arrmemberassign_L6
                 TAX
                 TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _arrmemberassign_L7
+                BEQ     _arrmemberassign_L7
                 LDA     #3
                 TAY
                 TSC
@@ -256,8 +252,7 @@ _arrmemberassign_L7
                 TAX
                 TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _arrmemberassign_L8
+                BEQ     _arrmemberassign_L8
                 LDA     #4
                 TAY
                 TSC
@@ -278,8 +273,7 @@ _arrmemberassign_L8
                 TAX
                 TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _arrmemberassign_L9
+                BEQ     _arrmemberassign_L9
                 LDA     #5
                 TAY
                 TSC
@@ -332,8 +326,7 @@ _arrmemberassign_L9
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L10
+                BEQ     _arrmemberassign_L10
                 LDA     #6
                 TAY
                 TSC
@@ -386,8 +379,7 @@ _arrmemberassign_L10
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _arrmemberassign_L11
+                BEQ     _arrmemberassign_L11
                 LDA     #7
                 TAY
                 TSC

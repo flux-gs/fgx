@@ -76,8 +76,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L0
+                BEQ     _int_const_ladder_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -106,8 +105,7 @@ _int_const_ladder_L0
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L1
+                BEQ     _int_const_ladder_L1
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -136,8 +134,7 @@ _int_const_ladder_L1
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L2
+                BEQ     _int_const_ladder_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -166,8 +163,7 @@ _int_const_ladder_L2
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L3
+                BEQ     _int_const_ladder_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -196,8 +192,7 @@ _int_const_ladder_L3
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _int_const_ladder_L4
+                BEQ     _int_const_ladder_L4
                 LDA     _fcc_img0
                 TAX
                 TXA

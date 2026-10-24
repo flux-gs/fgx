@@ -22,15 +22,12 @@ main_stkok        TCS
                 LDA     #2
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #1
-                BNE     *+5
-                BRL     _switch_enum_L1
+                BEQ     _switch_enum_L1
                 CMP     #2
-                BNE     *+5
-                BRL     _switch_enum_L2
+                BEQ     _switch_enum_L2
                 CMP     #3
-                BNE     *+5
-                BRL     _switch_enum_L3
-                BRL     _switch_enum_L0
+                BEQ     _switch_enum_L3
+                BRA     _switch_enum_L0
 _switch_enum_L1
                 LDA     #10
                 TAY

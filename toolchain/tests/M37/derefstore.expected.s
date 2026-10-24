@@ -162,8 +162,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #15
-                BEQ     *+5
-                BRL     _derefstore_L0
+                BNE     _derefstore_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -196,8 +195,7 @@ _derefstore_L0
                 TAX
                 TXA
                 CMP     #17
-                BEQ     *+5
-                BRL     _derefstore_L1
+                BNE     _derefstore_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

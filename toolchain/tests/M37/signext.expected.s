@@ -132,8 +132,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L0
+                BEQ     _signext_L0
                 LDA     #1
                 TAY
                 TSC
@@ -165,8 +164,7 @@ _signext_L0
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L1
+                BEQ     _signext_L1
                 LDA     #2
                 TAY
                 TSC
@@ -200,8 +198,7 @@ _signext_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L2
+                BEQ     _signext_L2
                 LDA     #3
                 TAY
                 TSC
@@ -235,8 +232,7 @@ _signext_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L3
+                BEQ     _signext_L3
                 LDA     #4
                 TAY
                 TSC
@@ -270,8 +266,7 @@ _signext_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L4
+                BEQ     _signext_L4
                 LDA     #5
                 TAY
                 TSC
@@ -305,8 +300,7 @@ _signext_L4
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L5
+                BEQ     _signext_L5
                 LDA     #6
                 TAY
                 TSC
@@ -340,8 +334,7 @@ _signext_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L6
+                BEQ     _signext_L6
                 LDA     #7
                 TAY
                 TSC
@@ -380,8 +373,7 @@ _signext_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L7
+                BEQ     _signext_L7
                 LDA     #8
                 TAY
                 TSC
@@ -419,8 +411,7 @@ _signext_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L8
+                BEQ     _signext_L8
                 LDA     #9
                 TAY
                 TSC
@@ -460,8 +451,7 @@ _signext_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _signext_L9
+                BEQ     _signext_L9
                 LDA     #10
                 TAY
                 TSC

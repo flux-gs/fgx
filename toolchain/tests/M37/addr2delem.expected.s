@@ -250,8 +250,7 @@ _addr2delem_L16
                 BVC     _addr2delem_L19
                 EOR     #$8000
 _addr2delem_L19
-                BMI     *+5
-                BRL     _addr2delem_L18
+                BPL     _addr2delem_L18
                 LDA     #_addr2delem_i3
                 PHA
                 LDA     _fcc_img0
@@ -314,7 +313,7 @@ _addr2delem_L19
                 PLA
 _addr2delem_L17
                 INC     _fcc_img2
-                BRL     _addr2delem_L16
+                BRA     _addr2delem_L16
 _addr2delem_L18
 _addr2delem_L13
                 INC     _fcc_img1
@@ -346,8 +345,7 @@ _addr2delem_L10
                 TAX
                 TXA
                 CMP     #272
-                BNE     *+5
-                BRL     _addr2delem_L20
+                BEQ     _addr2delem_L20
                 LDA     #50
                 TAY
                 TSC
@@ -373,8 +371,7 @@ _addr2delem_L20
                 TAX
                 TXA
                 CMP     #273
-                BNE     *+5
-                BRL     _addr2delem_L21
+                BEQ     _addr2delem_L21
                 LDA     #51
                 TAY
                 TSC
@@ -400,8 +397,7 @@ _addr2delem_L21
                 TAX
                 TXA
                 CMP     #288
-                BNE     *+5
-                BRL     _addr2delem_L22
+                BEQ     _addr2delem_L22
                 LDA     #52
                 TAY
                 TSC
@@ -442,8 +438,7 @@ _addr2delem_L22
                 TAX
                 TXA
                 CMP     #274
-                BNE     *+5
-                BRL     _addr2delem_L23
+                BEQ     _addr2delem_L23
                 LDA     #53
                 TAY
                 TSC
@@ -469,8 +464,7 @@ _addr2delem_L23
                 TAX
                 TXA
                 CMP     #275
-                BNE     *+5
-                BRL     _addr2delem_L24
+                BEQ     _addr2delem_L24
                 LDA     #54
                 TAY
                 TSC
@@ -512,8 +506,7 @@ _addr2delem_L24
                 TAX
                 TXA
                 CMP     #289
-                BNE     *+5
-                BRL     _addr2delem_L25
+                BEQ     _addr2delem_L25
                 LDA     #55
                 TAY
                 TSC
@@ -554,8 +547,7 @@ _addr2delem_L25
                 TAX
                 TXA
                 CMP     #256
-                BNE     *+5
-                BRL     _addr2delem_L26
+                BEQ     _addr2delem_L26
                 LDA     #56
                 TAY
                 TSC
@@ -598,8 +590,7 @@ _addr2delem_L26
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _addr2delem_L27
+                BEQ     _addr2delem_L27
                 LDA     #57
                 TAY
                 TSC
@@ -646,8 +637,7 @@ _addr2delem_L27
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2delem_L28
+                BEQ     _addr2delem_L28
                 LDA     #58
                 TAY
                 TSC
@@ -711,8 +701,7 @@ _addr2delem_L28
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2delem_L29
+                BEQ     _addr2delem_L29
                 LDA     #59
                 TAY
                 TSC
@@ -762,8 +751,7 @@ _addr2delem_L29
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2delem_L30
+                BEQ     _addr2delem_L30
                 LDA     #60
                 TAY
                 TSC
@@ -819,8 +807,7 @@ _addr2delem_L30
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2delem_L31
+                BEQ     _addr2delem_L31
                 LDA     #61
                 TAY
                 TSC
@@ -870,8 +857,7 @@ _addr2delem_L31
                 TAX
                 TXA
                 CMP     #595
-                BNE     *+5
-                BRL     _addr2delem_L32
+                BEQ     _addr2delem_L32
                 LDA     #62
                 TAY
                 TSC
@@ -916,8 +902,7 @@ _addr2delem_L32
                 TAX
                 TXA
                 CMP     #592
-                BNE     *+5
-                BRL     _addr2delem_L33
+                BEQ     _addr2delem_L33
                 LDA     #63
                 TAY
                 TSC
@@ -953,8 +938,7 @@ _addr2delem_L33
                 TAX
                 TXA
                 CMP     #576
-                BNE     *+5
-                BRL     _addr2delem_L34
+                BEQ     _addr2delem_L34
                 LDA     #64
                 TAY
                 TSC
@@ -1009,8 +993,7 @@ _addr2delem_L34
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _addr2delem_L35
+                BEQ     _addr2delem_L35
                 LDA     #65
                 TAY
                 TSC
@@ -1088,8 +1071,7 @@ _addr2delem_L35
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _addr2delem_L36
+                BEQ     _addr2delem_L36
                 LDA     #66
                 TAY
                 TSC

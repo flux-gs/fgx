@@ -40,8 +40,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysops_L0
+                BNE     _sysops_L0
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
@@ -83,8 +82,7 @@ _sysops_L0
                 TXA
                 AND     #127
                 CMP     #0
-                BEQ     *+5
-                BRL     _sysops_L2
+                BNE     _sysops_L2
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -107,16 +105,14 @@ _sysops_L0
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _sysops_L2
+                BNE     _sysops_L2
                 LDA     #1
-                BRL     _sysops_L3
+                BRA     _sysops_L3
 _sysops_L2
                 LDA     #0
 _sysops_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L1
+                BEQ     _sysops_L1
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
@@ -162,8 +158,7 @@ _sysops_L1
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L4
+                BEQ     _sysops_L4
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA
@@ -216,8 +211,7 @@ _sysops_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L6
+                BEQ     _sysops_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5
@@ -255,16 +249,14 @@ _sysops_L4
                 TYA
                 JSR     _fcc_long_lts
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L6
+                BEQ     _sysops_L6
                 LDA     #1
-                BRL     _sysops_L7
+                BRA     _sysops_L7
 _sysops_L6
                 LDA     #0
 _sysops_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _sysops_L5
+                BEQ     _sysops_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 TXA

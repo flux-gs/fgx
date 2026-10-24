@@ -28,22 +28,19 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L1
+                BNE     _paren_postincdec_value_L1
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L1
+                BNE     _paren_postincdec_value_L1
                 LDA     #0
-                BRL     _paren_postincdec_value_L2
+                BRA     _paren_postincdec_value_L2
 _paren_postincdec_value_L1
                 LDA     #1
 _paren_postincdec_value_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L0
+                BEQ     _paren_postincdec_value_L0
                 LDA     #1
                 TAY
                 TSC
@@ -64,22 +61,19 @@ _paren_postincdec_value_L0
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L4
+                BNE     _paren_postincdec_value_L4
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L4
+                BNE     _paren_postincdec_value_L4
                 LDA     #0
-                BRL     _paren_postincdec_value_L5
+                BRA     _paren_postincdec_value_L5
 _paren_postincdec_value_L4
                 LDA     #1
 _paren_postincdec_value_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L3
+                BEQ     _paren_postincdec_value_L3
                 LDA     #2
                 TAY
                 TSC
@@ -100,22 +94,19 @@ _paren_postincdec_value_L3
                 INC
                 STA     _fcc_img0
                 CMP     #$FFFB
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L7
+                BNE     _paren_postincdec_value_L7
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L7
+                BNE     _paren_postincdec_value_L7
                 LDA     #0
-                BRL     _paren_postincdec_value_L8
+                BRA     _paren_postincdec_value_L8
 _paren_postincdec_value_L7
                 LDA     #1
 _paren_postincdec_value_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L6
+                BEQ     _paren_postincdec_value_L6
                 LDA     #3
                 TAY
                 TSC
@@ -141,22 +132,19 @@ _paren_postincdec_value_L9
 _paren_postincdec_value_L10
                 STA     _fcc_img0
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L12
+                BNE     _paren_postincdec_value_L12
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L12
+                BNE     _paren_postincdec_value_L12
                 LDA     #0
-                BRL     _paren_postincdec_value_L13
+                BRA     _paren_postincdec_value_L13
 _paren_postincdec_value_L12
                 LDA     #1
 _paren_postincdec_value_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L11
+                BEQ     _paren_postincdec_value_L11
                 LDA     #4
                 TAY
                 TSC
@@ -177,22 +165,19 @@ _paren_postincdec_value_L11
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L15
+                BNE     _paren_postincdec_value_L15
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L15
+                BNE     _paren_postincdec_value_L15
                 LDA     #0
-                BRL     _paren_postincdec_value_L16
+                BRA     _paren_postincdec_value_L16
 _paren_postincdec_value_L15
                 LDA     #1
 _paren_postincdec_value_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L14
+                BEQ     _paren_postincdec_value_L14
                 LDA     #5
                 TAY
                 TSC
@@ -214,22 +199,19 @@ _paren_postincdec_value_L14
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L18
+                BNE     _paren_postincdec_value_L18
                 LDA     g
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L18
+                BNE     _paren_postincdec_value_L18
                 LDA     #0
-                BRL     _paren_postincdec_value_L19
+                BRA     _paren_postincdec_value_L19
 _paren_postincdec_value_L18
                 LDA     #1
 _paren_postincdec_value_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L17
+                BEQ     _paren_postincdec_value_L17
                 LDA     #6
                 TAY
                 TSC
@@ -298,8 +280,7 @@ _paren_postincdec_value_L17
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L21
+                BNE     _paren_postincdec_value_L21
                 LDA     _fcc_img7
                 STA     _fcc_long_hi
                 LDA     _fcc_img6
@@ -321,16 +302,14 @@ _paren_postincdec_value_L17
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L21
+                BNE     _paren_postincdec_value_L21
                 LDA     #0
-                BRL     _paren_postincdec_value_L22
+                BRA     _paren_postincdec_value_L22
 _paren_postincdec_value_L21
                 LDA     #1
 _paren_postincdec_value_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L20
+                BEQ     _paren_postincdec_value_L20
                 LDA     #7
                 TAY
                 TSC
@@ -397,8 +376,7 @@ _paren_postincdec_value_L20
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L24
+                BNE     _paren_postincdec_value_L24
                 LDA     gl+2
                 STA     _fcc_long_hi
                 LDA     gl
@@ -420,16 +398,14 @@ _paren_postincdec_value_L20
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L24
+                BNE     _paren_postincdec_value_L24
                 LDA     #0
-                BRL     _paren_postincdec_value_L25
+                BRA     _paren_postincdec_value_L25
 _paren_postincdec_value_L24
                 LDA     #1
 _paren_postincdec_value_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L23
+                BEQ     _paren_postincdec_value_L23
                 LDA     #8
                 TAY
                 TSC
@@ -555,8 +531,7 @@ _paren_postincdec_value_L23
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L27
+                BNE     _paren_postincdec_value_L27
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -574,32 +549,28 @@ _paren_postincdec_value_L23
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L29
+                BNE     _paren_postincdec_value_L29
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L29
+                BNE     _paren_postincdec_value_L29
                 LDA     #0
-                BRL     _paren_postincdec_value_L30
+                BRA     _paren_postincdec_value_L30
 _paren_postincdec_value_L29
                 LDA     #1
 _paren_postincdec_value_L30
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L27
+                BNE     _paren_postincdec_value_L27
                 LDA     #0
-                BRL     _paren_postincdec_value_L28
+                BRA     _paren_postincdec_value_L28
 _paren_postincdec_value_L27
                 LDA     #1
 _paren_postincdec_value_L28
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L26
+                BEQ     _paren_postincdec_value_L26
                 LDA     #9
                 TAY
                 TSC
@@ -630,8 +601,7 @@ _paren_postincdec_value_L26
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L32
+                BNE     _paren_postincdec_value_L32
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -649,32 +619,28 @@ _paren_postincdec_value_L26
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L34
+                BNE     _paren_postincdec_value_L34
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L34
+                BNE     _paren_postincdec_value_L34
                 LDA     #0
-                BRL     _paren_postincdec_value_L35
+                BRA     _paren_postincdec_value_L35
 _paren_postincdec_value_L34
                 LDA     #1
 _paren_postincdec_value_L35
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L32
+                BNE     _paren_postincdec_value_L32
                 LDA     #0
-                BRL     _paren_postincdec_value_L33
+                BRA     _paren_postincdec_value_L33
 _paren_postincdec_value_L32
                 LDA     #1
 _paren_postincdec_value_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L31
+                BEQ     _paren_postincdec_value_L31
                 LDA     #10
                 TAY
                 TSC
@@ -705,8 +671,7 @@ _paren_postincdec_value_L31
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L37
+                BNE     _paren_postincdec_value_L37
                 LDA     _fcc_img3
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img2
@@ -724,32 +689,28 @@ _paren_postincdec_value_L31
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L39
+                BNE     _paren_postincdec_value_L39
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L39
+                BNE     _paren_postincdec_value_L39
                 LDA     #0
-                BRL     _paren_postincdec_value_L40
+                BRA     _paren_postincdec_value_L40
 _paren_postincdec_value_L39
                 LDA     #1
 _paren_postincdec_value_L40
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L37
+                BNE     _paren_postincdec_value_L37
                 LDA     #0
-                BRL     _paren_postincdec_value_L38
+                BRA     _paren_postincdec_value_L38
 _paren_postincdec_value_L37
                 LDA     #1
 _paren_postincdec_value_L38
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L36
+                BEQ     _paren_postincdec_value_L36
                 LDA     #11
                 TAY
                 TSC
@@ -814,23 +775,20 @@ _paren_postincdec_value_L36
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L44
+                BNE     _paren_postincdec_value_L44
                 LDA     #1
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L44
+                BNE     _paren_postincdec_value_L44
                 LDA     #0
-                BRL     _paren_postincdec_value_L45
+                BRA     _paren_postincdec_value_L45
 _paren_postincdec_value_L44
                 LDA     #1
 _paren_postincdec_value_L45
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L42
+                BNE     _paren_postincdec_value_L42
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -838,16 +796,14 @@ _paren_postincdec_value_L45
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L42
+                BNE     _paren_postincdec_value_L42
                 LDA     #0
-                BRL     _paren_postincdec_value_L43
+                BRA     _paren_postincdec_value_L43
 _paren_postincdec_value_L42
                 LDA     #1
 _paren_postincdec_value_L43
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L41
+                BEQ     _paren_postincdec_value_L41
                 LDA     #12
                 TAY
                 TSC
@@ -905,8 +861,7 @@ _paren_postincdec_value_L41
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L49
+                BNE     _paren_postincdec_value_L49
                 LDA     #1
                 TAX
                 LDA:    buf,X
@@ -914,16 +869,14 @@ _paren_postincdec_value_L41
                 TAX
                 TXA
                 CMP     #255
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L49
+                BNE     _paren_postincdec_value_L49
                 LDA     #0
-                BRL     _paren_postincdec_value_L50
+                BRA     _paren_postincdec_value_L50
 _paren_postincdec_value_L49
                 LDA     #1
 _paren_postincdec_value_L50
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L47
+                BNE     _paren_postincdec_value_L47
                 LDA     #2
                 TAX
                 LDA:    buf,X
@@ -931,16 +884,14 @@ _paren_postincdec_value_L50
                 TAX
                 TXA
                 CMP     #30
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L47
+                BNE     _paren_postincdec_value_L47
                 LDA     #0
-                BRL     _paren_postincdec_value_L48
+                BRA     _paren_postincdec_value_L48
 _paren_postincdec_value_L47
                 LDA     #1
 _paren_postincdec_value_L48
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L46
+                BEQ     _paren_postincdec_value_L46
                 LDA     #13
                 TAY
                 TSC
@@ -1035,8 +986,7 @@ _paren_postincdec_value_L46
                 TAX
                 TXA
                 CMP     #100
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L54
+                BNE     _paren_postincdec_value_L54
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1057,16 +1007,14 @@ _paren_postincdec_value_L46
                 TAX
                 TXA
                 CMP     #101
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L54
+                BNE     _paren_postincdec_value_L54
                 LDA     #0
-                BRL     _paren_postincdec_value_L55
+                BRA     _paren_postincdec_value_L55
 _paren_postincdec_value_L54
                 LDA     #1
 _paren_postincdec_value_L55
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L52
+                BNE     _paren_postincdec_value_L52
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1087,16 +1035,14 @@ _paren_postincdec_value_L55
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L52
+                BNE     _paren_postincdec_value_L52
                 LDA     #0
-                BRL     _paren_postincdec_value_L53
+                BRA     _paren_postincdec_value_L53
 _paren_postincdec_value_L52
                 LDA     #1
 _paren_postincdec_value_L53
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L51
+                BEQ     _paren_postincdec_value_L51
                 LDA     #14
                 TAY
                 TSC
@@ -1182,8 +1128,7 @@ _paren_postincdec_value_L51
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L57
+                BNE     _paren_postincdec_value_L57
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
                 LDA     19,S   ; fccstk d=0 b=19
@@ -1205,16 +1150,14 @@ _paren_postincdec_value_L51
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L57
+                BNE     _paren_postincdec_value_L57
                 LDA     #0
-                BRL     _paren_postincdec_value_L58
+                BRA     _paren_postincdec_value_L58
 _paren_postincdec_value_L57
                 LDA     #1
 _paren_postincdec_value_L58
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L56
+                BEQ     _paren_postincdec_value_L56
                 LDA     #15
                 TAY
                 TSC
@@ -1261,22 +1204,19 @@ _paren_postincdec_value_L56
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L60
+                BNE     _paren_postincdec_value_L60
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L60
+                BNE     _paren_postincdec_value_L60
                 LDA     #0
-                BRL     _paren_postincdec_value_L61
+                BRA     _paren_postincdec_value_L61
 _paren_postincdec_value_L60
                 LDA     #1
 _paren_postincdec_value_L61
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L59
+                BEQ     _paren_postincdec_value_L59
                 LDA     #16
                 TAY
                 TSC
@@ -1301,22 +1241,19 @@ _paren_postincdec_value_L59
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L63
+                BNE     _paren_postincdec_value_L63
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L63
+                BNE     _paren_postincdec_value_L63
                 LDA     #0
-                BRL     _paren_postincdec_value_L64
+                BRA     _paren_postincdec_value_L64
 _paren_postincdec_value_L63
                 LDA     #1
 _paren_postincdec_value_L64
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L62
+                BEQ     _paren_postincdec_value_L62
                 LDA     #17
                 TAY
                 TSC
@@ -1392,24 +1329,21 @@ _paren_postincdec_value_L62
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L68
+                BNE     _paren_postincdec_value_L68
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L68
+                BNE     _paren_postincdec_value_L68
                 LDA     #0
-                BRL     _paren_postincdec_value_L69
+                BRA     _paren_postincdec_value_L69
 _paren_postincdec_value_L68
                 LDA     #1
 _paren_postincdec_value_L69
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L66
+                BNE     _paren_postincdec_value_L66
                 LDA     43,S   ; fccstk d=0 b=43
                 STA     _fcc_fpr0+2
                 LDA     41,S   ; fccstk d=0 b=41
@@ -1427,32 +1361,28 @@ _paren_postincdec_value_L69
                 MX      %00
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L70
+                BNE     _paren_postincdec_value_L70
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L70
+                BNE     _paren_postincdec_value_L70
                 LDA     #0
-                BRL     _paren_postincdec_value_L71
+                BRA     _paren_postincdec_value_L71
 _paren_postincdec_value_L70
                 LDA     #1
 _paren_postincdec_value_L71
                 CMP     #0
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L66
+                BNE     _paren_postincdec_value_L66
                 LDA     #0
-                BRL     _paren_postincdec_value_L67
+                BRA     _paren_postincdec_value_L67
 _paren_postincdec_value_L66
                 LDA     #1
 _paren_postincdec_value_L67
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L65
+                BEQ     _paren_postincdec_value_L65
                 LDA     #18
                 TAY
                 TSC
@@ -1517,8 +1447,7 @@ _paren_postincdec_value_L65
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L73
+                BNE     _paren_postincdec_value_L73
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1539,16 +1468,14 @@ _paren_postincdec_value_L65
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L73
+                BNE     _paren_postincdec_value_L73
                 LDA     #0
-                BRL     _paren_postincdec_value_L74
+                BRA     _paren_postincdec_value_L74
 _paren_postincdec_value_L73
                 LDA     #1
 _paren_postincdec_value_L74
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L72
+                BEQ     _paren_postincdec_value_L72
                 LDA     #19
                 TAY
                 TSC
@@ -1585,8 +1512,7 @@ _paren_postincdec_value_L72
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L76
+                BNE     _paren_postincdec_value_L76
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -1607,16 +1533,14 @@ _paren_postincdec_value_L72
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L76
+                BNE     _paren_postincdec_value_L76
                 LDA     #0
-                BRL     _paren_postincdec_value_L77
+                BRA     _paren_postincdec_value_L77
 _paren_postincdec_value_L76
                 LDA     #1
 _paren_postincdec_value_L77
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L75
+                BEQ     _paren_postincdec_value_L75
                 LDA     #20
                 TAY
                 TSC
@@ -1635,22 +1559,19 @@ _paren_postincdec_value_L75
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L79
+                BNE     _paren_postincdec_value_L79
                 LDA     _fcc_img1
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _paren_postincdec_value_L79
+                BNE     _paren_postincdec_value_L79
                 LDA     #0
-                BRL     _paren_postincdec_value_L80
+                BRA     _paren_postincdec_value_L80
 _paren_postincdec_value_L79
                 LDA     #1
 _paren_postincdec_value_L80
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_postincdec_value_L78
+                BEQ     _paren_postincdec_value_L78
                 LDA     #21
                 TAY
                 TSC

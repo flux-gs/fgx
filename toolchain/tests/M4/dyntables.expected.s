@@ -44,10 +44,9 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #115
-                BEQ     *+5
-                BRL     _dyntables_L0
+                BNE     _dyntables_L0
                 LDA     #0
-                BRL     _dyntables_L1
+                BRA     _dyntables_L1
 _dyntables_L0
                 LDA     #1
 _dyntables_L1

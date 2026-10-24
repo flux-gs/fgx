@@ -179,8 +179,7 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ternary_ptrint_L0
+                BNE     _ternary_ptrint_L0
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -191,7 +190,7 @@ main_stkok        TCS
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L1
+                BRA     _ternary_ptrint_L1
 _ternary_ptrint_L0
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
@@ -218,8 +217,7 @@ _ternary_ptrint_L1
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _ternary_ptrint_L2
+                BEQ     _ternary_ptrint_L2
                 LDA     #1
                 TAY
                 TSC
@@ -235,8 +233,7 @@ _ternary_ptrint_L2
                 TAX
                 TXA
                 CMP     #5
-                BNE     *+5
-                BRL     _ternary_ptrint_L3
+                BEQ     _ternary_ptrint_L3
                 LDA     #2
                 TAY
                 TSC
@@ -258,8 +255,7 @@ _ternary_ptrint_L3
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _ternary_ptrint_L4
+                BNE     _ternary_ptrint_L4
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -270,7 +266,7 @@ _ternary_ptrint_L3
                 CLC
                 ADC     #0
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L5
+                BRA     _ternary_ptrint_L5
 _ternary_ptrint_L4
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
@@ -286,8 +282,7 @@ _ternary_ptrint_L5
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _ternary_ptrint_L6
+                BEQ     _ternary_ptrint_L6
                 LDA     #3
                 TAY
                 TSC
@@ -301,8 +296,7 @@ _ternary_ptrint_L5
 _ternary_ptrint_L6
                 LDA     11,S   ; fccstk d=0 b=11
                 CMP     #0
-                BNE     *+5
-                BRL     _ternary_ptrint_L7
+                BEQ     _ternary_ptrint_L7
                 LDA     #4
                 TAY
                 TSC
@@ -320,15 +314,14 @@ _ternary_ptrint_L7
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _ternary_ptrint_L8
+                BNE     _ternary_ptrint_L8
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_for_int
                 STA     _fcc_fpr0+2
                 LDA     _fcc_fpr0
-                BRL     _ternary_ptrint_L9
+                BRA     _ternary_ptrint_L9
 _ternary_ptrint_L8
                 SEP     #$20
                 MX      %10
@@ -348,8 +341,7 @@ _ternary_ptrint_L9
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _ternary_ptrint_L10
+                BEQ     _ternary_ptrint_L10
                 LDA     #5
                 TAY
                 TSC
@@ -365,15 +357,14 @@ _ternary_ptrint_L10
                 TAX
                 TXA
                 CMP     #2
-                BNE     *+5
-                BRL     _ternary_ptrint_L11
+                BEQ     _ternary_ptrint_L11
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_for_int
                 STA     _fcc_fpr0+2
                 LDA     _fcc_fpr0
-                BRL     _ternary_ptrint_L12
+                BRA     _ternary_ptrint_L12
 _ternary_ptrint_L11
                 SEP     #$20
                 MX      %10
@@ -404,8 +395,7 @@ _ternary_ptrint_L12
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _ternary_ptrint_L13
+                BEQ     _ternary_ptrint_L13
                 LDA     #6
                 TAY
                 TSC
@@ -425,8 +415,7 @@ _ternary_ptrint_L13
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BEQ     *+5
-                BRL     _ternary_ptrint_L14
+                BNE     _ternary_ptrint_L14
                 SEP     #$20
                 MX      %10
                 LDA     _ternary_ptrint_cmd+2
@@ -435,7 +424,7 @@ _ternary_ptrint_L13
                 MX      %00
                 LDA     _ternary_ptrint_cmd
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L15
+                BRA     _ternary_ptrint_L15
 _ternary_ptrint_L14
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -448,8 +437,7 @@ _ternary_ptrint_L14
                 BVC     _ternary_ptrint_L18
                 EOR     #$8000
 _ternary_ptrint_L18
-                BPL     *+5
-                BRL     _ternary_ptrint_L16
+                BMI     _ternary_ptrint_L16
                 LDA     9,S   ; fccstk d=0 b=9
                 ASL
                 ASL
@@ -463,7 +451,7 @@ _ternary_ptrint_L18
                 MX      %00
                 LDA:    _ternary_ptrint_vec,X
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L17
+                BRA     _ternary_ptrint_L17
 _ternary_ptrint_L16
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
@@ -491,8 +479,7 @@ _ternary_ptrint_L15
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _ternary_ptrint_L19
+                BEQ     _ternary_ptrint_L19
                 LDA     #7
                 TAY
                 TSC
@@ -512,8 +499,7 @@ _ternary_ptrint_L19
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BEQ     *+5
-                BRL     _ternary_ptrint_L20
+                BNE     _ternary_ptrint_L20
                 SEP     #$20
                 MX      %10
                 LDA     _ternary_ptrint_cmd+2
@@ -522,7 +508,7 @@ _ternary_ptrint_L19
                 MX      %00
                 LDA     _ternary_ptrint_cmd
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L21
+                BRA     _ternary_ptrint_L21
 _ternary_ptrint_L20
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -535,8 +521,7 @@ _ternary_ptrint_L20
                 BVC     _ternary_ptrint_L24
                 EOR     #$8000
 _ternary_ptrint_L24
-                BPL     *+5
-                BRL     _ternary_ptrint_L22
+                BMI     _ternary_ptrint_L22
                 LDA     9,S   ; fccstk d=0 b=9
                 ASL
                 ASL
@@ -550,7 +535,7 @@ _ternary_ptrint_L24
                 MX      %00
                 LDA:    _ternary_ptrint_vec,X
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L23
+                BRA     _ternary_ptrint_L23
 _ternary_ptrint_L22
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
@@ -578,8 +563,7 @@ _ternary_ptrint_L21
                 TAX
                 TXA
                 CMP     #120
-                BNE     *+5
-                BRL     _ternary_ptrint_L25
+                BEQ     _ternary_ptrint_L25
                 LDA     #8
                 TAY
                 TSC
@@ -599,8 +583,7 @@ _ternary_ptrint_L25
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 CMP     #0
-                BEQ     *+5
-                BRL     _ternary_ptrint_L26
+                BNE     _ternary_ptrint_L26
                 SEP     #$20
                 MX      %10
                 LDA     _ternary_ptrint_cmd+2
@@ -609,7 +592,7 @@ _ternary_ptrint_L25
                 MX      %00
                 LDA     _ternary_ptrint_cmd
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L27
+                BRA     _ternary_ptrint_L27
 _ternary_ptrint_L26
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -622,8 +605,7 @@ _ternary_ptrint_L26
                 BVC     _ternary_ptrint_L30
                 EOR     #$8000
 _ternary_ptrint_L30
-                BPL     *+5
-                BRL     _ternary_ptrint_L28
+                BMI     _ternary_ptrint_L28
                 LDA     9,S   ; fccstk d=0 b=9
                 ASL
                 ASL
@@ -637,7 +619,7 @@ _ternary_ptrint_L30
                 MX      %00
                 LDA:    _ternary_ptrint_vec,X
                 STA     _fcc_fpr0
-                BRL     _ternary_ptrint_L29
+                BRA     _ternary_ptrint_L29
 _ternary_ptrint_L28
                 LDA     #0
                 STA     11,S   ; fccstk d=0 b=11
@@ -654,8 +636,7 @@ _ternary_ptrint_L27
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
-                BNE     *+5
-                BRL     _ternary_ptrint_L31
+                BEQ     _ternary_ptrint_L31
                 LDA     #9
                 TAY
                 TSC

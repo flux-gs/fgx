@@ -119,8 +119,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strncatops_L0
+                BNE     _strncatops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -145,24 +144,21 @@ _strncatops_L0
                 PLA
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _strncatops_L2
+                BNE     _strncatops_L2
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _strncatops_L2
+                BNE     _strncatops_L2
                 LDA     #1
-                BRL     _strncatops_L3
+                BRA     _strncatops_L3
 _strncatops_L2
                 LDA     #0
 _strncatops_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _strncatops_L1
+                BEQ     _strncatops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -262,8 +258,7 @@ _strncatops_L1
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strncatops_L4
+                BNE     _strncatops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -276,8 +271,7 @@ _strncatops_L4
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
-                BEQ     *+5
-                BRL     _strncatops_L5
+                BNE     _strncatops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -368,8 +362,7 @@ _strncatops_L5
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strncatops_L6
+                BNE     _strncatops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -469,8 +462,7 @@ _strncatops_L6
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _strncatops_L7
+                BNE     _strncatops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

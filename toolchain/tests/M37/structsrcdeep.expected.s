@@ -176,8 +176,7 @@ _structsrcdeep_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _structsrcdeep_L0
+                BEQ     _structsrcdeep_L0
                 LDA     #0
                 TAY
                 TSC
@@ -230,8 +229,7 @@ _structsrcdeep_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _structsrcdeep_L1
+                BEQ     _structsrcdeep_L1
                 LDA     #0
                 TAY
                 TSC
@@ -287,8 +285,7 @@ _structsrcdeep_L1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _structsrcdeep_L2
+                BEQ     _structsrcdeep_L2
                 LDA     #0
                 TAY
                 TSC
@@ -344,8 +341,7 @@ _structsrcdeep_L2
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _structsrcdeep_L3
+                BEQ     _structsrcdeep_L3
                 LDA     #0
                 TAY
                 TSC
@@ -704,8 +700,7 @@ _structsrcdeep_L8
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L9
+                BEQ     _structsrcdeep_L9
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -785,8 +780,7 @@ _structsrcdeep_L10
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L11
+                BEQ     _structsrcdeep_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -853,22 +847,19 @@ _structsrcdeep_L12
                 TAX
                 TXA
                 CMP     #13058
-                BEQ     *+5
-                BRL     _structsrcdeep_L16
+                BNE     _structsrcdeep_L16
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 TXA
                 CMP     #17410
-                BEQ     *+5
-                BRL     _structsrcdeep_L16
+                BNE     _structsrcdeep_L16
                 LDA     #1
-                BRL     _structsrcdeep_L17
+                BRA     _structsrcdeep_L17
 _structsrcdeep_L16
                 LDA     #0
 _structsrcdeep_L17
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L14
+                BEQ     _structsrcdeep_L14
                 LDA     #320
                 PHA
                 SEP     #$20
@@ -893,16 +884,14 @@ _structsrcdeep_L17
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L14
+                BEQ     _structsrcdeep_L14
                 LDA     #1
-                BRL     _structsrcdeep_L15
+                BRA     _structsrcdeep_L15
 _structsrcdeep_L14
                 LDA     #0
 _structsrcdeep_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L13
+                BEQ     _structsrcdeep_L13
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -969,22 +958,19 @@ _structsrcdeep_L18
                 TAX
                 TXA
                 CMP     #13056
-                BEQ     *+5
-                BRL     _structsrcdeep_L22
+                BNE     _structsrcdeep_L22
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 TXA
                 CMP     #17408
-                BEQ     *+5
-                BRL     _structsrcdeep_L22
+                BNE     _structsrcdeep_L22
                 LDA     #1
-                BRL     _structsrcdeep_L23
+                BRA     _structsrcdeep_L23
 _structsrcdeep_L22
                 LDA     #0
 _structsrcdeep_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L20
+                BEQ     _structsrcdeep_L20
                 LDA     #300
                 PHA
                 SEP     #$20
@@ -1009,16 +995,14 @@ _structsrcdeep_L23
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L20
+                BEQ     _structsrcdeep_L20
                 LDA     #1
-                BRL     _structsrcdeep_L21
+                BRA     _structsrcdeep_L21
 _structsrcdeep_L20
                 LDA     #0
 _structsrcdeep_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L19
+                BEQ     _structsrcdeep_L19
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -1124,8 +1108,7 @@ _structsrcdeep_L24
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L25
+                BEQ     _structsrcdeep_L25
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -1195,22 +1178,19 @@ _structsrcdeep_L26
                 TAX
                 TXA
                 CMP     #4369
-                BEQ     *+5
-                BRL     _structsrcdeep_L30
+                BNE     _structsrcdeep_L30
                 LDA     27,S   ; fccstk d=0 b=27
                 TAX
                 TXA
                 CMP     #8738
-                BEQ     *+5
-                BRL     _structsrcdeep_L30
+                BNE     _structsrcdeep_L30
                 LDA     #1
-                BRL     _structsrcdeep_L31
+                BRA     _structsrcdeep_L31
 _structsrcdeep_L30
                 LDA     #0
 _structsrcdeep_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L28
+                BEQ     _structsrcdeep_L28
                 LDA     #100
                 PHA
                 SEP     #$20
@@ -1235,16 +1215,14 @@ _structsrcdeep_L31
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L28
+                BEQ     _structsrcdeep_L28
                 LDA     #1
-                BRL     _structsrcdeep_L29
+                BRA     _structsrcdeep_L29
 _structsrcdeep_L28
                 LDA     #0
 _structsrcdeep_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L27
+                BEQ     _structsrcdeep_L27
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA
@@ -1306,8 +1284,7 @@ _structsrcdeep_L32
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L38
+                BEQ     _structsrcdeep_L38
                 LDA     #400
                 PHA
                 PHA
@@ -1331,44 +1308,38 @@ _structsrcdeep_L32
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L38
+                BEQ     _structsrcdeep_L38
                 LDA     #1
-                BRL     _structsrcdeep_L39
+                BRA     _structsrcdeep_L39
 _structsrcdeep_L38
                 LDA     #0
 _structsrcdeep_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L36
+                BEQ     _structsrcdeep_L36
                 LDA     gt+2
                 TAX
                 TXA
                 CMP     #4369
-                BEQ     *+5
-                BRL     _structsrcdeep_L36
+                BNE     _structsrcdeep_L36
                 LDA     #1
-                BRL     _structsrcdeep_L37
+                BRA     _structsrcdeep_L37
 _structsrcdeep_L36
                 LDA     #0
 _structsrcdeep_L37
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L34
+                BEQ     _structsrcdeep_L34
                 LDA     gt+0
                 TAX
                 TXA
                 CMP     #30583
-                BEQ     *+5
-                BRL     _structsrcdeep_L34
+                BNE     _structsrcdeep_L34
                 LDA     #1
-                BRL     _structsrcdeep_L35
+                BRA     _structsrcdeep_L35
 _structsrcdeep_L34
                 LDA     #0
 _structsrcdeep_L35
                 CMP     #0
-                BNE     *+5
-                BRL     _structsrcdeep_L33
+                BEQ     _structsrcdeep_L33
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
                 TXA

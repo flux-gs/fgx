@@ -99,8 +99,7 @@ _dot_member_store_incdec_L0
                 BVC     _dot_member_store_incdec_L3
                 EOR     #$8000
 _dot_member_store_incdec_L3
-                BMI     *+5
-                BRL     _dot_member_store_incdec_L2
+                BPL     _dot_member_store_incdec_L2
                 SEP     #$20
                 MX      %10
                 LDA     B+2
@@ -137,7 +136,7 @@ _dot_member_store_incdec_L3
                 MX      %00
 _dot_member_store_incdec_L1
                 INC     _fcc_img0
-                BRL     _dot_member_store_incdec_L0
+                BRA     _dot_member_store_incdec_L0
 _dot_member_store_incdec_L2
                 LDA     #0
                 TAX
@@ -146,8 +145,7 @@ _dot_member_store_incdec_L2
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L5
+                BNE     _dot_member_store_incdec_L5
                 LDA     #3
                 TAX
                 LDA:    row,X
@@ -155,16 +153,14 @@ _dot_member_store_incdec_L2
                 TAX
                 TXA
                 CMP     #4
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L5
+                BNE     _dot_member_store_incdec_L5
                 LDA     #1
-                BRL     _dot_member_store_incdec_L6
+                BRA     _dot_member_store_incdec_L6
 _dot_member_store_incdec_L5
                 LDA     #0
 _dot_member_store_incdec_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _dot_member_store_incdec_L4
+                BEQ     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -190,8 +186,7 @@ _dot_member_store_incdec_L4
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L7
+                BNE     _dot_member_store_incdec_L7
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -208,8 +203,7 @@ _dot_member_store_incdec_L7
                 TAX
                 TXA
                 CMP     #11
-                BEQ     *+5
-                BRL     _dot_member_store_incdec_L8
+                BNE     _dot_member_store_incdec_L8
                 LDA     _fcc_img1
                 TAX
                 TXA
@@ -271,8 +265,7 @@ _dot_member_store_incdec_L8
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _dot_member_store_incdec_L9
+                BEQ     _dot_member_store_incdec_L9
                 LDA     _fcc_img1
                 TAX
                 TXA

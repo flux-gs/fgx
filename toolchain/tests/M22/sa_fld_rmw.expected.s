@@ -33,8 +33,7 @@ _sa_fld_rmw_L0
                 BVC     _sa_fld_rmw_L3
                 EOR     #$8000
 _sa_fld_rmw_L3
-                BMI     *+5
-                BRL     _sa_fld_rmw_L2
+                BPL     _sa_fld_rmw_L2
                 LDA     _fcc_img0
                 STA     _fcc_tmp_b
                 ASL
@@ -77,7 +76,7 @@ _sa_fld_rmw_L3
                 STA     [_fcc_fpr0],Y
 _sa_fld_rmw_L1
                 INC     _fcc_img0
-                BRL     _sa_fld_rmw_L0
+                BRA     _sa_fld_rmw_L0
 _sa_fld_rmw_L2
                 LDA     #2
                 ASL

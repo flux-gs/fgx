@@ -93,8 +93,7 @@ _chain_structcopy_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _chain_structcopy_L2
+                BNE     _chain_structcopy_L2
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -111,16 +110,14 @@ _chain_structcopy_same_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _chain_structcopy_L2
+                BNE     _chain_structcopy_L2
                 LDA     #1
-                BRL     _chain_structcopy_L3
+                BRA     _chain_structcopy_L3
 _chain_structcopy_L2
                 LDA     #0
 _chain_structcopy_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L0
+                BEQ     _chain_structcopy_L0
                 DO      8+_chain_structcopy_same_FRAMESIZE/256
                 TSC
                 CLC
@@ -159,10 +156,9 @@ _chain_structcopy_L3
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _chain_structcopy_L0
+                BNE     _chain_structcopy_L0
                 LDA     #1
-                BRL     _chain_structcopy_L1
+                BRA     _chain_structcopy_L1
 _chain_structcopy_L0
                 LDA     #0
 _chain_structcopy_L1
@@ -329,36 +325,31 @@ _chain_structcopy_L4
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L8
+                BEQ     _chain_structcopy_L8
                 LDA     _chain_structcopy_g1+0
                 TAX
                 TXA
                 CMP     #5
-                BEQ     *+5
-                BRL     _chain_structcopy_L8
+                BNE     _chain_structcopy_L8
                 LDA     #1
-                BRL     _chain_structcopy_L9
+                BRA     _chain_structcopy_L9
 _chain_structcopy_L8
                 LDA     #0
 _chain_structcopy_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L6
+                BEQ     _chain_structcopy_L6
                 LDA     _chain_structcopy_g1+8
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _chain_structcopy_L6
+                BNE     _chain_structcopy_L6
                 LDA     #1
-                BRL     _chain_structcopy_L7
+                BRA     _chain_structcopy_L7
 _chain_structcopy_L6
                 LDA     #0
 _chain_structcopy_L7
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L5
+                BEQ     _chain_structcopy_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -448,36 +439,31 @@ _chain_structcopy_L10
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L14
+                BEQ     _chain_structcopy_L14
                 LDA     _chain_structcopy_g3+0
                 TAX
                 TXA
                 CMP     #9
-                BEQ     *+5
-                BRL     _chain_structcopy_L14
+                BNE     _chain_structcopy_L14
                 LDA     #1
-                BRL     _chain_structcopy_L15
+                BRA     _chain_structcopy_L15
 _chain_structcopy_L14
                 LDA     #0
 _chain_structcopy_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L12
+                BEQ     _chain_structcopy_L12
                 LDA     _chain_structcopy_g3+8
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _chain_structcopy_L12
+                BNE     _chain_structcopy_L12
                 LDA     #1
-                BRL     _chain_structcopy_L13
+                BRA     _chain_structcopy_L13
 _chain_structcopy_L12
                 LDA     #0
 _chain_structcopy_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L11
+                BEQ     _chain_structcopy_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -555,22 +541,19 @@ _chain_structcopy_L16
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L18
+                BEQ     _chain_structcopy_L18
                 LDA     _chain_structcopy_g1+8
                 TAX
                 TXA
                 CMP     #6
-                BEQ     *+5
-                BRL     _chain_structcopy_L18
+                BNE     _chain_structcopy_L18
                 LDA     #1
-                BRL     _chain_structcopy_L19
+                BRA     _chain_structcopy_L19
 _chain_structcopy_L18
                 LDA     #0
 _chain_structcopy_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L17
+                BEQ     _chain_structcopy_L17
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -631,36 +614,31 @@ _chain_structcopy_L20
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L24
+                BEQ     _chain_structcopy_L24
                 LDA     _chain_structcopy_g2+0
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _chain_structcopy_L24
+                BNE     _chain_structcopy_L24
                 LDA     #1
-                BRL     _chain_structcopy_L25
+                BRA     _chain_structcopy_L25
 _chain_structcopy_L24
                 LDA     #0
 _chain_structcopy_L25
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L22
+                BEQ     _chain_structcopy_L22
                 LDA     _chain_structcopy_g2+8
                 TAX
                 TXA
                 CMP     #8
-                BEQ     *+5
-                BRL     _chain_structcopy_L22
+                BNE     _chain_structcopy_L22
                 LDA     #1
-                BRL     _chain_structcopy_L23
+                BRA     _chain_structcopy_L23
 _chain_structcopy_L22
                 LDA     #0
 _chain_structcopy_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L21
+                BEQ     _chain_structcopy_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -729,8 +707,7 @@ _chain_structcopy_L26
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _chain_structcopy_L30
+                BNE     _chain_structcopy_L30
                 LDA     #66
                 PHA
                 LDA     #55
@@ -758,30 +735,26 @@ _chain_structcopy_L26
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L30
+                BEQ     _chain_structcopy_L30
                 LDA     #1
-                BRL     _chain_structcopy_L31
+                BRA     _chain_structcopy_L31
 _chain_structcopy_L30
                 LDA     #0
 _chain_structcopy_L31
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L28
+                BEQ     _chain_structcopy_L28
                 LDA     _chain_structcopy_g3+8
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _chain_structcopy_L28
+                BNE     _chain_structcopy_L28
                 LDA     #1
-                BRL     _chain_structcopy_L29
+                BRA     _chain_structcopy_L29
 _chain_structcopy_L28
                 LDA     #0
 _chain_structcopy_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L27
+                BEQ     _chain_structcopy_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -838,8 +811,7 @@ _chain_structcopy_L32
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _chain_structcopy_L34
+                BNE     _chain_structcopy_L34
                 LDA     #66
                 PHA
                 LDA     #88
@@ -867,16 +839,14 @@ _chain_structcopy_L32
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L34
+                BEQ     _chain_structcopy_L34
                 LDA     #1
-                BRL     _chain_structcopy_L35
+                BRA     _chain_structcopy_L35
 _chain_structcopy_L34
                 LDA     #0
 _chain_structcopy_L35
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L33
+                BEQ     _chain_structcopy_L33
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA
@@ -911,8 +881,7 @@ _chain_structcopy_L33
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _chain_structcopy_L36
+                BEQ     _chain_structcopy_L36
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
                 TXA

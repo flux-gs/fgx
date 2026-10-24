@@ -91,8 +91,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L0
+                BEQ     _f_round_L0
                 LDA     #1
                 TAY
                 TSC
@@ -176,8 +175,7 @@ _f_round_L0
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L1
+                BEQ     _f_round_L1
                 LDA     #2
                 TAY
                 TSC
@@ -261,8 +259,7 @@ _f_round_L1
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L2
+                BEQ     _f_round_L2
                 LDA     #3
                 TAY
                 TSC
@@ -346,8 +343,7 @@ _f_round_L2
                 TYA
                 JSR     _fcc_fne
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L3
+                BEQ     _f_round_L3
                 LDA     #4
                 TAY
                 TSC
@@ -418,8 +414,7 @@ _f_round_L3
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L4
+                BEQ     _f_round_L4
                 LDA     #5
                 TAY
                 TSC
@@ -524,8 +519,7 @@ _f_round_L4
                 BRA     *+5
                 LDA     #1
                 CMP     #0
-                BNE     *+5
-                BRL     _f_round_L5
+                BEQ     _f_round_L5
                 LDA     #6
                 TAY
                 TSC

@@ -52,8 +52,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _statops_L0
+                BNE     _statops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -68,8 +67,7 @@ _statops_L0
                 TAX
                 TXA
                 CMP     #32768
-                BEQ     *+5
-                BRL     _statops_L1
+                BNE     _statops_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -97,8 +95,7 @@ _statops_L1
                 TYA
                 JSR     _fcc_long_gts
                 CMP     #0
-                BNE     *+5
-                BRL     _statops_L2
+                BEQ     _statops_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -110,8 +107,7 @@ _statops_L2
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _statops_L3
+                BNE     _statops_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -150,8 +146,7 @@ _statops_L3
                 TCS
                 TYA
                 CMP     #$FFFF
-                BEQ     *+5
-                BRL     _statops_L4
+                BNE     _statops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -170,8 +165,7 @@ _statops_L4
                 TAX
                 TXA
                 CMP     #78
-                BEQ     *+5
-                BRL     _statops_L5
+                BNE     _statops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

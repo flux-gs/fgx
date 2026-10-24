@@ -57,8 +57,7 @@ _ss_recurse_L0
                 BVC     _ss_recurse_L3
                 EOR     #$8000
 _ss_recurse_L3
-                BMI     *+5
-                BRL     _ss_recurse_L2
+                BPL     _ss_recurse_L2
                 SEP     #$20
                 MX      %10
                 REP     #$20
@@ -94,7 +93,7 @@ _ss_recurse_L3
                 PLA
 _ss_recurse_L1
                 INC     _fcc_img0
-                BRL     _ss_recurse_L0
+                BRA     _ss_recurse_L0
 _ss_recurse_L2
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
@@ -109,8 +108,7 @@ _ss_recurse_L2
                 BVC     _ss_recurse_L5
                 EOR     #$8000
 _ss_recurse_L5
-                BMI     *+5
-                BRL     _ss_recurse_L4
+                BPL     _ss_recurse_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
                 TAX
@@ -129,7 +127,7 @@ _ss_recurse_L5
                 PLA
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
-                BRL     _ss_recurse_L6
+                BRA     _ss_recurse_L6
 _ss_recurse_L4
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
@@ -157,8 +155,7 @@ _ss_recurse_L6
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BNE     *+5
-                BRL     _ss_recurse_L7
+                BEQ     _ss_recurse_L7
                 LDA     #100
                 TAY
                 TSC

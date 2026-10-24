@@ -250,8 +250,7 @@ _memberstructassign_landed_stkok        TCS
                 TAX
                 TXA
                 CMP     #4660
-                BNE     *+5
-                BRL     _memberstructassign_L0
+                BEQ     _memberstructassign_L0
                 LDA     #1
                 TAY
                 TSC
@@ -309,8 +308,7 @@ _memberstructassign_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L1
+                BEQ     _memberstructassign_L1
                 LDA     #2
                 TAY
                 TSC
@@ -350,8 +348,7 @@ _memberstructassign_L1
                 TAX
                 TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L2
+                BEQ     _memberstructassign_L2
                 LDA     #3
                 TAY
                 TSC
@@ -389,8 +386,7 @@ _memberstructassign_L2
                 TAX
                 TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _memberstructassign_L3
+                BEQ     _memberstructassign_L3
                 LDA     #4
                 TAY
                 TSC
@@ -429,8 +425,7 @@ _memberstructassign_L3
                 TAX
                 TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _memberstructassign_L4
+                BEQ     _memberstructassign_L4
                 LDA     #5
                 TAY
                 TSC
@@ -549,8 +544,7 @@ _memberstructassign_L5
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L6
+                BEQ     _memberstructassign_L6
                 LDA     #10
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -637,8 +631,7 @@ _memberstructassign_L7
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L8
+                BEQ     _memberstructassign_L8
                 LDA     #20
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -760,8 +753,7 @@ _memberstructassign_L10
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L11
+                BEQ     _memberstructassign_L11
                 LDA     #30
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -819,8 +811,7 @@ _memberstructassign_L11
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L12
+                BEQ     _memberstructassign_L12
                 LDA     #39
                 TAY
                 TSC
@@ -929,8 +920,7 @@ _memberstructassign_L14
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L15
+                BEQ     _memberstructassign_L15
                 LDA     #40
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1071,8 +1061,7 @@ _memberstructassign_L17
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L18
+                BEQ     _memberstructassign_L18
                 LDA     #50
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1165,8 +1154,7 @@ _memberstructassign_L19
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L20
+                BEQ     _memberstructassign_L20
                 LDA     #60
                 TAY
                 TSC
@@ -1182,8 +1170,7 @@ _memberstructassign_L20
                 TAX
                 TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L21
+                BEQ     _memberstructassign_L21
                 LDA     #61
                 TAY
                 TSC
@@ -1259,8 +1246,7 @@ _memberstructassign_L22
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L23
+                BEQ     _memberstructassign_L23
                 LDA     #62
                 TAY
                 TSC
@@ -1354,8 +1340,7 @@ _memberstructassign_L24
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L25
+                BEQ     _memberstructassign_L25
                 LDA     #63
                 TAY
                 TSC
@@ -1371,8 +1356,7 @@ _memberstructassign_L25
                 TAX
                 TXA
                 CMP     #22136
-                BNE     *+5
-                BRL     _memberstructassign_L26
+                BEQ     _memberstructassign_L26
                 LDA     #64
                 TAY
                 TSC
@@ -1434,8 +1418,7 @@ _memberstructassign_L27
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L28
+                BEQ     _memberstructassign_L28
                 LDA     #70
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -1534,8 +1517,7 @@ _memberstructassign_L29
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L30
+                BEQ     _memberstructassign_L30
                 LDA     #80
                 PHA
                 PHA
@@ -1586,8 +1568,7 @@ _memberstructassign_L31
                 BVC     _memberstructassign_L34
                 EOR     #$8000
 _memberstructassign_L34
-                BMI     *+5
-                BRL     _memberstructassign_L33
+                BPL     _memberstructassign_L33
                 LDA     25,S   ; fccstk d=0 b=25
                 STA     _fcc_tmp_b
                 ASL
@@ -1618,7 +1599,7 @@ _memberstructassign_L32
                 CLC
                 ADC     #1
                 STA     25,S   ; fccstk d=0 b=25
-                BRL     _memberstructassign_L31
+                BRA     _memberstructassign_L31
 _memberstructassign_L33
                 LDA     #1
                 STA     25,S   ; fccstk d=0 b=25
@@ -1679,8 +1660,7 @@ _memberstructassign_L35
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L36
+                BEQ     _memberstructassign_L36
                 LDA     #90
                 PHA
                 PHA
@@ -1758,8 +1738,7 @@ _memberstructassign_L36
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L37
+                BEQ     _memberstructassign_L37
                 LDA     #98
                 TAY
                 TSC
@@ -1812,8 +1791,7 @@ _memberstructassign_L37
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L38
+                BEQ     _memberstructassign_L38
                 LDA     #99
                 TAY
                 TSC
@@ -1906,8 +1884,7 @@ _memberstructassign_L39
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L40
+                BEQ     _memberstructassign_L40
                 LDA     #100
                 PHA
                 PHA
@@ -1948,8 +1925,7 @@ _memberstructassign_L40
                 TAX
                 TXA
                 CMP     #52428
-                BNE     *+5
-                BRL     _memberstructassign_L41
+                BEQ     _memberstructassign_L41
                 LDA     #108
                 TAY
                 TSC
@@ -1965,8 +1941,7 @@ _memberstructassign_L41
                 TAX
                 TXA
                 CMP     #56797
-                BNE     *+5
-                BRL     _memberstructassign_L42
+                BEQ     _memberstructassign_L42
                 LDA     #109
                 TAY
                 TSC
@@ -2051,8 +2026,7 @@ _memberstructassign_L43
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L44
+                BEQ     _memberstructassign_L44
                 LDA     #110
                 PHA
                 PHA
@@ -2093,8 +2067,7 @@ _memberstructassign_L44
                 TAX
                 TXA
                 CMP     #52428
-                BNE     *+5
-                BRL     _memberstructassign_L45
+                BEQ     _memberstructassign_L45
                 LDA     #118
                 TAY
                 TSC
@@ -2110,8 +2083,7 @@ _memberstructassign_L45
                 TAX
                 TXA
                 CMP     #56797
-                BNE     *+5
-                BRL     _memberstructassign_L46
+                BEQ     _memberstructassign_L46
                 LDA     #119
                 TAY
                 TSC
@@ -2167,8 +2139,7 @@ _memberstructassign_L47
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L48
+                BEQ     _memberstructassign_L48
                 LDA     #120
                 TAY
                 TSC
@@ -2208,8 +2179,7 @@ _memberstructassign_L48
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L49
+                BEQ     _memberstructassign_L49
                 LDA     #121
                 TAY
                 TSC
@@ -2229,8 +2199,7 @@ _memberstructassign_L49
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 CMP     #0
-                BNE     *+5
-                BRL     _memberstructassign_L50
+                BEQ     _memberstructassign_L50
                 LDA     #122
                 TAY
                 TSC
@@ -2250,8 +2219,7 @@ _memberstructassign_L50
                 TAX
                 TXA
                 CMP     #43690
-                BNE     *+5
-                BRL     _memberstructassign_L51
+                BEQ     _memberstructassign_L51
                 LDA     #123
                 TAY
                 TSC
@@ -2272,8 +2240,7 @@ _memberstructassign_L51
                 TAX
                 TXA
                 CMP     #48059
-                BNE     *+5
-                BRL     _memberstructassign_L52
+                BEQ     _memberstructassign_L52
                 LDA     #124
                 TAY
                 TSC

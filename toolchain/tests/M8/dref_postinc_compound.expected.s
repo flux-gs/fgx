@@ -137,9 +137,8 @@ _dref_postinc_compound_L0
                 REP     #$20
                 MX      %00
                 CMP     #0
-                BNE     *+5
-                BRL     _dref_postinc_compound_L1
-                BRL     _dref_postinc_compound_L0
+                BEQ     _dref_postinc_compound_L1
+                BRA     _dref_postinc_compound_L0
 _dref_postinc_compound_L1
                 LDA     #0
                 TAX
@@ -148,8 +147,7 @@ _dref_postinc_compound_L1
                 TAX
                 TXA
                 CMP     #65
-                BEQ     *+5
-                BRL     _dref_postinc_compound_L2
+                BNE     _dref_postinc_compound_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -164,8 +162,7 @@ _dref_postinc_compound_L2
                 TAX
                 TXA
                 CMP     #66
-                BEQ     *+5
-                BRL     _dref_postinc_compound_L3
+                BNE     _dref_postinc_compound_L3
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -180,8 +177,7 @@ _dref_postinc_compound_L3
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _dref_postinc_compound_L4
+                BNE     _dref_postinc_compound_L4
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -254,8 +250,7 @@ _dref_postinc_compound_L4
                 TAX
                 TXA
                 CMP     #7
-                BEQ     *+5
-                BRL     _dref_postinc_compound_L5
+                BNE     _dref_postinc_compound_L5
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -270,8 +265,7 @@ _dref_postinc_compound_L5
                 TAX
                 TXA
                 CMP     #7
-                BNE     *+5
-                BRL     _dref_postinc_compound_L6
+                BEQ     _dref_postinc_compound_L6
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -317,8 +311,7 @@ _dref_postinc_compound_L6
                 TAX
                 TXA
                 CMP     #32
-                BEQ     *+5
-                BRL     _dref_postinc_compound_L7
+                BNE     _dref_postinc_compound_L7
                 LDA     _fcc_img0
                 TAX
                 TXA

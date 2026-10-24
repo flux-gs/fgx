@@ -99,8 +99,7 @@ _uresid_L3
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
-                BCC     *+5
-                BRL     _uresid_L2
+                BCS     _uresid_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -164,8 +163,7 @@ _uresid_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _uresid_L5
+                BEQ     _uresid_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA

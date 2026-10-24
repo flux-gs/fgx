@@ -81,8 +81,7 @@ _f_printf_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L2
+                BEQ     _f_printf_L2
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img1
@@ -109,18 +108,16 @@ _f_printf_L0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _f_printf_L2
+                BNE     _f_printf_L2
                 LDA     #1
-                BRL     _f_printf_L3
+                BRA     _f_printf_L3
 _f_printf_L2
                 LDA     #0
 _f_printf_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L1
+                BEQ     _f_printf_L1
                 INC     _fcc_img0
-                BRL     _f_printf_L0
+                BRA     _f_printf_L0
 _f_printf_L1
                 LDA     _fcc_img2
                 STA     _fcc_ptr+2
@@ -258,8 +255,7 @@ _f_printf_L5
                 LDA     #1
 _f_printf_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L4
+                BEQ     _f_printf_L4
                 LDA     #1
                 TAY
                 TSC
@@ -355,8 +351,7 @@ _f_printf_L8
                 LDA     #1
 _f_printf_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L7
+                BEQ     _f_printf_L7
                 LDA     #2
                 TAY
                 TSC
@@ -452,8 +447,7 @@ _f_printf_L11
                 LDA     #1
 _f_printf_L12
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L10
+                BEQ     _f_printf_L10
                 LDA     #3
                 TAY
                 TSC
@@ -554,8 +548,7 @@ _f_printf_L14
                 LDA     #1
 _f_printf_L15
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L13
+                BEQ     _f_printf_L13
                 LDA     #4
                 TAY
                 TSC
@@ -651,8 +644,7 @@ _f_printf_L17
                 LDA     #1
 _f_printf_L18
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L16
+                BEQ     _f_printf_L16
                 LDA     #5
                 TAY
                 TSC
@@ -748,8 +740,7 @@ _f_printf_L20
                 LDA     #1
 _f_printf_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L19
+                BEQ     _f_printf_L19
                 LDA     #6
                 TAY
                 TSC
@@ -845,8 +836,7 @@ _f_printf_L23
                 LDA     #1
 _f_printf_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L22
+                BEQ     _f_printf_L22
                 LDA     #7
                 TAY
                 TSC
@@ -942,8 +932,7 @@ _f_printf_L26
                 LDA     #1
 _f_printf_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L25
+                BEQ     _f_printf_L25
                 LDA     #8
                 TAY
                 TSC
@@ -1039,8 +1028,7 @@ _f_printf_L29
                 LDA     #1
 _f_printf_L30
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L28
+                BEQ     _f_printf_L28
                 LDA     #9
                 TAY
                 TSC
@@ -1136,8 +1124,7 @@ _f_printf_L32
                 LDA     #1
 _f_printf_L33
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L31
+                BEQ     _f_printf_L31
                 LDA     #10
                 TAY
                 TSC
@@ -1233,8 +1220,7 @@ _f_printf_L35
                 LDA     #1
 _f_printf_L36
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L34
+                BEQ     _f_printf_L34
                 LDA     #11
                 TAY
                 TSC
@@ -1330,8 +1316,7 @@ _f_printf_L38
                 LDA     #1
 _f_printf_L39
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L37
+                BEQ     _f_printf_L37
                 LDA     #12
                 TAY
                 TSC
@@ -1427,8 +1412,7 @@ _f_printf_L41
                 LDA     #1
 _f_printf_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _f_printf_L40
+                BEQ     _f_printf_L40
                 LDA     #13
                 TAY
                 TSC

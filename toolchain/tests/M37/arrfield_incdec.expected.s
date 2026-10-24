@@ -86,50 +86,43 @@ main_stkok        TCS
                 TAX
                 TXA
                 CMP     #31
-                BEQ     *+5
-                BRL     _arrfield_incdec_L5
+                BNE     _arrfield_incdec_L5
                 LDA     _arrfield_incdec_obj+6
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _arrfield_incdec_L5
+                BNE     _arrfield_incdec_L5
                 LDA     #1
-                BRL     _arrfield_incdec_L6
+                BRA     _arrfield_incdec_L6
 _arrfield_incdec_L5
                 LDA     #0
 _arrfield_incdec_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L3
+                BEQ     _arrfield_incdec_L3
                 LDA     _arrfield_incdec_obj+10
                 TAX
                 TXA
                 CMP     #40
-                BEQ     *+5
-                BRL     _arrfield_incdec_L3
+                BNE     _arrfield_incdec_L3
                 LDA     #1
-                BRL     _arrfield_incdec_L4
+                BRA     _arrfield_incdec_L4
 _arrfield_incdec_L3
                 LDA     #0
 _arrfield_incdec_L4
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L1
+                BEQ     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+0
                 TAX
                 TXA
                 CMP     #10
-                BEQ     *+5
-                BRL     _arrfield_incdec_L1
+                BNE     _arrfield_incdec_L1
                 LDA     #1
-                BRL     _arrfield_incdec_L2
+                BRA     _arrfield_incdec_L2
 _arrfield_incdec_L1
                 LDA     #0
 _arrfield_incdec_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L0
+                BEQ     _arrfield_incdec_L0
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -159,36 +152,31 @@ _arrfield_incdec_L0
                 TAX
                 TXA
                 CMP     #39
-                BEQ     *+5
-                BRL     _arrfield_incdec_L10
+                BNE     _arrfield_incdec_L10
                 LDA     _arrfield_incdec_obj+8
                 TAX
                 TXA
                 CMP     #31
-                BEQ     *+5
-                BRL     _arrfield_incdec_L10
+                BNE     _arrfield_incdec_L10
                 LDA     #1
-                BRL     _arrfield_incdec_L11
+                BRA     _arrfield_incdec_L11
 _arrfield_incdec_L10
                 LDA     #0
 _arrfield_incdec_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L8
+                BEQ     _arrfield_incdec_L8
                 LDA     _arrfield_incdec_obj+6
                 TAX
                 TXA
                 CMP     #20
-                BEQ     *+5
-                BRL     _arrfield_incdec_L8
+                BNE     _arrfield_incdec_L8
                 LDA     #1
-                BRL     _arrfield_incdec_L9
+                BRA     _arrfield_incdec_L9
 _arrfield_incdec_L8
                 LDA     #0
 _arrfield_incdec_L9
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L7
+                BEQ     _arrfield_incdec_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -273,38 +261,33 @@ _arrfield_incdec_L7
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _arrfield_incdec_L15
+                BNE     _arrfield_incdec_L15
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _arrfield_incdec_L15
+                BNE     _arrfield_incdec_L15
                 LDA     #1
-                BRL     _arrfield_incdec_L16
+                BRA     _arrfield_incdec_L16
 _arrfield_incdec_L15
                 LDA     #0
 _arrfield_incdec_L16
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L13
+                BEQ     _arrfield_incdec_L13
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _arrfield_incdec_L13
+                BNE     _arrfield_incdec_L13
                 LDA     #1
-                BRL     _arrfield_incdec_L14
+                BRA     _arrfield_incdec_L14
 _arrfield_incdec_L13
                 LDA     #0
 _arrfield_incdec_L14
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L12
+                BEQ     _arrfield_incdec_L12
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -345,22 +328,19 @@ _arrfield_incdec_L12
                 TAX
                 TXA
                 CMP     #21
-                BEQ     *+5
-                BRL     _arrfield_incdec_L18
+                BNE     _arrfield_incdec_L18
                 LDA     _arrfield_incdec_obj+8
                 TAX
                 TXA
                 CMP     #31
-                BEQ     *+5
-                BRL     _arrfield_incdec_L18
+                BNE     _arrfield_incdec_L18
                 LDA     #1
-                BRL     _arrfield_incdec_L19
+                BRA     _arrfield_incdec_L19
 _arrfield_incdec_L18
                 LDA     #0
 _arrfield_incdec_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L17
+                BEQ     _arrfield_incdec_L17
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -395,38 +375,33 @@ _arrfield_incdec_L17
                 TAX
                 TXA
                 CMP     #98
-                BEQ     *+5
-                BRL     _arrfield_incdec_L23
+                BNE     _arrfield_incdec_L23
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #99
-                BEQ     *+5
-                BRL     _arrfield_incdec_L23
+                BNE     _arrfield_incdec_L23
                 LDA     #1
-                BRL     _arrfield_incdec_L24
+                BRA     _arrfield_incdec_L24
 _arrfield_incdec_L23
                 LDA     #0
 _arrfield_incdec_L24
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L21
+                BEQ     _arrfield_incdec_L21
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _arrfield_incdec_L21
+                BNE     _arrfield_incdec_L21
                 LDA     #1
-                BRL     _arrfield_incdec_L22
+                BRA     _arrfield_incdec_L22
 _arrfield_incdec_L21
                 LDA     #0
 _arrfield_incdec_L22
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L20
+                BEQ     _arrfield_incdec_L20
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -562,8 +537,7 @@ _arrfield_incdec_L20
                 TAX
                 TXA
                 CMP     #107
-                BEQ     *+5
-                BRL     _arrfield_incdec_L28
+                BNE     _arrfield_incdec_L28
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -596,16 +570,14 @@ _arrfield_incdec_L20
                 TAX
                 TXA
                 CMP     #200
-                BEQ     *+5
-                BRL     _arrfield_incdec_L28
+                BNE     _arrfield_incdec_L28
                 LDA     #1
-                BRL     _arrfield_incdec_L29
+                BRA     _arrfield_incdec_L29
 _arrfield_incdec_L28
                 LDA     #0
 _arrfield_incdec_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L26
+                BEQ     _arrfield_incdec_L26
                 LDA     #1
                 STA     _fcc_tmp_b
                 ASL
@@ -638,16 +610,14 @@ _arrfield_incdec_L29
                 TAX
                 TXA
                 CMP     #300
-                BEQ     *+5
-                BRL     _arrfield_incdec_L26
+                BNE     _arrfield_incdec_L26
                 LDA     #1
-                BRL     _arrfield_incdec_L27
+                BRA     _arrfield_incdec_L27
 _arrfield_incdec_L26
                 LDA     #0
 _arrfield_incdec_L27
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L25
+                BEQ     _arrfield_incdec_L25
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -719,8 +689,7 @@ _arrfield_incdec_L25
                 TAX
                 TXA
                 CMP     #250
-                BEQ     *+5
-                BRL     _arrfield_incdec_L31
+                BNE     _arrfield_incdec_L31
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -753,16 +722,14 @@ _arrfield_incdec_L25
                 TAX
                 TXA
                 CMP     #107
-                BEQ     *+5
-                BRL     _arrfield_incdec_L31
+                BNE     _arrfield_incdec_L31
                 LDA     #1
-                BRL     _arrfield_incdec_L32
+                BRA     _arrfield_incdec_L32
 _arrfield_incdec_L31
                 LDA     #0
 _arrfield_incdec_L32
                 CMP     #0
-                BNE     *+5
-                BRL     _arrfield_incdec_L30
+                BEQ     _arrfield_incdec_L30
                 LDA     _fcc_img0
                 TAX
                 TXA

@@ -95,8 +95,7 @@ _void_for_clause_L0
                 JSR     _fcc_safepoint
                 LDA     bavar
                 CMP     #0
-                BNE     *+5
-                BRL     _void_for_clause_L2
+                BEQ     _void_for_clause_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 TXA
@@ -107,14 +106,13 @@ _void_for_clause_L1
                 FGX2_FARCALL vafter
                 LDA     #0
                 STA     bavar
-                BRL     _void_for_clause_L0
+                BRA     _void_for_clause_L0
 _void_for_clause_L2
                 LDA     gtrace
                 TAX
                 TXA
                 CMP     #11
-                BNE     *+5
-                BRL     _void_for_clause_L3
+                BEQ     _void_for_clause_L3
                 LDA     #1
                 TAY
                 TSC
@@ -130,8 +128,7 @@ _void_for_clause_L3
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _void_for_clause_L4
+                BEQ     _void_for_clause_L4
                 LDA     #2
                 TAY
                 TSC

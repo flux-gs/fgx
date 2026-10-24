@@ -65,8 +65,7 @@ _long_rvinc_L0
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _long_rvinc_L2
+                BEQ     _long_rvinc_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -75,18 +74,16 @@ _long_rvinc_L0
                 BVC     _long_rvinc_L4
                 EOR     #$8000
 _long_rvinc_L4
-                BMI     *+5
-                BRL     _long_rvinc_L2
+                BPL     _long_rvinc_L2
                 LDA     #1
-                BRL     _long_rvinc_L3
+                BRA     _long_rvinc_L3
 _long_rvinc_L2
                 LDA     #0
 _long_rvinc_L3
                 CMP     #0
-                BNE     *+5
-                BRL     _long_rvinc_L1
+                BEQ     _long_rvinc_L1
                 INC     _fcc_img0
-                BRL     _long_rvinc_L0
+                BRA     _long_rvinc_L0
 _long_rvinc_L1
                 LDA     _fcc_img1
                 CLC
@@ -145,8 +142,7 @@ _long_rvinc_L5
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _long_rvinc_L7
+                BEQ     _long_rvinc_L7
                 LDA     _fcc_img0
                 TAX
                 TXA
@@ -155,18 +151,16 @@ _long_rvinc_L5
                 BVC     _long_rvinc_L9
                 EOR     #$8000
 _long_rvinc_L9
-                BMI     *+5
-                BRL     _long_rvinc_L7
+                BPL     _long_rvinc_L7
                 LDA     #1
-                BRL     _long_rvinc_L8
+                BRA     _long_rvinc_L8
 _long_rvinc_L7
                 LDA     #0
 _long_rvinc_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _long_rvinc_L6
+                BEQ     _long_rvinc_L6
                 INC     _fcc_img0
-                BRL     _long_rvinc_L5
+                BRA     _long_rvinc_L5
 _long_rvinc_L6
                 LDA     _fcc_img1
                 TAX

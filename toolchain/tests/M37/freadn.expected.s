@@ -37,8 +37,7 @@ _freadn_L0
                 BVC     _freadn_L3
                 EOR     #$8000
 _freadn_L3
-                BMI     *+5
-                BRL     _freadn_L2
+                BPL     _freadn_L2
                 LDA     #rec
                 PHA
                 LDA     _fcc_img0
@@ -63,7 +62,7 @@ _freadn_L3
                 PLA
 _freadn_L1
                 INC     _fcc_img0
-                BRL     _freadn_L0
+                BRA     _freadn_L0
 _freadn_L2
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
@@ -105,24 +104,21 @@ _freadn_L2
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _freadn_L7
+                BNE     _freadn_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _freadn_L7
+                BNE     _freadn_L7
                 LDA     #0
-                BRL     _freadn_L8
+                BRA     _freadn_L8
 _freadn_L7
                 LDA     #1
 _freadn_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L5
+                BEQ     _freadn_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -156,16 +152,14 @@ _freadn_L8
                 TAX
                 TXA
                 CMP     #3
-                BEQ     *+5
-                BRL     _freadn_L5
+                BNE     _freadn_L5
                 LDA     #1
-                BRL     _freadn_L6
+                BRA     _freadn_L6
 _freadn_L5
                 LDA     #0
 _freadn_L6
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L4
+                BEQ     _freadn_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -248,8 +242,7 @@ _freadn_L4
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _freadn_L12
+                BNE     _freadn_L12
                 LDA     #0
                 TAX
                 LDA:    in,X
@@ -257,16 +250,14 @@ _freadn_L4
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _freadn_L12
+                BNE     _freadn_L12
                 LDA     #1
-                BRL     _freadn_L13
+                BRA     _freadn_L13
 _freadn_L12
                 LDA     #0
 _freadn_L13
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L10
+                BEQ     _freadn_L10
                 LDA     #23
                 TAX
                 LDA:    in,X
@@ -280,16 +271,14 @@ _freadn_L13
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _freadn_L10
+                BNE     _freadn_L10
                 LDA     #1
-                BRL     _freadn_L11
+                BRA     _freadn_L11
 _freadn_L10
                 LDA     #0
 _freadn_L11
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L9
+                BEQ     _freadn_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -331,8 +320,7 @@ _freadn_L9
                 TAX
                 TXA
                 CMP     #1
-                BEQ     *+5
-                BRL     _freadn_L14
+                BNE     _freadn_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -372,8 +360,7 @@ _freadn_L14
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 CMP     #0
-                BEQ     *+5
-                BRL     _freadn_L15
+                BNE     _freadn_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -456,8 +443,7 @@ _freadn_L15
                 TAX
                 TXA
                 CMP     #36
-                BEQ     *+5
-                BRL     _freadn_L16
+                BNE     _freadn_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA
@@ -555,22 +541,19 @@ _freadn_L16
                 TAX
                 TXA
                 CMP     #97
-                BEQ     *+5
-                BRL     _freadn_L22
+                BNE     _freadn_L22
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
                 TXA
                 CMP     #2
-                BEQ     *+5
-                BRL     _freadn_L22
+                BNE     _freadn_L22
                 LDA     #1
-                BRL     _freadn_L23
+                BRA     _freadn_L23
 _freadn_L22
                 LDA     #0
 _freadn_L23
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L20
+                BEQ     _freadn_L20
                 LDA     #0
                 TAX
                 LDA:    in,X
@@ -578,16 +561,14 @@ _freadn_L23
                 TAX
                 TXA
                 CMP     #98
-                BEQ     *+5
-                BRL     _freadn_L20
+                BNE     _freadn_L20
                 LDA     #1
-                BRL     _freadn_L21
+                BRA     _freadn_L21
 _freadn_L20
                 LDA     #0
 _freadn_L21
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L18
+                BEQ     _freadn_L18
                 LDA     #7
                 TAX
                 LDA:    in,X
@@ -601,16 +582,14 @@ _freadn_L21
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _freadn_L18
+                BNE     _freadn_L18
                 LDA     #1
-                BRL     _freadn_L19
+                BRA     _freadn_L19
 _freadn_L18
                 LDA     #0
 _freadn_L19
                 CMP     #0
-                BNE     *+5
-                BRL     _freadn_L17
+                BEQ     _freadn_L17
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
                 TXA

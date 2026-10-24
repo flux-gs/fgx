@@ -52,8 +52,7 @@ _longincdec_L0
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L2
+                BEQ     _longincdec_L2
                 INC     _fcc_img0
 _longincdec_L1
                 LDA     #$FFFF
@@ -70,14 +69,13 @@ _longincdec_L1
                 LDA     _fcc_long_hi
                 STA     _fcc_img2
                 TYA
-                BRL     _longincdec_L0
+                BRA     _longincdec_L0
 _longincdec_L2
                 LDA     _fcc_img0
                 TAX
                 TXA
                 CMP     #4
-                BNE     *+5
-                BRL     _longincdec_L3
+                BEQ     _longincdec_L3
                 LDA     #1
                 TAY
                 TSC
@@ -111,8 +109,7 @@ _longincdec_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L4
+                BEQ     _longincdec_L4
                 LDA     #2
                 TAY
                 TSC
@@ -144,8 +141,7 @@ _longincdec_L4
                 TYA
                 JSR     _fcc_long_ges
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L5
+                BEQ     _longincdec_L5
                 LDA     #3
                 TAY
                 TSC
@@ -200,8 +196,7 @@ _longincdec_L5
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L6
+                BEQ     _longincdec_L6
                 LDA     #4
                 TAY
                 TSC
@@ -256,8 +251,7 @@ _longincdec_L6
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L7
+                BEQ     _longincdec_L7
                 LDA     #5
                 TAY
                 TSC
@@ -312,8 +306,7 @@ _longincdec_L7
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L8
+                BEQ     _longincdec_L8
                 LDA     #6
                 TAY
                 TSC
@@ -369,8 +362,7 @@ _longincdec_L8
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longincdec_L9
+                BEQ     _longincdec_L9
                 LDA     #7
                 TAY
                 TSC

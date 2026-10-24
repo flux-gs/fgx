@@ -140,10 +140,9 @@ same_stkok        TCS
                 TYA
                 JSR     _fcc_long_eq
                 CMP     #0
-                BNE     *+5
-                BRL     _sigsptrlong_L0
+                BEQ     _sigsptrlong_L0
                 LDA     #42
-                BRL     _sigsptrlong_L1
+                BRA     _sigsptrlong_L1
 _sigsptrlong_L0
                 LDA     #7
 _sigsptrlong_L1

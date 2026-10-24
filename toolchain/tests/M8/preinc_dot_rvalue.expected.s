@@ -61,56 +61,49 @@ main_stkok        TCS
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L5
+                BNE     _preinc_dot_rvalue_L5
                 LDA     _fcc_img1
                 PHA
                 LDA     c+10
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L5
+                BNE     _preinc_dot_rvalue_L5
                 LDA     #0
-                BRL     _preinc_dot_rvalue_L6
+                BRA     _preinc_dot_rvalue_L6
 _preinc_dot_rvalue_L5
                 LDA     #1
 _preinc_dot_rvalue_L6
                 CMP     #0
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L3
+                BNE     _preinc_dot_rvalue_L3
                 LDA     _fcc_img2
                 PHA
                 LDA     c+0
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L3
+                BNE     _preinc_dot_rvalue_L3
                 LDA     #0
-                BRL     _preinc_dot_rvalue_L4
+                BRA     _preinc_dot_rvalue_L4
 _preinc_dot_rvalue_L3
                 LDA     #1
 _preinc_dot_rvalue_L4
                 CMP     #0
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L1
+                BNE     _preinc_dot_rvalue_L1
                 LDA     _fcc_img3
                 PHA
                 LDA     c+4
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
-                BEQ     *+5
-                BRL     _preinc_dot_rvalue_L1
+                BNE     _preinc_dot_rvalue_L1
                 LDA     #0
-                BRL     _preinc_dot_rvalue_L2
+                BRA     _preinc_dot_rvalue_L2
 _preinc_dot_rvalue_L1
                 LDA     #1
 _preinc_dot_rvalue_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _preinc_dot_rvalue_L0
+                BEQ     _preinc_dot_rvalue_L0
                 LDA     #1
                 TAY
                 TSC

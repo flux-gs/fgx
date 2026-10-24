@@ -72,8 +72,7 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L0
+                BEQ     _longcompound_L0
                 LDA     #1
                 TAY
                 TSC
@@ -132,8 +131,7 @@ _longcompound_L0
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L1
+                BEQ     _longcompound_L1
                 LDA     #2
                 TAY
                 TSC
@@ -191,8 +189,7 @@ _longcompound_L1
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L2
+                BEQ     _longcompound_L2
                 LDA     #3
                 TAY
                 TSC
@@ -257,8 +254,7 @@ _longcompound_L2
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L3
+                BEQ     _longcompound_L3
                 LDA     #4
                 TAY
                 TSC
@@ -316,8 +312,7 @@ _longcompound_L3
                 TYA
                 JSR     _fcc_long_ne
                 CMP     #0
-                BNE     *+5
-                BRL     _longcompound_L4
+                BEQ     _longcompound_L4
                 LDA     #5
                 TAY
                 TSC

@@ -187,24 +187,21 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_assign_base_L1
+                BNE     _paren_assign_base_L1
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_assign_base_L1
+                BNE     _paren_assign_base_L1
                 LDA     #0
-                BRL     _paren_assign_base_L2
+                BRA     _paren_assign_base_L2
 _paren_assign_base_L1
                 LDA     #1
 _paren_assign_base_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_assign_base_L0
+                BEQ     _paren_assign_base_L0
                 LDA     #1
                 TAY
                 TSC
@@ -245,24 +242,21 @@ _paren_assign_base_L0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_assign_base_L4
+                BNE     _paren_assign_base_L4
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_assign_base_L4
+                BNE     _paren_assign_base_L4
                 LDA     #0
-                BRL     _paren_assign_base_L5
+                BRA     _paren_assign_base_L5
 _paren_assign_base_L4
                 LDA     #1
 _paren_assign_base_L5
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_assign_base_L3
+                BEQ     _paren_assign_base_L3
                 LDA     #2
                 TAY
                 TSC
@@ -294,24 +288,21 @@ _paren_assign_base_L3
                 STZ     _fcc_fpr1+2
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
-                BEQ     *+5
-                BRL     _paren_assign_base_L7
+                BNE     _paren_assign_base_L7
                 SEP     #$20
                 MX      %10
                 LDA     _fcc_fpr0+2
                 CMP     _fcc_fpr1+2
                 REP     #$20
                 MX      %00
-                BEQ     *+5
-                BRL     _paren_assign_base_L7
+                BNE     _paren_assign_base_L7
                 LDA     #0
-                BRL     _paren_assign_base_L8
+                BRA     _paren_assign_base_L8
 _paren_assign_base_L7
                 LDA     #1
 _paren_assign_base_L8
                 CMP     #0
-                BNE     *+5
-                BRL     _paren_assign_base_L6
+                BEQ     _paren_assign_base_L6
                 LDA     #3
                 TAY
                 TSC

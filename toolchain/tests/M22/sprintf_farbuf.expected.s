@@ -47,8 +47,7 @@ _sprintf_farbuf_L1
                 LDA     #1
 _sprintf_farbuf_L2
                 CMP     #0
-                BNE     *+5
-                BRL     _sprintf_farbuf_L0
+                BEQ     _sprintf_farbuf_L0
                 LDA     #1
                 TAY
                 TSC
@@ -169,8 +168,7 @@ _sprintf_farbuf_L0
                 TCS
                 TYA
                 CMP     #0
-                BNE     *+5
-                BRL     _sprintf_farbuf_L3
+                BEQ     _sprintf_farbuf_L3
                 LDA     #1
                 TAY
                 TSC

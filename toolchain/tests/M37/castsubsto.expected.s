@@ -33,8 +33,7 @@ _castsubsto_L0
                 BVC     _castsubsto_L3
                 EOR     #$8000
 _castsubsto_L3
-                BMI     *+5
-                BRL     _castsubsto_L2
+                BPL     _castsubsto_L2
                 LDA     _fcc_img0
                 CLC
                 ADC     #words
@@ -59,7 +58,7 @@ _castsubsto_L3
                 MX      %00
 _castsubsto_L1
                 INC     _fcc_img0
-                BRL     _castsubsto_L0
+                BRA     _castsubsto_L0
 _castsubsto_L2
                 LDA     #0
                 CLC
@@ -77,8 +76,7 @@ _castsubsto_L2
                 TAX
                 TXA
                 CMP     #1
-                BNE     *+5
-                BRL     _castsubsto_L4
+                BEQ     _castsubsto_L4
                 LDA     #1
                 TAY
                 TSC
@@ -106,8 +104,7 @@ _castsubsto_L4
                 TAX
                 TXA
                 CMP     #8
-                BNE     *+5
-                BRL     _castsubsto_L5
+                BEQ     _castsubsto_L5
                 LDA     #2
                 TAY
                 TSC
