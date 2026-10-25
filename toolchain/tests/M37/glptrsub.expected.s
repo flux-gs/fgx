@@ -152,22 +152,10 @@ _glptrsub_L2
                 LDA:    larr+2,X
                 STA     _fcc_long_hi
                 LDA:    larr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0064
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #100
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrsub_L4
@@ -189,22 +177,10 @@ _glptrsub_L4
                 LDA:    larr+2,X
                 STA     _fcc_long_hi
                 LDA:    larr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$3039
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #12345
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrsub_L5
@@ -259,22 +235,10 @@ _glptrsub_L5
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$002A
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #42
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrsub_L6
@@ -307,22 +271,10 @@ _glptrsub_L6
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0064
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #100
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrsub_L7
@@ -355,22 +307,10 @@ _glptrsub_L7
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$3039
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #12345
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrsub_L8

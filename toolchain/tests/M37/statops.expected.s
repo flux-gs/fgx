@@ -59,11 +59,9 @@ main_stkok        TCS
 _statops_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 AND     #61440
-                TAX
                 CMP     #32768
                 BNE     _statops_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
@@ -71,21 +69,10 @@ _statops_L1
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gts
                 CMP     #0
                 BEQ     _statops_L2

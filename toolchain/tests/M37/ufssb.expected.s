@@ -3911,21 +3911,10 @@ ufs_sbvalid_stkok        TCS
                 STA     _fcc_long_hi
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #4
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
                 BEQ     _ufssb_L25
@@ -3965,21 +3954,10 @@ _ufssb_L25
                 LDA     [_fcc_fpr0]
                 LDX     #0
                 STX     _fcc_long_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #2
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_les
                 CMP     #0
                 BEQ     _ufssb_L26
@@ -4183,21 +4161,10 @@ _ufssb_L34
                 ELSE
                 LDA     10+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ufssb_L35
@@ -4441,22 +4408,10 @@ _ufssb_L41
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1F06
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #7942
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ufssb_L42
@@ -4484,22 +4439,10 @@ _ufssb_L42
                 STA     _fcc_fp
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$1283
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4739
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ufssb_L43
@@ -4527,22 +4470,10 @@ _ufssb_L43
                 STA     _fcc_fp
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6A79
-                STA     _fcc_long_hi
-                LDA     #$37C3
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #14275
+                STX     _fcc_long_b_lo
+                LDX     #27257
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ufssb_L44

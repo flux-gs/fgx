@@ -55,21 +55,10 @@ _lshiftvar_L3
                 STA     _fcc_long_hi
                 TYA
                 JSR     _fcc_long_shl
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_img4
                 TAY
@@ -82,22 +71,10 @@ _lshiftvar_L3
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$01FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #511
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _lshiftvar_L4
@@ -118,22 +95,10 @@ _lshiftvar_L4
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$03FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1023
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _lshiftvar_L5
@@ -154,22 +119,10 @@ _lshiftvar_L5
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$07FF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2047
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _lshiftvar_L6
@@ -191,22 +144,10 @@ _lshiftvar_L6
                 LDA     _fcc_img5
                 STA     _fcc_long_hi
                 LDA     _fcc_img4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0FFF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4095
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _lshiftvar_L7
@@ -335,21 +276,10 @@ _lshiftvar_L14
                 LDA     _fcc_img9
                 STA     _fcc_long_hi
                 LDA     _fcc_img8
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #2
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_divs
                 STA     _fcc_img8
                 TAY

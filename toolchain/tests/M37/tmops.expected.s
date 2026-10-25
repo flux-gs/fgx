@@ -430,70 +430,34 @@ _tmops_L4
                 TCS
                 TYA
                 CMP     #0
-                BEQ     *+5
-                BRL     _tmops_L6
+                BNE     _tmops_L6
                 LDA     gtv+2
                 STA     _fcc_long_hi
                 LDA     gtv+0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$6553
-                STA     _fcc_long_hi
-                LDA     #$F100
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #61696
+                STX     _fcc_long_b_lo
+                LDX     #25939
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_gts
                 CMP     #0
                 BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #0
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ges
                 CMP     #0
                 BEQ     _tmops_L6
                 LDA     gtv+6
                 STA     _fcc_long_hi
                 LDA     gtv+4
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000F
-                STA     _fcc_long_hi
-                LDA     #$4240
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16960
+                STX     _fcc_long_b_lo
+                LDX     #15
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
                 BEQ     _tmops_L6

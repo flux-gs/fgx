@@ -184,22 +184,10 @@ _arrmemberdecay_L7
                 CLC
                 ADC     #1
                 JSR     _fcc_long_from_int
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$03E8
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_mul
                 STA     [_fcc_fpr0]
                 TAX
@@ -335,22 +323,10 @@ _arrmemberdecay_L6
                 LDA     [_fcc_ptr]
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$03E8
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L8
@@ -385,22 +361,10 @@ _arrmemberdecay_L8
                 LDA     [_fcc_ptr]
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0FA0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #4000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L9
@@ -450,22 +414,10 @@ _arrmemberdecay_L9
                 LDA     o+8
                 STA     _fcc_long_hi
                 LDA     o+6
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$08AE
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #2222
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L10
@@ -529,22 +481,10 @@ _arrmemberdecay_L10
                 ADC     #6
                 TCS
                 TYA
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$2710
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #10000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L11
@@ -575,22 +515,10 @@ _arrmemberdecay_L11
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$03E8
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L12
@@ -621,22 +549,10 @@ _arrmemberdecay_L12
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0BB8
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #3000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrmemberdecay_L13

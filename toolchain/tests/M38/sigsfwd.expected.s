@@ -367,22 +367,10 @@ chk_stkok        TCS
                 ELSE
                 LDA     6+chk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1234
-                STA     _fcc_long_hi
-                LDA     #$5678
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22136
+                STX     _fcc_long_b_lo
+                LDX     #4660
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _sigsfwd_L2

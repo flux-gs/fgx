@@ -619,22 +619,10 @@ _arrelemdeepstore_L18
                 LDA     gt+48
                 STA     _fcc_long_hi
                 LDA     gt+46
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$00AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #52719
+                STX     _fcc_long_b_lo
+                LDX     #171
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemdeepstore_L19
@@ -652,22 +640,10 @@ _arrelemdeepstore_L19
                 LDA     gt+28
                 STA     _fcc_long_hi
                 LDA     gt+26
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0004
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #4
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemdeepstore_L20

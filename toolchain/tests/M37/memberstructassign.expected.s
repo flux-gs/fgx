@@ -289,22 +289,10 @@ _memberstructassign_L0
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L1
@@ -764,22 +752,10 @@ _memberstructassign_L11
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L12
@@ -1105,22 +1081,10 @@ _memberstructassign_L19
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_long_hi
                 LDA     15,S   ; fccstk d=0 b=15
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L20
@@ -1196,22 +1160,10 @@ _memberstructassign_L22
                 LDA     g_zero+4
                 STA     _fcc_long_hi
                 LDA     g_zero+2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L23
@@ -1290,22 +1242,10 @@ _memberstructassign_L24
                 LDA     17,S   ; fccstk d=0 b=17
                 STA     _fcc_long_hi
                 LDA     15,S   ; fccstk d=0 b=15
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L25
@@ -1684,22 +1624,10 @@ _memberstructassign_L36
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L37
@@ -1737,22 +1665,10 @@ _memberstructassign_L37
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L38
@@ -2118,22 +2034,10 @@ _memberstructassign_L48
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _memberstructassign_L49

@@ -296,22 +296,10 @@ _arrelemstructstore_L4
                 STA     _fcc_long_hi
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$2222
-                STA     _fcc_long_hi
-                LDA     #$3333
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13107
+                STX     _fcc_long_b_lo
+                LDX     #8738
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemstructstore_L5
@@ -769,22 +757,10 @@ _arrelemstructstore_L19
                 LDA     g_dst+4
                 STA     _fcc_long_hi
                 LDA     g_dst+2
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000A
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #10
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemstructstore_L20
@@ -888,22 +864,10 @@ _arrelemstructstore_L24
                 LDA     gt+30
                 STA     _fcc_long_hi
                 LDA     gt+28
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000A
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #10
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemstructstore_L25
@@ -1052,22 +1016,10 @@ _arrelemstructstore_L32
                 LDA     gt+18
                 STA     _fcc_long_hi
                 LDA     gt+16
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0000
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _arrelemstructstore_L33

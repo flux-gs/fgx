@@ -24,22 +24,10 @@ main_stkok        TCS
                 LDA     #$0001
                 STA     _fcc_long_hi
                 LDA     #$0000
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0001
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     3,S   ; fccstk d=0 b=3
                 TAY
@@ -66,26 +54,14 @@ _for_long_init_L0
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_long_hi
                 LDA     7,S   ; fccstk d=0 b=7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #6
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #6
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_lts
                 CMP     #0
                 BEQ     _for_long_init_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -93,21 +69,10 @@ _for_long_init_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 STA     _fcc_long_hi
                 LDA     7,S   ; fccstk d=0 b=7
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #1
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #1
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_add
                 STA     7,S   ; fccstk d=0 b=7
                 TAY

@@ -207,22 +207,10 @@ f_stkok        TCS
                 LDA:    f_sl_l+2,X
                 STA     _fcc_long_hi
                 LDA:    f_sl_l,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$2710
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #10000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_divs
                 STA     _fcc_tmp_b
                 PLA

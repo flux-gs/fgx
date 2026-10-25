@@ -4542,6 +4542,37 @@ emit_scalar_binop(LocalType lhs_type, LocalType rhs_type,
     g_expr_unsigned = g_binop_unsigned;
 }
 
+/* The constant k, already at its own width and sign (ast_const_int), as the
+ * second operand of a long operation: widened as emit_promote_a_to_long would
+ * widen it, through X, so A:_fcc_long_hi is untouched. */
+void
+emit_stage_long_b(long k)
+{
+    unsigned long v = (unsigned long)k;
+    ir_emitf("                LDX     #%lu\n", v & 0xFFFFuL);
+    ir_emitf("                STX     _fcc_long_b_lo\n");
+    ir_emitf("                LDX     #%lu\n", (v >> 16) & 0xFFFFuL);
+    ir_emitf("                STX     _fcc_long_b_hi\n");
+}
+
+/* A long operation whose right operand is the constant k: the left operand
+ * stays in A:_fcc_long_hi and k goes straight to the second-operand cells,
+ * with no push, pop or runtime widening between. */
+void
+emit_long_binop_const(int lhs_unsigned, LocalType rhs_type, int rhs_unsigned,
+                      long k, void (*fn)(void))
+{
+    if (fn == emit_binop_shl || fn == emit_binop_shr)
+        g_binop_unsigned = promoted_unsigned(LT_LONG, lhs_unsigned);
+    else
+        g_binop_unsigned = arith_unsigned(LT_LONG, lhs_unsigned,
+                                          rhs_type, rhs_unsigned);
+    emit_stage_long_b(k);
+    g_expr_type = LT_LONG;
+    fn();
+    g_expr_unsigned = g_binop_unsigned;
+}
+
 /* Lower an int ALU tail (A = A <op> _fcc_tmp_b).  Reproduces the exact text of
  * the lifted emit_binop_* int paths. */
 static void

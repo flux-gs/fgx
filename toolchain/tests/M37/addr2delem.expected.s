@@ -607,22 +607,10 @@ _addr2delem_L27
                 LDA:    _addr2delem_l2+2,X
                 STA     _fcc_long_hi
                 LDA:    _addr2delem_l2,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7777
-                STA     _fcc_long_hi
-                LDA     #$0012
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #18
+                STX     _fcc_long_b_lo
+                LDX     #30583
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _addr2delem_L28
@@ -671,22 +659,10 @@ _addr2delem_L28
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7777
-                STA     _fcc_long_hi
-                LDA     #$0012
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #18
+                STX     _fcc_long_b_lo
+                LDX     #30583
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _addr2delem_L29
@@ -721,22 +697,10 @@ _addr2delem_L29
                 LDA     [_fcc_ptr]
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_lo
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7777
-                STA     _fcc_long_hi
-                LDA     #$0013
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #19
+                STX     _fcc_long_b_lo
+                LDX     #30583
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _addr2delem_L30
@@ -777,22 +741,10 @@ _addr2delem_L30
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7777
-                STA     _fcc_long_hi
-                LDA     #$0020
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32
+                STX     _fcc_long_b_lo
+                LDX     #30583
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _addr2delem_L31

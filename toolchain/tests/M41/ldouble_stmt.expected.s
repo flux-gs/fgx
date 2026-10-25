@@ -822,22 +822,10 @@ _ldouble_stmt_L6
                 LDA     37,S   ; fccstk d=0 b=37
                 STA     _fcc_long_hi
                 LDA     35,S   ; fccstk d=0 b=35
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0001
-                STA     _fcc_long_hi
-                LDA     #$9A28
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #39464
+                STX     _fcc_long_b_lo
+                LDX     #1
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ldouble_stmt_L7

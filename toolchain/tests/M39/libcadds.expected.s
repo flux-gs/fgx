@@ -46,21 +46,10 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=2 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #255
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #255
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_and
                 AND     #$00FF
                 TAY

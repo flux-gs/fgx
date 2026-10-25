@@ -7460,6 +7460,12 @@ walk_expr_body(int n)
         else                walk_expr(g_ast[n].a);
         LocalType lt = a->type;
         int lu = a->is_unsigned;
+        long kc;
+        if (lt == LT_LONG && (b->type == LT_INT || b->type == LT_LONG) &&
+            ast_const_int(g_ast[n].b, &kc)) {
+            emit_long_binop_const(lu, b->type, b->is_unsigned, kc, fn);
+            break;
+        }
         if (lt == LT_DOUBLE || b->type == LT_DOUBLE) {
             /* Widened BEFORE the push: a conversion calls the soft double,
              * which the right operand's parking in the second-operand cells
@@ -9309,8 +9315,16 @@ walk_expr_body(int n)
         {
         /* A-1: LHS signedness at load, after promotion (A.6.1). */
         int lhs_u = promoted_unsigned(ht, g_expr_unsigned);
+        long kc;
         if (llong_opassign_applies(ht, op, g_ast[n].a)) {
             llong_opassign(n, op, g_ast[n].a, ht, lhs_u);
+        } else if (ht == LT_LONG &&
+                   (g_ast[g_ast[n].a].type == LT_INT ||
+                    g_ast[g_ast[n].a].type == LT_LONG) &&
+                   ast_const_int(g_ast[n].a, &kc)) {
+            emit_stage_long_b(kc);     /* the LHS stays in A:_fcc_long_hi */
+            g_expr_type = ht;
+            emit_compound_op(op, lhs_u, ht);
         } else if (ht == LT_LONG || ht == LT_FLOAT) {
             /* 4-byte LHS: the RHS walk clobbers _fcc_long_hi, so save BOTH
              * words; promote an int/char RHS before the 32-bit op.  A lone

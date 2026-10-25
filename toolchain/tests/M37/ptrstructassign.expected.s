@@ -512,22 +512,10 @@ _ptrstructassign_L19
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_long_hi
                 LDA     11,S   ; fccstk d=0 b=11
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$2222
-                STA     _fcc_long_hi
-                LDA     #$3333
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13107
+                STX     _fcc_long_b_lo
+                LDX     #8738
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ptrstructassign_L20

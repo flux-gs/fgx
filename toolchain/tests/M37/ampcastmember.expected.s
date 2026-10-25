@@ -146,22 +146,10 @@ _ampcastmember_L1
                 STA     _fcc_long_hi
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0005
-                STA     _fcc_long_hi
-                LDA     #$1615
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #5653
+                STX     _fcc_long_b_lo
+                LDX     #5
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ampcastmember_L2

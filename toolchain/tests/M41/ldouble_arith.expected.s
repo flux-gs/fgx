@@ -1044,21 +1044,10 @@ _ldouble_arith_L6
                 LDA     53,S   ; fccstk d=0 b=53
                 STA     _fcc_long_hi
                 LDA     51,S   ; fccstk d=0 b=51
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$FFFD
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65533
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_mul
                 FGX2_FARCALL _fcc_dfroml
                 STA     17,S   ; fccstk d=0 b=17
@@ -1186,22 +1175,10 @@ _ldouble_arith_L8
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
                 FGX2_FARCALL _fcc_dtol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$B2D0
-                STA     _fcc_long_hi
-                LDA     #$5E00
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #24064
+                STX     _fcc_long_b_lo
+                LDX     #45776
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ldouble_arith_L9
@@ -2556,23 +2533,10 @@ _ldouble_arith_L22
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
                 FGX2_FARCALL _fcc_dtol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$0002
-                JSR     _fcc_long_neg
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65534
+                STX     _fcc_long_b_lo
+                LDX     #65535
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     _ldouble_arith_L24
@@ -2738,22 +2702,10 @@ _ldouble_arith_L25
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_fpr0]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$3EAA
-                STA     _fcc_long_hi
-                LDA     #$AAAB
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #43691
+                STX     _fcc_long_b_lo
+                LDX     #16042
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _ldouble_arith_L26

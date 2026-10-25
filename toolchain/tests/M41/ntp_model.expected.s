@@ -1676,22 +1676,10 @@ _ntp_model_L7
                 LDA     19,S   ; fccstk d=0 b=19
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$83AA
-                STA     _fcc_long_hi
-                LDA     #$7E80
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32384
+                STX     _fcc_long_b_lo
+                LDX     #33706
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 FGX2_FARCALL _fcc_dfromul
                 TAY
@@ -1744,22 +1732,10 @@ _ntp_model_L7
                 LDA     23,S   ; fccstk d=4 b=19
                 STA     _fcc_long_hi
                 LDA     21,S   ; fccstk d=4 b=17
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$83AA
-                STA     _fcc_long_hi
-                LDA     #$7E80
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #32384
+                STX     _fcc_long_b_lo
+                LDX     #33706
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi

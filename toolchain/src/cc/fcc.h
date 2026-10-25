@@ -1348,6 +1348,11 @@ emit_float_to_long(void);
 void
 emit_stash_long_to_b(void);
 void
+emit_stage_long_b(long k);
+void
+emit_long_binop_const(int lhs_unsigned, LocalType rhs_type, int rhs_unsigned,
+                      long k, void (*fn)(void));
+void
 emit_scalar_binop(LocalType lhs_type, LocalType rhs_type,
                   int lhs_unsigned, int rhs_unsigned, void (*fn)(void));
 void

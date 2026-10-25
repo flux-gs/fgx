@@ -117,22 +117,10 @@ main_stkok        TCS
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L0
@@ -145,22 +133,10 @@ _fconv_unsigned_L0
                 LDA     U
                 JSR     _fcc_utof
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L1
@@ -207,22 +183,10 @@ _fconv_unsigned_L1
                 TYA
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L2
@@ -234,22 +198,10 @@ _fconv_unsigned_L1
 _fconv_unsigned_L2
                 FGX2_FARCALL ret_u
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L3
@@ -439,22 +391,10 @@ _fconv_unsigned_L5
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_long_hi
                 LDA     9,S   ; fccstk d=0 b=9
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$B2D0
-                STA     _fcc_long_hi
-                LDA     #$5E00
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #24064
+                STX     _fcc_long_b_lo
+                LDX     #45776
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L6
@@ -479,22 +419,10 @@ _fconv_unsigned_L6
                 TCS
                 TYA
                 JSR     _fcc_ftol
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _fconv_unsigned_L7

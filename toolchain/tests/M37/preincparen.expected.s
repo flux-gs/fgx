@@ -107,22 +107,10 @@ _preincparen_L1
                 STA     _fcc_long_hi
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$000B
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #11
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _preincparen_L2

@@ -22,22 +22,10 @@ main_stkok        TCS
                 LDA     g+2
                 STA     _fcc_long_hi
                 LDA     g
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000F
-                STA     _fcc_long_hi
-                LDA     #$4216
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #16918
+                STX     _fcc_long_b_lo
+                LDX     #15
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_sub
                 STA     _fcc_img0
                 TAY

@@ -135,7 +135,6 @@ _u_track_L2
                 CMP     _fcc_tmp_b
                 BCS     _u_track_L3
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #8
                 STA     9,S   ; fccstk d=0 b=9
@@ -170,21 +169,10 @@ _u_track_L3
                 ROR     _fcc_long_b_hi
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #144
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #144
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _u_track_L4

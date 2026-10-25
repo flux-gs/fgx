@@ -197,71 +197,20 @@ main_stkok        TCS
                 ASL
                 STA     _fcc_long_hi
                 LDA     #0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #77
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_hi
-                LDA     #0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #77
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #101
-                JSR     _fcc_long_from_int
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #25856
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #109
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #109
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
                 TAY
                 LDA     _fcc_long_hi
@@ -301,71 +250,20 @@ _longswitch_L12
                 ASL
                 STA     _fcc_long_hi
                 LDA     #0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #77
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_hi
-                LDA     #0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #77
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #101
-                JSR     _fcc_long_from_int
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #25856
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #109
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #109
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
                 TAY
                 LDA     _fcc_long_hi
@@ -405,71 +303,20 @@ _longswitch_L13
                 ASL
                 STA     _fcc_long_hi
                 LDA     #0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #116
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_hi
-                LDA     #0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #116
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #107
-                JSR     _fcc_long_from_int
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #27392
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #115
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #115
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
                 TAY
                 LDA     _fcc_long_hi
@@ -566,71 +413,20 @@ _longswitch_L16
                 ASL
                 STA     _fcc_long_hi
                 LDA     #0
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #78
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_hi
-                LDA     #0
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #0
+                STX     _fcc_long_b_lo
+                LDX     #78
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #78
-                JSR     _fcc_long_from_int
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                ASL
-                ROL     _fcc_long_hi
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #19968
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #79
-                JSR     _fcc_long_from_int
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #79
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_or
                 TAY
                 LDA     _fcc_long_hi

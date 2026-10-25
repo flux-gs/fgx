@@ -24402,22 +24402,10 @@ _llong_arith_L179
                 LDA     a+2
                 STA     _fcc_long_hi
                 LDA     a
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$89AB
-                STA     _fcc_long_hi
-                LDA     #$CDEF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #52719
+                STX     _fcc_long_b_lo
+                LDX     #35243
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BNE     _llong_arith_L181

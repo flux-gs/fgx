@@ -433,22 +433,10 @@ _typedefunsigned_L11
                 LDA     _fcc_img2
                 LDX     #0
                 STX     _fcc_long_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0000
-                STA     _fcc_long_hi
-                LDA     #$9C40
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #40000
+                STX     _fcc_long_b_lo
+                LDX     #0
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _typedefunsigned_L12

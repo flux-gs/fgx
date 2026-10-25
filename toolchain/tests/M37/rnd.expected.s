@@ -85,22 +85,10 @@ _rnd_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$4C6C
-                STA     _fcc_long_hi
-                LDA     #$264E
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #9806
+                STX     _fcc_long_b_lo
+                LDX     #19564
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _rnd_L3
@@ -124,22 +112,10 @@ _rnd_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$2A74
-                STA     _fcc_long_hi
-                LDA     #$5892
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #22674
+                STX     _fcc_long_b_lo
+                LDX     #10868
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _rnd_L4

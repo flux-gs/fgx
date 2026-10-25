@@ -336,22 +336,10 @@ _addrarrowdot_L10
                 LDA     gt+8
                 STA     _fcc_long_hi
                 LDA     gt+6
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$1122
-                STA     _fcc_long_hi
-                LDA     #$3344
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13124
+                STX     _fcc_long_b_lo
+                LDX     #4386
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _addrarrowdot_L11
@@ -554,22 +542,10 @@ _addrarrowdot_L18
                 LDA     gt+8
                 STA     _fcc_long_hi
                 LDA     gt+6
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$7EED
-                STA     _fcc_long_hi
-                LDA     #$BEEF
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #48879
+                STX     _fcc_long_b_lo
+                LDX     #32493
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _addrarrowdot_L19
@@ -883,22 +859,10 @@ _addrarrowdot_L30
                 LDA     gt+64
                 STA     _fcc_long_hi
                 LDA     gt+62
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0123
-                STA     _fcc_long_hi
-                LDA     #$FEDC
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #65244
+                STX     _fcc_long_b_lo
+                LDX     #291
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _addrarrowdot_L31

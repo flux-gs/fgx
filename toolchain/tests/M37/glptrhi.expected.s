@@ -77,22 +77,10 @@ main_stkok        TCS
                 LDA:    larr+2,X
                 STA     _fcc_long_hi
                 LDA:    larr,X
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0006
-                STA     _fcc_long_hi
-                LDA     #$E065
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #57445
+                STX     _fcc_long_b_lo
+                LDX     #6
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrhi_L0
@@ -125,22 +113,10 @@ _glptrhi_L0
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0006
-                STA     _fcc_long_hi
-                LDA     #$E065
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #57445
+                STX     _fcc_long_b_lo
+                LDX     #6
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrhi_L1
@@ -173,22 +149,10 @@ _glptrhi_L1
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0006
-                STA     _fcc_long_hi
-                LDA     #$E066
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #57446
+                STX     _fcc_long_b_lo
+                LDX     #6
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_eq
                 CMP     #0
                 BEQ     _glptrhi_L2
@@ -243,22 +207,10 @@ _glptrhi_L2
                 LDA     [_fcc_ptr],Y
                 STA     _fcc_long_hi
                 LDA     [_fcc_ptr]
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0006
-                STA     _fcc_long_hi
-                LDA     #$E065
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #57445
+                STX     _fcc_long_b_lo
+                LDX     #6
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _glptrhi_L3

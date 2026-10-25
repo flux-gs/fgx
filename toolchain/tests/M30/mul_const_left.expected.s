@@ -457,22 +457,10 @@ _mul_const_left_L13
                 ROL     _fcc_long_hi
                 ASL
                 ROL     _fcc_long_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$0006
-                STA     _fcc_long_hi
-                LDA     #$1A80
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #6784
+                STX     _fcc_long_b_lo
+                LDX     #6
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _mul_const_left_L14
@@ -496,22 +484,10 @@ _mul_const_left_L14
                 ROL     _fcc_long_hi
                 ASL
                 ROL     _fcc_long_hi
-                TAY
-                LDA     _fcc_long_hi
-                PHA
-                TYA
-                PHA
-                LDA     #$000C
-                STA     _fcc_long_hi
-                LDA     #$3500
-                STA     _fcc_long_b_lo
-                LDX     _fcc_long_hi
+                LDX     #13568
+                STX     _fcc_long_b_lo
+                LDX     #12
                 STX     _fcc_long_b_hi
-                PLA
-                TAY
-                PLA
-                STA     _fcc_long_hi
-                TYA
                 JSR     _fcc_long_ne
                 CMP     #0
                 BEQ     _mul_const_left_L15
