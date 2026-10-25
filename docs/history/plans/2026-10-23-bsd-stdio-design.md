@@ -128,16 +128,31 @@ Reading the expansion found a defect: the value of an assignment to a char
 was A's whole word, so putc returned its argument rather than the byte it
 wrote (K&R A.7.17).  A used char store now masks A, which gives back 1.2 KB.
 
-What is left in the expansion is codegen, not peephole: the FILE pointer is
-reloaded from the frame on each arm of the ternaries (six loads, 48 bytes),
-because the fpr hold record clears at every label; `(p)->_ptr++' copies the
-pointer through _fcc_tmp_b and _fcc_ptr+2 where a second fpr would hold it;
-and the `&&' in the line-buffered test is materialized as 0/1 and then
-tested.
+## 9. The putc codegen (bf1cc1a, 9a28b6b, 409a84e, 5c2ef5b)
 
-## 9. Next
+The expansion is 270 bytes, and the staged system 142.7 KB smaller again
+(libc.so 216,626 -> 208,143), with no file larger:
 
-The putc codegen above -- a hold record that survives a label every branch
-to which it has seen, the post-increment through a second fpr, and `&&' as
-branches in a condition -- then a profile of ls and printf for inline asm on
-what it finds.
+- `&&' and `||' in a condition are branches, not a 0/1 that is then
+  tested (110.6 KB -- every `if (a && b)' paid it);
+- the fpr hold record survives a label that only already-lowered forward
+  branches reach, holding what they and the fall-through agree on, so the
+  FILE pointer is loaded three times instead of six (21.6 KB);
+- `p->_ptr++' yields straight into the address register (4.4 KB);
+- the CMP #0 carry walk follows a far branch pair (6.0 KB).
+
+Frames, 93 KB input: od 601 -> 577, wc 517 -> 493, tr 589 -> 565, grep
+661 -> 649, ls 493 -> 481, sed 1309 -> 1297, compress 3025 -> 3013, cmp
+253 -> 253.
+
+Still in the expansion: the lvalue walker adds `_ptr''s offset into the
+register that holds p, so p is lost there and loaded again on the arms
+after it; and the allocator's TAX for a pushed value whose TXA the
+peephole dropped stays, dead.  Keeping p means an fpr that carries a
+pending constant offset to the access -- the symbolic-register shape
+fpr_is_sym already has for globals.
+
+## 10. Next
+
+A profile of ls and printf for inline asm on what it finds; the fpr with
+a pending offset if the profile puts pointer reloads high.
