@@ -191,8 +191,26 @@ decimal digit, once for `%' and once for `/', though one call yields
 both.  ls -l is half kernel and VFS (directory scan, namei, the name
 cache) and 7.5% localtime (localsub, timesub).
 
-## 12. Next
+## 12. Locals in direct page across calls (2b45448)
 
-The pair `x % c; x /= c' as one division, which needs fcc to see the
-pair; pointer locals in direct-page registers, which is what the rest
-of _doprnt is waiting on.
+fcc kept hot locals in $C0-$DF only in a function that called no other C
+function, since any callee may reuse those slots.  $78-$97 is now a
+callee-saved band: a function that makes calls keeps its loop-hot
+locals there (pointers first), pushes its caller's words after _fcc_fb
+and pulls them back on return, through one shared tail when it has
+several returns.  setjmp/longjmp carry the band in a 48-byte jmp_buf,
+as 4.3BSD-Reno's i386 setjmp carries ebx/esi/edi/ebp.  Recursive
+functions stay out: their saves would repeat per level, and the first
+cut cut bsh's sourced-script depth from 218 to 43.
+
+Frames: grep 649 -> 553, sed 1285 -> 1165, cmp 253 -> 229, ls 457 ->
+445; system 10.3 KB smaller.  tr, wc and printf did not move: their hot
+pointer is a FILE * (a struct pointer), which the promotion does not
+take, and _doprnt's 16 band words did not pay for their saves in a loop
+of short formats.
+
+## 13. Next
+
+Struct pointers in the band -- `fp->_cnt', `fp->_ptr' read through a
+direct-page pointer with LDY #off -- is what wc, tr and the stdio
+macros are waiting on.  Then `x % c; x /= c' as one division.
