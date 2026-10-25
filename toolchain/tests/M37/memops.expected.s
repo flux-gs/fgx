@@ -7,9 +7,11 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -20,7 +22,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img17
                 LDA     #8
                 PHA
                 LDA     #65
@@ -98,15 +100,12 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 LDA     #0
-                STA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_img0
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_img1
+                STA     _fcc_img16
 _memops_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #8
@@ -114,7 +113,7 @@ _memops_L0
                 EOR     #$8000
 _memops_L3
                 BPL     _memops_L2
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 LDA:    gbuf,X
                 AND     #$00FF
@@ -128,7 +127,7 @@ _memops_L3
                 MX      %00
                 LDA     #_memops_S0
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -138,20 +137,16 @@ _memops_L3
                 PLA
                 CMP     _fcc_tmp_b
                 BNE     _memops_L4
-                LDA     _fcc_img1
+                LDA     _fcc_img17
                 TAX
                 CLC
                 ADC     #5
-                STA     _fcc_img1
+                STA     _fcc_img17
 _memops_L4
 _memops_L1
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _memops_L0
 _memops_L2
-                LDA     _fcc_img0
-                STA     9,S   ; fccstk d=0 b=9
-                LDA     _fcc_img1
-                STA     11,S   ; fccstk d=0 b=11
                 LDA     #0
                 PHA
                 LDA     #90
@@ -204,22 +199,26 @@ _memops_L6
 _memops_L7
                 CMP     #0
                 BEQ     _memops_L5
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img17
                 TAX
                 CLC
                 ADC     #2
-                STA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img17
 _memops_L5
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     12
+main_FRAMESIZE   EQU     16
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 6

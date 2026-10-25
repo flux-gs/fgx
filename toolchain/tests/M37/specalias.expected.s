@@ -990,9 +990,10 @@ _specalias_zerobytes_STKGUARD    EQU     0
                 FGX2_EXPORT vntblinit
 vntblinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vntblinit_FRAMESIZE
+                SBC     #vntblinit_FRAMESIZE-2
                 DO      vntblinit_STKGUARD
                 BCC     vntblinit_stkovf
                 CMP     _fcc_stkfloor
@@ -1035,14 +1036,12 @@ vntblinit_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     specinfo_pool+2
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _specalias_L17
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #8
@@ -1052,7 +1051,7 @@ _specalias_L20
                 BPL     _specalias_L19
                 LDA     #speclisth
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -1075,11 +1074,9 @@ _specalias_L20
                 MX      %00
                 PLA
 _specalias_L18
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _specalias_L17
 _specalias_L19
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #896
                 PHA
                 SEP     #$20
@@ -1140,12 +1137,12 @@ _specalias_L19
                 ADC     #6
                 TCS
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _specalias_L21
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #64
@@ -1161,7 +1158,7 @@ _specalias_L24
                 MX      %00
                 LDA     vnode_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -1193,10 +1190,7 @@ _specalias_L24
                 ADC     #4
                 TCS
 _specalias_L22
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRA     _specalias_L21
 _specalias_L23
                 DO      8+vntblinit_FRAMESIZE/256
@@ -1231,13 +1225,15 @@ _specalias_L23
                 TAY
                 TSC
                 CLC
-                ADC     #vntblinit_FRAMESIZE
+                ADC     #vntblinit_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vntblinit_FRAMESIZE   EQU     6
+vntblinit_FRAMESIZE   EQU     8
 vntblinit_STKGUARD    EQU     0
                 FGX2_EXPORT vfree
 vfree            ENT
@@ -3504,9 +3500,10 @@ insmntque_STKGUARD    EQU     0
                 FGX2_EXPORT _specalias_specalloc
 _specalias_specalloc            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #_specalias_specalloc_FRAMESIZE
+                SBC     #_specalias_specalloc_FRAMESIZE-2
                 DO      _specalias_specalloc_STKGUARD
                 BCC     _specalias_specalloc_stkovf
                 CMP     _fcc_stkfloor
@@ -3517,14 +3514,12 @@ _specalias_specalloc_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _specalias_L51
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #64
@@ -3541,7 +3536,7 @@ _specalias_L54
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3583,8 +3578,7 @@ _specalias_L56
                 LDA     #0
 _specalias_L57
                 CMP     #0
-                BNE     *+5
-                BRL     _specalias_L55
+                BEQ     _specalias_L55
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -3593,7 +3587,7 @@ _specalias_L57
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3639,7 +3633,7 @@ _specalias_L57
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3654,19 +3648,14 @@ _specalias_L57
                 TAY
                 TSC
                 CLC
-                ADC     #_specalias_specalloc_FRAMESIZE
+                ADC     #_specalias_specalloc_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     _specalias_specalloc_bandx
 _specalias_L55
 _specalias_L52
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _specalias_L51
 _specalias_L53
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3689,13 +3678,16 @@ _specalias_L53
                 TAY
                 TSC
                 CLC
-                ADC     #_specalias_specalloc_FRAMESIZE
+                ADC     #_specalias_specalloc_FRAMESIZE-2
                 TCS
+_specalias_specalloc_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_specalias_specalloc_FRAMESIZE   EQU     2
+_specalias_specalloc_FRAMESIZE   EQU     4
 _specalias_specalloc_STKGUARD    EQU     0
                 FGX2_EXPORT _specalias_specfree
 _specalias_specfree            ENT
@@ -5154,9 +5146,10 @@ vfinddev_STKGUARD    EQU     0
                 FGX2_EXPORT spec_securechr
 spec_securechr            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #spec_securechr_FRAMESIZE
+                SBC     #spec_securechr_FRAMESIZE-2
                 DO      spec_securechr_STKGUARD
                 BCC     spec_securechr_stkovf
                 CMP     _fcc_stkfloor
@@ -5178,12 +5171,9 @@ _specalias_L84
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     spec_securechr_bandx
 _specalias_L83
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
@@ -5200,7 +5190,7 @@ _specalias_L83
                 TAY
                 PLA
                 TYA
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 TAX
                 CMP     #65535
                 BNE     _specalias_L85
@@ -5208,21 +5198,18 @@ _specalias_L83
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     spec_securechr_bandx
 _specalias_L85
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 LSR
                 LSR
                 LSR
                 LSR
                 LSR
                 CLC
-                ADC     5,S   ; fccstk d=0 b=5
+                ADC     _fcc_img16
                 TAX
                 LDA     #8
                 TAY
@@ -5248,8 +5235,6 @@ _specalias_L85
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
 _specalias_L86
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
@@ -5278,7 +5263,7 @@ _specalias_L86
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -5323,12 +5308,9 @@ _specalias_L89
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     spec_securechr_bandx
 _specalias_L91
 _specalias_L87
                 LDA     3,S   ; fccstk d=0 b=3
@@ -5365,19 +5347,20 @@ _specalias_L87
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _specalias_L86
 _specalias_L88
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
+spec_securechr_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-spec_securechr_FRAMESIZE   EQU     6
+spec_securechr_FRAMESIZE   EQU     8
 spec_securechr_STKGUARD    EQU     0
                 FGX2_EXPORT vfs_getsecurelevel
 vfs_getsecurelevel            ENT
@@ -5477,9 +5460,10 @@ vfs_setsecurelevel_STKGUARD    EQU     0
                 FGX2_EXPORT vcount
 vcount            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vcount_FRAMESIZE
+                SBC     #vcount_FRAMESIZE-2
                 DO      vcount_STKGUARD
                 BCC     vcount_stkovf
                 CMP     _fcc_stkfloor
@@ -5521,16 +5505,13 @@ vcount_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     vcount_bandx
 _specalias_L94
 vcount_uL_loop
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 DO      8+vcount_FRAMESIZE/256
                 TSC
                 CLC
@@ -5717,7 +5698,7 @@ _specalias_L98
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
 _specalias_L100
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 PHA
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -5725,7 +5706,7 @@ _specalias_L100
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
 _specalias_L96
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -5761,17 +5742,20 @@ _specalias_L96
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _specalias_L95
 _specalias_L97
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
+vcount_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vcount_FRAMESIZE   EQU     6
+vcount_FRAMESIZE   EQU     8
 vcount_STKGUARD    EQU     0
                 FGX2_EXPORT vput
 vput            ENT
@@ -7952,9 +7936,10 @@ vgone_STKGUARD    EQU     0
                 FGX2_EXPORT vflush
 vflush            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vflush_FRAMESIZE
+                SBC     #vflush_FRAMESIZE-2
                 DO      vflush_STKGUARD
                 BCC     vflush_stkovf
                 CMP     _fcc_stkfloor
@@ -7964,6 +7949,17 @@ vflush_stkovf       JMP     _fcc_stkoflow
 vflush_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      14+vflush_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #14+vflush_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
+                FIN
+                STA     _fcc_img16
                 DO      8+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -8195,16 +8191,7 @@ _specalias_L154
                 BEQ     _specalias_L152
                 BRL     _specalias_L147
 _specalias_L152
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                LDA     _fcc_img16
                 TAX
                 AND     #1
                 BEQ     _specalias_L155
@@ -8228,16 +8215,7 @@ _specalias_L155
                 TCS
                 BRL     _specalias_L147
 _specalias_L156
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                LDA     _fcc_img16
                 TAX
                 AND     #2
                 BNE     *+5
@@ -8376,24 +8354,24 @@ _specalias_L148
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     vflush_bandx
 _specalias_L163
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
+vflush_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vflush_FRAMESIZE   EQU     10
+vflush_FRAMESIZE   EQU     12
 vflush_STKGUARD    EQU     0
                 FGX2_EXPORT ndinit
 ndinit            ENT
@@ -11322,9 +11300,10 @@ _specalias_ncdetach_STKGUARD    EQU     0
                 FGX2_EXPORT nchinit
 nchinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #nchinit_FRAMESIZE
+                SBC     #nchinit_FRAMESIZE-2
                 DO      nchinit_STKGUARD
                 BCC     nchinit_stkovf
                 CMP     _fcc_stkfloor
@@ -11423,14 +11402,12 @@ nchinit_stkok        TCS
                 STA     nchstats+30
                 TYA
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _specalias_L203
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #16
@@ -11438,7 +11415,7 @@ _specalias_L203
                 EOR     #$8000
 _specalias_L206
                 BPL     _specalias_L205
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -11487,11 +11464,9 @@ _specalias_L206
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
 _specalias_L204
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _specalias_L203
 _specalias_L205
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     nchhead
                 TAY
@@ -11549,23 +11524,20 @@ _specalias_L209
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     nchinit_bandx
 _specalias_L207
                 LDA     #64
                 TAX
                 SEC
                 SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _specalias_L210
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 BPL     *+5
                 BRL     _specalias_L212
                 SEP     #$20
@@ -11576,7 +11548,7 @@ _specalias_L210
                 MX      %00
                 LDA     namecache_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -11695,10 +11667,7 @@ _specalias_L210
                 ADC     #4
                 TCS
 _specalias_L211
-                LDA     1,S   ; fccstk d=0 b=1
-                SEC
-                SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                DEC     _fcc_img16
                 BRL     _specalias_L210
 _specalias_L212
                 SEP     #$20
@@ -11722,13 +11691,16 @@ _specalias_L212
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
+nchinit_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-nchinit_FRAMESIZE   EQU     10
+nchinit_FRAMESIZE   EQU     12
 nchinit_STKGUARD    EQU     0
                 FGX2_EXPORT namehash
 namehash            ENT
@@ -12324,9 +12296,10 @@ cache_purge_STKGUARD    EQU     0
                 FGX2_EXPORT cache_purgevfs
 cache_purgevfs            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_purgevfs_FRAMESIZE
+                SBC     #cache_purgevfs_FRAMESIZE-2
                 DO      cache_purgevfs_STKGUARD
                 BCC     cache_purgevfs_stkovf
                 CMP     _fcc_stkfloor
@@ -12337,12 +12310,12 @@ cache_purgevfs_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img16
 _specalias_L230
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #16
@@ -12351,7 +12324,7 @@ _specalias_L230
 _specalias_L233
                 BMI     *+5
                 BRL     _specalias_L232
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -12622,22 +12595,21 @@ _specalias_L235
                 BRL     _specalias_L234
 _specalias_L236
 _specalias_L231
-                LDA     13,S   ; fccstk d=0 b=13
-                CLC
-                ADC     #1
-                STA     13,S   ; fccstk d=0 b=13
+                INC     _fcc_img16
                 BRL     _specalias_L230
 _specalias_L232
                 TAY
                 TSC
                 CLC
-                ADC     #cache_purgevfs_FRAMESIZE
+                ADC     #cache_purgevfs_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_purgevfs_FRAMESIZE   EQU     14
+cache_purgevfs_FRAMESIZE   EQU     16
 cache_purgevfs_STKGUARD    EQU     0
                 FGX2_EXPORT cache_lookup
 cache_lookup            ENT
@@ -13487,9 +13459,10 @@ cache_lookup_STKGUARD    EQU     0
                 FGX2_EXPORT cache_enter
 cache_enter            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_enter_FRAMESIZE
+                SBC     #cache_enter_FRAMESIZE-2
                 DO      cache_enter_STKGUARD
                 BCC     cache_enter_stkovf
                 CMP     _fcc_stkfloor
@@ -13504,12 +13477,9 @@ cache_enter_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _specalias_L267
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
@@ -13547,12 +13517,9 @@ _specalias_L269
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _specalias_L268
                 SEP     #$20
                 MX      %10
@@ -13589,12 +13556,9 @@ _specalias_L272
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _specalias_L270
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -13897,14 +13861,12 @@ _specalias_L274
                 REP     #$20
                 MX      %00
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
+                STA     _fcc_img16
 _specalias_L275
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 PHA
                 DO      10+cache_enter_FRAMESIZE/256
                 TSC
@@ -13944,7 +13906,7 @@ _specalias_L278
                 CLC
                 ADC     #33
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -13982,7 +13944,7 @@ _specalias_L278
                 MX      %00
                 PLA
                 STA     _fcc_fpr1
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr1
                 STA     _fcc_fpr1
@@ -13994,11 +13956,9 @@ _specalias_L278
                 REP     #$20
                 MX      %00
 _specalias_L276
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _specalias_L275
 _specalias_L277
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -14121,13 +14081,16 @@ _specalias_L277
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
+cache_enter_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_enter_FRAMESIZE   EQU     6
+cache_enter_FRAMESIZE   EQU     8
 cache_enter_STKGUARD    EQU     0
                 FGX2_EXPORT _specalias_spec_inuse
 _specalias_spec_inuse            ENT

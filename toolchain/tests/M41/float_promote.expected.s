@@ -7,9 +7,11 @@
                 FGX2_EXPORT _float_promote_vsum
 _float_promote_vsum            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #_float_promote_vsum_FRAMESIZE
+                SBC     #_float_promote_vsum_FRAMESIZE-4
                 DO      _float_promote_vsum_STKGUARD
                 BCC     _float_promote_vsum_stkovf
                 CMP     _fcc_stkfloor
@@ -60,9 +62,9 @@ _float_promote_vsum_stkok        TCS
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _float_promote_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
@@ -118,9 +120,9 @@ _float_promote_L2
                 PHA
                 TYA
                 PHA
-                LDA     11,S   ; fccstk d=8 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=8 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 LDA     #8
                 INC
@@ -134,9 +136,9 @@ _float_promote_L2
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     11,S   ; fccstk d=8 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     9,S   ; fccstk d=8 b=1
+                STA     _fcc_img16
                 LDA     #8
                 INC
                 PHA
@@ -192,10 +194,6 @@ _float_promote_L1
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
-                LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_q3
                 LDA     9,S   ; fccstk d=0 b=9
@@ -206,13 +204,17 @@ _float_promote_L1
                 TAY
                 TSC
                 CLC
-                ADC     #_float_promote_vsum_FRAMESIZE
+                ADC     #_float_promote_vsum_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_float_promote_vsum_FRAMESIZE   EQU     12
+_float_promote_vsum_FRAMESIZE   EQU     16
 _float_promote_vsum_STKGUARD    EQU     0
                 FGX2_EXPORT _float_promote_twice
 _float_promote_twice            ENT

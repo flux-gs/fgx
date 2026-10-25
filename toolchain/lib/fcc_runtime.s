@@ -29,7 +29,14 @@
 ; bank @ +2, pad @ +3.
 ;
 ; DP map in fcc-compiled binaries (all offsets within the task's DP page):
-;   $10-$97   free (userland task DP page; kernel DP is a different page)
+;   $10-$77   free (userland task DP page; kernel DP is a different page)
+;   $78-$97   _fcc_img16.._fcc_img31      (the CALLEE-SAVED band: a function
+;                                          that calls others promotes its loop-
+;                                          hot locals here, PEIs the caller's
+;                                          words after _fcc_fb and pulls them
+;                                          back on return; setjmp/longjmp carry
+;                                          the band in the jmp_buf.  ir.c
+;                                          ir_band_frame.)
 ;   $98-$B7   _fcc_fpr0.._fcc_fpr7        (P3-2 T1: far-pointer expression
 ;                                          register band; 8 x 4-byte slots,
 ;                                          offset @ +0..+1, bank @ +2, pad @
@@ -151,6 +158,23 @@ _fcc_img12      EQU     $D8
 _fcc_img13      EQU     $DA
 _fcc_img14      EQU     $DC
 _fcc_img15      EQU     $DE
+; The callee-saved band (see the DP map above).
+_fcc_img16      EQU     $78
+_fcc_img17      EQU     $7A
+_fcc_img18      EQU     $7C
+_fcc_img19      EQU     $7E
+_fcc_img20      EQU     $80
+_fcc_img21      EQU     $82
+_fcc_img22      EQU     $84
+_fcc_img23      EQU     $86
+_fcc_img24      EQU     $88
+_fcc_img25      EQU     $8A
+_fcc_img26      EQU     $8C
+_fcc_img27      EQU     $8E
+_fcc_img28      EQU     $90
+_fcc_img29      EQU     $92
+_fcc_img30      EQU     $94
+_fcc_img31      EQU     $96
 _fcc_ptr        EQU     $E8
 _fcc_long_hi    EQU     $EC
 _fcc_long_b_lo  EQU     $EE

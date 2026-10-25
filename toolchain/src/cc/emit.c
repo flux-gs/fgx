@@ -2524,9 +2524,11 @@ emit_prologue_unconditional(void)
      * yields bank 0 for free.  Params sit above the frame + the saved-FP word,
      * so slot_addr_str adds FRAMESIZE+2 to their n,S displacement. */
     ir_emitf("                PEI     _fcc_fb\n");         /* save caller frame ptr */
+    ir_tag_last(IRF_PRO_FB, 0);              /* ...and the band (ir_band_frame) */
     ir_emitf("                TSC\n");
     ir_emitf("                SEC\n");
     ir_emitf("                SBC     #%s_FRAMESIZE\n", g_func_name);
+    ir_tag_last(IRF_FRAME_SBC, 0);
     /* P3-3 3.2b hardware-stack overflow guard.  DO-gated by %s_STKGUARD (an
      * EQU emitted at function end = 1 iff this fn recurses, calls indirectly,
      * or has a >=128 B frame — small leaf frames stay lean, byte-identical to
@@ -2607,11 +2609,17 @@ emit_epilogue_return(void)
     ir_emitf("                TSC\n");
     ir_emitf("                CLC\n");
     ir_emitf("                ADC     #%s_FRAMESIZE\n", g_func_name);
+    ir_tag_last(IRF_FRAME_ADC, 0);
     ir_emitf("                TCS\n");                        /* free the frame */
+    ir_tag_last(IRF_EPI_TCS, 0);             /* ...then pull the band back */
     ir_record_raw(IR_POP_A, 0, 0, NULL);                        /* restore caller frame ptr */
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_fb"));
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_record_raw(IR_TYA, 0, 0, NULL);                         /* restore return value */
+    ir_tag_last(IRF_EPI_TAIL, 0);
     ir_emitf("                RTL\n");
+    ir_tag_last(IRF_EPI_TAIL, 0);
 }
 
 static void

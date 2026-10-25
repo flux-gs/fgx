@@ -342,9 +342,11 @@ _structval_fill_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -355,7 +357,7 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img17
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     #10
@@ -719,7 +721,7 @@ _structval_L4
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -817,7 +819,7 @@ _structval_L10
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -855,7 +857,7 @@ _structval_L11
                 PHA
                 LDA     #43
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -927,7 +929,7 @@ _structval_L8
                 CMP     #12
                 BEQ     *+5
                 BRL     _structval_L13
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -956,7 +958,7 @@ _structval_L8
                 CMP     #41
                 BEQ     *+5
                 BRL     _structval_L13
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -988,7 +990,7 @@ _structval_L8
                 TAX
                 CMP     #44
                 BNE     _structval_L13
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 BEQ     _structval_L14
                 SEP     #$20
                 MX      %10
@@ -1014,7 +1016,7 @@ _structval_L8
                 STA     _fcc_fpr0
                 BRA     _structval_L15
 _structval_L14
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1047,7 +1049,7 @@ _structval_L15
                 STA     7,S   ; fccstk d=0 b=7
 _structval_L13
                 LDA     #1
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     _structval_gp+2
@@ -1088,7 +1090,7 @@ _structval_L16
                 DEY
                 DEY
                 BPL     _structval_L16
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
                 CMP     #1
                 BNE     _structval_L17
@@ -1127,15 +1129,12 @@ _structval_L16
                 STA     7,S   ; fccstk d=0 b=7
 _structval_L17
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img1
+                STA     _fcc_img16
 _structval_L18
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #2
@@ -1143,9 +1142,9 @@ _structval_L18
                 EOR     #$8000
 _structval_L21
                 BPL     _structval_L20
-                INC     _fcc_img0
+                INC     _fcc_img16
 _structval_L19
-                LDA     _fcc_img1
+                LDA     _fcc_img17
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -1186,11 +1185,7 @@ _structval_L22
                 BPL     _structval_L22
                 BRA     _structval_L18
 _structval_L20
-                LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_img1
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
                 CMP     #2
                 BNE     _structval_L23
@@ -1355,7 +1350,7 @@ _structval_L25
                 ADC     #10
                 TCS
                 TYA
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1367,7 +1362,7 @@ _structval_L25
                 STA     _fcc_fpr0
                 JSR     _fcc_bank_from_carrier
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img17
                 BNE     _structval_L26
                 SEP     #$20
                 MX      %10
@@ -1415,7 +1410,7 @@ _structval_L28
                 STA     [_fcc_fpr0]
                 LDA     5,S   ; fccstk d=0 b=5
                 BEQ     _structval_L29
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 BEQ     _structval_L29
                 LDA     #32
                 PHA
@@ -1553,12 +1548,16 @@ _structval_L30
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     8
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 35

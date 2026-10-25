@@ -120,9 +120,12 @@ touch_STKGUARD    EQU     0
                 FGX2_EXPORT kinds
 kinds            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #kinds_FRAMESIZE
+                SBC     #kinds_FRAMESIZE-6
                 DO      kinds_STKGUARD
                 BCC     kinds_stkovf
                 CMP     _fcc_stkfloor
@@ -220,8 +223,12 @@ kinds_stkok        TCS
                 LDA     20+kinds_FRAMESIZE,S   ; fccstk d=0 b=20 fs
                 FIN
                 STA     15,S   ; fccstk d=0 b=15
+                LDA     9,S   ; fccstk d=0 b=9
+                STA     _fcc_img16
+                LDA     11,S   ; fccstk d=0 b=11
+                STA     _fcc_img17
                 LDA     #0
-                STA     17,S   ; fccstk d=0 b=17
+                STA     _fcc_img18
                 LDA     #1
                 PHA
                 SEP     #$20
@@ -264,12 +271,9 @@ _parmhome_L1
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE
+                ADC     #kinds_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     kinds_bandx
 _parmhome_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
@@ -335,47 +339,30 @@ _parmhome_L3
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE
+                ADC     #kinds_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     kinds_bandx
 _parmhome_L2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_img0
 _parmhome_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_ptr
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_ptr+2
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_img16]
                 AND     #$00FF
                 BEQ     _parmhome_L5
-                LDA     _fcc_img0
+                LDA     _fcc_img18
                 PHA
-                LDA     13,S   ; fccstk d=2 b=11
-                STA     _fcc_ptr+2
-                LDA     11,S   ; fccstk d=2 b=9
-                STA     _fcc_tmp_b
-                INC
-                STA     11,S   ; fccstk d=2 b=9
-                LDA     _fcc_tmp_b
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                LDA     [_fcc_img16]
+                INC     _fcc_img16
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     _fcc_img0
+                STA     _fcc_img18
                 BRA     _parmhome_L4
 _parmhome_L5
-                LDA     _fcc_img0
-                STA     17,S   ; fccstk d=0 b=17
+                LDA     _fcc_img18
                 TAX
                 LDA     #97
                 TAY
@@ -386,9 +373,9 @@ _parmhome_L5
                 TXA
                 CMP     _fcc_tmp_b
                 BNE     _parmhome_L7
-                LDA     11,S   ; fccstk d=0 b=11
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     9,S   ; fccstk d=0 b=9
+                LDA     _fcc_img16
                 PHA
                 LDA     #$FFFF
                 CLC
@@ -405,12 +392,9 @@ _parmhome_L7
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE
+                ADC     #kinds_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     kinds_bandx
 _parmhome_L6
 _parmhome_L8
                 LDAL    KFGX_YIELD_MIRROR
@@ -424,7 +408,7 @@ _parmhome_L8
                 DEC
                 STA     [_fcc_ptr]
                 BMI     _parmhome_L9
-                LDA     17,S   ; fccstk d=0 b=17
+                LDA     _fcc_img18
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
                 STA     _fcc_ptr+2
@@ -453,10 +437,10 @@ _parmhome_L8
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     17,S   ; fccstk d=0 b=17
+                STA     _fcc_img18
                 BRA     _parmhome_L8
 _parmhome_L9
-                LDA     17,S   ; fccstk d=0 b=17
+                LDA     _fcc_img18
                 TAX
                 LDA     #97
                 TAY
@@ -487,12 +471,9 @@ _parmhome_L11
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE
+                ADC     #kinds_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     kinds_bandx
 _parmhome_L10
                 LDA     #0
                 STA     13,S   ; fccstk d=0 b=13
@@ -549,13 +530,20 @@ _parmhome_L13
                 TAY
                 TSC
                 CLC
-                ADC     #kinds_FRAMESIZE
+                ADC     #kinds_FRAMESIZE-6
                 TCS
+kinds_bandx
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-kinds_FRAMESIZE   EQU     318
+kinds_FRAMESIZE   EQU     324
 kinds_STKGUARD    EQU     1
                 FGX2_EXPORT addr
 addr            ENT

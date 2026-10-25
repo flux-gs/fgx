@@ -868,9 +868,12 @@ _ufssb_sb_p16_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_sbdecode
 ufs_sbdecode            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #ufs_sbdecode_FRAMESIZE
+                SBC     #ufs_sbdecode_FRAMESIZE-6
                 DO      ufs_sbdecode_STKGUARD
                 BCC     ufs_sbdecode_stkovf
                 CMP     _fcc_stkfloor
@@ -880,6 +883,28 @@ ufs_sbdecode_stkovf       JMP     _fcc_stkoflow
 ufs_sbdecode_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      6+ufs_sbdecode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+ufs_sbdecode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     _fcc_img16
+                DO      8+ufs_sbdecode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+ufs_sbdecode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img17
                 DO      12+ufs_sbdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -906,27 +931,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -970,27 +977,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #2
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1040,27 +1029,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #6
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1105,27 +1076,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #208
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1170,27 +1123,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #414
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1240,27 +1175,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #418
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1310,27 +1227,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #422
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1375,27 +1274,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #424
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1440,27 +1321,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #426
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1505,27 +1368,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #440
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1570,27 +1415,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #442
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1635,27 +1462,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #444
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1696,27 +1505,9 @@ ufs_sbdecode_stkok        TCS
                 LDA     10+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      6+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #413
                 CLC
@@ -1731,28 +1522,9 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                DO      8+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      6+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #411
                 CLC
@@ -1767,28 +1539,9 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                DO      8+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      6+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #410
                 CLC
@@ -1803,28 +1556,9 @@ ufs_sbdecode_stkok        TCS
                 STA     [_fcc_fpr0],Y
                 REP     #$20
                 MX      %00
-                LDA     _fcc_fpr0
-                DO      8+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      6+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #412
                 CLC
@@ -1840,20 +1574,19 @@ ufs_sbdecode_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #50
                 BVC     _ufssb_L4
                 EOR     #$8000
 _ufssb_L4
-                BMI     *+5
-                BRL     _ufssb_L3
+                BPL     _ufssb_L3
                 DO      12+ufs_sbdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1878,7 +1611,7 @@ _ufssb_L4
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 CLC
@@ -1888,7 +1621,7 @@ _ufssb_L4
                 PEI     _fcc_fpr0
                 LDA     #8
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 STA     _fcc_tmp_b
@@ -1896,27 +1629,9 @@ _ufssb_L4
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -1940,19 +1655,16 @@ _ufssb_L4
                 STA     [_fcc_fpr0],Y
                 TXA
 _ufssb_L2
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img18
                 BRL     _ufssb_L1
 _ufssb_L3
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L5
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #100
@@ -1984,7 +1696,7 @@ _ufssb_L8
                 CLC
                 ADC     #210
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -1993,34 +1705,16 @@ _ufssb_L8
                 PEI     _fcc_fpr0
                 LDA     #210
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img18
                 ASL
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      14+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_sbdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -2039,29 +1733,35 @@ _ufssb_L8
                 TYA
                 STA     [_fcc_fpr0]
 _ufssb_L6
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _ufssb_L5
+                INC     _fcc_img18
+                BRA     _ufssb_L5
 _ufssb_L7
                 TAY
                 TSC
                 CLC
-                ADC     #ufs_sbdecode_FRAMESIZE
+                ADC     #ufs_sbdecode_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-ufs_sbdecode_FRAMESIZE   EQU     2
+ufs_sbdecode_FRAMESIZE   EQU     8
 ufs_sbdecode_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_sbencode
 ufs_sbencode            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #ufs_sbencode_FRAMESIZE
+                SBC     #ufs_sbencode_FRAMESIZE-6
                 DO      ufs_sbencode_STKGUARD
                 BCC     ufs_sbencode_stkovf
                 CMP     _fcc_stkfloor
@@ -2071,6 +1771,28 @@ ufs_sbencode_stkovf       JMP     _fcc_stkoflow
 ufs_sbencode_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      10+ufs_sbencode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+ufs_sbencode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
+                FIN
+                STA     _fcc_img16
+                DO      12+ufs_sbencode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+ufs_sbencode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
+                FIN
+                STA     _fcc_img17
                 DO      8+ufs_sbencode_FRAMESIZE/256
                 TSC
                 CLC
@@ -2097,27 +1819,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #0
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2160,27 +1864,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #2
                 PHA
-                DO      18+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2216,27 +1902,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #6
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2272,27 +1940,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #208
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2335,27 +1985,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #414
                 PHA
-                DO      18+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2398,27 +2030,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #418
                 PHA
-                DO      18+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2454,27 +2068,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #422
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2510,27 +2106,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #424
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2566,27 +2144,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #426
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2622,27 +2182,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #440
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2678,27 +2220,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #442
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2734,27 +2258,9 @@ ufs_sbencode_stkok        TCS
                 PHA
                 LDA     #444
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -2763,27 +2269,9 @@ ufs_sbencode_stkok        TCS
                 CLC
                 ADC     #8
                 TCS
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #413
                 CLC
@@ -2835,27 +2323,9 @@ ufs_sbencode_stkok        TCS
                 PLA
                 PLA
                 TYA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #411
                 CLC
@@ -2885,27 +2355,9 @@ ufs_sbencode_stkok        TCS
                 PLA
                 PLA
                 TYA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #410
                 CLC
@@ -2935,27 +2387,9 @@ ufs_sbencode_stkok        TCS
                 PLA
                 PLA
                 TYA
-                DO      12+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                DO      10+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+ufs_sbencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 PHA
                 LDA     #412
                 CLC
@@ -2986,12 +2420,12 @@ ufs_sbencode_stkok        TCS
                 PLA
                 TYA
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L9
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #50
@@ -3023,7 +2457,7 @@ _ufssb_L12
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 CLC
@@ -3040,7 +2474,7 @@ _ufssb_L12
                 PHA
                 LDA     #8
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 STA     _fcc_tmp_b
@@ -3048,27 +2482,9 @@ _ufssb_L12
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      18+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=6 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -3078,19 +2494,16 @@ _ufssb_L12
                 ADC     #10
                 TCS
 _ufssb_L10
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _ufssb_L9
+                INC     _fcc_img18
+                BRA     _ufssb_L9
 _ufssb_L11
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #100
@@ -3122,7 +2535,7 @@ _ufssb_L16
                 CLC
                 ADC     #210
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -3131,34 +2544,16 @@ _ufssb_L16
                 PHA
                 LDA     #210
                 PHA
-                LDA     5,S   ; fccstk d=4 b=1
+                LDA     _fcc_img18
                 ASL
                 STA     _fcc_tmp_b
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      16+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_sbencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_sbencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_sbencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -3168,22 +2563,25 @@ _ufssb_L16
                 ADC     #8
                 TCS
 _ufssb_L14
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _ufssb_L13
+                INC     _fcc_img18
+                BRA     _ufssb_L13
 _ufssb_L15
                 TAY
                 TSC
                 CLC
-                ADC     #ufs_sbencode_FRAMESIZE
+                ADC     #ufs_sbencode_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-ufs_sbencode_FRAMESIZE   EQU     2
+ufs_sbencode_FRAMESIZE   EQU     8
 ufs_sbencode_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_dget32
 ufs_dget32            ENT
@@ -3493,9 +2891,12 @@ ufs_dget16_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_fblkdecode
 ufs_fblkdecode            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #ufs_fblkdecode_FRAMESIZE
+                SBC     #ufs_fblkdecode_FRAMESIZE-6
                 DO      ufs_fblkdecode_STKGUARD
                 BCC     ufs_fblkdecode_stkovf
                 CMP     _fcc_stkfloor
@@ -3505,6 +2906,28 @@ ufs_fblkdecode_stkovf       JMP     _fcc_stkoflow
 ufs_fblkdecode_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      6+ufs_fblkdecode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #6+ufs_fblkdecode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     6+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=0 b=6 fs
+                FIN
+                STA     _fcc_img16
+                DO      8+ufs_fblkdecode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #8+ufs_fblkdecode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     8+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=0 b=8 fs
+                FIN
+                STA     _fcc_img17
                 DO      12+ufs_fblkdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -3531,27 +2954,9 @@ ufs_fblkdecode_stkok        TCS
                 PEI     _fcc_fpr0
                 LDA     #0
                 PHA
-                DO      14+ufs_fblkdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_fblkdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_fblkdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_fblkdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -3571,20 +2976,19 @@ ufs_fblkdecode_stkok        TCS
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L17
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #50
                 BVC     _ufssb_L20
                 EOR     #$8000
 _ufssb_L20
-                BMI     *+5
-                BRL     _ufssb_L19
+                BPL     _ufssb_L19
                 DO      12+ufs_fblkdecode_FRAMESIZE/256
                 TSC
                 CLC
@@ -3609,7 +3013,7 @@ _ufssb_L20
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 CLC
@@ -3619,7 +3023,7 @@ _ufssb_L20
                 PEI     _fcc_fpr0
                 LDA     #2
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 STA     _fcc_tmp_b
@@ -3627,27 +3031,9 @@ _ufssb_L20
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      14+ufs_fblkdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_fblkdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=6 b=8 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr1+2
-                DO      12+ufs_fblkdecode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+ufs_fblkdecode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+ufs_fblkdecode_FRAMESIZE,S   ; fccstk d=6 b=6 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr1
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
@@ -3671,29 +3057,35 @@ _ufssb_L20
                 STA     [_fcc_fpr0],Y
                 TXA
 _ufssb_L18
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img18
                 BRL     _ufssb_L17
 _ufssb_L19
                 TAY
                 TSC
                 CLC
-                ADC     #ufs_fblkdecode_FRAMESIZE
+                ADC     #ufs_fblkdecode_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-ufs_fblkdecode_FRAMESIZE   EQU     2
+ufs_fblkdecode_FRAMESIZE   EQU     8
 ufs_fblkdecode_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_fblkencode
 ufs_fblkencode            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #ufs_fblkencode_FRAMESIZE
+                SBC     #ufs_fblkencode_FRAMESIZE-6
                 DO      ufs_fblkencode_STKGUARD
                 BCC     ufs_fblkencode_stkovf
                 CMP     _fcc_stkfloor
@@ -3703,6 +3095,28 @@ ufs_fblkencode_stkovf       JMP     _fcc_stkoflow
 ufs_fblkencode_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      10+ufs_fblkencode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #10+ufs_fblkencode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     10+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=0 b=10 fs
+                FIN
+                STA     _fcc_img16
+                DO      12+ufs_fblkencode_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+ufs_fblkencode_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=0 b=12 fs
+                FIN
+                STA     _fcc_img17
                 DO      8+ufs_fblkencode_FRAMESIZE/256
                 TSC
                 CLC
@@ -3730,27 +3144,9 @@ ufs_fblkencode_stkok        TCS
                 PHA
                 LDA     #0
                 PHA
-                DO      16+ufs_fblkencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_fblkencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=4 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      14+ufs_fblkencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+ufs_fblkencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=4 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -3760,12 +3156,12 @@ ufs_fblkencode_stkok        TCS
                 ADC     #8
                 TCS
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img18
 _ufssb_L21
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 TAX
                 SEC
                 SBC     #50
@@ -3797,7 +3193,7 @@ _ufssb_L24
                 CLC
                 ADC     #8
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 CLC
@@ -3814,7 +3210,7 @@ _ufssb_L24
                 PHA
                 LDA     #2
                 PHA
-                LDA     7,S   ; fccstk d=6 b=1
+                LDA     _fcc_img18
                 ASL
                 ASL
                 STA     _fcc_tmp_b
@@ -3822,27 +3218,9 @@ _ufssb_L24
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                DO      18+ufs_fblkencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #18+ufs_fblkencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     18+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=6 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      16+ufs_fblkencode_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #16+ufs_fblkencode_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     16+ufs_fblkencode_FRAMESIZE,S   ; fccstk d=6 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
@@ -3852,22 +3230,25 @@ _ufssb_L24
                 ADC     #10
                 TCS
 _ufssb_L22
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
-                BRL     _ufssb_L21
+                INC     _fcc_img18
+                BRA     _ufssb_L21
 _ufssb_L23
                 TAY
                 TSC
                 CLC
-                ADC     #ufs_fblkencode_FRAMESIZE
+                ADC     #ufs_fblkencode_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-ufs_fblkencode_FRAMESIZE   EQU     2
+ufs_fblkencode_FRAMESIZE   EQU     8
 ufs_fblkencode_STKGUARD    EQU     0
                 FGX2_EXPORT ufs_sbvalid
 ufs_sbvalid            ENT

@@ -7,9 +7,10 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -50,14 +51,12 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     codetab+2
                 LDA     #0
-                STA     15,S   ; fccstk d=0 b=15
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_img0
+                STA     _fcc_img16
 _lprobe_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #5010
@@ -73,7 +72,7 @@ _lprobe_L3
                 MX      %00
                 LDA     htab
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -110,7 +109,7 @@ _lprobe_L3
                 MX      %00
                 LDA     codetab
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 CLC
                 ADC     1,S
@@ -134,11 +133,9 @@ _lprobe_L3
                 PLA
                 TYA
 _lprobe_L1
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _lprobe_L0
 _lprobe_L2
-                LDA     _fcc_img0
-                STA     15,S   ; fccstk d=0 b=15
                 LDA     #5003
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
@@ -334,12 +331,9 @@ _lprobe_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _lprobe_L6
                 LDA     13,S   ; fccstk d=0 b=13
                 STA     _fcc_long_hi
@@ -389,12 +383,9 @@ _lprobe_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _lprobe_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
@@ -437,12 +428,9 @@ _lprobe_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _lprobe_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
@@ -473,12 +461,9 @@ _lprobe_L9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _lprobe_L10
                 SEP     #$20
                 MX      %10
@@ -560,12 +545,9 @@ _lprobe_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _lprobe_L11
                 LDA     #200
                 ASL
@@ -597,35 +579,32 @@ _lprobe_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _lprobe_L12
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _lprobe_L7
                 LDA     #7
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     16
+main_FRAMESIZE   EQU     18
 main_STKGUARD    EQU     0
                 FGX2_EXPORT htabof_eq
 htabof_eq            ENT

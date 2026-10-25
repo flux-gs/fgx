@@ -8909,6 +8909,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
      * the offsets are identical, only the base register changes. */
     ir_emitf("%s_FRAMESIZE   EQU     %d\n",
             g_func_name, g_fn_is_soft ? 0 : 2 * g_total_slots);
+    ir_tag_last(IRF_FRAMESIZE, (unsigned)(g_fn_is_soft ? 0 : 2 * g_total_slots));
     /* Emitted ONLY for a cycle member.  Gating in C rather than with a Merlin
      * `DO` keeps the predicate-off output byte-identical: a DO/FIN block costs
      * no bytes in the BINARY but does change the .s TEXT, so emitting it

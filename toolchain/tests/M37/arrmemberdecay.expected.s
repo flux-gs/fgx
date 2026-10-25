@@ -136,9 +136,10 @@ _arrmemberdecay_sumlong_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -151,14 +152,12 @@ main_stkok        TCS
                 LDA     #23130
                 STA     o+0
                 LDA     #0
-                STA     17,S   ; fccstk d=0 b=17
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_img0
+                STA     _fcc_img16
 _arrmemberdecay_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 SEC
                 SBC     #4
                 BVC     _arrmemberdecay_L7
@@ -166,7 +165,7 @@ _arrmemberdecay_L4
 _arrmemberdecay_L7
                 BMI     *+5
                 BRL     _arrmemberdecay_L6
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -179,7 +178,7 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 CLC
                 ADC     #1
@@ -195,7 +194,7 @@ _arrmemberdecay_L7
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 CLC
                 ADC     #o+18
@@ -207,7 +206,7 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -216,7 +215,7 @@ _arrmemberdecay_L7
                 ADC     _fcc_tmp_b
                 ASL
                 STA     [_fcc_fpr0]
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     #o+26
                 STA     _fcc_fpr0
@@ -227,7 +226,7 @@ _arrmemberdecay_L7
                 STA     _fcc_fpr0+2
                 REP     #$20
                 MX      %00
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 INC
                 AND     #$00FF
@@ -236,7 +235,7 @@ _arrmemberdecay_L7
                 STA     [_fcc_fpr0]
                 REP     #$20
                 MX      %00
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -275,11 +274,9 @@ _arrmemberdecay_L7
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
 _arrmemberdecay_L5
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _arrmemberdecay_L4
 _arrmemberdecay_L6
-                LDA     _fcc_img0
-                STA     17,S   ; fccstk d=0 b=17
                 PHA
                 SEP     #$20
                 MX      %10
@@ -334,12 +331,9 @@ _arrmemberdecay_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -372,12 +366,9 @@ _arrmemberdecay_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -425,12 +416,9 @@ _arrmemberdecay_L9
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L10
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -492,12 +480,9 @@ _arrmemberdecay_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -526,12 +511,9 @@ _arrmemberdecay_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L12
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -560,12 +542,9 @@ _arrmemberdecay_L12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L13
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -622,12 +601,9 @@ _arrmemberdecay_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L14
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -672,12 +648,9 @@ _arrmemberdecay_L18
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _arrmemberdecay_L17
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -722,12 +695,9 @@ _arrmemberdecay_L20
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _arrmemberdecay_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -748,12 +718,9 @@ _arrmemberdecay_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _arrmemberdecay_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -774,12 +741,9 @@ _arrmemberdecay_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _arrmemberdecay_L22
                 LDA     o+0
                 TAX
@@ -789,23 +753,23 @@ _arrmemberdecay_L22
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _arrmemberdecay_L23
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     18
+main_FRAMESIZE   EQU     20
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

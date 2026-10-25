@@ -108,9 +108,10 @@ _seekrw_filesize_STKGUARD    EQU     0
                 FGX2_EXPORT _seekrw_mk35
 _seekrw_mk35            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #_seekrw_mk35_FRAMESIZE
+                SBC     #_seekrw_mk35_FRAMESIZE-2
                 DO      _seekrw_mk35_STKGUARD
                 BCC     _seekrw_mk35_stkovf
                 CMP     _fcc_stkfloor
@@ -121,14 +122,12 @@ _seekrw_mk35_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
+                STA     _fcc_img16
 _seekrw_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #35
@@ -138,7 +137,7 @@ _seekrw_L4
                 BPL     _seekrw_L3
                 LDA     #buf
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     1,S
                 TAY
@@ -157,11 +156,9 @@ _seekrw_L4
                 MX      %00
                 PLA
 _seekrw_L2
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _seekrw_L1
 _seekrw_L3
-                LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
                 LDA     #420
                 PHA
                 LDA     #1537
@@ -203,12 +200,9 @@ _seekrw_L3
                 TAY
                 TSC
                 CLC
-                ADC     #_seekrw_mk35_FRAMESIZE
+                ADC     #_seekrw_mk35_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     _seekrw_mk35_bandx
 _seekrw_L5
                 LDA     #35
                 PHA
@@ -242,20 +236,24 @@ _seekrw_L5
                 TAY
                 TSC
                 CLC
-                ADC     #_seekrw_mk35_FRAMESIZE
+                ADC     #_seekrw_mk35_FRAMESIZE-2
                 TCS
+_seekrw_mk35_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_seekrw_mk35_FRAMESIZE   EQU     4
+_seekrw_mk35_FRAMESIZE   EQU     6
 _seekrw_mk35_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -295,12 +293,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _seekrw_L6
                 LDA     #0
                 PHA
@@ -402,37 +397,34 @@ _seekrw_L6
                 LDA     #1
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_img0
+                STA     _fcc_img16
                 LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_img1
+                STA     _fcc_img0
 _seekrw_L7
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 SEC
                 SBC     #32
                 BVC     _seekrw_L10
                 EOR     #$8000
 _seekrw_L10
                 BPL     _seekrw_L9
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
                 CMP     #0
                 BEQ     _seekrw_L11
                 LDA     #0
-                STA     _fcc_img1
+                STA     _fcc_img0
 _seekrw_L11
 _seekrw_L8
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _seekrw_L7
 _seekrw_L9
                 LDA     _fcc_img0
-                STA     7,S   ; fccstk d=0 b=7
-                LDA     _fcc_img1
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -706,7 +698,7 @@ _seekrw_L13
                 ADC     #8
                 TCS
                 TYA
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 LDA     #0
                 PHA
                 LDA     #$0000
@@ -724,7 +716,7 @@ _seekrw_L13
                 CLC
                 ADC     #8
                 TCS
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 TAX
                 CMP     #8
                 BNE     _seekrw_L14
@@ -754,11 +746,11 @@ _seekrw_L13
                 CMP     #8
                 BNE     _seekrw_L14
                 LDA     #1
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 BRA     _seekrw_L15
 _seekrw_L14
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
 _seekrw_L15
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
@@ -836,7 +828,7 @@ _seekrw_L15
                 TAY
                 PLA
                 TYA
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 BEQ     _seekrw_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -932,7 +924,7 @@ _seekrw_L16
                 ADC     #8
                 TCS
                 TYA
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 LDA     #1
                 PHA
                 LDA     #$0000
@@ -954,7 +946,7 @@ _seekrw_L16
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 TAX
                 CMP     #16
                 BNE     _seekrw_L17
@@ -988,11 +980,11 @@ _seekrw_L16
                 CMP     #8
                 BNE     _seekrw_L17
                 LDA     #1
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
                 BRA     _seekrw_L18
 _seekrw_L17
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
 _seekrw_L18
                 LDA     #1
                 PHA
@@ -1043,7 +1035,7 @@ _seekrw_L18
                 BEQ     _seekrw_L19
 _seekrw_L20
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
 _seekrw_L19
                 LDA     3,S   ; fccstk d=0 b=3
                 PHA
@@ -1121,7 +1113,7 @@ _seekrw_L19
                 TAY
                 PLA
                 TYA
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 BEQ     _seekrw_L21
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -1188,12 +1180,15 @@ _seekrw_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     12
+main_FRAMESIZE   EQU     14
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 49

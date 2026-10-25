@@ -623,9 +623,10 @@ uallrel_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -1027,15 +1028,14 @@ _cmp_branch_L61
                 LDA     #0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
-                STA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
+                STA     _fcc_img16
                 LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img1
+                STA     _fcc_img0
 _cmp_branch_L62
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #10
@@ -1043,14 +1043,12 @@ _cmp_branch_L62
                 EOR     #$8000
 _cmp_branch_L65
                 BPL     _cmp_branch_L64
-                INC     _fcc_img1
-_cmp_branch_L63
                 INC     _fcc_img0
+_cmp_branch_L63
+                INC     _fcc_img16
                 BRA     _cmp_branch_L62
 _cmp_branch_L64
                 LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_img1
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 STA     a
@@ -1096,12 +1094,14 @@ _cmp_branch_L72
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 35

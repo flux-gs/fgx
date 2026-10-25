@@ -151,9 +151,10 @@ nameis_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -170,7 +171,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     17,S   ; fccstk d=0 b=17
                 LDA     #1
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img16
                 LDA     #0
                 STA     21,S   ; fccstk d=0 b=21
                 SEP     #$20
@@ -219,12 +220,9 @@ _dirops_L4
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _dirops_L2
                 SEP     #$20
                 MX      %10
@@ -394,12 +392,12 @@ _dirops_L18
                 BPL     _dirops_L15
 _dirops_L16
                 LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img16
 _dirops_L15
                 LDA     [_fcc_fpr0]
                 BNE     _dirops_L19
                 LDA     #0
-                STA     19,S   ; fccstk d=0 b=19
+                STA     _fcc_img16
 _dirops_L19
                 SEP     #$20
                 MX      %10
@@ -480,7 +478,7 @@ _dirops_L23
                 ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L22
-                LDA     19,S   ; fccstk d=0 b=19
+                LDA     _fcc_img16
                 BEQ     _dirops_L24
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
@@ -623,12 +621,15 @@ _dirops_L26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     22
+main_FRAMESIZE   EQU     24
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 14

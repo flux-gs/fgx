@@ -294,9 +294,10 @@ _structsrcdeep_same_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -408,12 +409,12 @@ main_stkok        TCS
                 ADC     #6
                 TCS
                 LDA     #0
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img16
 _structsrcdeep_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #3
@@ -422,7 +423,7 @@ _structsrcdeep_L4
 _structsrcdeep_L7
                 BMI     *+5
                 BRL     _structsrcdeep_L6
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -441,9 +442,9 @@ _structsrcdeep_L7
                 MX      %00
                 LDA     #13056
                 CLC
-                ADC     15,S   ; fccstk d=0 b=15
+                ADC     _fcc_img16
                 STA     [_fcc_fpr0]
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -466,11 +467,11 @@ _structsrcdeep_L7
                 STA     _fcc_fpr0
                 LDA     #17408
                 CLC
-                ADC     15,S   ; fccstk d=0 b=15
+                ADC     _fcc_img16
                 STA     [_fcc_fpr0]
                 LDA     #300
                 PHA
-                LDA     17,S   ; fccstk d=2 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -482,7 +483,7 @@ _structsrcdeep_L7
                 CLC
                 ADC     _fcc_tmp_b
                 PHA
-                LDA     17,S   ; fccstk d=2 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -511,10 +512,7 @@ _structsrcdeep_L7
                 ADC     #6
                 TCS
 _structsrcdeep_L5
-                LDA     15,S   ; fccstk d=0 b=15
-                CLC
-                ADC     #1
-                STA     15,S   ; fccstk d=0 b=15
+                INC     _fcc_img16
                 BRL     _structsrcdeep_L4
 _structsrcdeep_L6
                 LDA     #21845
@@ -710,7 +708,7 @@ _structsrcdeep_L10
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L11
                 LDA     #2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -747,7 +745,7 @@ _structsrcdeep_L11
                 CLC
                 ADC     #18
                 STA     _fcc_fpr1
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -803,7 +801,7 @@ _structsrcdeep_L12
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L13
                 LDA     #0
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img16
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -840,7 +838,7 @@ _structsrcdeep_L13
                 CLC
                 ADC     #18
                 STA     _fcc_fpr1
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -896,7 +894,7 @@ _structsrcdeep_L14
                 STA     17,S   ; fccstk d=0 b=17
 _structsrcdeep_L15
                 LDA     #1
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img16
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -952,7 +950,7 @@ _structsrcdeep_L15
                 CLC
                 ADC     #18
                 STA     _fcc_fpr1
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -1191,12 +1189,14 @@ _structsrcdeep_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     28
+main_FRAMESIZE   EQU     30
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 19

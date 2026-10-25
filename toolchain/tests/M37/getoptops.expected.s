@@ -151,9 +151,11 @@ streq_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -166,7 +168,7 @@ main_stkok        TCS
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     #0
@@ -511,29 +513,29 @@ _getoptops_L2
                 ADC     #10
                 TCS
                 TYA
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img16
                 CMP     #$FFFF
                 BNE     *+5
                 BRL     _getoptops_L3
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 CMP     #108
                 BNE     _getoptops_L4
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 TAX
                 ORA     #1
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
                 BRL     _getoptops_L5
 _getoptops_L4
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 CMP     #97
                 BNE     _getoptops_L6
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 TAX
                 ORA     #2
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
                 BRL     _getoptops_L7
 _getoptops_L6
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
                 CMP     #111
                 BNE     _getoptops_L8
@@ -572,7 +574,7 @@ _getoptops_L6
 _getoptops_L9
                 BRA     _getoptops_L10
 _getoptops_L8
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
                 CMP     #102
                 BNE     _getoptops_L11
@@ -611,7 +613,7 @@ _getoptops_L8
 _getoptops_L12
                 BRA     _getoptops_L13
 _getoptops_L11
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img16
                 TAX
                 CMP     #63
                 BNE     _getoptops_L14
@@ -633,7 +635,7 @@ _getoptops_L7
 _getoptops_L5
                 BRL     _getoptops_L2
 _getoptops_L3
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 TAX
                 CMP     #3
                 BNE     _getoptops_L17
@@ -722,12 +724,16 @@ _getoptops_L23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     14
+main_FRAMESIZE   EQU     18
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 7

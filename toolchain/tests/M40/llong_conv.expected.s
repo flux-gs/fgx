@@ -872,9 +872,10 @@ _llong_conv_sw_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -939,12 +940,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L13
                 LDA     a+6
                 STA     _fcc_q3
@@ -972,12 +970,9 @@ _llong_conv_L13
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L14
                 LDA     a+6
                 STA     _fcc_q3
@@ -995,12 +990,9 @@ _llong_conv_L14
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L15
                 LDA     a+6
                 STA     _fcc_q3
@@ -1017,12 +1009,9 @@ _llong_conv_L15
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L16
                 LDA     #200
                 STA     19,S   ; fccstk d=0 b=19
@@ -1085,12 +1074,9 @@ _llong_conv_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L17
                 LDA     #$FFFB
                 STA     1,S   ; fccstk d=0 b=1
@@ -1157,12 +1143,9 @@ _llong_conv_L17
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L18
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -1226,12 +1209,9 @@ _llong_conv_L18
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L19
                 LDA     #$0001
                 STA     _fcc_long_hi
@@ -1306,12 +1286,9 @@ _llong_conv_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L20
                 LDA     #$89AB
                 STA     _fcc_long_hi
@@ -1379,12 +1356,9 @@ _llong_conv_L20
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L21
                 LDA     #$89AB
                 STA     _fcc_long_hi
@@ -1453,12 +1427,9 @@ _llong_conv_L21
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L22
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -1591,12 +1562,9 @@ _llong_conv_L22
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L23
                 LDA     9,S   ; fccstk d=0 b=9
                 PHA
@@ -1674,12 +1642,9 @@ _llong_conv_L23
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L24
                 LDA     a+6
                 STA     _fcc_q3
@@ -1728,12 +1693,9 @@ _llong_conv_L24
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L25
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -1862,12 +1824,9 @@ _llong_conv_L25
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L26
                 LDA     b+6
                 STA     _fcc_q3
@@ -1961,12 +1920,9 @@ _llong_conv_L26
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L27
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2070,12 +2026,9 @@ _llong_conv_L29
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L28
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2163,12 +2116,9 @@ _llong_conv_L28
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L30
                 LDA     a+6
                 STA     _fcc_q3
@@ -2220,12 +2170,9 @@ _llong_conv_L30
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L31
                 LDA     #$FFFD
                 STA     1,S   ; fccstk d=0 b=1
@@ -2339,12 +2286,9 @@ _llong_conv_L33
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L34
                 LDA     5,S   ; fccstk d=0 b=5
                 CMP     #0
@@ -2422,12 +2366,9 @@ _llong_conv_L36
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L37
                 LDA     3,S   ; fccstk d=0 b=3
                 CMP     #0
@@ -2505,12 +2446,9 @@ _llong_conv_L39
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L40
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2587,12 +2525,9 @@ _llong_conv_L42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L43
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2662,12 +2597,9 @@ _llong_conv_L43
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L44
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2735,12 +2667,9 @@ _llong_conv_L44
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L45
                 LDA     #$FFFF
                 STA     _fcc_long_hi
@@ -2808,12 +2737,9 @@ _llong_conv_L45
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L46
                 LDA     #$7FFF
                 STA     _fcc_long_hi
@@ -2881,12 +2807,9 @@ _llong_conv_L46
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L47
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2954,12 +2877,9 @@ _llong_conv_L47
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L48
                 LDA     #$FFFF
                 STA     _fcc_long_hi
@@ -3027,12 +2947,9 @@ _llong_conv_L48
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L49
                 LDA     #$89AB
                 STA     _fcc_long_hi
@@ -3089,12 +3006,9 @@ _llong_conv_L49
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L50
                 LDA     a+6
                 STA     _fcc_q3
@@ -3126,12 +3040,9 @@ _llong_conv_L50
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L51
                 LDA     a+6
                 STA     _fcc_q3
@@ -3163,12 +3074,9 @@ _llong_conv_L51
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L52
                 LDA     #$FFF9
                 STA     1,S   ; fccstk d=0 b=1
@@ -3235,12 +3143,9 @@ _llong_conv_L52
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L53
                 LDA     #$FFFF
                 STA     _fcc_long_hi
@@ -3308,12 +3213,9 @@ _llong_conv_L53
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _llong_conv_L54
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -3388,7 +3290,7 @@ _llong_conv_L54
                 TCS
                 TYA
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
 _llong_conv_L55
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
@@ -3405,7 +3307,7 @@ _llong_conv_L55
                 ORA     _fcc_q3
                 BNE     *+5
                 BRL     _llong_conv_L56
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 SEC
                 SBC     #3
                 BVC     _llong_conv_L57
@@ -3413,9 +3315,8 @@ _llong_conv_L55
 _llong_conv_L57
                 BMI     *+5
                 BRL     _llong_conv_L56
-                LDA     7,S   ; fccstk d=0 b=7
-                INC
-                STA     7,S   ; fccstk d=0 b=7
+                INC     _fcc_img16
+                LDA     _fcc_img16
                 TAX
                 CMP     #2
                 BEQ     *+5
@@ -3472,7 +3373,7 @@ _llong_conv_L57
 _llong_conv_L58
                 BRL     _llong_conv_L55
 _llong_conv_L56
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 TAX
                 CMP     #2
                 BEQ     _llong_conv_L59
@@ -3480,23 +3381,23 @@ _llong_conv_L56
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _llong_conv_L59
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     20
+main_FRAMESIZE   EQU     22
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 61

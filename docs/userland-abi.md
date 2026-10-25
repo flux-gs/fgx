@@ -40,10 +40,11 @@ stack pages, which `fgx_ld.py` computes from fcc's frame call graph; 0 = the
 loader default). The kernel restores this `D` on every syscall return.
 
 fcc-compiled code and libc own most of the direct page; the map is the header
-of `toolchain/lib/fcc_runtime.s` (`$98-$B7` the far-pointer register band
-`_fcc_fpr0..7`, `$C0-$DF` the promoted-local file, `$E0-$FF` libc and runtime
-scratch). Hand-written code linked with them must not keep live state in those
-cells across a call.
+of `toolchain/lib/fcc_runtime.s` (`$78-$97` the callee-saved band
+`_fcc_img16..31`, `$98-$B7` the far-pointer register band `_fcc_fpr0..7`,
+`$C0-$DF` the promoted-local file, `$E0-$FF` libc and runtime scratch).
+Hand-written code linked with them must not keep live state in those cells
+across a call, and must leave the band as it found it.
 
 The dispatcher keeps user SP intact across syscalls (saved to `_Sys_UserSP`,
 restored on exit). fcc's prologue checks the new S against `_fcc_stkfloor`
@@ -199,6 +200,9 @@ explicitly after the PLP, or stash the result across it.
 ### 3.3 Register conventions
 
 - **A, X, Y are caller-saved.**
+- **`$78-$97`, the band `_fcc_img16..31`, is callee-saved.** A function that
+  writes a band word pushes the caller's value after `_fcc_fb` in its prologue
+  and pulls it back in its epilogue (section 3.6, Frames).
 - **DBR and D survive** a syscall (the dispatcher saves and restores them).
 - **Carry (C)** is the success/failure signal of a syscall: `C = 1` success,
   `C = 0` failure with the errno in `A`.
@@ -265,9 +269,13 @@ same 3-byte return frame as a direct `JSL` (`emit_call_indirect`,
 | `void`                    | --                                     |
 | `struct` / `union`        | not supported: fcc rejects a function returning a struct by value ("return-by-value struct not supported") |
 
-**Frames.** The prologue saves `_fcc_fb` (`PEI`), carves locals with
-`TSC / SEC / SBC #framesize / TCS`, checks the stack floor, and seeds the frame
-base `_fcc_fb`; arguments and locals are read `n,S`. `D` is never pointed at
+**Frames.** The prologue saves `_fcc_fb` (`PEI`), then each band word the
+function uses (`PEI _fcc_img16`...), carves locals with
+`TSC / SEC / SBC #framesize-saves / TCS`, checks the stack floor, and seeds the
+frame base `_fcc_fb`; arguments and locals are read `n,S`, and `framesize`
+counts the band pushes so an argument's `n+framesize,S` still reaches it.  A
+function that calls another C function keeps its loop-hot locals in the band;
+one that calls none keeps them in `$C0-$DF`, which any callee may reuse. `D` is never pointed at
 the frame -- the direct page belongs to the runtime (section 1.2). Locals live
 on the bank-0 hardware stack, so `&local` has bank 0. A function on a
 call-graph cycle (recursion) keeps all its locals instead in a **soft frame**
@@ -279,9 +287,10 @@ in the dedicated soft-stack bank, addressed `[_fcc_sfp],Y`
 defined only when the banks match. `p == q` compares offset and bank; `NULL` is
 offset 0, bank 0. `<`/`>` are defined only when the banks match.
 
-**setjmp / longjmp.** `jmp_buf` is a 16-byte buffer (`<setjmp.h>`,
-`typedef struct { char _jb[16]; } jmp_buf;`) holding PB, DBR, `_fcc_fb`, PC,
-SP, D, `_fcc_sfp` and the 32-bit signal mask, in the layout `libc.s` writes. A
+**setjmp / longjmp.** `jmp_buf` is a 48-byte buffer (`<setjmp.h>`,
+`typedef struct { char _jb[48]; } jmp_buf;`) holding PB, DBR, `_fcc_fb`, PC,
+SP, D, `_fcc_sfp`, the 32-bit signal mask and the callee-saved band, in the
+layout `libc.s` writes. A
 bare `jmp_buf` identifier still decays to its address, so `setjmp(env)` /
 `longjmp(env, v)` compile unchanged.
 
@@ -293,8 +302,9 @@ its frame is gone by the time `longjmp` fires. `setjmp` returns its result in
 0) and is usable in any expression. `longjmp` reinstalls the saved signal mask
 (`SYS_SIGSETMASK`), restores S, D and DBR, and resumes at the saved PB:PC. The
 mask is BSD's contract (2.11BSD `setjmp(3)`, `examples/2.11BSD/usr/man/man3/setjmp.3`: "Setjmp and
-longjmp save and restore the signal mask"); FGX provides no `_setjmp`/`_longjmp`. fcc keeps no C
-local in a register across a call, so nothing else needs saving.
+longjmp save and restore the signal mask"); FGX provides no `_setjmp`/`_longjmp`. The band is
+saved and restored as 4.3BSD-Reno's i386 setjmp saves `ebx`, `esi`, `edi` and `ebp`: the functions a
+`longjmp` unwinds never run the epilogues that would have restored their callers' band words.
 
 The `jmp_buf` **must have static storage** (a file-scope global or a `static`
 local): the asm addresses it DBR-relative, and an automatic buffer would be in
@@ -665,6 +675,7 @@ keep state in these across a libc call:
 
 | DP        | Owner                                      |
 |-----------|--------------------------------------------|
+| `$78-$97` | `_fcc_img16..31`, the callee-saved band: preserve it |
 | `$98-$B7` | `_fcc_fpr0..7`, far-pointer registers (`_fcc_fpr0` is every pointer return) |
 | `$B8`     | `_LS_DATA_DP`, the task's data bank (`libc_start.s`) |
 | `$B9-$BF` | `_fcc_stkfloor`, `_fcc_fb`, `_fcc_sfp`     |

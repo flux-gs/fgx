@@ -238,9 +238,10 @@ scmp_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -406,15 +407,14 @@ main_stkok        TCS
                 LDA     #1
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     #1
-                STA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_img0
+                STA     _fcc_img16
                 LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img1
+                STA     _fcc_img0
 _qsortops_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #7
@@ -422,13 +422,13 @@ _qsortops_L1
                 EOR     #$8000
 _qsortops_L4
                 BPL     _qsortops_L3
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 DEC
                 ASL
                 TAX
                 LDA:    iv,X
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 TAX
                 LDA:    iv,X
@@ -444,15 +444,13 @@ _qsortops_L4
 _qsortops_L6
                 BPL     _qsortops_L5
                 LDA     #0
-                STA     _fcc_img1
+                STA     _fcc_img0
 _qsortops_L5
 _qsortops_L2
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _qsortops_L1
 _qsortops_L3
                 LDA     _fcc_img0
-                STA     3,S   ; fccstk d=0 b=3
-                LDA     _fcc_img1
                 STA     5,S   ; fccstk d=0 b=5
                 BEQ     _qsortops_L7
                 LDA     #0
@@ -761,12 +759,14 @@ _qsortops_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 8

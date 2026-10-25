@@ -700,5 +700,6 @@
   "fprjoin": 42,
   "longconst": 42,
   "pfdigits": 42,
-  "bcopyovl": 42
+  "bcopyovl": 42,
+  "dpband": 42
 }

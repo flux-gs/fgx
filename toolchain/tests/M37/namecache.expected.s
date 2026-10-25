@@ -575,9 +575,10 @@ _namecache_zerobytes_STKGUARD    EQU     0
                 FGX2_EXPORT vntblinit
 vntblinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vntblinit_FRAMESIZE
+                SBC     #vntblinit_FRAMESIZE-2
                 DO      vntblinit_STKGUARD
                 BCC     vntblinit_stkovf
                 CMP     _fcc_stkfloor
@@ -620,14 +621,12 @@ vntblinit_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     specinfo_pool+2
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _namecache_L10
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #8
@@ -637,7 +636,7 @@ _namecache_L13
                 BPL     _namecache_L12
                 LDA     #speclisth
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -660,11 +659,9 @@ _namecache_L13
                 MX      %00
                 PLA
 _namecache_L11
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _namecache_L10
 _namecache_L12
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #896
                 PHA
                 SEP     #$20
@@ -725,12 +722,12 @@ _namecache_L12
                 ADC     #6
                 TCS
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _namecache_L14
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #64
@@ -746,7 +743,7 @@ _namecache_L17
                 MX      %00
                 LDA     vnode_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -778,10 +775,7 @@ _namecache_L17
                 ADC     #4
                 TCS
 _namecache_L15
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRA     _namecache_L14
 _namecache_L16
                 DO      8+vntblinit_FRAMESIZE/256
@@ -816,13 +810,15 @@ _namecache_L16
                 TAY
                 TSC
                 CLC
-                ADC     #vntblinit_FRAMESIZE
+                ADC     #vntblinit_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vntblinit_FRAMESIZE   EQU     6
+vntblinit_FRAMESIZE   EQU     8
 vntblinit_STKGUARD    EQU     0
                 FGX2_EXPORT vfree
 vfree            ENT
@@ -3089,9 +3085,10 @@ insmntque_STKGUARD    EQU     0
                 FGX2_EXPORT _namecache_specalloc
 _namecache_specalloc            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #_namecache_specalloc_FRAMESIZE
+                SBC     #_namecache_specalloc_FRAMESIZE-2
                 DO      _namecache_specalloc_STKGUARD
                 BCC     _namecache_specalloc_stkovf
                 CMP     _fcc_stkfloor
@@ -3102,14 +3099,12 @@ _namecache_specalloc_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _namecache_L44
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #64
@@ -3126,7 +3121,7 @@ _namecache_L47
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3168,8 +3163,7 @@ _namecache_L49
                 LDA     #0
 _namecache_L50
                 CMP     #0
-                BNE     *+5
-                BRL     _namecache_L48
+                BEQ     _namecache_L48
                 SEP     #$20
                 MX      %10
                 LDA     specinfo_pool+2
@@ -3178,7 +3172,7 @@ _namecache_L50
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3224,7 +3218,7 @@ _namecache_L50
                 MX      %00
                 LDA     specinfo_pool
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -3239,19 +3233,14 @@ _namecache_L50
                 TAY
                 TSC
                 CLC
-                ADC     #_namecache_specalloc_FRAMESIZE
+                ADC     #_namecache_specalloc_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     _namecache_specalloc_bandx
 _namecache_L48
 _namecache_L45
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _namecache_L44
 _namecache_L46
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
                 MX      %10
                 PHB
@@ -3274,13 +3263,16 @@ _namecache_L46
                 TAY
                 TSC
                 CLC
-                ADC     #_namecache_specalloc_FRAMESIZE
+                ADC     #_namecache_specalloc_FRAMESIZE-2
                 TCS
+_namecache_specalloc_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_namecache_specalloc_FRAMESIZE   EQU     2
+_namecache_specalloc_FRAMESIZE   EQU     4
 _namecache_specalloc_STKGUARD    EQU     0
                 FGX2_EXPORT _namecache_specfree
 _namecache_specfree            ENT
@@ -4739,9 +4731,10 @@ vfinddev_STKGUARD    EQU     0
                 FGX2_EXPORT spec_securechr
 spec_securechr            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #spec_securechr_FRAMESIZE
+                SBC     #spec_securechr_FRAMESIZE-2
                 DO      spec_securechr_STKGUARD
                 BCC     spec_securechr_stkovf
                 CMP     _fcc_stkfloor
@@ -4763,12 +4756,9 @@ _namecache_L77
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     spec_securechr_bandx
 _namecache_L76
                 DO      6+spec_securechr_FRAMESIZE/256
                 TSC
@@ -4785,7 +4775,7 @@ _namecache_L76
                 TAY
                 PLA
                 TYA
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 TAX
                 CMP     #65535
                 BNE     _namecache_L78
@@ -4793,21 +4783,18 @@ _namecache_L76
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     spec_securechr_bandx
 _namecache_L78
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 LSR
                 LSR
                 LSR
                 LSR
                 LSR
                 CLC
-                ADC     5,S   ; fccstk d=0 b=5
+                ADC     _fcc_img16
                 TAX
                 LDA     #8
                 TAY
@@ -4833,8 +4820,6 @@ _namecache_L78
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
 _namecache_L79
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
@@ -4863,7 +4848,7 @@ _namecache_L79
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -4908,12 +4893,9 @@ _namecache_L82
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     spec_securechr_bandx
 _namecache_L84
 _namecache_L80
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4950,19 +4932,20 @@ _namecache_L80
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _namecache_L79
 _namecache_L81
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #spec_securechr_FRAMESIZE
+                ADC     #spec_securechr_FRAMESIZE-2
                 TCS
+spec_securechr_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-spec_securechr_FRAMESIZE   EQU     6
+spec_securechr_FRAMESIZE   EQU     8
 spec_securechr_STKGUARD    EQU     0
                 FGX2_EXPORT vfs_getsecurelevel
 vfs_getsecurelevel            ENT
@@ -5062,9 +5045,10 @@ vfs_setsecurelevel_STKGUARD    EQU     0
                 FGX2_EXPORT vcount
 vcount            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vcount_FRAMESIZE
+                SBC     #vcount_FRAMESIZE-2
                 DO      vcount_STKGUARD
                 BCC     vcount_stkovf
                 CMP     _fcc_stkfloor
@@ -5106,16 +5090,13 @@ vcount_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     vcount_bandx
 _namecache_L87
 vcount_uL_loop
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
                 DO      8+vcount_FRAMESIZE/256
                 TSC
                 CLC
@@ -5302,7 +5283,7 @@ _namecache_L91
                 JSR     _fcc_safepoint
                 BRL     vcount_uL_loop
 _namecache_L93
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 PHA
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
@@ -5310,7 +5291,7 @@ _namecache_L93
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img16
 _namecache_L89
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -5346,17 +5327,20 @@ _namecache_L89
                 STA     1,S   ; fccstk d=0 b=1
                 BRL     _namecache_L88
 _namecache_L90
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #vcount_FRAMESIZE
+                ADC     #vcount_FRAMESIZE-2
                 TCS
+vcount_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vcount_FRAMESIZE   EQU     6
+vcount_FRAMESIZE   EQU     8
 vcount_STKGUARD    EQU     0
                 FGX2_EXPORT vput
 vput            ENT
@@ -7537,9 +7521,10 @@ vgone_STKGUARD    EQU     0
                 FGX2_EXPORT vflush
 vflush            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #vflush_FRAMESIZE
+                SBC     #vflush_FRAMESIZE-2
                 DO      vflush_STKGUARD
                 BCC     vflush_stkovf
                 CMP     _fcc_stkfloor
@@ -7549,6 +7534,17 @@ vflush_stkovf       JMP     _fcc_stkoflow
 vflush_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
+                DO      14+vflush_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #14+vflush_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
+                FIN
+                STA     _fcc_img16
                 DO      8+vflush_FRAMESIZE/256
                 TSC
                 CLC
@@ -7780,16 +7776,7 @@ _namecache_L147
                 BEQ     _namecache_L145
                 BRL     _namecache_L140
 _namecache_L145
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                LDA     _fcc_img16
                 TAX
                 AND     #1
                 BEQ     _namecache_L148
@@ -7813,16 +7800,7 @@ _namecache_L148
                 TCS
                 BRL     _namecache_L140
 _namecache_L149
-                DO      14+vflush_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #14+vflush_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
-                FIN
+                LDA     _fcc_img16
                 TAX
                 AND     #2
                 BNE     *+5
@@ -7961,24 +7939,24 @@ _namecache_L141
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     vflush_bandx
 _namecache_L156
                 LDA     #0
                 TAY
                 TSC
                 CLC
-                ADC     #vflush_FRAMESIZE
+                ADC     #vflush_FRAMESIZE-2
                 TCS
+vflush_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-vflush_FRAMESIZE   EQU     10
+vflush_FRAMESIZE   EQU     12
 vflush_STKGUARD    EQU     0
                 FGX2_EXPORT ndinit
 ndinit            ENT
@@ -10907,9 +10885,10 @@ _namecache_ncdetach_STKGUARD    EQU     0
                 FGX2_EXPORT nchinit
 nchinit            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #nchinit_FRAMESIZE
+                SBC     #nchinit_FRAMESIZE-2
                 DO      nchinit_STKGUARD
                 BCC     nchinit_stkovf
                 CMP     _fcc_stkfloor
@@ -11008,14 +10987,12 @@ nchinit_stkok        TCS
                 STA     nchstats+30
                 TYA
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _namecache_L196
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #16
@@ -11023,7 +11000,7 @@ _namecache_L196
                 EOR     #$8000
 _namecache_L199
                 BPL     _namecache_L198
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -11072,11 +11049,9 @@ _namecache_L199
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
 _namecache_L197
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _namecache_L196
 _namecache_L198
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
                 STA     nchhead
                 TAY
@@ -11134,23 +11109,20 @@ _namecache_L202
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     nchinit_bandx
 _namecache_L200
                 LDA     #64
                 TAX
                 SEC
                 SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _namecache_L203
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 BPL     *+5
                 BRL     _namecache_L205
                 SEP     #$20
@@ -11161,7 +11133,7 @@ _namecache_L203
                 MX      %00
                 LDA     namecache_pool
                 STA     _fcc_fpr0
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -11280,10 +11252,7 @@ _namecache_L203
                 ADC     #4
                 TCS
 _namecache_L204
-                LDA     1,S   ; fccstk d=0 b=1
-                SEC
-                SBC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                DEC     _fcc_img16
                 BRL     _namecache_L203
 _namecache_L205
                 SEP     #$20
@@ -11307,13 +11276,16 @@ _namecache_L205
                 TAY
                 TSC
                 CLC
-                ADC     #nchinit_FRAMESIZE
+                ADC     #nchinit_FRAMESIZE-2
                 TCS
+nchinit_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-nchinit_FRAMESIZE   EQU     10
+nchinit_FRAMESIZE   EQU     12
 nchinit_STKGUARD    EQU     0
                 FGX2_EXPORT namehash
 namehash            ENT
@@ -11909,9 +11881,10 @@ cache_purge_STKGUARD    EQU     0
                 FGX2_EXPORT cache_purgevfs
 cache_purgevfs            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_purgevfs_FRAMESIZE
+                SBC     #cache_purgevfs_FRAMESIZE-2
                 DO      cache_purgevfs_STKGUARD
                 BCC     cache_purgevfs_stkovf
                 CMP     _fcc_stkfloor
@@ -11922,12 +11895,12 @@ cache_purgevfs_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img16
 _namecache_L223
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #16
@@ -11936,7 +11909,7 @@ _namecache_L223
 _namecache_L226
                 BMI     *+5
                 BRL     _namecache_L225
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -12207,22 +12180,21 @@ _namecache_L228
                 BRL     _namecache_L227
 _namecache_L229
 _namecache_L224
-                LDA     13,S   ; fccstk d=0 b=13
-                CLC
-                ADC     #1
-                STA     13,S   ; fccstk d=0 b=13
+                INC     _fcc_img16
                 BRL     _namecache_L223
 _namecache_L225
                 TAY
                 TSC
                 CLC
-                ADC     #cache_purgevfs_FRAMESIZE
+                ADC     #cache_purgevfs_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_purgevfs_FRAMESIZE   EQU     14
+cache_purgevfs_FRAMESIZE   EQU     16
 cache_purgevfs_STKGUARD    EQU     0
                 FGX2_EXPORT cache_lookup
 cache_lookup            ENT
@@ -13072,9 +13044,10 @@ cache_lookup_STKGUARD    EQU     0
                 FGX2_EXPORT cache_enter
 cache_enter            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #cache_enter_FRAMESIZE
+                SBC     #cache_enter_FRAMESIZE-2
                 DO      cache_enter_STKGUARD
                 BCC     cache_enter_stkovf
                 CMP     _fcc_stkfloor
@@ -13089,12 +13062,9 @@ cache_enter_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _namecache_L260
                 DO      8+cache_enter_FRAMESIZE/256
                 TSC
@@ -13132,12 +13102,9 @@ _namecache_L262
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _namecache_L261
                 SEP     #$20
                 MX      %10
@@ -13174,12 +13141,9 @@ _namecache_L265
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     cache_enter_bandx
 _namecache_L263
                 LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
@@ -13482,14 +13446,12 @@ _namecache_L267
                 REP     #$20
                 MX      %00
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img0
+                STA     _fcc_img16
 _namecache_L268
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 PHA
                 DO      10+cache_enter_FRAMESIZE/256
                 TSC
@@ -13529,7 +13491,7 @@ _namecache_L271
                 CLC
                 ADC     #33
                 STA     _fcc_fpr0
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -13567,7 +13529,7 @@ _namecache_L271
                 MX      %00
                 PLA
                 STA     _fcc_fpr1
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     _fcc_fpr1
                 STA     _fcc_fpr1
@@ -13579,11 +13541,9 @@ _namecache_L271
                 REP     #$20
                 MX      %00
 _namecache_L269
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRL     _namecache_L268
 _namecache_L270
-                LDA     _fcc_img0
-                STA     5,S   ; fccstk d=0 b=5
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13706,20 +13666,26 @@ _namecache_L270
                 TAY
                 TSC
                 CLC
-                ADC     #cache_enter_FRAMESIZE
+                ADC     #cache_enter_FRAMESIZE-2
                 TCS
+cache_enter_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-cache_enter_FRAMESIZE   EQU     6
+cache_enter_FRAMESIZE   EQU     8
 cache_enter_STKGUARD    EQU     0
                 FGX2_EXPORT _namecache_seek
 _namecache_seek            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #_namecache_seek_FRAMESIZE
+                SBC     #_namecache_seek_FRAMESIZE-6
                 DO      _namecache_seek_STKGUARD
                 BCC     _namecache_seek_stkovf
                 CMP     _fcc_stkfloor
@@ -13729,25 +13695,6 @@ _namecache_seek_stkovf       JMP     _fcc_stkoflow
 _namecache_seek_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
-_namecache_L272
-                LDAL    KFGX_YIELD_MIRROR
-                BEQ     *+5
-                JSR     _fcc_safepoint
-                DO      12+_namecache_seek_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+_namecache_seek_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+_namecache_seek_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
-                STA     _fcc_ptr+2
                 DO      10+_namecache_seek_FRAMESIZE/256
                 TSC
                 CLC
@@ -13758,8 +13705,29 @@ _namecache_L272
                 ELSE
                 LDA     10+_namecache_seek_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
+                STA     _fcc_img16
+                DO      12+_namecache_seek_FRAMESIZE/256
+                TSC
+                CLC
+                ADC     #12+_namecache_seek_FRAMESIZE
+                STA     _fcc_fp
+                STZ     _fcc_fp+2
+                LDA     [_fcc_fp]
+                ELSE
+                LDA     12+_namecache_seek_FRAMESIZE,S   ; fccstk d=0 b=12 fs
+                FIN
+                STA     _fcc_img17
+                LDA     #0
+                STA     _fcc_img18
+_namecache_L272
+                LDAL    KFGX_YIELD_MIRROR
+                BEQ     *+5
+                JSR     _fcc_safepoint
+                LDA     _fcc_img17
+                STA     _fcc_ptr+2
+                LDA     _fcc_img16
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img18
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -13768,11 +13736,9 @@ _namecache_L272
                 AND     #$00FF
                 CMP     #0
                 BEQ     _namecache_L273
-                INC     _fcc_img0
+                INC     _fcc_img18
                 BRA     _namecache_L272
 _namecache_L273
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 DO      8+_namecache_seek_FRAMESIZE/256
                 TSC
                 CLC
@@ -13807,27 +13773,9 @@ _namecache_L273
                 LDA     _fcc_ptr+2
                 STA     nd+54
                 TYA
-                DO      12+_namecache_seek_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #12+_namecache_seek_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     12+_namecache_seek_FRAMESIZE,S   ; fccstk d=0 b=12 fs
-                FIN
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                DO      10+_namecache_seek_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+_namecache_seek_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+_namecache_seek_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -13841,11 +13789,14 @@ _namecache_L273
                 LDA     _fcc_ptr+2
                 STA     nd+30
                 TYA
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 STA     nd+42
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img18
                 PHA
-                LDA     _fcc_fpr0
+                LDA     _fcc_img17
+                STA     _fcc_fpr0+2
+                LDA     _fcc_img16
+                STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL namehash
@@ -13877,13 +13828,19 @@ _namecache_L273
                 TAY
                 TSC
                 CLC
-                ADC     #_namecache_seek_FRAMESIZE
+                ADC     #_namecache_seek_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-_namecache_seek_FRAMESIZE   EQU     2
+_namecache_seek_FRAMESIZE   EQU     8
 _namecache_seek_STKGUARD    EQU     0
                 FGX2_EXPORT _namecache_hashed
 _namecache_hashed            ENT
@@ -14344,9 +14301,10 @@ _namecache_reset_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -14364,12 +14322,9 @@ main_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L296
                 SEP     #$20
                 MX      %10
@@ -14405,12 +14360,9 @@ _namecache_L296
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L297
                 SEP     #$20
                 MX      %10
@@ -14450,12 +14402,9 @@ _namecache_L297
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L298
                 LDA     #64
                 TAX
@@ -14465,12 +14414,9 @@ _namecache_L298
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L299
                 FGX2_FARCALL _namecache_reset
                 FGX2_FARCALL _namecache_lrulen
@@ -14481,12 +14427,9 @@ _namecache_L299
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L300
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
@@ -14495,12 +14438,9 @@ _namecache_L300
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L301
                 SEP     #$20
                 MX      %10
@@ -14549,12 +14489,9 @@ _namecache_L304
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L302
                 SEP     #$20
                 MX      %10
@@ -14608,12 +14545,9 @@ _namecache_L302
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L305
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -14674,12 +14608,9 @@ _namecache_L305
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L306
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -14736,12 +14667,9 @@ _namecache_L306
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L307
                 LDA     nchstats+18
                 STA     _fcc_long_hi
@@ -14757,12 +14685,9 @@ _namecache_L307
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L308
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -14806,12 +14731,9 @@ _namecache_L308
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L309
                 SEP     #$20
                 MX      %10
@@ -14861,12 +14783,9 @@ _namecache_L309
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L310
                 LDA     nd+50
                 STA     _fcc_fpr0+2
@@ -14897,12 +14816,9 @@ _namecache_L313
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L311
                 LDA     nchstats+2
                 STA     _fcc_long_hi
@@ -14918,12 +14834,9 @@ _namecache_L311
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L314
                 SEP     #$20
                 MX      %10
@@ -14977,12 +14890,9 @@ _namecache_L314
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L315
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
@@ -15038,12 +14948,9 @@ _namecache_L315
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L316
                 SEP     #$20
                 MX      %10
@@ -15092,12 +14999,9 @@ _namecache_L316
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L317
                 SEP     #$20
                 MX      %10
@@ -15146,12 +15050,9 @@ _namecache_L317
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L318
                 LDA     #0
                 STA     nd+48
@@ -15231,12 +15132,9 @@ _namecache_L318
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L319
                 LDA     nchstats+6
                 STA     _fcc_long_hi
@@ -15266,12 +15164,9 @@ _namecache_L319
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L320
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -15326,12 +15221,9 @@ _namecache_L320
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L321
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -15392,12 +15284,9 @@ _namecache_L321
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L322
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -15536,12 +15425,9 @@ _namecache_L322
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L323
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
@@ -15572,12 +15458,9 @@ _namecache_L326
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L324
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
@@ -15638,12 +15521,9 @@ _namecache_L324
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L327
                 LDA     nchstats+14
                 STA     _fcc_long_hi
@@ -15673,12 +15553,9 @@ _namecache_L327
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L328
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
@@ -15687,12 +15564,9 @@ _namecache_L328
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L329
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -15747,12 +15621,9 @@ _namecache_L329
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L330
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -15813,12 +15684,9 @@ _namecache_L330
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L331
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -15941,12 +15809,9 @@ _namecache_L331
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L332
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -16001,12 +15866,9 @@ _namecache_L332
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L333
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -16048,12 +15910,9 @@ _namecache_L333
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L334
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -16109,22 +15968,17 @@ _namecache_L334
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L335
                 LDA     #0
-                STA     21,S   ; fccstk d=0 b=21
-                LDA     21,S   ; fccstk d=0 b=21
-                STA     _fcc_img0
+                STA     _fcc_img16
 _namecache_L336
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 LDA     #31
                 TAY
@@ -16141,7 +15995,7 @@ _namecache_L339
                 BPL     _namecache_L338
                 LDA     #main_sl_toolong
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 CLC
                 ADC     1,S
                 TAY
@@ -16160,11 +16014,9 @@ _namecache_L339
                 MX      %00
                 PLA
 _namecache_L337
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _namecache_L336
 _namecache_L338
-                LDA     _fcc_img0
-                STA     21,S   ; fccstk d=0 b=21
                 LDA     #main_sl_toolong
                 PHA
                 LDA     #31
@@ -16240,12 +16092,9 @@ _namecache_L338
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L340
                 LDA     nchstats+22
                 STA     _fcc_long_hi
@@ -16275,12 +16124,9 @@ _namecache_L340
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L341
                 LDA     nd+46
                 AND     #$00FF
@@ -16289,12 +16135,9 @@ _namecache_L341
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L342
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -16337,12 +16180,9 @@ _namecache_L342
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L343
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -16397,12 +16237,9 @@ _namecache_L343
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L344
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -16463,12 +16300,9 @@ _namecache_L344
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L345
                 LDA     #main_sl_nm
                 PHA
@@ -16511,12 +16345,12 @@ _namecache_L345
                 MX      %00
                 PLA
                 LDA     #0
-                STA     21,S   ; fccstk d=0 b=21
+                STA     _fcc_img16
 _namecache_L346
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     21,S   ; fccstk d=0 b=21
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #64
@@ -16536,7 +16370,7 @@ _namecache_L349
                 PHA
                 LDA     #97
                 PHA
-                LDA     25,S   ; fccstk d=4 b=21
+                LDA     _fcc_img16
                 LDX     #26
                 STX     _fcc_tmp_b
                 JSR     _fcc_divs16
@@ -16566,7 +16400,7 @@ _namecache_L349
                 PHA
                 LDA     #97
                 PHA
-                LDA     25,S   ; fccstk d=4 b=21
+                LDA     _fcc_img16
                 LDX     #26
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
@@ -16644,10 +16478,7 @@ _namecache_L349
                 ADC     #4
                 TCS
 _namecache_L347
-                LDA     21,S   ; fccstk d=0 b=21
-                CLC
-                ADC     #1
-                STA     21,S   ; fccstk d=0 b=21
+                INC     _fcc_img16
                 BRL     _namecache_L346
 _namecache_L348
                 FGX2_FARCALL _namecache_hashed
@@ -16658,12 +16489,9 @@ _namecache_L348
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L350
                 FGX2_FARCALL _namecache_lrulen
                 TAX
@@ -16673,12 +16501,9 @@ _namecache_L350
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L351
                 LDA     #main_sl_nm
                 PHA
@@ -16770,12 +16595,9 @@ _namecache_L351
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L352
                 SEP     #$20
                 MX      %10
@@ -16923,12 +16745,9 @@ _namecache_L352
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L353
                 LDA     #main_sl_nm
                 PHA
@@ -17019,12 +16838,9 @@ _namecache_L353
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L354
                 FGX2_FARCALL _namecache_hashed
                 TAX
@@ -17034,12 +16850,9 @@ _namecache_L354
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L355
                 FGX2_FARCALL _namecache_lrulen
                 TAX
@@ -17049,12 +16862,9 @@ _namecache_L355
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L356
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -17109,12 +16919,9 @@ _namecache_L356
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L357
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -17175,12 +16982,9 @@ _namecache_L357
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L358
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
@@ -17241,12 +17045,9 @@ _namecache_L358
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L359
                 SEP     #$20
                 MX      %10
@@ -17368,12 +17169,9 @@ _namecache_L359
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L360
                 PHA
                 SEP     #$20
@@ -17401,12 +17199,9 @@ _namecache_L360
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L361
                 SEP     #$20
                 MX      %10
@@ -17455,12 +17250,9 @@ _namecache_L361
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L362
                 SEP     #$20
                 MX      %10
@@ -17510,12 +17302,9 @@ _namecache_L362
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L363
                 FGX2_FARCALL _namecache_lrulen
                 TAX
@@ -17525,12 +17314,9 @@ _namecache_L363
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L364
                 FGX2_FARCALL _namecache_reset
                 SEP     #$20
@@ -17585,12 +17371,9 @@ _namecache_L364
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L365
                 SEP     #$20
                 MX      %10
@@ -17644,12 +17427,9 @@ _namecache_L365
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L366
                 SEP     #$20
                 MX      %10
@@ -17756,12 +17536,9 @@ _namecache_L366
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _namecache_L367
                 SEP     #$20
                 MX      %10
@@ -17829,23 +17606,23 @@ _namecache_L367
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _namecache_L368
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     24
+main_FRAMESIZE   EQU     26
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 219

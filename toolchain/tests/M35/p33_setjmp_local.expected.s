@@ -7,9 +7,10 @@
                 FGX2_EXPORT deep
 deep            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #deep_FRAMESIZE
+                SBC     #deep_FRAMESIZE-2
                 DO      deep_STKGUARD
                 BCC     deep_stkovf
                 CMP     _fcc_stkfloor
@@ -20,14 +21,12 @@ deep_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _p33_setjmp_local_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #8
@@ -43,7 +42,7 @@ _p33_setjmp_local_L3
                 INC
                 INC
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 CLC
                 ADC     1,S
@@ -51,7 +50,7 @@ _p33_setjmp_local_L3
                 PLA
                 TYA
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -65,11 +64,9 @@ _p33_setjmp_local_L3
                 STA     [_fcc_ptr]
                 PLA
 _p33_setjmp_local_L1
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _p33_setjmp_local_L0
 _p33_setjmp_local_L2
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     marker
                 PHA
                 SEP     #$20
@@ -109,13 +106,15 @@ _p33_setjmp_local_L2
                 TAY
                 TSC
                 CLC
-                ADC     #deep_FRAMESIZE
+                ADC     #deep_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-deep_FRAMESIZE   EQU     18
+deep_FRAMESIZE   EQU     20
 deep_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT

@@ -93,6 +93,15 @@ ir_emitf(const char *fmt, ...)
     va_end(ap);
 }
 
+/* Tag the line ir_emitf just recorded (IRF_PRO_FB etc.). */
+void
+ir_tag_last(unsigned flag, unsigned u0)
+{
+    if (!(g_ir_on && g_recording) || g_ir_n == 0) return;
+    g_ir[g_ir_n - 1].flags |= flag;
+    if (flag & IRF_FRAMESIZE) g_ir[g_ir_n - 1].u0 = u0;
+}
+
 /* T2-3: flags applied to the NEXT recorded op (one-shot; see IRF_RAW). */
 static unsigned g_rec_flags = 0;
 
@@ -552,6 +561,19 @@ ir_alloc_bb(int lo, int hi)
  *     either way (same as the unseeded stack slot).
  * ========================================================================== */
 #define IR_NIMG       16    /* _fcc_img0.._fcc_img15 ($C0..$DF) */
+/* The callee-saved band, _fcc_img16.._fcc_img31 ($78..$97).  A function that
+ * calls another C function cannot hold a value in $C0..$DF across the call,
+ * since the callee may use those slots too; it can in the band, because every
+ * function that writes a band slot saves the caller's value on entry and puts
+ * it back on return (ir_band_frame), and setjmp/longjmp carry the band in the
+ * jmp_buf for the returns a longjmp skips.  Kernel and module code run on
+ * another direct page and do not use it, nor does a recursive function. */
+#define IR_BAND0      16
+#define IR_NBAND      16
+/* A band slot costs a PEI on entry and a PLA/STA on return, so only a local
+ * read in a loop is worth one: a scalar needs two loop accesses' weight. */
+#define IR_BAND_MIN   (2 * IR_LOOP_WEIGHT)
+static int g_band_n;        /* band words this function saves, from IR_BAND0 */
 #define IR_PROMOTE_MIN 3    /* min weighted accesses to bother promoting */
 /* P1.3-inc3: a loop-body access (IR node u1==1) is read every iteration, so it
  * is worth far more than a straight-line access.  Weighting it lets a loop-bound
@@ -773,30 +795,12 @@ ir_promote_loops(void)
 }
 
 static void
-ir_promote_locals(void)
+ir_promote_scalars(int *chosenp, int lim, int band)
 {
     Local *cand[MAX_LOCALS];
     int    cnt[MAX_LOCALS];
-    int    ncand = 0, chosen = 0, j, c;
-
-    g_n_promoted_params = 0;
-    g_loop_reg_n = 0;
-    if (!g_ir_opt) return;
-
-    /* 1. Eligibility: any call that may reach another C function (which could
-     * reuse this task DP page's $C0..$DF) disqualifies WHOLE-function promotion.
-     *  (a) indirect (fn-ptr) calls — tokenless computed-RTS trampoline that the
-     *      text scan below cannot see; flagged directly by emit_call_indirect.
-     *      Also blocks region promotion (can't localize a tokenless call).
-     *  (b) any token-bearing JSR/JSL/FARCALL to a non-_fcc_ target -> fall back to
-     *      LOOP-SCOPED promotion of the function's CALL-FREE loop regions. */
-    if (g_has_indirect_call) return;
-    for (j = 0; j < g_ir_n; j++)
-        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
-            ir_text_has_unsafe_call(g_ir[j].text)) {
-            ir_promote_loops();
-            return;
-        }
+    int    ncand = 0;
+    int chosen = *chosenp, j, c;
 
     /* 2. Tally accesses per promotable int/char scalar local OR param. */
     for (j = 0; j < g_ir_n; j++) {
@@ -810,8 +814,9 @@ ir_promote_locals(void)
         if (lc->type != LT_INT && lc->type != LT_CHAR) continue;
         if (lc->addr_taken || lc->raw_accessed) continue;
         /* PARAMS cost a 4-byte entry seed -> only promote when loop-hot so the
-         * seed is amortized; LOCALS have no seed and stay un-gated. */
-        if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+         * seed is amortized; LOCALS have no seed and stay un-gated, unless a
+         * band slot's save and restore are the cost. */
+        if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
         for (c = 0; c < ncand; c++) if (cand[c] == lc) break;
         if (c == ncand) {
             if (ncand >= MAX_LOCALS) continue;
@@ -824,10 +829,11 @@ ir_promote_locals(void)
     }
 
     /* 3. Greedily assign DP-IMG slots to the hottest (>= IR_PROMOTE_MIN). */
-    while (chosen < IR_NIMG) {
+    while (chosen < lim) {
         int best = -1, bi;
         for (bi = 0; bi < ncand; bi++)
-            if (cnt[bi] >= IR_PROMOTE_MIN && (best < 0 || cnt[bi] > cnt[best]))
+            if (cnt[bi] >= (band ? IR_BAND_MIN : IR_PROMOTE_MIN) &&
+                (best < 0 || cnt[bi] > cnt[best]))
                 best = bi;
         if (best < 0) break;
         for (j = 0; j < g_ir_n; j++) {
@@ -851,6 +857,14 @@ ir_promote_locals(void)
         cnt[best] = -1;                                  /* consumed */
         chosen++;
     }
+
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_ptrs(int *chosenp, int lim, int band)
+{
+    int chosen = *chosenp, j, c;
 
     /* 4. (B1b/B1c) Promote hot int/char/void-pointee pointer locals/params to a
      * CONTIGUOUS img PAIR {chosen (offset), chosen+1 (bank)}.  Reuses `chosen`
@@ -882,8 +896,9 @@ ir_promote_locals(void)
             if (!lc || (lc->kind != LK_LOCAL && lc->kind != LK_PARAM)) continue;
             if (!ir_ptr_promotable(lc)) continue;
             if (lc->addr_taken || lc->raw_accessed) continue;
-            /* PARAMS cost a 4-byte entry seed -> only promote when loop-hot. */
-            if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+            /* PARAMS cost a 4-byte entry seed, and a band pair its save and
+             * restore -> only promote when loop-hot. */
+            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
             for (c = 0; c < nptr; c++) if (pc[c] == lc) break;
             if (c == nptr) {
                 if (nptr >= MAX_LOCALS) continue;
@@ -897,7 +912,7 @@ ir_promote_locals(void)
             pn[c] += (op == IR_DEREF_POSTINC_LOCAL ||
                       op == IR_WALK_STORE_SETUP) ? 2 : 1;
         }
-        while (chosen + 1 < IR_NIMG) {     /* a pointer needs 2 contiguous slots */
+        while (chosen + 1 < lim) {         /* a pointer needs 2 contiguous slots */
             int best = -1;
             for (pi = 0; pi < nptr; pi++)
                 if (pn[pi] >= IR_PTR_PROMOTE_MIN && (best < 0 || pn[pi] > pn[best]))
@@ -942,6 +957,14 @@ ir_promote_locals(void)
         }
     }
 
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_longs(int *chosenp, int lim, int band)
+{
+    int chosen = *chosenp, j, c;
+
     /* 4b. Promote hot LONG locals/params to a contiguous img PAIR
      * {chosen (low word), chosen+1 (high word)}, after the scalars and
      * pointers and out of the same slot budget.
@@ -971,9 +994,10 @@ ir_promote_locals(void)
             if (!lc || (lc->kind != LK_LOCAL && lc->kind != LK_PARAM)) continue;
             if (lc->type != LT_LONG) continue;         /* not LT_FLOAT: see above */
             if (lc->addr_taken || lc->raw_accessed) continue;
-            /* A promoted PARAM costs a 4-byte entry seed, so it has to be
-             * loop-hot to pay for itself -- same gate as scalars and pointers. */
-            if (lc->kind == LK_PARAM && !lc->loop_accessed) continue;
+            /* A promoted PARAM costs a 4-byte entry seed, and a band pair its
+             * save and restore, so it has to be loop-hot to pay for itself --
+             * same gate as scalars and pointers. */
+            if ((lc->kind == LK_PARAM || band) && !lc->loop_accessed) continue;
             for (c = 0; c < nlong; c++) if (gc[c] == lc) break;
             if (c == nlong) {
                 if (nlong >= MAX_LOCALS) continue;
@@ -981,7 +1005,7 @@ ir_promote_locals(void)
             }
             gn[c] += 1;
         }
-        while (chosen + 1 < IR_NIMG) {   /* a long needs 2 contiguous slots */
+        while (chosen + 1 < lim) {       /* a long needs 2 contiguous slots */
             int best = -1;
             for (gi = 0; gi < nlong; gi++)
                 if (gn[gi] >= IR_PTR_PROMOTE_MIN && (best < 0 || gn[gi] > gn[best]))
@@ -1005,6 +1029,57 @@ ir_promote_locals(void)
             gn[best] = -1;
             chosen += 2;
         }
+    }
+
+    *chosenp = chosen;
+}
+
+static void
+ir_promote_locals(void)
+{
+    int    chosen = 0, j;
+    int    calls = g_has_indirect_call, band = 0, lim = IR_NIMG;
+
+    g_n_promoted_params = 0;
+    g_loop_reg_n = 0;
+    g_band_n = 0;
+    if (!g_ir_opt) return;
+
+    /* 1. Eligibility: any call that may reach another C function (which could
+     * reuse this task DP page's $C0..$DF) disqualifies $C0..$DF for the WHOLE
+     * function.
+     *  (a) indirect (fn-ptr) calls — tokenless computed-RTS trampoline that the
+     *      text scan below cannot see; flagged directly by emit_call_indirect.
+     *      Also blocks region promotion (can't localize a tokenless call).
+     *  (b) any token-bearing JSR/JSL/FARCALL to a non-_fcc_ target.
+     * Such a function promotes its loop-hot locals into the callee-saved band
+     * instead, and then (b) its CALL-FREE loop regions into $C0..$DF. */
+    for (j = 0; j < g_ir_n && !calls; j++)
+        if (g_ir[j].op == IR_TEXT && g_ir[j].text &&
+            ir_text_has_unsafe_call(g_ir[j].text))
+            calls = 1;
+    if (calls) {
+        /* A recursive function's band saves repeat at every level of the
+         * recursion, on the hardware stack that a soft frame exists to
+         * spare; it keeps its locals on its frame. */
+        if (g_kernel_bank || g_module_bank || g_fn_is_soft ||
+            ir_self_recursive()) {
+            if (!g_has_indirect_call) ir_promote_loops();
+            return;
+        }
+        band   = 1;
+        chosen = IR_BAND0;
+        lim    = IR_BAND0 + IR_NBAND;
+    }
+
+    if (band) {           /* a band pointer is worth the most: derefs in place */
+        ir_promote_ptrs(&chosen, lim, band);
+        ir_promote_longs(&chosen, lim, band);
+        ir_promote_scalars(&chosen, lim, band);
+    } else {
+        ir_promote_scalars(&chosen, lim, band);
+        ir_promote_ptrs(&chosen, lim, band);
+        ir_promote_longs(&chosen, lim, band);
     }
 
     /* 5. (B1c-2a-step-2) COLLAPSE a promoted `*p++ = RHS` walk-WRITE.  The promoted
@@ -1048,6 +1123,14 @@ ir_promote_locals(void)
         }
     }
 
+    if (band) {
+        g_band_n = chosen - IR_BAND0;
+        if (!g_has_indirect_call) ir_promote_loops();
+        if (g_tac_stats && g_band_n)
+            fprintf(stderr, "fcc-promote: %-20s %d band slot(s) (%d param)\n",
+                    g_func_name[0] ? g_func_name : "?", g_band_n, g_n_promoted_params);
+        return;
+    }
     if (g_tac_stats && chosen)
         fprintf(stderr, "fcc-promote: %-20s %d slot(s) -> DP-IMG (%d param)\n",
                 g_func_name[0] ? g_func_name : "?", chosen, g_n_promoted_params);
@@ -1818,6 +1901,90 @@ ir_lower_tracked(IrNode *n, FILE *out)
         g_fpr_skip = 1;
 }
 
+/* Replace node j's text. */
+static void
+ir_text_set(int j, const char *t)
+{
+    size_t n = strlen(t);
+    char  *copy = malloc(n + 1);
+    if (!copy) { fprintf(stderr, "fcc: IR out of memory\n"); exit(1); }
+    memcpy(copy, t, n + 1);
+    free(g_ir[j].text);
+    g_ir[j].text     = copy;
+    g_ir[j].text_len = n;
+}
+
+/* Make node j a line of text t ("" for none). */
+static void
+ir_node_text(int j, const char *t)
+{
+    if (g_ir[j].op != IR_TEXT) {
+        g_ir[j].op   = IR_TEXT;
+        g_ir[j].text = NULL;
+    }
+    ir_text_set(j, t);
+}
+
+/* The frame of a function that holds g_band_n words of the callee-saved band:
+ * the caller's values are pushed after its _fcc_fb and pulled back, in the
+ * reverse order, once the locals are freed.  FRAMESIZE counts the pushes, so
+ * a parameter's `off+FRAMESIZE,S' still reaches it; the SBC and ADC that
+ * allocate and free the locals leave them out.  With more than one return,
+ * each frees its locals and branches to one copy of the pulls and the rest of
+ * the epilogue, placed after the function's last line. */
+static void
+ir_band_frame(void)
+{
+    char buf[IR_LINE_MAX], pulls[IR_LINE_MAX];
+    int  j, s, n = 0, bytes = 2 * g_band_n, rets = 0;
+    if (!g_band_n) return;
+    for (s = g_band_n - 1; s >= 0; s--)
+        n += snprintf(pulls + n, sizeof pulls - (size_t)n,
+                      "                PLA\n                STA     _fcc_img%d\n",
+                      IR_BAND0 + s);
+    for (j = 0; j < g_ir_n; j++)
+        if (g_ir[j].flags & IRF_FRAME_ADC) rets++;
+    for (j = 0; j < g_ir_n; j++) {
+        unsigned f = g_ir[j].flags;
+        if (f & IRF_EPI_TAIL) {
+            if (rets > 1) ir_node_text(j, "");
+            continue;
+        }
+        if (g_ir[j].op != IR_TEXT) continue;
+        if (f & IRF_PRO_FB) {
+            n = snprintf(buf, sizeof buf, "                PEI     _fcc_fb\n");
+            for (s = 0; s < g_band_n; s++)
+                n += snprintf(buf + n, sizeof buf - (size_t)n,
+                              "                PEI     _fcc_img%d\n", IR_BAND0 + s);
+        } else if (f & IRF_FRAME_SBC) {
+            snprintf(buf, sizeof buf, "                SBC     #%s_FRAMESIZE-%d\n",
+                     g_func_name, bytes);
+        } else if (f & IRF_FRAME_ADC) {
+            snprintf(buf, sizeof buf, "                ADC     #%s_FRAMESIZE-%d\n",
+                     g_func_name, bytes);
+        } else if (f & IRF_EPI_TCS) {
+            if (rets > 1)
+                snprintf(buf, sizeof buf, "                TCS\n                BRL     %s_bandx\n",
+                         g_func_name);
+            else
+                snprintf(buf, sizeof buf, "                TCS\n%s", pulls);
+        } else if (f & IRF_FRAMESIZE) {
+            n = 0;
+            if (rets > 1)
+                n = snprintf(buf, sizeof buf,
+                             "%s_bandx\n%s                PLA\n"
+                             "                STA     _fcc_fb\n"
+                             "                TYA\n                RTL\n",
+                             g_func_name, pulls);
+            snprintf(buf + n, sizeof buf - (size_t)n, "%s_FRAMESIZE   EQU     %u\n",
+                     g_func_name, g_ir[j].u0 + (unsigned)bytes);
+        } else {
+            continue;
+        }
+        ir_text_set(j, buf);
+    }
+}
+
 void
 ir_end_func(void)
 {
@@ -1834,6 +2001,7 @@ ir_end_func(void)
      * under FCC_NO_REGALLOC (g_ir_opt==0 -> raw v0.14.0) nor the FCC_TAC_LOWER
      * round-trip gate (must stay byte-identical to raw). */
     if (g_ir_opt && !g_tac_lower) ir_promote_locals();
+    ir_band_frame();
 
     /* fcc2 isel Phase 1: select explicit-machine-form ops (load-op fold) on the
      * real allocator path only; gated by FCC_NO_ISEL for bisection. */

@@ -217,9 +217,11 @@ f3_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -230,21 +232,21 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img16
 _od_probe5_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 SEC
                 SBC     #4
                 BVC     _od_probe5_L3
                 EOR     #$8000
 _od_probe5_L3
                 BPL     _od_probe5_L2
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img16
                 ASL
                 ASL
                 TAX
@@ -261,9 +263,9 @@ _od_probe5_L3
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
+                LDA     _fcc_img16
                 PHA
                 LDA     _fcc_fpr0
                 PHK
@@ -286,27 +288,28 @@ _od_probe5_L4
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img17
 _od_probe5_L1
-                LDA     7,S   ; fccstk d=0 b=7
-                CLC
-                ADC     #1
-                STA     7,S   ; fccstk d=0 b=7
+                INC     _fcc_img16
                 BRA     _od_probe5_L0
 _od_probe5_L2
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img17
                 TAX
                 SEC
                 SBC     #24
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     8
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 8

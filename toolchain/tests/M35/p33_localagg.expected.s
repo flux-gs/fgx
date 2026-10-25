@@ -135,9 +135,11 @@ psum_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-4
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -181,12 +183,9 @@ _p33_localagg_L1
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _p33_localagg_L0
                 SEP     #$20
                 MX      %10
@@ -214,24 +213,17 @@ _p33_localagg_L0
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _p33_localagg_L2
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_img0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_img1
+                STA     _fcc_img16
 _p33_localagg_L3
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img1
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #3
@@ -240,12 +232,12 @@ _p33_localagg_L3
 _p33_localagg_L6
                 BPL     _p33_localagg_L5
                 LDA     #0
-                STA     _fcc_img0
+                STA     _fcc_img17
 _p33_localagg_L7
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img17
                 TAX
                 SEC
                 SBC     #2
@@ -261,11 +253,11 @@ _p33_localagg_L10
                 CLC
                 ADC     #8
                 PHA
-                LDA     _fcc_img1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img17
                 ASL
                 CLC
                 ADC     1,S
@@ -277,7 +269,7 @@ _p33_localagg_L10
                 PLA
                 TYA
                 PHA
-                LDA     _fcc_img1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 ASL
@@ -285,7 +277,7 @@ _p33_localagg_L10
                 ADC     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_img0
+                ADC     _fcc_img17
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -299,17 +291,13 @@ _p33_localagg_L10
                 STA     [_fcc_ptr]
                 PLA
 _p33_localagg_L8
-                INC     _fcc_img0
+                INC     _fcc_img17
                 BRA     _p33_localagg_L7
 _p33_localagg_L9
 _p33_localagg_L4
-                INC     _fcc_img1
+                INC     _fcc_img16
                 BRA     _p33_localagg_L3
 _p33_localagg_L5
-                LDA     _fcc_img0
-                STA     7,S   ; fccstk d=0 b=7
-                LDA     _fcc_img1
-                STA     5,S   ; fccstk d=0 b=5
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -340,12 +328,9 @@ _p33_localagg_L5
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _p33_localagg_L11
                 SEP     #$20
                 MX      %10
@@ -379,12 +364,9 @@ _p33_localagg_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _p33_localagg_L12
                 SEP     #$20
                 MX      %10
@@ -418,23 +400,25 @@ _p33_localagg_L12
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _p33_localagg_L13
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-4
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     20
+main_FRAMESIZE   EQU     24
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 6

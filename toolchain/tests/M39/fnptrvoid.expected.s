@@ -68,9 +68,10 @@ _fnptrvoid_f1_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -121,19 +122,19 @@ _fnptrvoid_L0
                 TCS
                 TYA
                 LDA     #1
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _fnptrvoid_L1
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 SEC
                 SBC     #2
                 BVC     _fnptrvoid_L4
                 EOR     #$8000
 _fnptrvoid_L4
                 BPL     _fnptrvoid_L3
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 TAX
@@ -172,10 +173,7 @@ _fnptrvoid_L5
                 TCS
                 TYA
 _fnptrvoid_L2
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRA     _fnptrvoid_L1
 _fnptrvoid_L3
                 LDA     #0
@@ -220,12 +218,14 @@ _fnptrvoid_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     2
+main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     1
                 FGX2_RELOC_COUNT 4

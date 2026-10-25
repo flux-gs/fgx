@@ -6139,9 +6139,10 @@ __muldf3_STKGUARD    EQU     0
                 FGX2_EXPORT __divdf3
 __divdf3            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #__divdf3_FRAMESIZE
+                SBC     #__divdf3_FRAMESIZE-2
                 DO      __divdf3_STKGUARD
                 BCC     __divdf3_stkovf
                 CMP     _fcc_stkfloor
@@ -6404,12 +6405,9 @@ __divdf3_stkok        TCS
                 TAY
                 TSC
                 CLC
-                ADC     #__divdf3_FRAMESIZE
+                ADC     #__divdf3_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     __divdf3_bandx
 _softdouble_L62
                 LDA     39,S   ; fccstk d=0 b=39
                 BNE     _softdouble_L63
@@ -6456,12 +6454,9 @@ _softdouble_L62
                 TAY
                 TSC
                 CLC
-                ADC     #__divdf3_FRAMESIZE
+                ADC     #__divdf3_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     __divdf3_bandx
 _softdouble_L63
                 LDA     33,S   ; fccstk d=0 b=33
                 SEC
@@ -6621,12 +6616,12 @@ _softdouble_L64
                 STA     65,S   ; fccstk d=0 b=65
                 TYA
                 LDA     #51
-                STA     67,S   ; fccstk d=0 b=67
+                STA     _fcc_img16
 _softdouble_L65
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     67,S   ; fccstk d=0 b=67
+                LDA     _fcc_img16
                 CMP     #0
                 BPL     *+5
                 BRL     _softdouble_L67
@@ -6711,6 +6706,7 @@ _softdouble_L65
                 LDA     #0
                 BRA     *+5
                 LDA     #1
+                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L68
                 LDA     65,S   ; fccstk d=0 b=65
@@ -6794,7 +6790,7 @@ _softdouble_L65
                 PHA
                 TYA
                 PHA
-                LDA     83,S   ; fccstk d=16 b=67
+                LDA     _fcc_img16
                 STA     _fcc_long_b_lo
                 PLA
                 TAY
@@ -6834,10 +6830,7 @@ _softdouble_L65
                 TYA
 _softdouble_L68
 _softdouble_L66
-                LDA     67,S   ; fccstk d=0 b=67
-                SEC
-                SBC     #1
-                STA     67,S   ; fccstk d=0 b=67
+                DEC     _fcc_img16
                 BRL     _softdouble_L65
 _softdouble_L67
                 LDA     65,S   ; fccstk d=0 b=65
@@ -7281,13 +7274,16 @@ _softdouble_L74
                 TAY
                 TSC
                 CLC
-                ADC     #__divdf3_FRAMESIZE
+                ADC     #__divdf3_FRAMESIZE-2
                 TCS
+__divdf3_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-__divdf3_FRAMESIZE   EQU     72
+__divdf3_FRAMESIZE   EQU     74
 __divdf3_STKGUARD    EQU     0
                 FGX2_EXPORT __cmpdf2
 __cmpdf2            ENT
@@ -12419,9 +12415,10 @@ __fixunsdfsi_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -12432,12 +12429,12 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _softdouble_L132
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 PHA
                 LDA     #2400
                 PHA
@@ -12454,7 +12451,7 @@ _softdouble_L132
 _softdouble_L135
                 BMI     *+5
                 BRL     _softdouble_L134
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -12867,7 +12864,7 @@ _softdouble_L135
                 LDA     #1
                 BEQ     _softdouble_L136
 _softdouble_L137
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 INC
                 SEC
                 SBC     #42
@@ -12875,13 +12872,13 @@ _softdouble_L137
                 EOR     #$8000
 _softdouble_L140
                 BMI     _softdouble_L138
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 CLC
                 ADC     #2
                 BRA     _softdouble_L139
 _softdouble_L138
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 CLC
                 ADC     #1
@@ -12889,12 +12886,9 @@ _softdouble_L139
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _softdouble_L136
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0+2
@@ -12960,31 +12954,25 @@ _softdouble_L136
                 BEQ     _softdouble_L141
                 LDA     #101
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
+                ADC     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _softdouble_L141
 _softdouble_L133
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRL     _softdouble_L132
 _softdouble_L134
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _softdouble_L142
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 PHA
                 LDA     #144
                 PHA
@@ -13001,7 +12989,7 @@ _softdouble_L142
 _softdouble_L145
                 BMI     *+5
                 BRL     _softdouble_L144
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13041,7 +13029,7 @@ _softdouble_L145
                 PHA
                 TYA
                 PHA
-                LDA     9,S   ; fccstk d=8 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13090,7 +13078,7 @@ _softdouble_L145
                 LDA     #1
                 BEQ     *+5
                 BRL     _softdouble_L147
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13137,7 +13125,7 @@ _softdouble_L145
                 PHA
                 TYA
                 PHA
-                LDA     5,S   ; fccstk d=4 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13171,31 +13159,25 @@ _softdouble_L145
 _softdouble_L147
                 LDA     #201
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
+                ADC     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _softdouble_L146
 _softdouble_L143
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRL     _softdouble_L142
 _softdouble_L144
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _softdouble_L148
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 PHA
                 LDA     #80
                 PHA
@@ -13212,7 +13194,7 @@ _softdouble_L148
 _softdouble_L151
                 BMI     *+5
                 BRL     _softdouble_L150
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13252,7 +13234,7 @@ _softdouble_L151
                 PHA
                 TYA
                 PHA
-                LDA     9,S   ; fccstk d=8 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13301,7 +13283,7 @@ _softdouble_L151
                 LDA     #1
                 BEQ     *+5
                 BRL     _softdouble_L153
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13348,7 +13330,7 @@ _softdouble_L151
                 PHA
                 TYA
                 PHA
-                LDA     5,S   ; fccstk d=4 b=1
+                LDA     _fcc_img16
                 ASL
                 ASL
                 ASL
@@ -13382,34 +13364,31 @@ _softdouble_L151
 _softdouble_L153
                 LDA     #211
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
+                ADC     _fcc_img16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _softdouble_L152
 _softdouble_L149
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRL     _softdouble_L148
 _softdouble_L150
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     8
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 235

@@ -7,9 +7,12 @@
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -83,29 +86,27 @@ main_stkok        TCS
                 ADC     #16
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     15,S   ; fccstk d=0 b=15
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     13,S   ; fccstk d=0 b=13
+                STA     _fcc_img16
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_img0
+                STA     _fcc_img18
 _wait3ops_L0
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img18
                 SEC
                 SBC     #76
                 BVC     _wait3ops_L3
                 EOR     #$8000
 _wait3ops_L3
                 BPL     _wait3ops_L2
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img18
                 CLC
                 ADC     1,S
                 TAY
@@ -132,31 +133,29 @@ _wait3ops_L3
                 PLA
                 TYA
 _wait3ops_L1
-                INC     _fcc_img0
+                INC     _fcc_img18
                 BRA     _wait3ops_L0
 _wait3ops_L2
-                LDA     _fcc_img0
-                STA     7,S   ; fccstk d=0 b=7
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img18
                 LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_img1
+                STA     _fcc_img0
 _wait3ops_L4
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img18
                 SEC
                 SBC     #76
                 BVC     _wait3ops_L7
                 EOR     #$8000
 _wait3ops_L7
                 BPL     _wait3ops_L6
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
+                LDA     _fcc_img18
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -167,16 +166,13 @@ _wait3ops_L7
                 CMP     #90
                 BNE     _wait3ops_L8
                 LDA     #1
-                STA     _fcc_img1
+                STA     _fcc_img0
 _wait3ops_L8
 _wait3ops_L5
-                LDA     7,S   ; fccstk d=0 b=7
-                CLC
-                ADC     #1
-                STA     7,S   ; fccstk d=0 b=7
+                INC     _fcc_img18
                 BRA     _wait3ops_L4
 _wait3ops_L6
-                LDA     _fcc_img1
+                LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 BEQ     _wait3ops_L9
                 LDA     5,S   ; fccstk d=0 b=5
@@ -291,43 +287,41 @@ _wait3ops_L12
                 STA     5,S   ; fccstk d=0 b=5
 _wait3ops_L13
                 LDA     #0
-                STA     7,S   ; fccstk d=0 b=7
+                STA     _fcc_img18
                 LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_img2
+                STA     _fcc_img1
 _wait3ops_L14
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     7,S   ; fccstk d=0 b=7
+                LDA     _fcc_img18
                 SEC
                 SBC     #76
                 BVC     _wait3ops_L17
                 EOR     #$8000
 _wait3ops_L17
                 BPL     _wait3ops_L16
-                LDA     15,S   ; fccstk d=0 b=15
+                LDA     _fcc_img17
                 STA     _fcc_ptr+2
-                LDA     13,S   ; fccstk d=0 b=13
+                LDA     _fcc_img16
                 PHA
-                LDA     9,S   ; fccstk d=2 b=7
+                LDA     _fcc_img18
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
+                CMP     #0
                 BEQ     _wait3ops_L18
                 LDA     #0
-                STA     _fcc_img2
+                STA     _fcc_img1
 _wait3ops_L18
 _wait3ops_L15
-                LDA     7,S   ; fccstk d=0 b=7
-                CLC
-                ADC     #1
-                STA     7,S   ; fccstk d=0 b=7
+                INC     _fcc_img18
                 BRA     _wait3ops_L14
 _wait3ops_L16
-                LDA     _fcc_img2
+                LDA     _fcc_img1
                 STA     11,S   ; fccstk d=0 b=11
                 BEQ     _wait3ops_L19
                 LDA     5,S   ; fccstk d=0 b=5
@@ -340,12 +334,18 @@ _wait3ops_L19
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     92
+main_FRAMESIZE   EQU     98
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4

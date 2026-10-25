@@ -6,6 +6,6 @@
 ;-------------------------------
 ; M7 globals
 ;-------------------------------
-env             DS      16
+env             DS      48
 marker          DS      2
                 FGX2_RELOC_COUNT 1

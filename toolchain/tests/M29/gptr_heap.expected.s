@@ -296,9 +296,12 @@ consume_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
+                PEI     _fcc_img17
+                PEI     _fcc_img18
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-6
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -358,12 +361,9 @@ _gptr_heap_L6
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _gptr_heap_L4
                 SEP     #$20
                 MX      %10
@@ -479,15 +479,12 @@ _gptr_heap_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _gptr_heap_L7
                 LDA     #0
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img18
                 SEP     #$20
                 MX      %10
                 LDA     addr1+2
@@ -497,25 +494,22 @@ _gptr_heap_L7
                 LDA     addr1
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
-                STA     3,S   ; fccstk d=0 b=3
+                STA     _fcc_img17
                 LDA     _fcc_fpr0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _gptr_heap_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img18
                 PHA
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_ptr+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_tmp_b
+                LDA     [_fcc_img16]
+                PHA
+                LDA     _fcc_img16
                 INC
                 INC
-                STA     3,S   ; fccstk d=2 b=1
-                LDA     _fcc_tmp_b
-                STA     _fcc_ptr
-                LDA     [_fcc_ptr]
+                STA     _fcc_img16
+                PLA
                 PHA
                 FGX2_FARCALL consume
                 TAY
@@ -525,11 +519,11 @@ _gptr_heap_L13
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                STA     5,S   ; fccstk d=0 b=5
+                STA     _fcc_img18
 _gptr_heap_L14
-                LDA     3,S   ; fccstk d=0 b=3
+                LDA     _fcc_img17
                 STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 STA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
@@ -549,33 +543,37 @@ _gptr_heap_L14
                 BEQ     _gptr_heap_L15
                 BRA     _gptr_heap_L13
 _gptr_heap_L15
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img18
                 TAX
                 CMP     #18
                 BEQ     _gptr_heap_L16
-                LDA     5,S   ; fccstk d=0 b=5
+                LDA     _fcc_img18
                 TAX
                 AND     #255
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _gptr_heap_L16
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-6
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img18
+                PLA
+                STA     _fcc_img17
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     6
+main_FRAMESIZE   EQU     12
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 12

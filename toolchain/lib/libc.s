@@ -235,8 +235,8 @@ vfork           MX      %00
 ;            setjmp's caller as if setjmp had just returned, with A
 ;            set to val (or 1 if val == 0, per C standard).
 ;
-; jmp_buf layout (16 bytes; 10 -> 12 in bank-0 stack campaign 1.1, 12 -> 16
-; for the signal mask in apple/fgx#64):
+; jmp_buf layout (48 bytes; 10 -> 12 in bank-0 stack campaign 1.1, 12 -> 16
+; for the signal mask in apple/fgx#64, 16 -> 48 for the callee-saved band):
 ;   +0       PB     program bank at setjmp call
 ;   +1       DBR    data bank register
 ;   +2..+3   _fcc_fb   fcc frame base (was the P/pad pair pre-P3-3)
@@ -256,6 +256,7 @@ vfork           MX      %00
 ;                      fault.c, and the standard BSD idiom) skips crt0's
 ;                      trampoline unblock and leaves its own signal blocked
 ;                      forever -- one ^C per process.
+;   +16..+47 the callee-saved band, _fcc_img16.._fcc_img31 ($78..$97).
 ;
 ; longjmp returns to the saved (pb:pc+1) by synthesizing an RTL
 ; frame on the user stack: push pb, then pc (16-bit), then RTL.  RTL
@@ -338,6 +339,24 @@ setjmp          MX      %00
                 LDA     _sig_curmask+2
                 STA:    $000E,X
 
+                ; +16..+47  the callee-saved band, _fcc_img16.._fcc_img31
+                ; ($78..$97), as 4.3BSD-Reno's i386 setjmp saves ebx, esi,
+                ; edi and ebp.  A function between this one and a longjmp
+                ; that pushed a caller's band word restores it on return,
+                ; and the longjmp skips that return.
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@sj_band        LDA     $78,X
+                STA:    $0000,Y
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @sj_band
+
                 PLY
                 PLP
                 LDA     #0
@@ -392,6 +411,22 @@ longjmp         MX      %00
                 ; Restore DP.
                 LDA:    $0008,X
                 TCD
+
+                ; ... and the callee-saved band (+16..+47) into it.
+                PHX
+                TXA
+                CLC
+                ADC     #16+30
+                TAY
+                LDX     #30
+@lj_band        LDA:    $0000,Y
+                STA     $78,X
+                DEY
+                DEY
+                DEX
+                DEX
+                BPL     @lj_band
+                PLX
 
                 ; Restore DBR.
                 SEP     #$20

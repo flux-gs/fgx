@@ -316,6 +316,16 @@ typedef struct {
  * Relaxing a family from raw to clean is a later, measured, per-family
  * change in exactly one place (ir_node_is_bb_barrier). */
 #define IRF_RAW 1u
+/* The frame lines a callee-saved band rewrites (ir_band_frame): the
+ * prologue's `PEI _fcc_fb' and `SBC #FRAMESIZE', each epilogue's
+ * `ADC #FRAMESIZE', `TCS' and what follows the TCS, and the FRAMESIZE EQU
+ * (its value in u0). */
+#define IRF_PRO_FB    2u
+#define IRF_FRAME_SBC 4u
+#define IRF_FRAME_ADC 8u
+#define IRF_EPI_TCS   16u
+#define IRF_FRAMESIZE 32u
+#define IRF_EPI_TAIL  64u   /* an epilogue's lines after its TCS */
 
 /* Master switch: 1 (default) = record/replay active; 0 = ir_emitf is a pure
  * pass-through to g_out (bisection / disable). */
@@ -337,6 +347,7 @@ void ir_end_func(void);     /* disarm + replay the op list to g_out */
 
 /* Drop-in replacement for fprintf(g_out, fmt, ...). */
 void ir_emitf(const char *fmt, ...);
+void ir_tag_last(unsigned flag, unsigned u0);   /* IRF_PRO_FB etc. on the last text line */
 
 /* Record a structured (operand-less) IR op; if not recording, lower it now. */
 void ir_record_op(IrOp op);

@@ -555,9 +555,10 @@ cl_hash_idiom_STKGUARD    EQU     0
                 FGX2_EXPORT main
 main            ENT
                 PEI     _fcc_fb
+                PEI     _fcc_img16
                 TSC
                 SEC
-                SBC     #main_FRAMESIZE
+                SBC     #main_FRAMESIZE-2
                 DO      main_STKGUARD
                 BCC     main_stkovf
                 CMP     _fcc_stkfloor
@@ -568,14 +569,12 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_img0
+                STA     _fcc_img16
 _clhash_L6
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #5006
@@ -585,7 +584,7 @@ _clhash_L9
                 BPL     _clhash_L8
                 LDA     #arr
                 PHA
-                LDA     _fcc_img0
+                LDA     _fcc_img16
                 ASL
                 ASL
                 CLC
@@ -606,11 +605,9 @@ _clhash_L9
                 STA:    $0002,X
                 PLA
 _clhash_L7
-                INC     _fcc_img0
+                INC     _fcc_img16
                 BRA     _clhash_L6
 _clhash_L8
-                LDA     _fcc_img0
-                STA     1,S   ; fccstk d=0 b=1
                 LDA     #1
                 ASL
                 ASL
@@ -659,12 +656,9 @@ _clhash_L8
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _clhash_L10
                 LDA     #5004
                 ASL
@@ -684,12 +678,9 @@ _clhash_L10
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRL     main_bandx
 _clhash_L11
                 LDA     #5005
                 ASL
@@ -709,20 +700,17 @@ _clhash_L11
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _clhash_L12
                 LDA     #0
-                STA     1,S   ; fccstk d=0 b=1
+                STA     _fcc_img16
 _clhash_L13
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_img16
                 TAX
                 SEC
                 SBC     #5003
@@ -732,7 +720,7 @@ _clhash_L16
                 BPL     _clhash_L15
                 LDA     #1
                 CLC
-                ADC     1,S   ; fccstk d=0 b=1
+                ADC     _fcc_img16
                 ASL
                 ASL
                 TAX
@@ -750,30 +738,27 @@ _clhash_L16
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
-                PLA
-                STA     _fcc_fb
-                TYA
-                RTL
+                BRA     main_bandx
 _clhash_L17
 _clhash_L14
-                LDA     1,S   ; fccstk d=0 b=1
-                CLC
-                ADC     #1
-                STA     1,S   ; fccstk d=0 b=1
+                INC     _fcc_img16
                 BRA     _clhash_L13
 _clhash_L15
                 LDA     #42
                 TAY
                 TSC
                 CLC
-                ADC     #main_FRAMESIZE
+                ADC     #main_FRAMESIZE-2
                 TCS
+main_bandx
+                PLA
+                STA     _fcc_img16
                 PLA
                 STA     _fcc_fb
                 TYA
                 RTL
-main_FRAMESIZE   EQU     2
+main_FRAMESIZE   EQU     4
 main_STKGUARD    EQU     0
                 FGX2_RELOC_COUNT 4
