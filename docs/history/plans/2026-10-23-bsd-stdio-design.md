@@ -168,6 +168,31 @@ LIFO, so the loaded pointer cannot take a fresh register while p's
 stays; keeping p there needs register renaming or a non-LIFO allocator,
 for one reload on the path that flushes.
 
-## 11. Next
+## 11. The ls and printf profile (f709568, dfb4175, 1105d4e)
 
-A profile of ls and printf for inline asm on what it finds.
+PC-sampled under MAME: `ls -l /bin' and a loop of 1,200 printf calls
+(%d %5d %s %-8s %ld %lu %o %x %c).  In the printf loop, before:
+_doprnt's own code 28%, 32-bit division 23% (two _fcc_long_udiv calls
+per digit), bcopy 8% (a C byte loop).  Three changes:
+
+- fcc: a long operation's constant right operand goes straight to the
+  second-operand cells -- no push, pop or _fcc_long_from_int.  57.2 KB
+  off the staged system; compress 3013 -> 2797 frames;
+- the digits are 4.4BSD's (netbsd-0-9 vfprintf.c), and a decimal that
+  fits in 16 bits divides as u_int;
+- bcopy is inline asm, a word at a time, in the direction an overlap
+  needs (4.3BSD-Reno string/bcopy.c's shape).
+
+The printf loop went 505 -> 397 frames; ls -l 481 -> 457.  After:
+_doprnt's own code 33%, division 16%, bcopy 2.5%.  What is left in
+_doprnt is general codegen (pointer locals live in the stack frame, so
+fmt and t are loaded on every use), and _fcc_udiv16 is called twice per
+decimal digit, once for `%' and once for `/', though one call yields
+both.  ls -l is half kernel and VFS (directory scan, namei, the name
+cache) and 7.5% localtime (localsub, timesub).
+
+## 12. Next
+
+The pair `x % c; x /= c' as one division, which needs fcc to see the
+pair; pointer locals in direct-page registers, which is what the rest
+of _doprnt is waiting on.
