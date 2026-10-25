@@ -17,6 +17,10 @@
  *   or ffltpr's `?' in a static program that prints no float, as 2.11BSD
  *   splits pdp/stdio/fltpr.s from doprnt.s so that a program with no
  *   floating point loads none.  cvt itself is double arithmetic.
+ * - The [diouxX] digits are 4.4BSD's (netbsd-0-9 vfprintf.c): octal and
+ *   hex by mask and shift, decimal by a loop that leaves the last digit
+ *   undivided.  A decimal value that fits in 16 bits finishes in u_int,
+ *   where the division is the machine's word, not a 32-bit routine.
  * - %s's memchr is <string.h>'s: upstream's block-scope `char *memchr()'
  *   hid the prototype, and prec, an int, went where a size_t is read.
  * - `*buf = '\0'', where upstream assigns NULL, which is a pointer here.
@@ -91,6 +95,7 @@ _doprnt(fmt0, argp, fp)
 	register int n;		/* random handy integer */
 	register char *t;	/* buffer pointer */
 	u_long _ulong;		/* integer arguments %[diouxX] */
+	u_int _uint;		/* FGX: _ulong once it fits in 16 bits */
 	unsigned _quad[4];	/* FGX: %q[diouxX] */
 	int base;		/* base for [diouxX] conversion */
 	int dprec;		/* decimal precision in [diouxX] */
@@ -366,10 +371,38 @@ number:			if ((dprec = prec) >= 0)
 						*--t = '0'; /* octal leading 0 */
 				}
 			} else if (_ulong != 0 || prec != 0) {
-				do {
-					*--t = digs[_ulong % base];
-					_ulong /= base;
-				} while (_ulong);
+				/*
+				 * Unsigned mod is hard, and unsigned mod
+				 * by a constant is easier than that by
+				 * a variable; hence this switch.
+				 */
+				switch (base) {
+				case 8:
+					do {
+						*--t = digs[_ulong & 7];
+						_ulong >>= 3;
+					} while (_ulong);
+					break;
+				case 10:
+					while (_ulong > 0xffff) {
+						*--t = digs[_ulong % 10];
+						_ulong /= 10;
+					}
+					/* many numbers are 1 digit */
+					_uint = _ulong;
+					while (_uint >= 10) {
+						*--t = digs[_uint % 10];
+						_uint /= 10;
+					}
+					*--t = digs[_uint];
+					break;
+				default:
+					do {
+						*--t = digs[_ulong & 15];
+						_ulong >>= 4;
+					} while (_ulong);
+					break;
+				}
 				digs = "0123456789abcdef";
 				if (flags & ALT && base == 8 && *t != '0')
 					*--t = '0'; /* octal leading 0 */

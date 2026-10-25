@@ -698,5 +698,6 @@
   "putcsize": 42,
   "charasgval": 42,
   "fprjoin": 42,
-  "longconst": 42
+  "longconst": 42,
+  "pfdigits": 42
 }
