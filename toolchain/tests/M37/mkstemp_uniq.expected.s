@@ -349,7 +349,6 @@ main_stkok        TCS
                 STA     13,S   ; fccstk d=0 b=13
 _mkstemp_uniq_L5
                 LDA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BPL     *+5
                 BRL     _mkstemp_uniq_L6
                 LDA     #4

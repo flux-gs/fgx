@@ -367,6 +367,22 @@ int main(void)
     check("cmp0_keep_after_sta",
           "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n",
           "                STA     x\n                CMP     #0\n                BEQ     L8\nL8                 RTL\n");
+    /* a far pair out of reach is followed to its label and past its BRL */
+    {
+        static char in[4096], want[4096];
+        size_t k;
+        strcpy(in, "                AND     #128\n                CMP     #0\n"
+                   "                BNE     *+5\n                BRL     L10\n");
+        strcpy(want, "                AND     #128\n"
+                     "                BNE     *+5\n                BRL     L10\n");
+        for (k = 0; k < 43; k++) {
+            strcat(in, "                STA     far\n");
+            strcat(want, "                STA     far\n");
+        }
+        strcat(in, "                RTL\nL10                CLC\n                RTL\n");
+        strcat(want, "                RTL\nL10                CLC\n                RTL\n");
+        check("cmp0_far_pair", in, want);
+    }
     /* a store between leaves A, N and Z as DEC set them */
     check("cmp0_after_store",
           "                DEC\n                STA     [_fcc_fpr0]\n                CMP     #0\n                BMI     L9\n                RTL\nL9                 RTL\n",

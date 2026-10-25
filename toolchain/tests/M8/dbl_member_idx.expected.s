@@ -269,7 +269,6 @@ _dbl_member_idx_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                CMP     #0
                 BNE     *+5
                 BRL     _dbl_member_idx_L6
                 SEP     #$20

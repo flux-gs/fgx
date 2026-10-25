@@ -397,7 +397,6 @@ _lprobe_L6
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _lprobe_L7
                 LDA     3,S   ; fccstk d=0 b=3

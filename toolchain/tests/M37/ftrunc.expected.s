@@ -443,7 +443,6 @@ _ftrunc_L7
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     *+5
                 BRL     _ftrunc_L8
                 LDA     #$0000
@@ -463,7 +462,6 @@ _ftrunc_L7
                 ADC     #6
                 TCS
                 TYA
-                CMP     #0
                 BEQ     *+5
                 BRL     _ftrunc_L9
                 LDA     #0
@@ -626,7 +624,6 @@ _ftrunc_L8
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BEQ     *+5
                 BRL     _ftrunc_L10
                 SEP     #$20

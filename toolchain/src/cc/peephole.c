@@ -1239,12 +1239,19 @@ carry_dead_paths(Line *lines, size_t n, size_t from, int depth)
         if (is_return(m)) return 1;
         if (reads_nz(m) || strcmp(m, "BVC") == 0 || strcmp(m, "BVS") == 0 ||
             strcmp(m, "BRA") == 0 || strcmp(m, "BRL") == 0) {
+            const char *tgt = L->operand;
             long t;
-            if (depth == 0 || L->operand[0] == '*') return 0;
-            t = label_line(L->operand);
+            if (strcmp(tgt, "*+5") == 0 && m[1] != 'R') {  /* `B!cc *+5 ; BRL L' */
+                long j = next_insn_no_label(lines, n, i + 1);
+                if (j < 0 || strcmp(lines[j].mnem, "BRL") != 0) return 0;
+                tgt = lines[j].operand;
+                i = (size_t)j;                 /* the fall-through is past it */
+            }
+            if (depth == 0 || tgt[0] == '*') return 0;
+            t = label_line(tgt);
             if (t < 0 || !carry_dead_paths(lines, n, (size_t)t, depth - 1))
                 return 0;
-            if (m[1] == 'R') return 1;          /* BRA/BRL: no fall-through */
+            if (L->mnem[1] == 'R') return 1;   /* BRA/BRL: no fall-through */
             continue;
         }
         if (is_control(m) || insn_size_ub(L) < 0) return 0;

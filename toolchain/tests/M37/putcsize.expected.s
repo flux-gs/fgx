@@ -80,7 +80,6 @@ _putcsize_L0
                 LDA     [_fcc_fpr0],Y
                 TAX
                 AND     #128
-                CMP     #0
                 BNE     *+5
                 BRL     _putcsize_L2
                 LDA     [_fcc_fpr0]

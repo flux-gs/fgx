@@ -319,7 +319,6 @@ _renameover_L4
                 TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
-                CMP     #0
                 BPL     *+5
                 BRL     _renameover_L5
                 LDA     #6

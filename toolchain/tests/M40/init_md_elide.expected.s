@@ -324,7 +324,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L9
                 LDA     #0
@@ -508,7 +507,6 @@ _init_md_elide_L8
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_elide_L11
                 LDA     #3
@@ -567,8 +565,8 @@ _init_md_elide_L8
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
-                BNE     _init_md_elide_L11
+                BEQ     *+5
+                BRL     _init_md_elide_L11
                 LDA     #3
                 ASL
                 CLC

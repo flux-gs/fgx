@@ -4170,7 +4170,6 @@ _specalias_L69
                 BNE     _specalias_L67
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _specalias_L66
 _specalias_L67
@@ -6353,7 +6352,6 @@ _specalias_L106
                 TCS
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     *+5
                 BRL     _specalias_L107
                 DO      10+vclean_FRAMESIZE/256
@@ -8284,7 +8282,6 @@ _specalias_L156
                 FIN
                 TAX
                 AND     #2
-                CMP     #0
                 BNE     *+5
                 BRL     _specalias_L157
                 LDY     #52
@@ -11627,7 +11624,6 @@ _specalias_L210
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     *+5
                 BRL     _specalias_L212
                 SEP     #$20

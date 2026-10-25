@@ -3911,7 +3911,6 @@ _vnodepool_L62
                 BNE     _vnodepool_L60
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _vnodepool_L59
 _vnodepool_L60
@@ -6094,7 +6093,6 @@ _vnodepool_L99
                 TCS
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     *+5
                 BRL     _vnodepool_L100
                 DO      10+vclean_FRAMESIZE/256
@@ -8025,7 +8023,6 @@ _vnodepool_L149
                 FIN
                 TAX
                 AND     #2
-                CMP     #0
                 BNE     *+5
                 BRL     _vnodepool_L150
                 LDY     #52
@@ -11368,7 +11365,6 @@ _vnodepool_L203
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     *+5
                 BRL     _vnodepool_L205
                 SEP     #$20

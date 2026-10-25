@@ -392,7 +392,6 @@ _tmops_L4
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _tmops_L5
                 LDA     #99

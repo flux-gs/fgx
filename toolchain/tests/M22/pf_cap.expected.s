@@ -377,7 +377,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _pf_cap_L2
                 SEP     #$20

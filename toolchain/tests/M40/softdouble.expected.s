@@ -3561,13 +3561,11 @@ _softdouble_L49
                 STA     83,S   ; fccstk d=0 b=83
                 TYA
                 LDA     101,S   ; fccstk d=0 b=101
-                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L53
                 LDA     103,S   ; fccstk d=0 b=103
                 BNE     _softdouble_L54
                 LDA     105,S   ; fccstk d=0 b=105
-                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L53
 _softdouble_L54
@@ -5892,7 +5890,6 @@ _softdouble_L57
                 AND     #1
                 STA     65,S   ; fccstk d=0 b=65
                 LDA     63,S   ; fccstk d=0 b=63
-                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L59
                 LDA     65,S   ; fccstk d=0 b=65
@@ -6724,7 +6721,6 @@ _softdouble_L65
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L68
                 LDA     65,S   ; fccstk d=0 b=65
@@ -7047,7 +7043,6 @@ _softdouble_L72
 _softdouble_L73
                 STA     71,S   ; fccstk d=0 b=71
                 LDA     69,S   ; fccstk d=0 b=69
-                CMP     #0
                 BNE     *+5
                 BRL     _softdouble_L74
                 LDA     71,S   ; fccstk d=0 b=71
@@ -12754,7 +12749,6 @@ _softdouble_L135
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12853,7 +12847,6 @@ _softdouble_L135
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12952,7 +12945,6 @@ _softdouble_L135
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L137
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13276,7 +13268,6 @@ _softdouble_L145
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L147
                 LDA     1,S   ; fccstk d=0 b=1
@@ -13488,7 +13479,6 @@ _softdouble_L151
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _softdouble_L153
                 LDA     1,S   ; fccstk d=0 b=1

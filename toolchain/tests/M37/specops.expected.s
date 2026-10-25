@@ -4413,7 +4413,6 @@ _specops_L57
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L58
                 LDY     #38
@@ -5020,7 +5019,6 @@ _specops_L73
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _specops_L74
                 LDY     #38
@@ -9273,7 +9271,6 @@ _specops_L154
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BEQ     *+5
                 BRL     _specops_L155
 _specops_L156
@@ -9644,7 +9641,6 @@ _specops_L161
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L160
                 LDA     [_fcc_fpr0]
@@ -9665,7 +9661,6 @@ _specops_L161
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BEQ     *+5
                 BRL     _specops_L162
                 DO      14+uiomove_FRAMESIZE/256
@@ -12539,7 +12534,6 @@ _specops_L211
                 STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L212
                 LDA     _fcc_fpr0
@@ -18019,7 +18013,6 @@ _specops_L314
                 BNE     _specops_L312
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L311
 _specops_L312
@@ -20202,7 +20195,6 @@ _specops_L351
                 TCS
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L352
                 DO      10+vclean_FRAMESIZE/256
@@ -22133,7 +22125,6 @@ _specops_L401
                 FIN
                 TAX
                 AND     #2
-                CMP     #0
                 BNE     *+5
                 BRL     _specops_L402
                 LDY     #52
@@ -25476,7 +25467,6 @@ _specops_L455
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     *+5
                 BRL     _specops_L457
                 SEP     #$20

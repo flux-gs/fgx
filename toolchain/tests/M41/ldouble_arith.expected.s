@@ -1519,7 +1519,6 @@ _ldouble_arith_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _ldouble_arith_L13
                 LDA     7,S   ; fccstk d=0 b=7
@@ -1567,7 +1566,6 @@ _ldouble_arith_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_arith_L13
                 LDA     7,S   ; fccstk d=0 b=7
@@ -1616,7 +1614,6 @@ _ldouble_arith_L11
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _ldouble_arith_L13
                 LDA     7,S   ; fccstk d=0 b=7
@@ -2044,7 +2041,6 @@ _ldouble_arith_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_arith_L17
                 LDA     39,S   ; fccstk d=0 b=39
@@ -2092,7 +2088,6 @@ _ldouble_arith_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_arith_L17
                 LDA     39,S   ; fccstk d=0 b=39
@@ -2141,7 +2136,6 @@ _ldouble_arith_L14
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_arith_L17
                 LDA     39,S   ; fccstk d=0 b=39

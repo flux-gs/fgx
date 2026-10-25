@@ -4004,7 +4004,6 @@ _biocache_L57
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                CMP     #0
                 BNE     *+5
                 BRL     _biocache_L58
                 LDY     #38
@@ -4611,7 +4610,6 @@ _biocache_L73
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _biocache_L74
                 LDY     #38

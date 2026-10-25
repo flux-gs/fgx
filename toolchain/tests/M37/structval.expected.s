@@ -611,7 +611,6 @@ _structval_L5
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _structval_L4
                 LDA     #22
@@ -752,7 +751,6 @@ _structval_L9
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _structval_L8
                 LDA     #25
@@ -807,7 +805,6 @@ _structval_L10
                 ADC     #12
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _structval_L8
                 LDA     #35
@@ -1485,7 +1482,6 @@ _structval_L29
                 ADC     #10
                 TCS
                 TYA
-                CMP     #0
                 BEQ     _structval_L30
                 LDA     #25
                 PHA

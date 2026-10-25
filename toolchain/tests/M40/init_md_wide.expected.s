@@ -236,7 +236,6 @@ _init_md_wide_L2
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _init_md_wide_L5
                 LDA     #0

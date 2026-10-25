@@ -542,7 +542,6 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                CMP     #0
                 BEQ     *+5
                 BRL     _libso_shapes_L0
                 SEP     #$20

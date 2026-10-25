@@ -513,7 +513,6 @@ _dirops_L25
                 ADC     #4
                 TCS
                 TYA
-                CMP     #0
                 BEQ     *+5
                 BRL     _dirops_L26
                 SEP     #$20

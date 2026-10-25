@@ -498,7 +498,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _pf_long_L2
                 SEP     #$20
@@ -532,7 +531,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _pf_long_L2
                 SEP     #$20
@@ -566,7 +564,6 @@ main_stkok        TCS
                 ADC     #8
                 TCS
                 TYA
-                CMP     #0
                 BNE     *+5
                 BRL     _pf_long_L2
                 SEP     #$20

@@ -3951,7 +3951,6 @@ _vreclaim_L57
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
-                CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L58
                 LDY     #38
@@ -4558,7 +4557,6 @@ _vreclaim_L73
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _vreclaim_L74
                 LDY     #38
@@ -12588,7 +12586,6 @@ _vreclaim_L218
                 BNE     _vreclaim_L216
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
-                CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L215
 _vreclaim_L216
@@ -14771,7 +14768,6 @@ _vreclaim_L255
                 TCS
                 TYA
                 LDA     5,S   ; fccstk d=0 b=5
-                CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L256
                 DO      10+vclean_FRAMESIZE/256
@@ -16702,7 +16698,6 @@ _vreclaim_L305
                 FIN
                 TAX
                 AND     #2
-                CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L306
                 LDY     #52
@@ -20045,7 +20040,6 @@ _vreclaim_L359
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                CMP     #0
                 BPL     *+5
                 BRL     _vreclaim_L361
                 SEP     #$20

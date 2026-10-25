@@ -66,7 +66,6 @@ main_stkok        TCS
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _float_array_init_L0
                 LDA     #1
@@ -217,7 +216,6 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _float_array_init_L1
                 LDA     #1
@@ -265,7 +263,6 @@ _float_array_init_L0
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _float_array_init_L1
                 LDA     #2
@@ -411,7 +408,6 @@ _float_array_init_L1
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BNE     *+5
                 BRL     _float_array_init_L2
                 LDA     #1

@@ -3948,7 +3948,6 @@ _llong_mem_L40
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _llong_mem_L43
                 LDA     #$0000
@@ -4327,7 +4326,6 @@ _llong_mem_L47
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _llong_mem_L50
                 SEP     #$20
@@ -4391,7 +4389,6 @@ _llong_mem_L47
                 LDA     #0
                 BRA     *+5
                 LDA     #1
-                CMP     #0
                 BEQ     *+5
                 BRL     _llong_mem_L50
                 SEP     #$20
