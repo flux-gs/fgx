@@ -109,10 +109,6 @@ _pptr_L2
                 TYA
                 RTL
 _pptr_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     #7
                 STA     [_fcc_fpr0]
                 DO      6+mk_FRAMESIZE/256

@@ -77,10 +77,7 @@ _fseek_ftell_L0
                 PHA
                 TYA
                 PHA
-                LDA     9,S   ; fccstk d=6 b=3
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=6 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fseek

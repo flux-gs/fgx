@@ -349,10 +349,6 @@ _longptr_impl_L3
                 MX      %00
                 LDA     G
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BNE     _longptr_impl_L7
@@ -440,10 +436,6 @@ _longptr_impl_L6
                 STA     _fcc_fpr0+2
                 LDA     [_fcc_ptr]
                 STA     _fcc_fpr0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BNE     _longptr_impl_L10

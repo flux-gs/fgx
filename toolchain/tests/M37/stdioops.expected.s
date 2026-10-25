@@ -80,10 +80,7 @@ _stdioops_L2
                 ADC     #5
                 STA     5,S   ; fccstk d=0 b=5
 _stdioops_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -200,10 +197,7 @@ _stdioops_L7
                 CMP     #0
                 BNE     *+5
                 BRL     _stdioops_L5
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #32
@@ -313,10 +307,7 @@ _stdioops_L11
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _stdioops_L10
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fgetc

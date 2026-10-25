@@ -1812,10 +1812,7 @@ _scanf_L36
                 TYA
                 RTL
 _scanf_L34
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 SEP     #$20
@@ -2054,10 +2051,7 @@ _scanf_L40
                 AND     #$00FF
                 BRA     _scanf_L44
 _scanf_L43
-                LDA     41,S   ; fccstk d=0 b=41
-                STA     _fcc_fpr0+2
-                LDA     39,S   ; fccstk d=0 b=39
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _filbuf

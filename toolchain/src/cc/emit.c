@@ -5680,9 +5680,9 @@ emit_cmp_branch(TokKind op, int is_unsigned, int label, int want_true)
         int lab = new_label();
         ir_emitf("                SEC\n");
         ir_emitf("                SBC     _fcc_tmp_b\n");
-        ir_emitf("                BVC     %s_L%d\n", g_tu_prefix, lab);
+        emit_bcond(IRC_BVC, lab, 0);       /* over the 3-byte EOR: near */
         ir_emitf("                EOR     #$8000\n");
-        ir_emitf("%s_L%d\n", g_tu_prefix, lab);
+        emit_label(lab);
         cc = (op == TOK_LT) ? IRC_BMI : IRC_BPL;
     }
 

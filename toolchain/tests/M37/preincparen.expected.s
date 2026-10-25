@@ -65,10 +65,6 @@ main_stkok        TCS
                 ADC     #10
                 STA     _fcc_img0
 _preincparen_L0
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0+2
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 INC
                 STA     [_fcc_fpr0]

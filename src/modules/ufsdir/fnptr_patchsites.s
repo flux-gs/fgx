@@ -8,6 +8,25 @@
 ; single-bank image already is.
 
 _modFnPtrTab    ANOP
+                DA      $2CF6
+                DA      $2CFA
+                DA      $2CFE
+                DA      $2D02
+                DA      $2D06
+                DA      $2D0A
+                DA      $2D0E
+                DA      $2D12
+                DA      $2D16
+                DA      $2D1A
+                DA      $2D1E
+                DA      $2D22
+                DA      $2D26
+                DA      $2D2A
+                DA      $2D2E
+                DA      $2D32
+                DA      $2D36
+                DA      $2D3A
+                DA      $2D3E
                 DA      $2D42
                 DA      $2D46
                 DA      $2D4A
@@ -21,25 +40,50 @@ _modFnPtrTab    ANOP
                 DA      $2D6A
                 DA      $2D6E
                 DA      $2D72
-                DA      $2D76
-                DA      $2D7A
-                DA      $2D7E
-                DA      $2D82
-                DA      $2D86
-                DA      $2D8A
-                DA      $2D8E
-                DA      $2D92
-                DA      $2D96
-                DA      $2D9A
-                DA      $2D9E
-                DA      $2DA2
-                DA      $2DA6
-                DA      $2DAA
-                DA      $2DAE
-                DA      $2DB2
-                DA      $2DB6
-                DA      $2DBA
-                DA      $2DBE
+                DA      $7078
+                DA      $707C
+                DA      $7080
+                DA      $7084
+                DA      $7088
+                DA      $708C
+                DA      $7090
+                DA      $7094
+                DA      $7098
+                DA      $709C
+                DA      $70A0
+                DA      $70A4
+                DA      $70A8
+                DA      $70AC
+                DA      $70B0
+                DA      $70B4
+                DA      $70B8
+                DA      $70BC
+                DA      $70C0
+                DA      $70C4
+                DA      $70C8
+                DA      $70CC
+                DA      $70D0
+                DA      $70D4
+                DA      $70D8
+                DA      $70DC
+                DA      $70E0
+                DA      $70E4
+                DA      $70E8
+                DA      $70EC
+                DA      $70F0
+                DA      $70F4
+                DA      $70F8
+                DA      $70FC
+                DA      $7100
+                DA      $7104
+                DA      $7108
+                DA      $710C
+                DA      $7110
+                DA      $7114
+                DA      $7118
+                DA      $711C
+                DA      $7120
+                DA      $7124
                 DA      $7128
                 DA      $712C
                 DA      $7130
@@ -60,50 +104,6 @@ _modFnPtrTab    ANOP
                 DA      $716C
                 DA      $7170
                 DA      $7174
-                DA      $7178
-                DA      $717C
-                DA      $7180
-                DA      $7184
-                DA      $7188
-                DA      $718C
-                DA      $7190
-                DA      $7194
-                DA      $7198
-                DA      $719C
-                DA      $71A0
-                DA      $71A4
-                DA      $71A8
-                DA      $71AC
-                DA      $71B0
-                DA      $71B4
-                DA      $71B8
-                DA      $71BC
-                DA      $71C0
-                DA      $71C4
-                DA      $71C8
-                DA      $71CC
-                DA      $71D0
-                DA      $71D4
-                DA      $71D8
-                DA      $71DC
-                DA      $71E0
-                DA      $71E4
-                DA      $71E8
-                DA      $71EC
-                DA      $71F0
-                DA      $71F4
-                DA      $71F8
-                DA      $71FC
-                DA      $7200
-                DA      $7204
-                DA      $7208
-                DA      $720C
-                DA      $7210
-                DA      $7214
-                DA      $7218
-                DA      $721C
-                DA      $7220
-                DA      $7224
-                DA      $B4AB
-                DA      $B4AF
+                DA      $B357
+                DA      $B35B
 _modFnPtrBytes  EQU     196      ; 98 cell(s), 2 bytes of table each

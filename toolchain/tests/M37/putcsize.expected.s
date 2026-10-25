@@ -83,28 +83,6 @@ put_stkok        TCS
                 AND     #$00FF
                 BRL     _putcsize_L1
 _putcsize_L0
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -127,28 +105,6 @@ _putcsize_L0
 _putcsize_L4
                 BMI     *+5
                 BRL     _putcsize_L2
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -273,28 +229,7 @@ _putcsize_L5
 _putcsize_L6
                 BRA     _putcsize_L3
 _putcsize_L2
-                DO      10+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+put_FRAMESIZE,S   ; fccstk d=0 b=10 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+put_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+put_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 DO      10+put_FRAMESIZE/256

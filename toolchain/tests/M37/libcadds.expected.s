@@ -265,10 +265,7 @@ _libcadds_L3
 _libcadds_L4
                 CMP     #0
                 BEQ     _libcadds_L1
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #3
@@ -347,10 +344,7 @@ _libcadds_L7
 _libcadds_L8
                 CMP     #0
                 BEQ     _libcadds_L6
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fclose
@@ -434,10 +428,7 @@ _libcadds_L11
 _libcadds_L12
                 CMP     #0
                 BEQ     _libcadds_L10
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #1

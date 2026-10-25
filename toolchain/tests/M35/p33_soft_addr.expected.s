@@ -131,12 +131,6 @@ addr_of_sfok         STA     _fcc_sfp
                 EOR     #$8000
 _p33_soft_addr_L1
                 BPL     _p33_soft_addr_L0
-                LDY     #4
-                LDA     [_fcc_sfp],Y
-                STA     _fcc_fpr0+2
-                LDY     #2
-                LDA     [_fcc_sfp],Y
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_sfp],Y
                 STA     _fcc_ptr

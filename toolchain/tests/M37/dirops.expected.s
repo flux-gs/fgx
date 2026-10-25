@@ -268,10 +268,7 @@ _dirops_L6
 _dirops_L7
                 CMP     #0
                 BEQ     _dirops_L5
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL readdir
@@ -375,10 +372,6 @@ _dirops_L14
                 LDA     13,S   ; fccstk d=0 b=13
                 INC
                 STA     13,S   ; fccstk d=0 b=13
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -388,10 +381,6 @@ _dirops_L14
                 EOR     #$8000
 _dirops_L17
                 BMI     _dirops_L16
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -408,10 +397,6 @@ _dirops_L16
                 LDA     #0
                 STA     19,S   ; fccstk d=0 b=19
 _dirops_L15
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 BNE     _dirops_L19
                 LDA     #0
@@ -572,12 +557,8 @@ _dirops_L28
                 LDA     #1
 _dirops_L29
                 CMP     #0
-                BNE     *+5
-                BRL     _dirops_L27
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                BEQ     _dirops_L27
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL readdir
@@ -611,10 +592,6 @@ _dirops_L31
 _dirops_L32
                 CMP     #0
                 BEQ     _dirops_L30
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX

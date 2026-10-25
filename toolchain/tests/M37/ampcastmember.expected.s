@@ -125,10 +125,6 @@ main_stkok        TCS
                 TYA
                 RTL
 _ampcastmember_L0
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -145,10 +141,6 @@ _ampcastmember_L0
                 TYA
                 RTL
 _ampcastmember_L1
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi

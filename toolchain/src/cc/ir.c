@@ -1636,6 +1636,133 @@ fpr_holds_ok(Local *lc)
     return lc && !lc->addr_taken && !lc->raw_accessed;
 }
 
+/* WHAT THE RECORD IS AT A LABEL.  A label that only forward branches reach,
+ * every one of them already lowered, holds what all of them and the code
+ * falling into it agree on; any other label holds nothing.  ir_holds_prescan
+ * counts each label's branches (IR_BR, IR_BCOND) and marks one that text
+ * names -- a jump table, a hand-built branch -- as reached by what this does
+ * not follow. */
+typedef struct {
+    Local *holds[8];
+    int    refs, seen, have, text_ref;
+} LabelHolds;
+
+static LabelHolds *g_lh;
+static int         g_lh_base, g_lh_n;
+static int         g_fpr_dead;   /* the last op does not fall through */
+
+static LabelHolds *
+lh_get(int lab)
+{
+    if (!g_lh || lab < g_lh_base || lab >= g_lh_base + g_lh_n) return NULL;
+    return &g_lh[lab - g_lh_base];
+}
+
+/* Mark every `<prefix>_L<num>' a text names as an operand. */
+static void
+lh_scan_text(const char *t, size_t len)
+{
+    size_t pl = strlen(g_tu_prefix), i;
+    for (i = 0; i + pl + 2 < len; i++) {
+        LabelHolds *h;
+        if (memcmp(t + i, g_tu_prefix, pl) != 0 || t[i + pl] != '_' ||
+            t[i + pl + 1] != 'L' || !isdigit((unsigned char)t[i + pl + 2]))
+            continue;
+        if (i > 0 && t[i - 1] == '\n') continue;       /* a definition */
+        if (i == 0) continue;
+        h = lh_get(atoi(t + i + pl + 2));
+        if (h) h->text_ref = 1;
+    }
+}
+
+static void
+ir_holds_prescan(void)
+{
+    int i, lo = -1, hi = -1;
+    free(g_lh);
+    g_lh = NULL;
+    for (i = 0; i < g_ir_n; i++) {
+        IrOp op = g_ir[i].op;
+        if (op == IR_LABEL || op == IR_BR || op == IR_BCOND) {
+            int l = (int)g_ir[i].u0;
+            if (lo < 0 || l < lo) lo = l;
+            if (l > hi) hi = l;
+        }
+    }
+    if (lo < 0) return;
+    g_lh_base = lo;
+    g_lh_n = hi - lo + 1;
+    g_lh = calloc((size_t)g_lh_n, sizeof *g_lh);
+    if (!g_lh) return;                 /* every label then holds nothing */
+    for (i = 0; i < g_ir_n; i++) {
+        IrNode *n = &g_ir[i];
+        if (n->op == IR_BR || n->op == IR_BCOND) {
+            LabelHolds *h = lh_get((int)n->u0);
+            if (h) h->refs++;
+        } else if (n->op == IR_TEXT && n->text_len) {
+            lh_scan_text(n->text, n->text_len);
+        }
+    }
+}
+
+/* A branch to `lab' carries the record as it stands. */
+static void
+lh_branch(int lab)
+{
+    LabelHolds *h = lh_get(lab);
+    int k;
+    if (!h) return;
+    h->seen++;
+    if (!h->have) {
+        memcpy(h->holds, g_fpr_holds, sizeof h->holds);
+        h->have = 1;
+        return;
+    }
+    for (k = 0; k < 8; k++)
+        if (h->holds[k] != g_fpr_holds[k]) h->holds[k] = NULL;
+}
+
+/* The record at label `lab', from what reaches it. */
+static void
+lh_label(int lab)
+{
+    LabelHolds *h = lh_get(lab);
+    int k;
+    if (!h || h->text_ref || h->seen != h->refs) {
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        return;
+    }
+    if (g_fpr_dead) {                  /* reached only by its branches */
+        if (h->have) memcpy(g_fpr_holds, h->holds, sizeof g_fpr_holds);
+        else         memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        return;
+    }
+    if (h->have)
+        for (k = 0; k < 8; k++)
+            if (h->holds[k] != g_fpr_holds[k]) g_fpr_holds[k] = NULL;
+}
+
+/* Does emitted text end in a transfer that does not fall through? */
+static int
+text_ends_dead(const char *t, size_t len)
+{
+    static const char *const dead[] = {
+        "BRA", "BRL", "JMP", "JML", "RTL", "RTS", "RTI", NULL
+    };
+    size_t e = len, b;
+    char m[8];
+    size_t k = 0;
+    while (e > 0 && (t[e - 1] == '\n' || t[e - 1] == ' ')) e--;
+    b = e;
+    while (b > 0 && t[b - 1] != '\n') b--;
+    if (b < e && t[b] != ' ' && t[b] != '\t') return 0;   /* a label line */
+    while (b < e && (t[b] == ' ' || t[b] == '\t')) b++;
+    while (b < e && t[b] != ' ' && t[b] != '\t' && k + 1 < sizeof m)
+        m[k++] = (char)toupper((unsigned char)t[b++]);
+    m[k] = '\0';
+    return mn_in(m, dead);
+}
+
 /* Lower op n into g_out, keeping g_fpr_holds. */
 static void
 ir_lower_tracked(IrNode *n, FILE *out)
@@ -1650,8 +1777,21 @@ ir_lower_tracked(IrNode *n, FILE *out)
     if (n->op == IR_FPR_LOAD_PTR_LOCAL && fpr_holds_ok(lc) &&
         g_fpr_holds[n->u1] == lc) {
         fprintf(out, "                LDA     _fcc_fpr%u\n", n->u1);
+        g_fpr_dead = 0;
     } else if (n->op == IR_BCOND) {          /* `Bcc L' or `B!cc *+5; BRL L' */
+        lh_branch((int)n->u0);
         emit_lower_op(n);
+        g_fpr_dead = 0;
+    } else if (n->op == IR_BR) {
+        lh_branch((int)n->u0);
+        emit_lower_op(n);
+        memset(g_fpr_holds, 0, sizeof g_fpr_holds);
+        g_fpr_dead = 1;
+    } else if (n->op == IR_LABEL) {
+        if (pending) g_fpr_dead = 0;         /* an earlier skip may land here */
+        emit_lower_op(n);
+        lh_label((int)n->u0);
+        g_fpr_dead = 0;
     } else {
         mem = open_memstream(&buf, &len);
         if (!mem) { perror("fcc: open_memstream"); exit(1); }
@@ -1667,6 +1807,8 @@ ir_lower_tracked(IrNode *n, FILE *out)
         if ((n->op == IR_FPR_LOAD_PTR_LOCAL || n->op == IR_FPR_STORE_PTR_LOCAL) &&
             fpr_holds_ok(lc))
             g_fpr_holds[n->u1] = lc;
+        /* a `*+N' skip may step over the final transfer */
+        if (len) g_fpr_dead = text_ends_dead(buf, len) && !g_fpr_skip;
         fwrite(buf, 1, len, out);
         free(buf);
     }
@@ -1712,6 +1854,8 @@ ir_end_func(void)
         if (g_p3_stats) ir_p3_stats();   /* read-only Phase-3 measurement */
         memset(g_fpr_holds, 0, sizeof g_fpr_holds);
         g_fpr_skip = 0;
+        g_fpr_dead = 0;
+        if (g_ir_opt) ir_holds_prescan();
         for (i = 0; i < g_ir_n; i++) {
             if (g_ir_opt) {
                 ir_lower_tracked(&g_ir[i], g_out);

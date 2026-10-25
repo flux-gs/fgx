@@ -168,10 +168,6 @@ _arwdotread_L2
                 ADC     #20
                 STA     _fcc_img0
 _arwdotread_L0
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX

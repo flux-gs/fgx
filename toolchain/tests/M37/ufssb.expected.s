@@ -4111,28 +4111,6 @@ _ufssb_L29
                 TYA
                 RTL
 _ufssb_L28
-                DO      8+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
                 BMI     _ufssb_L32
@@ -4160,28 +4138,6 @@ _ufssb_L32
                 TYA
                 RTL
 _ufssb_L31
-                DO      8+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+ufs_sbvalid_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+ufs_sbvalid_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+ufs_sbvalid_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #416
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi

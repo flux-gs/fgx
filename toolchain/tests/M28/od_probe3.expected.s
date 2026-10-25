@@ -408,10 +408,6 @@ _od_probe3_L6
                 TYA
                 RTL
 _od_probe3_L4
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #6
@@ -427,10 +423,6 @@ _od_probe3_L4
                 TYA
                 RTL
 _od_probe3_L7
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -447,10 +439,6 @@ _od_probe3_L7
                 TYA
                 RTL
 _od_probe3_L8
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 ASL

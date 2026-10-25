@@ -310,9 +310,7 @@ _aoptr_field_L2
                 TYA
                 RTL
 _aoptr_field_L3
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
+                LDA     _fcc_fpr0
                 CLC
                 ADC     #12
                 STA     _fcc_fpr0

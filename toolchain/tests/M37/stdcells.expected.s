@@ -51,10 +51,7 @@ main_stkok        TCS
                 TYA
                 RTL
 _stdcells_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PHA
                 SEP     #$20
                 MX      %10
@@ -158,10 +155,6 @@ _stdcells_L6
                 TYA
                 RTL
 _stdcells_L4
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     _fcc_long_hi
                 LDA     _fcc_long_hi

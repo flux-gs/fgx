@@ -607,18 +607,10 @@ _fprhold_L13
                 EOR     #$8000
 _fprhold_L18
                 BPL     _fprhold_L16
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 BRA     _fprhold_L17
 _fprhold_L16
-                LDA     5,S   ; fccstk d=2 b=3
-                STA     _fcc_fpr0+2
-                LDA     3,S   ; fccstk d=2 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
 _fprhold_L17
                 STA     _fcc_tmp_b
@@ -627,10 +619,6 @@ _fprhold_L17
                 ADC     _fcc_tmp_b
                 STA     _fcc_img1
 _fprhold_L14
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 PHA

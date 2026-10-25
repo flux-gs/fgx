@@ -67,10 +67,6 @@ _heapchurn_L2
                 TYA
                 RTL
 _heapchurn_L0
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -300,10 +296,6 @@ _heapchurn_L13
                 TYA
                 RTL
 _heapchurn_L11
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_tmp_b
                 ASL

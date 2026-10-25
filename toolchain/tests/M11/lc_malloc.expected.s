@@ -335,10 +335,7 @@ _lc_malloc_L2
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9
                 PHA
-                LDA     11,S   ; fccstk d=4 b=7
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=4 b=5
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     11,S   ; fccstk d=8 b=3

@@ -118,10 +118,7 @@ _freadn_L5
 _freadn_L6
                 CMP     #0
                 BEQ     _freadn_L4
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     #3

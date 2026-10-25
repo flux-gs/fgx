@@ -323,10 +323,6 @@ _addrarrowdot_L10
                 CMP     #0
                 BNE     *+5
                 BRL     _addrarrowdot_L8
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     #$1122
                 STA     _fcc_long_hi
                 LDA     #$3344
@@ -455,10 +451,6 @@ _addrarrowdot_L13
 _addrarrowdot_L14
                 CMP     #0
                 BEQ     _addrarrowdot_L12
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #2989
                 STA     [_fcc_fpr0]
                 LDA     gt+12
@@ -550,10 +542,6 @@ _addrarrowdot_L17
 _addrarrowdot_L18
                 CMP     #0
                 BEQ     _addrarrowdot_L16
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDA     #$7EED
                 STA     _fcc_long_hi
                 LDA     #$BEEF
@@ -666,10 +654,6 @@ _addrarrowdot_L21
 _addrarrowdot_L22
                 CMP     #0
                 BEQ     _addrarrowdot_L20
-                LDA     23,S   ; fccstk d=0 b=23
-                STA     _fcc_fpr0+2
-                LDA     21,S   ; fccstk d=0 b=21
-                STA     _fcc_fpr0
                 LDA     #95
                 SEP     #$20
                 MX      %10
@@ -778,10 +762,6 @@ _addrarrowdot_L25
 _addrarrowdot_L26
                 CMP     #0
                 BEQ     _addrarrowdot_L24
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #3084
                 STA     [_fcc_fpr0]
                 LDA     gt+50
@@ -891,10 +871,6 @@ _addrarrowdot_L29
 _addrarrowdot_L30
                 CMP     #0
                 BEQ     _addrarrowdot_L28
-                LDA     15,S   ; fccstk d=0 b=15
-                STA     _fcc_fpr0+2
-                LDA     13,S   ; fccstk d=0 b=13
-                STA     _fcc_fpr0
                 LDA     #$0123
                 STA     _fcc_long_hi
                 LDA     #$FEDC
@@ -1014,10 +990,6 @@ _addrarrowdot_L33
 _addrarrowdot_L34
                 CMP     #0
                 BEQ     _addrarrowdot_L32
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #3501
                 STA     [_fcc_fpr0]
                 LDA     gt+20
@@ -1116,10 +1088,6 @@ _addrarrowdot_L37
 _addrarrowdot_L38
                 CMP     #0
                 BEQ     _addrarrowdot_L36
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #3598
                 STA     [_fcc_fpr0]
                 LDA     gt+12
@@ -1201,12 +1169,7 @@ _addrarrowdot_L41
                 LDA     #0
 _addrarrowdot_L42
                 CMP     #0
-                BNE     *+5
-                BRL     _addrarrowdot_L40
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
+                BEQ     _addrarrowdot_L40
                 LDA     #3855
                 STA     [_fcc_fpr0]
                 LDA     gh+16
@@ -1372,10 +1335,6 @@ _addrarrowdot_L48
 _addrarrowdot_L49
                 CMP     #0
                 BEQ     _addrarrowdot_L47
-                LDA     19,S   ; fccstk d=0 b=19
-                STA     _fcc_fpr0+2
-                LDA     17,S   ; fccstk d=0 b=17
-                STA     _fcc_fpr0
                 LDA     #6939
                 STA     [_fcc_fpr0]
                 LDA     gt+20

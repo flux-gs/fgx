@@ -262,10 +262,6 @@ _selfchain_L8
                 MX      %00
                 PLA
                 STA     _fcc_fpr0
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr1+2
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr1
                 LDA     _fcc_fpr0
                 CMP     _fcc_fpr1
                 BNE     _selfchain_L12

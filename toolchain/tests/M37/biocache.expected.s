@@ -141,28 +141,6 @@ bio_strategy_stkok        TCS
 _biocache_L2
                 BMI     _biocache_L0
 _biocache_L1
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 ORA     #4
@@ -192,28 +170,6 @@ _biocache_L1
                 TYA
                 RTL
 _biocache_L0
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bio_strategy_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #1
@@ -260,28 +216,6 @@ _biocache_L3
                 PLA
                 TYA
                 PHA
-                DO      10+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #10+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     10+bio_strategy_FRAMESIZE,S   ; fccstk d=2 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      8+bio_strategy_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bio_strategy_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bio_strategy_FRAMESIZE,S   ; fccstk d=2 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -2856,10 +2790,6 @@ _biocache_L26
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L24
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #30
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -3207,10 +3137,6 @@ _biocache_L32
                 JSR     _fcc_safepoint
                 BRL     _biocache_getnewbuf_uL_again
 _biocache_L39
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -3539,10 +3465,6 @@ _biocache_L48
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L46
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #30
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_long_hi
@@ -3652,10 +3574,6 @@ _biocache_L52
 _biocache_L50
                 BRA     _biocache_L45
 _biocache_L49
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #8
@@ -3677,10 +3595,7 @@ _biocache_L49
                 JSR     _fcc_safepoint
                 BRL     getblk_uL_loop
 _biocache_L53
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_bremfree
@@ -4086,28 +4001,6 @@ _biocache_L56
                 ORA     #2048
                 STA     [_fcc_fpr0]
 _biocache_L57
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
@@ -4307,28 +4200,6 @@ _biocache_L59
                 AND     _fcc_tmp_b
                 STA     [_fcc_fpr0]
 _biocache_L58
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #2048
@@ -4348,30 +4219,8 @@ _biocache_L58
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
-                BRL     _biocache_L61
+                BRA     _biocache_L61
 _biocache_L60
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #8192
@@ -4393,28 +4242,6 @@ _biocache_L60
                 STA     1,S   ; fccstk d=0 b=1
                 BRA     _biocache_L63
 _biocache_L62
-                DO      8+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+brelse_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+brelse_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+brelse_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+brelse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #128
@@ -4660,28 +4487,6 @@ _biocache_L68
                 TCS
                 BRA     _biocache_L68
 _biocache_L69
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #4
@@ -4697,28 +4502,6 @@ _biocache_L69
                 TYA
                 RTL
 _biocache_L70
-                DO      8+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biowait_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biowait_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biowait_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biowait_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #20
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -4907,10 +4690,6 @@ _biocache_L73
                 EOR     #$8000
 _biocache_L76
                 BMI     _biocache_L75
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
                 BPL     _biocache_L77
@@ -5000,28 +4779,6 @@ _biocache_L74
                 TYA
                 RTL
 _biocache_L78
-                DO      8+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+biodone_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+biodone_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+biodone_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+biodone_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #64
@@ -5188,10 +4945,6 @@ bread_stkok        TCS
                 TYA
                 RTL
 _biocache_L80
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 ORA     #1
@@ -6096,28 +5849,6 @@ _biocache_L88
                 LDA     10+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 STA     _fcc_fpr0
-                DO      8+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr1+2
-                DO      6+bgetvp_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+bgetvp_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+bgetvp_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr1
                 LDY     #54
                 LDA     [_fcc_fpr1],Y
                 PHA
@@ -6788,10 +6519,6 @@ _biocache_L99
                 BEQ     _biocache_L102
                 BRL     _biocache_L100
 _biocache_L102
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #512
@@ -6855,10 +6582,7 @@ _biocache_L103
                 TCS
                 BRA     _biocache_L105
 _biocache_L104
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
@@ -6953,28 +6677,6 @@ _biocache_L107
                 TCS
                 BRA     _biocache_L107
 _biocache_L108
-                DO      8+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+vflushbuf_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+vflushbuf_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+vflushbuf_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #46
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7115,10 +6817,6 @@ _biocache_L117
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L115
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #512
@@ -7139,10 +6837,6 @@ _biocache_L118
                 TAX
                 CMP     #65535
                 BEQ     _biocache_L119
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #22
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7162,10 +6856,7 @@ _biocache_L118
                 BEQ     _biocache_L119
                 BRA     _biocache_L114
 _biocache_L119
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_bremfree
@@ -7196,10 +6887,6 @@ _biocache_L119
                 JSR     _fcc_safepoint
                 BRL     bflush_uL_loop
 _biocache_L114
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7350,10 +7037,6 @@ _biocache_L125
                 BRL     _biocache_L122
 _biocache_L126
 _biocache_L124
-                LDA     11,S   ; fccstk d=0 b=11
-                STA     _fcc_fpr0+2
-                LDA     9,S   ; fccstk d=0 b=9
-                STA     _fcc_fpr0
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -7409,10 +7092,7 @@ _biocache_L127
                 TCS
                 BRL     _biocache_L129
 _biocache_L130
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
+                LDA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_bremfree
@@ -7457,10 +7137,6 @@ _biocache_L130
                 TCS
                 BRL     _biocache_L129
 _biocache_L131
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #38
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -7840,10 +7516,6 @@ _biocache_L145
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L143
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -8122,10 +7794,6 @@ _biocache_L158
                 CMP     #0
                 BNE     *+5
                 BRL     _biocache_L156
-                LDA     7,S   ; fccstk d=0 b=7
-                STA     _fcc_fpr0+2
-                LDA     5,S   ; fccstk d=0 b=5
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA

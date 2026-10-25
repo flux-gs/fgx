@@ -185,28 +185,6 @@ _structsrcdeep_same_stkok        TCS
                 TYA
                 RTL
 _structsrcdeep_L0
-                DO      8+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -237,28 +215,6 @@ _structsrcdeep_L0
                 TYA
                 RTL
 _structsrcdeep_L1
-                DO      8+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF
@@ -292,28 +248,6 @@ _structsrcdeep_L1
                 TYA
                 RTL
 _structsrcdeep_L2
-                DO      8+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_structsrcdeep_same_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_structsrcdeep_same_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_structsrcdeep_same_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #5
                 LDA     [_fcc_fpr0],Y
                 AND     #$00FF

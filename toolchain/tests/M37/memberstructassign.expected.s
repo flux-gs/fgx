@@ -395,28 +395,6 @@ _memberstructassign_L2
                 TYA
                 RTL
 _memberstructassign_L3
-                DO      8+_memberstructassign_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #8+_memberstructassign_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     8+_memberstructassign_landed_FRAMESIZE,S   ; fccstk d=0 b=8 fs
-                FIN
-                STA     _fcc_fpr0+2
-                DO      6+_memberstructassign_landed_FRAMESIZE/256
-                TSC
-                CLC
-                ADC     #6+_memberstructassign_landed_FRAMESIZE
-                STA     _fcc_fp
-                STZ     _fcc_fp+2
-                LDA     [_fcc_fp]
-                ELSE
-                LDA     6+_memberstructassign_landed_FRAMESIZE,S   ; fccstk d=0 b=6 fs
-                FIN
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
@@ -2208,10 +2186,6 @@ _memberstructassign_L50
                 TYA
                 RTL
 _memberstructassign_L51
-                LDA     3,S   ; fccstk d=0 b=3
-                STA     _fcc_fpr0+2
-                LDA     1,S   ; fccstk d=0 b=1
-                STA     _fcc_fpr0
                 LDY     #10
                 LDA     [_fcc_fpr0],Y
                 TAX
