@@ -100,11 +100,9 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    w,X
-                TAX
                 CMP     #5
                 BNE     _arrpost_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -113,11 +111,9 @@ _arrpost_L0
                 TAX
                 LDA:    b,X
                 AND     #$00FF
-                TAX
                 CMP     #8
                 BNE     _arrpost_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0

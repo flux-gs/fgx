@@ -221,7 +221,6 @@ _wait3ops_L9
                 TCS
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

@@ -26,7 +26,6 @@ _glptrsub_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #8
                 BVC     _glptrsub_L3
@@ -245,7 +244,6 @@ _glptrsub_L5
                 LDA     #5
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -294,7 +292,6 @@ _glptrsub_L6
                 LDA     #3
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -343,7 +340,6 @@ _glptrsub_L7
                 LDA     #7
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

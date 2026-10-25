@@ -20,7 +20,6 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #40
-                TAX
                 INC
                 INC
                 STA     _fcc_img0
@@ -73,7 +72,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
                 AND     #6
                 TAY
                 LDA     1,S
@@ -132,7 +130,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
                 ORA     #15
                 TAY
                 LDA     1,S
@@ -191,7 +188,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
                 SEC
                 SBC     #100
                 TAY

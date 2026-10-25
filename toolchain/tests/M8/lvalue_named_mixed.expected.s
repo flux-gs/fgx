@@ -90,7 +90,6 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #40
                 STA     [_fcc_fpr0]
                 SEP     #$20

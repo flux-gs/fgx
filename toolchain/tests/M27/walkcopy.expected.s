@@ -178,7 +178,6 @@ _walkcopy_L2
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

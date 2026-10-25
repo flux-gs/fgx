@@ -48,11 +48,9 @@ main_stkok        TCS
                 ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #7
                 BNE     _memchain2_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -111,11 +109,9 @@ _memchain2_L0
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #9
                 BNE     _memchain2_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -151,11 +147,9 @@ _memchain2_L1
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
                 CMP     #16
                 BNE     _memchain2_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0

@@ -71,7 +71,6 @@ _arrptrarrread_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _arrptrarrread_L7

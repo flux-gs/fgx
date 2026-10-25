@@ -193,7 +193,6 @@ _derefrmw_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CLC
                 ADC     #3
                 SEP     #$20
@@ -264,7 +263,6 @@ _derefrmw_L3
                 LDA     _derefrmw_sp
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
-                TAX
                 DEC
                 STA     [_fcc_fpr0]
                 STA     _fcc_img0

@@ -20,7 +20,6 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #20
-                TAX
                 CLC
                 ADC     #21
                 STA     _fcc_img0

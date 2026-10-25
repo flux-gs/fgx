@@ -516,7 +516,6 @@ _getoptops_L2
                 BNE     *+5
                 BRL     _getoptops_L3
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CMP     #108
                 BNE     _getoptops_L4
                 LDA     5,S   ; fccstk d=0 b=5
@@ -526,7 +525,6 @@ _getoptops_L2
                 BRL     _getoptops_L5
 _getoptops_L4
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CMP     #97
                 BNE     _getoptops_L6
                 LDA     5,S   ; fccstk d=0 b=5
@@ -640,7 +638,6 @@ _getoptops_L3
                 CMP     #3
                 BNE     _getoptops_L17
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -648,7 +645,6 @@ _getoptops_L17
                 LDA     9,S   ; fccstk d=0 b=9
                 BEQ     _getoptops_L18
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -656,7 +652,6 @@ _getoptops_L18
                 LDA     7,S   ; fccstk d=0 b=7
                 BEQ     _getoptops_L19
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -664,7 +659,6 @@ _getoptops_L19
                 LDA     11,S   ; fccstk d=0 b=11
                 BEQ     _getoptops_L20
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
@@ -672,17 +666,14 @@ _getoptops_L20
                 LDA     13,S   ; fccstk d=0 b=13
                 BNE     _getoptops_L21
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1
 _getoptops_L21
                 LDA     optind
-                TAX
                 CMP     #6
                 BNE     _getoptops_L22
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #6
                 STA     1,S   ; fccstk d=0 b=1

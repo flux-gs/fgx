@@ -127,7 +127,6 @@ _fnptrvoid_L1
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 SEC
                 SBC     #2
                 BVC     _fnptrvoid_L4

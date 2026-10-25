@@ -128,11 +128,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #101
                 BNE     _m2d_row2_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -173,39 +171,31 @@ _m2d_row2_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #101
                 BNE     _m2d_row2_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
 _m2d_row2_L1
                 LDA     #6
-                TAX
                 CMP     #6
                 BNE     _m2d_row2_L2
                 LDA     #6
-                TAX
                 CMP     #6
                 BNE     _m2d_row2_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
 _m2d_row2_L2
                 LDA     #1
-                TAX
                 CMP     #1
                 BNE     _m2d_row2_L3
                 LDA     #1
-                TAX
                 CMP     #1
                 BNE     _m2d_row2_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -261,11 +251,9 @@ _m2d_row2_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #104
                 BNE     _m2d_row2_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -306,11 +294,9 @@ _m2d_row2_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #104
                 BNE     _m2d_row2_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #32
                 STA     _fcc_img0
@@ -360,11 +346,9 @@ _m2d_row2_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #122
                 BNE     _m2d_row2_L6
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #64
                 STA     _fcc_img0

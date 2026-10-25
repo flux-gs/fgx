@@ -39,7 +39,6 @@ main_stkok        TCS
                 TAX
                 LDA:    arr,X
                 AND     #$00FF
-                TAX
                 CMP     #81
                 BNE     _static_ptr_disp_L0
                 LDA     #13
@@ -53,7 +52,6 @@ main_stkok        TCS
                 AND     #$00FF
                 BNE     _static_ptr_disp_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -72,7 +70,6 @@ _static_ptr_disp_L0
                 ASL
                 TAX
                 LDA:    iarr,X
-                TAX
                 CMP     #4660
                 BNE     _static_ptr_disp_L1
                 LDA     #1
@@ -121,7 +118,6 @@ _static_ptr_disp_L3
                 CMP     #0
                 BEQ     _static_ptr_disp_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0

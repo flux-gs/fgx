@@ -78,7 +78,6 @@ main_stkok        TCS
                 CMP     #0
                 BEQ     _int_const_ladder_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -106,7 +105,6 @@ _int_const_ladder_L0
                 CMP     #0
                 BEQ     _int_const_ladder_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -134,7 +132,6 @@ _int_const_ladder_L1
                 CMP     #0
                 BEQ     _int_const_ladder_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -162,7 +159,6 @@ _int_const_ladder_L2
                 CMP     #0
                 BEQ     _int_const_ladder_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #9
                 STA     _fcc_img0

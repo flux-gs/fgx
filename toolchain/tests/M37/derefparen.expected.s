@@ -84,7 +84,6 @@ main_stkok        TCS
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
                 CMP     #120
                 BNE     _derefparen_L0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -132,7 +131,6 @@ _derefparen_L2
                 CMP     #0
                 BEQ     _derefparen_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -166,14 +164,12 @@ _derefparen_L0
                 TXA
                 JSR     _fcc_ne16
                 STA     _fcc_img1
-                TAX
                 CMP     #1
                 BNE     _derefparen_L3
                 LDA     #0
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
                 CMP     #121
                 BNE     _derefparen_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -221,7 +217,6 @@ _derefparen_L5
                 CMP     #0
                 BEQ     _derefparen_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -261,11 +256,9 @@ _derefparen_L3
                 TAX
                 LDA:    buf,X
                 AND     #$00FF
-                TAX
                 CMP     #10
                 BNE     _derefparen_L6
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -353,11 +346,9 @@ _derefparen_L9
                 TAX
                 LDA:    buf2,X
                 AND     #$00FF
-                TAX
                 CMP     #122
                 BNE     _derefparen_L7
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -387,7 +378,6 @@ _derefparen_L7
                 TAX
                 LDA:    buf2,X
                 AND     #$00FF
-                TAX
                 CMP     #119
                 BNE     _derefparen_L10
                 LDA     3,S   ; fccstk d=0 b=3
@@ -435,7 +425,6 @@ _derefparen_L12
                 CMP     #0
                 BEQ     _derefparen_L10
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #12
                 STA     _fcc_img0

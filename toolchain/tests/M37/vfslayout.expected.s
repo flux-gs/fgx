@@ -74,7 +74,6 @@ _vfslayout_L0
                 RTL
 _vfslayout_L1
                 LDA     #100
-                TAX
                 LDX     #104
                 STA     _fcc_tmp_b
                 TXA
@@ -157,7 +156,6 @@ _vfslayout_L4
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
                 CLC
                 ADC     #64
                 LDX     #100
@@ -1267,17 +1265,11 @@ _vfslayout_L38
                 RTL
 _vfslayout_L39
                 LDA     #1
-                TAX
                 ORA     #2
-                TAX
                 ORA     #4
-                TAX
                 ORA     #256
-                TAX
                 ORA     #512
-                TAX
                 ORA     #1024
-                TAX
                 ORA     #2048
                 TAX
                 LDA     #1
@@ -2018,7 +2010,6 @@ _vfslayout_L66
                 CLC
                 ADC     _fcc_tmp_b
                 ASL
-                TAX
                 LDX     #64
                 STA     _fcc_tmp_b
                 TXA

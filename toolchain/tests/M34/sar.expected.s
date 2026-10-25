@@ -31,7 +31,6 @@ main_stkok        TCS
                 CMP     #$FFFC
                 BNE     _sar_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -46,7 +45,6 @@ _sar_L0
                 CMP     #$FFFF
                 BNE     _sar_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -56,11 +54,9 @@ _sar_L1
                 LSR
                 LSR
                 LSR
-                TAX
                 CMP     #4096
                 BNE     _sar_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0

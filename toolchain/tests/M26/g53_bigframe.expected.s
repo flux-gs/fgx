@@ -26,7 +26,6 @@ _g53_bigframe_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #300
                 BVC     _g53_bigframe_L3
@@ -107,7 +106,6 @@ _g53_bigframe_L2
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #127
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1

@@ -163,7 +163,6 @@ _arwdotread_L2
                 CMP     #0
                 BEQ     _arwdotread_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #20
                 STA     _fcc_img0

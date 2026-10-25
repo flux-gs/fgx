@@ -121,7 +121,6 @@ addr_of_sfok         STA     _fcc_sfp
                 ELSE
                 LDA     6+addr_of_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -436,7 +435,6 @@ _p33_soft_addr_L4
                 ELSE
                 LDA     6+elems_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -807,7 +805,6 @@ _p33_soft_addr_L10
                 ELSE
                 LDA     6+rowsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -977,7 +974,6 @@ _p33_soft_addr_L14
                 ELSE
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

@@ -66,7 +66,6 @@ main_stkok        TCS
                 CMP     #0
                 BEQ     _struct_init_leaves_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -116,7 +115,6 @@ _struct_init_leaves_L0
                 CMP     #0
                 BEQ     _struct_init_leaves_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -144,11 +142,9 @@ _struct_init_leaves_L1
                 CMP     #0
                 BEQ     _struct_init_leaves_L2
                 LDA     _struct_init_leaves_zru+20
-                TAX
                 CMP     #6
                 BNE     _struct_init_leaves_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -198,7 +194,6 @@ _struct_init_leaves_L2
                 CMP     #0
                 BEQ     _struct_init_leaves_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0

@@ -441,7 +441,6 @@ allrel_stkok        TCS
 _cmp_branch_L25
                 BPL     _cmp_branch_L24
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -461,7 +460,6 @@ _cmp_branch_L24
 _cmp_branch_L27
                 BPL     _cmp_branch_L26
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -481,7 +479,6 @@ _cmp_branch_L26
 _cmp_branch_L29
                 BMI     _cmp_branch_L28
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -498,7 +495,6 @@ _cmp_branch_L28
 _cmp_branch_L31
                 BMI     _cmp_branch_L30
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -511,7 +507,6 @@ _cmp_branch_L30
                 CMP     _fcc_tmp_b
                 BNE     _cmp_branch_L32
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -566,7 +561,6 @@ uallrel_stkok        TCS
                 CMP     _fcc_tmp_b
                 BCS     _cmp_branch_L34
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -582,7 +576,6 @@ _cmp_branch_L34
                 CMP     _fcc_tmp_b
                 BCS     _cmp_branch_L35
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -598,7 +591,6 @@ _cmp_branch_L35
                 CMP     _fcc_tmp_b
                 BCC     _cmp_branch_L36
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -652,7 +644,6 @@ main_stkok        TCS
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #1
-                TAX
                 CLC
                 ADC     #4
                 TAX
@@ -675,7 +666,6 @@ _cmp_branch_L38
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #2
-                TAX
                 CLC
                 ADC     #8
                 TAX
@@ -698,7 +688,6 @@ _cmp_branch_L39
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #4
-                TAX
                 CLC
                 ADC     #8
                 TAX
@@ -724,7 +713,6 @@ _cmp_branch_L40
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #1
-                TAX
                 CLC
                 ADC     #4
                 TAX
@@ -747,7 +735,6 @@ _cmp_branch_L41
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #2
-                TAX
                 CLC
                 ADC     #8
                 TAX
@@ -770,7 +757,6 @@ _cmp_branch_L42
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #1
-                TAX
                 CLC
                 ADC     #4
                 TAX
@@ -796,7 +782,6 @@ _cmp_branch_L43
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #2
-                TAX
                 CLC
                 ADC     #8
                 TAX
@@ -819,7 +804,6 @@ _cmp_branch_L44
                 FGX2_FARCALL allrel
                 PHA
                 LDA     #1
-                TAX
                 CLC
                 ADC     #4
                 TAX
@@ -940,7 +924,6 @@ _cmp_branch_L49
                 CMP     #0
                 BEQ     _cmp_branch_L50
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #4096
                 STA     1,S   ; fccstk d=0 b=1
@@ -978,7 +961,6 @@ _cmp_branch_L54
                 BPL     _cmp_branch_L51
 _cmp_branch_L52
                 LDA     hits
-                TAX
                 CLC
                 ADC     #1
                 STA     hits
@@ -995,7 +977,6 @@ _cmp_branch_L51
 _cmp_branch_L56
                 BPL     _cmp_branch_L55
                 LDA     b
-                TAX
                 SEC
                 SBC     #3
                 BVC     _cmp_branch_L57
@@ -1003,7 +984,6 @@ _cmp_branch_L56
 _cmp_branch_L57
                 BPL     _cmp_branch_L55
                 LDA     hits
-                TAX
                 CLC
                 ADC     #2
                 STA     hits
@@ -1023,7 +1003,6 @@ _cmp_branch_L55
 _cmp_branch_L59
                 BPL     _cmp_branch_L58
                 LDA     b
-                TAX
                 SEC
                 SBC     #3
                 BVC     _cmp_branch_L60
@@ -1031,7 +1010,6 @@ _cmp_branch_L59
 _cmp_branch_L60
                 BPL     _cmp_branch_L58
                 LDA     hits
-                TAX
                 CLC
                 ADC     #4
                 STA     hits
@@ -1096,15 +1074,12 @@ _cmp_branch_L69
                 BRA     _cmp_branch_L66
 _cmp_branch_L68
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CMP     #10
                 BNE     _cmp_branch_L70
                 LDA     a
-                TAX
                 CMP     #4
                 BNE     _cmp_branch_L70
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #16384
                 STA     1,S   ; fccstk d=0 b=1

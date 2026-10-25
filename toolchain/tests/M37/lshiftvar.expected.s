@@ -26,7 +26,6 @@ _lshiftvar_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
-                TAX
                 LDX     #12
                 STA     _fcc_tmp_b
                 TXA
@@ -78,7 +77,6 @@ _lshiftvar_L3
                 STA     _fcc_img5
                 TYA
                 LDA     _fcc_img1
-                TAX
                 CMP     #9
                 BNE     _lshiftvar_L4
                 LDA     _fcc_img5
@@ -115,7 +113,6 @@ _lshiftvar_L3
                 RTL
 _lshiftvar_L4
                 LDA     _fcc_img1
-                TAX
                 CMP     #10
                 BNE     _lshiftvar_L5
                 LDA     _fcc_img5
@@ -152,7 +149,6 @@ _lshiftvar_L4
                 RTL
 _lshiftvar_L5
                 LDA     _fcc_img1
-                TAX
                 CMP     #11
                 BNE     _lshiftvar_L6
                 LDA     _fcc_img5
@@ -244,7 +240,6 @@ _lshiftvar_L8
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #7
                 STA     _fcc_tmp_b
                 TXA
@@ -328,7 +323,6 @@ _lshiftvar_L12
                 DEC
                 STA     _fcc_img2
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -418,7 +412,6 @@ _lshiftvar_L16
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #7
                 STA     _fcc_tmp_b
                 TXA
@@ -472,7 +465,6 @@ _lshiftvar_L20
                 DEC
                 STA     _fcc_img3
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

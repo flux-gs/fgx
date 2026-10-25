@@ -258,7 +258,6 @@ _stdioops_L9
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 CMP     #104
                 BNE     _stdioops_L5
                 SEP     #$20
@@ -278,11 +277,9 @@ _stdioops_L9
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 CMP     #10
                 BNE     _stdioops_L5
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #5
                 STA     5,S   ; fccstk d=0 b=5
@@ -347,7 +344,6 @@ _stdioops_L12
                 STA     _fcc_fpr0
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
-                TAX
                 AND     #16
                 TAX
                 LDA     #0
@@ -393,7 +389,6 @@ _stdioops_L13
                 STA     _fcc_fpr0
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
-                TAX
                 AND     #16
                 TAX
                 LDA     #0

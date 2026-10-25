@@ -1182,11 +1182,33 @@ carry_effect(const Line *L)
     return C_NONE;
 }
 
-/* The first carry effect of the arms of the DO at line `d': C_WRITE when
- * both write before reading, C_READ when either may read (or holds what this
- * does not follow), else C_NONE.  *fin is the line of its FIN. */
+/* What a line does to X first, as carry_effect does for the carry.  A call
+ * may take an argument in X -- setjmp and longjmp take the jmp_buf there --
+ * and a caller may read it after a return, so dead_on_paths counts both as
+ * reads; only a write on every path makes X dead. */
 static int
-carry_do_arms(Line *lines, size_t n, size_t d, size_t *fin)
+x_effect(const Line *L)
+{
+    static const char *const r[] = {
+        "TXA","TXY","TXS","STX","PHX","CPX","INX","DEX","MVN","MVP",
+        "RTL","RTS","RTI", NULL
+    };
+    static const char *const w[] = {
+        "LDX","TAX","TSX","TYX","PLX", NULL
+    };
+    if (mn_is(L->mnem, r) || strncmp(L->mnem, "FGX2_", 5) == 0 ||
+        strstr(L->operand, ",X") || strstr(L->operand, ",x"))
+        return C_READ;
+    if (mn_is(L->mnem, w)) return C_WRITE;
+    return C_NONE;
+}
+
+/* The first effect `eff' finds in the arms of the DO at line `d': C_WRITE
+ * when both write before reading, C_READ when either may read (or holds what
+ * this does not follow), else C_NONE.  *fin is the line of its FIN. */
+static int
+do_arms_effect(Line *lines, size_t n, size_t d, size_t *fin,
+               int (*eff)(const Line *))
 {
     int arm[2] = { C_NONE, C_NONE }, k = 0;
     size_t i;
@@ -1206,18 +1228,19 @@ carry_do_arms(Line *lines, size_t n, size_t d, size_t *fin)
         if (strcmp(L->mnem, "DO") == 0 || L->mnem[0] == 'B' ||
             is_control(L->mnem) || insn_size_ub(L) < 0)
             return C_READ;
-        if (arm[k] == C_NONE) arm[k] = carry_effect(L);
+        if (arm[k] == C_NONE) arm[k] = eff(L);
     }
     return C_READ;
 }
 
-/* True if the carry is dead at line `from' on every path: written, or the
- * function returned, before anything reads it.  A conditional branch that
- * does not read the carry is followed to its label as well as through, and
- * BRA/BRL to theirs, `depth' branches deep.  A call, a jump, `__asm' text or
- * a line this does not know reads it. */
+/* True if what `eff' tracks (the carry, X) is dead at line `from' on every
+ * path: written, or the function returned, before anything reads it.  A
+ * conditional branch that does not read it is followed to its label as well
+ * as through, and BRA/BRL to theirs, `depth' branches deep.  A call `eff'
+ * does not name, a jump, `__asm' text or a line this does not know reads it. */
 static int
-carry_dead_paths(Line *lines, size_t n, size_t from, int depth)
+dead_on_paths(Line *lines, size_t n, size_t from, int depth,
+              int (*eff)(const Line *))
 {
     size_t i, fin;
     for (i = from; i < n && i < from + 512; i++) {
@@ -1226,13 +1249,13 @@ carry_dead_paths(Line *lines, size_t n, size_t from, int depth)
         if (strcmp(L->label, "@__asm") == 0) return 0;
         if (L->dead || !m[0]) continue;
         if (strcmp(m, "DO") == 0) {
-            int e = carry_do_arms(lines, n, i, &fin);
+            int e = do_arms_effect(lines, n, i, &fin, eff);
             if (e != C_NONE) return e == C_WRITE;
             i = fin;
             continue;
         }
         if (strcmp(m, "ELSE") == 0 || strcmp(m, "FIN") == 0) return 0;
-        switch (carry_effect(L)) {
+        switch (eff(L)) {
         case C_READ:  return 0;
         case C_WRITE: return 1;
         }
@@ -1249,7 +1272,7 @@ carry_dead_paths(Line *lines, size_t n, size_t from, int depth)
             }
             if (depth == 0 || tgt[0] == '*') return 0;
             t = label_line(tgt);
-            if (t < 0 || !carry_dead_paths(lines, n, (size_t)t, depth - 1))
+            if (t < 0 || !dead_on_paths(lines, n, (size_t)t, depth - 1, eff))
                 return 0;
             if (L->mnem[1] == 'R') return 1;   /* BRA/BRL: no fall-through */
             continue;
@@ -1314,7 +1337,7 @@ pat_cmp_zero_after_nz(Line *lines, size_t n)
         while (p >= 0 && keeps_a_and_nz(&lines[p]))
             p = prev_insn(lines, (size_t)p);
         if (p < 0 || !sets_nz_from_a(&lines[p])) continue;
-        if (carry_dead_paths(lines, n, i + 1, 4))
+        if (dead_on_paths(lines, n, i + 1, 4, carry_effect))
             lines[i].dead = 1;
     }
 }
@@ -1332,6 +1355,22 @@ pat_tax_txa(Line *lines, size_t n)
         j = next_insn_no_label(lines, n, i + 1);
         if (j >= 0 && strcmp(lines[j].mnem, "TXA") == 0)
             lines[j].dead = 1;
+    }
+}
+
+/* Pattern: a `TAX' whose X nothing reads -- what is left of a register home
+ * once its `TXA' has gone.  TAX also sets N and Z, so it goes only when
+ * those are dead after it. */
+static void
+pat_dead_tax(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        if (lines[i].dead || lines[i].label[0] ||
+            strcmp(lines[i].mnem, "TAX") != 0) continue;
+        if (nz_dead_after(lines, n, i) &&
+            dead_on_paths(lines, n, i + 1, 4, x_effect))
+            lines[i].dead = 1;
     }
 }
 
@@ -1494,6 +1533,7 @@ peephole_optimize(const char *asm_text)
     pat_empty_width_roundtrip(lines, n);
     if (labels_build(lines, n)) {
         pat_tax_txa(lines, n);
+        pat_dead_tax(lines, n);
         pat_relax_branches(lines, n);       /* the carry walk follows Bcc L */
         pat_cmp_zero_after_nz(lines, n);
         pat_relax_branches(lines, n);

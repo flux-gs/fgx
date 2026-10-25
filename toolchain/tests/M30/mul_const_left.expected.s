@@ -584,7 +584,6 @@ _mul_const_left_L16
                 LDA     #_mul_const_left_row10
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
-                TAX
                 INC
                 STA     _fcc_tmp_b
                 ASL

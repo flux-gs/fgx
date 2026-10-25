@@ -74,7 +74,6 @@ _commacond_L0
                 BRA     _commacond_L0
 _commacond_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
@@ -103,7 +102,6 @@ _commacond_L3
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #100
                 STA     _fcc_img2

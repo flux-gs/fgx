@@ -93,7 +93,6 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     #0
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

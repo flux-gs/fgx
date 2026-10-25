@@ -68,7 +68,6 @@ _biginit_L1
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
                 CLC
                 ADC     #3
                 TAX
@@ -101,7 +100,6 @@ _biginit_L2
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
                 CLC
                 ADC     #3
                 TAX
@@ -134,7 +132,6 @@ _biginit_L3
                 ASL
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
                 CLC
                 ADC     #3
                 TAX

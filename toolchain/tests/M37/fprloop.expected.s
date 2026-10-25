@@ -260,11 +260,9 @@ _fprloop_L2
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #1
                 BNE     _fprloop_L8
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -290,11 +288,9 @@ _fprloop_L8
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #2
                 BNE     _fprloop_L9
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -320,11 +316,9 @@ _fprloop_L9
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #3
                 BNE     _fprloop_L10
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -350,11 +344,9 @@ _fprloop_L10
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #4
                 BNE     _fprloop_L11
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
@@ -380,11 +372,9 @@ _fprloop_L11
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #77
                 BNE     _fprloop_L12
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7

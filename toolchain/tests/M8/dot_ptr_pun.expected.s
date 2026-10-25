@@ -35,7 +35,6 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     p+2
                 LDA     p
-                TAX
                 AND     #0
                 STA     p
                 TAX

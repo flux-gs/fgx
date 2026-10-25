@@ -145,7 +145,6 @@ _fprhold_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _fprhold_L3
@@ -168,7 +167,6 @@ _fprhold_L3
                 REP     #$20
                 MX      %00
                 LDA     _fcc_img0
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _fcc_img0
@@ -186,7 +184,6 @@ _fprhold_L3
                 REP     #$20
                 MX      %00
                 LDA     _fcc_img0
-                TAX
                 INC
                 STA     _fcc_tmp_b
                 ASL
@@ -597,7 +594,6 @@ _fprhold_L13
                 LDA     _fcc_img1
                 PHA
                 LDA     [_fcc_fpr0]
-                TAX
                 LDX     #2
                 STA     _fcc_tmp_b
                 TXA

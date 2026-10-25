@@ -423,7 +423,6 @@ _qsortops_L1
 _qsortops_L4
                 BPL     _qsortops_L3
                 LDA     _fcc_img0
-                TAX
                 DEC
                 ASL
                 TAX

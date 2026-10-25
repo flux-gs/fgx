@@ -250,7 +250,6 @@ _typedefunsigned_L3
                 RTL
 _typedefunsigned_L4
                 LDA     _fcc_img0
-                TAX
                 LDX     #10
                 STA     _fcc_tmp_b
                 TXA

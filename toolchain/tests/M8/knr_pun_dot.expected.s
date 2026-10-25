@@ -39,7 +39,6 @@ main_stkok        TCS
                 LDA     np
                 STA     _fcc_img0
                 LDA     np
-                TAX
                 EOR     #1
                 STA     np
                 SEP     #$20
@@ -57,7 +56,6 @@ main_stkok        TCS
                 JSR     _fcc_ne16
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     np
-                TAX
                 EOR     #1
                 STA     np
                 SEP     #$20

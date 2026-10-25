@@ -39,7 +39,6 @@ _macro_for_step_L0
                 LDA     gv
                 BEQ     _macro_for_step_L2
                 LDA     gbody
-                TAX
                 SEC
                 SBC     #3
                 BVC     _macro_for_step_L3
@@ -47,7 +46,6 @@ _macro_for_step_L0
 _macro_for_step_L3
                 BPL     _macro_for_step_L2
                 LDA     gbody
-                TAX
                 CLC
                 ADC     #1
                 STA     gbody

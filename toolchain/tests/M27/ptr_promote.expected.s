@@ -59,7 +59,6 @@ _ptr_promote_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

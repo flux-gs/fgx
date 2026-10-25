@@ -256,7 +256,6 @@ _strncatops_L1
                 TYA
                 BNE     _strncatops_L4
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -267,7 +266,6 @@ _strncatops_L4
                 AND     #$00FF
                 BNE     _strncatops_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1

@@ -418,7 +418,6 @@ _ternary_ptrint_L13
                 BRA     _ternary_ptrint_L15
 _ternary_ptrint_L14
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -499,7 +498,6 @@ _ternary_ptrint_L19
                 BRA     _ternary_ptrint_L21
 _ternary_ptrint_L20
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -580,7 +578,6 @@ _ternary_ptrint_L25
                 BRA     _ternary_ptrint_L27
 _ternary_ptrint_L26
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA

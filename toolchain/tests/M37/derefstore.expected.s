@@ -158,11 +158,9 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    hdr,X
-                TAX
                 CMP     #15
                 BNE     _derefstore_L0
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #15
                 STA     5,S   ; fccstk d=0 b=5
@@ -180,7 +178,6 @@ _derefstore_L0
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 INC
                 STA     [_fcc_fpr0]

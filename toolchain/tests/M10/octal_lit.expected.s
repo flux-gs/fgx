@@ -94,7 +94,6 @@ _octal_lit_L3
 _octal_lit_L4
                 LDA     #128
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
                 AND     #255
                 TAX
                 CMP     #128

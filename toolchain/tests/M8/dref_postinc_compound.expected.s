@@ -144,11 +144,9 @@ _dref_postinc_compound_L1
                 TAX
                 LDA:    bytes,X
                 AND     #$00FF
-                TAX
                 CMP     #65
                 BNE     _dref_postinc_compound_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -157,11 +155,9 @@ _dref_postinc_compound_L2
                 TAX
                 LDA:    bytes,X
                 AND     #$00FF
-                TAX
                 CMP     #66
                 BNE     _dref_postinc_compound_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -170,11 +166,9 @@ _dref_postinc_compound_L3
                 TAX
                 LDA:    bytes,X
                 AND     #$00FF
-                TAX
                 CMP     #3
                 BNE     _dref_postinc_compound_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -236,15 +230,12 @@ _dref_postinc_compound_L4
                 STA     _fcc_fpr0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #5
                 STA     [_fcc_fpr0]
-                TAX
                 CMP     #7
                 BNE     _dref_postinc_compound_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -253,11 +244,9 @@ _dref_postinc_compound_L5
                 ASL
                 TAX
                 LDA:    words,X
-                TAX
                 CMP     #7
                 BEQ     _dref_postinc_compound_L6
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #100
                 STA     _fcc_img0

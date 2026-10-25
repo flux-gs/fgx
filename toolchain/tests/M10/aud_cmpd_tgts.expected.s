@@ -118,7 +118,6 @@ main_stkok        TCS
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
                 CLC
                 ADC     #8
                 TAY
@@ -154,7 +153,6 @@ main_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #7
                 STA     [_fcc_fpr0]

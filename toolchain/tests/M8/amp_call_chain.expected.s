@@ -100,11 +100,9 @@ main_stkok        TCS
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
-                TAX
                 CMP     #3
                 BNE     _amp_call_chain_L0
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
@@ -141,15 +139,12 @@ _amp_call_chain_L1
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 LDA     slot+2
-                TAX
                 CMP     #6
                 BNE     _amp_call_chain_L2
                 LDA     slot+4
-                TAX
                 CMP     #12
                 BNE     _amp_call_chain_L2
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #18
                 STA     9,S   ; fccstk d=0 b=9

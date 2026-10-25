@@ -55,7 +55,6 @@ jump_from_deep_stkok        TCS
                 ELSE
                 LDA     8+jump_from_deep_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
-                TAX
                 INC
                 PLX
                 FGX2_FARCALL longjmp

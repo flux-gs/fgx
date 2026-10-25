@@ -39,7 +39,6 @@ main_uL_inc_loop
                 BRA     main_uL_done
 _goto_test_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0

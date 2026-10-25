@@ -37,7 +37,6 @@ _g53_param_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #300
                 BVC     _g53_param_L3

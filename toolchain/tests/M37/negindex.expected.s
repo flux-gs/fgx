@@ -26,7 +26,6 @@ _negindex_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #6
                 BVC     _negindex_L3

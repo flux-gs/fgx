@@ -110,7 +110,6 @@ _glptrhi_L0
                 LDA     #2
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -159,7 +158,6 @@ _glptrhi_L1
                 LDA     #2
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -230,7 +228,6 @@ _glptrhi_L2
                 LDA     #4
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

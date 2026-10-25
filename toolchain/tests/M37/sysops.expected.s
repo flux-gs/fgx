@@ -95,7 +95,6 @@ _sysops_L0
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                TAX
                 AND     #255
                 TAX
                 CMP     #1

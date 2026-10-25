@@ -238,7 +238,6 @@ _od_probe5_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 SEC
                 SBC     #4
                 BVC     _od_probe5_L3

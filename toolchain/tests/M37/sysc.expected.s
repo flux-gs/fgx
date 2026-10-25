@@ -72,17 +72,14 @@ _sysc_L1
                 CMP     #0
                 BNE     _sysc_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L0
                 LDA     __sys_c
-                TAX
                 CMP     #1
                 BNE     _sysc_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -91,7 +88,6 @@ _sysc_L2
                 CMP     #0
                 BNE     _sysc_L3
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1

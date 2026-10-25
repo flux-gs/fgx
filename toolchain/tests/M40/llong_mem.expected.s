@@ -1158,7 +1158,6 @@ _llong_mem_L13
                 ADC     #30
                 STA     _fcc_fpr0
                 LDA     n
-                TAX
                 INC
                 ASL
                 ASL

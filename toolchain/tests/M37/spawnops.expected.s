@@ -120,7 +120,6 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -257,7 +256,6 @@ _spawnops_L4
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

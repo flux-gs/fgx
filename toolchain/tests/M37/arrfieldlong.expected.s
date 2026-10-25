@@ -60,7 +60,6 @@ _arrfieldlong_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _arrfieldlong_L3

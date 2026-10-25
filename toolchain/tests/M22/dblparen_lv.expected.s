@@ -57,7 +57,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_ptr]
-                TAX
                 CLC
                 ADC     #2
                 TAY
@@ -68,7 +67,6 @@ main_stkok        TCS
                 PLA
 _dblparen_lv_L0
                 LDA     #15
-                TAX
                 AND     #6
                 STA     _fcc_img0
                 LDA     #100

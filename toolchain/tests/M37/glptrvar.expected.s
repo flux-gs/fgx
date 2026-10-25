@@ -211,7 +211,6 @@ _glptrvar_L6
                 LDA     _fcc_img1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -297,7 +296,6 @@ _glptrvar_L10
                 LDA     _fcc_img1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

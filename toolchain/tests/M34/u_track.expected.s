@@ -86,7 +86,6 @@ main_stkok        TCS
                 ASL
                 TAX
                 LDA:    garr,X
-                TAX
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -99,14 +98,12 @@ main_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L0
                 FGX2_FARCALL uret
-                TAX
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
                 BCS     _u_track_L1
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #2
                 STA     9,S   ; fccstk d=0 b=9
@@ -120,21 +117,18 @@ _u_track_L1
                 LDA     gp
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
                 BCS     _u_track_L2
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #4
                 STA     9,S   ; fccstk d=0 b=9
 _u_track_L2
                 LDA     #36864
                 STA     7,S   ; fccstk d=0 b=7
-                TAX
                 LDX     #256
                 STA     _fcc_tmp_b
                 TXA
@@ -195,7 +189,6 @@ _u_track_L3
                 CMP     #0
                 BEQ     _u_track_L4
                 LDA     9,S   ; fccstk d=0 b=9
-                TAX
                 CLC
                 ADC     #16
                 STA     9,S   ; fccstk d=0 b=9

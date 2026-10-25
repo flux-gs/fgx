@@ -57,7 +57,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_ptr]
-                TAX
                 INC
                 INC
                 TAY
@@ -102,7 +101,6 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_ptr]
-                TAX
                 AND     #6
                 TAY
                 LDA     1,S
@@ -149,7 +147,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 ORA     #15
                 TAY
                 LDA     1,S
@@ -200,7 +197,6 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 SEC
                 SBC     #100
                 TAY

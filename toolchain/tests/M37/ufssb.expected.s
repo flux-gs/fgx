@@ -91,7 +91,6 @@ _ufssb_sb_u32_stkok        TCS
                 ELSE
                 LDA     14+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=4 b=10 fs
                 FIN
-                TAX
                 INC
                 CLC
                 ADC     1,S
@@ -150,7 +149,6 @@ _ufssb_sb_u32_stkok        TCS
                 ELSE
                 LDA     12+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
-                TAX
                 INC
                 INC
                 CLC
@@ -193,7 +191,6 @@ _ufssb_sb_u32_stkok        TCS
                 ELSE
                 LDA     14+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=4 b=10 fs
                 FIN
-                TAX
                 CLC
                 ADC     #3
                 CLC
@@ -479,7 +476,6 @@ _ufssb_L0
                 TYA
                 PHA
                 LDA     _fcc_img0
-                TAX
                 AND     #255
                 AND     #$00FF
                 TAY
@@ -528,7 +524,6 @@ _ufssb_L0
                 ELSE
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
-                TAX
                 INC
                 CLC
                 ADC     1,S
@@ -546,7 +541,6 @@ _ufssb_L0
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                TAX
                 AND     #255
                 AND     #$00FF
                 TAY
@@ -595,7 +589,6 @@ _ufssb_L0
                 ELSE
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
-                TAX
                 INC
                 INC
                 CLC
@@ -609,7 +602,6 @@ _ufssb_L0
                 TYA
                 PHA
                 LDA     _fcc_img1
-                TAX
                 AND     #255
                 AND     #$00FF
                 TAY
@@ -658,7 +650,6 @@ _ufssb_L0
                 ELSE
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
-                TAX
                 CLC
                 ADC     #3
                 CLC
@@ -772,7 +763,6 @@ _ufssb_sb_p16_stkok        TCS
                 ELSE
                 LDA     16+_ufssb_sb_p16_FRAMESIZE,S   ; fccstk d=4 b=12 fs
                 FIN
-                TAX
                 AND     #255
                 AND     #$00FF
                 TAY
@@ -821,7 +811,6 @@ _ufssb_sb_p16_stkok        TCS
                 ELSE
                 LDA     12+_ufssb_sb_p16_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
-                TAX
                 INC
                 CLC
                 ADC     1,S
@@ -4089,7 +4078,6 @@ _ufssb_L27
                 BMI     _ufssb_L29
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #50
                 STA     _fcc_tmp_b
                 TXA
@@ -4116,7 +4104,6 @@ _ufssb_L28
                 BMI     _ufssb_L32
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA

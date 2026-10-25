@@ -407,7 +407,6 @@ _arrfield_L0
                 LDA     #1
                 BEQ     _arrfield_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -442,7 +441,6 @@ _arrfield_L1
                 MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 INC
                 INC
                 SEP     #$20
@@ -452,11 +450,9 @@ _arrfield_L1
                 MX      %00
                 LDA     gs+35
                 AND     #$00FF
-                TAX
                 CMP     #5
                 BNE     _arrfield_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #5
                 STA     1,S   ; fccstk d=0 b=1
@@ -609,7 +605,6 @@ _arrfield_L2
                 CMP     #0
                 BEQ     _arrfield_L3
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #4
                 STA     1,S   ; fccstk d=0 b=1

@@ -42,7 +42,6 @@ _break_while_L2
                 BRA     _break_while_L1
 _break_while_L3
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img1

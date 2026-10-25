@@ -58,7 +58,6 @@ main_stkok        TCS
                 LDA     _fcc_img1
                 STA     _fcc_img3
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L0
                 INC     _fcc_img0
@@ -70,7 +69,6 @@ _charasgval_L0
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L1
                 INC     _fcc_img0
@@ -86,7 +84,6 @@ _charasgval_L1
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L2
                 INC     _fcc_img0
@@ -109,7 +106,6 @@ _charasgval_L2
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L3
                 INC     _fcc_img0
@@ -126,7 +122,6 @@ _charasgval_L3
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L4
                 INC     _fcc_img0
@@ -138,19 +133,16 @@ _charasgval_L4
                 REP     #$20
                 MX      %00
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L5
                 INC     _fcc_img0
 _charasgval_L5
                 LDA     #128
                 AND     #$00FF
-                TAX
                 CLC
                 ADC     #321
                 STA     _fcc_img3
                 AND     #$00FF
-                TAX
                 CMP     #193
                 BNE     _charasgval_L6
                 INC     _fcc_img0
@@ -163,17 +155,14 @@ _charasgval_L6
                 MX      %00
                 AND     #$00FF
                 STA     _fcc_img1
-                TAX
                 CMP     #193
                 BNE     _charasgval_L7
                 INC     _fcc_img0
 _charasgval_L7
                 LDA     _fcc_img0
-                TAX
                 CMP     #8
                 BNE     _charasgval_L8
                 LDA     _fcc_img2
-                TAX
                 CLC
                 ADC     #40
                 STA     _fcc_img2

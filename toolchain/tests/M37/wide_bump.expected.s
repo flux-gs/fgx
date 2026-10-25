@@ -294,7 +294,6 @@ _wide_bump_L0
                 CMP     #0
                 BEQ     _wide_bump_L1
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
@@ -508,7 +507,6 @@ _wide_bump_L1
                 CMP     #0
                 BEQ     _wide_bump_L2
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3

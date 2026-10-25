@@ -3674,7 +3674,6 @@ _ldouble_arith_L31
                 RTL
 _ldouble_arith_L32
                 LDA     45,S   ; fccstk d=0 b=45
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA

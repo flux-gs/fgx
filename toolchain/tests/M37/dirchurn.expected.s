@@ -251,7 +251,6 @@ _dirchurn_L2
                 ADC     #10
                 TCS
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -313,7 +312,6 @@ _dirchurn_L3
                 ADC     #8
                 TCS
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -366,7 +364,6 @@ _dirchurn_L5
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -506,7 +503,6 @@ _dirchurn_L11
                 RTL
 _dirchurn_L9
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -1702,7 +1698,6 @@ _dirchurn_L50
                 LDA     #200
                 PHA
                 LDA     _fcc_img0
-                TAX
                 LDX     #54
                 STA     _fcc_tmp_b
                 TXA
@@ -1755,7 +1750,6 @@ _dirchurn_L51
                 LDA     #100
                 PHA
                 LDA     _fcc_img0
-                TAX
                 LDX     #54
                 STA     _fcc_tmp_b
                 TXA

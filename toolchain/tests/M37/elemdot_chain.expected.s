@@ -70,7 +70,6 @@ main_stkok        TCS
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #22
                 BNE     _elemdot_chain_L0
                 LDA     #0
@@ -88,11 +87,9 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #11
                 BNE     _elemdot_chain_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -148,7 +145,6 @@ _elemdot_chain_L0
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #44
                 BNE     _elemdot_chain_L1
                 LDA     #1
@@ -166,7 +162,6 @@ _elemdot_chain_L0
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #33
                 BNE     _elemdot_chain_L1
                 LDA     #0
@@ -185,11 +180,9 @@ _elemdot_chain_L0
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #22
                 BNE     _elemdot_chain_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -210,7 +203,6 @@ _elemdot_chain_L1
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 INC
                 INC
                 LDY     #2
@@ -250,7 +242,6 @@ _elemdot_chain_L1
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #47
                 BNE     _elemdot_chain_L2
                 LDA     #1
@@ -268,11 +259,9 @@ _elemdot_chain_L1
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #33
                 BNE     _elemdot_chain_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -357,7 +346,6 @@ _elemdot_chain_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #65
                 BNE     _elemdot_chain_L3
                 LDA     #1
@@ -384,7 +372,6 @@ _elemdot_chain_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #67
                 BNE     _elemdot_chain_L3
                 LDA     #1
@@ -403,11 +390,9 @@ _elemdot_chain_L2
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #47
                 BNE     _elemdot_chain_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -482,7 +467,6 @@ _elemdot_chain_L3
                 MX      %00
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #77
                 BNE     _elemdot_chain_L4
                 LDA     #1
@@ -502,7 +486,6 @@ _elemdot_chain_L3
                 MX      %00
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #66
                 BNE     _elemdot_chain_L4
                 LDA     #1
@@ -521,11 +504,9 @@ _elemdot_chain_L3
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #55
                 BNE     _elemdot_chain_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0

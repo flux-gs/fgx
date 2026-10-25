@@ -962,7 +962,6 @@ _specalias_L15
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2219,7 +2218,6 @@ vref_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2438,7 +2436,6 @@ vrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2494,7 +2491,6 @@ _specalias_L38
                 STA     [_fcc_fpr0],Y
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -2720,7 +2716,6 @@ holdrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -3894,7 +3889,6 @@ checkalias_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #3
                 BEQ     _specalias_L58
                 LDY     #52
@@ -4465,7 +4459,6 @@ _specalias_L72
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
@@ -5449,7 +5442,6 @@ vfs_setsecurelevel_stkok        TCS
                 ELSE
                 LDA     6+vfs_setsecurelevel_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -8612,7 +8604,6 @@ _specalias_L169
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #32
                 STA     _fcc_tmp_b
                 TXA
@@ -8687,7 +8678,6 @@ _specalias_L171
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 DEC
                 ASL
                 TAX
@@ -12760,7 +12750,6 @@ _specalias_L245
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -13605,7 +13594,6 @@ _specalias_L267
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -14362,7 +14350,6 @@ _specalias_L286
                 STA     _fcc_img0
                 PHA
                 LDA     #64
-                TAX
                 INC
                 INC
                 STA     _fcc_tmp_b
@@ -14533,7 +14520,6 @@ main_stkok        TCS
                 LSR
                 LSR
                 LSR
-                TAX
                 CLC
                 ADC     #769
                 TAX
@@ -14582,7 +14568,6 @@ _specalias_L291
                 LSR
                 LSR
                 LSR
-                TAX
                 CLC
                 ADC     #769
                 TAX
@@ -14631,7 +14616,6 @@ _specalias_L292
                 LSR
                 LSR
                 LSR
-                TAX
                 CLC
                 ADC     #769
                 TAX

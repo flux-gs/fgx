@@ -401,7 +401,6 @@ _divs_pow2_L27
                 CMP     #$C000
                 BNE     _divs_pow2_L26
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8192
                 STA     _fcc_img0
@@ -414,7 +413,6 @@ _divs_pow2_L26
                 CMP     #$FFF6
                 BNE     _divs_pow2_L28
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16384
                 STA     _fcc_img0

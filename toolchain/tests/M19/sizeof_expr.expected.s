@@ -48,51 +48,40 @@ main_stkok        TCS
                 LDA     #0
                 STA     _fcc_img0
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _sizeof_expr_L0
                 LDA     #4
-                TAX
                 CMP     #4
                 BNE     _sizeof_expr_L0
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _sizeof_expr_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _sizeof_expr_L0
                 LDA     #4
-                TAX
                 CMP     #4
                 BNE     _sizeof_expr_L1
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _sizeof_expr_L1
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _sizeof_expr_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
 _sizeof_expr_L1
                 LDA     #4
-                TAX
                 CMP     #4
                 BNE     _sizeof_expr_L2
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _sizeof_expr_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #11
                 STA     _fcc_img0

@@ -141,7 +141,6 @@ _callchain_stmt_L0
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #16
                 STA     [_fcc_fpr0]
                 LDA     root+8
@@ -170,7 +169,6 @@ _callchain_stmt_L1
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     root+8
@@ -220,7 +218,6 @@ _callchain_stmt_L3
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #3
                 STA     [_fcc_fpr0]

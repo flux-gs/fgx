@@ -92,7 +92,6 @@ _dot_member_store_incdec_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _dot_member_store_incdec_L3
@@ -140,18 +139,15 @@ _dot_member_store_incdec_L2
                 TAX
                 LDA:    row,X
                 AND     #$00FF
-                TAX
                 CMP     #1
                 BNE     _dot_member_store_incdec_L4
                 LDA     #3
                 TAX
                 LDA:    row,X
                 AND     #$00FF
-                TAX
                 CMP     #4
                 BNE     _dot_member_store_incdec_L4
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #12
                 STA     _fcc_img1
@@ -171,11 +167,9 @@ _dot_member_store_incdec_L4
                 LDA     #5
                 STA     [_fcc_fpr0]
                 LDA     B+6
-                TAX
                 CMP     #5
                 BNE     _dot_member_store_incdec_L5
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img1

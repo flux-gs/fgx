@@ -306,21 +306,18 @@ main_stkok        TCS
                 ADC     #18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
                 BCS     _chain_index_arrow_read_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #0
                 STA     _fcc_img0
                 BRA     _chain_index_arrow_read_L1
 _chain_index_arrow_read_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #100
                 STA     _fcc_img0
@@ -485,7 +482,6 @@ _chain_index_arrow_read_L1
                 ADC     #18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA

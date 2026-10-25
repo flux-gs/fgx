@@ -41,13 +41,11 @@ _comma_for_L0
 _comma_for_L3
                 BPL     _comma_for_L2
                 LDA     _fcc_img2
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img2
 _comma_for_L1
                 LDA     _fcc_img0
-                TAX
                 INC
                 STA     _fcc_img0
                 LDA     _fcc_img1

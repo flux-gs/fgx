@@ -327,7 +327,6 @@ _longptr_impl_L5
                 CMP     #0
                 BEQ     _longptr_impl_L3
                 LDA     23,S   ; fccstk d=0 b=23
-                TAX
                 CLC
                 ADC     #2
                 STA     23,S   ; fccstk d=0 b=23
@@ -367,7 +366,6 @@ _longptr_impl_L8
                 CMP     #0
                 BEQ     _longptr_impl_L6
                 LDA     23,S   ; fccstk d=0 b=23
-                TAX
                 CLC
                 ADC     #4
                 STA     23,S   ; fccstk d=0 b=23
@@ -454,7 +452,6 @@ _longptr_impl_L11
                 CMP     #0
                 BEQ     _longptr_impl_L9
                 LDA     23,S   ; fccstk d=0 b=23
-                TAX
                 CLC
                 ADC     #8
                 STA     23,S   ; fccstk d=0 b=23

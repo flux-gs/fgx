@@ -28,7 +28,6 @@ _incdec_img_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #10
                 BVC     _incdec_img_L3

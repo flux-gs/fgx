@@ -3430,7 +3430,6 @@ _llong_conv_L55
                 BNE     *+5
                 BRL     _llong_conv_L56
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 SEC
                 SBC     #3
                 BVC     _llong_conv_L57

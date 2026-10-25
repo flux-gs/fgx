@@ -411,7 +411,6 @@ _seekrw_L7
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #32
                 BVC     _seekrw_L10

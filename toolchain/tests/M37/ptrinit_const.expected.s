@@ -109,7 +109,6 @@ main_stkok        TCS
                 CMP     #0
                 BEQ     _ptrinit_const_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -154,7 +153,6 @@ _ptrinit_const_L0
                 CMP     #0
                 BEQ     _ptrinit_const_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0

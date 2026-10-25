@@ -132,7 +132,6 @@ _compound_arr_L3
                 PHA
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
-                TAX
                 CLC
                 ADC     #14
                 TAY

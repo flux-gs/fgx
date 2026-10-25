@@ -479,7 +479,6 @@ _long_truth_L33
                 LDA     3,S   ; fccstk d=0 b=3
                 INC
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
                 LDX     #3
                 STA     _fcc_tmp_b
                 TXA

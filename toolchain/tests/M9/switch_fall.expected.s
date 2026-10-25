@@ -34,13 +34,11 @@ main_stkok        TCS
                 BRA     _switch_fall_L0
 _switch_fall_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
 _switch_fall_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0

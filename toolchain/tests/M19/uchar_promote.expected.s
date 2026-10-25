@@ -66,7 +66,6 @@ main_stkok        TCS
 _uchar_promote_L1
                 BMI     _uchar_promote_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -99,7 +98,6 @@ _uchar_promote_L2
                 CMP     #$FF9C
                 BNE     _uchar_promote_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -119,7 +117,6 @@ _uchar_promote_L4
 _uchar_promote_L6
                 BMI     _uchar_promote_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -149,11 +146,9 @@ _uchar_promote_L7
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mods16
-                TAX
                 CMP     #4
                 BNE     _uchar_promote_L9
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #32
                 STA     _fcc_img0

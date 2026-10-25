@@ -93,7 +93,6 @@ main_stkok        TCS
                 PHA
                 RTL
 _uresid_L3
-                TAX
                 LDX     #30000
                 STA     _fcc_tmp_b
                 TXA
@@ -163,7 +162,6 @@ _uresid_L4
                 CMP     #0
                 BEQ     _uresid_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1

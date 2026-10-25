@@ -40,7 +40,6 @@ main_stkok        TCS
                 LDA     _fcc_img0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #14
                 STA     [_fcc_fpr0]

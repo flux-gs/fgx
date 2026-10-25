@@ -101,7 +101,6 @@ _libc_gaps_L3
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 CMP     #119
                 BNE     _libc_gaps_L0
                 LDA     #6

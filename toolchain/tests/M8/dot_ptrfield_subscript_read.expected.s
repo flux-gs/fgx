@@ -276,7 +276,6 @@ main_stkok        TCS
                 LDA     _fcc_fpr0+2
                 STA     r0+2
                 LDA     #0
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -346,7 +345,6 @@ _dot_ptrfield_subscript_rea_L0
                 LDA     _fcc_fpr0+2
                 STA     r1+2
                 LDA     #0
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -397,7 +395,6 @@ _dot_ptrfield_subscript_rea_L1
                 LDA     _fcc_fpr0+2
                 STA     r2+2
                 LDA     #0
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -549,7 +546,6 @@ _dot_ptrfield_subscript_rea_L4
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 LDX     #100
                 STA     _fcc_tmp_b
                 TXA

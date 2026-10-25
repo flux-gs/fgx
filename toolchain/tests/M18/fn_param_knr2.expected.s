@@ -147,7 +147,6 @@ use_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 SEC
                 SBC     #97
                 STA     _fcc_tmp_b

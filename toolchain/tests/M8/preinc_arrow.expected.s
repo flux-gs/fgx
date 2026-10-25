@@ -42,12 +42,10 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y

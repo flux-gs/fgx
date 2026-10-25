@@ -68,27 +68,21 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #15
                 STA     [_fcc_fpr0]
                 LDA     g+2
-                TAX
                 CMP     #15
                 BNE     _arrowdot_compound_L0
                 LDA     g+4
-                TAX
                 CMP     #4660
                 BNE     _arrowdot_compound_L0
                 LDA     g+0
-                TAX
                 CMP     #43690
                 BNE     _arrowdot_compound_L0
                 LDA     g+6
-                TAX
                 CMP     #21845
                 BNE     _arrowdot_compound_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -119,27 +113,21 @@ _arrowdot_compound_L0
                 ADC     #4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #52
                 STA     [_fcc_fpr0]
                 LDA     g+4
-                TAX
                 CMP     #4660
                 BNE     _arrowdot_compound_L1
                 LDA     g+2
-                TAX
                 CMP     #15
                 BNE     _arrowdot_compound_L1
                 LDA     g+0
-                TAX
                 CMP     #43690
                 BNE     _arrowdot_compound_L1
                 LDA     g+6
-                TAX
                 CMP     #21845
                 BNE     _arrowdot_compound_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -170,7 +158,6 @@ _arrowdot_compound_L1
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #23
                 STA     [_fcc_fpr0]

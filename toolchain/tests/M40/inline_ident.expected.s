@@ -25,7 +25,6 @@ main_stkok        TCS
                 STA     inline
                 BNE     _inline_ident_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #20
                 STA     _fcc_img0

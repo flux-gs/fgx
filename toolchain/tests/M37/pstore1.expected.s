@@ -375,7 +375,6 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr1
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 INC
                 ASL
                 ASL
@@ -531,7 +530,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #98
                 BEQ     *+5
                 BRL     _pstore1_L0
@@ -573,7 +571,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #99
                 BNE     _pstore1_L0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -614,11 +611,9 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #97
                 BNE     _pstore1_L0
                 LDA     15,S   ; fccstk d=0 b=15
-                TAX
                 CLC
                 ADC     #10
                 STA     15,S   ; fccstk d=0 b=15
@@ -722,11 +717,9 @@ _pstore1_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #120
                 BNE     _pstore1_L1
                 LDA     15,S   ; fccstk d=0 b=15
-                TAX
                 CLC
                 ADC     #10
                 STA     15,S   ; fccstk d=0 b=15

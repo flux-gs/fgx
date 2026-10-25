@@ -274,7 +274,6 @@ _g53_layout_L10
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #127
                 STA     _fcc_tmp_b
                 PLA

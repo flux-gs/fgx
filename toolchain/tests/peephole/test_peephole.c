@@ -391,6 +391,28 @@ int main(void)
     check("tax_txa",
           "                TAX\n                TXA\n                AND     #128\n",
           "                TAX\n                AND     #128\n");
+    /* a TAX no path reads X from goes; a read on either path keeps it */
+    check("dead_tax",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                LDX     #0\n                RTL\nL9                 TSX\n                RTL\n",
+          "                AND     #128\n                BEQ     L9\n                LDX     #0\n                RTL\nL9                 TSX\n                RTL\n");
+    check("tax_before_setjmp",
+          "                TAX\n                FGX2_FARCALL setjmp\n                LDX     #0\n                RTL\n",
+          "                TAX\n                FGX2_FARCALL setjmp\n                LDX     #0\n                RTL\n");
+    check("tax_at_return",
+          "                TAX\n                LDA     #0\n                RTL\n",
+          "                TAX\n                LDA     #0\n                RTL\n");
+    check("tax_read_at_label",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                RTL\nL9                 TXA\n                RTL\n",
+          "                TAX\n                AND     #128\n                BEQ     L9\n                RTL\nL9                 TXA\n                RTL\n");
+    check("tax_before_jsr",
+          "                TAX\n                LDA     #1\n                JSR     _fcc_x\n                RTL\n",
+          "                TAX\n                LDA     #1\n                JSR     _fcc_x\n                RTL\n");
+    check("tax_indexed",
+          "                TAX\n                LDAL    $000000,X\n                RTL\n",
+          "                TAX\n                LDAL    $000000,X\n                RTL\n");
+    check("tax_nz_live",
+          "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n",
+          "                TAX\n                BEQ     L9\n                RTL\nL9                 RTL\n");
 
     /* (option C pattern 3 redundant-restore was dropped: 0 corpus yield.) */
 

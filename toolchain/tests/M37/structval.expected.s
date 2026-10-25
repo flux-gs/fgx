@@ -309,7 +309,6 @@ _structval_fill_stkok        TCS
                 ELSE
                 LDA     10+_structval_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                TAX
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -906,7 +905,6 @@ _structval_L12
                 TYA
                 BEQ     _structval_L8
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CLC
                 ADC     #6
                 STA     7,S   ; fccstk d=0 b=7

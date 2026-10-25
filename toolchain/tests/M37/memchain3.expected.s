@@ -267,11 +267,9 @@ _memchain3_L0
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #4
                 BNE     _memchain3_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -311,11 +309,9 @@ _memchain3_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #90
                 BNE     _memchain3_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0

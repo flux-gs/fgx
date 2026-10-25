@@ -29,7 +29,6 @@ f_stkok        TCS
                 ELSE
                 LDA     6+f_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 SEP     #$20
@@ -89,7 +88,6 @@ main_stkok        TCS
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #0
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -103,11 +101,9 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 CMP     #101
                 BNE     _bracescalar_L0
                 LDA     #4
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -121,11 +117,9 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 CMP     #116
                 BNE     _bracescalar_L0
                 LDA     #5
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -142,7 +136,6 @@ main_stkok        TCS
                 CMP     #0
                 BNE     _bracescalar_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #7
                 STA     1,S   ; fccstk d=0 b=1
@@ -192,7 +185,6 @@ _bracescalar_L2
                 TYA
                 PHA
                 LDA     #2
-                TAX
                 CLC
                 ADC     #5
                 TAX

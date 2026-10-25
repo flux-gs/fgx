@@ -58,7 +58,6 @@ _paren_member_L0
                 RTL
 _paren_member_L1
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 AND     #240
                 TAX
                 CMP     #64

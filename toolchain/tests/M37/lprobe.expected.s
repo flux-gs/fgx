@@ -403,7 +403,6 @@ _lprobe_L6
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -433,7 +432,6 @@ _lprobe_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -711,7 +709,6 @@ htabof_eq_stkok        TCS
                 FIN
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

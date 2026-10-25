@@ -84,7 +84,6 @@ main_stkok        TCS
                 STA     9,S   ; fccstk d=0 b=9
                 FGX2_FARCALL _comma_stmt_bump
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 INC
                 INC
                 STA     7,S   ; fccstk d=0 b=7
@@ -95,7 +94,6 @@ main_stkok        TCS
                 LDA     #3
                 STA     [_fcc_fpr0]
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 INC
                 INC
                 STA     1,S   ; fccstk d=0 b=1
@@ -142,7 +140,6 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 PHA
                 LDA     11,S   ; fccstk d=2 b=9
-                TAX
                 DEC
                 DEC
                 STA     _fcc_tmp_b

@@ -20,19 +20,14 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #1
-                TAX
                 INC
-                TAX
                 INC
-                TAX
                 INC
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #1
-                TAX
                 DEC
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     #40
-                TAX
                 INC
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     1,S   ; fccstk d=0 b=1

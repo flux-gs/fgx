@@ -178,7 +178,6 @@ _ampderef_L2
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                TAX
                 SEC
                 SBC     #111
                 TAX

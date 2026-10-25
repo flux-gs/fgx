@@ -306,7 +306,6 @@ _m2d_row_L9
                 CMP     #0
                 BEQ     _m2d_row_L5
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #2
                 STA     5,S   ; fccstk d=0 b=5
@@ -364,7 +363,6 @@ _m2d_row_L12
                 CMP     #0
                 BEQ     _m2d_row_L10
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
@@ -453,7 +451,6 @@ _m2d_row_L15
                 CMP     #0
                 BEQ     _m2d_row_L13
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
@@ -541,7 +538,6 @@ _m2d_row_L18
                 CMP     #0
                 BEQ     _m2d_row_L16
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CLC
                 ADC     #16
                 STA     5,S   ; fccstk d=0 b=5

@@ -59,7 +59,6 @@ main_stkok        TCS
                 CMP     #0
                 BEQ     _u_long_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -87,7 +86,6 @@ _u_long_L0
                 CMP     #0
                 BEQ     _u_long_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -132,7 +130,6 @@ _u_long_L1
                 CMP     #0
                 BEQ     _u_long_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -228,7 +225,6 @@ _u_long_L3
                 CMP     #0
                 BEQ     _u_long_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -268,7 +264,6 @@ _u_long_L4
                 CMP     #0
                 BEQ     _u_long_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #32
                 STA     _fcc_img0

@@ -82,7 +82,6 @@ _vasum_L0
                 STA     6+vsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -99,7 +98,6 @@ _vasum_L2
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #2
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -141,7 +139,6 @@ _vasum_L1
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #4
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -157,7 +154,6 @@ _vasum_L1
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
                 LDA     #4
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -184,7 +180,6 @@ _vasum_L1
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #4
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -200,7 +195,6 @@ _vasum_L1
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
                 LDA     #4
-                TAX
                 INC
                 PHA
                 LDA     #1

@@ -272,7 +272,6 @@ _amp_dot_ptrfield_index_L2
                 CMP     #0
                 BEQ     _amp_dot_ptrfield_index_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -304,11 +303,9 @@ _amp_dot_ptrfield_index_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #9
                 BNE     _amp_dot_ptrfield_index_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -330,11 +327,9 @@ _amp_dot_ptrfield_index_L3
                 LDA     _fcc_fpr0
                 STA     _fcc_img1
                 LDA     [_fcc_img1]
-                TAX
                 CMP     #3
                 BNE     _amp_dot_ptrfield_index_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #11
                 STA     _fcc_img0

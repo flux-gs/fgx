@@ -161,7 +161,6 @@ main_stkok        TCS
                 LDA     #1
                 BEQ     _float_array_init_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -358,7 +357,6 @@ _float_array_init_L0
                 LDA     #1
                 BEQ     _float_array_init_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
@@ -462,7 +460,6 @@ _float_array_init_L1
                 LDA     #1
                 BEQ     _float_array_init_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #11
                 STA     1,S   ; fccstk d=0 b=1

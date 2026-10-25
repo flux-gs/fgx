@@ -304,26 +304,21 @@ _dotvarincdec_L3
                 MX      %00
                 AND     #$00FF
                 STA     21,S   ; fccstk d=0 b=21
-                TAX
                 CMP     #5
                 BNE     _dotvarincdec_L4
                 LDA     gc+1
                 AND     #$00FF
-                TAX
                 CMP     #5
                 BNE     _dotvarincdec_L4
                 LDA     gc+0
                 AND     #$00FF
-                TAX
                 CMP     #65
                 BNE     _dotvarincdec_L4
                 LDA     gc+2
                 AND     #$00FF
-                TAX
                 CMP     #67
                 BNE     _dotvarincdec_L4
                 LDA     19,S   ; fccstk d=0 b=19
-                TAX
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19
@@ -352,23 +347,18 @@ _dotvarincdec_L4
                 STA     [_fcc_ptr]
                 LDA     _fcc_tmp_b
                 STA     21,S   ; fccstk d=0 b=21
-                TAX
                 CMP     #4
                 BNE     _dotvarincdec_L5
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CMP     #5
                 BNE     _dotvarincdec_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CMP     #97
                 BNE     _dotvarincdec_L5
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CMP     #99
                 BNE     _dotvarincdec_L5
                 LDA     19,S   ; fccstk d=0 b=19
-                TAX
                 CLC
                 ADC     #3
                 STA     19,S   ; fccstk d=0 b=19

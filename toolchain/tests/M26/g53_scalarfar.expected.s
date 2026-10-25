@@ -641,7 +641,6 @@ scalarfar_stkok        TCS
                 STA     _fcc_fp
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
-                TAX
                 CLC
                 ADC     #6
                 PHA

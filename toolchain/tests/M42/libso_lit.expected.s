@@ -106,7 +106,6 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 PHA
                 LDA     #8
-                TAX
                 CLC
                 ADC     #7
                 TAX

@@ -644,7 +644,6 @@ addr_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     #2
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -660,7 +659,6 @@ addr_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -676,7 +674,6 @@ addr_stkok        TCS
                 LDA     _fcc_fpr0
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
-                TAX
                 INC
                 PHA
                 LDA     #1

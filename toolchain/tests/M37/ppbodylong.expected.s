@@ -24,17 +24,14 @@ _ppbodylong_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     #1
-                TAX
                 INC
                 INC
                 STA     _fcc_img0
                 LDA     #3
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img1
                 LDA     #5
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img2
@@ -49,17 +46,12 @@ _ppbodylong_L0
                 ADC     _fcc_img4
                 CLC
                 ADC     _fcc_img5
-                TAX
                 INC
-                TAX
                 DEC
-                TAX
                 INC
                 INC
-                TAX
                 DEC
                 DEC
-                TAX
                 CLC
                 ADC     #3
                 TAX

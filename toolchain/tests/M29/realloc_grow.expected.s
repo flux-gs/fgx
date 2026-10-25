@@ -204,7 +204,6 @@ _realloc_grow_L13
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
@@ -311,7 +310,6 @@ _realloc_grow_L22
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
@@ -419,7 +417,6 @@ _realloc_grow_L30
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
@@ -583,7 +580,6 @@ _realloc_grow_L32
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #11
@@ -610,7 +606,6 @@ _realloc_grow_L35
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #13

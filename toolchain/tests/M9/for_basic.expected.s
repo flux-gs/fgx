@@ -36,7 +36,6 @@ _for_basic_L0
 _for_basic_L3
                 BPL     _for_basic_L2
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img1

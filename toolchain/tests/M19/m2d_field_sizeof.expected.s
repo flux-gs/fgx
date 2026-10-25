@@ -79,7 +79,6 @@ _m2d_field_sizeof_L7
                 STA     _fcc_img0
                 PHA
                 LDA     #14
-                TAX
                 CMP     #14
                 BNE     _m2d_field_sizeof_L8
                 LDA     #16
@@ -94,7 +93,6 @@ _m2d_field_sizeof_L9
                 STA     _fcc_img0
                 PHA
                 LDA     #15
-                TAX
                 CMP     #15
                 BNE     _m2d_field_sizeof_L10
                 LDA     #32
@@ -109,7 +107,6 @@ _m2d_field_sizeof_L11
                 STA     _fcc_img0
                 PHA
                 LDA     #2
-                TAX
                 CMP     #2
                 BNE     _m2d_field_sizeof_L12
                 LDA     #64

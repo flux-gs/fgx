@@ -92,7 +92,6 @@ _float_promote_L0
                 STA     6+_float_promote_vsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -124,7 +123,6 @@ _float_promote_L2
                 LDA     9,S   ; fccstk d=8 b=1
                 STA     _fcc_fpr0
                 LDA     #8
-                TAX
                 INC
                 PHA
                 LDA     #1
@@ -140,7 +138,6 @@ _float_promote_L2
                 LDA     _fcc_fpr0
                 STA     9,S   ; fccstk d=8 b=1
                 LDA     #8
-                TAX
                 INC
                 PHA
                 LDA     #1

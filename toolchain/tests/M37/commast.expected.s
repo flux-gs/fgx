@@ -34,15 +34,12 @@ main_stkok        TCS
                 LDA     #7
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
-                TAX
                 CMP     #5
                 BNE     _commast_L0
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 CMP     #7
                 BNE     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
@@ -130,21 +127,17 @@ _commast_L1
                 TCS
                 TYA
                 LDA     _tty+0
-                TAX
                 CMP     #8
                 BNE     _commast_L2
                 LDA     _rawmode
                 BNE     _commast_L2
                 LDA     nxstty
-                TAX
                 CMP     #2
                 BNE     _commast_L2
                 LDA     seen_flags
-                TAX
                 CMP     #8
                 BNE     _commast_L2
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13

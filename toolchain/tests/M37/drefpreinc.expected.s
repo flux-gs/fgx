@@ -264,7 +264,6 @@ _drefpreinc_L7
 _drefpreinc_L5
                 LDA     _fcc_img0
                 AND     #$00FF
-                TAX
                 SEC
                 SBC     #65
                 TAX

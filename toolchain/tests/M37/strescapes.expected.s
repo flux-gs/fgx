@@ -69,7 +69,6 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #27
@@ -171,7 +170,6 @@ _strescapes_L3
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #27
@@ -271,7 +269,6 @@ _strescapes_L7
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #27
@@ -323,7 +320,6 @@ _strescapes_L9
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #65
@@ -350,7 +346,6 @@ _strescapes_L10
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #7
@@ -377,7 +372,6 @@ _strescapes_L11
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #27
@@ -404,7 +398,6 @@ _strescapes_L12
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #220

@@ -134,7 +134,6 @@ _m9_ctrl_test_L8
 _m9_ctrl_test_L11
                 BPL     _m9_ctrl_test_L10
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 CMP     #1
                 BNE     _m9_ctrl_test_L12
                 BRA     _m9_ctrl_test_L9

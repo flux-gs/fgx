@@ -24,12 +24,10 @@ main_stkok        TCS
                 LDA     #7
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     3,S   ; fccstk d=0 b=3
-                TAX
                 ORA     #14
                 STA     3,S   ; fccstk d=0 b=3
                 SEP     #$20

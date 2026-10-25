@@ -38,7 +38,6 @@ main_stkok        TCS
                 PLA
                 LDA     #3
                 STA     _fcc_img0
-                TAX
                 ASL
                 CLC
                 ADC     #arr
@@ -126,7 +125,6 @@ _iplusp_scale_L1
                 PLA
                 LDA     #2
                 STA     _fcc_img0
-                TAX
                 ASL
                 ASL
                 CLC

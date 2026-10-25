@@ -159,7 +159,6 @@ _arrmemberdecay_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _arrmemberdecay_L7
@@ -221,7 +220,6 @@ _arrmemberdecay_L7
                 REP     #$20
                 MX      %00
                 LDA     _fcc_img0
-                TAX
                 INC
                 STA     _fcc_tmp_b
                 ASL

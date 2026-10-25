@@ -149,11 +149,9 @@ _uchar_compound_L3
                 MX      %00
                 LDA     GC
                 AND     #$00FF
-                TAX
                 CMP     #156
                 BNE     _uchar_compound_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -177,23 +175,19 @@ _uchar_compound_L4
                 CMP     _fcc_tmp_b
                 BNE     _uchar_compound_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #32
                 STA     _fcc_img0
 _uchar_compound_L5
                 LDA     #10
                 AND     #$00FF
-                TAX
                 SEC
                 SBC     #20
                 STA     _fcc_img2
                 AND     #$00FF
-                TAX
                 CMP     #246
                 BNE     _uchar_compound_L6
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #64
                 STA     _fcc_img0

@@ -20,13 +20,10 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #8
-                TAX
                 CLC
                 ADC     #12
-                TAX
                 CLC
                 ADC     #11
-                TAX
                 CLC
                 ADC     #7
                 TAX

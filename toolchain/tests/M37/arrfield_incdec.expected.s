@@ -78,27 +78,21 @@ main_stkok        TCS
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+8
-                TAX
                 CMP     #31
                 BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+6
-                TAX
                 CMP     #20
                 BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+10
-                TAX
                 CMP     #40
                 BNE     _arrfield_incdec_L0
                 LDA     _arrfield_incdec_obj+0
-                TAX
                 CMP     #10
                 BNE     _arrfield_incdec_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -117,23 +111,18 @@ _arrfield_incdec_L0
                 REP     #$20
                 MX      %00
                 LDA     [_fcc_fpr0]
-                TAX
                 DEC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+10
-                TAX
                 CMP     #39
                 BNE     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+8
-                TAX
                 CMP     #31
                 BNE     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+6
-                TAX
                 CMP     #20
                 BNE     _arrfield_incdec_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -202,7 +191,6 @@ _arrfield_incdec_L1
                 MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 INC
                 SEP     #$20
                 MX      %10
@@ -211,21 +199,17 @@ _arrfield_incdec_L1
                 MX      %00
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
-                TAX
                 CMP     #99
                 BNE     _arrfield_incdec_L2
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
-                TAX
                 CMP     #97
                 BNE     _arrfield_incdec_L2
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
-                TAX
                 CMP     #99
                 BNE     _arrfield_incdec_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -255,19 +239,15 @@ _arrfield_incdec_L2
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_obj+6
-                TAX
                 CMP     #21
                 BNE     _arrfield_incdec_L3
                 LDA     _arrfield_incdec_obj+8
-                TAX
                 CMP     #31
                 BNE     _arrfield_incdec_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -286,7 +266,6 @@ _arrfield_incdec_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 DEC
                 SEP     #$20
                 MX      %10
@@ -295,21 +274,17 @@ _arrfield_incdec_L3
                 MX      %00
                 LDA     _arrfield_incdec_obj+4
                 AND     #$00FF
-                TAX
                 CMP     #98
                 BNE     _arrfield_incdec_L4
                 LDA     _arrfield_incdec_obj+3
                 AND     #$00FF
-                TAX
                 CMP     #99
                 BNE     _arrfield_incdec_L4
                 LDA     _arrfield_incdec_obj+2
                 AND     #$00FF
-                TAX
                 CMP     #97
                 BNE     _arrfield_incdec_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -405,7 +380,6 @@ _arrfield_incdec_L4
                 LDA     #300
                 STA     [_fcc_fpr0]
                 LDA     _arrfield_incdec_vs+8
-                TAX
                 CLC
                 ADC     #7
                 STA     _arrfield_incdec_vs+8
@@ -438,10 +412,8 @@ _arrfield_incdec_L4
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #107
-                BEQ     *+5
-                BRL     _arrfield_incdec_L5
+                BNE     _arrfield_incdec_L5
                 LDA     #0
                 STA     _fcc_tmp_b
                 ASL
@@ -471,7 +443,6 @@ _arrfield_incdec_L4
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #200
                 BNE     _arrfield_incdec_L5
                 LDA     #1
@@ -503,11 +474,9 @@ _arrfield_incdec_L4
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #300
                 BNE     _arrfield_incdec_L5
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img0
@@ -539,7 +508,6 @@ _arrfield_incdec_L5
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 SEC
                 SBC     #50
                 STA     [_fcc_fpr0]

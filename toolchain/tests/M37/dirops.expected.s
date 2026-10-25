@@ -383,7 +383,6 @@ _dirops_L17
                 BMI     _dirops_L16
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #15
                 STA     _fcc_tmp_b
                 TXA
@@ -466,7 +465,6 @@ _dirops_L21
                 BRL     _dirops_L11
 _dirops_L12
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 LDX     #10
                 STA     _fcc_tmp_b
                 TXA
@@ -593,7 +591,6 @@ _dirops_L32
                 BEQ     _dirops_L30
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

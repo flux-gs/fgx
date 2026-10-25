@@ -161,7 +161,6 @@ main_stkok        TCS
                 LDA     #0
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -196,7 +195,6 @@ main_stkok        TCS
                 LDA     #0
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -227,7 +225,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -258,7 +255,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -282,7 +278,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CLC
                 ADC     #3
                 SEP     #$20
@@ -293,7 +288,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -324,7 +318,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -357,7 +350,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -388,7 +380,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -510,7 +501,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 ORA     #16
                 SEP     #$20
                 MX      %10
@@ -597,7 +587,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 DEC
                 DEC
                 SEP     #$20
@@ -653,32 +642,27 @@ main_stkok        TCS
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
                 CMP     #65
                 BNE     _st2d_L0
                 LDA     #1
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
                 CMP     #66
                 BNE     _st2d_L0
                 LDA     #2
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
                 CMP     #67
                 BNE     _st2d_L0
                 LDA     #3
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
                 CMP     #68
                 BNE     _st2d_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #12
                 STA     _fcc_img0

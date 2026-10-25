@@ -36,7 +36,6 @@ _for_empty_L0
 _for_empty_L3
                 BPL     _for_empty_L2
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #6
                 STA     _fcc_img1

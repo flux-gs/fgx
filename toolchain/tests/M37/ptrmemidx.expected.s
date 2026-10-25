@@ -70,7 +70,6 @@ _ptrmemidx_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #4
                 BVC     _ptrmemidx_L3
@@ -236,11 +235,9 @@ _ptrmemidx_L2
                 PLA
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #10
                 BNE     _ptrmemidx_L4
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -263,11 +260,9 @@ _ptrmemidx_L4
                 ADC     #12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #13
                 BNE     _ptrmemidx_L5
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img1
@@ -290,11 +285,9 @@ _ptrmemidx_L5
                 ADC     #8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #11
                 BNE     _ptrmemidx_L6
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img1

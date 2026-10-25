@@ -374,7 +374,6 @@ _fconv_store_L4
                 CMP     #0
                 BEQ     _fconv_store_L5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #32
                 STA     1,S   ; fccstk d=0 b=1

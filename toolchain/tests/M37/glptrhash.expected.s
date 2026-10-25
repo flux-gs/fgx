@@ -457,7 +457,6 @@ _glptrhash_L6
                 STA     _fcc_long_hi
                 LDA     _fcc_img2
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -519,7 +518,6 @@ _glptrhash_L8
                 LDA     _fcc_img2
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

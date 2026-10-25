@@ -23,7 +23,6 @@ main_stkok        TCS
                 TAX
                 LDA:    cols,X
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #255

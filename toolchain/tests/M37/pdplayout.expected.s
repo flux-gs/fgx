@@ -1435,7 +1435,6 @@ _pdplayout_L40
                 LDA     _fcc_fpr0
                 SEC
                 SBC     _fcc_fpr1
-                TAX
                 CMP     #4
                 BEQ     _pdplayout_L41
                 LDA     #42
@@ -1484,7 +1483,6 @@ _pdplayout_L41
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #4
@@ -1511,7 +1509,6 @@ _pdplayout_L42
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #3
@@ -1538,7 +1535,6 @@ _pdplayout_L43
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #2
@@ -1565,7 +1561,6 @@ _pdplayout_L44
                 PLA
                 LDA     [_fcc_ptr]
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 CMP     #1

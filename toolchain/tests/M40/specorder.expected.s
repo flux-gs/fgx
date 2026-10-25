@@ -98,7 +98,6 @@ _specorder_L1
                 CMP     #0
                 BEQ     _specorder_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -126,7 +125,6 @@ _specorder_L2
                 CMP     #0
                 BEQ     _specorder_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #5
                 STA     _fcc_img0

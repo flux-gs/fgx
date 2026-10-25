@@ -26,7 +26,6 @@ _castsubsto_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #8
                 BVC     _castsubsto_L3

@@ -86,7 +86,6 @@ main_stkok        TCS
                 ADC     #0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CLC
                 ADC     #4
                 STA     [_fcc_fpr0]
@@ -147,7 +146,6 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 INC
                 ASL
                 CLC

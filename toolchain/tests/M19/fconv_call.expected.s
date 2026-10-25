@@ -382,7 +382,6 @@ _fconv_call_L3
                 CMP     #0
                 BEQ     _fconv_call_L4
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
@@ -421,7 +420,6 @@ _fconv_call_L5
                 CMP     #0
                 BEQ     _fconv_call_L6
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #64
                 STA     1,S   ; fccstk d=0 b=1

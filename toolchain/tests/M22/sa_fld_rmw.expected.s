@@ -136,7 +136,6 @@ _sa_fld_rmw_L2
                 MX      %00
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CLC
                 ADC     #5
                 LDY     #8

@@ -93,7 +93,6 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 ORA     #2
                 SEP     #$20
                 MX      %10

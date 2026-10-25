@@ -82,7 +82,6 @@ _rtlraw_L0
                 STA     6+vsum2_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -99,7 +98,6 @@ _rtlraw_L2
                 LDA     _fcc_img1
                 STA     _fcc_fpr0
                 LDA     #2
-                TAX
                 INC
                 PHA
                 LDA     #1

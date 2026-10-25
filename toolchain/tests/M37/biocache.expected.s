@@ -133,7 +133,6 @@ bio_strategy_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 BMI     _biocache_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 SEC
                 SBC     #64
                 BVC     _biocache_L2
@@ -171,7 +170,6 @@ _biocache_L1
                 RTL
 _biocache_L0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1
                 BEQ     _biocache_L3
                 LDA     _biocache_fake_reads
@@ -3117,7 +3115,6 @@ _biocache_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
@@ -3993,11 +3990,9 @@ _biocache_L56
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #4
                 BEQ     _biocache_L57
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2048
                 STA     [_fcc_fpr0]
 _biocache_L57
@@ -4200,7 +4195,6 @@ _biocache_L59
                 STA     [_fcc_fpr0]
 _biocache_L58
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #2048
                 BEQ     _biocache_L60
                 PHA
@@ -4221,7 +4215,6 @@ _biocache_L58
                 BRA     _biocache_L61
 _biocache_L60
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #8192
                 BEQ     _biocache_L62
                 PHA
@@ -4242,7 +4235,6 @@ _biocache_L60
                 BRA     _biocache_L63
 _biocache_L62
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #128
                 BEQ     _biocache_L64
                 PHA
@@ -4409,9 +4401,7 @@ _biocache_L67
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
-                TAX
                 ORA     #8
-                TAX
                 ORA     #256
                 TAX
                 ORA     #128
@@ -4604,11 +4594,9 @@ _biocache_L73
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1
                 BEQ     *+5
                 BRL     _biocache_L74
@@ -4673,12 +4661,10 @@ _biocache_L73
                 LDY     #50
                 STA     [_fcc_fpr0],Y
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1024
                 BEQ     _biocache_L75
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -5079,7 +5065,6 @@ bwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #256
                 STA     3,S   ; fccstk d=0 b=3
                 DO      8+bwrite_FRAMESIZE/256
@@ -5105,7 +5090,6 @@ bwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #512
                 STA     5,S   ; fccstk d=0 b=5
                 DO      8+bwrite_FRAMESIZE/256
@@ -5133,9 +5117,7 @@ bwrite_stkok        TCS
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                TAX
                 ORA     #2
-                TAX
                 ORA     #4
                 TAX
                 ORA     #512
@@ -5512,7 +5494,6 @@ bdwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #512
                 BNE     _biocache_L85
                 LDA     [_fcc_fpr0]
@@ -6554,7 +6535,6 @@ _biocache_L103
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #8
                 STA     [_fcc_fpr0]
                 DO      10+vflushbuf_FRAMESIZE/256
@@ -7575,7 +7555,6 @@ _biocache_L146
                 STA     _fcc_img0
                 PHA
                 LDA     #16
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_tmp_b
@@ -7853,7 +7832,6 @@ _biocache_L159
                 STA     _fcc_img0
                 PHA
                 LDA     #16
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_tmp_b
@@ -8147,7 +8125,6 @@ _biocache_L170
                 STA     _fcc_img0
                 PHA
                 LDA     #16
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_tmp_b
@@ -10473,7 +10450,6 @@ _biocache_L271
                 TYA
                 PHA
                 LDA     15,S   ; fccstk d=2 b=13
-                TAX
                 CLC
                 ADC     #1
                 AND     #$00FF

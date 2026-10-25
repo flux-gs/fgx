@@ -325,7 +325,6 @@ _dbl_member_idx_L4
                 ADC     #34
                 STA     _fcc_fpr1
                 LDA     _fcc_img0
-                TAX
                 DEC
                 ASL
                 ASL

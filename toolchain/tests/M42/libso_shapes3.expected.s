@@ -226,7 +226,6 @@ _libso_shapes3_L6
                 ADC     #0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 SEP     #$20

@@ -264,7 +264,6 @@ _paren_base_chain_L2
                 CMP     #0
                 BEQ     _paren_base_chain_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #5
                 STA     _fcc_img0
@@ -285,11 +284,9 @@ _paren_base_chain_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #7
                 BNE     _paren_base_chain_L3
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #5
                 STA     _fcc_img0

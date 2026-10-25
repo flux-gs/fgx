@@ -26,7 +26,6 @@ main_stkok        TCS
                 LDA     #7
                 STA     _fcc_img2
                 LDA     #0
-                TAX
                 SEC
                 SBC     #3
                 STA     _fcc_img3
@@ -42,7 +41,6 @@ main_stkok        TCS
 _aud_cmp_all_L1
                 BPL     _aud_cmp_all_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #1
                 STA     _fcc_img0
@@ -62,7 +60,6 @@ _aud_cmp_all_L0
 _aud_cmp_all_L3
                 BPL     _aud_cmp_all_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #2
                 STA     _fcc_img0
@@ -82,7 +79,6 @@ _aud_cmp_all_L2
 _aud_cmp_all_L5
                 BMI     _aud_cmp_all_L4
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -99,7 +95,6 @@ _aud_cmp_all_L4
 _aud_cmp_all_L7
                 BMI     _aud_cmp_all_L6
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #8
                 STA     _fcc_img0
@@ -112,7 +107,6 @@ _aud_cmp_all_L6
                 CMP     _fcc_tmp_b
                 BNE     _aud_cmp_all_L8
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #16
                 STA     _fcc_img0
@@ -125,7 +119,6 @@ _aud_cmp_all_L8
                 CMP     _fcc_tmp_b
                 BEQ     _aud_cmp_all_L9
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0
@@ -142,7 +135,6 @@ _aud_cmp_all_L9
 _aud_cmp_all_L11
                 BPL     _aud_cmp_all_L10
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_img0

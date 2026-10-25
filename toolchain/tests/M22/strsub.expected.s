@@ -151,7 +151,6 @@ _strsub_L3
                 LDA     #_strsub_S0
                 STA     _fcc_fpr0
                 LDA     idx
-                TAX
                 INC
                 CLC
                 ADC     _fcc_fpr0

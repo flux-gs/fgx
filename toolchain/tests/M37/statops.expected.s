@@ -53,13 +53,11 @@ main_stkok        TCS
                 TYA
                 BNE     _statops_L0
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _statops_L0
                 LDA     7,S   ; fccstk d=0 b=7
-                TAX
                 AND     #61440
                 TAX
                 CMP     #32768
@@ -92,7 +90,6 @@ _statops_L1
                 CMP     #0
                 BEQ     _statops_L2
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #8
                 STA     1,S   ; fccstk d=0 b=1

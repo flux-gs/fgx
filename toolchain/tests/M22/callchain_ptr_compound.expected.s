@@ -962,7 +962,6 @@ _callchain_ptr_compound_L11
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 INC
                 STA     [_fcc_fpr0]
                 LDA     #1
@@ -1004,7 +1003,6 @@ _callchain_ptr_compound_L13
                 INC
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 SEC
                 SBC     #3
                 STA     [_fcc_fpr0]

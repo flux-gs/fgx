@@ -163,7 +163,6 @@ bio_strategy_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 BMI     _vreclaim_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 SEC
                 SBC     #64
                 BVC     _vreclaim_L2
@@ -201,7 +200,6 @@ _vreclaim_L1
                 RTL
 _vreclaim_L0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1
                 BEQ     _vreclaim_L3
                 LDA     _vreclaim_fake_reads
@@ -3064,7 +3062,6 @@ _vreclaim_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #8
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
@@ -3940,11 +3937,9 @@ _vreclaim_L56
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #4
                 BEQ     _vreclaim_L57
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2048
                 STA     [_fcc_fpr0]
 _vreclaim_L57
@@ -4147,7 +4142,6 @@ _vreclaim_L59
                 STA     [_fcc_fpr0]
 _vreclaim_L58
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #2048
                 BEQ     _vreclaim_L60
                 PHA
@@ -4168,7 +4162,6 @@ _vreclaim_L58
                 BRA     _vreclaim_L61
 _vreclaim_L60
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #8192
                 BEQ     _vreclaim_L62
                 PHA
@@ -4189,7 +4182,6 @@ _vreclaim_L60
                 BRA     _vreclaim_L63
 _vreclaim_L62
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #128
                 BEQ     _vreclaim_L64
                 PHA
@@ -4356,9 +4348,7 @@ _vreclaim_L67
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #64
-                TAX
                 ORA     #8
-                TAX
                 ORA     #256
                 TAX
                 ORA     #128
@@ -4551,11 +4541,9 @@ _vreclaim_L73
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2
                 STA     [_fcc_fpr0]
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1
                 BEQ     *+5
                 BRL     _vreclaim_L74
@@ -4620,12 +4608,10 @@ _vreclaim_L73
                 LDY     #50
                 STA     [_fcc_fpr0],Y
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #1024
                 BEQ     _vreclaim_L75
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -5026,7 +5012,6 @@ bwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #256
                 STA     3,S   ; fccstk d=0 b=3
                 DO      8+bwrite_FRAMESIZE/256
@@ -5052,7 +5037,6 @@ bwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #512
                 STA     5,S   ; fccstk d=0 b=5
                 DO      8+bwrite_FRAMESIZE/256
@@ -5080,9 +5064,7 @@ bwrite_stkok        TCS
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #1
-                TAX
                 ORA     #2
-                TAX
                 ORA     #4
                 TAX
                 ORA     #512
@@ -5459,7 +5441,6 @@ bdwrite_stkok        TCS
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 AND     #512
                 BNE     _vreclaim_L85
                 LDA     [_fcc_fpr0]
@@ -6501,7 +6482,6 @@ _vreclaim_L103
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #8
                 STA     [_fcc_fpr0]
                 DO      10+vflushbuf_FRAMESIZE/256
@@ -9378,7 +9358,6 @@ _vreclaim_L164
                 DEC
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -10635,7 +10614,6 @@ vref_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -10854,7 +10832,6 @@ vrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -10910,7 +10887,6 @@ _vreclaim_L187
                 STA     [_fcc_fpr0],Y
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -11136,7 +11112,6 @@ holdrele_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -12310,7 +12285,6 @@ checkalias_stkok        TCS
                 STA     _fcc_fpr0
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
-                TAX
                 CMP     #3
                 BEQ     _vreclaim_L207
                 LDY     #52
@@ -12881,7 +12855,6 @@ _vreclaim_L221
                 FIN
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
@@ -13865,7 +13838,6 @@ vfs_setsecurelevel_stkok        TCS
                 ELSE
                 LDA     6+vfs_setsecurelevel_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #1
                 STA     _fcc_tmp_b
                 TXA
@@ -17028,7 +17000,6 @@ _vreclaim_L318
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 LDX     #32
                 STA     _fcc_tmp_b
                 TXA
@@ -17103,7 +17074,6 @@ _vreclaim_L320
                 ELSE
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 DEC
                 ASL
                 TAX
@@ -21176,7 +21146,6 @@ _vreclaim_L394
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -22021,7 +21990,6 @@ _vreclaim_L416
                 STA     _fcc_fpr0
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
-                TAX
                 LDX     #31
                 STA     _fcc_tmp_b
                 TXA
@@ -22786,7 +22754,6 @@ _vreclaim_L431
                 STA     _fcc_img0
                 PHA
                 LDA     #16
-                TAX
                 CLC
                 ADC     #4
                 STA     _fcc_tmp_b
@@ -24120,7 +24087,6 @@ _vreclaim_L483
                 STA     19,S   ; fccstk d=0 b=19
                 PHA
                 LDA     #64
-                TAX
                 INC
                 INC
                 STA     _fcc_tmp_b

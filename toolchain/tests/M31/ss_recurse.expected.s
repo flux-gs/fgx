@@ -97,7 +97,6 @@ _ss_recurse_L2
                 LDA     _fcc_img0
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -109,7 +108,6 @@ _ss_recurse_L5
                 BPL     _ss_recurse_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 AND     #$00FF
-                TAX
                 INC
                 PHA
                 LDA     3,S   ; fccstk d=2 b=1

@@ -165,7 +165,6 @@ _fconv_unsigned_L0
                 CMP     #0
                 BEQ     _fconv_unsigned_L1
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #2
                 STA     1,S   ; fccstk d=0 b=1

@@ -154,22 +154,17 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 STA     3,S   ; fccstk d=0 b=3
-                TAX
                 CLC
                 ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
                 PHA
                 LDA     #8
-                TAX
                 CLC
                 ADC     #10
-                TAX
                 CLC
                 ADC     #4
-                TAX
                 CLC
                 ADC     #4
-                TAX
                 CLC
                 ADC     #65533
                 STA     _fcc_tmp_b

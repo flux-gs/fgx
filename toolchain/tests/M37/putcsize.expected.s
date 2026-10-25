@@ -352,11 +352,9 @@ main_stkok        TCS
                 ADC     #6
                 TCS
                 TYA
-                TAX
                 CMP     #98
                 BNE     _putcsize_L7
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
@@ -386,7 +384,6 @@ _putcsize_L7
                 ADC     #6
                 TCS
                 TYA
-                TAX
                 CMP     #99
                 BNE     _putcsize_L8
                 LDA     3,S   ; fccstk d=0 b=3
@@ -425,7 +422,6 @@ _putcsize_L10
                 CMP     #0
                 BEQ     _putcsize_L8
                 LDA     1,S   ; fccstk d=0 b=1
-                TAX
                 CLC
                 ADC     #20
                 STA     1,S   ; fccstk d=0 b=1

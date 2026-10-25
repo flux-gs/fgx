@@ -28,10 +28,8 @@ _dowhile_cont_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 INC
                 STA     _fcc_img0
-                TAX
                 CMP     #3
                 BNE     _dowhile_cont_L3
                 BRA     _dowhile_cont_L1

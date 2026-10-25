@@ -393,17 +393,14 @@ main_stkok        TCS
                 TYA
                 BEQ     _long_double_L2
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _long_double_L2
                 LDA     #8
-                TAX
                 CMP     #8
                 BNE     _long_double_L3
                 LDA     #8
-                TAX
                 CMP     #8
                 BNE     _long_double_L3
                 LDA     #8
@@ -414,7 +411,6 @@ _long_double_L2
 _long_double_L4
                 BMI     _long_double_L3
                 LDA     13,S   ; fccstk d=0 b=13
-                TAX
                 CLC
                 ADC     #10
                 STA     13,S   ; fccstk d=0 b=13

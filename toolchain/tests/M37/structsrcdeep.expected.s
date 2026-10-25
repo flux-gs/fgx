@@ -63,7 +63,6 @@ _structsrcdeep_fill_stkok        TCS
                 ELSE
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                TAX
                 INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
@@ -78,7 +77,6 @@ _structsrcdeep_fill_stkok        TCS
                 ELSE
                 LDA     10+_structsrcdeep_fill_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
-                TAX
                 INC
                 INC
                 AND     #$00FF

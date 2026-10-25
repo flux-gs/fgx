@@ -112,7 +112,6 @@ main_stkok        TCS
                 LDA     #420
                 PHA
                 LDA     #2
-                TAX
                 ORA     #512
                 TAX
                 ORA     #1024

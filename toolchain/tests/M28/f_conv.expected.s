@@ -100,7 +100,6 @@ _f_conv_L2
                 STA     _fcc_long_hi
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_ftoi
-                TAX
                 INC
                 INC
                 TAX

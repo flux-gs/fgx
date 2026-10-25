@@ -894,7 +894,6 @@ _llong_store_L3
                 CMP     #0
                 BEQ     _llong_store_L4
                 LDA     21,S   ; fccstk d=0 b=21
-                TAX
                 CLC
                 ADC     #11
                 STA     21,S   ; fccstk d=0 b=21

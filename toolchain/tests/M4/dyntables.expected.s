@@ -41,7 +41,6 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #115
                 BNE     _dyntables_L0
                 LDA     #0

@@ -42,7 +42,6 @@ _ptr_pinc_wide_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -176,7 +175,6 @@ _ptr_pinc_wide_L4
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA
@@ -296,7 +294,6 @@ _ptr_pinc_wide_L7
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

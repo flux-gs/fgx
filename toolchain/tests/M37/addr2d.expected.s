@@ -216,7 +216,6 @@ main_stkok        TCS
                 STA     _fcc_img1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -255,7 +254,6 @@ main_stkok        TCS
                 LDA     #1
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -279,18 +277,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #81
                 BNE     _addr2d_L0
                 LDA     #2
                 TAX
                 LDA:    r1,X
                 AND     #$00FF
-                TAX
                 CMP     #81
                 BNE     _addr2d_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -328,7 +323,6 @@ _addr2d_L0
                 PLA
                 STA     _fcc_fpr0
                 LDA     _fcc_img1
-                TAX
                 INC
                 CLC
                 ADC     _fcc_fpr0
@@ -385,18 +379,15 @@ _addr2d_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
-                TAX
                 CMP     #90
                 BNE     _addr2d_L1
                 LDA     #2
                 TAX
                 LDA:    r0,X
                 AND     #$00FF
-                TAX
                 CMP     #90
                 BNE     _addr2d_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #14
                 STA     _fcc_img0
@@ -404,7 +395,6 @@ _addr2d_L1
                 LDA     #0
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -440,7 +430,6 @@ _addr2d_L1
                 LDA     #0
                 ASL
                 ASL
-                TAX
                 STA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

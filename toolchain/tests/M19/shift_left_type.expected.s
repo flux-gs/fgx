@@ -82,11 +82,9 @@ _shift_left_type_L0
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_shl16
-                TAX
                 CMP     #8
                 BNE     _shift_left_type_L1
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -117,7 +115,6 @@ _shift_left_type_L1
                 CMP     #$FFFC
                 BNE     _shift_left_type_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #11
                 STA     _fcc_img0

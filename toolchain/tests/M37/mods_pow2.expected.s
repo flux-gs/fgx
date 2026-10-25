@@ -36,7 +36,6 @@ _mods_pow2_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 LDX     #1100
                 STA     _fcc_tmp_b
                 TXA
@@ -397,7 +396,6 @@ _mods_pow2_L44
                 CMP     #0
                 BEQ     _mods_pow2_L43
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #2048
                 STA     _fcc_img1

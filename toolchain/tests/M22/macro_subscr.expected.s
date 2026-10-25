@@ -26,7 +26,6 @@ _macro_subscr_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                TAX
                 SEC
                 SBC     #128
                 BVC     _macro_subscr_L3
@@ -224,7 +223,6 @@ _macro_subscr_L2
                 LDA     [_fcc_img4]
                 INC     _fcc_img4
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 LDA:    up_tab,X
@@ -256,7 +254,6 @@ _macro_subscr_L2
                 TAX
                 LDA:    sbuf,X
                 AND     #$00FF
-                TAX
                 AND     #255
                 TAX
                 LDA:    lo_tab,X
@@ -277,11 +274,9 @@ _macro_subscr_L2
                 TAX
                 LDA:    dbuf,X
                 AND     #$00FF
-                TAX
                 CMP     #65
                 BNE     _macro_subscr_L4
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #20
                 STA     _fcc_img1

@@ -295,7 +295,6 @@ _arr_postop_L6
                 DEC
                 STA     [_fcc_fpr0]
                 LDA     _fcc_tmp_b
-                TAX
                 LDX     #0
                 STA     _fcc_tmp_b
                 TXA

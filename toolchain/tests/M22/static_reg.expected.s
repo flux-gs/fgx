@@ -22,7 +22,6 @@ accum_stkok        TCS
                 LDA     #7
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     accum_sl_calls
-                TAX
                 CLC
                 ADC     #1
                 STA     accum_sl_calls

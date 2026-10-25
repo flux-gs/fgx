@@ -56,11 +56,9 @@ main_stkok        TCS
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #6
                 BNE     _preincparen_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0
@@ -129,7 +127,6 @@ _preincparen_L1
                 CMP     #0
                 BEQ     _preincparen_L2
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #10
                 STA     _fcc_img0

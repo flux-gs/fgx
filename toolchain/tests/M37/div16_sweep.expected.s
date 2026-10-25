@@ -133,7 +133,6 @@ _div16_sweep_L9
                 TAX
                 LDA:    dv,X
                 STA     17,S   ; fccstk d=0 b=17
-                TAX
                 LDX     #1000
                 STA     _fcc_tmp_b
                 TXA

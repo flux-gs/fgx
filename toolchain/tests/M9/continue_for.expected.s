@@ -36,7 +36,6 @@ _continue_for_L0
 _continue_for_L3
                 BPL     _continue_for_L2
                 LDA     _fcc_img0
-                TAX
                 LDX     #5
                 STA     _fcc_tmp_b
                 TXA
@@ -49,7 +48,6 @@ _continue_for_L5
                 BRA     _continue_for_L1
 _continue_for_L4
                 LDA     _fcc_img1
-                TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img1

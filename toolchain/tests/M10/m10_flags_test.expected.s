@@ -31,11 +31,9 @@ score_stkok        TCS
                 ELSE
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 AND     #1
                 BEQ     _m10_flags_test_L0
                 LDA     _fcc_img0
-                TAX
                 CLC
                 ADC     #7
                 STA     _fcc_img0
@@ -50,11 +48,9 @@ _m10_flags_test_L0
                 ELSE
                 LDA     6+score_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
-                TAX
                 AND     #2
                 BEQ     _m10_flags_test_L1
                 LDA     _fcc_img0
-                TAX
                 ORA     #14
                 STA     _fcc_img0
 _m10_flags_test_L1

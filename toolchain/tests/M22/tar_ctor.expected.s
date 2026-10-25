@@ -301,7 +301,6 @@ main_stkok        TCS
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #20
                 BNE     _tar_ctor_L9
                 LDA     #1
@@ -323,7 +322,6 @@ main_stkok        TCS
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
-                TAX
                 CMP     #30
                 BEQ     _tar_ctor_L8
 _tar_ctor_L9
