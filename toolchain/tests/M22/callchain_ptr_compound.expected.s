@@ -646,11 +646,7 @@ _callchain_ptr_compound_L5
                 ADC     #6
                 STA     [_fcc_fpr0]
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_ptr+2
                 LDA     _fcc_tmp_b
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     hroot+4
@@ -708,11 +704,7 @@ _callchain_ptr_compound_L6
                 SBC     #6
                 STA     [_fcc_fpr0]
                 LDY     #2
-                LDA     [_fcc_fpr0],Y
-                STA     _fcc_ptr+2
                 LDA     _fcc_tmp_b
-                STA     _fcc_fpr0
-                LDA     _fcc_fpr0
                 SEP     #$20
                 MX      %10
                 LDA     hroot+4

@@ -9220,6 +9220,14 @@ walk_expr_body(int n)
             g_expr_unsigned  = g_ast[n].is_unsigned;
             break;
         }
+        if (is_ptr) {                          /* the result replaces the address */
+            emit_ptr_incdec_into_fpr(kd, (int)g_ast[n].val, is_inc, is_prefix);
+            g_fpr_res        = kd;
+            g_expr_type      = lt;
+            g_expr_struct_id = g_ast[n].struct_id;
+            g_expr_unsigned  = g_ast[n].is_unsigned;
+            break;
+        }
         emit_incdec_at_fpr(kd, (int)g_ast[n].val, is_inc, is_prefix, is_ptr,
                            lt, g_ast[n].struct_id);
         fpr_drop(kd);

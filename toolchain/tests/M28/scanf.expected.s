@@ -2038,15 +2038,9 @@ _scanf_L40
                 STA     [_fcc_fpr0]
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
-                STA     _fcc_ptr+2
+                STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
                 STA     _fcc_fpr0
-                SEP     #$20
-                MX      %10
-                LDA     _fcc_ptr+2
-                STA     _fcc_fpr0+2
-                REP     #$20
-                MX      %00
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 BRA     _scanf_L44

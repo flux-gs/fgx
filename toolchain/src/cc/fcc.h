@@ -1422,6 +1422,7 @@ Local *param_addr_node(int n);   /* params_home: &param in the body */
 void emit_restage_base_bank(Local *lc, Global *gv);   /* after an index that calls */
 void emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix,
                         int is_ptr, tword rt, int rt_sid);
+void emit_ptr_incdec_into_fpr(int k, int stride, int is_inc, int is_prefix);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
 void emit_m16(void);                                /* T2-3: REP #$20 / MX %00 */
 void
