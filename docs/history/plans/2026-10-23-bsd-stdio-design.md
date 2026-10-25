@@ -145,14 +145,29 @@ Frames, 93 KB input: od 601 -> 577, wc 517 -> 493, tr 589 -> 565, grep
 661 -> 649, ls 493 -> 481, sed 1309 -> 1297, compress 3025 -> 3013, cmp
 253 -> 253.
 
-Still in the expansion: the lvalue walker adds `_ptr''s offset into the
-register that holds p, so p is lost there and loaded again on the arms
-after it; and the allocator's TAX for a pushed value whose TXA the
-peephole dropped stays, dead.  Keeping p means an fpr that carries a
-pending constant offset to the access -- the symbolic-register shape
-fpr_is_sym already has for globals.
+## 10. The rest of the putc waste (ae55b75, cb5284d)
 
-## 10. Next
+The expansion is 268 bytes; the staged system 8.7 KB smaller again
+(libc.so 208,143 -> 207,660), with no file larger:
 
-A profile of ls and printf for inline asm on what it finds; the fpr with
-a pending offset if the profile puts pointer reloads high.
+- a TAX whose X no path reads goes: 985 lines leave the goldens (8.0 KB).
+  Calls and returns count as reads of X -- setjmp and longjmp take the
+  jmp_buf there, and a first cut that let FGX2_FARCALL write X hung the
+  shell at boot;
+- `p->_ptr++' reaches the member through Y instead of adding its offset
+  into p's register, 3 bytes and about 9 cycles off every getc and putc
+  that does not flush (0.7 KB).
+
+Frames, 93 KB input, in 12-frame steps: od 577 -> 565, wc 493 -> 481,
+tr 565, grep 649 -> 661, ls 481, sed 1297 -> 1285, compress 3013, cmp
+253 -> 241.
+
+p is still loaded again on the line-buffered arm: `*(p)->_ptr = (x)'
+loads `_ptr' into the register that holds p.  The register stack is
+LIFO, so the loaded pointer cannot take a fresh register while p's
+stays; keeping p there needs register renaming or a non-LIFO allocator,
+for one reload on the path that flushes.
+
+## 11. Next
+
+A profile of ls and printf for inline asm on what it finds.
