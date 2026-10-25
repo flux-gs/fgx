@@ -45,15 +45,12 @@ put_stkok        TCS
                 DEC
                 STA     [_fcc_fpr0]
                 BMI     _putcsize_L0
-                LDA     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
@@ -149,15 +146,14 @@ _putcsize_L4
                 ELSE
                 LDA     8+put_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
-                INC
-                INC
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b

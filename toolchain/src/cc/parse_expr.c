@@ -9191,13 +9191,17 @@ walk_expr_body(int n)
         int is_prefix = (g_ast[n].flags & AF_RET_OLD) ? 0 : 1;
         LocalType lt  = g_ast[n].type;
         int is_ptr    = ISPTR(lt);
-        int kd;
+        int kd, off = 0;
         if (g_ast[op].kind == N_LV_CHAIN)
-            kd = emit_lvalue_addr(op);                       /* &arr[i] etc. (chain) */
+            kd = emit_lvalue_addr_off(op, &off);             /* &arr[i] etc. (chain) */
         else if (g_ast[op].kind == N_DEREF_FAST)
             kd = fpr_load_sym(g_ast[op].sym_lc, NULL);       /* addr = the ptr's value */
         else
             kd = walk_fpr(g_ast[op].a);                      /* N_DEREF_GENERAL operand */
+        if (!is_ptr || fpr_is_sym(kd)) {      /* only the pointer RMW takes it in Y */
+            emit_fpr_add_const(kd, off);
+            off = 0;
+        }
         /* A LONG OR FLOAT LEAF IS A 32-BIT ±1.  The word RMW below reaches
          * only the low half: a long lost its carry and yielded whatever
          * _fcc_long_hi last held (`++s.lw[i]' in value position), and a float
@@ -9221,7 +9225,7 @@ walk_expr_body(int n)
             break;
         }
         if (is_ptr) {                          /* the result replaces the address */
-            emit_ptr_incdec_into_fpr(kd, (int)g_ast[n].val, is_inc, is_prefix);
+            emit_ptr_incdec_into_fpr(kd, off, (int)g_ast[n].val, is_inc, is_prefix);
             g_fpr_res        = kd;
             g_expr_type      = lt;
             g_expr_struct_id = g_ast[n].struct_id;

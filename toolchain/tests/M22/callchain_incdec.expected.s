@@ -541,16 +541,13 @@ _callchain_incdec_L15
                 TAY
                 PLA
                 TYA
-                LDA     _fcc_fpr0
-                CLC
-                ADC     #4
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #4
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #4
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #6
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b

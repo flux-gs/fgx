@@ -1422,7 +1422,7 @@ Local *param_addr_node(int n);   /* params_home: &param in the body */
 void emit_restage_base_bank(Local *lc, Global *gv);   /* after an index that calls */
 void emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix,
                         int is_ptr, tword rt, int rt_sid);
-void emit_ptr_incdec_into_fpr(int k, int stride, int is_inc, int is_prefix);
+void emit_ptr_incdec_into_fpr(int k, int off, int stride, int is_inc, int is_prefix);
 void emit_m8(void);                                 /* T2-3: SEP #$20 / MX %10 */
 void emit_m16(void);                                /* T2-3: REP #$20 / MX %00 */
 void
@@ -1593,6 +1593,7 @@ int  walk_fpr(int n);
 /* Uniform K&R lvalue-address walker (parse_stmt.c); reused by the expression
  * parser/walk for value-leaving lvalue stores/incdec (N_LV_STORE_E etc.). */
 int  emit_lvalue_addr(int head);
+int  emit_lvalue_addr_off(int head, int *offp);
 void build_lvalue_suffixes(int head, LocalType cur, int cur_sid);
 void require_assignable(LocalType t, TokKind op);
 int  build_struct_var_store(Local *lc, Global *gv, int rhs, int line, int col);

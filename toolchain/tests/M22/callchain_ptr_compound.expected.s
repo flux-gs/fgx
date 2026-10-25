@@ -636,16 +636,13 @@ _callchain_ptr_compound_L5
                 STA     hroot+4
                 TYA
                 FGX2_FARCALL hf
-                LDA     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #6
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10
@@ -694,16 +691,13 @@ _callchain_ptr_compound_L6
                 STA     hroot+4
                 TYA
                 FGX2_FARCALL hf
-                LDA     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 SEC
                 SBC     #6
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     _fcc_tmp_b
                 SEP     #$20
                 MX      %10

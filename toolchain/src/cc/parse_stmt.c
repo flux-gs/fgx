@@ -817,6 +817,16 @@ ast_store_conv(int dst, Local *lc, Global *gv)
 int
 emit_lvalue_addr(int head)
 {
+    int off, kd = emit_lvalue_addr_off(head, &off);
+    emit_fpr_add_const(kd, off);
+    return kd;
+}
+
+/* emit_lvalue_addr with the final offset left to the caller: the address is
+ * kd + *offp, and kd is unchanged by it. */
+int
+emit_lvalue_addr_off(int head, int *offp)
+{
     int kd;
     if (g_ast[head].c >= 0)
         kd = walk_fpr(g_ast[head].c);        /* computed pointer value = pointee addr */
@@ -850,7 +860,7 @@ emit_lvalue_addr(int head)
             die(g_ast[s].line, g_ast[s].col, "bad lvalue step (internal)");
         }
     }
-    if (off) emit_fpr_add_const(kd, off);
+    *offp            = off;
     g_expr_type      = g_ast[head].type;
     g_expr_struct_id = g_ast[head].struct_id;
     return kd;

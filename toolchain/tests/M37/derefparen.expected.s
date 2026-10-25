@@ -356,14 +356,13 @@ _derefparen_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
-                INC
-                INC
                 STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 INC
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b

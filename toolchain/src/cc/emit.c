@@ -6430,24 +6430,24 @@ emit_incdec_at_fpr(int k, int stride, int is_inc, int is_prefix, int is_ptr,
     g_rmw_ptr = NULL;
 }
 
-/* ++/-- of a pointer held at the address in fpr k, yielding the pointer
+/* ++/-- of a pointer held at the address fpr k + off, yielding the pointer
  * (old for postfix, new for prefix) in k itself: the address is dead once
  * the word is written back, so the result's offset and bank go straight
- * into k rather than through the carrier.  A = the offset, as fpr_in
- * leaves it. */
+ * into k rather than through the carrier.  The offset rides in Y, so k is
+ * read as it stands.  A = the offset, as fpr_in leaves it. */
 void
-emit_ptr_incdec_into_fpr(int k, int stride, int is_inc, int is_prefix)
+emit_ptr_incdec_into_fpr(int k, int off, int stride, int is_inc, int is_prefix)
 {
     const char *cell = cellp(fpr_name(k));
     g_rmw_ptr = cell;
-    rmw_lda(0);                                                    /* old offset */
+    rmw_lda(off);                                                  /* old offset */
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
     if (is_inc) ir_record_raw(IR_ADD_CONST, (unsigned)stride, 0, NULL);
     else        ir_record_raw(IR_SUB_CONST, (unsigned)stride, 0, NULL);
-    rmw_sta();
+    ir_record_raw(IR_STA_DEREF, off ? 1 : 0, 0, (void *)cell);     /* Y is still off */
     if (is_prefix)
         ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));
-    rmw_lda(2);                                       /* bank (and pad) word */
+    rmw_lda(off + 2);                                 /* bank (and pad) word */
     g_rmw_ptr = NULL;
     ir_record_raw(IR_STA_CELL, 0, 0, (void *)cellp2(cell));
     ir_record_raw(IR_LDA_CELL, 0, 0, (void *)cellp("_fcc_tmp_b"));

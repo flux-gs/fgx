@@ -2027,16 +2027,13 @@ _scanf_L40
                 DEC
                 STA     [_fcc_fpr0]
                 BMI     _scanf_L43
-                LDA     _fcc_fpr0
-                INC
-                INC
-                STA     _fcc_fpr0
-                LDA     [_fcc_fpr0]
+                LDY     #2
+                LDA     [_fcc_fpr0],Y
                 STA     _fcc_tmp_b
                 CLC
                 ADC     #1
-                STA     [_fcc_fpr0]
-                LDY     #2
+                STA     [_fcc_fpr0],Y
+                LDY     #4
                 LDA     [_fcc_fpr0],Y
                 STA     _fcc_fpr0+2
                 LDA     _fcc_tmp_b
