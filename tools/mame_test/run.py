@@ -522,7 +522,7 @@ KNOWN_MANIFEST_KEYS = {
     "use_state", "watch_addrs", "watch_min",
     "warm_reset_frame", "warm_settle_frames", "poison", "host_proc",
     "ram_poison_seed", "ram_poison_top_bank",
-    "ram_poison_win_lo", "ram_poison_win_hi",
+    "ram_poison_win_lo", "ram_poison_win_hi", "dirty_root",
     # Injected by run.py itself, not written by manifest authors.
     "_exit_reason", "_no_state", "_hostproc",
 }
@@ -1575,6 +1575,15 @@ def run_mame(*, manifest, mode, debug=False, headless=True, scratch=None):
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         print(DIM_(f"  staged {name} -> {pdir}/{name}"
                    + (" (replace)" if sf.get("replace") else "")))
+
+    # "dirty_root": true boots the root as a power cut leaves it: not marked
+    # clean, so /etc/rc's fsck -p runs all five phases.  fgxfs put marks the
+    # volume clean, so this comes after the staging above.
+    if manifest.get("dirty_root") and _is_ufs_image(test_disk):
+        sys.path.insert(0, str(REPO / "tools"))
+        import fgxfs
+        fgxfs.Volume(str(test_disk), writable=True).sbsync(clean=False)
+        print(DIM_("  root marked not clean"))
 
     # Pick paste-frame based on whether we're loading a state.
     # Auto-invalidate: the save-state captures RAM, including the

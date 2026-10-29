@@ -42,6 +42,7 @@
 #include "initscr.c"
 #include "insch.c"
 #include "insertln.c"
+#include "keypad.c"
 #include "longname.c"
 #include "move.c"
 #include "mvprintw.c"

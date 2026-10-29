@@ -95,7 +95,9 @@ The fcc-generated `<name>.s` is a **build artifact** — `.gitignore` it.
      `vendor/`), `yacc: true` (source is `<name>.y`), `static`, `commons`
      (K&R tentative definitions shared across translation units),
      `pack` (the linker places every translation unit but the entry in code
-     segments itself) or `seg3_tus`/`seg4_tus` (by hand), `stack_pad`, and
+     segments itself) or `seg3_tus`/`seg4_tus` (by hand), `split` (one entry
+     `.c` whose code outgrows a bank: compiled with `--sections` and packed
+     function by function, as ee is), `stack_pad`, and
      `gen_script`/`gen`/`gen_deps` (headers generated before any compile).
      `parse_tools` in `tools/ninja/gen.py` documents each; sh, tcsh and elvis
      use most of them.

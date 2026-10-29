@@ -41,6 +41,42 @@ def pack(sizes, room0, cap, per_bank):
     return groups
 
 
+def split_code(path, out_dir, keep="main"):
+    """A program file too big for one bank, as pack units: fcc --sections
+    output split at its FGX_SECT boundaries.  Every function is its own
+    exported, far-called unit (FGX2_EXPORT / FGX2_FARCALL), so one in
+    another bank is reached the way another file's would be.  Returns the
+    file for segment 0 -- the header and the `keep' section -- and one file
+    per other section; each carries the header and its own
+    FGX2_RELOC_COUNT, which fgx_ld checks per file."""
+    import fgx_gc
+    lines = open(path).read().split("\n")
+    parts = fgx_gc.split_sections(lines, path)
+    if not any(p[0] == "sect" for p in parts):
+        die("%s has no FGX_SECT sections to split (compile it with --sections)"
+            % path)
+    if parts[0][0] != "loose":
+        die("%s starts with a section, not its header" % path)
+    head = [ln for ln in parts[0][1] if ln.split()[:1] != ["FGX2_RELOC_COUNT"]]
+    sects = [p for p in parts if p[0] == "sect"]
+    if keep not in [p[1] for p in sects]:
+        die("%s has no %s section" % (path, keep))
+    base = os.path.splitext(os.path.basename(path))[0]
+    os.makedirs(out_dir, exist_ok=True)
+
+    def write(nm, body):
+        rows = head + body
+        p = os.path.join(out_dir, nm)
+        with open(p, "w") as f:
+            f.write("\n".join(rows) + "\n                FGX2_RELOC_COUNT %d\n"
+                    % fgx_gc.fgx2_rows(rows))
+        return p
+    seg0 = write(base + ".s", [ln for p in sects if p[1] == keep for ln in p[2]])
+    rest = [write("%s.%d.s" % (base, i), p[2])
+            for i, p in enumerate(s for s in sects if s[1] != keep)]
+    return seg0, rest
+
+
 def assembled(link_dir, puts, equs=(), name="m1"):
     """The byte size of one segment assembled from `puts' in link_dir."""
     b = fgx_libso.run_merlin(link_dir, fgx_libso.write_link(
@@ -73,6 +109,26 @@ def self_test():
         assert "huge" in str(e)
     else:
         raise AssertionError("an oversized TU must be refused by name")
+    # split_code: main stays, the others become files; each file's count is
+    # its own FGX2 rows (FGX2_MODE, the exports, the call), not the input's.
+    import tempfile
+    t = tempfile.mkdtemp()
+    src = os.path.join(t, "p.s")
+    with open(src, "w") as f:
+        f.write("\n".join([
+            "                FGX2_MODE 2", "                MX      %00",
+            "                FGX_SECT main", "                FGX2_EXPORT main",
+            "main            ENT", "                FGX2_FARCALL f", "                RTL",
+            "                FGX_ENDS",
+            "                FGX_SECT f", "                FGX2_EXPORT f",
+            "f               ENT", "                RTL", "                FGX_ENDS",
+            "                FGX2_RELOC_COUNT 4"]) + "\n")
+    s0, rest = split_code(src, os.path.join(t, "o"))
+    a, b = open(s0).read(), open(rest[0]).read()
+    assert "main            ENT" in a and "f               ENT" not in a, a
+    assert "FGX2_RELOC_COUNT 3" in a, a          # MODE, EXPORT main, FARCALL f
+    assert "f               ENT" in b and "FGX2_RELOC_COUNT 2" in b, b
+    assert len(rest) == 1 and "MX      %00" in b
     print("fgx_pack: self-test OK")
 
 

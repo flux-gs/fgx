@@ -3964,13 +3964,19 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                     }
                     continue;
                 } else if (fld->type == LT_FN_PTR) {
-                    /* Fn-ptr field: a function NAME (its address) or
-                     * 0 (NULL) — the elvis cmdnames[]/vikeys[] command
-                     * table idiom.  Same 4-byte in-struct pointer shape
-                     * as char*; init_values_hi[n]: 1 = NULL,
-                     * 2 = function index (emit -> DA/DFB^ label). */
-                    skip_field_init_cast();   /* (MARK (*)())0 = NO_FUNC */
-                    if (g_cur.kind == TOK_IDENT) {
+                    /* Fn-ptr field: a function NAME (its address) or a
+                     * null pointer constant -- the elvis cmdnames[]/vikeys[]
+                     * command table idiom.  Same 4-byte in-struct pointer
+                     * shape as char*; init_values_hi[n]: 1 = NULL,
+                     * 2 = function index (emit -> DA/DFB^ label).  The null
+                     * test is the pointer arm's, so `NULL' (((char *)0)),
+                     * `(void *)0' and `(MARK (*)())0' all qualify, as A.6.6
+                     * lets a null pointer convert "to a pointer of any type". */
+                    if (field_init_is_null()) {
+                        g->init_values[n]    = 0;
+                        g->init_values_hi[n] = 1;     /* NULL */
+                    } else if (skip_field_init_cast(),
+                               g_cur.kind == TOK_IDENT) {
                         int fi = funcs_lookup(g_cur.id_ptr,
                                               g_cur.id_len);
                         if (fi < 0) {
@@ -3983,10 +3989,6 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                         }
                         g->init_values[n]    = (unsigned)fi;
                         g->init_values_hi[n] = 2;     /* function idx */
-                    } else if (g_cur.kind == TOK_INT_LIT &&
-                               g_cur.value == 0) {
-                        g->init_values[n]    = 0;
-                        g->init_values_hi[n] = 1;     /* NULL */
                     } else {
                         die(g_cur.line, g_cur.col,
                             "fn-ptr field init: need function name or 0");

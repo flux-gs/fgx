@@ -19,6 +19,8 @@ Run: fgx_dyn.py --name N --dir D --code a.s --data a.data.s
                 [--pack b.s,c.s,...]   (packed into segment 0's room, then
                                         into further code segments: fgx_pack)
                 [--stack-pad BYTES]    (fgx_ld's stack_pad)
+                [--split]              (the --code file's functions packed
+                                        one by one: fgx_pack.split_code)
      fgx_dyn.py --self-test
 """
 import argparse
@@ -658,14 +660,25 @@ def main():
                     "then into further code segments")
     ap.add_argument("--stack-pad", type=int, metavar="BYTES",
                     help="fgx_ld's stack_pad: bytes added to the measured stack")
+    ap.add_argument("--split", action="store_true",
+                    help="the one --code file is fcc --sections output too big "
+                    "for a bank: its functions are packed one by one (fgx_pack)")
     a = ap.parse_args()
+    code = [os.path.abspath(p) for p in a.code.split(",")]
+    pack = [os.path.abspath(p) for x in a.pack for p in x.split(",")]
+    if a.split:
+        if len(code) != 1:
+            die("--split takes one --code file")
+        seg0, rest = fgx_pack.split_code(code[0],
+                                         os.path.abspath(a.dir) + ".split")
+        code, pack = [seg0], pack + rest
     build(a.name, os.path.abspath(a.dir),
-          [os.path.abspath(p) for p in a.code.split(",")],
+          code,
           [os.path.abspath(p) for p in a.data.split(",")],
           os.path.abspath(a.out), a.lib.split(","),
           {k: os.path.abspath(v) for k, v in (x.split("=", 1) for x in a.so)},
           [[os.path.abspath(p) for p in s.split(",")] for s in a.code_seg],
-          [os.path.abspath(p) for x in a.pack for p in x.split(",")], a.stack_pad)
+          pack, a.stack_pad)
     return 0
 
 
