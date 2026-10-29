@@ -87,6 +87,11 @@ int g_pile = 0;
 /* --sections: FGX_SECT/FGX_ENDS around each function and data item, for
  * fgx_gc (toolchain/src/ld/fgx_gc.py) to keep or drop as units. */
 int g_sections = 0;
+/* --signed-char: a char not declared unsigned holds -128..127.  fcc's
+ * default keeps every char 0..255; the 68000 compilers a port comes from
+ * (and K&R's PDP-11) sign-extend, and code that writes `signed char' or
+ * tests a char for < 0 depends on it. */
+int g_signed_char = 0;
 /* This translation unit passes a floating value where no parameter is
  * declared for it, as a printf call does: main.c then marks its output with
  * `]__lc_fltused'.  In a static link (fgx_static) the marker keeps libc's
