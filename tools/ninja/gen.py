@@ -489,7 +489,9 @@ def parse_tools():
     seg4_tus, yacc, static, main (the entry TU when it is not
     src/userland/<name>/<name>.c), commons (K&R tentative definitions shared
     across TUs, coalesced by gen_commons), pack (the linker packs every TU but
-    the entry into code segments itself), stack_pad (bytes), gen + gen_script
+    the entry into code segments itself), split (one entry TU too big for a
+    bank: compiled with --sections and its functions packed one by one),
+    stack_pad (bytes), gen + gen_script
     (headers the script writes, given their directory, before any compile;
     gen_deps are what it reads)."""
     man = json.load(open(os.path.join(HERE, "manifest.json")))
@@ -503,7 +505,8 @@ def parse_tools():
             yacc=t.get("yacc", False),
             static=t.get("static", False),
             main=t.get("main", ""), commons=t.get("commons", False),
-            pack=t.get("pack", False), stack_pad=t.get("stack_pad", 0),
+            pack=t.get("pack", False), split=t.get("split", False),
+            stack_pad=t.get("stack_pad", 0),
             gen=t.get("gen", []), gen_script=t.get("gen_script", ""),
             gen_deps=t.get("gen_deps", []))
     return covered, {}
@@ -517,6 +520,13 @@ def direct_link_edges(lines, name, kind, src, tus, rec):
     os.makedirs(os.path.join(ROOT, b), exist_ok=True)
     tu_stems = [os.path.basename(t)[:-2] for t in tus]
     flags = (" " + rebase_flags(rec["flags"])) if rec["flags"] else ""
+    if rec["split"]:
+        if kind == "static":
+            raise SystemExit(f"{name}: split is fgx_dyn's (a dynamic tool)")
+        if tus or rec["pack"]:
+            raise SystemExit(f"{name}: split packs the entry TU's functions; "
+                             f"it takes no tu_list or pack")
+        flags += " --sections"
     scc = os.path.join("src", "softscc", f"{name}.txt")
     softscc = ("$$PWD/" + scc) if os.path.exists(os.path.join(ROOT, scc)) else ""
     sccdep = f" {scc}" if softscc else ""
@@ -563,6 +573,8 @@ def direct_link_edges(lines, name, kind, src, tus, rec):
     stub = os.path.join("src/userland", name, f"{name}_stubs.s")
     if os.path.isfile(os.path.join(ROOT, stub)):
         code0.append(stub)
+    if rec["split"]:
+        codesegs += " --split"
     if rec["stack_pad"]:
         codesegs += f" --stack-pad {int(rec['stack_pad'])}"
     data = [f"{b}/{name}.data.s"] + [f"{b}/{t}.data.s" for t in tu_stems]
