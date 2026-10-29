@@ -42,6 +42,9 @@ one with its upstream:
 - frotz (src/userland/frotz): GPL-2.0-or-later.  The Z-machine interpreter,
   a separate program; a binary distribution that ships it must offer its
   source, as the GPL requires.
+- novi (src/userland/novi): BSD-2-Clause, Copyright (c) Dave Plummer.  The
+  upstream carries no license file; its author stated the terms: "you can
+  assume NOVI is under the 2_BSD license".
 - The soft double (toolchain/lib/libdouble/softdouble.c): Apache-2.0, from
   the W65816 fork of llvm-mos; the licence text is
   vendor/65816-llvm-mos/LICENSE.TXT (Apache License v2.0 with LLVM

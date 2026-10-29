@@ -1,0 +1,30 @@
+{
+ "name": "novidraw",
+ "description": "novi(1) renders a real multi-line file, and paging works.  novi.json only ever types into an EMPTY buffer, so it exercises none of draw_line's line walking -- the code rewritten for speed (bulk buf_read, the next-line start returned from draw_line instead of a second scan, and the terminal shadow that suppresses unchanged rows).  A bug in any of those shows as wrong or missing text, which nothing else here catches: the first version of this test found exactly that, in the test itself.\n\nWorkload: open novi's own man page (95 lines) and press ^V twice.  RECALIBRATED 2026-08-15: the fixture was /etc/profile, which has been deleted -- nothing read it once jsh was removed and init seeds PATH/HOME/TERM itself, so it was a file whose only remaining reader was this test.  A man page is a better fixture anyway: it exists for its own sake and is not going to be deleted out from under the suite.\n\nThe needle is `novicut`, which sits at line 55 and appears ONCE in the file.  It can only show if paging moved the viewport AND rows below the first screenful render: page one is lines 1-23.  Deliberately not `CAVEATS`, which looks like the better section anchor but also occurs at line 25 in a cross-reference, close enough to the first screenful to make the needle prove less than it appears to.  Nor anything containing `novi` alone, which is in the command line -- the vacuous-needle trap this suite has hit before.\n\nDo NOT add a third ^V: two pages land mid-file with rows above and below, which is what exercises the walk; paging to the end would blank the body and assert nothing.  The test deliberately does not exit -- ^X restores the alternate screen and the text would vanish before the dump.\n\nTHE PATH WAS `/usr/man/cat1/NOVI.1' AND THE ROOT IS CASE-SENSITIVE.  That is a ProDOS spelling, which resolved on the old boot volume because ProDOS compares case-insensitively, and stopped resolving when the root swapped to 2.11BSD on 2026-09-04.  novi then printed `cannot open' -- which this manifest's own `lacks' arm names -- so the test was red about a file it was asking for by a name that does not exist.  Ten manifests were repointed for this in apple/fgx#335; this one was not among them.",
+ "command": "novi /usr/man/cat1/novi.1",
+ "exit_on_prompt": false,
+ "timeout_s": 180,
+ "post_gap_frames": 900,
+ "raw_inject": [
+  [
+   400,
+   22,
+   0
+  ],
+  [
+   800,
+   22,
+   0
+  ]
+ ],
+ "expect": {
+  "screen_contains": [
+   "novicut"
+  ],
+  "screen_lacks": [
+   "PANIC",
+   "BRK",
+   "cannot"
+  ]
+ }
+}

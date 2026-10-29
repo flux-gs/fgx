@@ -38,6 +38,11 @@ source is unproblematic (see the licence notes below), so it is simply shipped.
     SunOS-4.1.3/usr.bin/eject.c, man1/eject.1 eject(1), ported to src/userland/eject
     frotz-2.44/                               Frotz, ported to src/userland/frotz
                                               (its README)
+    pdpsrc/bsd/novi                           novi(1), Dave Plummer's editor at
+                                              davepl/pdpsrc commit 381ac12,
+                                              ported to src/userland/novi; its
+                                              author states BSD-2-Clause
+                                              (docs/PROVENANCE.md)
     65816-llvm-mos/                           the soft double runtime behind
                                               toolchain/lib/libdouble (its README)
     tzcode-2026d/, tzdata-2026d/              host zic and the zone files

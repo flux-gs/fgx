@@ -1,0 +1,21 @@
+{
+ "name": "novi",
+ "description": "novi(1) edits and saves, and cleans its scratch files up.  End-to-end over the whole port: raw mode via sgtty, the ANSI screen through the console's VT handler, the two-file disk-backed gap buffer, mkstemp/O_EXCL for the scratch names, and buf_save's write-temp-then-rename.  Workload: open a new file, type `zqx42`, ^O then Enter (the prompt pre-fills the name novi was given), ^X to leave, then `cat` it back and `ls /tmp`.  `zqx42` is the discriminator and CANNOT come from an echoed command line -- no command in this test contains it -- which is the vacuous-needle trap this suite has hit before.  The screen_lacks needles are the scratch-file half: `novi0` and `novicut` are the mkstemp-generated scratch names (the X's fill from the pid, right to left, so they start `novi0`), and their absence from `ls /tmp` proves novi unlinked them -- at creation, as upstream does, the open fds keeping the blocks until novi closes them.  `novi ` with its trailing space never appears in `ls` output, so neither needle can match the command echo.  `/root` is the liveness half: without it this test PASSES WITH NOVI HUNG -- a ^X that never took would leave the editor running, the post commands would be typed into the buffer, and `zqx42` would still be on screen from novi's own display.  `echo $HOME` printing /root can only come from a shell reading the line, so it proves novi exited; and /root cannot come from the echoed command line, which is the same trap again.",
+ "command": "novi /tmp/nvt",
+ "exit_on_prompt": false,
+ "timeout_s": 180,
+ "post_gap_frames": 900,
+ "post_commands": ["cat /tmp/nvt", "ls /tmp", "echo $HOME"],
+ "raw_inject": [[300, 122, 0],
+                [340, 113, 0],
+                [380, 120, 0],
+                [420, 52, 0],
+                [460, 50, 0],
+                [540, 15, 0],
+                [620, 13, 0],
+                [700, 24, 0]],
+ "expect": {
+  "screen_contains": ["zqx42", "/root"],
+  "screen_lacks": ["novi0", "novicut", "cannot", "not found", "PANIC", "BRK"]
+ }
+}

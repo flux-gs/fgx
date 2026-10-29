@@ -270,6 +270,10 @@
    "name": "netdump"
   },
   {
+   "name": "novi",
+   "tu_list": "src/userland/novi/tu.list"
+  },
+  {
    "name": "ensoniqplay"
   },
   {
@@ -903,6 +907,10 @@
   {
    "src": "bin/nc.bin",
    "dst": "disk_src/bin/nc"
+  },
+  {
+   "src": "bin/novi.bin",
+   "dst": "disk_src/bin/novi"
   },
   {
    "src": "bin/od.bin",
