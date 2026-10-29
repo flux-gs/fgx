@@ -720,5 +720,6 @@
   "init_nested_local": 42,
   "addr_member_elem": 42,
   "fnptr_ptr": 42,
-  "ptr_held": 42
+  "ptr_held": 42,
+  "getfsstat_room": 42
 }

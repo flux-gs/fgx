@@ -2781,7 +2781,15 @@ _Sys_GetfsStat  MX      %00
                 ; ...then the far pointer, offset last of the four bytes pushed
                 ; so it lands lowest.  THE BANK IS THE CALLER'S, not PHK: this
                 ; buffer belongs to the process that made the call.
-                PHA                             ; park the offset
+                ;
+                ; THE OFFSET WAITS IN X, NOT ON THE STACK.  Parked on the stack
+                ; it sat between sbp and bufsize, where the callee reads its
+                ; second argument -- so bufsize arrived as the buffer's ADDRESS,
+                ; maxcount came out as that over 100, and every mount was
+                ; copied whatever room the caller gave.  df(1)'s malloc'd
+                ; buffer has room for all of them; a 128-byte stack buffer got
+                ; the second entry over its own frame.
+                TAX
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -2790,14 +2798,14 @@ _Sys_GetfsStat  MX      %00
                 PHA                             ;      bank
                 REP     #$30
                 MX      %00
-                LDA     3,S                     ;      offset (the parked copy)
-                PHA
+                TXA
+                PHA                             ;      offset
 _kfp980         JSL     KFAR_VFS_GETFSSTAT      ; bank byte patched by Far_Init
                 TAY                             ; park the count; TSC needs A
                 TSC
                 CLC
-                ADC     #8                      ; 6 argument bytes + the parked
-                TCS                             ;   offset word
+                ADC     #6                      ; the 6 argument bytes
+                TCS
                 TYA
                 SEC                             ; the handler does not fail
                 RTS
