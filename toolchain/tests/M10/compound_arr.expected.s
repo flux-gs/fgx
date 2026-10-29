@@ -106,11 +106,9 @@ _compound_arr_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _compound_arr_L3
                 EOR     #$8000
 _compound_arr_L3
@@ -137,11 +135,9 @@ _compound_arr_L3
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -157,11 +153,9 @@ _compound_arr_L3
 _compound_arr_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _compound_arr_L0
 _compound_arr_L2

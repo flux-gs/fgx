@@ -49,11 +49,10 @@ main_stkok        TCS
                 LDA     #opts
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -120,11 +119,9 @@ _cfield_gaddr_L0
                 LDA     #opts
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -185,11 +182,10 @@ _cfield_gaddr_L3
                 LDA     #opts
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -212,10 +208,8 @@ _cfield_gaddr_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BNE     *+5
                 BRL     _cfield_gaddr_L6
                 LDA     #3
@@ -239,11 +233,10 @@ _cfield_gaddr_L6
                 LDA     #opts
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0

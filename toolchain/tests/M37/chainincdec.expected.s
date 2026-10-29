@@ -232,10 +232,8 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _chainincdec_L0
                 LDA     #50
@@ -251,18 +249,14 @@ main_stkok        TCS
 _chainincdec_L0
                 LDA     L+0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _chainincdec_L2
                 LDA     L+10
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _chainincdec_L2
                 LDA     #0
@@ -319,10 +313,8 @@ _chainincdec_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _chainincdec_L4
                 LDA     #52
@@ -360,10 +352,8 @@ _chainincdec_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _chainincdec_L5
                 LDA     #53
@@ -427,10 +417,8 @@ _chainincdec_L5
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _chainincdec_L6
                 LDA     #54
@@ -542,10 +530,8 @@ _chainincdec_L6
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _chainincdec_L7
                 LDA     #55
@@ -561,18 +547,14 @@ _chainincdec_L6
 _chainincdec_L7
                 LDA     L+0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _chainincdec_L9
                 LDA     L+10
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _chainincdec_L9
                 LDA     #0
@@ -943,10 +925,8 @@ _chainincdec_L13
                 LDA     L+8
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _chainincdec_L14
                 LDA     #60
@@ -962,10 +942,8 @@ _chainincdec_L13
 _chainincdec_L14
                 LDA     L+2
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _chainincdec_L15
                 LDA     #61
@@ -1018,10 +996,8 @@ _chainincdec_L15
                 STA     [_fcc_fpr0]
                 LDA     M+6
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BNE     *+5
                 BRL     _chainincdec_L16
                 LDA     #62
@@ -1037,18 +1013,14 @@ _chainincdec_L15
 _chainincdec_L16
                 LDA     M+4
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _chainincdec_L18
                 LDA     M+14
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _chainincdec_L18
                 LDA     #0
@@ -1109,10 +1081,8 @@ _chainincdec_L17
                 STA     [_fcc_fpr0]
                 LDA     M+6
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BNE     *+5
                 BRL     _chainincdec_L20
                 LDA     #64
@@ -1166,10 +1136,8 @@ _chainincdec_L20
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _chainincdec_L21
                 LDA     #65
@@ -1199,10 +1167,8 @@ _chainincdec_L21
                 STA     [_fcc_fpr0]
                 LDA     T+8
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _chainincdec_L22
                 LDA     #66
@@ -1218,10 +1184,8 @@ _chainincdec_L21
 _chainincdec_L22
                 LDA     T+10
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BNE     *+5
                 BRL     _chainincdec_L23
                 LDA     #72
@@ -1287,10 +1251,8 @@ _chainincdec_L23
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _chainincdec_L24
                 LDA     #67
@@ -1316,11 +1278,9 @@ _chainincdec_L25
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 BVC     _chainincdec_L28
                 EOR     #$8000
 _chainincdec_L28
@@ -1383,10 +1343,8 @@ _chainincdec_L27
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     L+2
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _chainincdec_L29
                 LDA     #68
@@ -1402,18 +1360,14 @@ _chainincdec_L27
 _chainincdec_L29
                 LDA     L+0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _chainincdec_L31
                 LDA     L+10
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _chainincdec_L31
                 LDA     #0
@@ -1478,10 +1432,8 @@ _chainincdec_L30
                 STA     [_fcc_fpr0]
                 LDA     M+6
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _chainincdec_L33
                 LDA     #70
@@ -1534,10 +1486,8 @@ _chainincdec_L33
                 STA     [_fcc_fpr0]
                 LDA     L+2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _chainincdec_L34
                 LDA     #71

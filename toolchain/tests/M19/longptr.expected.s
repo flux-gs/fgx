@@ -295,11 +295,9 @@ main_stkok        TCS
                 BRL     _longptr_L2
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L2
                 LDA     21,S   ; fccstk d=0 b=21
@@ -347,11 +345,9 @@ _longptr_L5
                 BRL     _longptr_L3
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L3
                 LDA     21,S   ; fccstk d=0 b=21
@@ -403,11 +399,9 @@ _longptr_L8
                 BRL     _longptr_L6
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L6
                 SEP     #$20
@@ -509,11 +503,9 @@ _longptr_L11
                 BRL     _longptr_L9
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L9
                 LDA     #GA
@@ -592,11 +584,9 @@ _longptr_L14
                 BRL     _longptr_L12
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L12
                 LDA     21,S   ; fccstk d=0 b=21
@@ -648,11 +638,9 @@ _longptr_L17
                 BRL     _longptr_L15
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L15
                 SEP     #$20
@@ -736,11 +724,9 @@ _longptr_L20
                 BRL     _longptr_L18
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L18
                 LDA     3,S   ; fccstk d=0 b=3
@@ -821,11 +807,9 @@ _longptr_L23
                 BRL     _longptr_L21
                 LDA     23,S   ; fccstk d=0 b=23
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     23,S   ; fccstk d=0 b=23
 _longptr_L21
                 LDA     23,S   ; fccstk d=0 b=23

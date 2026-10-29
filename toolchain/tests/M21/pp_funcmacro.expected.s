@@ -21,11 +21,9 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #20
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 STA     _fcc_img0
                 LDA     #20
                 ASL
@@ -51,11 +49,8 @@ _pp_funcmacro_L0
 _pp_funcmacro_L1
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 TAY
                 TSC
                 CLC

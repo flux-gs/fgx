@@ -30,19 +30,15 @@ main_stkok        TCS
                 JSR     _fcc_divu16
                 STA     u
                 TAX
-                LDA     #18432
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #18432
                 BEQ     *+5
                 BRL     _u_comp_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _u_comp_L0
                 LDA     #36864
@@ -54,19 +50,15 @@ _u_comp_L0
                 JSR     _fcc_shr16
                 STA     u
                 TAX
-                LDA     #2304
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2304
                 BEQ     *+5
                 BRL     _u_comp_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _u_comp_L1
                 LDA     #65520
@@ -78,27 +70,21 @@ _u_comp_L1
                 JSR     _fcc_modu16
                 STA     u
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _u_comp_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _u_comp_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _u_comp_L3
                 LDA     #42

@@ -29,11 +29,9 @@ _p33_setjmp_local_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _p33_setjmp_local_L3
                 EOR     #$8000
 _p33_setjmp_local_L3
@@ -164,20 +162,16 @@ main_stkok        TCS
                 FGX2_FARCALL setjmp
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_setjmp_local_L4
                 FGX2_FARCALL deep
 _p33_setjmp_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #314
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #314
                 BNE     *+5
                 BRL     _p33_setjmp_local_L5
                 LDA     #1
@@ -197,10 +191,8 @@ _p33_setjmp_local_L5
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #314
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #314
                 BNE     *+5
                 BRL     _p33_setjmp_local_L6
                 LDA     #2
@@ -216,10 +208,8 @@ _p33_setjmp_local_L5
 _p33_setjmp_local_L6
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _p33_setjmp_local_L7
                 LDA     #3
@@ -235,10 +225,8 @@ _p33_setjmp_local_L6
 _p33_setjmp_local_L7
                 LDA     marker
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _p33_setjmp_local_L8
                 LDA     #4
@@ -311,10 +299,8 @@ _p33_setjmp_local_L9
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #314
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #314
                 BNE     *+5
                 BRL     _p33_setjmp_local_L12
                 LDA     #6

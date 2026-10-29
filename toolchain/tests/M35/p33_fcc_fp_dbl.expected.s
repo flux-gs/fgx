@@ -29,11 +29,9 @@ _p33_fcc_fp_dbl_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #520
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #520
                 BVC     _p33_fcc_fp_dbl_L3
                 EOR     #$8000
 _p33_fcc_fp_dbl_L3
@@ -115,10 +113,8 @@ _p33_fcc_fp_dbl_L2
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BNE     *+5
                 BRL     _p33_fcc_fp_dbl_L4
                 LDA     #1
@@ -169,10 +165,8 @@ _p33_fcc_fp_dbl_L4
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BNE     *+5
                 BRL     _p33_fcc_fp_dbl_L5
                 LDA     #2
@@ -215,10 +209,8 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L7
                 TSC
@@ -228,10 +220,8 @@ _p33_fcc_fp_dbl_L5
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #800
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #800
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L7
                 LDA     #0
@@ -255,10 +245,8 @@ _p33_fcc_fp_dbl_L8
 _p33_fcc_fp_dbl_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L12
                 SEP     #$20
@@ -280,10 +268,8 @@ _p33_fcc_fp_dbl_L6
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L12
                 LDA     #0
@@ -313,10 +299,8 @@ _p33_fcc_fp_dbl_L13
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _p33_fcc_fp_dbl_L10
                 LDA     #0

@@ -71,6 +71,10 @@
 #include "ufsmount.h"
 #include "inode.h"
 
+/* A directory's data blocks are zeroed on the platter when allocated, as
+ * 2.11BSD's B_SYNC directory writes keep them; see bmapnew. */
+#define ISDIRBLK(ip)    (((ip)->i_mode & IFMT) == IFDIR)
+
 extern int   bread();
 extern int   bwrite();
 extern void  brelse();
@@ -170,12 +174,22 @@ struct buf *bp;
  * IT IS KEYED ON THE DEVICE VNODE, by physical block, which is what
  * ufs_bmap's own indirect reads do -- an indirect block is not part of any
  * file's logical address space and has no logical number to be cached under.
+ *
+ * `clear' IS 0 FOR A PLAIN FILE'S DATA BLOCK, which comes back as a bare
+ * number.  2.11BSD's bmap allocates one with `balloc(ip, flags)' -- cleared
+ * only when the caller asked, written with bdwrite unless B_SYNC -- and only
+ * directories pass B_SYNC, "so they never appear with garbage in them on the
+ * disk".  Every caller here owns a fresh data block's bytes already: *freshp
+ * tells ufs_write and ufs_itrunc to clear the buffer, and both write it.
+ * Zeroing it on the platter first was a second synchronous write of every
+ * block a file grew by.
  */
 static int
-bmapnew(devvp, ip, resultbno)
+bmapnew(devvp, ip, resultbno, clear)
 struct vnode  *devvp;
 struct inode  *ip;
 daddr_t       *resultbno;
+int            clear;
 {
     struct ufsmount *ump;
     struct buf      *bp;
@@ -190,17 +204,15 @@ daddr_t       *resultbno;
     error = ufs_balloc(devvp, &ump->um_sb, &newb);
     if (error)
         return (error);
+    *resultbno = newb;
+    if (!clear)
+        return (0);
 
     bp = getblk(devvp, newb);
     clrbuf(bp);
     /* bwrite releases the buffer on both arms (vfs_bio.c), so there is no
      * brelse here and none on the error path either. */
-    error = bwrite(bp);
-    if (error)
-        return (error);
-
-    *resultbno = newb;
-    return (0);
+    return (bwrite(bp));
 }
 
 
@@ -264,6 +276,7 @@ daddr_t       *resultbno;
  * NOTE THAT ONLY THE FINAL DATA BLOCK IS REPORTED FRESH.  A newly allocated
  * INDIRECT block is already zeroed on the platter by bmapnew above and its
  * caller never sees the buffer, so the distinction does not arise for it.
+ * A fresh data block is zeroed on the platter only for a directory.
  *
  * In:  addr[NADDR] -- decoded, native byte order (read path only; ignored when
  *      ip is non-null).  rwflg is B_READ or B_WRITE.  ip must be non-null when
@@ -309,7 +322,7 @@ int           *freshp;
                 *resultbno = (daddr_t)-1;   /* a hole */
                 return (0);
             }
-            error = bmapnew(devvp, ip, &nb);
+            error = bmapnew(devvp, ip, &nb, ISDIRBLK(ip));
             if (error)
                 return (error);
             addr[(int)lbn] = nb;
@@ -349,7 +362,7 @@ int           *freshp;
             *resultbno = (daddr_t)-1;   /* the whole subtree is a hole */
             return (0);
         }
-        error = bmapnew(devvp, ip, &nb);
+        error = bmapnew(devvp, ip, &nb, 1);
         if (error)
             return (error);
         addr[NADDR - j] = nb;
@@ -383,15 +396,18 @@ int           *freshp;
                 *resultbno = (daddr_t)-1;   /* a hole deeper in the tree */
                 return (0);
             }
-            error = bmapnew(devvp, ip, &nb);
+            error = bmapnew(devvp, ip, &nb,
+                            j < NIADDR || ISDIRBLK(ip));
             if (error) {
                 brelse(bp);
                 return (error);
             }
             /* THREAD IT IN AND WRITE THE PARENT SYNCHRONOUSLY, in that order.
-             * The child is already zeroed on the platter (bmapnew), so at no
-             * point between these two writes does a reachable address name a
-             * block holding somebody else's bytes.  The reverse order -- write
+             * An indirect or directory child is already zeroed on the platter
+             * (bmapnew), so at no point between these two writes does a
+             * reachable address name a block holding somebody else's bytes.
+             * A plain file's data child is not, as in 2.11BSD, where it is
+             * bdwritten and its parent too.  The reverse order -- write
              * the parent first, clear the child after -- is the window both
              * upstreams' comment exists to close.
              *

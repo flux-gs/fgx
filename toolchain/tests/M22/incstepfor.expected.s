@@ -60,11 +60,9 @@ _incstepfor_L3
 _incstepfor_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _incstepfor_L0
 _incstepfor_L2
@@ -102,10 +100,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BNE     *+5
                 BRL     _incstepfor_L4
                 LDA     #1
@@ -126,10 +122,8 @@ _incstepfor_L4
                 PLA
                 TYA
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BNE     *+5
                 BRL     _incstepfor_L5
                 LDA     #2

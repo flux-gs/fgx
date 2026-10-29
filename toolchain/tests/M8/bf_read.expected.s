@@ -19,33 +19,25 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #7
-                STA     _fcc_tmp_b
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$FFF8
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_tmp_b
+                LDA     #7
                 AND     #$0007
                 ORA     1,S   ; fccstk d=0 b=1
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #21
-                STA     _fcc_tmp_b
-                LDA     1,S   ; fccstk d=0 b=1
                 AND     #$FF07
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_tmp_b
+                LDA     #21
                 AND     #$001F
                 ASL
                 ASL
                 ASL
                 ORA     1,S   ; fccstk d=0 b=1
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #6
-                STA     _fcc_tmp_b
-                LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_tmp_b
+                LDA     #6
                 AND     #$00FF
                 ASL
                 ASL

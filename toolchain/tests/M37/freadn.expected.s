@@ -31,11 +31,9 @@ _freadn_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #36
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #36
                 BVC     _freadn_L3
                 EOR     #$8000
 _freadn_L3
@@ -158,10 +156,8 @@ _freadn_L8
                 TCS
                 TYA
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _freadn_L5
                 LDA     #1
@@ -174,11 +170,9 @@ _freadn_L6
                 BRL     _freadn_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L4
                 LDA     3,S   ; fccstk d=0 b=3
@@ -255,10 +249,8 @@ _freadn_L4
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _freadn_L12
                 LDA     #0
@@ -266,10 +258,8 @@ _freadn_L4
                 LDA:    in,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _freadn_L12
                 LDA     #1
@@ -287,11 +277,9 @@ _freadn_L13
                 PHA
                 LDA     #97
                 TAX
-                LDA     #23
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #23
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -307,11 +295,9 @@ _freadn_L11
                 BRL     _freadn_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L9
                 LDA     3,S   ; fccstk d=0 b=3
@@ -344,19 +330,15 @@ _freadn_L9
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _freadn_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L14
                 LDA     3,S   ; fccstk d=0 b=3
@@ -389,19 +371,15 @@ _freadn_L14
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _freadn_L15
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L15
                 LDA     3,S   ; fccstk d=0 b=3
@@ -478,19 +456,15 @@ _freadn_L15
                 TYA
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #36
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #36
                 BEQ     *+5
                 BRL     _freadn_L16
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L16
                 LDA     3,S   ; fccstk d=0 b=3
@@ -582,18 +556,14 @@ _freadn_L16
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _freadn_L22
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _freadn_L22
                 LDA     #1
@@ -609,10 +579,8 @@ _freadn_L23
                 LDA:    in,X
                 AND     #$00FF
                 TAX
-                LDA     #98
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #98
                 BEQ     *+5
                 BRL     _freadn_L20
                 LDA     #1
@@ -630,11 +598,9 @@ _freadn_L21
                 PHA
                 LDA     #97
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -650,11 +616,9 @@ _freadn_L19
                 BRL     _freadn_L17
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _freadn_L17
                 LDA     3,S   ; fccstk d=0 b=3

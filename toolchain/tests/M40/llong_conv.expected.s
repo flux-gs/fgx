@@ -958,10 +958,8 @@ main_stkok        TCS
                 LDA     a
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #52719
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52719
                 BNE     *+5
                 BRL     _llong_conv_L13
                 LDA     #1
@@ -1031,10 +1029,8 @@ _llong_conv_L14
                 STA     19,S   ; fccstk d=0 b=19
                 AND     #$00FF
                 TAX
-                LDA     #239
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #239
                 BNE     *+5
                 BRL     _llong_conv_L15
                 LDA     #3
@@ -1057,10 +1053,8 @@ _llong_conv_L15
                 LDA     a
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #52719
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52719
                 BNE     *+5
                 BRL     _llong_conv_L16
                 LDA     #4
@@ -1150,9 +1144,7 @@ _llong_conv_L19
                 TYA
                 RTL
 _llong_conv_L17
-                LDA     #5
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFB
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_long_from_int
@@ -2402,9 +2394,7 @@ _llong_conv_L60
                 TYA
                 RTL
 _llong_conv_L58
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -2869,10 +2859,8 @@ _llong_conv_L78
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_conv_L81
                 LDA     #23
@@ -2944,10 +2932,8 @@ _llong_conv_L81
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _llong_conv_L82
                 LDA     #24
@@ -3019,10 +3005,8 @@ _llong_conv_L82
                 TCS
                 TYA
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _llong_conv_L83
                 LDA     #25
@@ -3094,10 +3078,8 @@ _llong_conv_L83
                 TCS
                 TYA
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _llong_conv_L84
                 LDA     #26
@@ -3169,10 +3151,8 @@ _llong_conv_L84
                 TCS
                 TYA
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _llong_conv_L85
                 LDA     #27
@@ -3244,10 +3224,8 @@ _llong_conv_L85
                 TCS
                 TYA
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _llong_conv_L86
                 LDA     #28
@@ -3308,10 +3286,8 @@ _llong_conv_L86
                 PLA
                 TYA
                 TAX
-                LDA     #52719
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52719
                 BNE     *+5
                 BRL     _llong_conv_L87
                 LDA     #29
@@ -3399,10 +3375,8 @@ _llong_conv_L88
                 TCS
                 TYA
                 TAX
-                LDA     #52719
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52719
                 BNE     *+5
                 BRL     _llong_conv_L89
                 LDA     #31
@@ -3416,9 +3390,7 @@ _llong_conv_L88
                 TYA
                 RTL
 _llong_conv_L89
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -3669,11 +3641,9 @@ _llong_conv_L96
                 BRL     _llong_conv_L98
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _llong_conv_L100
                 EOR     #$8000
 _llong_conv_L100
@@ -3691,10 +3661,8 @@ _llong_conv_L99
                 INC
                 STA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _llong_conv_L101
                 LDA     a+6
@@ -3751,10 +3719,8 @@ _llong_conv_L101
 _llong_conv_L97
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _llong_conv_L102
                 LDA     #34

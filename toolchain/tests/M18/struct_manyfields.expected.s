@@ -39,12 +39,8 @@ _struct_manyfields_L0
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                PHA
-                LDA     #104
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #104
                 BVC     _struct_manyfields_L3
                 EOR     #$8000
 _struct_manyfields_L3
@@ -310,11 +306,9 @@ _struct_manyfields_L4
                 STA     _fcc_long_hi
                 LDA     _fcc_img3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #6
                 TAY
                 TSC
                 CLC

@@ -96,11 +96,8 @@ recurse_stkok        TCS
                 LDA     6+recurse_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 FGX2_FARCALL recurse
                 TAY

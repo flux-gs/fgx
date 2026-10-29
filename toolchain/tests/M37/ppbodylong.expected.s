@@ -25,27 +25,21 @@ _ppbodylong_L0
                 JSR     _fcc_safepoint
                 LDA     #1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     _fcc_img0
                 LDA     #3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img1
                 LDA     #5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img2
                 LDA     _fcc_img0
                 STA     _fcc_img3
@@ -59,41 +53,27 @@ _ppbodylong_L0
                 CLC
                 ADC     _fcc_img5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
+                TXA
+                INC
+                TAX
+                TXA
+                DEC
+                TAX
+                TXA
+                INC
+                INC
+                TAX
+                TXA
+                DEC
+                DEC
+                TAX
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
-                TAX
-                LDA     #2
-                STA     _fcc_tmp_b
-                TXA
-                CLC
-                ADC     _fcc_tmp_b
-                TAX
-                LDA     #2
-                STA     _fcc_tmp_b
-                TXA
-                SEC
-                SBC     _fcc_tmp_b
-                TAX
-                LDA     #3
-                STA     _fcc_tmp_b
-                TXA
-                CLC
-                ADC     _fcc_tmp_b
-                TAX
-                LDA     #3
-                STA     _fcc_tmp_b
-                TXA
-                SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 STA     acc
 _ppbodylong_L1
                 LDA     #0
@@ -104,11 +84,9 @@ _ppbodylong_L1
 _ppbodylong_L2
                 LDA     acc
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 TAY
                 TSC
                 CLC

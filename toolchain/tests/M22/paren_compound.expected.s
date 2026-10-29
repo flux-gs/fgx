@@ -21,11 +21,9 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #40
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     _fcc_img0
                 SEP     #$20
                 MX      %10
@@ -77,10 +75,8 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #6
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -139,10 +135,8 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #15
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -201,11 +195,9 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -244,10 +236,8 @@ main_stkok        TCS
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _paren_compound_L0
                 LDA     #1
@@ -279,10 +269,8 @@ _paren_compound_L0
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BNE     *+5
                 BRL     _paren_compound_L1
                 LDA     #2
@@ -314,10 +302,8 @@ _paren_compound_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _paren_compound_L2
                 LDA     #3
@@ -333,10 +319,8 @@ _paren_compound_L1
 _paren_compound_L2
                 LDA     gsv
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _paren_compound_L3
                 LDA     #4

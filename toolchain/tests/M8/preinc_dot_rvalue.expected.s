@@ -229,11 +229,9 @@ _preinc_dot_rvalue_L0
                 CLC
                 ADC     _fcc_img3
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
+                DEC
                 TAY
                 TSC
                 CLC

@@ -90,10 +90,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]

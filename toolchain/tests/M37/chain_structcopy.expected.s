@@ -358,10 +358,8 @@ _chain_structcopy_L4
                 BRL     _chain_structcopy_L8
                 LDA     _chain_structcopy_g1+0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _chain_structcopy_L8
                 LDA     #1
@@ -374,10 +372,8 @@ _chain_structcopy_L9
                 BRL     _chain_structcopy_L6
                 LDA     _chain_structcopy_g1+8
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _chain_structcopy_L6
                 LDA     #1
@@ -390,11 +386,9 @@ _chain_structcopy_L7
                 BRL     _chain_structcopy_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L5
                 LDA     #44
@@ -495,10 +489,8 @@ _chain_structcopy_L10
                 BRL     _chain_structcopy_L14
                 LDA     _chain_structcopy_g3+0
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _chain_structcopy_L14
                 LDA     #1
@@ -511,10 +503,8 @@ _chain_structcopy_L15
                 BRL     _chain_structcopy_L12
                 LDA     _chain_structcopy_g3+8
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _chain_structcopy_L12
                 LDA     #1
@@ -527,11 +517,9 @@ _chain_structcopy_L13
                 BRL     _chain_structcopy_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L11
                 LDA     #55
@@ -620,10 +608,8 @@ _chain_structcopy_L16
                 BRL     _chain_structcopy_L18
                 LDA     _chain_structcopy_g1+8
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _chain_structcopy_L18
                 LDA     #1
@@ -636,11 +622,9 @@ _chain_structcopy_L19
                 BRL     _chain_structcopy_L17
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L17
                 LDA     #66
@@ -700,10 +684,8 @@ _chain_structcopy_L20
                 BRL     _chain_structcopy_L24
                 LDA     _chain_structcopy_g2+0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _chain_structcopy_L24
                 LDA     #1
@@ -716,10 +698,8 @@ _chain_structcopy_L25
                 BRL     _chain_structcopy_L22
                 LDA     _chain_structcopy_g2+8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _chain_structcopy_L22
                 LDA     #1
@@ -732,11 +712,9 @@ _chain_structcopy_L23
                 BRL     _chain_structcopy_L21
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L21
                 LDA     #77
@@ -810,10 +788,8 @@ _chain_structcopy_L26
                 BPL     _chain_structcopy_L26
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _chain_structcopy_L30
                 LDA     #66
@@ -855,10 +831,8 @@ _chain_structcopy_L31
                 BRL     _chain_structcopy_L28
                 LDA     _chain_structcopy_g3+8
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _chain_structcopy_L28
                 LDA     #1
@@ -871,11 +845,9 @@ _chain_structcopy_L29
                 BRL     _chain_structcopy_L27
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L27
                 LDA     #88
@@ -937,10 +909,8 @@ _chain_structcopy_L32
                 BPL     _chain_structcopy_L32
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _chain_structcopy_L34
                 LDA     #66
@@ -982,11 +952,9 @@ _chain_structcopy_L35
                 BRL     _chain_structcopy_L33
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L33
                 LDA     #66
@@ -1018,11 +986,9 @@ _chain_structcopy_L33
                 BRL     _chain_structcopy_L36
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     3,S   ; fccstk d=0 b=3
 _chain_structcopy_L36
                 LDA     3,S   ; fccstk d=0 b=3

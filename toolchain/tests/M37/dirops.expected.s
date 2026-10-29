@@ -344,10 +344,8 @@ _dirops_L14
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dirops_L11
                 LDA     #1
@@ -360,11 +358,9 @@ _dirops_L12
                 BRL     _dirops_L10
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #9
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L10
                 LDA     7,S   ; fccstk d=0 b=7
@@ -433,11 +429,9 @@ _dirops_L18
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 BVC     _dirops_L22
                 EOR     #$8000
 _dirops_L22
@@ -450,10 +444,8 @@ _dirops_L22
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #15
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -480,10 +472,8 @@ _dirops_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dirops_L24
                 LDA     #0
@@ -557,10 +547,8 @@ _dirops_L26
 _dirops_L16
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #10
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -572,11 +560,9 @@ _dirops_L28
                 BRL     _dirops_L27
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L27
                 LDA     19,S   ; fccstk d=0 b=19
@@ -585,11 +571,9 @@ _dirops_L27
                 BRL     _dirops_L29
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L29
                 LDA     15,S   ; fccstk d=0 b=15
@@ -610,11 +594,9 @@ _dirops_L32
                 BRL     _dirops_L30
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L30
                 LDA     3,S   ; fccstk d=0 b=3
@@ -631,10 +613,8 @@ _dirops_L30
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _dirops_L33
                 SEP     #$20
@@ -737,10 +717,8 @@ _dirops_L41
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -760,11 +738,9 @@ _dirops_L39
                 BRL     _dirops_L37
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #9
                 STA     21,S   ; fccstk d=0 b=21
 _dirops_L37
                 LDA     3,S   ; fccstk d=0 b=3

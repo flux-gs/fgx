@@ -32,10 +32,8 @@ main_stkok        TCS
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BNE     *+5
                 BRL     _str2d_init_L0
                 LDA     #1
@@ -62,10 +60,8 @@ _str2d_init_L0
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #44
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #44
                 BNE     *+5
                 BRL     _str2d_init_L1
                 LDA     #2
@@ -92,10 +88,8 @@ _str2d_init_L1
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _str2d_init_L2
                 LDA     #3
@@ -122,10 +116,8 @@ _str2d_init_L2
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L3
                 LDA     #4
@@ -152,10 +144,8 @@ _str2d_init_L3
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BNE     *+5
                 BRL     _str2d_init_L4
                 LDA     #5
@@ -182,10 +172,8 @@ _str2d_init_L4
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L5
                 LDA     #6
@@ -212,10 +200,8 @@ _str2d_init_L5
                 LDA:    dig,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _str2d_init_L6
                 LDA     #7

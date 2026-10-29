@@ -20,19 +20,11 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #2
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_literal_L1
                 LDA     #2
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_literal_L1
                 LDA     #0
@@ -55,19 +47,11 @@ _sizeof_literal_L2
                 RTL
 _sizeof_literal_L0
                 LDA     #4
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_literal_L4
                 LDA     #4
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_literal_L4
                 LDA     #0
@@ -90,19 +74,11 @@ _sizeof_literal_L5
                 RTL
 _sizeof_literal_L3
                 LDA     #2
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_literal_L7
                 LDA     #2
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _sizeof_literal_L7
                 LDA     #0
@@ -125,19 +101,11 @@ _sizeof_literal_L8
                 RTL
 _sizeof_literal_L6
                 LDA     #8
-                PHA
-                LDA     #8
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _sizeof_literal_L10
                 LDA     #4
-                PHA
-                LDA     #4
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sizeof_literal_L10
                 LDA     #0

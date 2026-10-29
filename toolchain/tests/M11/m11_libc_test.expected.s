@@ -92,11 +92,9 @@ main_stkok        TCS
                 ASL
                 ASL
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

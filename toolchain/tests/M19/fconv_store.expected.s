@@ -80,19 +80,15 @@ main_stkok        TCS
                 JSR     _fcc_ftoi
                 STA     GI
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _fconv_store_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L0
                 LDA     #GA
@@ -120,19 +116,15 @@ _fconv_store_L0
                 TAX
                 LDA:    GA,X
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _fconv_store_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L1
                 SEP     #$20
@@ -169,10 +161,8 @@ _fconv_store_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _fconv_store_L3
                 LDA     GS+6
@@ -208,11 +198,9 @@ _fconv_store_L4
                 BRL     _fconv_store_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L2
                 LDA     #$0001
@@ -278,11 +266,9 @@ _fconv_store_L2
                 BRL     _fconv_store_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L5
                 LDA     #3
@@ -326,19 +312,15 @@ _fconv_store_L5
                 FGX2_FARCALL _fcc_dtol
                 STA     GI
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _fconv_store_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L6
                 LDA     #$0001
@@ -417,11 +399,9 @@ _fconv_store_L6
                 BRL     _fconv_store_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L7
                 LDA     #$0001
@@ -492,11 +472,9 @@ _fconv_store_L7
                 BRL     _fconv_store_L8
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L8
                 LDA     #$0000
@@ -547,11 +525,9 @@ _fconv_store_L8
                 BRL     _fconv_store_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     1,S   ; fccstk d=0 b=1
 _fconv_store_L9
                 LDA     1,S   ; fccstk d=0 b=1

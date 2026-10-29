@@ -79,10 +79,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _lc_stat_local_L0
                 LDA     #1
@@ -98,15 +96,11 @@ main_stkok        TCS
 _lc_stat_local_L0
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #32768
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #32768
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _lc_stat_local_L1
                 LDA     #2

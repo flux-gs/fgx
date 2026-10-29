@@ -42,13 +42,7 @@ main_stkok        TCS
                 TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _lc_errno_L0
                 LDA     #1
@@ -64,10 +58,8 @@ main_stkok        TCS
 _lc_errno_L0
                 LDA     errno
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _lc_errno_L1
                 LDA     #2
@@ -114,10 +106,8 @@ _lc_errno_L1
                 TYA
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L2
                 LDA     #3
@@ -133,10 +123,8 @@ _lc_errno_L1
 _lc_errno_L2
                 LDA     errno
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _lc_errno_L3
                 LDA     #4
@@ -177,10 +165,8 @@ _lc_errno_L3
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L4
                 LDA     #5
@@ -221,10 +207,8 @@ _lc_errno_L4
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L5
                 LDA     #6
@@ -265,10 +249,8 @@ _lc_errno_L5
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _lc_errno_L6
                 LDA     #7

@@ -148,11 +148,9 @@ use_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #97
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -200,11 +198,9 @@ use_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #97
                 STA     _fcc_tmp_b
                 PLA
                 CLC

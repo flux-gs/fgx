@@ -236,9 +236,7 @@ main_stkok        TCS
                 LDY     #6
                 STA     [_fcc_fpr0],Y
                 TXA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -278,9 +276,7 @@ main_stkok        TCS
                 TXA
                 LDA     #1
                 STA     99,S   ; fccstk d=0 b=99
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -666,18 +662,14 @@ _llong_mem_L13
 _llong_mem_L11
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _llong_mem_L17
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _llong_mem_L17
                 LDA     #0
@@ -1297,11 +1289,8 @@ _llong_mem_L27
                 STA     _fcc_fpr0
                 LDA     n
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -1496,11 +1485,8 @@ _llong_mem_L31
                 STA     _fcc_fpr0
                 LDA     n
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -1682,18 +1668,14 @@ _llong_mem_L37
 _llong_mem_L35
                 LDA     63,S   ; fccstk d=0 b=63
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _llong_mem_L39
                 LDA     73,S   ; fccstk d=0 b=73
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _llong_mem_L39
                 LDA     #0
@@ -3230,9 +3212,7 @@ _llong_mem_L59
                 TYA
                 RTL
 _llong_mem_L57
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -3397,9 +3377,7 @@ _llong_mem_L60
                 PHA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -3760,9 +3738,7 @@ _llong_mem_L62
                 PHA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -4022,10 +3998,8 @@ _llong_mem_L64
                 FGX2_FARCALL _fcc_ll_divs
                 STA     29,S   ; fccstk d=0 b=29
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_mem_L67
                 LDA     #32
@@ -4084,10 +4058,8 @@ _llong_mem_L67
                 FGX2_FARCALL _fcc_ll_add
                 STA     29,S   ; fccstk d=0 b=29
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _llong_mem_L68
                 LDA     #33
@@ -4161,9 +4133,7 @@ _llong_mem_L73
                 PHA
                 TYA
                 PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFE
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -4318,9 +4288,7 @@ _llong_mem_L69
                 PHA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -4563,10 +4531,8 @@ _llong_mem_L85
 _llong_mem_L83
                 LDA     gsi+0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _llong_mem_L89
                 LDA     #$5566
@@ -4625,10 +4591,8 @@ _llong_mem_L90
                 BRL     _llong_mem_L87
                 LDA     gsi+10
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _llong_mem_L87
                 LDA     #0
@@ -4725,9 +4689,7 @@ _llong_mem_L86
                 PHA
                 TYA
                 PHA
-                LDA     #5
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFB
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -4884,9 +4846,7 @@ _llong_mem_L93
                 PHA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -5016,10 +4976,8 @@ _llong_mem_L98
 _llong_mem_L96
                 LDA     99,S   ; fccstk d=0 b=99
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _llong_mem_L104
                 LDA     107,S   ; fccstk d=0 b=107
@@ -5038,9 +4996,7 @@ _llong_mem_L96
                 PHA
                 TYA
                 PHA
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi
@@ -5082,10 +5038,8 @@ _llong_mem_L105
                 BRL     _llong_mem_L102
                 LDA     109,S   ; fccstk d=0 b=109
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _llong_mem_L102
                 LDA     #0

@@ -256,10 +256,8 @@ main_stkok        TCS
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _f_param_L0
                 LDA     #1
@@ -308,10 +306,8 @@ _f_param_L0
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_param_L1
                 LDA     #2
@@ -349,10 +345,8 @@ _f_param_L1
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_param_L2
                 LDA     #3
@@ -393,10 +387,8 @@ _f_param_L2
                 TYA
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_param_L3
                 LDA     #4

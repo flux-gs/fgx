@@ -54,10 +54,8 @@ main_stkok        TCS
                 PHA
                 LDA     _fcc_img2
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #15
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -65,11 +63,9 @@ main_stkok        TCS
                 BRL     _ptr_mask_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L0
                 LDA     _fcc_img5
@@ -81,10 +77,8 @@ _ptr_mask_L0
                 PHA
                 LDA     _fcc_img2
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #15
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -92,11 +86,9 @@ _ptr_mask_L0
                 BRL     _ptr_mask_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L1
                 LDA     _fcc_img5
@@ -104,18 +96,14 @@ _ptr_mask_L1
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     _fcc_img1
                 PHA
                 LDA     _fcc_img2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -123,11 +111,9 @@ _ptr_mask_L1
                 BRL     _ptr_mask_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L2
                 LDA     #90
@@ -150,11 +136,9 @@ _ptr_mask_L2
                 BRL     _ptr_mask_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L3
                 LDA     _fcc_img5
@@ -162,17 +146,13 @@ _ptr_mask_L3
                 LDA     _fcc_img4
                 STA     _fcc_fpr0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1
                 PHA
                 LDA     _fcc_img2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -180,11 +160,9 @@ _ptr_mask_L3
                 BRL     _ptr_mask_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L4
                 LDA     _fcc_img5
@@ -226,34 +204,26 @@ _ptr_mask_L7
                 BRL     _ptr_mask_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L5
                 LDA     _fcc_img3
                 TAX
-                LDA     #60
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #60
                 STA     _fcc_img1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _ptr_mask_L8
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _ptr_mask_L8
                 LDA     _fcc_img0

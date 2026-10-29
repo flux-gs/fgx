@@ -71,10 +71,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _pdref_store_L0
                 LDA     #1
@@ -93,10 +91,8 @@ _pdref_store_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BNE     *+5
                 BRL     _pdref_store_L1
                 LDA     #2
@@ -115,10 +111,8 @@ _pdref_store_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BNE     *+5
                 BRL     _pdref_store_L2
                 LDA     #3

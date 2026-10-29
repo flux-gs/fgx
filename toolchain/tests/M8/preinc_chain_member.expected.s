@@ -106,36 +106,28 @@ main_stkok        TCS
                 DEC
                 STA     [_fcc_ptr]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _preinc_chain_member_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _preinc_chain_member_L0
                 LDA     I+0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _preinc_chain_member_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _preinc_chain_member_L1
                 SEP     #$20
@@ -181,36 +173,28 @@ _preinc_chain_member_L1
                 INC
                 STA     [_fcc_ptr]
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _preinc_chain_member_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _preinc_chain_member_L2
                 LDA     I+0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _preinc_chain_member_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _preinc_chain_member_L3
                 LDA     _fcc_img0

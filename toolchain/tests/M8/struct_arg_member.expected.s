@@ -143,11 +143,10 @@ main_stkok        TCS
                 LDA     #$0403
                 STA     _fcc_long_hi
                 LDA     #$0201
-                STA     _fcc_tmp_b
                 STA     5,S   ; fccstk d=0 b=5
                 LDA     _fcc_long_hi
                 STA     7,S   ; fccstk d=0 b=7
-                LDA     _fcc_tmp_b
+                LDA     #$0201
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -253,18 +252,14 @@ _struct_arg_member_L3
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _struct_arg_member_L2
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L2
                 SEP     #$20
@@ -304,18 +299,14 @@ _struct_arg_member_L5
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _struct_arg_member_L4
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L4
                 SEP     #$20
@@ -364,18 +355,14 @@ _struct_arg_member_L7
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _struct_arg_member_L6
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #4
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L6
                 SEP     #$20
@@ -424,18 +411,14 @@ _struct_arg_member_L9
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     9,S   ; fccstk d=0 b=9
 _struct_arg_member_L8
                 LDA     9,S   ; fccstk d=0 b=9

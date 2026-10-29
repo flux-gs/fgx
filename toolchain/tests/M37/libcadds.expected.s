@@ -145,11 +145,9 @@ _libcadds_L2
                 BRL     _libcadds_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L0
                 SEP     #$20
@@ -326,16 +324,12 @@ _libcadds_L8
                 TYA
                 BRL     _libcadds_L6
 _libcadds_L5
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
 _libcadds_L6
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _libcadds_L12
                 LDA     #0
@@ -343,10 +337,8 @@ _libcadds_L6
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _libcadds_L12
                 LDA     #1
@@ -362,10 +354,8 @@ _libcadds_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _libcadds_L10
                 LDA     #1
@@ -378,11 +368,9 @@ _libcadds_L11
                 BRL     _libcadds_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L9
                 LDA     3,S   ; fccstk d=0 b=3
@@ -627,10 +615,8 @@ _libcadds_L21
                 TCS
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _libcadds_L25
                 LDA     #0
@@ -638,10 +624,8 @@ _libcadds_L21
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _libcadds_L25
                 LDA     #1
@@ -657,10 +641,8 @@ _libcadds_L26
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _libcadds_L23
                 LDA     #1
@@ -673,11 +655,9 @@ _libcadds_L24
                 BRL     _libcadds_L22
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L22
                 SEP     #$20
@@ -728,10 +708,8 @@ _libcadds_L22
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _libcadds_L32
                 LDA     3,S   ; fccstk d=0 b=3
@@ -750,10 +728,8 @@ _libcadds_L22
                 TCS
                 TYA
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _libcadds_L32
                 LDA     #1
@@ -778,10 +754,8 @@ _libcadds_L33
                 TCS
                 TYA
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _libcadds_L30
                 LDA     #1
@@ -806,10 +780,8 @@ _libcadds_L31
                 TCS
                 TYA
                 TAX
-                LDA     #98
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #98
                 BEQ     *+5
                 BRL     _libcadds_L28
                 LDA     #1
@@ -822,11 +794,9 @@ _libcadds_L29
                 BRL     _libcadds_L27
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L27
                 LDA     3,S   ; fccstk d=0 b=3
@@ -891,11 +861,9 @@ _libcadds_L34
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _libcadds_L36
                 EOR     #$8000
 _libcadds_L36
@@ -919,10 +887,8 @@ _libcadds_L35
                 TCS
                 TYA
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BEQ     *+5
                 BRL     _libcadds_L38
                 LDA     3,S   ; fccstk d=0 b=3
@@ -939,10 +905,8 @@ _libcadds_L35
                 TCS
                 TYA
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BEQ     *+5
                 BRL     _libcadds_L38
                 LDA     #1
@@ -955,11 +919,9 @@ _libcadds_L39
                 BRL     _libcadds_L37
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _libcadds_L37
                 LDA     3,S   ; fccstk d=0 b=3

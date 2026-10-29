@@ -92,11 +92,8 @@ _ufssb_sb_u32_stkok        TCS
                 LDA     14+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=4 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -155,11 +152,9 @@ _ufssb_sb_u32_stkok        TCS
                 LDA     12+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -201,11 +196,9 @@ _ufssb_sb_u32_stkok        TCS
                 LDA     14+_ufssb_sb_u32_FRAMESIZE,S   ; fccstk d=4 b=10 fs
                 FIN
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -350,11 +343,8 @@ _ufssb_sb_u16_stkok        TCS
                 LDA     14+_ufssb_sb_u16_FRAMESIZE,S   ; fccstk d=4 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -494,10 +484,8 @@ _ufssb_L0
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -546,11 +534,8 @@ _ufssb_L0
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 TAY
@@ -568,10 +553,8 @@ _ufssb_L0
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -620,11 +603,9 @@ _ufssb_L0
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 CLC
                 ADC     1,S
                 TAY
@@ -637,10 +618,8 @@ _ufssb_L0
                 PHA
                 LDA     _fcc_img1
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -689,11 +668,9 @@ _ufssb_L0
                 LDA     12+_ufssb_sb_p32_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 CLC
                 ADC     1,S
                 TAY
@@ -711,10 +688,8 @@ _ufssb_L0
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -809,10 +784,8 @@ _ufssb_sb_p16_stkok        TCS
                 LDA     16+_ufssb_sb_p16_FRAMESIZE,S   ; fccstk d=4 b=12 fs
                 FIN
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -861,11 +834,8 @@ _ufssb_sb_p16_stkok        TCS
                 LDA     12+_ufssb_sb_p16_FRAMESIZE,S   ; fccstk d=2 b=10 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     1,S
                 TAY
@@ -892,10 +862,8 @@ _ufssb_sb_p16_stkok        TCS
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -1967,11 +1935,9 @@ _ufssb_L1
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _ufssb_L4
                 EOR     #$8000
 _ufssb_L4
@@ -2077,11 +2043,9 @@ _ufssb_L5
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 BVC     _ufssb_L8
                 EOR     #$8000
 _ufssb_L8
@@ -3186,11 +3150,9 @@ _ufssb_L9
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _ufssb_L12
                 EOR     #$8000
 _ufssb_L12
@@ -3289,11 +3251,9 @@ _ufssb_L13
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 BVC     _ufssb_L16
                 EOR     #$8000
 _ufssb_L16
@@ -3779,11 +3739,9 @@ _ufssb_L17
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _ufssb_L20
                 EOR     #$8000
 _ufssb_L20
@@ -3971,11 +3929,9 @@ _ufssb_L21
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 BVC     _ufssb_L24
                 EOR     #$8000
 _ufssb_L24
@@ -4309,11 +4265,9 @@ _ufssb_L27
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _ufssb_L31
                 EOR     #$8000
 _ufssb_L31
@@ -4344,10 +4298,8 @@ _ufssb_L31
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #50
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -4401,11 +4353,9 @@ _ufssb_L28
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _ufssb_L36
                 EOR     #$8000
 _ufssb_L36
@@ -4436,10 +4386,8 @@ _ufssb_L36
                 LDY     #208
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #100
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -4731,10 +4679,8 @@ main_stkok        TCS
                 TCS
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #126
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #126
                 BNE     *+5
                 BRL     _ufssb_L42
                 LDA     #1
@@ -4750,10 +4696,8 @@ main_stkok        TCS
 _ufssb_L42
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _ufssb_L43
                 LDA     #2
@@ -4769,10 +4713,8 @@ _ufssb_L42
 _ufssb_L43
                 LDA     209,S   ; fccstk d=0 b=209
                 TAX
-                LDA     #92
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #92
                 BNE     *+5
                 BRL     _ufssb_L44
                 LDA     #3
@@ -4793,10 +4735,8 @@ _ufssb_L44
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #1368
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1368
                 BNE     *+5
                 BRL     _ufssb_L45
                 LDA     #4
@@ -4817,10 +4757,8 @@ _ufssb_L45
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _ufssb_L46
                 LDA     #5
@@ -4841,10 +4779,8 @@ _ufssb_L46
                 STZ     _fcc_fp+2
                 LDA     [_fcc_fp]
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BNE     *+5
                 BRL     _ufssb_L47
                 LDA     #6

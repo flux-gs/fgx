@@ -83,10 +83,8 @@ main_stkok        TCS
                 STA     _fcc_ptr
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #16
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -136,10 +134,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #15
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -159,19 +155,15 @@ main_stkok        TCS
                 TAX
                 LDA:    wtab,X
                 TAX
-                LDA     #19
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #19
                 BEQ     *+5
                 BRL     _ptrsub_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _ptrsub_L0
                 LDA     #2
@@ -179,27 +171,21 @@ _ptrsub_L0
                 LDA:    ctab,X
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _ptrsub_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _ptrsub_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -211,11 +197,9 @@ _ptrsub_L3
                 BRL     _ptrsub_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _ptrsub_L2
                 LDA     _fcc_img0

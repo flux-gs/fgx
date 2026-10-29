@@ -37,18 +37,14 @@ main_stkok        TCS
                 STA     _fcc_img0
                 LDA     #20
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BNE     *+5
                 BRL     _char_bitfield_bytes_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #1
                 STA     _fcc_img0
 _char_bitfield_bytes_L0
                 LDA     #90
@@ -57,21 +53,16 @@ _char_bitfield_bytes_L0
                 STA     10,S   ; fccstk d=0 b=10
                 REP     #$20
                 MX      %00
-                LDA     #5
-                STA     _fcc_tmp_b
                 LDA     9,S   ; fccstk d=0 b=9
                 AND     #$FFF0
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     _fcc_tmp_b
+                LDA     #5
                 AND     #$000F
                 ORA     9,S   ; fccstk d=0 b=9
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     #4
-                STA     _fcc_tmp_b
-                LDA     9,S   ; fccstk d=0 b=9
                 AND     #$FF0F
                 STA     9,S   ; fccstk d=0 b=9
-                LDA     _fcc_tmp_b
+                LDA     #4
                 AND     #$000F
                 ASL
                 ASL
@@ -91,10 +82,8 @@ _char_bitfield_bytes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #69
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #69
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L2
                 LDA     _fcc_img2
@@ -109,10 +98,8 @@ _char_bitfield_bytes_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L2
                 LDA     #0
@@ -125,19 +112,15 @@ _char_bitfield_bytes_L3
                 BRL     _char_bitfield_bytes_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     _fcc_img0
 _char_bitfield_bytes_L1
                 LDA     9,S   ; fccstk d=0 b=9
                 AND     #$000F
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L7
                 LDA     9,S   ; fccstk d=0 b=9
@@ -147,10 +130,8 @@ _char_bitfield_bytes_L1
                 LSR
                 AND     #$000F
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L7
                 LDA     #0
@@ -164,10 +145,8 @@ _char_bitfield_bytes_L8
                 LDA     10,S   ; fccstk d=0 b=10
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L5
                 LDA     #0
@@ -180,27 +159,20 @@ _char_bitfield_bytes_L6
                 BRL     _char_bitfield_bytes_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #4
                 STA     _fcc_img0
 _char_bitfield_bytes_L4
-                LDA     #6
-                STA     _fcc_tmp_b
                 LDA     gh+0
                 AND     #$FFF0
                 STA     gh+0
-                LDA     _fcc_tmp_b
+                LDA     #6
                 AND     #$000F
                 ORA     gh+0
                 STA     gh+0
-                LDA     #4
-                STA     _fcc_tmp_b
-                LDA     gh+0
                 AND     #$FF0F
                 STA     gh+0
-                LDA     _fcc_tmp_b
+                LDA     #4
                 AND     #$000F
                 ASL
                 ASL
@@ -226,19 +198,15 @@ _char_bitfield_bytes_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #70
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #70
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L10
                 LDA     gh+1
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L10
                 LDA     #0
@@ -251,10 +219,8 @@ _char_bitfield_bytes_L11
                 BRL     _char_bitfield_bytes_L9
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 STA     _fcc_img0
 _char_bitfield_bytes_L9
                 LDA     #17
@@ -263,12 +229,10 @@ _char_bitfield_bytes_L9
                 STA     1,S   ; fccstk d=0 b=1
                 REP     #$20
                 MX      %00
-                LDA     #5
-                STA     _fcc_tmp_b
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$F8FF
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_tmp_b
+                LDA     #5
                 AND     #$0007
                 ASL
                 ASL
@@ -280,12 +244,9 @@ _char_bitfield_bytes_L9
                 ASL
                 ORA     1,S   ; fccstk d=0 b=1
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #17
-                STA     _fcc_tmp_b
-                LDA     1,S   ; fccstk d=0 b=1
                 AND     #$07FF
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     _fcc_tmp_b
+                LDA     #17
                 AND     #$001F
                 ASL
                 ASL
@@ -302,19 +263,15 @@ _char_bitfield_bytes_L9
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                LDA     #17
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17
                 BEQ     *+5
                 BRL     _char_bitfield_bytes_L15
                 LDA     #0
@@ -347,10 +304,8 @@ _char_bitfield_bytes_L16
                 ASL
                 ASL
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #5
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -366,10 +321,8 @@ _char_bitfield_bytes_L14
                 BRL     _char_bitfield_bytes_L12
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #16
                 STA     _fcc_img0
 _char_bitfield_bytes_L12
                 LDA     _fcc_img0

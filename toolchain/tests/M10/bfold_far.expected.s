@@ -33,11 +33,9 @@ _bfold_far_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #126
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #126
                 BVC     _bfold_far_L3
                 EOR     #$8000
 _bfold_far_L3

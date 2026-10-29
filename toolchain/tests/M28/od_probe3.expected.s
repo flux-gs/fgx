@@ -313,10 +313,8 @@ main_stkok        TCS
                 TCS
                 LDA     a+0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _od_probe3_L0
                 LDA     #1
@@ -332,10 +330,8 @@ main_stkok        TCS
 _od_probe3_L0
                 LDA     a+2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _od_probe3_L1
                 LDA     #2
@@ -351,10 +347,8 @@ _od_probe3_L0
 _od_probe3_L1
                 LDA     a+4
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _od_probe3_L2
                 LDA     #3
@@ -370,10 +364,8 @@ _od_probe3_L1
 _od_probe3_L2
                 LDA     a+10
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _od_probe3_L3
                 LDA     #4
@@ -529,10 +521,8 @@ _od_probe3_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _od_probe3_L7
                 LDA     #6
@@ -553,10 +543,8 @@ _od_probe3_L7
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _od_probe3_L8
                 LDA     #7
@@ -634,10 +622,8 @@ _od_probe3_L10
                 TCS
                 TYA
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BNE     *+5
                 BRL     _od_probe3_L9
                 LDA     #8

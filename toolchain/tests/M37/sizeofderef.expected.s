@@ -20,18 +20,13 @@ main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
                 LDA     #4
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 ASL
-                PHA
-                LDA     #2
-                STA     _fcc_tmp_b
-                PLA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 TAY
                 TSC
                 CLC

@@ -110,10 +110,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L0
                 LDA     #1
@@ -236,10 +234,8 @@ _llong_printf_L0
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L1
                 LDA     #2
@@ -328,10 +324,8 @@ _llong_printf_L1
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L2
                 LDA     #3
@@ -436,10 +430,8 @@ _llong_printf_L2
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L3
                 LDA     #4
@@ -528,10 +520,8 @@ _llong_printf_L3
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L4
                 LDA     #5
@@ -637,10 +627,8 @@ _llong_printf_L4
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L5
                 LDA     #6
@@ -763,10 +751,8 @@ _llong_printf_L5
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L6
                 LDA     #7
@@ -867,10 +853,8 @@ _llong_printf_L6
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_printf_L7
                 LDA     #8
@@ -1104,9 +1088,7 @@ _llong_printf_L14
                 PHA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 JSR     _fcc_long_from_int
                 LDX     #0
                 BIT     _fcc_long_hi

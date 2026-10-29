@@ -94,10 +94,8 @@ main_stkok        TCS
                 RTL
 _uresid_L3
                 TAX
-                LDA     #30000
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #30000
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -105,11 +103,9 @@ _uresid_L3
                 BRL     _uresid_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _uresid_L2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -172,11 +168,9 @@ _uresid_L4
                 BRL     _uresid_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _uresid_L5
                 LDA     #$0000
@@ -230,11 +224,9 @@ _uresid_L5
                 TAX
                 LDA     gu
                 TAY
-                LDA     #10
-                STA     _fcc_tmp_b
                 TYA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #10
                 STA     _fcc_tmp_b
                 TXA
                 CLC

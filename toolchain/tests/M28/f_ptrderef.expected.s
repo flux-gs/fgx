@@ -160,10 +160,8 @@ _f_ptrderef_L1
                 LDA     [_fcc_ptr]
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _f_ptrderef_L2
                 LDA     #3
@@ -221,10 +219,8 @@ _f_ptrderef_L2
                 FGX2_FARCALL _fcc_dadd
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_ptrderef_L3
                 LDA     #4
@@ -269,10 +265,8 @@ _f_ptrderef_L3
                 LDA     gf
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _f_ptrderef_L4
                 LDA     #5
@@ -424,10 +418,8 @@ _f_ptrderef_L5
                 LDA     _fcc_long_b_lo
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_ptrderef_L6
                 LDA     #7

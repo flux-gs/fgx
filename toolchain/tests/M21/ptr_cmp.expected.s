@@ -181,10 +181,8 @@ main_stkok        TCS
                 FGX2_FARCALL pcount
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _ptr_cmp_L3
                 LDA     #1
@@ -337,10 +335,8 @@ _ptr_cmp_L10
                 PLA
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _ptr_cmp_L13
                 LDA     #5
@@ -356,9 +352,7 @@ _ptr_cmp_L10
 _ptr_cmp_L13
                 LDA     #0
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 PHA
                 FGX2_FARCALL icmp
                 TAY
@@ -366,10 +360,8 @@ _ptr_cmp_L13
                 PLA
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _ptr_cmp_L14
                 LDA     #6

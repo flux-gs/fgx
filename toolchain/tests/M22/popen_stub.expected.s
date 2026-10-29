@@ -103,13 +103,7 @@ _popen_stub_L0
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _popen_stub_L3
                 LDA     #2

@@ -297,18 +297,14 @@ main_stkok        TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _scanf_L9
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _scanf_L9
                 LDA     #0
@@ -320,13 +316,7 @@ _scanf_L10
                 BEQ     *+5
                 BRL     _scanf_L7
                 LDA     3,S   ; fccstk d=0 b=3
-                PHA
-                LDA     #34
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFDE
                 BEQ     *+5
                 BRL     _scanf_L7
                 LDA     #0
@@ -339,10 +329,8 @@ _scanf_L8
                 BRL     _scanf_L5
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #63
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #63
                 BEQ     *+5
                 BRL     _scanf_L5
                 LDA     #0
@@ -355,10 +343,8 @@ _scanf_L6
                 BRL     _scanf_L3
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BEQ     *+5
                 BRL     _scanf_L3
                 LDA     #0
@@ -435,10 +421,8 @@ _scanf_L2
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L14
                 LDA     13,S   ; fccstk d=0 b=13
@@ -473,13 +457,7 @@ _scanf_L15
                 BEQ     *+5
                 BRL     _scanf_L12
                 LDA     15,S   ; fccstk d=0 b=15
-                PHA
-                LDA     #5
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFB
                 BEQ     *+5
                 BRL     _scanf_L12
                 LDA     #0
@@ -556,18 +534,14 @@ _scanf_L11
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L19
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #123
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #123
                 BEQ     *+5
                 BRL     _scanf_L19
                 LDA     #0
@@ -580,10 +554,8 @@ _scanf_L20
                 BRL     _scanf_L17
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _scanf_L17
                 LDA     #0
@@ -648,18 +620,14 @@ _scanf_L16
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L22
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _scanf_L22
                 LDA     #0
@@ -736,10 +704,8 @@ _scanf_L21
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L31
                 SEP     #$20
@@ -760,10 +726,8 @@ _scanf_L21
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #104
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #104
                 BEQ     *+5
                 BRL     _scanf_L31
                 LDA     #0
@@ -792,10 +756,8 @@ _scanf_L32
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #111
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #111
                 BEQ     *+5
                 BRL     _scanf_L29
                 LDA     #0
@@ -824,10 +786,8 @@ _scanf_L30
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L27
                 LDA     #0
@@ -841,10 +801,8 @@ _scanf_L28
                 LDA     17,S   ; fccstk d=0 b=17
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BEQ     *+5
                 BRL     _scanf_L25
                 LDA     #0
@@ -921,10 +879,8 @@ _scanf_L24
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L38
                 SEP     #$20
@@ -945,10 +901,8 @@ _scanf_L24
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _scanf_L38
                 LDA     #0
@@ -977,10 +931,8 @@ _scanf_L39
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L36
                 LDA     #0
@@ -993,10 +945,8 @@ _scanf_L37
                 BRL     _scanf_L34
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #123
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #123
                 BEQ     *+5
                 BRL     _scanf_L34
                 LDA     #0
@@ -1073,18 +1023,14 @@ _scanf_L33
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L43
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L43
                 LDA     #0
@@ -1097,10 +1043,8 @@ _scanf_L44
                 BRL     _scanf_L41
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L41
                 LDA     #0
@@ -1165,10 +1109,8 @@ _scanf_L40
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L46
                 LDA     21,S   ; fccstk d=0 b=21
@@ -1256,10 +1198,8 @@ _scanf_L45
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L49
                 LDA     21,S   ; fccstk d=0 b=21
@@ -1347,10 +1287,8 @@ _scanf_L48
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L52
                 LDA     21,S   ; fccstk d=0 b=21
@@ -1439,10 +1377,8 @@ _scanf_L51
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L55
                 LDA     29,S   ; fccstk d=0 b=29
@@ -1554,10 +1490,8 @@ _scanf_L54
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L58
                 LDA     29,S   ; fccstk d=0 b=29
@@ -1719,10 +1653,8 @@ _scanf_L57
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L61
                 LDA     29,S   ; fccstk d=0 b=29
@@ -1884,10 +1816,8 @@ _scanf_L60
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _scanf_L64
                 LDA     37,S   ; fccstk d=0 b=37
@@ -2004,21 +1934,13 @@ _scanf_L63
                 ADC     #12
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _scanf_L67
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _scanf_L67
                 LDA     #0
@@ -2082,18 +2004,14 @@ _scanf_L66
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _scanf_L70
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _scanf_L70
                 LDA     #0
@@ -2340,18 +2258,14 @@ _scanf_L75
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _scanf_L81
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _scanf_L81
                 LDA     #0
@@ -2442,10 +2356,8 @@ _scanf_L78
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _scanf_L83
                 LDA     #20
@@ -2495,13 +2407,7 @@ _scanf_L83
                 ADC     #12
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _scanf_L84
                 LDA     #21

@@ -85,11 +85,9 @@ _realloc_grow_L3
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _realloc_grow_L6
                 EOR     #$8000
 _realloc_grow_L6
@@ -112,11 +110,9 @@ _realloc_grow_L6
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -208,11 +204,9 @@ _realloc_grow_L10
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _realloc_grow_L13
                 EOR     #$8000
 _realloc_grow_L13
@@ -230,18 +224,13 @@ _realloc_grow_L13
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -273,11 +262,9 @@ _realloc_grow_L15
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #200
                 BVC     _realloc_grow_L18
                 EOR     #$8000
 _realloc_grow_L18
@@ -300,10 +287,8 @@ _realloc_grow_L18
                 PHA
                 LDA     9,S   ; fccstk d=4 b=5
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -334,11 +319,9 @@ _realloc_grow_L19
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _realloc_grow_L22
                 EOR     #$8000
 _realloc_grow_L22
@@ -356,18 +339,13 @@ _realloc_grow_L22
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -461,11 +439,9 @@ _realloc_grow_L27
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _realloc_grow_L30
                 EOR     #$8000
 _realloc_grow_L30
@@ -483,18 +459,13 @@ _realloc_grow_L30
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 PHA
                 LDA     7,S   ; fccstk d=2 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -662,15 +633,11 @@ _realloc_grow_L32
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _realloc_grow_L35
                 LDA     #8
@@ -696,15 +663,11 @@ _realloc_grow_L35
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #13
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13
                 BNE     *+5
                 BRL     _realloc_grow_L36
                 LDA     #9

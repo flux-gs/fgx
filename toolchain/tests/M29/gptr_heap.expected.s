@@ -578,18 +578,14 @@ _gptr_heap_L16
 _gptr_heap_L17
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #18
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #18
                 BNE     *+5
                 BRL     _gptr_heap_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAY
                 TSC
                 CLC

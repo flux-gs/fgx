@@ -21,29 +21,21 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #8
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

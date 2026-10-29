@@ -144,10 +144,8 @@ addr_of_sfok         STA     _fcc_sfp
                 LDA     6+addr_of_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -184,11 +182,8 @@ _p33_soft_addr_L1
                 LDA     12+addr_of_FRAMESIZE,S   ; fccstk d=6 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 PHA
                 FGX2_FARCALL addr_of
                 TAY
@@ -275,11 +270,9 @@ _p33_soft_addr_L2
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _p33_soft_addr_L5
                 EOR     #$8000
 _p33_soft_addr_L5
@@ -477,10 +470,8 @@ _p33_soft_addr_L4
                 LDA     6+elems_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -536,11 +527,9 @@ _p33_soft_addr_L7
                 LDA     10+elems_FRAMESIZE,S   ; fccstk d=4 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 PHA
                 FGX2_FARCALL elems
                 TAY
@@ -661,11 +650,9 @@ _p33_soft_addr_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _p33_soft_addr_L11
                 EOR     #$8000
 _p33_soft_addr_L11
@@ -680,10 +667,9 @@ _p33_soft_addr_L11
                 ADC     #8
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     _fcc_img0
@@ -716,10 +702,8 @@ _p33_soft_addr_L11
                 ADC     #8
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     _fcc_img0
@@ -778,10 +762,8 @@ _p33_soft_addr_L10
                 ADC     #8
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     1,S
@@ -864,10 +846,8 @@ _p33_soft_addr_L10
                 LDA     6+rowsum_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -891,11 +871,8 @@ _p33_soft_addr_L13
                 LDA     8+rowsum_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 PHA
                 FGX2_FARCALL rowsum
                 TAY
@@ -972,11 +949,8 @@ crosspath_sfok         STA     _fcc_sfp
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 LDY     #2
                 STA     [_fcc_sfp],Y
                 LDY     #0
@@ -1021,9 +995,7 @@ crosspath_sfok         STA     _fcc_sfp
                 CMP     _fcc_tmp_b
                 BNE     *+5
                 BRL     _p33_soft_addr_L14
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_sfp
                 CLC
@@ -1049,10 +1021,8 @@ _p33_soft_addr_L14
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -1073,11 +1043,8 @@ _p33_soft_addr_L16
                 LDA     6+crosspath_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 PHA
                 FGX2_FARCALL crosspath
                 TAY
@@ -1088,19 +1055,15 @@ _p33_soft_addr_L16
                 LDY     #6
                 LDA     [_fcc_sfp],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _p33_soft_addr_L18
                 EOR     #$8000
 _p33_soft_addr_L18
                 BMI     *+5
                 BRL     _p33_soft_addr_L17
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 LDA     _fcc_sfp
                 CLC
@@ -1163,10 +1126,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _p33_soft_addr_L19
                 LDA     #1
@@ -1224,10 +1185,8 @@ _p33_soft_addr_L20
                 PLA
                 TYA
                 TAX
-                LDA     #18
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #18
                 BNE     *+5
                 BRL     _p33_soft_addr_L21
                 LDA     #3
@@ -1248,10 +1207,8 @@ _p33_soft_addr_L21
                 PLA
                 TYA
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _p33_soft_addr_L22
                 LDA     #4

@@ -233,10 +233,8 @@ main_stkok        TCS
                 ADC     #26
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -542,10 +540,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #3
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -596,10 +592,8 @@ main_stkok        TCS
                 RTL
 _libso_shapes2_L21
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _libso_shapes2_L19
                 LDA     1,S   ; fccstk d=0 b=1
@@ -608,10 +602,8 @@ _libso_shapes2_L21
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _libso_shapes2_L19
                 LDA     #1
@@ -677,10 +669,8 @@ _libso_shapes2_L18
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _libso_shapes2_L15
                 LDA     #1
@@ -703,10 +693,8 @@ _libso_shapes2_L16
                 ADC     #26
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -718,10 +706,8 @@ _libso_shapes2_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _libso_shapes2_L13
                 LDA     #1
@@ -756,10 +742,8 @@ _libso_shapes2_L14
                 LDA     [_fcc_fpr0],Y
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _libso_shapes2_L11
                 LDA     #1
@@ -793,10 +777,8 @@ _libso_shapes2_L12
                 LDY     #0
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _libso_shapes2_L9
                 LDA     #1
@@ -837,10 +819,8 @@ _libso_shapes2_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _libso_shapes2_L7
                 LDA     #1
@@ -865,10 +845,8 @@ _libso_shapes2_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _libso_shapes2_L5
                 LDA     #1

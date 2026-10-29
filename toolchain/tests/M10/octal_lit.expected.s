@@ -21,10 +21,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #255
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BNE     *+5
                 BRL     _octal_lit_L0
                 LDA     #1
@@ -40,10 +38,8 @@ main_stkok        TCS
 _octal_lit_L0
                 LDA     #127
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #127
                 BNE     *+5
                 BRL     _octal_lit_L1
                 LDA     #2
@@ -59,10 +55,8 @@ _octal_lit_L0
 _octal_lit_L1
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _octal_lit_L2
                 LDA     #3
@@ -78,10 +72,8 @@ _octal_lit_L1
 _octal_lit_L2
                 LDA     #7
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _octal_lit_L3
                 LDA     #4
@@ -97,10 +89,8 @@ _octal_lit_L2
 _octal_lit_L3
                 LDA     #0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _octal_lit_L4
                 LDA     #5
@@ -117,15 +107,11 @@ _octal_lit_L4
                 LDA     #128
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #128
                 BNE     *+5
                 BRL     _octal_lit_L5
                 LDA     #6

@@ -317,10 +317,8 @@ _typedefunsigned_L8
                 STX     _fcc_tmp_b
                 JSR     _fcc_divu16
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BNE     *+5
                 BRL     _typedefunsigned_L9
                 LDA     #50
@@ -371,10 +369,8 @@ _typedefunsigned_L10
                 LSR
                 LSR
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2048
                 BNE     *+5
                 BRL     _typedefunsigned_L11
                 LDA     #52
@@ -519,10 +515,8 @@ _typedefunsigned_L15
                 LDA     _fcc_img3
                 AND     #$00FF
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #200
                 BNE     *+5
                 BRL     _typedefunsigned_L16
                 LDA     #57

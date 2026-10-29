@@ -192,10 +192,8 @@ _sptrnull_L9
                 LDA:    sentinel,X
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _sptrnull_L13
                 LDA     #3
@@ -203,10 +201,8 @@ _sptrnull_L9
                 LDA:    sentinel,X
                 AND     #$00FF
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _sptrnull_L13
                 LDA     #0

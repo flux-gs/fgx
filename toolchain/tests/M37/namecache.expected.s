@@ -195,10 +195,8 @@ chrtoblk_stkok        TCS
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _namecache_L0
                 LDA     #0
@@ -223,10 +221,8 @@ _namecache_L0
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _namecache_L1
                 LDA     #1
@@ -251,10 +247,8 @@ _namecache_L1
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _namecache_L2
                 LDA     #2
@@ -279,10 +273,8 @@ _namecache_L2
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #13
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13
                 BEQ     *+5
                 BRL     _namecache_L3
                 LDA     #3
@@ -307,10 +299,8 @@ _namecache_L3
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BEQ     *+5
                 BRL     _namecache_L4
                 LDA     #4
@@ -335,10 +325,8 @@ _namecache_L4
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _namecache_L5
                 LDA     #5
@@ -363,10 +351,8 @@ _namecache_L5
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _namecache_L6
                 LDA     #6
@@ -391,10 +377,8 @@ _namecache_L6
                 LDA     6+chrtoblk_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #17
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17
                 BEQ     *+5
                 BRL     _namecache_L7
                 LDA     #7
@@ -580,10 +564,8 @@ _namecache_L8
                 STA     _fcc_img0
                 LDA     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -687,11 +669,9 @@ _namecache_L10
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _namecache_L13
                 EOR     #$8000
 _namecache_L13
@@ -790,11 +770,9 @@ _namecache_L14
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _namecache_L17
                 EOR     #$8000
 _namecache_L17
@@ -877,11 +855,9 @@ _namecache_L16
                 STA     _fcc_fpr0
                 LDA     #10496
                 TAX
-                LDA     #896
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #896
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -1545,10 +1521,8 @@ _namecache_L23
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _namecache_L24
                 LDA     3,S   ; fccstk d=0 b=3
@@ -1929,10 +1903,8 @@ vref_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -2036,10 +2008,8 @@ vget_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #256
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L29
@@ -2067,10 +2037,8 @@ vget_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #512
                 STA     [_fcc_fpr0]
                 DO      8+vget_FRAMESIZE/256
                 TSC
@@ -2137,10 +2105,8 @@ _namecache_L29
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L30
                 DO      8+vget_FRAMESIZE/256
@@ -2252,10 +2218,8 @@ vrele_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -2334,10 +2298,8 @@ _namecache_L31
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -2585,10 +2547,8 @@ holdrele_stkok        TCS
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -3404,11 +3364,9 @@ _namecache_L44
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _namecache_L47
                 EOR     #$8000
 _namecache_L47
@@ -3785,10 +3743,8 @@ checkalias_stkok        TCS
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _namecache_L52
                 DO      8+checkalias_FRAMESIZE/256
@@ -3816,10 +3772,8 @@ checkalias_stkok        TCS
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _namecache_L52
                 LDA     #1
@@ -3885,11 +3839,8 @@ _namecache_L51
                 TAX
                 LDA     #8
                 TAY
-                LDA     #1
-                STA     _fcc_tmp_b
                 TYA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     _fcc_tmp_b
                 TXA
                 AND     _fcc_tmp_b
@@ -4028,10 +3979,8 @@ _namecache_L57
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L60
                 LDA     3,S   ; fccstk d=0 b=3
@@ -4141,10 +4090,8 @@ _namecache_L66
                 LDY     #58
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L63
                 LDA     #0
@@ -4451,10 +4398,8 @@ _namecache_L69
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -4462,10 +4407,8 @@ _namecache_L69
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2048
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -5004,11 +4947,9 @@ vfinddev_stkok        TCS
                 TAX
                 LDA     #8
                 TAY
-                LDA     #1
-                STA     _fcc_tmp_b
                 TYA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_tmp_b
                 TXA
                 AND     _fcc_tmp_b
@@ -5197,11 +5138,9 @@ spec_securechr_stkok        TCS
                 INC     _fcc_fb
                 LDA     securelevel
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 BVC     _namecache_L82
                 EOR     #$8000
 _namecache_L82
@@ -5235,10 +5174,8 @@ _namecache_L81
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #65535
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65535
                 BEQ     *+5
                 BRL     _namecache_L83
                 LDA     #0
@@ -5263,11 +5200,9 @@ _namecache_L83
                 TAX
                 LDA     #8
                 TAY
-                LDA     #1
-                STA     _fcc_tmp_b
                 TYA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_tmp_b
                 TXA
                 AND     _fcc_tmp_b
@@ -5334,10 +5269,8 @@ _namecache_L84
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _namecache_L88
                 LDA     #0
@@ -5503,10 +5436,8 @@ vfs_setsecurelevel_stkok        TCS
                 LDA     6+vfs_setsecurelevel_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #1
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -5589,15 +5520,11 @@ vcount_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L93
                 DO      8+vcount_FRAMESIZE/256
@@ -5823,10 +5750,8 @@ _namecache_L97
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L100
                 LDA     3,S   ; fccstk d=0 b=3
@@ -6152,10 +6077,8 @@ _namecache_L102
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #256
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L103
@@ -6200,10 +6123,8 @@ _namecache_L103
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #256
                 STA     [_fcc_fpr0]
                 DO      8+vclean_FRAMESIZE/256
                 TSC
@@ -6311,10 +6232,8 @@ _namecache_L104
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #4
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L105
@@ -6534,10 +6453,8 @@ _namecache_L106
                 LDA     10+vclean_FRAMESIZE,S   ; fccstk d=0 b=10 fs
                 FIN
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #4
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L108
@@ -6853,10 +6770,8 @@ _namecache_L113
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #512
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L114
@@ -6970,10 +6885,8 @@ vgone_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #256
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L115
@@ -7001,10 +6914,8 @@ vgone_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #512
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #512
                 STA     [_fcc_fpr0]
                 DO      8+vgone_FRAMESIZE/256
                 TSC
@@ -7135,10 +7046,8 @@ _namecache_L115
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _namecache_L117
                 DO      8+vgone_FRAMESIZE/256
@@ -7166,10 +7075,8 @@ _namecache_L115
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _namecache_L117
                 LDA     #0
@@ -7774,10 +7681,8 @@ _namecache_L125
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2048
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L135
@@ -8016,10 +7921,8 @@ _namecache_L138
                 LDA     _fcc_img0
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L142
                 SEP     #$20
@@ -8041,10 +7944,8 @@ _namecache_L138
 _namecache_L142
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _namecache_L143
                 LDA     7,S   ; fccstk d=0 b=7
@@ -8766,10 +8667,8 @@ _namecache_L154
                 LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #1
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L158
@@ -8779,10 +8678,8 @@ _namecache_L154
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #4
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L158
@@ -8803,10 +8700,8 @@ _namecache_L157
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L160
                 LDA     3,S   ; fccstk d=0 b=3
@@ -8833,10 +8728,8 @@ _namecache_L160
                 LDA     14+vflush_FRAMESIZE,S   ; fccstk d=0 b=14 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #2
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L161
@@ -8847,10 +8740,8 @@ _namecache_L160
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _namecache_L163
                 LDA     3,S   ; fccstk d=0 b=3
@@ -8860,10 +8751,8 @@ _namecache_L160
                 LDY     #52
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _namecache_L163
                 LDA     #1
@@ -9144,11 +9033,9 @@ ndslot_stkok        TCS
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _namecache_L173
                 EOR     #$8000
 _namecache_L173
@@ -9165,11 +9052,9 @@ _namecache_L173
                 LDA     8+ndslot_FRAMESIZE,S   ; fccstk d=0 b=8 fs
                 FIN
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _namecache_L174
                 EOR     #$8000
 _namecache_L174
@@ -9207,11 +9092,9 @@ _namecache_L170
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 BVC     _namecache_L178
                 EOR     #$8000
 _namecache_L178
@@ -9228,10 +9111,8 @@ _namecache_L178
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #32
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -9317,11 +9198,8 @@ _namecache_L180
                 LDA     6+ndslot_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 ASL
                 TAX
                 DO      8+ndslot_FRAMESIZE/256
@@ -9365,12 +9243,8 @@ _namecache_L183
                 BEQ     *+5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
-                PHA
-                LDA     #158
-                STA     _fcc_tmp_b
-                PLA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #158
                 BVC     _namecache_L186
                 EOR     #$8000
 _namecache_L186
@@ -9449,11 +9323,9 @@ _namecache_L185
                 ASL
                 ASL
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 CLC
                 ADC     _fcc_fpr1
                 STA     _fcc_fpr1
@@ -10622,11 +10494,9 @@ _namecache_nchbucket_stkok        TCS
                 PHA
                 LDA     #16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -12234,11 +12104,9 @@ _namecache_L215
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _namecache_L218
                 EOR     #$8000
 _namecache_L218
@@ -12372,11 +12240,9 @@ _namecache_L221
 _namecache_L219
                 LDA     #64
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _namecache_L222
                 LDAL    KFGX_YIELD_MIRROR
@@ -12384,11 +12250,9 @@ _namecache_L222
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _namecache_L225
                 EOR     #$8000
 _namecache_L225
@@ -12995,11 +12859,9 @@ _namecache_L234
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _namecache_L237
                 EOR     #$8000
 _namecache_L237
@@ -13212,11 +13074,9 @@ _namecache_L243
                 JSR     _fcc_safepoint
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _namecache_L246
                 EOR     #$8000
 _namecache_L246
@@ -13600,10 +13460,8 @@ _namecache_L259
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #31
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -14000,10 +13858,8 @@ _namecache_L273
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _namecache_L270
                 LDA     #1
@@ -14420,9 +14276,7 @@ _namecache_L289
                 STA     _fcc_fpr0
                 LDA     _fcc_fpr1+2
                 STA     _fcc_fpr0+2
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -14541,10 +14395,8 @@ _namecache_L291
                 LDY     #42
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #31
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -15372,11 +15224,9 @@ _namecache_L307
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 BVC     _namecache_L310
                 EOR     #$8000
 _namecache_L310
@@ -15459,11 +15309,9 @@ _namecache_L315
                 PHA
                 LDA     #64
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 LDX     _fcc_tmp_b
@@ -15476,9 +15324,7 @@ _namecache_L315
 _namecache_L317
                 BMI     *+5
                 BRL     _namecache_L316
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -15667,9 +15513,7 @@ _namecache_L323
                 CMP     #0
                 BNE     *+5
                 BRL     _namecache_L321
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -15686,11 +15530,9 @@ _namecache_L321
                 PHA
                 LDA     #64
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 LDX     _fcc_tmp_b
@@ -15703,9 +15545,7 @@ _namecache_L321
 _namecache_L329
                 BMI     *+5
                 BRL     _namecache_L328
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -15865,10 +15705,8 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _namecache_L330
                 LDA     #51
@@ -15934,10 +15772,8 @@ _namecache_L330
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L331
                 LDA     #52
@@ -16005,10 +15841,8 @@ _namecache_L331
                 SEC
                 SBC     _fcc_fpr1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _namecache_L332
                 LDA     #53
@@ -16024,10 +15858,8 @@ _namecache_L331
 _namecache_L332
                 LDA     #64
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L333
                 LDA     #54
@@ -16044,10 +15876,8 @@ _namecache_L333
                 FGX2_FARCALL _namecache_reset
                 FGX2_FARCALL _namecache_lrulen
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L334
                 LDA     #55
@@ -16063,10 +15893,8 @@ _namecache_L333
 _namecache_L334
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L335
                 LDA     #56
@@ -16181,10 +16009,8 @@ _namecache_L336
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L339
                 LDA     #58
@@ -16249,10 +16075,8 @@ _namecache_L339
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L340
                 LDA     #59
@@ -16314,10 +16138,8 @@ _namecache_L340
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L341
                 LDA     #60
@@ -16398,10 +16220,8 @@ _namecache_L342
                 TCS
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _namecache_L343
                 LDA     #62
@@ -16455,13 +16275,7 @@ _namecache_L343
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _namecache_L344
                 LDA     #63
@@ -16591,10 +16405,8 @@ _namecache_L348
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L349
                 LDA     #66
@@ -16656,10 +16468,8 @@ _namecache_L349
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L350
                 LDA     #67
@@ -16714,10 +16524,8 @@ _namecache_L350
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L351
                 LDA     #68
@@ -16772,10 +16580,8 @@ _namecache_L351
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L352
                 LDA     #69
@@ -16857,10 +16663,8 @@ _namecache_L352
                 TCS
                 TYA
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _namecache_L353
                 LDA     #70
@@ -16884,11 +16688,9 @@ _namecache_L353
                 PHA
                 LDA     27,S   ; fccstk d=4 b=23
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -16958,10 +16760,8 @@ _namecache_L354
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L355
                 LDA     #72
@@ -17026,10 +16826,8 @@ _namecache_L355
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L356
                 LDA     #73
@@ -17170,10 +16968,8 @@ _namecache_L356
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L357
                 LDA     #74
@@ -17277,13 +17073,7 @@ _namecache_L358
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _namecache_L361
                 LDA     #76
@@ -17307,11 +17097,9 @@ _namecache_L361
                 PHA
                 LDA     27,S   ; fccstk d=4 b=23
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -17338,10 +17126,8 @@ _namecache_L361
 _namecache_L362
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L363
                 LDA     #78
@@ -17400,10 +17186,8 @@ _namecache_L363
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L364
                 LDA     #79
@@ -17468,10 +17252,8 @@ _namecache_L364
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L365
                 LDA     #80
@@ -17598,10 +17380,8 @@ _namecache_L365
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L366
                 LDA     #81
@@ -17660,10 +17440,8 @@ _namecache_L366
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L367
                 LDA     #82
@@ -17770,10 +17548,8 @@ _namecache_L368
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L369
                 LDA     #84
@@ -17799,11 +17575,9 @@ _namecache_L370
                 TAX
                 LDA     #31
                 TAY
-                LDA     #4
-                STA     _fcc_tmp_b
                 TYA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -17843,11 +17617,9 @@ _namecache_L372
                 PHA
                 LDA     #31
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 CLC
                 ADC     1,S
                 TAY
@@ -17910,10 +17682,8 @@ _namecache_L372
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L374
                 LDA     #85
@@ -17937,11 +17707,9 @@ _namecache_L374
                 PHA
                 LDA     27,S   ; fccstk d=4 b=23
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -17969,10 +17737,8 @@ _namecache_L375
                 LDA     nd+46
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L376
                 LDA     #87
@@ -18020,10 +17786,8 @@ _namecache_L376
                 TCS
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L377
                 LDA     #88
@@ -18082,10 +17846,8 @@ _namecache_L377
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L378
                 LDA     #89
@@ -18150,10 +17912,8 @@ _namecache_L378
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L379
                 LDA     #90
@@ -18215,11 +17975,9 @@ _namecache_L380
                 JSR     _fcc_safepoint
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _namecache_L383
                 EOR     #$8000
 _namecache_L383
@@ -18267,10 +18025,8 @@ _namecache_L383
                 LDA     #97
                 PHA
                 LDA     25,S   ; fccstk d=4 b=21
-                TAX
-                LDA     #26
-                STA     _fcc_tmp_b
-                TXA
+                LDX     #26
+                STX     _fcc_tmp_b
                 JSR     _fcc_mods16
                 STA     _fcc_tmp_b
                 PLA
@@ -18350,10 +18106,8 @@ _namecache_L381
 _namecache_L382
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L384
                 LDA     #91
@@ -18369,10 +18123,8 @@ _namecache_L382
 _namecache_L384
                 FGX2_FARCALL _namecache_lrulen
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L385
                 LDA     #92
@@ -18466,13 +18218,7 @@ _namecache_L385
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _namecache_L386
                 LDA     #93
@@ -18620,13 +18366,7 @@ _namecache_L386
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _namecache_L387
                 LDA     #94
@@ -18721,10 +18461,8 @@ _namecache_L387
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L388
                 LDA     #95
@@ -18740,10 +18478,8 @@ _namecache_L387
 _namecache_L388
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L389
                 LDA     #96
@@ -18759,10 +18495,8 @@ _namecache_L388
 _namecache_L389
                 FGX2_FARCALL _namecache_lrulen
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L390
                 LDA     #97
@@ -18821,10 +18555,8 @@ _namecache_L390
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L391
                 LDA     #98
@@ -18889,10 +18621,8 @@ _namecache_L391
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L392
                 LDA     #100
@@ -18957,10 +18687,8 @@ _namecache_L392
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L393
                 LDA     #101
@@ -19084,10 +18812,8 @@ _namecache_L393
                 TCS
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _namecache_L394
                 LDA     #102
@@ -19119,10 +18845,8 @@ _namecache_L394
                 TCS
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _namecache_L395
                 LDA     #103
@@ -19177,10 +18901,8 @@ _namecache_L395
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L396
                 LDA     #104
@@ -19234,13 +18956,7 @@ _namecache_L396
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _namecache_L397
                 LDA     #105
@@ -19256,10 +18972,8 @@ _namecache_L396
 _namecache_L397
                 FGX2_FARCALL _namecache_lrulen
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _namecache_L398
                 LDA     #106
@@ -19318,10 +19032,8 @@ _namecache_L398
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L399
                 LDA     #107
@@ -19379,10 +19091,8 @@ _namecache_L399
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L400
                 LDA     #108
@@ -19493,10 +19203,8 @@ _namecache_L400
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L401
                 LDA     #109
@@ -19568,10 +19276,8 @@ _namecache_L401
                 STA     doingcache
                 FGX2_FARCALL _namecache_hashed
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _namecache_L402
                 LDA     #110

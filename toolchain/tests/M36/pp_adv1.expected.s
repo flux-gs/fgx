@@ -21,17 +21,13 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #22
                 STA     _fcc_img0
                 TAY
                 TSC

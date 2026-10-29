@@ -32,11 +32,9 @@ _struct_arr_init_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _struct_arr_init_L3
                 EOR     #$8000
 _struct_arr_init_L3
@@ -72,11 +70,9 @@ _struct_arr_init_L3
 _struct_arr_init_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _struct_arr_init_L0
 _struct_arr_init_L2
@@ -105,10 +101,8 @@ _struct_arr_init_L2
                 LDA     #items
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -134,10 +128,8 @@ _struct_arr_init_L2
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _struct_arr_init_L4
                 LDA     #0

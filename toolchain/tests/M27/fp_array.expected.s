@@ -107,11 +107,9 @@ add_ten_stkok        TCS
                 LDA     6+add_ten_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 TAY
                 TSC
                 CLC

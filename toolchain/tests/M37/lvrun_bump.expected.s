@@ -121,10 +121,8 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _lvrun_bump_L5
                 SEP     #$20
@@ -145,10 +143,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BEQ     *+5
                 BRL     _lvrun_bump_L5
                 LDA     #1
@@ -177,10 +173,8 @@ _lvrun_bump_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _lvrun_bump_L3
                 LDA     #1
@@ -209,10 +203,8 @@ _lvrun_bump_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BEQ     *+5
                 BRL     _lvrun_bump_L1
                 LDA     #1
@@ -225,11 +217,9 @@ _lvrun_bump_L2
                 BRL     _lvrun_bump_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L0
                 SEP     #$20
@@ -336,10 +326,8 @@ _lvrun_bump_L0
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #98
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #98
                 BEQ     *+5
                 BRL     _lvrun_bump_L12
                 SEP     #$20
@@ -360,10 +348,8 @@ _lvrun_bump_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _lvrun_bump_L12
                 LDA     #1
@@ -392,10 +378,8 @@ _lvrun_bump_L13
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _lvrun_bump_L10
                 LDA     #1
@@ -424,10 +408,8 @@ _lvrun_bump_L11
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _lvrun_bump_L8
                 LDA     #1
@@ -440,11 +422,9 @@ _lvrun_bump_L9
                 BRL     _lvrun_bump_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L7
                 SEP     #$20
@@ -558,10 +538,8 @@ _lvrun_bump_L7
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #200
                 BEQ     *+5
                 BRL     _lvrun_bump_L19
                 SEP     #$20
@@ -588,10 +566,8 @@ _lvrun_bump_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #201
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #201
                 BEQ     *+5
                 BRL     _lvrun_bump_L19
                 LDA     #1
@@ -626,10 +602,8 @@ _lvrun_bump_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _lvrun_bump_L17
                 LDA     #1
@@ -664,10 +638,8 @@ _lvrun_bump_L18
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BEQ     *+5
                 BRL     _lvrun_bump_L15
                 LDA     #1
@@ -680,11 +652,9 @@ _lvrun_bump_L16
                 BRL     _lvrun_bump_L14
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L14
                 LDA     #40
@@ -729,18 +699,14 @@ _lvrun_bump_L14
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BEQ     *+5
                 BRL     _lvrun_bump_L26
                 LDA     _lvrun_bump_obj+18
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BEQ     *+5
                 BRL     _lvrun_bump_L26
                 LDA     #1
@@ -753,10 +719,8 @@ _lvrun_bump_L27
                 BRL     _lvrun_bump_L24
                 LDA     _lvrun_bump_obj+20
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BEQ     *+5
                 BRL     _lvrun_bump_L24
                 LDA     #1
@@ -769,10 +733,8 @@ _lvrun_bump_L25
                 BRL     _lvrun_bump_L22
                 LDA     _lvrun_bump_obj+0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _lvrun_bump_L22
                 LDA     #1
@@ -785,11 +747,9 @@ _lvrun_bump_L23
                 BRL     _lvrun_bump_L21
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L21
                 SEP     #$20
@@ -931,10 +891,8 @@ _lvrun_bump_L21
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #60
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #60
                 BEQ     *+5
                 BRL     _lvrun_bump_L33
                 SEP     #$20
@@ -968,10 +926,8 @@ _lvrun_bump_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #59
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #59
                 BEQ     *+5
                 BRL     _lvrun_bump_L33
                 LDA     #1
@@ -1013,10 +969,8 @@ _lvrun_bump_L34
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #70
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #70
                 BEQ     *+5
                 BRL     _lvrun_bump_L31
                 LDA     #1
@@ -1058,10 +1012,8 @@ _lvrun_bump_L32
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #80
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #80
                 BEQ     *+5
                 BRL     _lvrun_bump_L29
                 LDA     #1
@@ -1074,11 +1026,9 @@ _lvrun_bump_L30
                 BRL     _lvrun_bump_L28
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L28
                 SEP     #$20
@@ -1185,10 +1135,8 @@ _lvrun_bump_L28
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _lvrun_bump_L36
                 SEP     #$20
@@ -1222,10 +1170,8 @@ _lvrun_bump_L28
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L36
                 LDA     #1
@@ -1238,11 +1184,9 @@ _lvrun_bump_L37
                 BRL     _lvrun_bump_L35
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L35
                 SEP     #$20
@@ -1290,10 +1234,8 @@ _lvrun_bump_L35
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #29
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #29
                 BEQ     *+5
                 BRL     _lvrun_bump_L39
                 SEP     #$20
@@ -1314,10 +1256,8 @@ _lvrun_bump_L35
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BEQ     *+5
                 BRL     _lvrun_bump_L39
                 LDA     #1
@@ -1330,11 +1270,9 @@ _lvrun_bump_L40
                 BRL     _lvrun_bump_L38
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L38
                 SEP     #$20
@@ -1365,18 +1303,14 @@ _lvrun_bump_L38
                 STA     [_fcc_fpr0]
                 LDA     _lvrun_bump_obj+20
                 TAX
-                LDA     #51
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #51
                 BEQ     *+5
                 BRL     _lvrun_bump_L42
                 LDA     _lvrun_bump_obj+18
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BEQ     *+5
                 BRL     _lvrun_bump_L42
                 LDA     #1
@@ -1389,11 +1323,9 @@ _lvrun_bump_L43
                 BRL     _lvrun_bump_L41
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L41
                 LDA     #_lvrun_bump_buf
@@ -1575,18 +1507,14 @@ _lvrun_bump_L41
                 LDA:    _lvrun_bump_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BEQ     *+5
                 BRL     _lvrun_bump_L51
                 LDA     _fcc_img1
                 TAX
-                LDA     #122
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #122
                 BEQ     *+5
                 BRL     _lvrun_bump_L51
                 LDA     #1
@@ -1604,11 +1532,8 @@ _lvrun_bump_L52
                 PHA
                 LDA     #122
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -1627,10 +1552,8 @@ _lvrun_bump_L50
                 LDA:    _lvrun_bump_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BEQ     *+5
                 BRL     _lvrun_bump_L47
                 LDA     #1
@@ -1684,11 +1607,9 @@ _lvrun_bump_L46
                 BRL     _lvrun_bump_L44
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L44
                 SEP     #$20
@@ -1768,11 +1689,9 @@ _lvrun_bump_L44
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -1785,11 +1704,9 @@ _lvrun_bump_L44
                 PHA
                 LDA     #120
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -1800,10 +1717,8 @@ _lvrun_bump_L44
                 LDA:    _lvrun_bump_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BEQ     *+5
                 BRL     _lvrun_bump_L56
                 LDA     #1
@@ -1816,11 +1731,9 @@ _lvrun_bump_L57
                 BRL     _lvrun_bump_L55
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L55
                 SEP     #$20
@@ -1854,17 +1767,12 @@ _lvrun_bump_L55
                 LDA     #9
                 STA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_img1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _lvrun_bump_L61
                 SEP     #$20
@@ -1885,10 +1793,8 @@ _lvrun_bump_L55
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _lvrun_bump_L61
                 LDA     #1
@@ -1917,10 +1823,8 @@ _lvrun_bump_L62
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #29
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #29
                 BEQ     *+5
                 BRL     _lvrun_bump_L59
                 LDA     #1
@@ -1933,20 +1837,17 @@ _lvrun_bump_L60
                 BRL     _lvrun_bump_L58
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L58
                 LDA     #_lvrun_bump_m2
                 PHA
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2
@@ -1971,10 +1872,8 @@ _lvrun_bump_L58
                 LDA     #_lvrun_bump_m2
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -1999,10 +1898,8 @@ _lvrun_bump_L58
                 LDA     #_lvrun_bump_m2
                 PHA
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -2034,10 +1931,8 @@ _lvrun_bump_L58
                 LDA     #_lvrun_bump_m2
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -2062,17 +1957,13 @@ _lvrun_bump_L58
                 LDA     _fcc_tmp_b
                 STA     _fcc_img1
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _lvrun_bump_L68
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -2084,10 +1975,8 @@ _lvrun_bump_L58
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _lvrun_bump_L68
                 LDA     #1
@@ -2099,10 +1988,9 @@ _lvrun_bump_L69
                 BNE     *+5
                 BRL     _lvrun_bump_L66
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #2
@@ -2114,10 +2002,8 @@ _lvrun_bump_L69
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _lvrun_bump_L66
                 LDA     #1
@@ -2129,10 +2015,8 @@ _lvrun_bump_L67
                 BNE     *+5
                 BRL     _lvrun_bump_L64
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #0
@@ -2144,10 +2028,8 @@ _lvrun_bump_L67
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _lvrun_bump_L64
                 LDA     #1
@@ -2160,11 +2042,9 @@ _lvrun_bump_L65
                 BRL     _lvrun_bump_L63
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L63
                 LDA     #1
@@ -2195,24 +2075,17 @@ _lvrun_bump_L63
                 LDA     #8
                 STA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_img1
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _lvrun_bump_L75
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #1
@@ -2224,10 +2097,8 @@ _lvrun_bump_L63
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _lvrun_bump_L75
                 LDA     #1
@@ -2239,10 +2110,9 @@ _lvrun_bump_L76
                 BNE     *+5
                 BRL     _lvrun_bump_L73
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #1
@@ -2254,10 +2124,8 @@ _lvrun_bump_L76
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L73
                 LDA     #1
@@ -2269,10 +2137,8 @@ _lvrun_bump_L74
                 BNE     *+5
                 BRL     _lvrun_bump_L71
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 PHA
                 LDA     #2
@@ -2284,10 +2150,8 @@ _lvrun_bump_L74
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _lvrun_bump_L71
                 LDA     #1
@@ -2300,11 +2164,9 @@ _lvrun_bump_L72
                 BRL     _lvrun_bump_L70
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L70
                 SEP     #$20
@@ -2317,10 +2179,9 @@ _lvrun_bump_L70
                 LDA     #_lvrun_bump_m2
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -2343,10 +2204,9 @@ _lvrun_bump_L70
                 INC
                 STA     [_fcc_ptr]
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #0
@@ -2358,17 +2218,14 @@ _lvrun_bump_L70
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _lvrun_bump_L78
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 PHA
                 LDA     #1
@@ -2380,10 +2237,8 @@ _lvrun_bump_L70
                 TAX
                 LDA:    _lvrun_bump_m2,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _lvrun_bump_L78
                 LDA     #1
@@ -2396,11 +2251,9 @@ _lvrun_bump_L79
                 BRL     _lvrun_bump_L77
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _lvrun_bump_L77
                 LDA     _fcc_img0

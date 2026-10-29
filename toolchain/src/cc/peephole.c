@@ -282,12 +282,9 @@ writes_carry(const char *m)
  * comments.
  *
  * CARRY ONLY.  The CLC;ADC -> INC fold also drops the overflow flag V (ADC sets
- * V; INC does not).  This routine does NOT prove V dead — and crucially, it can
- * return "dead" at a carry-writer that leaves V untouched (CLC/SEC/CMP/CPX/CPY),
- * so a folded site may diverge from the original in V (e.g. ...ADC #1; CLC; PHP
- * would push a stale V).  That is sound ONLY because fcc never observes V: it
- * emits no BVC/BVS and never bit-tests a pushed P for the V bit.  If fcc ever
- * gains a V consumer, this fold must also gate on a V-liveness check. */
+ * V; INC does not), and this routine can return "dead" at a carry-writer that
+ * leaves V untouched (CLC/SEC/CMP/CPX/CPY).  v_dead_after is the fold's second
+ * gate: fcc's signed compares read V with BVC after an SBC. */
 static int
 carry_dead_after(Line *lines, size_t n, size_t idx)
 {
@@ -307,6 +304,29 @@ carry_dead_after(Line *lines, size_t n, size_t idx)
         /* carry-neutral op (LDA/STA/REP/SEP/...) -> keep scanning */
     }
     return 0;                                            /* fell off end: live */
+}
+
+/* True if the overflow flag set by line `idx` is dead.  fcc reads V only with
+ * BVC/BVS, and every one of those -- 4,238 in 424 files, measured 2026-10-23 --
+ * takes V from an ADC, SBC or BIT earlier in its own block, so V is dead at a
+ * block's end and a call; inside the block a V-writer kills it and a BVC/BVS
+ * or a PHP keeps it. */
+static int
+v_dead_after(Line *lines, size_t n, size_t idx)
+{
+    size_t i;
+    for (i = idx + 1; i < n; i++) {
+        Line *L = &lines[i];
+        const char *m = L->mnem;
+        if (L->dead || L->raw[0] == '\0') continue;
+        if (L->label[0] != '\0') return 1;
+        if (m[0] == '\0') continue;
+        if (strcmp(m,"BVC")==0 || strcmp(m,"BVS")==0 || strcmp(m,"PHP")==0) return 0;
+        if (strcmp(m,"ADC")==0 || strcmp(m,"SBC")==0 || strcmp(m,"BIT")==0 ||
+            strcmp(m,"CLV")==0 || strcmp(m,"PLP")==0) return 1;
+        if (is_control(m)) return 1;
+    }
+    return 1;
 }
 
 /* Pattern: STA m ; LDA m (adjacent, same operand, LDA not a branch target)
@@ -427,6 +447,7 @@ pat_clcadc_to_ina(Line *lines, size_t n)
         k = small_imm(lines[(size_t)j].operand);
         if (k < 0) continue;
         if (!carry_dead_after(lines, n, (size_t)j)) continue;
+        if (!v_dead_after(lines, n, (size_t)j)) continue;
 
         mn = is_add ? "INC" : "DEC";                    /* implied-A (Merlin32) */
         snprintf(buf, sizeof buf, "                %s", mn);
@@ -765,6 +786,244 @@ pat_dead_store(Line *lines, size_t n)
     }
 }
 
+/* "#<decimal>" or "#$<hex>" -> its value in 0..65535, else -1.  Anything
+ * else (a symbol, an expression, a char or binary literal) is left alone. */
+static long
+imm16(const char *op)
+{
+    long v = 0;
+    const char *p = op;
+    if (*p++ != '#') return -1;
+    if (*p == '$') {
+        p++;
+        if (!isxdigit((unsigned char)*p)) return -1;
+        for (; isxdigit((unsigned char)*p); p++)
+            v = v * 16 + (isdigit((unsigned char)*p) ? *p - '0'
+                                                     : (toupper((unsigned char)*p) - 'A' + 10));
+    } else {
+        if (*p < '0' || *p > '9') return -1;
+        for (; *p >= '0' && *p <= '9'; p++) v = v * 10 + (*p - '0');
+    }
+    if (*p != '\0' || v > 0xFFFFL) return -1;
+    return v;
+}
+
+/* Replace a line's text with `                <mn>     <op>`. */
+static int
+set_insn(Line *L, const char *mn, const char *op)
+{
+    char buf[PH_TOK * 2 + 32];
+    char *d;
+    snprintf(buf, sizeof buf, "                %-7s %s", mn, op);
+    d = dup_range(buf, strlen(buf));
+    if (!d) return 0;
+    free(L->raw);
+    L->raw = d;
+    parse_fields(L);
+    return 1;
+}
+
+/* Pattern: a negated literal.  `LDA #k ; EOR #$FFFF ; INC` is -k computed at
+ * run time; `LDA #(-k & $FFFF)` loads it and sets N and Z from the same value.
+ * fcc spells a negative literal this way (`c != -1').  The EOR #$FFFF fixes
+ * the width at 16 bits. */
+static void
+pat_neg_const(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        long j, k, v;
+        char op[16];
+        if (lines[i].dead || lines[i].label[0] != '\0') continue;
+        if (strcmp(lines[i].mnem, "LDA") != 0) continue;
+        if ((v = imm16(lines[i].operand)) < 0) continue;
+        j = next_insn_no_label(lines, n, i + 1);
+        if (j < 0 || strcmp(lines[j].mnem, "EOR") != 0 ||
+            strcmp(lines[j].operand, "#$FFFF") != 0) continue;
+        k = next_insn_no_label(lines, n, (size_t)j + 1);
+        if (k < 0 || strcmp(lines[k].mnem, "INC") != 0 ||
+            lines[k].operand[0] != '\0') continue;
+        snprintf(op, sizeof op, "#$%04lX", (0x10000L - v) & 0xFFFFL);
+        if (!set_insn(&lines[i], "LDA", op)) continue;
+        lines[j].dead = 1;
+        lines[k].dead = 1;
+    }
+}
+
+/* The fcc runtime routines that take _fcc_tmp_b as an input (fcc_runtime.s:
+ * every routine that loads it, and every routine that calls one of those). */
+static int
+tmpb_reader_call(const Line *L)
+{
+    static const char *t[] = {
+        "_fcc_divs16", "_fcc_divu16", "_fcc_mods16", "_fcc_modu16",
+        "_fcc_udiv16", "_fcc_mul16", "_fcc_eq16", "_fcc_ne16",
+        "_fcc_lts16", "_fcc_les16", "_fcc_gts16", "_fcc_ges16",
+        "_fcc_ltu16", "_fcc_leu16", "_fcc_gtu16", "_fcc_geu16",
+        "_fcc_shl16", "_fcc_shr16", "_fcc_shrs16", NULL
+    };
+    int i;
+    if (strcmp(L->mnem, "JSR") != 0 && strcmp(L->mnem, "JSL") != 0 &&
+        strcmp(L->mnem, "FGX2_FARCALL") != 0) return 0;
+    for (i = 0; t[i]; i++) if (strcmp(L->operand, t[i]) == 0) return 1;
+    return 0;
+}
+
+static int
+reads_tmpb(const Line *L)
+{
+    return reads_loc(L, "_fcc_tmp_b") || tmpb_reader_call(L);
+}
+
+static int
+defines_tmpb(const Line *L)
+{
+    return (strcmp(L->mnem, "STA") == 0 || strcmp(L->mnem, "STX") == 0 ||
+            strcmp(L->mnem, "STY") == 0 || strcmp(L->mnem, "STZ") == 0) &&
+           strcmp(L->operand, "_fcc_tmp_b") == 0;
+}
+
+/* A label or a branch, jump or return ends a basic block.  A call does not:
+ * fcc's code resumes after it.  DO/ELSE/FIN (conditional assembly) are
+ * straight-line code. */
+static int
+ends_block(const Line *L)
+{
+    return L->label[0] != '\0' ||
+           (is_control(L->mnem) && strcmp(L->mnem, "JSR") != 0 &&
+            strcmp(L->mnem, "JSL") != 0);
+}
+
+/* _fcc_tmp_b IS NEVER LIVE ACROSS A BASIC BLOCK in fcc's output: it is the
+ * second operand of one 16-bit operation, stored just before that operation
+ * reads it.  Measured 2026-10-23 over every fcc-compiled file in the tree --
+ * 23,776 reads in 381 tool and library files, 3,448 in 45 kernel files, each
+ * preceded by a store in its own block.  The rules below rely on that, so each
+ * unit is CHECKED for it first, and a unit where any read lacks an in-block
+ * store gets none of them. */
+static int
+tmpb_block_local(Line *lines, size_t n)
+{
+    size_t i;
+    int defined = 0;
+    for (i = 0; i < n; i++) {
+        Line *L = &lines[i];
+        if (L->dead || L->raw[0] == '\0') continue;
+        if (L->label[0] != '\0') defined = 0;
+        if (L->mnem[0] == '\0') continue;
+        if (strcmp(L->label, "@__asm") == 0) return 0;    /* verbatim asm: unknown */
+        if (reads_tmpb(L) && !defined) return 0;
+        if (defines_tmpb(L)) defined = 1;
+        if (ends_block(L)) defined = 0;
+    }
+    return 1;
+}
+
+/* After line `idx`, is _fcc_tmp_b's value dead?  Given tmpb_block_local, it is
+ * dead at the end of the block; inside it, a store kills it and a read keeps
+ * it. */
+static int
+tmpb_dead_after(Line *lines, size_t n, size_t idx)
+{
+    size_t j;
+    for (j = idx + 1; j < n; j++) {
+        Line *L = &lines[j];
+        if (L->dead || L->raw[0] == '\0') continue;
+        if (L->label[0] != '\0') return 1;
+        if (L->mnem[0] == '\0') continue;
+        if (reads_tmpb(L)) return 0;
+        if (defines_tmpb(L)) return 1;
+        if (ends_block(L)) return 1;
+    }
+    return 1;
+}
+
+/* Pattern: a constant passed through _fcc_tmp_b.  fcc materialises the
+ * second operand of a 16-bit operation there even when it is a literal:
+ *   LDA #k ; STA _fcc_tmp_b ; TXA ; CMP _fcc_tmp_b
+ * The reader takes the literal instead -- `CMP #k', `SBC #k', `AND #k',
+ * `LDX #k' -- and the store goes, when _fcc_tmp_b is dead after the reader.
+ * An immediate operand gives the reader the same value and the same flags.
+ * Between the store and the reader there may be no label, no control
+ * transfer, no other store to _fcc_tmp_b and no width change (an 8-bit store
+ * read at 16 bits is not the literal).  `LDA #k' itself is left for
+ * pat_dead_lda, which drops it when A is overwritten unread, as it is by the
+ * TXA above; when the load sat alone between a PHA and a PLA, the pair goes
+ * with it. */
+static int
+imm_reader(const Line *L)
+{
+    static const char *t[] = { "CMP", "SBC", "ADC", "AND", "ORA", "EOR",
+                               "LDA", "LDX", "LDY", "CPX", "CPY", NULL };
+    int i;
+    if (strcmp(L->operand, "_fcc_tmp_b") != 0) return 0;
+    for (i = 0; t[i]; i++) if (strcmp(L->mnem, t[i]) == 0) return 1;
+    return 0;
+}
+
+static void
+pat_tmpb_const(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        long b, r = -1, p, q;
+        size_t j;
+        if (lines[i].dead || lines[i].label[0] != '\0') continue;
+        if (strcmp(lines[i].mnem, "LDA") != 0 || imm16(lines[i].operand) < 0)
+            continue;
+        b = next_insn_no_label(lines, n, i + 1);
+        if (b < 0 || strcmp(lines[b].mnem, "STA") != 0 ||
+            strcmp(lines[b].operand, "_fcc_tmp_b") != 0) continue;
+        for (j = (size_t)b + 1; j < n; j++) {
+            Line *L = &lines[j];
+            if (L->dead || L->raw[0] == '\0') continue;
+            if (L->label[0] != '\0') break;
+            if (L->mnem[0] == '\0') continue;
+            if (reads_tmpb(L)) { r = (long)j; break; }
+            if (defines_tmpb(L) || ends_block(L) || is_control(L->mnem)) break;
+            if (strcmp(L->mnem, "SEP") == 0 || strcmp(L->mnem, "REP") == 0 ||
+                strcmp(L->mnem, "MX") == 0) break;
+            if (strcmp(L->mnem, "DO") == 0 || strcmp(L->mnem, "ELSE") == 0 ||
+                strcmp(L->mnem, "FIN") == 0) break;
+        }
+        if (r < 0 || !imm_reader(&lines[r])) continue;
+        if (!tmpb_dead_after(lines, n, (size_t)r)) continue;
+        if (!set_insn(&lines[r], lines[r].mnem, lines[i].operand)) continue;
+        lines[b].dead = 1;
+        if (!dead_a_after(lines, n, i)) continue;
+        lines[i].dead = 1;
+        /* A PHA ; LDA #k ; PLA bracket with nothing else inside is now empty. */
+        p = -1;
+        for (j = i; j-- > 0; ) {
+            if (lines[j].dead || lines[j].raw[0] == '\0') continue;
+            if (lines[j].mnem[0] == '\0' && lines[j].label[0] == '\0') continue;
+            p = (long)j;
+            break;
+        }
+        q = next_insn_no_label(lines, n, i + 1);
+        if (p >= 0 && q >= 0 && lines[p].label[0] == '\0' &&
+            strcmp(lines[p].mnem, "PHA") == 0 && strcmp(lines[q].mnem, "PLA") == 0 &&
+            nz_dead_after(lines, n, (size_t)q)) {
+            lines[p].dead = 1;
+            lines[q].dead = 1;
+        }
+    }
+}
+
+/* Pattern: a store to _fcc_tmp_b that nothing reads.  pat_dead_store needs a
+ * second store to prove the first dead; given tmpb_block_local, the end of the
+ * block proves it too. */
+static void
+pat_tmpb_dead_store(Line *lines, size_t n)
+{
+    size_t i;
+    for (i = 0; i < n; i++) {
+        if (lines[i].dead || lines[i].label[0] != '\0') continue;
+        if (defines_tmpb(&lines[i]) && tmpb_dead_after(lines, n, i))
+            lines[i].dead = 1;
+    }
+}
+
 char *
 peephole_optimize(const char *asm_text)
 {
@@ -787,6 +1046,11 @@ peephole_optimize(const char *asm_text)
         }
     }
     pat_bra_to_next(lines, n);
+    pat_neg_const(lines, n);
+    if (tmpb_block_local(lines, n)) {
+        pat_tmpb_const(lines, n);
+        pat_tmpb_dead_store(lines, n);
+    }
     pat_staload_forward(lines, n);
     pat_repsep_adjacent(lines, n);
     pat_clcadc_to_ina(lines, n);

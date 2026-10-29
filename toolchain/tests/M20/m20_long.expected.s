@@ -119,11 +119,9 @@ _m20_long_L3
 _m20_long_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _m20_long_L0
 _m20_long_L2

@@ -89,10 +89,8 @@ main_stkok        TCS
                 STA     _fcc_img0
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _drefpreinc_L0
                 LDA     #1
@@ -184,12 +182,7 @@ _drefpreinc_L1
                 REP     #$20
                 MX      %00
                 PLA
-                STA     _fcc_fpr1
-                LDA     #1
-                STA     _fcc_tmp_b
-                LDA     _fcc_fpr1
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     _fcc_fpr1
                 STA     [_fcc_fpr0]
                 SEP     #$20
@@ -208,10 +201,8 @@ _drefpreinc_L1
                 STA     _fcc_img0
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _drefpreinc_L4
                 LDA     #3
@@ -276,17 +267,13 @@ _drefpreinc_L5
                 LDA     _fcc_img0
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #65
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #42
                 TAY
                 TSC
                 CLC

@@ -413,11 +413,9 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #20
                 TAY
                 TSC
                 CLC

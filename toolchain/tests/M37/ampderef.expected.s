@@ -49,10 +49,8 @@ main_stkok        TCS
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                LDA     #101
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #101
                 BNE     *+5
                 BRL     _ampderef_L0
                 LDA     #1
@@ -96,10 +94,8 @@ _ampderef_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                LDA     #111
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #111
                 BNE     *+5
                 BRL     _ampderef_L1
                 LDA     #2
@@ -123,10 +119,9 @@ _ampderef_L1
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -154,10 +149,9 @@ _ampderef_L1
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -173,10 +167,8 @@ _ampderef_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BNE     *+5
                 BRL     _ampderef_L2
                 LDA     #3
@@ -199,17 +191,13 @@ _ampderef_L2
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #111
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #111
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #30
                 TAY
                 TSC
                 CLC

@@ -294,10 +294,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L0
                 LDA     #1
@@ -369,10 +367,8 @@ _dot_ptrfield_subscript_rea_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L1
                 LDA     #2
@@ -443,10 +439,8 @@ _dot_ptrfield_subscript_rea_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L2
                 LDA     #3
@@ -504,10 +498,8 @@ _dot_ptrfield_subscript_rea_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L3
                 LDA     #4
@@ -597,10 +589,8 @@ _dot_ptrfield_subscript_rea_L3
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L4
                 LDA     #5
@@ -815,10 +805,8 @@ _dot_ptrfield_subscript_rea_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _dot_ptrfield_subscript_rea_L11
                 LDA     #8

@@ -70,10 +70,9 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -102,10 +101,9 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -117,31 +115,27 @@ main_stkok        TCS
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0

@@ -83,19 +83,15 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_shrs16
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _aud_shr_or_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #40
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L0
                 LDA     #1
@@ -134,28 +130,22 @@ _aud_shr_or_L3
                 BRL     _aud_shr_or_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _aud_shr_or_L4
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     5,S   ; fccstk d=0 b=5
 _aud_shr_or_L4
                 LDA     5,S   ; fccstk d=0 b=5

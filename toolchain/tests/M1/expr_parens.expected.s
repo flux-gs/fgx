@@ -21,11 +21,9 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #2
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 ASL
                 TAY

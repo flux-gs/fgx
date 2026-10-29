@@ -27,11 +27,9 @@ _p33_frame_deep_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #260
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #260
                 BVC     _p33_frame_deep_L3
                 EOR     #$8000
 _p33_frame_deep_L3
@@ -54,10 +52,8 @@ _p33_frame_deep_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -99,10 +95,8 @@ _p33_frame_deep_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _p33_frame_deep_L4
                 LDA     #1
@@ -136,10 +130,8 @@ _p33_frame_deep_L4
                 PHA
                 LDA     #255
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
@@ -177,10 +169,8 @@ _p33_frame_deep_L5
                 PHA
                 LDA     #256
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
@@ -218,10 +208,8 @@ _p33_frame_deep_L6
                 PHA
                 LDA     #259
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 STA     _fcc_tmp_b
                 PLA
@@ -241,10 +229,8 @@ _p33_frame_deep_L6
 _p33_frame_deep_L7
                 LDA     _fcc_img1
                 TAX
-                LDA     #12345
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12345
                 BNE     *+5
                 BRL     _p33_frame_deep_L8
                 LDA     #5
@@ -268,11 +254,9 @@ _p33_frame_deep_L9
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #260
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #260
                 BVC     _p33_frame_deep_L12
                 EOR     #$8000
 _p33_frame_deep_L12
@@ -308,10 +292,8 @@ _p33_frame_deep_L10
 _p33_frame_deep_L11
                 LDA     _fcc_img1
                 TAX
-                LDA     #16262
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16262
                 BNE     *+5
                 BRL     _p33_frame_deep_L13
                 LDA     #6

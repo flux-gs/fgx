@@ -318,10 +318,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _tar_ctor_L11
                 LDA     #1
@@ -344,10 +342,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BEQ     *+5
                 BRL     _tar_ctor_L11
                 LDA     #0
@@ -364,10 +360,8 @@ _tar_ctor_L10
                 LDA     #8
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _tar_ctor_L13
                 LDA     #0
@@ -457,10 +451,8 @@ _tar_ctor_L16
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _tar_ctor_L20
                 SEP     #$20
@@ -481,10 +473,8 @@ _tar_ctor_L16
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _tar_ctor_L20
                 LDA     #0
@@ -511,10 +501,8 @@ _tar_ctor_L21
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BEQ     *+5
                 BRL     _tar_ctor_L18
                 LDA     #0

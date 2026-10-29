@@ -16824,10 +16824,8 @@ _llong_arith_L328
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L331
                 LDA     #111
@@ -16955,10 +16953,8 @@ _llong_arith_L331
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L332
                 LDA     #112
@@ -17087,10 +17083,8 @@ _llong_arith_L332
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L333
                 LDA     #113
@@ -17219,10 +17213,8 @@ _llong_arith_L333
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L334
                 LDA     #114
@@ -17351,10 +17343,8 @@ _llong_arith_L334
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L335
                 LDA     #115
@@ -17483,10 +17473,8 @@ _llong_arith_L335
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L336
                 LDA     #116
@@ -17614,10 +17602,8 @@ _llong_arith_L336
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L337
                 LDA     #117
@@ -17745,10 +17731,8 @@ _llong_arith_L337
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L338
                 LDA     #118
@@ -17876,10 +17860,8 @@ _llong_arith_L338
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L339
                 LDA     #119
@@ -18007,10 +17989,8 @@ _llong_arith_L339
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L340
                 LDA     #120
@@ -18138,10 +18118,8 @@ _llong_arith_L340
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L341
                 LDA     #121
@@ -18269,10 +18247,8 @@ _llong_arith_L341
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L342
                 LDA     #122
@@ -18400,10 +18376,8 @@ _llong_arith_L342
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L343
                 LDA     #123
@@ -18531,10 +18505,8 @@ _llong_arith_L343
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L344
                 LDA     #124
@@ -18663,10 +18635,8 @@ _llong_arith_L344
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L345
                 LDA     #125
@@ -18795,10 +18765,8 @@ _llong_arith_L345
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L346
                 LDA     #126
@@ -18927,10 +18895,8 @@ _llong_arith_L346
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L347
                 LDA     #127
@@ -19059,10 +19025,8 @@ _llong_arith_L347
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L348
                 LDA     #128
@@ -19190,10 +19154,8 @@ _llong_arith_L348
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L349
                 LDA     #129
@@ -19321,10 +19283,8 @@ _llong_arith_L349
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L350
                 LDA     #130
@@ -19452,10 +19412,8 @@ _llong_arith_L350
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L351
                 LDA     #131
@@ -19583,10 +19541,8 @@ _llong_arith_L351
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L352
                 LDA     #132
@@ -19714,10 +19670,8 @@ _llong_arith_L352
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L353
                 LDA     #133
@@ -19845,10 +19799,8 @@ _llong_arith_L353
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L354
                 LDA     #134
@@ -19976,10 +19928,8 @@ _llong_arith_L354
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L355
                 LDA     #135
@@ -20107,10 +20057,8 @@ _llong_arith_L355
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L356
                 LDA     #136
@@ -20239,10 +20187,8 @@ _llong_arith_L356
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L357
                 LDA     #137
@@ -20371,10 +20317,8 @@ _llong_arith_L357
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L358
                 LDA     #138
@@ -20503,10 +20447,8 @@ _llong_arith_L358
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L359
                 LDA     #139
@@ -20635,10 +20577,8 @@ _llong_arith_L359
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L360
                 LDA     #140
@@ -20766,10 +20706,8 @@ _llong_arith_L360
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L361
                 LDA     #141
@@ -20897,10 +20835,8 @@ _llong_arith_L361
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L362
                 LDA     #142
@@ -21028,10 +20964,8 @@ _llong_arith_L362
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L363
                 LDA     #143
@@ -21159,10 +21093,8 @@ _llong_arith_L363
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L364
                 LDA     #144
@@ -21290,10 +21222,8 @@ _llong_arith_L364
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L365
                 LDA     #145
@@ -21421,10 +21351,8 @@ _llong_arith_L365
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L366
                 LDA     #146
@@ -21552,10 +21480,8 @@ _llong_arith_L366
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L367
                 LDA     #147
@@ -21683,10 +21609,8 @@ _llong_arith_L367
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L368
                 LDA     #148
@@ -21815,10 +21739,8 @@ _llong_arith_L368
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L369
                 LDA     #149
@@ -21947,10 +21869,8 @@ _llong_arith_L369
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L370
                 LDA     #150
@@ -22079,10 +21999,8 @@ _llong_arith_L370
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L371
                 LDA     #151
@@ -22211,10 +22129,8 @@ _llong_arith_L371
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L372
                 LDA     #152
@@ -22342,10 +22258,8 @@ _llong_arith_L372
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L373
                 LDA     #153
@@ -22473,10 +22387,8 @@ _llong_arith_L373
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L374
                 LDA     #154
@@ -22604,10 +22516,8 @@ _llong_arith_L374
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L375
                 LDA     #155
@@ -22735,10 +22645,8 @@ _llong_arith_L375
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L376
                 LDA     #156
@@ -22866,10 +22774,8 @@ _llong_arith_L376
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L377
                 LDA     #157
@@ -22997,10 +22903,8 @@ _llong_arith_L377
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L378
                 LDA     #158
@@ -23128,10 +23032,8 @@ _llong_arith_L378
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L379
                 LDA     #159
@@ -23259,10 +23161,8 @@ _llong_arith_L379
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L380
                 LDA     #160
@@ -23391,10 +23291,8 @@ _llong_arith_L380
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L381
                 LDA     #161
@@ -23523,10 +23421,8 @@ _llong_arith_L381
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L382
                 LDA     #162
@@ -23655,10 +23551,8 @@ _llong_arith_L382
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L383
                 LDA     #163
@@ -23787,10 +23681,8 @@ _llong_arith_L383
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L384
                 LDA     #164
@@ -23918,10 +23810,8 @@ _llong_arith_L384
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L385
                 LDA     #165
@@ -24049,10 +23939,8 @@ _llong_arith_L385
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L386
                 LDA     #166
@@ -24180,10 +24068,8 @@ _llong_arith_L386
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L387
                 LDA     #167
@@ -24311,10 +24197,8 @@ _llong_arith_L387
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _llong_arith_L388
                 LDA     #168
@@ -24442,10 +24326,8 @@ _llong_arith_L388
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L389
                 LDA     #169
@@ -24573,10 +24455,8 @@ _llong_arith_L389
                 LDA     #1
                 STA     i
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _llong_arith_L390
                 LDA     #170
@@ -25031,9 +24911,7 @@ _llong_arith_L407
                 TYA
                 RTL
 _llong_arith_L405
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     i
                 LDA     a+6
                 STA     _fcc_q3
@@ -25214,10 +25092,8 @@ _llong_arith_L408
                 STA     _fcc_long_hi
                 LDA     a
                 TAX
-                LDA     #52719
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52719
                 BEQ     *+5
                 BRL     _llong_arith_L412
                 LDA     #0

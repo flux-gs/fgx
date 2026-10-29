@@ -35,10 +35,9 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -61,10 +60,9 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -130,10 +128,8 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -161,11 +157,9 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -184,10 +178,9 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -215,10 +208,9 @@ main_stkok        TCS
                 INC
                 STA     _fcc_fpr0
                 LDA     #3
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -252,11 +244,8 @@ main_stkok        TCS
                 TXA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -286,10 +275,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _m2d_field_L0
                 LDA     #16
@@ -321,10 +308,8 @@ _m2d_field_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _m2d_field_L2
                 LDA     #32
@@ -340,10 +325,8 @@ _m2d_field_L3
                 PHA
                 LDA     #24
                 TAX
-                LDA     #24
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24
                 BEQ     *+5
                 BRL     _m2d_field_L4
                 LDA     #64
@@ -359,18 +342,14 @@ _m2d_field_L5
                 PHA
                 LDA     F+0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _m2d_field_L8
                 LDA     F+26
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #200
                 BEQ     *+5
                 BRL     _m2d_field_L8
                 LDA     #1

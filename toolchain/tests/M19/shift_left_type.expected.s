@@ -21,9 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #16
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF0
                 STA     _fcc_img1
                 LDA     #$0000
                 STA     _fcc_long_hi
@@ -69,19 +67,15 @@ main_stkok        TCS
                 PLA
                 JSR     _fcc_shl16
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _shift_left_type_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _shift_left_type_L0
                 LDA     1,S   ; fccstk d=0 b=1
@@ -93,19 +87,15 @@ _shift_left_type_L0
                 PLA
                 JSR     _fcc_shl16
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _shift_left_type_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _shift_left_type_L1
                 LDA     _fcc_img1
@@ -132,13 +122,7 @@ _shift_left_type_L1
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                PHA
-                LDA     #4
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFC
                 BEQ     *+5
                 BRL     _shift_left_type_L3
                 LDA     #1
@@ -151,11 +135,9 @@ _shift_left_type_L4
                 BRL     _shift_left_type_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _shift_left_type_L2
                 LDA     15,S   ; fccstk d=0 b=15
@@ -165,10 +147,8 @@ _shift_left_type_L2
                 TXA
                 JSR     _fcc_shr16
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2048
                 BEQ     *+5
                 BRL     _shift_left_type_L6
                 LDA     _fcc_img6
@@ -222,11 +202,9 @@ _shift_left_type_L7
                 BRL     _shift_left_type_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     _fcc_img0
 _shift_left_type_L5
                 LDA     _fcc_img0

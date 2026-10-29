@@ -46,8 +46,6 @@ _fcc_mul_acc    DA      0
 
 ; --- _fcc_divs16 scratch ---
 _fcc_div_dvd    DA      0
-_fcc_div_rem    DA      0
-_fcc_div_quo    DA      0
 _fcc_div_negq   DA      0
 
 ; --- _fcc_lts16 / _fcc_ges16 scratch ---

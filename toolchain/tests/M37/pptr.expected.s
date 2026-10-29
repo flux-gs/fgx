@@ -170,10 +170,8 @@ _pptr_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _pptr_L3
                 LDA     #3
@@ -439,10 +437,8 @@ main_stkok        TCS
                 TYA
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _pptr_L7
                 LDA     #1
@@ -458,10 +454,8 @@ main_stkok        TCS
 _pptr_L7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _pptr_L8
                 LDA     #3
@@ -508,10 +502,8 @@ _pptr_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _pptr_L10
                 LDA     #0
@@ -590,10 +582,8 @@ _pptr_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _pptr_L15
                 LDA     #4
@@ -690,10 +680,8 @@ _pptr_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _pptr_L19
                 LDA     #6

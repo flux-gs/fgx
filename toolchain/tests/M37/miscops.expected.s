@@ -39,22 +39,14 @@ main_stkok        TCS
                 ADC     #4
                 TCS
                 TYA
-                PHA
-                LDA     #42
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFD6
                 BEQ     *+5
                 BRL     _miscops_L0
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L0
                 SEP     #$20
@@ -97,11 +89,9 @@ _miscops_L0
                 BRL     _miscops_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L1
                 SEP     #$20
@@ -147,11 +137,9 @@ _miscops_L4
                 BRL     _miscops_L2
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L2
                 LDA     #9
@@ -163,22 +151,14 @@ _miscops_L2
                 PLA
                 PLA
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _miscops_L5
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L5
                 LDA     #1
@@ -195,9 +175,7 @@ _miscops_L5
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 PHA
                 FGX2_FARCALL waitpid
                 TAY
@@ -206,22 +184,14 @@ _miscops_L5
                 ADC     #8
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _miscops_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L6
                 FGX2_FARCALL ticks
@@ -250,11 +220,9 @@ _miscops_L6
                 TCS
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 BVC     _miscops_L8
                 EOR     #$8000
 _miscops_L8
@@ -262,11 +230,9 @@ _miscops_L8
                 BRL     _miscops_L7
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L7
                 FGX2_FARCALL ticks
@@ -274,11 +240,9 @@ _miscops_L7
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _miscops_L10
                 EOR     #$8000
 _miscops_L10
@@ -286,11 +250,9 @@ _miscops_L10
                 BRL     _miscops_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _miscops_L9
                 LDA     7,S   ; fccstk d=0 b=7

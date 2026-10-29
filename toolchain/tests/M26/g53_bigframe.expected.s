@@ -27,11 +27,9 @@ _g53_bigframe_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #300
                 BVC     _g53_bigframe_L3
                 EOR     #$8000
 _g53_bigframe_L3
@@ -54,10 +52,8 @@ _g53_bigframe_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -115,20 +111,16 @@ _g53_bigframe_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 SEC
                 SBC     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 TAY
                 TSC
                 CLC

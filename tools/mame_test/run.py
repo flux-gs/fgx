@@ -213,12 +213,14 @@ def _primary_for(manifest):
     character at a time -- measured at 6.24 frames (104 ms) per character, so a
     146-character command carries 755 frames that are not the workload, and a
     pc_sample profile spends 42% of its samples idling at `swtch's WAI between
-    keystrokes instead of 10%.  "inject" pokes the bytes into `_kKbdRing' in a
-    single frame, so the measured interval is the workload -- at the cost of
-    the path it skips: ADB, the heartbeat's key poll, and the vt100
-    translation that only `raw_inject' goes through.  So a test covering the
-    keyboard or the tty input path wants "autoboot"; one that reports a number
-    wants "inject".
+    keystrokes instead of 10%.  "inject" hands the plugin's key latch
+    (`_kKbdInjectRaw') one byte per frame, which the heartbeat translates
+    like a real strobe -- so a command costs one frame per character instead
+    of 6.24, and the measured interval is nearly the workload.  The sampler
+    arms when the first byte goes in, so a profile still carries those frames
+    of typing; subtract the command's length.  What inject skips is ADB and
+    the heartbeat's key poll.  So a test covering the keyboard path wants
+    "autoboot"; one that reports a number wants "inject".
 
     An unrecognised value is fatal rather than a quiet fall back to the
     default.  Falling back is the exact failure this key exists to stop, and it

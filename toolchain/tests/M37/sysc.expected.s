@@ -72,53 +72,41 @@ _sysc_L1
                 STX     __sys_c
                 STY     __sys_y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _sysc_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L0
                 LDA     __sys_c
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _sysc_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L2
                 LDA     __sys_y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _sysc_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L3
                 PHB
@@ -149,19 +137,15 @@ _sysc_L4
                 STY     __sys_y
                 LDA     __sys_c
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _sysc_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     1,S   ; fccstk d=0 b=1
 _sysc_L5
                 LDA     1,S   ; fccstk d=0 b=1

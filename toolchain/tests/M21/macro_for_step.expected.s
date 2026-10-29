@@ -27,11 +27,9 @@ main_stkok        TCS
                 STA     gbody
                 LDA     gbefore
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     gbefore
                 LDA     #1
                 STA     gv
@@ -45,11 +43,9 @@ _macro_for_step_L0
                 BRL     _macro_for_step_L3
                 LDA     gbody
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _macro_for_step_L5
                 EOR     #$8000
 _macro_for_step_L5
@@ -65,20 +61,16 @@ _macro_for_step_L4
                 BRL     _macro_for_step_L2
                 LDA     gbody
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     gbody
 _macro_for_step_L1
                 LDA     gafter
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     gafter
                 LDA     #1
                 STA     gv
@@ -86,10 +78,8 @@ _macro_for_step_L1
 _macro_for_step_L2
                 LDA     gbefore
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _macro_for_step_L6
                 LDA     #1
@@ -105,10 +95,8 @@ _macro_for_step_L2
 _macro_for_step_L6
                 LDA     gbody
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _macro_for_step_L7
                 LDA     #2
@@ -124,10 +112,8 @@ _macro_for_step_L6
 _macro_for_step_L7
                 LDA     gafter
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _macro_for_step_L8
                 LDA     #3

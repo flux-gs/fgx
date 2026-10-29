@@ -30,10 +30,8 @@ fact_stkok        TCS
                 LDA     6+fact_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #1
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -76,11 +74,9 @@ _fn_recurse_L0
                 LDA     8+fact_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 PHA
                 FGX2_FARCALL fact
                 TAY

@@ -29,10 +29,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #235
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #235
                 BEQ     *+5
                 BRL     _krvarencl_L0
                 LDA     #42

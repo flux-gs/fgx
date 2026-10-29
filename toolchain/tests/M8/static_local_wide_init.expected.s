@@ -436,11 +436,9 @@ main_stkok        TCS
                 CLC
                 ADC     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #19
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #19
                 TAY
                 TSC
                 CLC

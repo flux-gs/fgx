@@ -111,11 +111,9 @@ _mulconst_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 BVC     _mulconst_L3
                 EOR     #$8000
 _mulconst_L3
@@ -142,11 +140,9 @@ _mulconst_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 LDY     #10
                 STA     [_fcc_fpr0],Y
 _mulconst_L1
@@ -165,11 +161,9 @@ _mulconst_L4
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 BVC     _mulconst_L7
                 EOR     #$8000
 _mulconst_L7
@@ -235,10 +229,8 @@ _mulconst_L6
                 ADC     _fcc_tmp_b
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAY
                 TSC
                 CLC

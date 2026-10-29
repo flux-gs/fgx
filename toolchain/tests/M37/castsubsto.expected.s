@@ -27,11 +27,9 @@ _castsubsto_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _castsubsto_L3
                 EOR     #$8000
 _castsubsto_L3
@@ -52,11 +50,9 @@ _castsubsto_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 AND     #$00FF
                 SEP     #$20
                 MX      %10
@@ -83,10 +79,8 @@ _castsubsto_L2
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _castsubsto_L4
                 LDA     #1
@@ -116,10 +110,8 @@ _castsubsto_L4
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _castsubsto_L5
                 LDA     #2

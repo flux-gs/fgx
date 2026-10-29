@@ -27,11 +27,9 @@ main_stkok        TCS
                 JSR     _fcc_divs16
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 TAY
                 TSC
                 CLC

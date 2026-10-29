@@ -43,10 +43,8 @@ _ptr_pinc_wide_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -122,11 +120,9 @@ _ptr_pinc_wide_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img0
                 BRL     _ptr_pinc_wide_L0
 _ptr_pinc_wide_L1
@@ -184,10 +180,8 @@ _ptr_pinc_wide_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -257,11 +251,9 @@ _ptr_pinc_wide_L6
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img0
                 BRL     _ptr_pinc_wide_L4
 _ptr_pinc_wide_L5
@@ -311,10 +303,8 @@ _ptr_pinc_wide_L7
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -393,11 +383,9 @@ _ptr_pinc_wide_L9
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img0
                 BRL     _ptr_pinc_wide_L7
 _ptr_pinc_wide_L8

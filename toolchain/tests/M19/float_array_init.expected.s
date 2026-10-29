@@ -183,11 +183,9 @@ _float_array_init_L2
                 BRL     _float_array_init_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _float_array_init_L0
                 LDA     #0
@@ -413,11 +411,9 @@ _float_array_init_L7
                 BRL     _float_array_init_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _float_array_init_L5
                 LDA     #0
@@ -531,28 +527,22 @@ _float_array_init_L14
                 BRL     _float_array_init_L12
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
 _float_array_init_L12
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _float_array_init_L15
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #11
                 STA     1,S   ; fccstk d=0 b=1
 _float_array_init_L15
                 LDA     1,S   ; fccstk d=0 b=1

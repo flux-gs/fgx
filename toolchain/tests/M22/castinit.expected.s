@@ -147,10 +147,8 @@ _castinit_L8
 _castinit_L6
                 LDA     gi
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _castinit_L9
                 LDA     #4

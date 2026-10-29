@@ -208,10 +208,8 @@ _mkstemp_uniq_L4
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BEQ     *+5
                 BRL     _mkstemp_uniq_L6
                 LDA     #1
@@ -339,11 +337,9 @@ main_stkok        TCS
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _mkstemp_uniq_L10
                 EOR     #$8000
 _mkstemp_uniq_L10
@@ -388,20 +384,16 @@ _mkstemp_uniq_L9
                 BRL     _mkstemp_uniq_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
 _mkstemp_uniq_L7
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _mkstemp_uniq_L14
                 EOR     #$8000
 _mkstemp_uniq_L14
@@ -430,10 +422,8 @@ _mkstemp_uniq_L14
                 TCS
                 TYA
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _mkstemp_uniq_L22
                 LDA     #0
@@ -507,10 +497,8 @@ _mkstemp_uniq_L23
                 TCS
                 TYA
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _mkstemp_uniq_L20
                 LDA     #1
@@ -539,10 +527,8 @@ _mkstemp_uniq_L21
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #110
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #110
                 BEQ     *+5
                 BRL     _mkstemp_uniq_L18
                 LDA     #1
@@ -571,10 +557,8 @@ _mkstemp_uniq_L19
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #105
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #105
                 BEQ     *+5
                 BRL     _mkstemp_uniq_L16
                 LDA     #1
@@ -587,11 +571,9 @@ _mkstemp_uniq_L17
                 BRL     _mkstemp_uniq_L15
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _mkstemp_uniq_L15
 _mkstemp_uniq_L13
@@ -616,11 +598,9 @@ _mkstemp_uniq_L13
                 TYA
                 STA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _mkstemp_uniq_L27
                 EOR     #$8000
 _mkstemp_uniq_L27
@@ -677,20 +657,16 @@ _mkstemp_uniq_L26
                 BRL     _mkstemp_uniq_L24
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     13,S   ; fccstk d=0 b=13
 _mkstemp_uniq_L24
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _mkstemp_uniq_L31
                 EOR     #$8000
 _mkstemp_uniq_L31
@@ -722,11 +698,9 @@ _mkstemp_uniq_L31
 _mkstemp_uniq_L30
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _mkstemp_uniq_L33
                 EOR     #$8000
 _mkstemp_uniq_L33

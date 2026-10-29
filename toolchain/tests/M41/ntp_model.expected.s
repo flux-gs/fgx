@@ -709,11 +709,9 @@ _ntp_model_L2
                 JSR     _fcc_safepoint
                 LDA     93,S   ; fccstk d=0 b=93
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #64
                 BVC     _ntp_model_L5
                 EOR     #$8000
 _ntp_model_L5

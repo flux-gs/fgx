@@ -150,11 +150,9 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #111
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #111
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -201,10 +199,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _strinit_L0
                 LDA     #5
@@ -235,11 +231,9 @@ _strinit_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #104
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #104
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -286,10 +280,8 @@ _strinit_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #105
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #105
                 BEQ     *+5
                 BRL     _strinit_L2
                 LDA     #3

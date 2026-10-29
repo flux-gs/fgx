@@ -804,10 +804,8 @@ _f_acompound_L4
                 FGX2_FARCALL _fcc_dmul
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _f_acompound_L5
                 LDA     #6
@@ -941,10 +939,8 @@ _f_acompound_L5
                 LDA:    fg,X
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _f_acompound_L6
                 LDA     #7
@@ -1116,10 +1112,8 @@ _f_acompound_L6
                 LDA     _fcc_long_b_lo
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _f_acompound_L7
                 LDA     #8
@@ -1274,10 +1268,8 @@ _f_acompound_L7
                 LDA     _fcc_long_b_lo
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BNE     *+5
                 BRL     _f_acompound_L8
                 LDA     #9

@@ -21,58 +21,38 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     _fcc_img0
-                LDA     #16
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF0
                 STA     si
                 TAX
                 LDA     #2
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                PHA
-                LDA     #4
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFC
                 BEQ     *+5
                 BRL     _sar_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _sar_L0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     si
                 TAX
                 LDA     #1
                 STA     _fcc_tmp_b
                 TXA
                 JSR     _fcc_shrs16
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sar_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _sar_L1
                 LDA     #32768
@@ -81,27 +61,21 @@ _sar_L1
                 LSR
                 LSR
                 TAX
-                LDA     #4096
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4096
                 BEQ     *+5
                 BRL     _sar_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _sar_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _sar_L3
                 LDA     #42

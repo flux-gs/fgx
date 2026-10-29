@@ -43,11 +43,9 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _fileops_L1
                 EOR     #$8000
 _fileops_L1
@@ -55,11 +53,9 @@ _fileops_L1
                 BRL     _fileops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L0
                 LDA     #6
@@ -85,19 +81,15 @@ _fileops_L0
                 TCS
                 TYA
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _fileops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -107,19 +99,15 @@ _fileops_L2
                 PLA
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fileops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L3
                 LDA     #0
@@ -144,11 +132,9 @@ _fileops_L3
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _fileops_L5
                 EOR     #$8000
 _fileops_L5
@@ -156,11 +142,9 @@ _fileops_L5
                 BRL     _fileops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L4
                 LDA     #0
@@ -213,11 +197,9 @@ _fileops_L4
                 BRL     _fileops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L6
                 LDA     #4
@@ -244,19 +226,15 @@ _fileops_L6
                 TCS
                 TYA
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _fileops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L7
                 LDA     #4
@@ -292,19 +270,15 @@ _fileops_L7
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fileops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L8
                 LDA     1,S   ; fccstk d=0 b=1
@@ -333,22 +307,14 @@ _fileops_L8
                 ADC     #6
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _fileops_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L9
                 SEP     #$20
@@ -370,19 +336,15 @@ _fileops_L9
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fileops_L10
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L10
                 SEP     #$20
@@ -405,19 +367,15 @@ _fileops_L10
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _fileops_L11
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     3,S   ; fccstk d=0 b=3
 _fileops_L11
                 LDA     3,S   ; fccstk d=0 b=3

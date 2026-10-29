@@ -135,18 +135,14 @@ _mixed_declarator_list_L9
                 TCS
                 TYA
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L7
                 LDA     #1
@@ -159,10 +155,8 @@ _mixed_declarator_list_L8
                 BRL     _mixed_declarator_list_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L5
                 LDA     #1
@@ -175,10 +169,8 @@ _mixed_declarator_list_L6
                 BRL     _mixed_declarator_list_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L3
                 LDA     #1
@@ -191,11 +183,9 @@ _mixed_declarator_list_L4
                 BRL     _mixed_declarator_list_L2
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
 _mixed_declarator_list_L2
                 LDA     #4
@@ -232,18 +222,14 @@ _mixed_declarator_list_L15
                 TCS
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L13
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L13
                 LDA     #1
@@ -256,10 +242,8 @@ _mixed_declarator_list_L14
                 BRL     _mixed_declarator_list_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L11
                 LDA     #1
@@ -272,11 +256,9 @@ _mixed_declarator_list_L12
                 BRL     _mixed_declarator_list_L10
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
 _mixed_declarator_list_L10
                 LDA     #6
@@ -357,10 +339,8 @@ _mixed_declarator_list_L31
                 TCS
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L29
                 SEP     #$20
@@ -397,10 +377,8 @@ _mixed_declarator_list_L32
                 TCS
                 TYA
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L29
                 LDA     #1
@@ -445,10 +423,8 @@ _mixed_declarator_list_L33
                 TCS
                 TYA
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L27
                 LDA     #1
@@ -493,10 +469,8 @@ _mixed_declarator_list_L34
                 TCS
                 TYA
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L25
                 LDA     #1
@@ -509,10 +483,8 @@ _mixed_declarator_list_L26
                 BRL     _mixed_declarator_list_L23
                 LDA     gplain
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L23
                 LDA     #1
@@ -525,10 +497,8 @@ _mixed_declarator_list_L24
                 BRL     _mixed_declarator_list_L21
                 LDA     gplain2
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _mixed_declarator_list_L21
                 LDA     #1
@@ -541,11 +511,9 @@ _mixed_declarator_list_L22
                 BRL     _mixed_declarator_list_L20
                 LDA     19,S   ; fccstk d=0 b=19
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     19,S   ; fccstk d=0 b=19
 _mixed_declarator_list_L20
                 LDA     19,S   ; fccstk d=0 b=19

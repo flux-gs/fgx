@@ -90,10 +90,8 @@ _statmulti_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _statmulti_L1
                 LDA     #2

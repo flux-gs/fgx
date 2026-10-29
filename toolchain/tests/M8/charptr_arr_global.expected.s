@@ -173,11 +173,9 @@ _charptr_arr_global_L5
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #26
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #26
                 TAY
                 TSC
                 CLC

@@ -67,25 +67,19 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #15
                 STA     [_fcc_fpr0]
                 LDA     g+2
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _arrowdot_compound_L5
                 LDA     g+4
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BEQ     *+5
                 BRL     _arrowdot_compound_L5
                 LDA     #1
@@ -98,10 +92,8 @@ _arrowdot_compound_L6
                 BRL     _arrowdot_compound_L3
                 LDA     g+0
                 TAX
-                LDA     #43690
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43690
                 BEQ     *+5
                 BRL     _arrowdot_compound_L3
                 LDA     #1
@@ -114,10 +106,8 @@ _arrowdot_compound_L4
                 BRL     _arrowdot_compound_L1
                 LDA     g+6
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BEQ     *+5
                 BRL     _arrowdot_compound_L1
                 LDA     #1
@@ -130,11 +120,9 @@ _arrowdot_compound_L2
                 BRL     _arrowdot_compound_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _arrowdot_compound_L0
                 LDA     #4608
@@ -164,25 +152,19 @@ _arrowdot_compound_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #52
                 STA     [_fcc_fpr0]
                 LDA     g+4
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BEQ     *+5
                 BRL     _arrowdot_compound_L12
                 LDA     g+2
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _arrowdot_compound_L12
                 LDA     #1
@@ -195,10 +177,8 @@ _arrowdot_compound_L13
                 BRL     _arrowdot_compound_L10
                 LDA     g+0
                 TAX
-                LDA     #43690
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43690
                 BEQ     *+5
                 BRL     _arrowdot_compound_L10
                 LDA     #1
@@ -211,10 +191,8 @@ _arrowdot_compound_L11
                 BRL     _arrowdot_compound_L8
                 LDA     g+6
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BEQ     *+5
                 BRL     _arrowdot_compound_L8
                 LDA     #1
@@ -227,11 +205,9 @@ _arrowdot_compound_L9
                 BRL     _arrowdot_compound_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _arrowdot_compound_L7
                 LDA     #100
@@ -261,26 +237,20 @@ _arrowdot_compound_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #23
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #23
                 STA     [_fcc_fpr0]
                 LDA     g+2
                 TAX
-                LDA     #123
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #123
                 BEQ     *+5
                 BRL     _arrowdot_compound_L19
                 LDA     g+4
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BEQ     *+5
                 BRL     _arrowdot_compound_L19
                 LDA     #1
@@ -293,10 +263,8 @@ _arrowdot_compound_L20
                 BRL     _arrowdot_compound_L17
                 LDA     g+0
                 TAX
-                LDA     #43690
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #43690
                 BEQ     *+5
                 BRL     _arrowdot_compound_L17
                 LDA     #1
@@ -309,10 +277,8 @@ _arrowdot_compound_L18
                 BRL     _arrowdot_compound_L15
                 LDA     g+6
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BEQ     *+5
                 BRL     _arrowdot_compound_L15
                 LDA     #1
@@ -325,11 +291,9 @@ _arrowdot_compound_L16
                 BRL     _arrowdot_compound_L14
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _arrowdot_compound_L14
                 LDA     _fcc_img0

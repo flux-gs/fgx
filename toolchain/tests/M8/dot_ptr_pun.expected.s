@@ -41,10 +41,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #0
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -57,10 +55,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #42
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10

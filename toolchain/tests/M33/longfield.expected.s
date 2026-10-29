@@ -248,10 +248,8 @@ _longfield_L2
                 LDA     #7
                 STA     g+12
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _longfield_L3
                 LDA     #4
@@ -340,10 +338,8 @@ _longfield_L4
                 BRL     _longfield_L6
                 LDA     gt+4
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _longfield_L6
                 LDA     #0
@@ -375,10 +371,8 @@ _longfield_L5
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -417,10 +411,8 @@ _longfield_L5
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -428,10 +420,8 @@ _longfield_L5
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _longfield_L9
                 LDA     #0
@@ -463,10 +453,9 @@ _longfield_L8
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -504,10 +493,9 @@ _longfield_L8
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -515,10 +503,8 @@ _longfield_L8
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _longfield_L12
                 LDA     #0

@@ -30,11 +30,9 @@ add3_stkok        TCS
                 LDA     6+add3_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAY
                 TSC
                 CLC
@@ -282,19 +280,15 @@ _memfnptr_L4
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _memfnptr_L3
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _memfnptr_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -351,19 +345,15 @@ _memfnptr_L6
                 TCS
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _memfnptr_L5
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _memfnptr_L5
                 LDA     3,S   ; fccstk d=0 b=3
@@ -461,19 +451,15 @@ _memfnptr_L8
                 TYA
                 LDA     g_side
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BEQ     *+5
                 BRL     _memfnptr_L9
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     9,S   ; fccstk d=0 b=9
 _memfnptr_L9
                 LDA     3,S   ; fccstk d=0 b=3
@@ -572,19 +558,15 @@ _memfnptr_L10
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _memfnptr_L11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     9,S   ; fccstk d=0 b=9
 _memfnptr_L11
                 LDA     9,S   ; fccstk d=0 b=9

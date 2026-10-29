@@ -27,11 +27,9 @@ _g53_layout_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #300
                 BVC     _g53_layout_L3
                 EOR     #$8000
 _g53_layout_L3
@@ -54,10 +52,8 @@ _g53_layout_L3
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 AND     #$00FF
                 TAY
                 LDA     1,S
@@ -87,11 +83,9 @@ _g53_layout_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 BVC     _g53_layout_L7
                 EOR     #$8000
 _g53_layout_L7
@@ -147,11 +141,9 @@ _g53_layout_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img1
                 TAX
-                LDA     #130
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #130
                 BVC     _g53_layout_L11
                 EOR     #$8000
 _g53_layout_L11
@@ -282,10 +274,8 @@ _g53_layout_L10
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 SEC
@@ -301,11 +291,9 @@ _g53_layout_L10
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #30
                 PHA
                 DO      8+layout_FRAMESIZE/256
                 TSC

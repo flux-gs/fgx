@@ -144,10 +144,8 @@ _argvtest_L0
                 LDA     [_fcc_img0]
                 AND     #$00FF
                 TAX
-                LDA     #47
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #47
                 BEQ     *+5
                 BRL     _argvtest_L3
                 LDA     #42

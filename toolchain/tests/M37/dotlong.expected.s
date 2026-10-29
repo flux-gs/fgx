@@ -229,7 +229,6 @@ _dotlong_L2
                 LDA     #$0003
                 STA     _fcc_long_hi
                 LDA     #$0001
-                STA     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_long_hi
                 STA     3,S   ; fccstk d=0 b=3

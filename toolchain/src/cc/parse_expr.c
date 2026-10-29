@@ -5445,12 +5445,10 @@ build_mul_expr(void)
         LocalType lhs_type = g_ast[lhs].type;
         int lhs_u = g_ast[lhs].is_unsigned;
         require_mulshift_operand(lhs, op, op_line, op_col);
-        /* `*` always; `/` for either signedness now that the signed pow2 case
-         * has an emitter; `%` still unsigned-only, because a signed remainder
-         * takes its sign from the dividend and that is a second sequence with
-         * no measured caller. */
+        /* `*`, `/` and `%` for either signedness: the signed pow2 cases
+         * have emitters (emit_inline_divs_pow2, emit_inline_mods_pow2). */
         int can_inline = (op == TOK_STAR) || (op == TOK_SLASH) ||
-                         (op == TOK_PERCENT && lhs_u);
+                         (op == TOK_PERCENT);
         /* A long `*' by a power of two is A.7.8's left shift written the other
          * way: "in the absence of overflow, this is equivalent to
          * multiplication by 2**E2".  Nothing else about a long reaches the
@@ -7253,6 +7251,9 @@ walk_expr_body(int n)
         else if (g_ast[n].op == TOK_SLASH && !g_ast[n].is_unsigned &&
                  g_ast[n].val != 1)
             emit_inline_divs_pow2(g_ast[n].val);
+        else if (g_ast[n].op == TOK_PERCENT && !g_ast[n].is_unsigned &&
+                 g_ast[n].val != 1)
+            emit_inline_mods_pow2(g_ast[n].val);
         else emit_inline_divmod_pow2(g_ast[n].op, g_ast[n].val);
         g_expr_unsigned = g_ast[n].is_unsigned;
         break;

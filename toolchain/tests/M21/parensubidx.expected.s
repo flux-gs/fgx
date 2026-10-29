@@ -138,10 +138,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BNE     *+5
                 BRL     _parensubidx_L0
                 LDA     #1
@@ -183,10 +181,8 @@ _parensubidx_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #121
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #121
                 BNE     *+5
                 BRL     _parensubidx_L1
                 LDA     #2
@@ -237,10 +233,8 @@ _parensubidx_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BNE     *+5
                 BRL     _parensubidx_L2
                 LDA     #3

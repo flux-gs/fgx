@@ -26,18 +26,14 @@ main_stkok        TCS
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L1
                 LDA     _fcc_img1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L1
                 LDA     #0
@@ -66,18 +62,14 @@ _paren_postincdec_value_L0
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L4
                 LDA     #0
@@ -107,21 +99,13 @@ _paren_postincdec_value_L3
                 EOR     #$FFFF
                 INC
                 STA     _fcc_img0
-                PHA
-                LDA     #5
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFB
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L7
                 LDA     _fcc_img1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L7
                 LDA     #0
@@ -157,18 +141,14 @@ _paren_postincdec_value_L9
 _paren_postincdec_value_L10
                 STA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L12
                 LDA     _fcc_img1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L12
                 LDA     #0
@@ -197,18 +177,14 @@ _paren_postincdec_value_L11
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L15
                 LDA     _fcc_img1
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L15
                 LDA     #0
@@ -238,18 +214,14 @@ _paren_postincdec_value_L14
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L18
                 LDA     g
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L18
                 LDA     #0
@@ -581,10 +553,8 @@ _paren_postincdec_value_L23
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L27
                 LDA     _fcc_img3
@@ -660,10 +630,8 @@ _paren_postincdec_value_L26
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L32
                 LDA     _fcc_img3
@@ -735,10 +703,8 @@ _paren_postincdec_value_L31
                 AND     #$00FF
                 STA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L37
                 LDA     _fcc_img3
@@ -858,10 +824,8 @@ _paren_postincdec_value_L36
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L44
                 LDA     #1
@@ -869,10 +833,8 @@ _paren_postincdec_value_L36
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L44
                 LDA     #0
@@ -888,10 +850,8 @@ _paren_postincdec_value_L45
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L42
                 LDA     #0
@@ -968,10 +928,8 @@ _paren_postincdec_value_L41
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L49
                 LDA     #1
@@ -979,10 +937,8 @@ _paren_postincdec_value_L41
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L49
                 LDA     #0
@@ -998,10 +954,8 @@ _paren_postincdec_value_L50
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #30
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #30
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L47
                 LDA     #0
@@ -1115,10 +1069,8 @@ _paren_postincdec_value_L46
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L54
                 SEP     #$20
@@ -1139,10 +1091,8 @@ _paren_postincdec_value_L46
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #101
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #101
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L54
                 LDA     #0
@@ -1171,10 +1121,8 @@ _paren_postincdec_value_L55
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L52
                 LDA     #0
@@ -1351,18 +1299,14 @@ _paren_postincdec_value_L56
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L60
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L60
                 LDA     #0
@@ -1395,18 +1339,14 @@ _paren_postincdec_value_L59
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L63
                 LDA     39,S   ; fccstk d=0 b=39
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L63
                 LDA     #0
@@ -1613,10 +1553,8 @@ _paren_postincdec_value_L65
                 LDA     _fcc_tmp_b
                 STA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L73
                 SEP     #$20
@@ -1637,10 +1575,8 @@ _paren_postincdec_value_L65
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L73
                 LDA     #0
@@ -1685,10 +1621,8 @@ _paren_postincdec_value_L72
                 ASL
                 STA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L76
                 SEP     #$20
@@ -1709,10 +1643,8 @@ _paren_postincdec_value_L72
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L76
                 LDA     #0
@@ -1739,18 +1671,14 @@ _paren_postincdec_value_L75
                 STA     _fcc_img1
                 STA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L79
                 LDA     _fcc_img1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _paren_postincdec_value_L79
                 LDA     #0

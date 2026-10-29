@@ -206,10 +206,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _arrowdotchain_L0
                 LDA     #50
@@ -231,10 +229,8 @@ _arrowdotchain_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _arrowdotchain_L1
                 LDA     #51
@@ -257,10 +253,8 @@ _arrowdotchain_L1
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _arrowdotchain_L2
                 LDA     #52
@@ -282,10 +276,8 @@ _arrowdotchain_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _arrowdotchain_L3
                 LDA     #53
@@ -321,10 +313,8 @@ _arrowdotchain_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _arrowdotchain_L4
                 LDA     #54
@@ -363,10 +353,8 @@ _arrowdotchain_L4
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #8738
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8738
                 BNE     *+5
                 BRL     _arrowdotchain_L5
                 LDA     #55
@@ -402,10 +390,8 @@ _arrowdotchain_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1911
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1911
                 BNE     *+5
                 BRL     _arrowdotchain_L6
                 LDA     #56
@@ -438,10 +424,8 @@ _arrowdotchain_L6
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #17476
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17476
                 BNE     *+5
                 BRL     _arrowdotchain_L7
                 LDA     #57
@@ -473,10 +457,8 @@ _arrowdotchain_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #13107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #13107
                 BNE     *+5
                 BRL     _arrowdotchain_L8
                 LDA     #58
@@ -515,10 +497,8 @@ _arrowdotchain_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #26210
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26210
                 BNE     *+5
                 BRL     _arrowdotchain_L9
                 LDA     #59
@@ -550,10 +530,8 @@ _arrowdotchain_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21845
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21845
                 BNE     *+5
                 BRL     _arrowdotchain_L10
                 LDA     #60
@@ -583,10 +561,8 @@ _arrowdotchain_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2989
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2989
                 BNE     *+5
                 BRL     _arrowdotchain_L11
                 LDA     #61
@@ -608,10 +584,8 @@ _arrowdotchain_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _arrowdotchain_L12
                 LDA     #62
@@ -631,10 +605,8 @@ _arrowdotchain_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1911
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1911
                 BNE     *+5
                 BRL     _arrowdotchain_L13
                 LDA     #63
@@ -685,10 +657,8 @@ _arrowdotchain_L13
                 STA     _fcc_img0
                 LDA     [_fcc_img0]
                 TAX
-                LDA     #26209
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26209
                 BNE     *+5
                 BRL     _arrowdotchain_L14
                 LDA     #64
@@ -714,10 +684,8 @@ _arrowdotchain_L14
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #26210
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26210
                 BNE     *+5
                 BRL     _arrowdotchain_L15
                 LDA     #65
@@ -755,10 +723,8 @@ _arrowdotchain_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2748
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2748
                 BNE     *+5
                 BRL     _arrowdotchain_L16
                 LDA     #66
@@ -790,10 +756,8 @@ _arrowdotchain_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #26208
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26208
                 BNE     *+5
                 BRL     _arrowdotchain_L17
                 LDA     #67
@@ -825,10 +789,8 @@ _arrowdotchain_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #26210
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #26210
                 BNE     *+5
                 BRL     _arrowdotchain_L18
                 LDA     #68

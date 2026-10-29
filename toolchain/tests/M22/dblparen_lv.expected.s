@@ -60,11 +60,9 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 TAY
                 LDA     1,S
                 TAX
@@ -74,10 +72,8 @@ main_stkok        TCS
 _dblparen_lv_L0
                 LDA     #15
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #6
                 STA     _fcc_img0
                 LDA     #100
                 STA     gsv
@@ -85,10 +81,8 @@ _dblparen_lv_L0
                 STA     gsv
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _dblparen_lv_L1
                 LDA     #1
@@ -104,10 +98,8 @@ _dblparen_lv_L0
 _dblparen_lv_L1
                 LDA     gsv
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _dblparen_lv_L2
                 LDA     #2

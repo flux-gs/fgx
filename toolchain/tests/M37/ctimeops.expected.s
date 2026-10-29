@@ -248,11 +248,9 @@ main_stkok        TCS
                 BRL     _ctimeops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _ctimeops_L4
                 SEP     #$20
@@ -298,11 +296,9 @@ _ctimeops_L4
                 BRL     _ctimeops_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _ctimeops_L5
                 SEP     #$20
@@ -348,11 +344,9 @@ _ctimeops_L5
                 BRL     _ctimeops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _ctimeops_L6
                 SEP     #$20
@@ -398,11 +392,9 @@ _ctimeops_L6
                 BRL     _ctimeops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     1,S   ; fccstk d=0 b=1
 _ctimeops_L7
                 LDA     1,S   ; fccstk d=0 b=1

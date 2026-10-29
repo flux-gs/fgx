@@ -137,18 +137,12 @@ main_stkok        TCS
                 PLA
                 CLC
                 ADC     _fcc_tmp_b
-                PHA
-                LDA     #8
-                STA     _fcc_tmp_b
-                PLA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #5
                 TAY
                 TSC
                 CLC

@@ -27,11 +27,9 @@ _arrptrarrread_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _arrptrarrread_L3
                 EOR     #$8000
 _arrptrarrread_L3
@@ -53,11 +51,8 @@ _arrptrarrread_L3
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_tmp_b
                 ASL
                 CLC
@@ -82,11 +77,9 @@ _arrptrarrread_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _arrptrarrread_L7
                 EOR     #$8000
 _arrptrarrread_L7
@@ -142,10 +135,9 @@ _arrptrarrread_L7
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -194,10 +186,8 @@ _arrptrarrread_L7
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -248,10 +238,9 @@ _arrptrarrread_L7
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -269,11 +258,9 @@ _arrptrarrread_L7
                 STA     _fcc_fpr0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 JSR     _fcc_long_from_int
                 TAY
                 LDA     _fcc_long_hi
@@ -308,10 +295,9 @@ _arrptrarrread_L7
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -386,10 +372,8 @@ _arrptrarrread_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _arrptrarrread_L8
                 LDA     #1
@@ -431,10 +415,8 @@ _arrptrarrread_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BNE     *+5
                 BRL     _arrptrarrread_L9
                 LDA     #2
@@ -458,10 +440,9 @@ _arrptrarrread_L9
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -488,10 +469,8 @@ _arrptrarrread_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _arrptrarrread_L10
                 LDA     #3
@@ -515,10 +494,9 @@ _arrptrarrread_L10
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -545,10 +523,8 @@ _arrptrarrread_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BNE     *+5
                 BRL     _arrptrarrread_L11
                 LDA     #4
@@ -572,10 +548,8 @@ _arrptrarrread_L11
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -602,10 +576,8 @@ _arrptrarrread_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BNE     *+5
                 BRL     _arrptrarrread_L12
                 LDA     #5
@@ -629,10 +601,8 @@ _arrptrarrread_L12
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -659,10 +629,8 @@ _arrptrarrread_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _arrptrarrread_L13
                 LDA     #6
@@ -686,10 +654,9 @@ _arrptrarrread_L13
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -724,10 +691,8 @@ _arrptrarrread_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #200
                 BNE     *+5
                 BRL     _arrptrarrread_L14
                 LDA     #7
@@ -751,10 +716,8 @@ _arrptrarrread_L14
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -789,10 +752,8 @@ _arrptrarrread_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BNE     *+5
                 BRL     _arrptrarrread_L15
                 LDA     #8
@@ -816,10 +777,9 @@ _arrptrarrread_L15
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -880,10 +840,9 @@ _arrptrarrread_L16
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -944,10 +903,9 @@ _arrptrarrread_L17
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -1022,10 +980,9 @@ _arrptrarrread_L18
                 LDA     #arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 ASL
@@ -1121,10 +1078,8 @@ _arrptrarrread_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _arrptrarrread_L23
                 SEP     #$20
@@ -1143,10 +1098,8 @@ _arrptrarrread_L19
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BEQ     *+5
                 BRL     _arrptrarrread_L23
                 LDA     #0

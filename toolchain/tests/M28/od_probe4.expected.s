@@ -668,11 +668,9 @@ _od_probe4_L0
                 TCS
                 TYA
                 TAX
-                LDA     #25
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #25
                 TAY
                 TSC
                 CLC

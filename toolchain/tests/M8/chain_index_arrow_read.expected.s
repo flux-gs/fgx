@@ -310,10 +310,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #100
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -321,21 +319,17 @@ main_stkok        TCS
                 BRL     _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 STA     _fcc_img0
                 BRL     _chain_index_arrow_read_L1
 _chain_index_arrow_read_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #100
                 STA     _fcc_img0
 _chain_index_arrow_read_L1
                 LDA     _fcc_img0
@@ -515,10 +509,8 @@ _chain_index_arrow_read_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #100
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -526,21 +518,17 @@ _chain_index_arrow_read_L1
                 BRL     _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 STA     _fcc_img0
                 BRL     _chain_index_arrow_read_L3
 _chain_index_arrow_read_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #100
                 STA     _fcc_img0
 _chain_index_arrow_read_L3
                 LDA     _fcc_img0

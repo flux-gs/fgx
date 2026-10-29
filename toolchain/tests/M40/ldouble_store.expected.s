@@ -646,18 +646,14 @@ main_stkok        TCS
                 STA     25,S   ; fccstk d=0 b=25
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _ldouble_store_L7
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _ldouble_store_L7
                 LDA     #0
@@ -670,10 +666,8 @@ _ldouble_store_L8
                 BRL     _ldouble_store_L5
                 LDA     #32
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _ldouble_store_L5
                 LDA     #0
@@ -697,18 +691,14 @@ _ldouble_store_L6
 _ldouble_store_L4
                 LDA     #12
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12
                 BEQ     *+5
                 BRL     _ldouble_store_L10
                 LDA     #8
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _ldouble_store_L10
                 LDA     #0
@@ -1127,11 +1117,8 @@ _ldouble_store_L21
                 STA     _fcc_fpr0
                 LDA     25,S   ; fccstk d=0 b=25
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 ASL
@@ -1953,18 +1940,14 @@ _ldouble_store_L47
 _ldouble_store_L45
                 LDA     59,S   ; fccstk d=0 b=59
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _ldouble_store_L49
                 LDA     69,S   ; fccstk d=0 b=69
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _ldouble_store_L49
                 LDA     #0
@@ -2967,10 +2950,8 @@ _ldouble_store_L83
 _ldouble_store_L81
                 LDA     71,S   ; fccstk d=0 b=71
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _ldouble_store_L91
                 LDA     #$0000
@@ -3030,10 +3011,8 @@ _ldouble_store_L92
                 BRL     _ldouble_store_L89
                 LDA     81,S   ; fccstk d=0 b=81
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _ldouble_store_L89
                 LDA     #0

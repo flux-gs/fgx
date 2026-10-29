@@ -591,10 +591,8 @@ _arraymemberdecay_L4
                 STA     _fcc_ptr+2
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #4242
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4242
                 BNE     *+5
                 BRL     _arraymemberdecay_L7
                 LDA     #48
@@ -646,10 +644,8 @@ _arraymemberdecay_L7
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BNE     *+5
                 BRL     _arraymemberdecay_L8
                 LDA     #49

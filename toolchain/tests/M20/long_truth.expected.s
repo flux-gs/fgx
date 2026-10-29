@@ -154,10 +154,8 @@ _long_truth_L10
                 LDA     #0
 _long_truth_L11
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L9
                 LDA     #5
@@ -316,10 +314,8 @@ _long_truth_L30
                 LDA     #0
 _long_truth_L31
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _long_truth_L29
                 LDA     #10
@@ -449,10 +445,8 @@ _long_truth_L42
                 LDA     _fcc_img0
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L43
                 LDA     #14
@@ -503,10 +497,8 @@ _long_truth_L45
 _long_truth_L46
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L47
                 LDA     #15
@@ -557,10 +549,8 @@ _long_truth_L49
 _long_truth_L50
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L51
                 LDA     #16
@@ -598,10 +588,8 @@ _long_truth_L52
                 INC
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #3
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -617,10 +605,8 @@ _long_truth_L54
 _long_truth_L53
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _long_truth_L56
                 LDA     #17
@@ -816,10 +802,8 @@ _long_truth_L68
                 LDA     #0
 _long_truth_L69
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L67
                 LDA     #22
@@ -896,10 +880,8 @@ _long_truth_L75
                 LDA     #0
 _long_truth_L76
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _long_truth_L74
                 LDA     #25

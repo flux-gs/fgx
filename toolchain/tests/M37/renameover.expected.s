@@ -54,19 +54,15 @@ _renameover_put_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _renameover_L1
                 EOR     #$8000
 _renameover_L1
                 BMI     *+5
                 BRL     _renameover_L0
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -143,9 +139,7 @@ _renameover_L0
                 TAY
                 PLA
                 TYA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 TAY
                 TSC
                 CLC
@@ -223,11 +217,9 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _renameover_L4
                 EOR     #$8000
 _renameover_L4
@@ -276,11 +268,9 @@ _renameover_L3
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _renameover_L6
                 EOR     #$8000
 _renameover_L6
@@ -327,19 +317,15 @@ _renameover_L5
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _renameover_L7
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
 _renameover_L7
                 LDA     #0
@@ -364,11 +350,9 @@ _renameover_L7
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _renameover_L9
                 EOR     #$8000
 _renameover_L9
@@ -406,10 +390,8 @@ _renameover_L9
                 TYA
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _renameover_L15
                 SEP     #$20
@@ -430,10 +412,8 @@ _renameover_L9
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #78
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #78
                 BEQ     *+5
                 BRL     _renameover_L15
                 LDA     #1
@@ -462,10 +442,8 @@ _renameover_L16
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #69
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #69
                 BEQ     *+5
                 BRL     _renameover_L13
                 LDA     #1
@@ -494,10 +472,8 @@ _renameover_L14
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #87
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #87
                 BEQ     *+5
                 BRL     _renameover_L11
                 LDA     #1
@@ -510,11 +486,9 @@ _renameover_L12
                 BRL     _renameover_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
 _renameover_L10
 _renameover_L8
@@ -540,11 +514,9 @@ _renameover_L8
                 TYA
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _renameover_L18
                 EOR     #$8000
 _renameover_L18
@@ -552,11 +524,9 @@ _renameover_L18
                 BRL     _renameover_L17
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     13,S   ; fccstk d=0 b=13
                 BRL     _renameover_L19
 _renameover_L17
@@ -599,10 +569,8 @@ _renameover_L19
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _renameover_L20
                 SEP     #$20
@@ -635,19 +603,15 @@ _renameover_L19
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _renameover_L21
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _renameover_L21
                 SEP     #$20

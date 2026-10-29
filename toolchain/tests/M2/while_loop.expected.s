@@ -27,11 +27,9 @@ _while_loop_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #42
                 BVC     _while_loop_L2
                 EOR     #$8000
 _while_loop_L2
@@ -39,11 +37,9 @@ _while_loop_L2
                 BRL     _while_loop_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _while_loop_L0
 _while_loop_L1

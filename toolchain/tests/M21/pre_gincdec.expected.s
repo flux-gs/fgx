@@ -75,10 +75,8 @@ main_stkok        TCS
                 LDA     gc
                 AND     #$00FF
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _pre_gincdec_L0
                 LDA     #1

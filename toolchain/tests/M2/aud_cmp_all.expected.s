@@ -27,11 +27,9 @@ main_stkok        TCS
                 STA     _fcc_img2
                 LDA     #0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 STA     _fcc_img3
                 LDA     _fcc_img1
                 TAX
@@ -47,11 +45,9 @@ _aud_cmp_all_L1
                 BRL     _aud_cmp_all_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _aud_cmp_all_L0
                 LDA     _fcc_img2
@@ -71,11 +67,9 @@ _aud_cmp_all_L3
                 BRL     _aud_cmp_all_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _aud_cmp_all_L2
                 LDA     _fcc_img1
@@ -95,11 +89,9 @@ _aud_cmp_all_L5
                 BRL     _aud_cmp_all_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _aud_cmp_all_L4
                 LDA     _fcc_img1
@@ -116,11 +108,9 @@ _aud_cmp_all_L7
                 BRL     _aud_cmp_all_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _aud_cmp_all_L6
                 LDA     _fcc_img1
@@ -133,11 +123,9 @@ _aud_cmp_all_L6
                 BRL     _aud_cmp_all_L8
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _aud_cmp_all_L8
                 LDA     _fcc_img1
@@ -150,11 +138,9 @@ _aud_cmp_all_L8
                 BRL     _aud_cmp_all_L9
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _aud_cmp_all_L9
                 LDA     _fcc_img3
@@ -171,11 +157,9 @@ _aud_cmp_all_L11
                 BRL     _aud_cmp_all_L10
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _aud_cmp_all_L10
                 LDA     _fcc_img1
@@ -195,11 +179,9 @@ _aud_cmp_all_L13
                 BRL     _aud_cmp_all_L12
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 STA     _fcc_img0
 _aud_cmp_all_L12
                 LDA     _fcc_img0

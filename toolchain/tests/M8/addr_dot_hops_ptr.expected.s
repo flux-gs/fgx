@@ -29,12 +29,11 @@ main_stkok        TCS
                 LDA     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -52,12 +51,10 @@ main_stkok        TCS
                 LDA     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -75,12 +72,11 @@ main_stkok        TCS
                 LDA     #_addr_dot_hops_ptr_arr
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -153,12 +149,11 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -189,12 +184,10 @@ main_stkok        TCS
                 PLA
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -210,11 +203,8 @@ main_stkok        TCS
                 LDY     #16
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 LDY     #16
                 STA     [_fcc_fpr0],Y
                 LDA     9,S   ; fccstk d=0 b=9

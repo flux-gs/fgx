@@ -285,11 +285,9 @@ main_stkok        TCS
                 LDA     8+main_FRAMESIZE,S   ; fccstk d=2 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 BVC     _bigframe_L2
                 EOR     #$8000
 _bigframe_L2

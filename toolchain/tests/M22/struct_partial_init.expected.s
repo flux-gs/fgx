@@ -21,18 +21,14 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     _struct_partial_init_g+0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L1
                 LDA     _struct_partial_init_g+2
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L1
                 LDA     #0
@@ -71,10 +67,8 @@ _struct_partial_init_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _struct_partial_init_L4
                 SEP     #$20
@@ -95,10 +89,8 @@ _struct_partial_init_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _struct_partial_init_L4
                 LDA     #0
@@ -137,10 +129,8 @@ _struct_partial_init_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _struct_partial_init_L7
                 SEP     #$20
@@ -161,10 +151,8 @@ _struct_partial_init_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _struct_partial_init_L7
                 LDA     #0

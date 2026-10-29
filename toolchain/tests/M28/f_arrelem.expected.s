@@ -229,10 +229,8 @@ _f_arrelem_L1
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_arrelem_L2
                 LDA     #3
@@ -289,10 +287,8 @@ _f_arrelem_L2
                 FGX2_FARCALL _fcc_dmul
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _f_arrelem_L3
                 LDA     #4
@@ -354,10 +350,8 @@ _f_arrelem_L4
                 LDA:    fa,X
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _f_arrelem_L5
                 LDA     #6

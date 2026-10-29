@@ -98,11 +98,9 @@ _strlen_test_L2
                 TYA
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _strlen_test_L0
 _strlen_test_L1
@@ -172,11 +170,9 @@ _strlen_test_L3
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _strlen_test_L3
 _strlen_test_L4

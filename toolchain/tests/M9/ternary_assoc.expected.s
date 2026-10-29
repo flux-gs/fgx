@@ -22,10 +22,8 @@ main_stkok        TCS
                 LDA     #2
                 STA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _ternary_assoc_L0
                 LDA     #10
@@ -33,10 +31,8 @@ main_stkok        TCS
 _ternary_assoc_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _ternary_assoc_L2
                 LDA     #42

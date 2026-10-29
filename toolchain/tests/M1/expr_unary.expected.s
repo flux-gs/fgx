@@ -19,15 +19,11 @@ main_stkovf       JMP     _fcc_stkoflow
 main_stkok        TCS
                 STA     _fcc_fb
                 INC     _fcc_fb
-                LDA     #5
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFB
                 TAX
-                LDA     #47
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #47
                 TAY
                 TSC
                 CLC

@@ -24,10 +24,8 @@ main_stkok        TCS
                 TAX
                 LDA:    a,X
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _biginit_L0
                 LDA     #1
@@ -46,10 +44,8 @@ _biginit_L0
                 TAX
                 LDA:    a,X
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _biginit_L1
                 LDA     #2
@@ -77,16 +73,12 @@ _biginit_L1
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -117,16 +109,12 @@ _biginit_L2
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -157,16 +145,12 @@ _biginit_L3
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAX
-                LDA     #127
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #127
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b

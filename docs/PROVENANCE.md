@@ -400,7 +400,7 @@ did not write, which this registry's preamble calls the worse error.
 | `src/userland/time/time.c`         | 2.11BSD `time(1)`     | H1 port; spawnv+waitpid for fork/execvp/wait3; real line only (no rusage); 60 Hz ticks timing |
 | `src/userland/wc/wc.c`             | 2.11BSD `wc(1)`       | by Bill Joy, UCB |
 | `src/userland/kill/kill.c`         | 2.11BSD `kill(1)`     | 4.4.1 port, replacing a hand-rolled kill(1) whose bare atoi() turned the csh job spec `kill %` into kill(0, SIGTERM) — a fan-out over the caller's whole process group (apple/fgx#126).  Restores upstream's isdigit/'-' operand guard, -l, signal names, several pids and strerror(errno) — all of which the shipped 2.11BSD man page already documented.  Name table verbatim, so signal 6 is `IOT` not FGX's SIGABRT spelling; FGX signal numbers already match 2.11BSD one for one.  Adaptation: explicit `int` where upstream used implicit-int, errno via <errno.h> |
-| `src/userland/cat/cat.c`           | 2.11BSD `cat(1)`      | -benstuv; CR-keyed; no fstat dev/ino guard |
+| `src/userland/cat/cat.c`           | 2.11BSD `vendor/2.11BSD/usr/bin/cat.c` | **VERBATIM -- no FGX delta** but the provenance header.  The rewrite it replaced wrote one byte per write(2) under any flag, keyed lines on CR, and dropped the fstat input-is-output guard; upstream's fstat on a pipe is what found the provisional-descriptor fstat crash. |
 | `src/userland/cmp/cmp.c`           | 2.11BSD `vendor/2.11BSD/usr/bin/cmp.c` | **VERBATIM -- no FGX delta** but the provenance header.  The rewrite it replaced counted lines on CR and printed its numbers through buffered stdio after an unbuffered write (apple/fgx#510).  Gap filled in the toolchain: `MAXBSIZE` in `sys/param.h` (1024, 2.11BSD's) |
 | `src/userland/cp/cp.c`             | 2.11BSD `cp(1)`       | file/dir dest; no -r/-p/-i |
 | `src/userland/rm/rm.c`             | 2.11BSD `rm(1)`       | 4.18 port; full -f/-i/-r (recursive tree delete via opendir snapshot + rmdir); upstream's lstat, the access(2) check before descending and the override-protection prompt restored (apple/fgx#530); needs SYS_RMDIR + tree-file unlink |
@@ -447,7 +447,7 @@ did not write, which this registry's preamble calls the worse error.
 | `src/userland/fold/fold.c`         | 2.11BSD `fold(1)`     | by Bill Joy, UCB |
 | `src/userland/basename/basename.c` | 2.11BSD `basename(1)` | |
 | `src/userland/dirname/dirname.c`   | 2.11BSD `dirname(1)`  | |
-| `src/userland/head/head.c`         | 2.11BSD `head(1)`     | by Bill Joy; -n N / -N; stdin fallback; CR-keyed |
+| `src/userland/head/head.c`         | 2.11BSD `vendor/2.11BSD/usr/ucb/head.c` | **VERBATIM -- no FGX delta** but the provenance header; by Bill Joy.  The rewrite it replaced wrote one byte per write(2) and took a POSIX `-n N`, which upstream does not. |
 | `src/userland/hostname/hostname.c` | 2.11BSD `hostname(1)` | print-only |
 | `src/userland/uname/uname.c`       | 2.11BSD `uname(1)`    | UCB 1993 |
 | `src/userland/echo/echo.c`         | 2.11BSD `echo(1)`     | |

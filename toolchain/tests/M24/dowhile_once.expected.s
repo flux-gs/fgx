@@ -27,20 +27,16 @@ _dowhile_once_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _dowhile_once_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _dowhile_once_L3
                 EOR     #$8000
 _dowhile_once_L3

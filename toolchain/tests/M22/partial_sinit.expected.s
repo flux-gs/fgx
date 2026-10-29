@@ -53,10 +53,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #109
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #109
                 BNE     *+5
                 BRL     _partial_sinit_L0
                 LDA     #1
@@ -89,10 +87,8 @@ _partial_sinit_L0
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _partial_sinit_L1
                 LDA     #2
@@ -125,10 +121,8 @@ _partial_sinit_L1
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _partial_sinit_L2
                 LDA     #3
@@ -222,10 +216,8 @@ _partial_sinit_L3
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _partial_sinit_L6
                 LDA     #5
@@ -258,10 +250,8 @@ _partial_sinit_L6
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _partial_sinit_L7
                 LDA     #6

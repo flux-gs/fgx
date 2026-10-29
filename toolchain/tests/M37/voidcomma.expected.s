@@ -205,19 +205,15 @@ main_stkok        TCS
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _voidcomma_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     3,S   ; fccstk d=0 b=3
 _voidcomma_L0
                 SEP     #$20
@@ -240,11 +236,9 @@ _voidcomma_L0
                 TYA
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     3,S   ; fccstk d=0 b=3
                 SEP     #$20
                 MX      %10
@@ -267,11 +261,9 @@ _voidcomma_L0
                 TYA
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC

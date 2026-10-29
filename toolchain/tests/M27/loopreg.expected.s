@@ -30,11 +30,8 @@ _loopreg_helper_stkok        TCS
                 LDA     6+_loopreg_helper_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 TAY
                 TSC
                 CLC
@@ -195,10 +192,8 @@ _loopreg_L7
                 BRL     _loopreg_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _loopreg_L8
                 BRL     _loopreg_L6
@@ -297,10 +292,8 @@ _loopreg_L12
                 BRL     _loopreg_L11
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _loopreg_L13
                 BRL     _loopreg_L10
@@ -398,10 +391,8 @@ _loopreg_L17
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _loopreg_L18
                 BRL     _loopreg_with_goto_uL_done
@@ -497,10 +488,8 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAY
                 TSC
                 CLC

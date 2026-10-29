@@ -96,11 +96,9 @@ main_stkok        TCS
                 BRL     _uconv_compound_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
 _uconv_compound_L0
                 LDA     #$0001
@@ -161,11 +159,9 @@ _uconv_compound_L0
                 BRL     _uconv_compound_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _uconv_compound_L1
                 LDA     #$0001
@@ -228,11 +224,9 @@ _uconv_compound_L1
                 BRL     _uconv_compound_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     _fcc_img0
 _uconv_compound_L2
                 LDA     #$0001
@@ -305,11 +299,9 @@ _uconv_compound_L2
                 BRL     _uconv_compound_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _uconv_compound_L3
                 LDA     #$0000
@@ -370,11 +362,9 @@ _uconv_compound_L3
                 BRL     _uconv_compound_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     _fcc_img0
 _uconv_compound_L4
                 LDA     #$FFFF
@@ -435,11 +425,9 @@ _uconv_compound_L4
                 BRL     _uconv_compound_L5
                 LDA     _fcc_img0
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #32
                 STA     _fcc_img0
 _uconv_compound_L5
                 LDA     #$0000
@@ -500,11 +488,9 @@ _uconv_compound_L5
                 BRL     _uconv_compound_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #64
                 STA     _fcc_img0
 _uconv_compound_L6
                 LDA     #$0000
@@ -567,11 +553,9 @@ _uconv_compound_L6
                 BRL     _uconv_compound_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #128
                 STA     _fcc_img0
 _uconv_compound_L7
                 LDA     _fcc_img0

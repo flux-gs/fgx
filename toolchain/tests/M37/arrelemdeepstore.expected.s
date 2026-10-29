@@ -27,11 +27,9 @@ _arrelemdeepstore_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _arrelemdeepstore_L3
                 EOR     #$8000
 _arrelemdeepstore_L3
@@ -319,11 +317,9 @@ main_stkok        TCS
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -333,10 +329,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21930
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21930
                 BNE     *+5
                 BRL     _arrelemdeepstore_L4
                 LDA     #1
@@ -360,11 +354,10 @@ _arrelemdeepstore_L4
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -374,10 +367,8 @@ _arrelemdeepstore_L4
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12288
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12288
                 BNE     *+5
                 BRL     _arrelemdeepstore_L5
                 LDA     #2
@@ -401,11 +392,10 @@ _arrelemdeepstore_L5
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -415,10 +405,8 @@ _arrelemdeepstore_L5
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12290
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12290
                 BNE     *+5
                 BRL     _arrelemdeepstore_L6
                 LDA     #3
@@ -442,11 +430,9 @@ _arrelemdeepstore_L6
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -456,10 +442,8 @@ _arrelemdeepstore_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8193
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8193
                 BNE     *+5
                 BRL     _arrelemdeepstore_L7
                 LDA     #4
@@ -483,11 +467,9 @@ _arrelemdeepstore_L7
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -495,10 +477,8 @@ _arrelemdeepstore_L7
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4097
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4097
                 BNE     *+5
                 BRL     _arrelemdeepstore_L8
                 LDA     #5
@@ -514,10 +494,8 @@ _arrelemdeepstore_L7
 _arrelemdeepstore_L8
                 LDA     gt+64
                 TAX
-                LDA     #32768
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32768
                 BNE     *+5
                 BRL     _arrelemdeepstore_L9
                 LDA     #6
@@ -579,11 +557,10 @@ _arrelemdeepstore_L9
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -593,10 +570,8 @@ _arrelemdeepstore_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4660
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4660
                 BNE     *+5
                 BRL     _arrelemdeepstore_L10
                 LDA     #10
@@ -620,11 +595,9 @@ _arrelemdeepstore_L10
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -634,10 +607,8 @@ _arrelemdeepstore_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12289
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12289
                 BNE     *+5
                 BRL     _arrelemdeepstore_L11
                 LDA     #11
@@ -661,11 +632,10 @@ _arrelemdeepstore_L11
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -675,10 +645,8 @@ _arrelemdeepstore_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8194
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8194
                 BNE     *+5
                 BRL     _arrelemdeepstore_L12
                 LDA     #12
@@ -702,11 +670,10 @@ _arrelemdeepstore_L12
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -714,10 +681,8 @@ _arrelemdeepstore_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4098
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4098
                 BNE     *+5
                 BRL     _arrelemdeepstore_L13
                 LDA     #13
@@ -768,11 +733,10 @@ _arrelemdeepstore_L13
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -782,10 +746,8 @@ _arrelemdeepstore_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #3855
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3855
                 BNE     *+5
                 BRL     _arrelemdeepstore_L14
                 LDA     #20
@@ -809,11 +771,10 @@ _arrelemdeepstore_L14
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -823,10 +784,8 @@ _arrelemdeepstore_L14
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #24576
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24576
                 BNE     *+5
                 BRL     _arrelemdeepstore_L15
                 LDA     #21
@@ -850,11 +809,10 @@ _arrelemdeepstore_L15
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -864,10 +822,8 @@ _arrelemdeepstore_L15
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #20480
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20480
                 BNE     *+5
                 BRL     _arrelemdeepstore_L16
                 LDA     #22
@@ -891,11 +847,10 @@ _arrelemdeepstore_L16
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 ASL
                 CLC
@@ -905,10 +860,8 @@ _arrelemdeepstore_L16
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12288
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12288
                 BNE     *+5
                 BRL     _arrelemdeepstore_L17
                 LDA     #23
@@ -932,11 +885,9 @@ _arrelemdeepstore_L17
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -946,10 +897,8 @@ _arrelemdeepstore_L17
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #28673
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28673
                 BNE     *+5
                 BRL     _arrelemdeepstore_L18
                 LDA     #24
@@ -1007,11 +956,10 @@ _arrelemdeepstore_L18
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -1064,11 +1012,9 @@ _arrelemdeepstore_L19
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -1121,11 +1067,10 @@ _arrelemdeepstore_L20
                 LDA     #gt
                 STA     _fcc_fpr0
                 LDA     #2
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 ASL
                 ASL
                 CLC
@@ -1135,10 +1080,8 @@ _arrelemdeepstore_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #12290
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #12290
                 BNE     *+5
                 BRL     _arrelemdeepstore_L21
                 LDA     #32
@@ -1203,10 +1146,8 @@ _arrelemdeepstore_L21
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #32382
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32382
                 BNE     *+5
                 BRL     _arrelemdeepstore_L22
                 LDA     #50

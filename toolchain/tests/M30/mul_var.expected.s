@@ -155,10 +155,8 @@ main_stkok        TCS
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L0
                 LDA     #1
@@ -189,10 +187,8 @@ _mul_var_L0
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L1
                 LDA     #2
@@ -213,9 +209,7 @@ _mul_var_L1
                 PLA
                 TYA
                 PHA
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
@@ -224,13 +218,7 @@ _mul_var_L1
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #7
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFF9
                 BNE     *+5
                 BRL     _mul_var_L2
                 LDA     #3
@@ -244,9 +232,7 @@ _mul_var_L1
                 TYA
                 RTL
 _mul_var_L2
-                LDA     #7
-                EOR     #$FFFF
-                INC
+                LDA     #$FFF9
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
@@ -262,13 +248,7 @@ _mul_var_L2
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #7
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFF9
                 BNE     *+5
                 BRL     _mul_var_L3
                 LDA     #4
@@ -299,10 +279,8 @@ _mul_var_L3
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #24464
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #24464
                 BNE     *+5
                 BRL     _mul_var_L4
                 LDA     #5
@@ -316,18 +294,14 @@ _mul_var_L3
                 TYA
                 RTL
 _mul_var_L4
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
                 PLA
                 TYA
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
@@ -337,10 +311,8 @@ _mul_var_L4
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _mul_var_L5
                 LDA     #6
@@ -354,9 +326,7 @@ _mul_var_L4
                 TYA
                 RTL
 _mul_var_L5
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
@@ -372,13 +342,7 @@ _mul_var_L5
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #21
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFEB
                 BNE     *+5
                 BRL     _mul_var_L6
                 LDA     #7
@@ -399,9 +363,7 @@ _mul_var_L6
                 PLA
                 TYA
                 PHA
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 PHA
                 FGX2_FARCALL _mul_var_iv
                 TAY
@@ -410,13 +372,7 @@ _mul_var_L6
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
-                PHA
-                LDA     #21
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFEB
                 BNE     *+5
                 BRL     _mul_var_L7
                 LDA     #8
@@ -447,10 +403,8 @@ _mul_var_L7
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _mul_var_L8
                 LDA     #9
@@ -483,10 +437,8 @@ _mul_var_L8
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #28393
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28393
                 BNE     *+5
                 BRL     _mul_var_L9
                 LDA     #10
@@ -519,10 +471,8 @@ _mul_var_L9
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #28393
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #28393
                 BNE     *+5
                 BRL     _mul_var_L10
                 LDA     #11
@@ -553,10 +503,8 @@ _mul_var_L10
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L11
                 LDA     #12
@@ -587,10 +535,8 @@ _mul_var_L11
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _mul_var_L12
                 LDA     #13
@@ -621,10 +567,8 @@ _mul_var_L12
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #65025
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65025
                 BNE     *+5
                 BRL     _mul_var_L13
                 LDA     #14
@@ -655,10 +599,8 @@ _mul_var_L13
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #32761
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32761
                 BNE     *+5
                 BRL     _mul_var_L14
                 LDA     #15
@@ -689,10 +631,8 @@ _mul_var_L14
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #32765
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32765
                 BNE     *+5
                 BRL     _mul_var_L15
                 LDA     #16
@@ -727,10 +667,8 @@ _mul_var_L15
                 PLA
                 JSR     _fcc_mul16
                 TAX
-                LDA     #4096
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4096
                 BNE     *+5
                 BRL     _mul_var_L16
                 LDA     #17

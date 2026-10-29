@@ -21,11 +21,8 @@ _fnptrvoid_f0_stkok        TCS
                 INC     _fcc_fb
                 LDA     _fnptrvoid_hits
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fnptrvoid_hits
                 TAY
                 TSC
@@ -55,11 +52,9 @@ _fnptrvoid_f1_stkok        TCS
                 INC     _fcc_fb
                 LDA     _fnptrvoid_hits
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #40
                 STA     _fnptrvoid_hits
                 TAY
                 TSC
@@ -135,11 +130,9 @@ _fnptrvoid_L1
                 JSR     _fcc_safepoint
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2
                 BVC     _fnptrvoid_L4
                 EOR     #$8000
 _fnptrvoid_L4

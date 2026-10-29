@@ -222,10 +222,8 @@ _argvloop_L3
                 LDA     [_fcc_img1]
                 AND     #$00FF
                 TAX
-                LDA     #47
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #47
                 BNE     *+5
                 BRL     _argvloop_L6
                 LDA     #3

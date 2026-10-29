@@ -83,11 +83,9 @@ main_stkok        TCS
                 SEC
                 SBC     _fcc_tmp_b
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #16
                 TAY
                 TSC
                 CLC

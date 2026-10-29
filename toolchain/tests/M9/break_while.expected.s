@@ -29,11 +29,9 @@ _break_while_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 BVC     _break_while_L2
                 EOR     #$8000
 _break_while_L2
@@ -41,29 +39,23 @@ _break_while_L2
                 BRL     _break_while_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _break_while_L3
                 BRL     _break_while_L1
 _break_while_L3
                 LDA     _fcc_img1
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _break_while_L0
 _break_while_L1

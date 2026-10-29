@@ -58,11 +58,9 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 TAY
                 LDA     1,S
                 TAX
@@ -106,10 +104,8 @@ main_stkok        TCS
                 MX      %00
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #6
                 TAY
                 LDA     1,S
                 TAX
@@ -156,10 +152,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #15
                 TAY
                 LDA     1,S
                 TAX
@@ -210,11 +204,9 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #100
                 TAY
                 LDA     1,S
                 TAX
@@ -230,10 +222,8 @@ main_stkok        TCS
                 TAX
                 LDA:    gv,X
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BNE     *+5
                 BRL     _garr_compound_L0
                 LDA     #1
@@ -252,10 +242,8 @@ _garr_compound_L0
                 LDA:    gbm,X
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #255
                 BNE     *+5
                 BRL     _garr_compound_L1
                 LDA     #2
@@ -274,10 +262,8 @@ _garr_compound_L1
                 LDA:    gbm,X
                 AND     #$00FF
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BNE     *+5
                 BRL     _garr_compound_L2
                 LDA     #3

@@ -77,10 +77,8 @@ main_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BEQ     *+5
                 BRL     _elemdot_chain_L1
                 SEP     #$20
@@ -101,10 +99,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BEQ     *+5
                 BRL     _elemdot_chain_L1
                 LDA     #1
@@ -117,11 +113,9 @@ _elemdot_chain_L2
                 BRL     _elemdot_chain_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L0
                 LDA     #1
@@ -182,10 +176,8 @@ _elemdot_chain_L0
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #44
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #44
                 BEQ     *+5
                 BRL     _elemdot_chain_L6
                 SEP     #$20
@@ -206,10 +198,8 @@ _elemdot_chain_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #33
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #33
                 BEQ     *+5
                 BRL     _elemdot_chain_L6
                 LDA     #1
@@ -239,10 +229,8 @@ _elemdot_chain_L7
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #22
                 BEQ     *+5
                 BRL     _elemdot_chain_L4
                 LDA     #1
@@ -255,11 +243,9 @@ _elemdot_chain_L5
                 BRL     _elemdot_chain_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L3
                 SEP     #$20
@@ -281,11 +267,9 @@ _elemdot_chain_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 SEP     #$20
@@ -328,10 +312,8 @@ _elemdot_chain_L3
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #47
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #47
                 BEQ     *+5
                 BRL     _elemdot_chain_L9
                 SEP     #$20
@@ -352,10 +334,8 @@ _elemdot_chain_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #33
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #33
                 BEQ     *+5
                 BRL     _elemdot_chain_L9
                 LDA     #1
@@ -368,11 +348,9 @@ _elemdot_chain_L10
                 BRL     _elemdot_chain_L8
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L8
                 SEP     #$20
@@ -448,10 +426,8 @@ _elemdot_chain_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _elemdot_chain_L14
                 SEP     #$20
@@ -479,10 +455,8 @@ _elemdot_chain_L8
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #67
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #67
                 BEQ     *+5
                 BRL     _elemdot_chain_L14
                 LDA     #1
@@ -512,10 +486,8 @@ _elemdot_chain_L15
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #47
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #47
                 BEQ     *+5
                 BRL     _elemdot_chain_L12
                 LDA     #1
@@ -528,11 +500,9 @@ _elemdot_chain_L13
                 BRL     _elemdot_chain_L11
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L11
                 SEP     #$20
@@ -545,11 +515,9 @@ _elemdot_chain_L11
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -566,11 +534,9 @@ _elemdot_chain_L11
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -588,11 +554,9 @@ _elemdot_chain_L11
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -610,11 +574,9 @@ _elemdot_chain_L11
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -622,10 +584,8 @@ _elemdot_chain_L11
                 LDY     #4
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BEQ     *+5
                 BRL     _elemdot_chain_L19
                 SEP     #$20
@@ -638,11 +598,9 @@ _elemdot_chain_L11
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -650,10 +608,8 @@ _elemdot_chain_L11
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BEQ     *+5
                 BRL     _elemdot_chain_L19
                 LDA     #1
@@ -674,21 +630,17 @@ _elemdot_chain_L20
                 LDA     #_elemdot_chain_dp
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BEQ     *+5
                 BRL     _elemdot_chain_L17
                 LDA     #1
@@ -701,11 +653,9 @@ _elemdot_chain_L18
                 BRL     _elemdot_chain_L16
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L16
                 SEP     #$20
@@ -718,10 +668,9 @@ _elemdot_chain_L16
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -738,10 +687,9 @@ _elemdot_chain_L16
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -759,10 +707,8 @@ _elemdot_chain_L16
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -780,10 +726,9 @@ _elemdot_chain_L16
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -791,10 +736,8 @@ _elemdot_chain_L16
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _elemdot_chain_L24
                 SEP     #$20
@@ -807,20 +750,17 @@ _elemdot_chain_L16
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #0
-                STA     _fcc_tmp_b
                 ASL
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 ASL
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BEQ     *+5
                 BRL     _elemdot_chain_L24
                 LDA     #1
@@ -841,10 +781,8 @@ _elemdot_chain_L25
                 LDA     #_elemdot_chain_valstack
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 CLC
                 ADC     _fcc_fpr0
@@ -852,10 +790,8 @@ _elemdot_chain_L25
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #100
                 BEQ     *+5
                 BRL     _elemdot_chain_L22
                 LDA     #1
@@ -868,11 +804,9 @@ _elemdot_chain_L23
                 BRL     _elemdot_chain_L21
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L21
                 LDA     #123
@@ -951,10 +885,8 @@ _elemdot_chain_L26
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #123
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #123
                 BEQ     *+5
                 BRL     _elemdot_chain_L28
                 SEP     #$20
@@ -975,10 +907,8 @@ _elemdot_chain_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #121
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #121
                 BEQ     *+5
                 BRL     _elemdot_chain_L28
                 LDA     #1
@@ -991,11 +921,9 @@ _elemdot_chain_L29
                 BRL     _elemdot_chain_L27
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _elemdot_chain_L27
                 LDA     _fcc_img0

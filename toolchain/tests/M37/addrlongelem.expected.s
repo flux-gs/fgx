@@ -27,11 +27,9 @@ _addrlongelem_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #6
                 BVC     _addrlongelem_L3
                 EOR     #$8000
 _addrlongelem_L3
@@ -337,10 +335,8 @@ _addrlongelem_L7
 _addrlongelem_L9
                 STX     _fcc_long_hi
                 TAX
-                LDA     #4369
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4369
                 BNE     *+5
                 BRL     _addrlongelem_L8
                 LDA     #54
@@ -380,10 +376,8 @@ _addrlongelem_L8
                 TYA
                 JSR     _fcc_long_and
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _addrlongelem_L10
                 LDA     #55
@@ -592,10 +586,8 @@ _addrlongelem_L13
                 STA     _fcc_img2
                 LDA     [_fcc_img2]
                 TAX
-                LDA     #258
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #258
                 BNE     *+5
                 BRL     _addrlongelem_L14
                 LDA     #59
@@ -620,10 +612,8 @@ _addrlongelem_L14
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                LDA     #819
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #819
                 BNE     *+5
                 BRL     _addrlongelem_L15
                 LDA     #60
@@ -642,10 +632,8 @@ _addrlongelem_L15
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _addrlongelem_L16
                 LDA     #61
@@ -664,10 +652,8 @@ _addrlongelem_L16
                 TAX
                 LDA:    _addrlongelem_ai,X
                 TAX
-                LDA     #259
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #259
                 BNE     *+5
                 BRL     _addrlongelem_L17
                 LDA     #62

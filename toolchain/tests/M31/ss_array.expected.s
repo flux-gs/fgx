@@ -27,11 +27,9 @@ _ss_array_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _ss_array_L3
                 EOR     #$8000
 _ss_array_L3
@@ -82,11 +80,9 @@ _ss_array_L4
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _ss_array_L7
                 EOR     #$8000
 _ss_array_L7
@@ -109,11 +105,9 @@ _ss_array_L7
                 PHA
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 TAY
                 LDA     1,S
                 STA     _fcc_ptr
@@ -144,11 +138,9 @@ _ss_array_L8
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _ss_array_L11
                 EOR     #$8000
 _ss_array_L11
@@ -206,11 +198,9 @@ _ss_array_L9
 _ss_array_L10
                 LDA     _fcc_img1
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 TAY
                 TSC
                 CLC

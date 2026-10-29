@@ -27,11 +27,9 @@ _ss_bigbuf_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #2048
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #2048
                 BVC     _ss_bigbuf_L3
                 EOR     #$8000
 _ss_bigbuf_L3

@@ -27,11 +27,9 @@ _negindex_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #6
                 BVC     _negindex_L3
                 EOR     #$8000
 _negindex_L3
@@ -105,9 +103,7 @@ _negindex_L2
                 STA     _fcc_ptr+2
                 LDA     _fcc_img2
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 ASL
                 CLC
                 ADC     1,S
@@ -115,10 +111,8 @@ _negindex_L2
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _negindex_L4
                 LDA     #50
@@ -136,9 +130,7 @@ _negindex_L4
                 STA     _fcc_ptr+2
                 LDA     _fcc_img2
                 PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFE
                 ASL
                 CLC
                 ADC     1,S
@@ -146,10 +138,8 @@ _negindex_L4
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #256
                 BNE     *+5
                 BRL     _negindex_L5
                 LDA     #51
@@ -163,9 +153,7 @@ _negindex_L4
                 TYA
                 RTL
 _negindex_L5
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 STA     _fcc_img1
                 LDA     _fcc_img3
                 STA     _fcc_ptr+2
@@ -179,10 +167,8 @@ _negindex_L5
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _negindex_L6
                 LDA     #52
@@ -210,10 +196,8 @@ _negindex_L6
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #259
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #259
                 BNE     *+5
                 BRL     _negindex_L7
                 LDA     #53
@@ -239,10 +223,8 @@ _negindex_L7
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #259
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #259
                 BNE     *+5
                 BRL     _negindex_L8
                 LDA     #54
@@ -268,10 +250,8 @@ _negindex_L8
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #258
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #258
                 BNE     *+5
                 BRL     _negindex_L9
                 LDA     #55
@@ -298,10 +278,8 @@ _negindex_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #257
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #257
                 BNE     *+5
                 BRL     _negindex_L10
                 LDA     #56
@@ -326,10 +304,8 @@ _negindex_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #259
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #259
                 BNE     *+5
                 BRL     _negindex_L11
                 LDA     #57
@@ -347,9 +323,7 @@ _negindex_L11
                 STA     _fcc_ptr+2
                 LDA     _fcc_img2
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 ASL
                 CLC
                 ADC     1,S
@@ -377,10 +351,8 @@ _negindex_L11
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                LDA     #1911
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1911
                 BNE     *+5
                 BRL     _negindex_L12
                 LDA     #58
@@ -399,10 +371,8 @@ _negindex_L12
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                LDA     #256
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #256
                 BNE     *+5
                 BRL     _negindex_L13
                 LDA     #59
@@ -421,10 +391,8 @@ _negindex_L13
                 TAX
                 LDA:    _negindex_ai,X
                 TAX
-                LDA     #258
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #258
                 BNE     *+5
                 BRL     _negindex_L14
                 LDA     #60
@@ -476,9 +444,7 @@ _negindex_L14
                 STA     _fcc_ptr+2
                 LDA     _fcc_img4
                 PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFF
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr

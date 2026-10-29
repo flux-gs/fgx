@@ -89,11 +89,9 @@ bump_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     [_fcc_fpr0]
                 DO      6+bump_FRAMESIZE/256
                 TSC
@@ -189,19 +187,15 @@ main_stkok        TCS
                 TAX
                 LDA:    hdr,X
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _derefstore_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #15
                 STA     5,S   ; fccstk d=0 b=5
 _derefstore_L0
                 SEP     #$20
@@ -220,30 +214,24 @@ _derefstore_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 STA     [_fcc_fpr0]
                 LDA     #1
                 ASL
                 TAX
                 LDA:    hdr,X
                 TAX
-                LDA     #17
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #17
                 BEQ     *+5
                 BRL     _derefstore_L1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     5,S   ; fccstk d=0 b=5
 _derefstore_L1
                 LDA     5,S   ; fccstk d=0 b=5

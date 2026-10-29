@@ -21,18 +21,13 @@ feed_stkok        TCS
                 INC     _fcc_fb
                 LDA     g_n
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     g_n
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _assign_in_while_L1
                 EOR     #$8000
 _assign_in_while_L1
@@ -40,11 +35,8 @@ _assign_in_while_L1
                 BRL     _assign_in_while_L0
                 LDA     #0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 TAY
                 TSC
                 CLC
@@ -93,11 +85,9 @@ _assign_in_while_L2
                 FGX2_FARCALL feed
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _assign_in_while_L4
                 EOR     #$8000
 _assign_in_while_L4

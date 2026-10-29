@@ -87,11 +87,9 @@ _for_long_init_L0
                 BRL     _for_long_init_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     _fcc_img0
 _for_long_init_L1
                 LDA     9,S   ; fccstk d=0 b=9

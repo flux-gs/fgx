@@ -33,10 +33,8 @@ probe_stkok        TCS
                 LDA     6+probe_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _labelarm_L0
                 DO      8+probe_FRAMESIZE/256
@@ -151,10 +149,8 @@ main_stkok        TCS
                 PLA
                 TYA
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _labelarm_L8
                 LDA     #1
@@ -184,10 +180,8 @@ _labelarm_L8
                 PLA
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _labelarm_L9
                 LDA     #2
@@ -217,10 +211,8 @@ _labelarm_L9
                 PLA
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _labelarm_L10
                 LDA     #3
@@ -250,10 +242,8 @@ _labelarm_L10
                 PLA
                 TYA
                 TAX
-                LDA     #990
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #990
                 BNE     *+5
                 BRL     _labelarm_L11
                 LDA     #4

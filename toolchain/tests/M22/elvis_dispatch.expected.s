@@ -30,11 +30,9 @@ add5_stkok        TCS
                 LDA     6+add5_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 TAY
                 TSC
                 CLC
@@ -72,11 +70,9 @@ add37_stkok        TCS
                 LDA     6+add37_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #37
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #37
                 TAY
                 TSC
                 CLC

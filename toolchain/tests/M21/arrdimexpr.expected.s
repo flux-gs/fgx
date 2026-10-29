@@ -81,10 +81,8 @@ main_stkok        TCS
                 LDA:    gbuf,X
                 AND     #$00FF
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _arrdimexpr_L0
                 LDA     #1
@@ -103,10 +101,8 @@ _arrdimexpr_L0
                 LDA:    main_sl_sb,X
                 AND     #$00FF
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _arrdimexpr_L1
                 LDA     #2
@@ -137,10 +133,8 @@ _arrdimexpr_L1
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _arrdimexpr_L2
                 LDA     #3

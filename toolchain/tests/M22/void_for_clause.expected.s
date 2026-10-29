@@ -21,11 +21,8 @@ vbefore_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     gtrace
                 TAY
                 TSC
@@ -55,11 +52,9 @@ vafter_stkok        TCS
                 INC     _fcc_fb
                 LDA     gtrace
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     gtrace
                 TAY
                 TSC
@@ -104,11 +99,9 @@ _void_for_clause_L0
                 BRL     _void_for_clause_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
 _void_for_clause_L1
                 FGX2_FARCALL vafter
@@ -118,10 +111,8 @@ _void_for_clause_L1
 _void_for_clause_L2
                 LDA     gtrace
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _void_for_clause_L3
                 LDA     #1
@@ -137,10 +128,8 @@ _void_for_clause_L2
 _void_for_clause_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _void_for_clause_L4
                 LDA     #2

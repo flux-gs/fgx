@@ -320,10 +320,8 @@ _declinit_ptr_L1
                 LDA:    gs2,X
                 AND     #$00FF
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _declinit_ptr_L12
                 LDA     #2
@@ -372,10 +370,8 @@ _declinit_ptr_L17
                 BRL     _declinit_ptr_L14
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _declinit_ptr_L14
                 LDA     #0
@@ -412,10 +408,8 @@ _declinit_ptr_L13
                 LDA:    gs1,X
                 AND     #$00FF
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _declinit_ptr_L18
                 LDA     #4
@@ -447,10 +441,8 @@ _declinit_ptr_L18
                 RTL
 _declinit_ptr_L20
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _declinit_ptr_L19
                 LDA     #5
@@ -502,10 +494,8 @@ _declinit_ptr_L19
                 STA     [_fcc_fpr0]
                 LDA     gi
                 TAX
-                LDA     #11
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #11
                 BNE     *+5
                 BRL     _declinit_ptr_L21
                 LDA     #6
@@ -573,10 +563,8 @@ _declinit_ptr_L21
                 LDA:    gs2,X
                 AND     #$00FF
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BNE     *+5
                 BRL     _declinit_ptr_L22
                 LDA     #7
@@ -801,10 +789,8 @@ _declinit_ptr_L26
                 LDA     #recs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -819,10 +805,8 @@ _declinit_ptr_L26
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _declinit_ptr_L28
                 SEP     #$20
@@ -835,10 +819,8 @@ _declinit_ptr_L26
                 LDA     #recs
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -853,10 +835,8 @@ _declinit_ptr_L26
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #400
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #400
                 BEQ     *+5
                 BRL     _declinit_ptr_L28
                 LDA     #0
@@ -946,10 +926,8 @@ _declinit_ptr_L27
                 ADC     #36
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -964,10 +942,8 @@ _declinit_ptr_L27
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _declinit_ptr_L31
                 SEP     #$20
@@ -981,10 +957,8 @@ _declinit_ptr_L27
                 ADC     #36
                 STA     _fcc_fpr0
                 LDA     #1
-                STA     _fcc_tmp_b
                 ASL
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 ASL
                 ASL
                 CLC
@@ -999,10 +973,8 @@ _declinit_ptr_L27
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #250
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #250
                 BEQ     *+5
                 BRL     _declinit_ptr_L31
                 LDA     #0

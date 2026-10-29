@@ -21,11 +21,8 @@ bump_stkok        TCS
                 INC     _fcc_fb
                 LDA     g
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     g
                 TAY
                 TSC

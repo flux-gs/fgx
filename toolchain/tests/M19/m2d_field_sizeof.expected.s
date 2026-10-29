@@ -23,11 +23,7 @@ main_stkok        TCS
                 STA     _fcc_img0
                 PHA
                 LDA     #14
-                PHA
-                LDA     #14
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L0
                 LDA     #1
@@ -42,11 +38,7 @@ _m2d_field_sizeof_L1
                 STA     _fcc_img0
                 PHA
                 LDA     #14
-                PHA
-                LDA     #14
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L2
                 LDA     #2
@@ -61,11 +53,7 @@ _m2d_field_sizeof_L3
                 STA     _fcc_img0
                 PHA
                 LDA     #16
-                PHA
-                LDA     #16
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L4
                 LDA     #4
@@ -80,11 +68,7 @@ _m2d_field_sizeof_L5
                 STA     _fcc_img0
                 PHA
                 LDA     #15
-                PHA
-                LDA     #15
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L6
                 LDA     #8
@@ -100,10 +84,8 @@ _m2d_field_sizeof_L7
                 PHA
                 LDA     #14
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #14
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L8
                 LDA     #16
@@ -119,10 +101,8 @@ _m2d_field_sizeof_L9
                 PHA
                 LDA     #15
                 TAX
-                LDA     #15
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #15
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L10
                 LDA     #32
@@ -138,10 +118,8 @@ _m2d_field_sizeof_L11
                 PHA
                 LDA     #2
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L12
                 LDA     #64
@@ -157,10 +135,8 @@ _m2d_field_sizeof_L13
                 PHA
                 LDA     #1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _m2d_field_sizeof_L14
                 LDA     #128

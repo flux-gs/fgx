@@ -264,10 +264,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BEQ     *+5
                 BRL     _addr2d_L1
                 LDA     #2
@@ -275,10 +273,8 @@ main_stkok        TCS
                 LDA:    r1,X
                 AND     #$00FF
                 TAX
-                LDA     #81
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #81
                 BEQ     *+5
                 BRL     _addr2d_L1
                 LDA     #1
@@ -291,11 +287,9 @@ _addr2d_L2
                 BRL     _addr2d_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _addr2d_L0
                 LDA     11,S   ; fccstk d=0 b=11
@@ -332,11 +326,8 @@ _addr2d_L0
                 STA     _fcc_fpr0
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 CLC
                 ADC     _fcc_fpr0
                 STA     _fcc_fpr0
@@ -393,10 +384,8 @@ _addr2d_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _addr2d_L4
                 LDA     #2
@@ -404,10 +393,8 @@ _addr2d_L0
                 LDA:    r0,X
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _addr2d_L4
                 LDA     #1
@@ -420,11 +407,9 @@ _addr2d_L5
                 BRL     _addr2d_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _addr2d_L3
                 LDA     #0
@@ -493,10 +478,8 @@ _addr2d_L3
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4242
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4242
                 BEQ     *+5
                 BRL     _addr2d_L9
                 LDA     #2
@@ -504,10 +487,8 @@ _addr2d_L3
                 TAX
                 LDA:    i0,X
                 TAX
-                LDA     #4242
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4242
                 BEQ     *+5
                 BRL     _addr2d_L9
                 LDA     #1
@@ -523,10 +504,8 @@ _addr2d_L10
                 TAX
                 LDA:    i0,X
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _addr2d_L7
                 LDA     #1
@@ -539,11 +518,9 @@ _addr2d_L8
                 BRL     _addr2d_L6
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _addr2d_L6
                 LDA     _fcc_img0

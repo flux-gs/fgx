@@ -39,11 +39,8 @@ vsum_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -87,10 +84,8 @@ _vasum_L0
                 FIN
                 LDA     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -108,11 +103,8 @@ _vasum_L2
                 STA     _fcc_fpr0
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -128,11 +120,8 @@ _vasum_L2
                 STA     _fcc_img1
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -158,11 +147,8 @@ _vasum_L1
                 STA     _fcc_fpr0
                 LDA     #4
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -178,11 +164,8 @@ _vasum_L1
                 STA     _fcc_img1
                 LDA     #4
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -209,11 +192,8 @@ _vasum_L1
                 STA     _fcc_fpr0
                 LDA     #4
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -229,11 +209,8 @@ _vasum_L1
                 STA     _fcc_img1
                 LDA     #4
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -288,19 +265,15 @@ _vasum_L3
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BEQ     *+5
                 BRL     _vasum_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img0
 _vasum_L4
                 LDA     #0

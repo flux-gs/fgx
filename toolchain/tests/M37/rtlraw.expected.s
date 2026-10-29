@@ -39,11 +39,8 @@ vsum2_stkok        TCS
                 MX      %00
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -87,10 +84,8 @@ _rtlraw_L0
                 FIN
                 LDA     _fcc_tmp_b
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -108,11 +103,8 @@ _rtlraw_L2
                 STA     _fcc_fpr0
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -128,11 +120,8 @@ _rtlraw_L2
                 STA     _fcc_img1
                 LDA     #2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 PHA
                 LDA     #1
                 EOR     #$FFFF
@@ -366,11 +355,9 @@ _rtlraw_L3
                 TCS
                 TYA
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #3
                 TAY
                 TSC
                 CLC

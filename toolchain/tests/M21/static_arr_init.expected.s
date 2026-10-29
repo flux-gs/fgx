@@ -39,10 +39,8 @@ main_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BNE     *+5
                 BRL     _static_arr_init_L0
                 LDA     #1
@@ -76,10 +74,8 @@ _static_arr_init_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #98
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #98
                 BNE     *+5
                 BRL     _static_arr_init_L1
                 LDA     #2
@@ -113,10 +109,8 @@ _static_arr_init_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BNE     *+5
                 BRL     _static_arr_init_L2
                 LDA     #3
@@ -135,10 +129,8 @@ _static_arr_init_L2
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #120
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #120
                 BNE     *+5
                 BRL     _static_arr_init_L3
                 LDA     #4
@@ -157,10 +149,8 @@ _static_arr_init_L3
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #122
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #122
                 BNE     *+5
                 BRL     _static_arr_init_L4
                 LDA     #5
@@ -179,10 +169,8 @@ _static_arr_init_L4
                 LDA:    main_sl_buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _static_arr_init_L5
                 LDA     #6
@@ -201,10 +189,8 @@ _static_arr_init_L5
                 TAX
                 LDA:    main_sl_nums,X
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BNE     *+5
                 BRL     _static_arr_init_L6
                 LDA     #7
@@ -222,13 +208,7 @@ _static_arr_init_L6
                 ASL
                 TAX
                 LDA:    main_sl_nums,X
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BNE     *+5
                 BRL     _static_arr_init_L7
                 LDA     #8

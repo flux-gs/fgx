@@ -80,11 +80,9 @@ main_stkok        TCS
                 BRL     _int_const_ladder_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _int_const_ladder_L0
                 LDA     b+2
@@ -112,11 +110,9 @@ _int_const_ladder_L0
                 BRL     _int_const_ladder_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _int_const_ladder_L1
                 LDA     c+2
@@ -144,11 +140,9 @@ _int_const_ladder_L1
                 BRL     _int_const_ladder_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     _fcc_img0
 _int_const_ladder_L2
                 LDA     d+2
@@ -176,11 +170,9 @@ _int_const_ladder_L2
                 BRL     _int_const_ladder_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #9
                 STA     _fcc_img0
 _int_const_ladder_L3
                 LDA     e+2
@@ -208,11 +200,9 @@ _int_const_ladder_L3
                 BRL     _int_const_ladder_L4
                 LDA     _fcc_img0
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #9
                 STA     _fcc_img0
 _int_const_ladder_L4
                 LDA     _fcc_img0

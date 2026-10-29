@@ -21,20 +21,14 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #8
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #32
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     _fcc_img0
                 TAY
                 TSC

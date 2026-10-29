@@ -27,11 +27,9 @@ _macro_subscr_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #128
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #128
                 BVC     _macro_subscr_L3
                 EOR     #$8000
 _macro_subscr_L3
@@ -225,10 +223,8 @@ _macro_subscr_L2
                 INC     _fcc_img4
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
                 LDA:    up_tab,X
                 AND     #$00FF
@@ -260,10 +256,8 @@ _macro_subscr_L2
                 LDA:    sbuf,X
                 AND     #$00FF
                 TAX
-                LDA     #255
-                STA     _fcc_tmp_b
                 TXA
-                AND     _fcc_tmp_b
+                AND     #255
                 TAX
                 LDA:    lo_tab,X
                 AND     #$00FF
@@ -284,19 +278,15 @@ _macro_subscr_L2
                 LDA:    dbuf,X
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _macro_subscr_L4
                 LDA     _fcc_img1
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     _fcc_img1
 _macro_subscr_L4
                 LDA     #1
@@ -304,19 +294,15 @@ _macro_subscr_L4
                 LDA:    dbuf,X
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _macro_subscr_L5
                 LDA     _fcc_img1
                 TAX
-                LDA     #22
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #22
                 STA     _fcc_img1
 _macro_subscr_L5
                 LDA     _fcc_img1

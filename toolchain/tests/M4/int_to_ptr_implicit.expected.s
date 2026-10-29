@@ -30,10 +30,8 @@ pick_stkok        TCS
                 LDA     6+pick_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _int_to_ptr_implicit_L0
                 SEP     #$20
@@ -98,11 +96,9 @@ bump_stkok        TCS
                 LDA     6+bump_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #0
                 STA     _fcc_img0
                 TAY
                 JSR     _fcc_bank_for_int
@@ -174,10 +170,8 @@ main_stkok        TCS
                 STA     [_fcc_fpr0]
                 LDA     g
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _int_to_ptr_implicit_L2
                 LDA     #1
@@ -312,10 +306,8 @@ _int_to_ptr_implicit_L5
                 STA     [_fcc_fpr0]
                 LDA     guard
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _int_to_ptr_implicit_L8
                 LDA     #5

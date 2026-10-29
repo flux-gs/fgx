@@ -52,10 +52,8 @@ _ptr_postinc_L0
                 AND     #$00FF
                 STA     _fcc_img1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _ptr_postinc_L1
                 LDA     _fcc_img0
@@ -132,10 +130,8 @@ _ptr_postinc_L2
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -157,11 +153,9 @@ _ptr_postinc_L4
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img0
                 BRL     _ptr_postinc_L2
 _ptr_postinc_L3
@@ -233,10 +227,8 @@ _ptr_postinc_L5
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #0
                 STA     _fcc_tmp_b
                 TXA
                 SEC
@@ -262,11 +254,9 @@ _ptr_postinc_L7
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img0
                 BRL     _ptr_postinc_L5
 _ptr_postinc_L6

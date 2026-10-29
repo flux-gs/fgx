@@ -21,9 +21,7 @@ main_stkok        TCS
                 INC     _fcc_fb
                 LDA     #0
                 STA     1,S   ; fccstk d=0 b=1
-                LDA     #42
-                EOR     #$FFFF
-                INC
+                LDA     #$FFD6
                 PHA
                 SEP     #$20
                 MX      %10
@@ -57,10 +55,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L11
                 LDA     #1
@@ -68,10 +64,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L11
                 LDA     #1
@@ -87,10 +81,8 @@ _pfsign_L12
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L9
                 LDA     #1
@@ -106,10 +98,8 @@ _pfsign_L10
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _pfsign_L7
                 LDA     #1
@@ -125,10 +115,8 @@ _pfsign_L8
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52
                 BEQ     *+5
                 BRL     _pfsign_L5
                 LDA     #1
@@ -144,10 +132,8 @@ _pfsign_L6
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BEQ     *+5
                 BRL     _pfsign_L3
                 LDA     #1
@@ -163,10 +149,8 @@ _pfsign_L4
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _pfsign_L1
                 LDA     #1
@@ -179,16 +163,12 @@ _pfsign_L2
                 BRL     _pfsign_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #20
                 STA     1,S   ; fccstk d=0 b=1
 _pfsign_L0
-                LDA     #42
-                EOR     #$FFFF
-                INC
+                LDA     #$FFD6
                 PHA
                 SEP     #$20
                 MX      %10
@@ -222,10 +202,8 @@ _pfsign_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _pfsign_L22
                 LDA     #1
@@ -233,10 +211,8 @@ _pfsign_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BEQ     *+5
                 BRL     _pfsign_L22
                 LDA     #1
@@ -252,10 +228,8 @@ _pfsign_L23
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BEQ     *+5
                 BRL     _pfsign_L20
                 LDA     #1
@@ -271,10 +245,8 @@ _pfsign_L21
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #48
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #48
                 BEQ     *+5
                 BRL     _pfsign_L18
                 LDA     #1
@@ -290,10 +262,8 @@ _pfsign_L19
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52
                 BEQ     *+5
                 BRL     _pfsign_L16
                 LDA     #1
@@ -309,10 +279,8 @@ _pfsign_L17
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BEQ     *+5
                 BRL     _pfsign_L14
                 LDA     #1
@@ -325,16 +293,12 @@ _pfsign_L15
                 BRL     _pfsign_L13
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     1,S   ; fccstk d=0 b=1
 _pfsign_L13
-                LDA     #42
-                EOR     #$FFFF
-                INC
+                LDA     #$FFD6
                 PHA
                 SEP     #$20
                 MX      %10
@@ -368,10 +332,8 @@ _pfsign_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _pfsign_L33
                 LDA     #1
@@ -379,10 +341,8 @@ _pfsign_L13
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #52
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #52
                 BEQ     *+5
                 BRL     _pfsign_L33
                 LDA     #1
@@ -398,10 +358,8 @@ _pfsign_L34
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #50
                 BEQ     *+5
                 BRL     _pfsign_L31
                 LDA     #1
@@ -417,10 +375,8 @@ _pfsign_L32
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L29
                 LDA     #1
@@ -436,10 +392,8 @@ _pfsign_L30
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L27
                 LDA     #1
@@ -455,10 +409,8 @@ _pfsign_L28
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #88
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #88
                 BEQ     *+5
                 BRL     _pfsign_L25
                 LDA     #1
@@ -471,11 +423,9 @@ _pfsign_L26
                 BRL     _pfsign_L24
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     1,S   ; fccstk d=0 b=1
 _pfsign_L24
                 LDA     #$0001
@@ -519,10 +469,8 @@ _pfsign_L24
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L40
                 LDA     #1
@@ -530,10 +478,8 @@ _pfsign_L24
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #32
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #32
                 BEQ     *+5
                 BRL     _pfsign_L40
                 LDA     #1
@@ -549,10 +495,8 @@ _pfsign_L41
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _pfsign_L38
                 LDA     #1
@@ -568,10 +512,8 @@ _pfsign_L39
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #55
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #55
                 BEQ     *+5
                 BRL     _pfsign_L36
                 LDA     #1
@@ -584,11 +526,9 @@ _pfsign_L37
                 BRL     _pfsign_L35
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     1,S   ; fccstk d=0 b=1
 _pfsign_L35
                 LDA     1,S   ; fccstk d=0 b=1

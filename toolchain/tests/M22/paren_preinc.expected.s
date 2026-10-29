@@ -167,10 +167,8 @@ _paren_preinc_L2
 _paren_preinc_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #41
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #41
                 BNE     *+5
                 BRL     _paren_preinc_L3
                 LDA     #2
@@ -186,10 +184,8 @@ _paren_preinc_L0
 _paren_preinc_L3
                 LDA     gi
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _paren_preinc_L4
                 LDA     #3

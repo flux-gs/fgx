@@ -95,11 +95,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -119,10 +116,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #31
                 BEQ     *+5
                 BRL     _arrfield_incdec_L5
                 SEP     #$20
@@ -143,10 +138,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _arrfield_incdec_L5
                 LDA     #1
@@ -175,10 +168,8 @@ _arrfield_incdec_L6
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BEQ     *+5
                 BRL     _arrfield_incdec_L3
                 LDA     #1
@@ -191,10 +182,8 @@ _arrfield_incdec_L4
                 BRL     _arrfield_incdec_L1
                 LDA     _arrfield_incdec_obj+0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _arrfield_incdec_L1
                 LDA     #1
@@ -207,11 +196,9 @@ _arrfield_incdec_L2
                 BRL     _arrfield_incdec_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L0
                 LDA     #2
@@ -234,11 +221,8 @@ _arrfield_incdec_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -258,10 +242,8 @@ _arrfield_incdec_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #39
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #39
                 BEQ     *+5
                 BRL     _arrfield_incdec_L10
                 SEP     #$20
@@ -282,10 +264,8 @@ _arrfield_incdec_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #31
                 BEQ     *+5
                 BRL     _arrfield_incdec_L10
                 LDA     #1
@@ -314,10 +294,8 @@ _arrfield_incdec_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #20
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #20
                 BEQ     *+5
                 BRL     _arrfield_incdec_L8
                 LDA     #1
@@ -330,11 +308,9 @@ _arrfield_incdec_L9
                 BRL     _arrfield_incdec_L7
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L7
                 SEP     #$20
@@ -406,11 +382,8 @@ _arrfield_incdec_L7
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -430,10 +403,8 @@ _arrfield_incdec_L7
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _arrfield_incdec_L15
                 SEP     #$20
@@ -454,10 +425,8 @@ _arrfield_incdec_L7
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _arrfield_incdec_L15
                 LDA     #1
@@ -486,10 +455,8 @@ _arrfield_incdec_L16
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _arrfield_incdec_L13
                 LDA     #1
@@ -502,11 +469,9 @@ _arrfield_incdec_L14
                 BRL     _arrfield_incdec_L12
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L12
                 SEP     #$20
@@ -535,11 +500,8 @@ _arrfield_incdec_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -559,10 +521,8 @@ _arrfield_incdec_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #21
                 BEQ     *+5
                 BRL     _arrfield_incdec_L18
                 SEP     #$20
@@ -583,10 +543,8 @@ _arrfield_incdec_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #31
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #31
                 BEQ     *+5
                 BRL     _arrfield_incdec_L18
                 LDA     #1
@@ -599,11 +557,9 @@ _arrfield_incdec_L19
                 BRL     _arrfield_incdec_L17
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L17
                 LDA     #2
@@ -621,11 +577,8 @@ _arrfield_incdec_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 SEP     #$20
                 MX      %10
                 STA     [_fcc_fpr0]
@@ -645,10 +598,8 @@ _arrfield_incdec_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #98
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #98
                 BEQ     *+5
                 BRL     _arrfield_incdec_L23
                 SEP     #$20
@@ -669,10 +620,8 @@ _arrfield_incdec_L17
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #99
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #99
                 BEQ     *+5
                 BRL     _arrfield_incdec_L23
                 LDA     #1
@@ -701,10 +650,8 @@ _arrfield_incdec_L24
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #97
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #97
                 BEQ     *+5
                 BRL     _arrfield_incdec_L21
                 LDA     #1
@@ -717,11 +664,9 @@ _arrfield_incdec_L22
                 BRL     _arrfield_incdec_L20
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L20
                 SEP     #$20
@@ -844,11 +789,9 @@ _arrfield_incdec_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #7
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -880,10 +823,8 @@ _arrfield_incdec_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #107
                 BEQ     *+5
                 BRL     _arrfield_incdec_L28
                 SEP     #$20
@@ -916,10 +857,8 @@ _arrfield_incdec_L20
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #200
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #200
                 BEQ     *+5
                 BRL     _arrfield_incdec_L28
                 LDA     #1
@@ -960,10 +899,8 @@ _arrfield_incdec_L29
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #300
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #300
                 BEQ     *+5
                 BRL     _arrfield_incdec_L26
                 LDA     #1
@@ -976,11 +913,9 @@ _arrfield_incdec_L27
                 BRL     _arrfield_incdec_L25
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L25
                 LDA     #1
@@ -1015,11 +950,9 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #50
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #50
                 STA     [_fcc_fpr0]
                 SEP     #$20
                 MX      %10
@@ -1051,10 +984,8 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #250
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #250
                 BEQ     *+5
                 BRL     _arrfield_incdec_L31
                 SEP     #$20
@@ -1087,10 +1018,8 @@ _arrfield_incdec_L25
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #107
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #107
                 BEQ     *+5
                 BRL     _arrfield_incdec_L31
                 LDA     #1
@@ -1103,11 +1032,9 @@ _arrfield_incdec_L32
                 BRL     _arrfield_incdec_L30
                 LDA     _fcc_img0
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     _fcc_img0
 _arrfield_incdec_L30
                 LDA     _fcc_img0

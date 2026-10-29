@@ -92,11 +92,9 @@ _sum_loop_L2
                 STA     _fcc_img1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img0
                 BRL     _sum_loop_L0
 _sum_loop_L1

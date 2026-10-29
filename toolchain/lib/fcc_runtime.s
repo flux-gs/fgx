@@ -313,53 +313,26 @@ _fcc_divs16     MX      %00
                 LDA     #0
                 RTS
 
-@ds_nonzero     STA     _fcc_div_dvd        ; save dividend
-                LDA     #0
-                STA     _fcc_div_negq
-
-                ; |dividend|
-                LDA     _fcc_div_dvd
-                BPL     @ds_dvd_pos
+                ; The quotient is negative when exactly one operand is.
+@ds_nonzero     STZ     _fcc_div_negq
+                CMP     #$8000
+                BCC     @ds_dvd_pos
                 EOR     #$FFFF
                 INC
-                STA     _fcc_div_dvd
-                LDA     _fcc_div_negq
-                EOR     #1
-                STA     _fcc_div_negq
-@ds_dvd_pos
-                ; |divisor|
-                LDA     _fcc_tmp_b
+                INC     _fcc_div_negq
+@ds_dvd_pos     LDX     _fcc_tmp_b
                 BPL     @ds_dvs_pos
+                PHA
+                TXA
                 EOR     #$FFFF
                 INC
                 STA     _fcc_tmp_b
-                LDA     _fcc_div_negq
-                EOR     #1
-                STA     _fcc_div_negq
-@ds_dvs_pos
-                ; Unsigned 16-bit long division: dvd / divisor.
-                LDA     #0
-                STA     _fcc_div_rem
-                STA     _fcc_div_quo
-                LDX     #16
-@ds_lp          ASL     _fcc_div_dvd        ; top bit -> C
-                ROL     _fcc_div_rem        ; rem = (rem<<1) | bit
-                ROL     _fcc_div_quo        ; quo <<= 1
-                LDA     _fcc_div_rem
-                CMP     _fcc_tmp_b
-                BCC     @ds_skip            ; rem < divisor → no subtract
-                SEC
-                SBC     _fcc_tmp_b
-                STA     _fcc_div_rem
-                LDA     _fcc_div_quo
-                ORA     #1
-                STA     _fcc_div_quo
-@ds_skip        DEX
-                BNE     @ds_lp
-
-                LDA     _fcc_div_quo
-                LDX     _fcc_div_negq
-                BEQ     @ds_done
+                PLA
+                INC     _fcc_div_negq
+@ds_dvs_pos     JSR     _fcc_udiv16
+                LDA     _fcc_div_dvd
+                LSR     _fcc_div_negq       ; odd = one negative operand
+                BCC     @ds_done
                 EOR     #$FFFF
                 INC
 @ds_done        RTS
@@ -374,9 +347,7 @@ _fcc_divs16     MX      %00
 ;   Mod-by-zero returns 0 (UB in C).
 ;   Caller MX %00.
 ;
-; Algorithm: capture dividend's sign, take |a| % |b| via the same
-; long-division loop as _fcc_divs16 (but keep the REMAINDER not the
-; quotient), then negate if the dividend was negative.
+; |a| % |b| through _fcc_udiv16, negated if the dividend was negative.
 ;------------------------------------------------------------------------------
 _fcc_mods16     MX      %00
                 LDX     _fcc_tmp_b
@@ -384,54 +355,65 @@ _fcc_mods16     MX      %00
                 LDA     #0
                 RTS
 
-@ms_nonzero     STA     _fcc_div_dvd
-                LDA     #0
-                STA     _fcc_div_negq           ; reuse: sign of dividend
-
-                ; |dividend|, remembering sign for the result
-                LDA     _fcc_div_dvd
-                BPL     @ms_dvd_pos
+@ms_nonzero     STZ     _fcc_div_negq
+                CMP     #$8000
+                BCC     @ms_dvd_pos
                 EOR     #$FFFF
                 INC
-                STA     _fcc_div_dvd
-                LDA     #1
-                STA     _fcc_div_negq
-@ms_dvd_pos
-                ; |divisor| (sign discarded — modulus result follows
-                ; dividend's sign only)
-                LDA     _fcc_tmp_b
+                INC     _fcc_div_negq
+@ms_dvd_pos     LDX     _fcc_tmp_b          ; |divisor|: its sign is not the result's
                 BPL     @ms_dvs_pos
+                PHA
+                TXA
                 EOR     #$FFFF
                 INC
                 STA     _fcc_tmp_b
-@ms_dvs_pos
-                ; Unsigned 16-bit long-division loop, same as _fcc_divs16
-                ; but we keep _fcc_div_rem as the final result.
-                LDA     #0
-                STA     _fcc_div_rem
-                STA     _fcc_div_quo
-                LDX     #16
-@ms_lp          ASL     _fcc_div_dvd
-                ROL     _fcc_div_rem
-                ROL     _fcc_div_quo
-                LDA     _fcc_div_rem
-                CMP     _fcc_tmp_b
-                BCC     @ms_skip
-                SEC
-                SBC     _fcc_tmp_b
-                STA     _fcc_div_rem
-                LDA     _fcc_div_quo
-                ORA     #1
-                STA     _fcc_div_quo
-@ms_skip        DEX
-                BNE     @ms_lp
-
-                LDA     _fcc_div_rem
+                PLA
+@ms_dvs_pos     JSR     _fcc_udiv16
                 LDX     _fcc_div_negq
                 BEQ     @ms_done
                 EOR     #$FFFF
                 INC
 @ms_done        RTS
+
+;------------------------------------------------------------------------------
+; _fcc_udiv16 - the unsigned 16-bit division every 16-bit / and % shares.
+;   In:   A          = dividend
+;         _fcc_tmp_b = divisor, NONZERO (each caller has tested it)
+;   Out:  A          = remainder
+;         _fcc_div_dvd = quotient
+;   Clobbers: X.  Caller MX %00.
+;
+; Restoring division with the remainder in A and the quotient built in the
+; dividend's own cell: each step shifts the next dividend bit into A, and a
+; subtract that succeeds sets the bit the shift just vacated.  A carry out of
+; the ROL means the remainder passed 16 bits, which only a divisor of $8000 or
+; more allows, and it is then larger than the divisor whatever the compare
+; says -- the SBC, entered with C=1, gives the right 16-bit difference.
+;
+; A dividend under 256 has eight leading zero bits that would each shift a 0
+; into A and a 0 into the quotient, so XBA moves the low byte up and the loop
+; runs eight steps instead of sixteen.  printf's digit loop and the date
+; arithmetic divide small numbers far more often than large ones.
+;------------------------------------------------------------------------------
+_fcc_udiv16     MX      %00
+                LDX     #16
+                CMP     #$0100
+                BCS     @ud_full
+                XBA                         ; high byte is 0: dividend << 8
+                LDX     #8
+@ud_full        STA     _fcc_div_dvd
+                LDA     #0
+@ud_lp          ASL     _fcc_div_dvd        ; next dividend bit -> C
+                ROL                         ; A = (A << 1) | bit
+                BCS     @ud_sub             ; past 16 bits: larger than any divisor
+                CMP     _fcc_tmp_b
+                BCC     @ud_skip
+@ud_sub         SBC     _fcc_tmp_b          ; C=1 on both arms
+                INC     _fcc_div_dvd        ; the vacated low bit is the quotient's
+@ud_skip        DEX
+                BNE     @ud_lp
+                RTS
 
 ;------------------------------------------------------------------------------
 ; _fcc_eq16 - A == _fcc_tmp_b → A=1 else A=0.
@@ -585,26 +567,8 @@ _fcc_divu16     MX      %00
                 BNE     @du_nz
                 LDA     #0
                 RTS
-@du_nz          STA     _fcc_div_dvd
-                LDA     #0
-                STA     _fcc_div_rem
-                STA     _fcc_div_quo
-                LDX     #16
-@du_lp          ASL     _fcc_div_dvd
-                ROL     _fcc_div_rem
-                ROL     _fcc_div_quo
-                LDA     _fcc_div_rem
-                CMP     _fcc_tmp_b
-                BCC     @du_skip
-                SEC
-                SBC     _fcc_tmp_b
-                STA     _fcc_div_rem
-                LDA     _fcc_div_quo
-                ORA     #1
-                STA     _fcc_div_quo
-@du_skip        DEX
-                BNE     @du_lp
-                LDA     _fcc_div_quo
+@du_nz          JSR     _fcc_udiv16
+                LDA     _fcc_div_dvd
                 RTS
 
 ;------------------------------------------------------------------------------
@@ -616,27 +580,7 @@ _fcc_modu16     MX      %00
                 BNE     @mu_nz
                 LDA     #0
                 RTS
-@mu_nz          STA     _fcc_div_dvd
-                LDA     #0
-                STA     _fcc_div_rem
-                STA     _fcc_div_quo
-                LDX     #16
-@mu_lp          ASL     _fcc_div_dvd
-                ROL     _fcc_div_rem
-                ROL     _fcc_div_quo
-                LDA     _fcc_div_rem
-                CMP     _fcc_tmp_b
-                BCC     @mu_skip
-                SEC
-                SBC     _fcc_tmp_b
-                STA     _fcc_div_rem
-                LDA     _fcc_div_quo
-                ORA     #1
-                STA     _fcc_div_quo
-@mu_skip        DEX
-                BNE     @mu_lp
-                LDA     _fcc_div_rem
-                RTS
+@mu_nz          JMP     _fcc_udiv16
 
 ;==============================================================================
 ; M20 — 32-bit long helpers.  "Long in A" carrying convention: low word in A,
@@ -889,39 +833,7 @@ _fcc_long_divs  MX      %00
                 LDA     _fcc_long_div_negq
                 EOR     #1
                 STA     _fcc_long_div_negq
-@lds_vpos
-                LDA     #0
-                STA     _fcc_long_div_rem_lo
-                STA     _fcc_long_div_rem_hi
-                STA     _fcc_long_div_quo_lo
-                STA     _fcc_long_div_quo_hi
-                LDX     #32
-@lds_lp         ASL     _fcc_long_div_dvd_lo
-                ROL     _fcc_long_div_dvd_hi
-                ROL     _fcc_long_div_rem_lo
-                ROL     _fcc_long_div_rem_hi
-                ROL     _fcc_long_div_quo_lo
-                ROL     _fcc_long_div_quo_hi
-                LDA     _fcc_long_div_rem_hi
-                CMP     _fcc_long_b_hi
-                BCC     @lds_skip
-                BNE     @lds_sub
-                LDA     _fcc_long_div_rem_lo
-                CMP     _fcc_long_b_lo
-                BCC     @lds_skip
-@lds_sub        LDA     _fcc_long_div_rem_lo
-                SEC
-                SBC     _fcc_long_b_lo
-                STA     _fcc_long_div_rem_lo
-                LDA     _fcc_long_div_rem_hi
-                SBC     _fcc_long_b_hi
-                STA     _fcc_long_div_rem_hi
-                LDA     _fcc_long_div_quo_lo
-                ORA     #1
-                STA     _fcc_long_div_quo_lo
-@lds_skip       DEX
-                BNE     @lds_lp
-
+@lds_vpos       JSR     _fcc_long_udiv
                 LDA     _fcc_long_div_quo_lo
                 LDX     _fcc_long_div_negq
                 BEQ     @lds_done
@@ -939,6 +851,97 @@ _fcc_long_divs  MX      %00
                 LDA     _fcc_long_div_quo_hi
                 STA     _fcc_long_hi
                 LDA     _fcc_long_b_lo
+                RTS
+
+;------------------------------------------------------------------------------
+; _fcc_long_udiv - the unsigned 32-bit division divs and divu share.
+;   In:   _fcc_long_div_dvd_lo/hi = dividend
+;         _fcc_long_b_lo/hi       = divisor, NONZERO (each caller tests it)
+;   Out:  _fcc_long_div_quo_lo/hi = quotient
+;         _fcc_long_div_rem_lo/hi = remainder
+;   Clobbers A, X, _fcc_div_dvd.  Caller MX %00.
+;
+; A DIVISOR THAT FITS A WORD -- /10 for a decimal digit, /512 for a block --
+; divides in two word-wide restoring passes, the high word and then the low
+; word with the first pass's remainder carried in, which is schoolbook long
+; division by a one-digit divisor in base 65536.  Each pass is _fcc_udiv16's
+; loop: the remainder in A, the quotient built in the shifted cell.  A dividend
+; whose high word is zero skips the first pass, and one under 256 runs eight
+; steps of the second, as _fcc_udiv16 does.  A wider divisor takes the
+; thirty-two step restoring loop over the four memory words.
+;------------------------------------------------------------------------------
+_fcc_long_udiv  MX      %00
+                LDA     _fcc_long_b_hi
+                BNE     @lu_wide
+                LDA     #0
+                LDX     _fcc_long_div_dvd_hi
+                BEQ     @lu_low             ; quotient high word is 0, rem 0
+                STX     _fcc_div_dvd
+                LDX     #16
+                JSR     @lu_pass
+                LDX     _fcc_div_dvd
+@lu_low         STX     _fcc_long_div_quo_hi
+                LDX     _fcc_long_div_dvd_lo
+                STX     _fcc_div_dvd
+                LDX     #16
+                CMP     #0                  ; a carried remainder needs all 16
+                BNE     @lu_go
+                LDA     _fcc_div_dvd
+                CMP     #$0100
+                BCS     @lu_full
+                XBA                         ; high byte is 0: dividend << 8
+                STA     _fcc_div_dvd
+                LDX     #8
+@lu_full        LDA     #0
+@lu_go          JSR     @lu_pass
+                STA     _fcc_long_div_rem_lo
+                STZ     _fcc_long_div_rem_hi
+                LDA     _fcc_div_dvd
+                STA     _fcc_long_div_quo_lo
+                RTS
+
+@lu_pass        ASL     _fcc_div_dvd        ; next dividend bit -> C
+                ROL                         ; A = (A << 1) | bit
+                BCS     @lu_sub             ; past 16 bits: larger than any divisor
+                CMP     _fcc_long_b_lo
+                BCC     @lu_skip
+@lu_sub         SBC     _fcc_long_b_lo      ; C=1 on both arms
+                INC     _fcc_div_dvd        ; the vacated low bit is the quotient's
+@lu_skip        DEX
+                BNE     @lu_pass
+                RTS
+
+@lu_wide        LDA     #0
+                STA     _fcc_long_div_rem_lo
+                STA     _fcc_long_div_rem_hi
+                STA     _fcc_long_div_quo_lo
+                STA     _fcc_long_div_quo_hi
+                LDX     #32
+@lu_lp          ASL     _fcc_long_div_dvd_lo
+                ROL     _fcc_long_div_dvd_hi
+                ROL     _fcc_long_div_rem_lo
+                ROL     _fcc_long_div_rem_hi
+                ROL     _fcc_long_div_quo_lo
+                ROL     _fcc_long_div_quo_hi
+                LDA     _fcc_long_div_rem_hi
+                CMP     _fcc_long_b_hi
+                BCC     @lu_skw
+                BNE     @lu_subw
+                LDA     _fcc_long_div_rem_lo
+                CMP     _fcc_long_b_lo
+                BCC     @lu_skw
+@lu_subw        LDA     _fcc_long_div_rem_lo
+                SEC
+                SBC     _fcc_long_b_lo
+                STA     _fcc_long_div_rem_lo
+                LDA     _fcc_long_div_rem_hi
+                SBC     _fcc_long_b_hi
+                STA     _fcc_long_div_rem_hi
+                LDA     _fcc_long_div_quo_lo
+                ORA     #1
+                STA     _fcc_long_div_quo_lo
+@lu_skw         DEX
+                BNE     @lu_lp
                 RTS
 
 ;------------------------------------------------------------------------------
@@ -1183,13 +1186,10 @@ _fcc_long_geu   MX      %00
                 RTS
 
 ;------------------------------------------------------------------------------
-; _fcc_long_divu - unsigned 32-bit divide.  The _fcc_long_divs core WITHOUT
-; the sign-strip prologue / negate epilogue (those run on BMI, which is
-; exactly wrong for unsigned operands >= $80000000).  Deliberately a
-; standalone copy of the 32-iteration restoring loop: Merlin @-locals are
-; scoped per global label, so the signed core can't be branched into, and
-; restructuring the proven signed path for sharing isn't worth the risk.
-; Divide-by-zero returns 0 (matches divs).  Same _fcc_long_div_* scratch.
+; _fcc_long_divu - unsigned 32-bit divide.  _fcc_long_udiv WITHOUT divs's
+; sign-strip prologue / negate epilogue (those run on BMI, which is exactly
+; wrong for unsigned operands >= $80000000).  Divide-by-zero returns 0
+; (matches divs).  Same _fcc_long_div_* scratch.
 ;------------------------------------------------------------------------------
 _fcc_long_divu  MX      %00
                 LDX     _fcc_long_b_lo
@@ -1202,37 +1202,7 @@ _fcc_long_divu  MX      %00
 @ldu_nz         STA     _fcc_long_div_dvd_lo
                 LDA     _fcc_long_hi
                 STA     _fcc_long_div_dvd_hi
-                LDA     #0
-                STA     _fcc_long_div_rem_lo
-                STA     _fcc_long_div_rem_hi
-                STA     _fcc_long_div_quo_lo
-                STA     _fcc_long_div_quo_hi
-                LDX     #32
-@ldu_lp         ASL     _fcc_long_div_dvd_lo
-                ROL     _fcc_long_div_dvd_hi
-                ROL     _fcc_long_div_rem_lo
-                ROL     _fcc_long_div_rem_hi
-                ROL     _fcc_long_div_quo_lo
-                ROL     _fcc_long_div_quo_hi
-                LDA     _fcc_long_div_rem_hi
-                CMP     _fcc_long_b_hi
-                BCC     @ldu_skip
-                BNE     @ldu_sub
-                LDA     _fcc_long_div_rem_lo
-                CMP     _fcc_long_b_lo
-                BCC     @ldu_skip
-@ldu_sub        LDA     _fcc_long_div_rem_lo
-                SEC
-                SBC     _fcc_long_b_lo
-                STA     _fcc_long_div_rem_lo
-                LDA     _fcc_long_div_rem_hi
-                SBC     _fcc_long_b_hi
-                STA     _fcc_long_div_rem_hi
-                LDA     _fcc_long_div_quo_lo
-                ORA     #1
-                STA     _fcc_long_div_quo_lo
-@ldu_skip       DEX
-                BNE     @ldu_lp
+                JSR     _fcc_long_udiv
                 LDA     _fcc_long_div_quo_hi
                 STA     _fcc_long_hi
                 LDA     _fcc_long_div_quo_lo

@@ -4905,6 +4905,32 @@ emit_inline_divs_pow2(unsigned k)
     g_expr_type = LT_INT;
 }
 
+/* A = A % k for a SIGNED dividend and a power-of-two k.  K&R 2nd ed A.7.6
+ * (p.166): "it is always true that (a/b)*b + a%b is equal to a", and `/'
+ * truncates toward zero here (emit_inline_divs_pow2 and _fcc_divs16 alike),
+ * so the remainder takes the dividend's sign -- what _fcc_mods16 returns.
+ * The magnitude is |a| & (k-1), negated back for a negative dividend.
+ * -32768 negates to itself and masks to 0, which is its remainder.  The
+ * sequence is the same size for every k, so no cap applies. */
+void
+emit_inline_mods_pow2(unsigned k)
+{
+    int pos = new_label(), done = new_label();
+
+    ir_emitf("                CMP     #$8000\n");        /* C=1 iff negative */
+    ir_emitf("                BCC     %s_L%d\n", g_tu_prefix, pos);
+    ir_emitf("                EOR     #$FFFF\n");
+    ir_emitf("                INC\n");
+    ir_emitf("                AND     #%u\n", k - 1);
+    ir_emitf("                EOR     #$FFFF\n");
+    ir_emitf("                INC\n");
+    ir_emitf("                BRA     %s_L%d\n", g_tu_prefix, done);
+    ir_emitf("%s_L%d\n", g_tu_prefix, pos);
+    ir_emitf("                AND     #%u\n", k - 1);
+    ir_emitf("%s_L%d\n", g_tu_prefix, done);
+    g_expr_type = LT_INT;
+}
+
 
 /* ---- 32-bit constant shifts ------------------------------------------------
  *

@@ -27,11 +27,9 @@ _glptrsub_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #8
                 BVC     _glptrsub_L3
                 EOR     #$8000
 _glptrsub_L3

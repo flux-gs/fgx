@@ -48,10 +48,8 @@ main_stkok        TCS
                 MX      %00
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _deref_store_gp_L0
                 LDA     #1
@@ -70,10 +68,8 @@ _deref_store_gp_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _deref_store_gp_L1
                 LDA     #2
@@ -156,10 +152,8 @@ _deref_store_gp_L2
                 REP     #$20
                 MX      %00
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _deref_store_gp_L5
                 LDA     #4
@@ -178,10 +172,8 @@ _deref_store_gp_L5
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _deref_store_gp_L6
                 LDA     #5
@@ -220,10 +212,8 @@ _deref_store_gp_L6
                 LDA     #1000
                 STA     [_fcc_fpr0]
                 TAX
-                LDA     #1000
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1000
                 BNE     *+5
                 BRL     _deref_store_gp_L7
                 LDA     #6
@@ -242,10 +232,8 @@ _deref_store_gp_L7
                 TAX
                 LDA:    ibuf,X
                 TAX
-                LDA     #1000
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1000
                 BNE     *+5
                 BRL     _deref_store_gp_L8
                 LDA     #7

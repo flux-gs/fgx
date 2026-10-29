@@ -35,11 +35,9 @@ main_stkok        TCS
                 TYA
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #0
                 BVC     _sockops_L1
                 EOR     #$8000
 _sockops_L1
@@ -47,11 +45,9 @@ _sockops_L1
                 BRL     _sockops_L0
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L0
                 LDA     #16
@@ -76,22 +72,14 @@ _sockops_L0
                 ADC     #8
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L2
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L2
                 LDA     #16
@@ -116,22 +104,14 @@ _sockops_L2
                 ADC     #8
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L3
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L3
                 LDA     #0
@@ -158,22 +138,14 @@ _sockops_L3
                 ADC     #10
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L4
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L4
                 LDA     #0
@@ -200,22 +172,14 @@ _sockops_L4
                 ADC     #10
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L5
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L5
                 LDA     #4
@@ -244,22 +208,14 @@ _sockops_L5
                 ADC     #12
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L6
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #5
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L6
                 LDA     #16
@@ -299,22 +255,14 @@ _sockops_L6
                 ADC     #16
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L7
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L7
                 LDA     #16
@@ -354,22 +302,14 @@ _sockops_L7
                 ADC     #16
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L8
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L8
                 SEP     #$20
@@ -392,22 +332,14 @@ _sockops_L8
                 ADC     #6
                 TCS
                 TYA
-                PHA
-                LDA     #1
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFF
                 BEQ     *+5
                 BRL     _sockops_L9
                 LDA     3,S   ; fccstk d=0 b=3
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
 _sockops_L9
                 LDA     1,S   ; fccstk d=0 b=1

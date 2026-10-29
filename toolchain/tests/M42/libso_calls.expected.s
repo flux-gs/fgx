@@ -30,11 +30,8 @@ _libso_calls_helper_stkok        TCS
                 LDA     6+_libso_calls_helper_FRAMESIZE,S   ; fccstk d=0 b=6 fs
                 FIN
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 TAY
                 TSC
                 CLC
@@ -184,10 +181,8 @@ _libso_calls_L0
                 PLA
                 TYA
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #16
                 BEQ     *+5
                 BRL     _libso_calls_L1
                 LDA     #42

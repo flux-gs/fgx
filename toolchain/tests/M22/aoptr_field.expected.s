@@ -179,10 +179,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _aoptr_field_L0
                 LDA     #1
@@ -233,10 +231,8 @@ _aoptr_field_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _aoptr_field_L1
                 LDA     #2
@@ -289,10 +285,8 @@ _aoptr_field_L1
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _aoptr_field_L2
                 LDA     #3
@@ -313,10 +307,8 @@ _aoptr_field_L2
                 LDY     #24
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _aoptr_field_L3
                 LDA     #4
@@ -440,10 +432,8 @@ _aoptr_field_L4
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _aoptr_field_L7
                 LDA     #6

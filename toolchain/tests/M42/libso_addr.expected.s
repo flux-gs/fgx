@@ -89,10 +89,8 @@ main_stkok        TCS
                 TCS
                 TYA
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _libso_addr_L0
                 LDA     #42

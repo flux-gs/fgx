@@ -111,11 +111,9 @@ main_stkok        TCS
                 BRL     _ptrinit_const_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _ptrinit_const_L0
                 LDA     _fcc_img4
@@ -160,11 +158,9 @@ _ptrinit_const_L0
                 BRL     _ptrinit_const_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _ptrinit_const_L1
                 LDA     _fcc_img6
@@ -192,11 +188,9 @@ _ptrinit_const_L1
                 BRL     _ptrinit_const_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #14
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #14
                 STA     _fcc_img0
 _ptrinit_const_L2
                 LDA     _fcc_img0

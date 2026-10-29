@@ -52,11 +52,9 @@ _indir_promote_L3
                 BRL     _indir_promote_L2
                 LDA     _fcc_img1
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #2
                 STA     _fcc_img1
 _indir_promote_L1
                 INC     _fcc_img0
@@ -111,11 +109,9 @@ _indir_promote_L5
                 JSR     _fcc_safepoint
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _indir_promote_L8
                 EOR     #$8000
 _indir_promote_L8

@@ -57,10 +57,8 @@ probe_stkok        TCS
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BNE     *+5
                 BRL     _deref_postfix_L0
                 LDA     #1
@@ -112,10 +110,8 @@ _deref_postfix_L0
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _deref_postfix_L1
                 LDA     #2
@@ -182,10 +178,8 @@ _deref_postfix_L1
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _deref_postfix_L2
                 LDA     #3

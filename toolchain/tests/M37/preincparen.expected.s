@@ -57,19 +57,15 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _preincparen_L0
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _preincparen_L0
                 LDA     9,S   ; fccstk d=0 b=9
@@ -93,19 +89,15 @@ _preincparen_L0
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _preincparen_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _preincparen_L1
                 LDA     #1
@@ -161,11 +153,9 @@ _preincparen_L1
                 BRL     _preincparen_L2
                 LDA     _fcc_img0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     _fcc_img0
 _preincparen_L2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -185,10 +175,8 @@ _preincparen_L2
                 STA     [_fcc_ptr]
                 STA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _preincparen_L4
                 LDA     9,S   ; fccstk d=0 b=9
@@ -197,10 +185,8 @@ _preincparen_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _preincparen_L4
                 LDA     #1
@@ -213,11 +199,9 @@ _preincparen_L5
                 BRL     _preincparen_L3
                 LDA     _fcc_img0
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     _fcc_img0
 _preincparen_L3
                 LDA     _fcc_img0

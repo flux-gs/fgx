@@ -43,28 +43,21 @@ _comma_for_L3
                 BRL     _comma_for_L2
                 LDA     _fcc_img2
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img2
 _comma_for_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     _fcc_img0
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #1
                 STA     _fcc_img1
                 BRL     _comma_for_L0
 _comma_for_L2

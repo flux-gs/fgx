@@ -97,11 +97,9 @@ main_stkok        TCS
                 ADC     _fcc_tmp_b
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #28
                 TAY
                 TSC
                 CLC

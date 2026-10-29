@@ -37,10 +37,8 @@ _strblob_L0
 _strblob_L1
                 LDA     _fcc_img0
                 TAX
-                LDA     #2109
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2109
                 BNE     *+5
                 BRL     _strblob_L2
                 LDA     #1
@@ -59,10 +57,8 @@ _strblob_L2
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _strblob_L4
                 LDA     #61
@@ -70,10 +66,8 @@ _strblob_L2
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                LDA     #65
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #65
                 BEQ     *+5
                 BRL     _strblob_L4
                 LDA     #0
@@ -100,10 +94,8 @@ _strblob_L3
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BNE     *+5
                 BRL     _strblob_L6
                 LDA     #3
@@ -122,10 +114,8 @@ _strblob_L6
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                LDA     #64
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #64
                 BNE     *+5
                 BRL     _strblob_L7
                 LDA     #4
@@ -144,10 +134,8 @@ _strblob_L7
                 LDA:    _strblob_big,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _strblob_L8
                 LDA     #5

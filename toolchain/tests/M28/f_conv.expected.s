@@ -32,10 +32,8 @@ main_stkok        TCS
                 JSR     _fcc_ftoi
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BNE     *+5
                 BRL     _f_conv_L0
                 LDA     #1
@@ -58,10 +56,8 @@ _f_conv_L0
                 LDA     #0
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BNE     *+5
                 BRL     _f_conv_L1
                 LDA     #2
@@ -84,10 +80,8 @@ _f_conv_L1
                 LDA     #0
                 FGX2_FARCALL _fcc_dtol
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BNE     *+5
                 BRL     _f_conv_L2
                 LDA     #3
@@ -113,16 +107,12 @@ _f_conv_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 JSR     _fcc_ftoi
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 TAX
-                LDA     #42
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #42
                 BNE     *+5
                 BRL     _f_conv_L3
                 LDA     #4

@@ -35,18 +35,14 @@ main_stkok        TCS
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #5
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #5
                 BEQ     *+5
                 BRL     _commast_L1
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _commast_L1
                 LDA     #1
@@ -59,19 +55,15 @@ _commast_L2
                 BRL     _commast_L0
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L0
                 LDA     _tty+0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                ORA     _fcc_tmp_b
+                ORA     #2
                 STA     _tty+0
                 LDA     #1
                 STA     _rawmode
@@ -97,18 +89,14 @@ _commast_L0
                 TYA
                 LDA     _tty+0
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _commast_L8
                 LDA     _rawmode
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _commast_L8
                 LDA     #1
@@ -121,10 +109,8 @@ _commast_L9
                 BRL     _commast_L6
                 LDA     nxstty
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _commast_L6
                 LDA     #1
@@ -137,10 +123,8 @@ _commast_L7
                 BRL     _commast_L4
                 LDA     seen_flags
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _commast_L4
                 LDA     #1
@@ -153,11 +137,9 @@ _commast_L5
                 BRL     _commast_L3
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #12
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #12
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L3
                 LDA     _tty+0
@@ -192,18 +174,14 @@ _commast_L3
                 TYA
                 LDA     _tty+0
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _commast_L15
                 LDA     _rawmode
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _commast_L15
                 LDA     #1
@@ -216,10 +194,8 @@ _commast_L16
                 BRL     _commast_L13
                 LDA     nxstty
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _commast_L13
                 LDA     #1
@@ -232,10 +208,8 @@ _commast_L14
                 BRL     _commast_L11
                 LDA     seen_flags
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #8
                 BEQ     *+5
                 BRL     _commast_L11
                 LDA     #1
@@ -248,11 +222,9 @@ _commast_L12
                 BRL     _commast_L10
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L10
                 LDA     #4
@@ -291,18 +263,14 @@ _commast_L10
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _commast_L18
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #6
                 BEQ     *+5
                 BRL     _commast_L18
                 LDA     #1
@@ -315,11 +283,9 @@ _commast_L19
                 BRL     _commast_L17
                 LDA     13,S   ; fccstk d=0 b=13
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     13,S   ; fccstk d=0 b=13
 _commast_L17
                 LDA     13,S   ; fccstk d=0 b=13

@@ -23,10 +23,8 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
-                LDA     #66
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #66
                 BEQ     *+5
                 BRL     _char_cmp_L0
                 LDA     #42

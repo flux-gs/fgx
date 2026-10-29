@@ -45,7 +45,6 @@ main_stkok        TCS
                 LDA     #$000F
                 STA     _fcc_long_hi
                 LDA     #$4240
-                STA     _fcc_tmp_b
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_long_hi
                 STA     13,S   ; fccstk d=0 b=13
@@ -59,11 +58,9 @@ main_stkok        TCS
                 STA     _fcc_fpr1
                 LDA     [_fcc_fpr1]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 STA     [_fcc_fpr0]
                 LDA     #1
                 JSR     _fcc_long_from_int

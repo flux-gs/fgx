@@ -136,11 +136,9 @@ _static_struct_array_local_L0
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 BVC     _static_struct_array_local_L3
                 EOR     #$8000
 _static_struct_array_local_L3
@@ -226,36 +224,28 @@ main_stkok        TCS
                 STA     1,S   ; fccstk d=0 b=1
                 FGX2_FARCALL _static_struct_array_local_sized
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #10
                 BEQ     *+5
                 BRL     _static_struct_array_local_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
 _static_struct_array_local_L4
                 FGX2_FARCALL _static_struct_array_local_from_init
                 TAX
-                LDA     #45
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #45
                 BEQ     *+5
                 BRL     _static_struct_array_local_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #21
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #21
                 STA     1,S   ; fccstk d=0 b=1
 _static_struct_array_local_L5
                 LDA     1,S   ; fccstk d=0 b=1

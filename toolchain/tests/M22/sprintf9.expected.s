@@ -69,10 +69,8 @@ main_stkok        TCS
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #49
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #49
                 BNE     *+5
                 BRL     _sprintf9_L0
                 LDA     #10
@@ -91,10 +89,8 @@ _sprintf9_L0
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #46
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #46
                 BNE     *+5
                 BRL     _sprintf9_L1
                 LDA     #11
@@ -113,10 +109,8 @@ _sprintf9_L1
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #53
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #53
                 BNE     *+5
                 BRL     _sprintf9_L2
                 LDA     #12
@@ -135,10 +129,8 @@ _sprintf9_L2
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #57
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #57
                 BNE     *+5
                 BRL     _sprintf9_L3
                 LDA     #13
@@ -157,10 +149,8 @@ _sprintf9_L3
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #57
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #57
                 BNE     *+5
                 BRL     _sprintf9_L4
                 LDA     #14
@@ -179,10 +169,8 @@ _sprintf9_L4
                 LDA:    buf,X
                 AND     #$00FF
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BNE     *+5
                 BRL     _sprintf9_L5
                 LDA     #15

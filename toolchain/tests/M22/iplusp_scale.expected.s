@@ -59,10 +59,8 @@ main_stkok        TCS
                 STA     _fcc_img1
                 LDA     [_fcc_img1]
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _iplusp_scale_L0
                 LDA     #1
@@ -94,10 +92,8 @@ _iplusp_scale_L0
                 SBC     _fcc_fpr1
                 LSR
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BNE     *+5
                 BRL     _iplusp_scale_L1
                 LDA     #2

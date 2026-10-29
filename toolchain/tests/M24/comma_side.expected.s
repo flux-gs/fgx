@@ -22,11 +22,9 @@ main_stkok        TCS
                 LDA     #3
                 STA     _fcc_img0
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     3,S   ; fccstk d=0 b=3
                 TAY
                 TSC

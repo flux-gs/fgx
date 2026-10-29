@@ -76,11 +76,9 @@ _commacond_L0
 _commacond_L1
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
                 LDA     #7
@@ -92,11 +90,9 @@ _commacond_L1
                 BRL     _commacond_L2
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #10
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #10
                 STA     5,S   ; fccstk d=0 b=5
 _commacond_L2
                 LDA     #0
@@ -112,11 +108,9 @@ _commacond_L3
                 JSR     _fcc_safepoint
                 LDA     _fcc_img0
                 TAX
-                LDA     #100
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #100
                 STA     _fcc_img2
                 LDA     _fcc_img0
                 TAX
@@ -129,11 +123,9 @@ _commacond_L3
                 BRL     _commacond_L5
                 LDA     _fcc_img1
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #1
                 STA     _fcc_img1
 _commacond_L4
                 LDA     _fcc_img0
@@ -149,19 +141,15 @@ _commacond_L5
                 LDA     _fcc_img2
                 STA     1,S   ; fccstk d=0 b=1
                 TAX
-                LDA     #104
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #104
                 BEQ     *+5
                 BRL     _commacond_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #16
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #16
                 STA     5,S   ; fccstk d=0 b=5
 _commacond_L6
                 LDA     5,S   ; fccstk d=0 b=5

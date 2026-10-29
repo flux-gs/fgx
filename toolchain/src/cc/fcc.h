@@ -1022,6 +1022,8 @@ int
 is_ident_cont(int c);
 int
 is_type_modifier_ident(const char *p, int n);
+int
+inline_is_specifier(void);
 long
 pp_apply_op(int op, long a, long b);
 void
@@ -1375,6 +1377,8 @@ int
 emit_inline_divmod_pow2(TokKind op, unsigned k);
 void
 emit_inline_divs_pow2(unsigned k);
+void
+emit_inline_mods_pow2(unsigned k);
 
 int  long_shift_inlineable(int is_lshift, int is_unsigned, unsigned k);
 void emit_inline_long_shl(unsigned k);

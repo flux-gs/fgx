@@ -1092,9 +1092,7 @@ _ldouble_arith_L14
                 PHA
                 TYA
                 PHA
-                LDA     #3
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFD
                 JSR     _fcc_long_from_int
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
@@ -2783,9 +2781,7 @@ _ldouble_arith_L88
                 TYA
                 RTL
 _ldouble_arith_L86
-                LDA     #5
-                EOR     #$FFFF
-                INC
+                LDA     #$FFFB
                 JSR     _fcc_long_from_int
                 FGX2_FARCALL _fcc_dfroml
                 STA     17,S   ; fccstk d=0 b=17
@@ -2879,13 +2875,7 @@ _ldouble_arith_L86
                 STA     _fcc_long_hi
                 LDA     17,S   ; fccstk d=0 b=17
                 FGX2_FARCALL _fcc_dtol
-                PHA
-                LDA     #2
-                EOR     #$FFFF
-                INC
-                STA     _fcc_tmp_b
-                PLA
-                CMP     _fcc_tmp_b
+                CMP     #$FFFE
                 BEQ     *+5
                 BRL     _ldouble_arith_L90
                 LDA     #0
@@ -2974,10 +2964,8 @@ _ldouble_arith_L89
                 FGX2_FARCALL _fcc_dtol
                 STA     55,S   ; fccstk d=0 b=55
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _ldouble_arith_L92
                 LDA     #19
@@ -3933,10 +3921,8 @@ _ldouble_arith_L99
                 FGX2_FARCALL _fcc_dtol
                 STA     55,S   ; fccstk d=0 b=55
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _ldouble_arith_L100
                 LDA     #25
@@ -4051,10 +4037,8 @@ _ldouble_arith_L100
 _ldouble_arith_L101
                 LDA     45,S   ; fccstk d=0 b=45
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                LDX     _fcc_tmp_b
+                LDX     #1
                 STA     _fcc_tmp_b
                 TXA
                 CMP     _fcc_tmp_b
@@ -4138,10 +4122,8 @@ _ldouble_arith_L103
 _ldouble_arith_L104
                 LDA     45,S   ; fccstk d=0 b=45
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BCC     *+5
                 BRL     _ldouble_arith_L105
                 LDA     7,S   ; fccstk d=0 b=7
@@ -4263,10 +4245,8 @@ _ldouble_arith_L107
                 PLA
                 TYA
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BNE     *+5
                 BRL     _ldouble_arith_L108
                 LDA     #29

@@ -1442,10 +1442,8 @@ _deref_store_L10
                 STA     [_fcc_fpr0]
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _deref_store_L12
                 LDA     #0
@@ -1453,10 +1451,8 @@ _deref_store_L10
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BEQ     *+5
                 BRL     _deref_store_L12
                 LDA     #0
@@ -1495,10 +1491,8 @@ _deref_store_L11
                 STA     [_fcc_fpr0]
                 STA     25,S   ; fccstk d=0 b=25
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _deref_store_L15
                 LDA     #1
@@ -1506,10 +1500,8 @@ _deref_store_L11
                 TAX
                 LDA:    _deref_store_iv,X
                 TAX
-                LDA     #9
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #9
                 BEQ     *+5
                 BRL     _deref_store_L15
                 LDA     #0

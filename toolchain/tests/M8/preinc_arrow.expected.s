@@ -43,11 +43,8 @@ main_stkok        TCS
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     [_fcc_fpr0]
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
@@ -56,11 +53,8 @@ main_stkok        TCS
                 LDY     #2
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                SEC
-                SBC     _fcc_tmp_b
+                DEC
                 LDY     #2
                 STA     [_fcc_fpr0],Y
                 LDA     7,S   ; fccstk d=0 b=7
@@ -80,11 +74,9 @@ main_stkok        TCS
                 CLC
                 ADC     _fcc_tmp_b
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #3
                 TAY
                 TSC
                 CLC

@@ -74,11 +74,9 @@ _pwdops_L2
                 BRL     _pwdops_L0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L0
                 LDA     3,S   ; fccstk d=0 b=3
@@ -115,10 +113,8 @@ _pwdops_L7
                 LDY     #8
                 LDA     [_fcc_fpr0],Y
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L4
                 LDA     #1
@@ -131,11 +127,9 @@ _pwdops_L5
                 BRL     _pwdops_L3
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L3
                 LDA     3,S   ; fccstk d=0 b=3
@@ -202,10 +196,8 @@ _pwdops_L12
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L9
                 LDA     #1
@@ -218,11 +210,9 @@ _pwdops_L10
                 BRL     _pwdops_L8
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L8
                 LDA     3,S   ; fccstk d=0 b=3
@@ -289,10 +279,8 @@ _pwdops_L17
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L14
                 LDA     #1
@@ -305,11 +293,9 @@ _pwdops_L15
                 BRL     _pwdops_L13
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L13
                 LDA     #0
@@ -385,10 +371,8 @@ _pwdops_L22
                 TCS
                 TYA
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _pwdops_L19
                 LDA     #1
@@ -401,11 +385,9 @@ _pwdops_L20
                 BRL     _pwdops_L18
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #8
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #8
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L18
                 SEP     #$20
@@ -451,11 +433,9 @@ _pwdops_L25
                 BRL     _pwdops_L23
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L23
                 FGX2_FARCALL setpwent
@@ -496,19 +476,15 @@ _pwdops_L27
                 FGX2_FARCALL endpwent
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _pwdops_L30
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #4
                 STA     5,S   ; fccstk d=0 b=5
 _pwdops_L30
                 LDA     5,S   ; fccstk d=0 b=5

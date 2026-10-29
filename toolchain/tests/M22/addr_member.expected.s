@@ -118,10 +118,8 @@ main_stkok        TCS
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BNE     *+5
                 BRL     _addr_member_L0
                 LDA     #1
@@ -170,10 +168,8 @@ _addr_member_L0
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #90
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #90
                 BNE     *+5
                 BRL     _addr_member_L1
                 LDA     #2
@@ -219,10 +215,8 @@ _addr_member_L1
                 PLA
                 LDA     [_fcc_ptr]
                 TAX
-                LDA     #7
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #7
                 BNE     *+5
                 BRL     _addr_member_L2
                 LDA     #3
@@ -268,10 +262,8 @@ _addr_member_L2
                 LDA     [_fcc_ptr]
                 AND     #$00FF
                 TAX
-                LDA     #76
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #76
                 BNE     *+5
                 BRL     _addr_member_L3
                 LDA     #4
@@ -306,10 +298,8 @@ _addr_member_L3
                 STA     [_fcc_fpr0]
                 LDA     gb+0
                 TAX
-                LDA     #40
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #40
                 BNE     *+5
                 BRL     _addr_member_L4
                 LDA     #5
@@ -325,11 +315,9 @@ _addr_member_L3
 _addr_member_L4
                 LDA     gb+0
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
+                INC
                 TAY
                 TSC
                 CLC

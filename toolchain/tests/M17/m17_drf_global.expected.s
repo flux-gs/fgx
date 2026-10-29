@@ -177,11 +177,9 @@ main_stkok        TCS
                 SEC
                 SBC     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #28
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #28
                 TAY
                 TSC
                 CLC

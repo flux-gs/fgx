@@ -90,11 +90,9 @@ _fprloop_L0
                 JSR     _fcc_safepoint
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
                 SEC
-                SBC     _fcc_tmp_b
+                SBC     #4
                 BVC     _fprloop_L3
                 EOR     #$8000
 _fprloop_L3
@@ -121,11 +119,8 @@ _fprloop_L3
                 STA     _fcc_fpr0
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CLC
-                ADC     _fcc_tmp_b
+                INC
                 STA     [_fcc_fpr0]
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
@@ -229,10 +224,8 @@ _fprloop_L4
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _fprloop_L7
                 SEP     #$20
@@ -280,19 +273,15 @@ _fprloop_L2
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #1
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #1
                 BEQ     *+5
                 BRL     _fprloop_L8
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L8
                 SEP     #$20
@@ -319,19 +308,15 @@ _fprloop_L8
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #2
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #2
                 BEQ     *+5
                 BRL     _fprloop_L9
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L9
                 SEP     #$20
@@ -358,19 +343,15 @@ _fprloop_L9
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #3
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #3
                 BEQ     *+5
                 BRL     _fprloop_L10
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L10
                 SEP     #$20
@@ -397,19 +378,15 @@ _fprloop_L10
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #4
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #4
                 BEQ     *+5
                 BRL     _fprloop_L11
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L11
                 SEP     #$20
@@ -436,19 +413,15 @@ _fprloop_L11
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #77
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #77
                 BEQ     *+5
                 BRL     _fprloop_L12
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L12
                 SEP     #$20
@@ -475,19 +448,15 @@ _fprloop_L12
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #78
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #78
                 BEQ     *+5
                 BRL     _fprloop_L13
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L13
                 SEP     #$20
@@ -514,19 +483,15 @@ _fprloop_L13
                 STA     _fcc_fpr0
                 LDA     [_fcc_fpr0]
                 TAX
-                LDA     #0
-                STA     _fcc_tmp_b
                 TXA
-                CMP     _fcc_tmp_b
+                CMP     #0
                 BEQ     *+5
                 BRL     _fprloop_L14
                 LDA     7,S   ; fccstk d=0 b=7
                 TAX
-                LDA     #6
-                STA     _fcc_tmp_b
                 TXA
                 CLC
-                ADC     _fcc_tmp_b
+                ADC     #6
                 STA     7,S   ; fccstk d=0 b=7
 _fprloop_L14
                 LDA     7,S   ; fccstk d=0 b=7
