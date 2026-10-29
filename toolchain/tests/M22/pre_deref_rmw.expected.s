@@ -311,12 +311,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL adv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 SEP     #$20
                 MX      %10
@@ -331,12 +327,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL adv
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     7,S   ; fccstk d=0 b=7
                 SEP     #$20
                 MX      %10
@@ -351,12 +343,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL back
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     1,S   ; fccstk d=0 b=1
                 STA     _fcc_ptr

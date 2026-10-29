@@ -183,9 +183,7 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL getn
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     [_fcc_fpr0]
                 TAX
                 CMP     #10
@@ -204,9 +202,7 @@ _call_postfix_L2
                 LDA     #0
                 PHA
                 FGX2_FARCALL getn
-                TAY
-                PLA
-                TYA
+                PLY
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -234,9 +230,7 @@ _call_postfix_L3
                 LDA     #0
                 PHA
                 FGX2_FARCALL getn
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 INC
                 INC
@@ -285,17 +279,13 @@ _call_postfix_L5
                 LDA     #0
                 PHA
                 FGX2_FARCALL getn
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     [_fcc_fpr0]
                 PHA
                 LDA     #0
                 PHA
                 FGX2_FARCALL getn
-                TAY
-                PLA
-                TYA
+                PLY
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA

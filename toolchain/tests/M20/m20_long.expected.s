@@ -168,12 +168,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum_longs
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi

@@ -62,9 +62,7 @@ main_stkok        TCS
                 LDA     gcmd
                 PHA
                 FGX2_FARCALL _enum_typedef_val
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

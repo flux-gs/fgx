@@ -72,16 +72,12 @@ main_stkok        TCS
                 LDA     #6
                 PHA
                 FGX2_FARCALL sq
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #2
                 PHA
                 FGX2_FARCALL sq
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

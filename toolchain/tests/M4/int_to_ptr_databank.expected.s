@@ -77,9 +77,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 PHA
                 FGX2_FARCALL reconstitute
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0

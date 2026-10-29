@@ -391,10 +391,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #13
                 PHA
                 LDA     #1
@@ -415,10 +414,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -458,10 +456,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #23
                 PHA
                 LDA     #1
@@ -482,10 +479,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #30
                 PHA
                 PHA
@@ -502,10 +498,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #33
                 PHA
                 LDA     #1
@@ -526,10 +521,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #40
                 PHA
                 PHA
@@ -546,10 +540,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #43
                 PHA
                 LDA     #1
@@ -570,10 +563,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structval_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10

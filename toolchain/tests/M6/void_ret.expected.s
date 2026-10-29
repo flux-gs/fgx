@@ -84,10 +84,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL poke
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC

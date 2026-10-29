@@ -1301,7 +1301,7 @@ emit_libc_call(const char *asm_name);
 void
 emit_call_indirect(int kc);
 void
-emit_drop_args(int n_args);
+emit_drop_arg_bytes(int bytes, int discard);
 void
 emit_addr_of_local(Local *lc);
 void

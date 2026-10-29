@@ -34,10 +34,8 @@ main_stkok        TCS
                 LDA     _fcc_img20
                 PHA
                 FGX2_FARCALL calloc
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -151,12 +149,8 @@ _heapchurn_L6
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL strdup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -256,12 +250,10 @@ _heapchurn_L7
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL realloc
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -539,10 +531,8 @@ _heapchurn_L27
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL free
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_ptr+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -557,10 +547,8 @@ _heapchurn_L26
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL free
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #42
                 TAY
                 TSC

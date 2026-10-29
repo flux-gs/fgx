@@ -500,12 +500,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_fwd
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     #3
                 PHA
@@ -523,12 +519,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_sum_bwd
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -550,12 +543,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ptr_postinc_isum_bwd
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

@@ -199,10 +199,8 @@ _pp_adv4_L4
                 LDA     #3
                 PHA
                 FGX2_FARCALL take2
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

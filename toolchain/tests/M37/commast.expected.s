@@ -68,12 +68,9 @@ _commast_L0
                 LDA     _tty_ch
                 PHA
                 FGX2_FARCALL xstty
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _tty+0
                 TAX
                 CMP     #10
@@ -122,12 +119,9 @@ _commast_L1
                 LDA     _tty_ch
                 PHA
                 FGX2_FARCALL xstty
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _tty+0
                 CMP     #8
                 BNE     _commast_L2

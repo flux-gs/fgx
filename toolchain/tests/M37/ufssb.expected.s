@@ -938,12 +938,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -960,12 +957,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -988,12 +982,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1011,12 +1002,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1034,12 +1022,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1062,12 +1047,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1090,12 +1072,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1113,12 +1092,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1136,12 +1112,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1159,12 +1132,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1182,12 +1152,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1205,12 +1172,9 @@ ufs_sbdecode_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1333,12 +1297,9 @@ _ufssb_L4
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1395,12 +1356,9 @@ _ufssb_L8
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1505,10 +1463,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #4
                 LDA     [_fcc_img16],Y
                 STA     _fcc_long_hi
@@ -1538,10 +1496,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #208
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1551,10 +1509,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #412
                 LDA     [_fcc_img16],Y
                 STA     _fcc_long_hi
@@ -1604,10 +1562,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #420
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1617,10 +1575,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #422
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1630,10 +1588,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #424
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1643,10 +1601,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #426
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1656,10 +1614,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #428
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1669,10 +1627,10 @@ ufs_sbencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img19
                 STA     _fcc_ptr+2
                 LDA     _fcc_img18
@@ -1902,10 +1860,10 @@ _ufssb_L16
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _ufssb_L14
                 INC     _fcc_img20
                 BRA     _ufssb_L13
@@ -1982,12 +1940,9 @@ ufs_dget32_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -2153,10 +2108,10 @@ ufs_dput16_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -2219,12 +2174,9 @@ ufs_dget16_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -2309,12 +2261,9 @@ ufs_fblkdecode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_u16
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2365,12 +2314,9 @@ _ufssb_L20
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_u32
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2481,10 +2427,10 @@ ufs_fblkencode_stkok        TCS
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _ufssb_sb_p16
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img20
 _ufssb_L21
@@ -2937,10 +2883,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ufs_sbdecode
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
                 CMP     #126
@@ -3149,12 +3095,10 @@ _ufssb_L44
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ufs_sbvalid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _ufssb_L45
                 LDA     #10
@@ -3188,12 +3132,10 @@ _ufssb_L45
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ufs_sbvalid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _ufssb_L46
                 LDA     #11
@@ -3227,12 +3169,11 @@ _ufssb_L46
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ufs_sbvalid
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _ufssb_L47
                 LDA     #12
                 TAY

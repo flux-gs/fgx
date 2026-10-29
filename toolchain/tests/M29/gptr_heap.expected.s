@@ -352,12 +352,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL malloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     zero
                 LDA     _fcc_fpr0+2
@@ -416,27 +412,19 @@ _gptr_heap_L4
                 LDA     #2
                 PHA
                 FGX2_FARCALL store
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #6
                 PHA
                 FGX2_FARCALL store
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #10
                 PHA
                 FGX2_FARCALL store
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #1
                 PHA
                 FGX2_FARCALL parse
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 STA     addr1
                 LDA     _fcc_fpr0+2
@@ -444,9 +432,7 @@ _gptr_heap_L4
                 LDA     #3
                 PHA
                 FGX2_FARCALL parse
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 STA     addr2
                 LDA     _fcc_fpr0+2
@@ -545,9 +531,7 @@ _gptr_heap_L13
                 PLA
                 PHA
                 FGX2_FARCALL consume
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

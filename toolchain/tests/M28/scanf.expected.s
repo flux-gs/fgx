@@ -1269,12 +1269,10 @@ _scanf_L22
                 TYA
                 PHA
                 FGX2_FARCALL _scanf_mag
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1419,12 +1417,10 @@ _scanf_L24
                 TYA
                 PHA
                 FGX2_FARCALL _scanf_mag
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1713,12 +1709,10 @@ _scanf_L32
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -1770,18 +1764,16 @@ _scanf_L34
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fputs
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1805,12 +1797,10 @@ _scanf_L34
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -1977,12 +1967,8 @@ _scanf_L43
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _filbuf
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
 _scanf_L44
                 TAX
                 CMP     #10
@@ -2042,10 +2028,8 @@ _scanf_L45
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -2058,10 +2042,8 @@ _scanf_L45
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #42
                 TAY
                 TSC

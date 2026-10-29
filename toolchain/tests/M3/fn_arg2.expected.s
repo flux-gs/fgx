@@ -74,10 +74,8 @@ main_stkok        TCS
                 LDA     #6
                 PHA
                 FGX2_FARCALL mul
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

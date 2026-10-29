@@ -463,18 +463,15 @@ _arrmemberdecay_L10
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
-                INC
-                INC
+                CLC
+                ADC     #2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arrmemberdecay_sumlong
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDX     #10000
                 STX     _fcc_long_b_lo
                 LDX     #0

@@ -35,12 +35,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 CMP     #$FFFF
                 BEQ     _lc_errno_L0
@@ -95,13 +92,12 @@ _lc_errno_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
+                CMP     #0
                 BEQ     _lc_errno_L2
                 LDA     #3
                 TAY
@@ -143,18 +139,15 @@ _lc_errno_L3
                 LDA     #2
                 PHA
                 FGX2_FARCALL strerror
-                TAY
-                PLA
-                TYA
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _lc_errno_L4
                 LDA     #5
                 TAY
@@ -181,18 +174,15 @@ _lc_errno_L4
                 LDA     #22
                 PHA
                 FGX2_FARCALL strerror
-                TAY
-                PLA
-                TYA
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _lc_errno_L5
                 LDA     #6
                 TAY
@@ -219,18 +209,15 @@ _lc_errno_L5
                 LDA     #9999
                 PHA
                 FGX2_FARCALL strerror
-                TAY
-                PLA
-                TYA
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _lc_errno_L6
                 LDA     #7
                 TAY
@@ -255,10 +242,8 @@ _lc_errno_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL perror
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #42
                 TAY
                 TSC

@@ -46,10 +46,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #10
                 PHA
                 SEP     #$20
@@ -112,12 +112,11 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _strncatops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -188,10 +187,10 @@ _strncatops_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #2
                 PHA
                 SEP     #$20
@@ -248,12 +247,11 @@ _strncatops_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _strncatops_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
@@ -346,12 +344,11 @@ _strncatops_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _strncatops_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -384,10 +381,10 @@ _strncatops_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcpy
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -444,12 +441,11 @@ _strncatops_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _strncatops_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX

@@ -157,10 +157,8 @@ _biocache_L1
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biodone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -240,10 +238,8 @@ _biocache_L4
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biodone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -327,10 +323,8 @@ _biocache_fake_strategy_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bio_strategy
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -1769,10 +1763,10 @@ _biocache_L21
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_binstailfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _biocache_L19
                 INC     _fcc_img20
                 BRL     _biocache_L18
@@ -1890,12 +1884,10 @@ incore_stkok        TCS
                 PEI     _fcc_img21
                 PEI     _fcc_img20
                 FGX2_FARCALL _biocache_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2203,10 +2195,8 @@ _biocache_L36
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L31
                 BRL     _biocache_L30
 _biocache_L32
@@ -2226,25 +2216,22 @@ _biocache_L32
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 ORA     #8
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 TAX
                 AND     #512
+                CMP     #0
                 BEQ     _biocache_L39
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2267,19 +2254,15 @@ _biocache_L39
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelvp
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L40
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 LDY     #2
                 STA     [_fcc_img16],Y
@@ -2443,10 +2426,8 @@ _biocache_L43
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L41
                 PHA
                 SEP     #$20
@@ -2473,12 +2454,10 @@ _biocache_L41
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _biocache_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2611,6 +2590,7 @@ _biocache_L49
                 LDA     [_fcc_img16]
                 TAX
                 AND     #8
+                CMP     #0
                 BEQ     _biocache_L53
                 LDA     [_fcc_img16]
                 TAX
@@ -2620,10 +2600,8 @@ _biocache_L49
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2633,10 +2611,8 @@ _biocache_L53
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -2678,10 +2654,10 @@ _biocache_L46
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL bgetvp
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img23
                 STA     _fcc_long_hi
                 LDA     _fcc_img22
@@ -2709,10 +2685,10 @@ _biocache_L46
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_binshash
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -2794,10 +2770,8 @@ brelse_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L54
                 LDA     #2
                 STA     _fcc_tmp_b
@@ -2867,10 +2841,8 @@ _biocache_L54
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L55
                 LDA     #1
                 STA     _fcc_tmp_b
@@ -2940,10 +2912,8 @@ _biocache_L55
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L56
                 LDA     [_fcc_img16]
                 AND     #4
@@ -2973,19 +2943,15 @@ _biocache_L57
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelvp
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L59
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 LDY     #2
                 STA     [_fcc_img16],Y
@@ -3113,10 +3079,10 @@ _biocache_L61
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_binsheadfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _biocache_L67
 _biocache_L66
                 LDA     _fcc_img18
@@ -3126,10 +3092,10 @@ _biocache_L66
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_binstailfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _biocache_L67
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -3212,15 +3178,14 @@ _biocache_L68
                 LDA     [_fcc_img16]
                 TAX
                 AND     #2
+                CMP     #0
                 BNE     _biocache_L69
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _biocache_L68
 _biocache_L69
                 LDA     _fcc_img17
@@ -3331,10 +3296,8 @@ biodone_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L73
                 LDA     [_fcc_img16]
                 ORA     #2
@@ -3404,10 +3367,8 @@ _biocache_L76
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L77
                 LDA     [_fcc_img18]
                 PHA
@@ -3426,10 +3387,8 @@ _biocache_L77
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L75
 _biocache_L74
                 LDA     [_fcc_img16]
@@ -3440,10 +3399,8 @@ _biocache_L74
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -3471,10 +3428,8 @@ _biocache_L78
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L79
                 TAY
                 TSC
@@ -3564,12 +3519,10 @@ bread_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -3624,7 +3577,7 @@ bread_stkok        TCS
                 CLC
                 ADC     #bread_FRAMESIZE-4
                 TCS
-                BRL     bread_bandx
+                BRA     bread_bandx
 _biocache_L80
                 LDA     [_fcc_img16]
                 TAX
@@ -3692,12 +3645,8 @@ _biocache_L81
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biowait
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -3788,10 +3737,10 @@ bwrite_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _biocache_L82
                 LDA     #0
                 LDY     #36
@@ -3879,21 +3828,15 @@ _biocache_L84
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biowait
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -3972,10 +3915,10 @@ bdwrite_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _biocache_L85
                 LDA     [_fcc_img16]
                 TAX
@@ -3985,10 +3928,8 @@ _biocache_L85
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4049,10 +3990,8 @@ bawrite_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4152,10 +4091,8 @@ bgetvp_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L86
                 LDA     _fcc_img16
                 LDY     #38
@@ -4218,10 +4155,10 @@ _biocache_L89
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _biocache_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4322,10 +4259,8 @@ _biocache_L90
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bufremvn
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
@@ -4488,19 +4423,15 @@ _biocache_L96
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L94
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bufremvn
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 AND     #512
@@ -4517,10 +4448,10 @@ _biocache_L94
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _biocache_L98
 _biocache_L97
                 LDA     _fcc_img19
@@ -4535,10 +4466,10 @@ _biocache_L97
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _biocache_L98
                 TAY
                 TSC
@@ -4665,19 +4596,15 @@ _biocache_L102
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L103
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 ORA     #8
                 STA     [_fcc_img16]
@@ -4693,25 +4620,22 @@ _biocache_L103
                 FIN
                 TAX
                 AND     #2
+                CMP     #0
                 BNE     _biocache_L104
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bawrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _biocache_L105
 _biocache_L104
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4770,10 +4694,8 @@ _biocache_L107
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _biocache_L107
 _biocache_L108
                 LDY     #46
@@ -4978,10 +4900,8 @@ _biocache_L119
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -4990,12 +4910,8 @@ _biocache_L119
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5171,6 +5087,7 @@ _biocache_L127
                 LDA     [_fcc_img16]
                 TAX
                 AND     #8
+                CMP     #0
                 BEQ     _biocache_L130
                 LDA     [_fcc_img16]
                 TAX
@@ -5180,20 +5097,16 @@ _biocache_L127
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _biocache_L129
 _biocache_L130
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _biocache_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -5215,17 +5128,16 @@ _biocache_L130
                 AND     #512
                 BEQ     _biocache_L131
                 LDA     13,S   ; fccstk d=0 b=13
-                INC
+                CLC
+                ADC     #1
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                BRL     _biocache_L129
+                PLY
+                PLY
+                BRA     _biocache_L129
 _biocache_L131
                 LDY     #38
                 LDA     [_fcc_img16],Y
@@ -5272,10 +5184,10 @@ _biocache_L134
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _biocache_L135
 _biocache_L132
                 LDA     [_fcc_img16]
@@ -5287,10 +5199,8 @@ _biocache_L135
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L128
                 LDA     _fcc_img23
                 STA     _fcc_fpr0+2
@@ -5344,10 +5254,8 @@ _biocache_L137
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L136
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
@@ -5897,16 +5805,12 @@ _biocache_totalfree_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL _biocache_flistlen
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #1
                 PHA
                 FGX2_FARCALL _biocache_flistlen
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -5915,9 +5819,7 @@ _biocache_totalfree_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL _biocache_flistlen
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -6563,10 +6465,8 @@ _biocache_L181
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_totalfree
                 TAX
                 CMP     #16
@@ -6582,9 +6482,7 @@ _biocache_L183
                 LDA     #2
                 PHA
                 FGX2_FARCALL _biocache_flistlen
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #16
                 BEQ     _biocache_L184
@@ -6613,9 +6511,7 @@ _biocache_L188
                 LDA     _fcc_img16
                 PHA
                 FGX2_FARCALL _biocache_hashlen
-                TAY
-                PLA
-                TYA
+                PLY
                 CMP     #0
                 BEQ     _biocache_L189
                 LDA     #3
@@ -6780,12 +6676,10 @@ _biocache_L192
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -7002,12 +6896,10 @@ _biocache_L208
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _biocache_L209
                 LDA     #13
@@ -7039,12 +6931,10 @@ _biocache_L209
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _biocache_L210
                 LDA     #14
@@ -7076,12 +6966,11 @@ _biocache_L210
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L211
                 LDA     #15
                 TAY
@@ -7098,10 +6987,8 @@ _biocache_L211
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -7151,12 +7038,10 @@ _biocache_L213
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -7251,12 +7136,10 @@ _biocache_L217
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -7319,10 +7202,8 @@ _biocache_L221
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     11,S   ; fccstk d=0 b=11
                 STA     _fcc_fpr0+2
                 LDA     9,S   ; fccstk d=0 b=9
@@ -7330,10 +7211,8 @@ _biocache_L221
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #$FFFF
                 STA     _fcc_img17
                 LDA     #0
@@ -7376,12 +7255,10 @@ _biocache_L225
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 LDA     #7
                 JSR     _fcc_long_from_int
@@ -7404,12 +7281,10 @@ _biocache_L225
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CMP     _fcc_tmp_b
@@ -7454,12 +7329,10 @@ _biocache_L227
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -7485,12 +7358,10 @@ _biocache_L227
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -7600,12 +7471,10 @@ _biocache_L231
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _biocache_L234
                 LDA     #24
@@ -7637,12 +7506,10 @@ _biocache_L234
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _biocache_L235
                 LDA     #25
@@ -7674,12 +7541,11 @@ _biocache_L235
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L236
                 LDA     _fcc_img17
                 TAX
@@ -7700,10 +7566,8 @@ _biocache_L236
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -7711,10 +7575,8 @@ _biocache_L236
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #55
                 JSR     _fcc_long_from_int
                 TAY
@@ -7736,12 +7598,10 @@ _biocache_L236
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -7797,10 +7657,8 @@ _biocache_L237
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #55
                 JSR     _fcc_long_from_int
                 TAY
@@ -7822,12 +7680,11 @@ _biocache_L237
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L238
                 LDA     #27
                 TAY
@@ -8008,12 +7865,10 @@ _biocache_L249
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -8087,9 +7942,7 @@ _biocache_L258
                 LDA     _fcc_img16
                 PHA
                 FGX2_FARCALL _biocache_hashlen
-                TAY
-                PLA
-                TYA
+                PLY
                 CMP     #$FFFF
                 BNE     _biocache_L259
                 LDA     #40
@@ -8105,9 +7958,7 @@ _biocache_L259
                 LDA     _fcc_img16
                 PHA
                 FGX2_FARCALL _biocache_hashlen
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -8168,10 +8019,8 @@ _biocache_L264
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L262
                 INC     _fcc_img16
                 BRA     _biocache_L261
@@ -8199,6 +8048,7 @@ _biocache_L265
                 BRL     main_bandx
 _biocache_L266
                 LDA     _biocache_stub_panic
+                CMP     #0
                 BEQ     _biocache_L267
                 LDA     #37
                 TAY
@@ -8222,10 +8072,8 @@ _biocache_L267
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img16
 _biocache_L268
@@ -8388,10 +8236,8 @@ _biocache_L275
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -8492,10 +8338,8 @@ _biocache_L280
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -8575,12 +8419,9 @@ _biocache_L281
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L282
                 LDA     #53
                 TAY
@@ -8716,10 +8557,8 @@ _biocache_L286
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _biocache_fake_writes
                 TAX
                 CMP     #1
@@ -8889,10 +8728,8 @@ _biocache_L294
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img16
 _biocache_L295
@@ -8957,10 +8794,8 @@ _biocache_L298
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L299
 _biocache_L296
                 INC     _fcc_img16
@@ -9011,10 +8846,8 @@ _biocache_L301
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _biocache_fake_writes
                 LDA     #_biocache_fake_disk
@@ -9117,10 +8950,8 @@ _biocache_L302
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #9
                 JSR     _fcc_long_from_int
                 TAY
@@ -9142,12 +8973,10 @@ _biocache_L302
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -9167,10 +8996,8 @@ _biocache_L302
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -9252,10 +9079,8 @@ _biocache_L307
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _biocache_L308
 _biocache_L305
                 INC     _fcc_img16
@@ -9304,10 +9129,8 @@ _biocache_L310
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #11
                 JSR     _fcc_long_from_int
                 TAY
@@ -9329,12 +9152,10 @@ _biocache_L310
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -9361,10 +9182,8 @@ _biocache_L310
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #12
                 JSR     _fcc_long_from_int
                 TAY
@@ -9386,12 +9205,10 @@ _biocache_L310
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -9460,10 +9277,8 @@ _biocache_L314
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_vnreset
                 LDA     #0
                 STA     _biocache_fake_reads
@@ -9490,12 +9305,10 @@ _biocache_L314
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -9514,12 +9327,8 @@ _biocache_L314
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L315
@@ -9545,12 +9354,9 @@ _biocache_L315
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L316
                 LDA     #76
                 TAY
@@ -9677,10 +9483,8 @@ _biocache_L320
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -9695,12 +9499,8 @@ _biocache_L320
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L323
@@ -9782,12 +9582,10 @@ _biocache_L324
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -9799,10 +9597,8 @@ _biocache_L324
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -9817,12 +9613,8 @@ _biocache_L324
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L327
@@ -9848,12 +9640,8 @@ _biocache_L327
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L328
@@ -9886,12 +9674,10 @@ _biocache_L328
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -9927,10 +9713,8 @@ _biocache_L328
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -9945,12 +9729,9 @@ _biocache_L328
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L329
                 LDA     #83
                 TAY
@@ -9974,12 +9755,8 @@ _biocache_L329
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L330
@@ -10023,12 +9800,10 @@ _biocache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -10040,10 +9815,8 @@ _biocache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10058,12 +9831,8 @@ _biocache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L332
@@ -10089,12 +9858,8 @@ _biocache_L332
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _biocache_L333
                 LDA     #87
@@ -10126,12 +9891,10 @@ _biocache_L333
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -10143,12 +9906,9 @@ _biocache_L333
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L334
                 LDA     #88
                 TAY
@@ -10203,12 +9963,9 @@ _biocache_L336
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L337
                 LDA     #91
                 TAY
@@ -10232,12 +9989,8 @@ _biocache_L337
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L338
@@ -10274,6 +10027,7 @@ _biocache_L338
                 MX      %00
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
+                CMP     #0
                 BEQ     _biocache_L339
                 LDA     #93
                 TAY
@@ -10297,10 +10051,8 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_vnreset
                 LDA     #3
                 JSR     _fcc_long_from_int
@@ -10323,12 +10075,10 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -10340,10 +10090,8 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #4
                 JSR     _fcc_long_from_int
                 TAY
@@ -10365,12 +10113,10 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -10382,10 +10128,8 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #5
                 JSR     _fcc_long_from_int
                 TAY
@@ -10407,12 +10151,10 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -10424,10 +10166,8 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10442,12 +10182,8 @@ _biocache_L339
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #3
                 BEQ     _biocache_L340
@@ -10541,12 +10277,10 @@ _biocache_L341
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -10566,10 +10300,8 @@ _biocache_L341
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10584,12 +10316,8 @@ _biocache_L341
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _biocache_L344
@@ -10765,12 +10493,10 @@ _biocache_L351
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _biocache_L354
                 LDA     #100
@@ -10802,12 +10528,11 @@ _biocache_L354
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL incore
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _biocache_L355
                 LDA     #101
                 TAY
@@ -10831,10 +10556,8 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_vnreset
                 LDA     #0
                 STA     _biocache_fake_writes
@@ -10859,12 +10582,10 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -10900,10 +10621,8 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #7
                 JSR     _fcc_long_from_int
                 TAY
@@ -10925,12 +10644,10 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -10966,10 +10683,8 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #8
                 JSR     _fcc_long_from_int
                 TAY
@@ -10991,12 +10706,10 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     11,S   ; fccstk d=0 b=11
                 LDA     _fcc_fpr0
@@ -11032,10 +10745,8 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11050,12 +10761,8 @@ _biocache_L355
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _biocache_L356
@@ -11083,10 +10790,9 @@ _biocache_L356
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vflushbuf
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     _biocache_fake_writes
                 TAX
                 CMP     #2
@@ -11170,12 +10876,9 @@ _biocache_L360
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L361
                 LDA     #107
                 TAY
@@ -11199,12 +10902,8 @@ _biocache_L361
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _biocache_L362
@@ -11230,12 +10929,8 @@ _biocache_L362
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _biocache_L363
@@ -11272,6 +10967,7 @@ _biocache_L363
                 MX      %00
                 LDY     #50
                 LDA     [_fcc_fpr0],Y
+                CMP     #0
                 BEQ     _biocache_L364
                 LDA     #110
                 TAY
@@ -11295,10 +10991,8 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_vnreset
                 LDA     #0
                 STA     _biocache_fake_writes
@@ -11323,12 +11017,10 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -11364,10 +11056,8 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #10
                 JSR     _fcc_long_from_int
                 TAY
@@ -11389,12 +11079,10 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -11406,10 +11094,8 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 PHA
                 PHA
@@ -11426,12 +11112,9 @@ _biocache_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vinvalbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_img17
                 TAX
                 CMP     #1
@@ -11489,12 +11172,9 @@ _biocache_L367
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L368
                 LDA     #114
                 TAY
@@ -11518,12 +11198,9 @@ _biocache_L368
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L369
                 LDA     #115
                 TAY
@@ -11593,10 +11270,8 @@ _biocache_L371
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _biocache_vnreset
                 LDA     #_biocache_fake_disk
                 PHA
@@ -11644,12 +11319,10 @@ _biocache_L371
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -11685,10 +11358,8 @@ _biocache_L371
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 PHA
@@ -11705,13 +11376,11 @@ _biocache_L371
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vinvalbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_img17
+                CMP     #0
                 BEQ     _biocache_L372
                 LDA     #118
                 TAY
@@ -11764,12 +11433,9 @@ _biocache_L374
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L375
                 LDA     #121
                 TAY
@@ -11793,12 +11459,9 @@ _biocache_L375
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _biocache_blklen
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _biocache_L376
                 LDA     #122
                 TAY
@@ -11909,10 +11572,8 @@ _biocache_L379
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _biocache_stub_slept
                 BEQ     _biocache_L380
                 LDA     #71

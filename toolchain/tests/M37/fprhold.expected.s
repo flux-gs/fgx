@@ -444,10 +444,8 @@ _fprhold_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL move
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img19
                 PHA
                 LDA     9,S   ; fccstk d=2 b=7
@@ -692,12 +690,8 @@ _fprhold_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
                 STA     _fcc_fpr0+2

@@ -1238,12 +1238,10 @@ _tar_ctor_L23
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL nullslot
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _tar_ctor_L31
                 LDA     #0
                 STA     7,S   ; fccstk d=0 b=7

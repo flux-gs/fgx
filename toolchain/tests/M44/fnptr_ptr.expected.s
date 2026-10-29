@@ -1349,12 +1349,8 @@ _fnptr_ptr_L26
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kr
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #40
                 BNE     _fnptr_ptr_L31
@@ -1372,12 +1368,8 @@ _fnptr_ptr_L26
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL ansi
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #40
                 BNE     _fnptr_ptr_L31
@@ -1395,12 +1387,8 @@ _fnptr_ptr_L26
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL arr
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFEC
                 BEQ     _fnptr_ptr_L30
 _fnptr_ptr_L31
@@ -1423,12 +1411,8 @@ _fnptr_ptr_L30
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL tdp
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BEQ     _fnptr_ptr_L32
@@ -1607,9 +1591,7 @@ _fnptr_ptr_L33
                 PHA
                 RTL
 _fnptr_ptr_L41
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #42
                 BNE     _fnptr_ptr_L40

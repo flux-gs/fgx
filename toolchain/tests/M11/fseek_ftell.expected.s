@@ -44,12 +44,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -92,12 +90,8 @@ _fseek_ftell_L0
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL ftell
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
                 LDA     _fcc_long_hi
@@ -107,10 +101,8 @@ _fseek_ftell_L0
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_long_hi
                 LDA     5,S   ; fccstk d=0 b=5

@@ -116,10 +116,8 @@ _ss_recurse_L5
                 SBC     #1
                 PHA
                 FGX2_FARCALL rec
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 STA     7,S   ; fccstk d=0 b=7
                 BRA     _ss_recurse_L6
 _ss_recurse_L4
@@ -215,10 +213,8 @@ main_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL rec
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

@@ -247,12 +247,8 @@ _struct_arg_member_L3
                 DEY
                 BPL     _struct_arg_member_L3
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _struct_arg_member_L2
@@ -291,12 +287,8 @@ _struct_arg_member_L5
                 DEY
                 BPL     _struct_arg_member_L5
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _struct_arg_member_L4
@@ -327,12 +319,8 @@ _struct_arg_member_L7
                 DEY
                 BPL     _struct_arg_member_L7
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _struct_arg_member_L6
@@ -363,12 +351,8 @@ _struct_arg_member_L9
                 DEY
                 BPL     _struct_arg_member_L9
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _struct_arg_member_L8

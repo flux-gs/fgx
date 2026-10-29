@@ -3716,9 +3716,7 @@ _ldouble_arith_L38
                 FGX2_FARCALL _fcc_dtol
                 PHA
                 FGX2_FARCALL _ldouble_arith_trunc3
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _ldouble_arith_L39
@@ -3743,12 +3741,10 @@ _ldouble_arith_L39
                 TYA
                 PHA
                 FGX2_FARCALL _ldouble_arith_half
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     17,S   ; fccstk d=0 b=17
                 TAY
                 LDA     _fcc_long_hi

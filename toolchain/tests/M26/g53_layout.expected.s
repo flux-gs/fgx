@@ -323,9 +323,7 @@ main_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL layout
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

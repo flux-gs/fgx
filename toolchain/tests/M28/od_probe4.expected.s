@@ -553,12 +553,10 @@ main_stkok        TCS
                 PHA
                 RTL
 _od_probe4_L0
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CLC
                 ADC     #25

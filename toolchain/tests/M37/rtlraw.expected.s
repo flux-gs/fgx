@@ -250,12 +250,10 @@ probe_stkok        TCS
                 PHA
                 FGX2_FARCALL vsum2
                 TAY
-                PLA
-                PLA
-                PLA
-                PLA
-                PLA
-                PLA
+                TSC
+                CLC
+                ADC     #12
+                TCS
                 TYA
                 TAY
                 TSC

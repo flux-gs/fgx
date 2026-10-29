@@ -124,9 +124,7 @@ _dpband_L3
                 AND     #$00FF
                 PHA
                 FGX2_FARCALL leaf
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -241,12 +239,9 @@ _dpband_L7
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL walk
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -405,12 +400,9 @@ _dpband_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL rec
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -573,9 +565,7 @@ _dpband_L17
                 LDA     _fcc_img19
                 PHA
                 FGX2_FARCALL leaf
-                TAY
-                PLA
-                TYA
+                PLY
 _dpband_L14
                 INC     _fcc_img18
                 BRA     _dpband_L13
@@ -707,17 +697,13 @@ _dpband_L21
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL deep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _dpband_L22
                 LDA     _fcc_img18
                 PHA
                 FGX2_FARCALL leaf
-                TAY
-                PLA
-                TYA
+                PLY
 _dpband_L19
                 INC     _fcc_img18
                 BRA     _dpband_L18
@@ -809,9 +795,7 @@ _dpband_L26
                 LDA     _fcc_img18
                 PHA
                 FGX2_FARCALL leaf
-                TAY
-                PLA
-                TYA
+                PLY
 _dpband_L24
                 INC     _fcc_img18
                 BRA     _dpband_L23
@@ -856,12 +840,8 @@ _dpband_L27
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #44
                 BNE     _dpband_L28
@@ -887,12 +867,9 @@ _dpband_L28
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL rec
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #2993
                 BNE     _dpband_L29
@@ -916,12 +893,8 @@ _dpband_L29
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL outer
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     #97
                 CLC

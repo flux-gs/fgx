@@ -52,10 +52,8 @@ mk_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL calloc
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -284,12 +282,10 @@ grow_stkok        TCS
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL realloc
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -426,12 +422,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL mk
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAX
                 CMP     #1
@@ -528,12 +520,9 @@ _pptr_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL grow
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pptr_L13
                 LDA     #1
                 TAY
@@ -646,10 +635,8 @@ _pptr_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL free
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #42
                 TAY
                 TSC

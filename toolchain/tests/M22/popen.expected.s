@@ -44,12 +44,10 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL popen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -263,12 +261,9 @@ _popen_L8
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL pclose
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _popen_L11
                 LDA     #5
                 TAY
@@ -301,12 +296,10 @@ _popen_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL popen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -358,20 +351,17 @@ _popen_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fputs
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL pclose
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _popen_L15
                 LDA     #7
                 TAY
@@ -404,12 +394,10 @@ _popen_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL popen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -450,12 +438,8 @@ _popen_L16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL pclose
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     #3
                 ASL
@@ -492,12 +476,8 @@ _popen_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pclose
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BEQ     _popen_L20
                 LDA     #10

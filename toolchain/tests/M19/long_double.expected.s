@@ -518,12 +518,10 @@ _long_double_L5
                 TYA
                 PHA
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi

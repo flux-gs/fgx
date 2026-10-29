@@ -253,12 +253,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL malloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -314,10 +310,9 @@ _memsetbig_L7
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #40000
                 PHA
                 LDA     #0
@@ -329,10 +324,10 @@ _memsetbig_L7
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 AND     #$00FF
                 PHA
@@ -345,12 +340,11 @@ _memsetbig_L7
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _memsetbig_L10
                 LDA     #44
                 TAY
@@ -425,10 +419,9 @@ _memsetbig_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #40000
                 PHA
                 LDA     #92
@@ -440,10 +433,10 @@ _memsetbig_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #92
                 AND     #$00FF
                 PHA
@@ -456,12 +449,11 @@ _memsetbig_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _memsetbig_L13
                 LDA     #46
                 TAY
@@ -536,10 +528,9 @@ _memsetbig_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #32766
                 PHA
                 LDA     #0
@@ -551,10 +542,10 @@ _memsetbig_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 AND     #$00FF
                 PHA
@@ -567,12 +558,11 @@ _memsetbig_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memsetbig_L17
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -616,10 +606,9 @@ _memsetbig_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #32766
                 TAX
                 INC
@@ -633,10 +622,10 @@ _memsetbig_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 AND     #$00FF
                 PHA
@@ -651,12 +640,11 @@ _memsetbig_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memsetbig_L19
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -702,10 +690,9 @@ _memsetbig_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #32766
                 TAX
                 INC
@@ -720,10 +707,10 @@ _memsetbig_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 AND     #$00FF
                 PHA
@@ -739,12 +726,11 @@ _memsetbig_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memsetbig_L21
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
@@ -791,10 +777,9 @@ _memsetbig_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #0
@@ -806,10 +791,10 @@ _memsetbig_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL memset
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_ptr+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -851,10 +836,9 @@ _memsetbig_L22
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_poison
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #40000
                 PHA
                 LDA     9,S   ; fccstk d=2 b=7
@@ -864,10 +848,9 @@ _memsetbig_L22
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bzero
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 AND     #$00FF
                 PHA
@@ -880,12 +863,11 @@ _memsetbig_L22
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memsetbig_check
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _memsetbig_L23
                 LDA     #52
                 TAY

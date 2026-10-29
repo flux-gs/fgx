@@ -192,12 +192,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL opendir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img19
                 LDA     _fcc_fpr0
@@ -246,12 +242,8 @@ _dirops_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL opendir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img21
                 LDA     _fcc_fpr0
@@ -284,12 +276,8 @@ _dirops_L7
                 PEI     _fcc_img21
                 PEI     _fcc_img20
                 FGX2_FARCALL readdir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -320,6 +308,7 @@ _dirops_L10
                 BEQ     _dirops_L8
                 LDY     #2
                 LDA     [_fcc_img18],Y
+                CMP     #0
                 BNE     _dirops_L8
                 LDA     21,S   ; fccstk d=0 b=21
                 TAX
@@ -331,10 +320,8 @@ _dirops_L8
                 PEI     _fcc_img21
                 PEI     _fcc_img20
                 FGX2_FARCALL closedir
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _dirops_L5
 _dirops_L11
                 LDAL    KFGX_YIELD_MIRROR
@@ -344,12 +331,8 @@ _dirops_L11
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL readdir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -427,12 +410,11 @@ _dirops_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL nameis
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _dirops_L20
                 LDA     #1
                 STA     15,S   ; fccstk d=0 b=15
@@ -457,12 +439,10 @@ _dirops_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL nameis
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _dirops_L21
                 LDA     #1
@@ -508,12 +488,9 @@ _dirops_L25
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL closedir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     *+5
                 BRL     _dirops_L26
                 SEP     #$20
@@ -528,12 +505,8 @@ _dirops_L25
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL opendir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img19
                 LDA     _fcc_fpr0
@@ -566,12 +539,8 @@ _dirops_L29
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL readdir
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -621,10 +590,8 @@ _dirops_L30
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL closedir
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _dirops_L27
 _dirops_L26
                 LDA     21,S   ; fccstk d=0 b=21

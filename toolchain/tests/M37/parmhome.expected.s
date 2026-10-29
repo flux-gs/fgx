@@ -250,10 +250,9 @@ kinds_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL touch
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
@@ -317,10 +316,9 @@ _parmhome_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL touch
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 AND     #$00FF
                 TAX
@@ -502,10 +500,9 @@ _parmhome_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL touch
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img19
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img18
@@ -587,10 +584,9 @@ addr_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL touch
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -919,10 +915,8 @@ _parmhome_L17
                 LDA     #1
                 PHA
                 FGX2_FARCALL addr
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #37
                 BEQ     _parmhome_L20

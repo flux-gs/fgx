@@ -113,17 +113,13 @@ main_stkok        TCS
                 LDA     g_type
                 PHA
                 FGX2_FARCALL _enum_as_type_take_enum
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 PHA
                 LDA     g_vnode+2
                 PHA
                 FGX2_FARCALL _enum_as_type_take_enum
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -143,12 +139,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _enum_as_type_take_enum_ptr
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

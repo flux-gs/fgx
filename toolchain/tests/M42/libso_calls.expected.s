@@ -175,9 +175,7 @@ _libso_calls_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 PHA
                 FGX2_FARCALL _libso_calls_helper
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #16
                 BNE     _libso_calls_L1

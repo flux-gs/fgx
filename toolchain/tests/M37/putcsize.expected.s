@@ -154,12 +154,9 @@ _putcsize_L5
                 AND     #$00FF
                 PHA
                 FGX2_FARCALL _flsbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
 _putcsize_L6
                 BRA     _putcsize_L3
 _putcsize_L2
@@ -179,12 +176,9 @@ _putcsize_L2
                 AND     #$00FF
                 PHA
                 FGX2_FARCALL _flsbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
 _putcsize_L3
 _putcsize_L1
                 TAY
@@ -274,12 +268,9 @@ main_stkok        TCS
                 LDA     #97
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #97
                 BNE     _putcsize_L7
@@ -298,12 +289,9 @@ main_stkok        TCS
                 LDA     #98
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #98
                 BNE     _putcsize_L7
                 LDA     1,S   ; fccstk d=0 b=1
@@ -330,12 +318,9 @@ _putcsize_L7
                 LDA     #99
                 PHA
                 FGX2_FARCALL put
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #99
                 BNE     _putcsize_L8
                 LDA     3,S   ; fccstk d=0 b=3

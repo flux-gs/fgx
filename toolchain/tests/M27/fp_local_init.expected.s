@@ -139,9 +139,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _fp_local_init_L2
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #10
                 PHA
@@ -162,9 +160,7 @@ _fp_local_init_L2
                 PHA
                 RTL
 _fp_local_init_L3
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

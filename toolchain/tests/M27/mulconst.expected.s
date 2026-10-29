@@ -193,9 +193,7 @@ _mulconst_L6
                 LDA     #3
                 PHA
                 FGX2_FARCALL _mulconst_times
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

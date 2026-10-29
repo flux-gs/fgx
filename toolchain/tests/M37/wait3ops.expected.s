@@ -211,12 +211,10 @@ _wait3ops_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL spawnv
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDX     #0
                 STA     _fcc_tmp_b

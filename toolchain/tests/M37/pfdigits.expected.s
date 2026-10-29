@@ -57,12 +57,10 @@ same_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 LDA     #0
                 STA     _fcc_tmp_b
@@ -147,12 +145,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -225,12 +220,8 @@ _pfdigits_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _pfdigits_L1
                 LDA     1,S   ; fccstk d=0 b=1
@@ -302,12 +293,9 @@ _pfdigits_L1
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L2
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -370,12 +358,9 @@ _pfdigits_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -444,12 +429,9 @@ _pfdigits_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L4
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -512,12 +494,9 @@ _pfdigits_L4
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -581,12 +560,9 @@ _pfdigits_L5
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _pfdigits_L6
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX

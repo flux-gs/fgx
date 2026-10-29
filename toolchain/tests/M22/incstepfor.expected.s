@@ -94,9 +94,7 @@ main_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL sumto
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #15
                 BEQ     _incstepfor_L4
@@ -114,9 +112,7 @@ _incstepfor_L4
                 LDA     #10
                 PHA
                 FGX2_FARCALL sumto
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #55
                 BEQ     _incstepfor_L5

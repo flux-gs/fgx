@@ -111,9 +111,7 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL classify
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

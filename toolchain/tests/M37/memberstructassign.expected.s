@@ -354,10 +354,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_fill
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -376,10 +374,8 @@ main_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -409,12 +405,9 @@ _memberstructassign_L5
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L6
                 LDA     #10
                 PHA
@@ -422,12 +415,8 @@ _memberstructassign_L5
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -458,10 +447,8 @@ _memberstructassign_L6
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -483,12 +470,9 @@ _memberstructassign_L7
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L8
                 LDA     #20
                 PHA
@@ -496,12 +480,8 @@ _memberstructassign_L7
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -531,10 +511,8 @@ _memberstructassign_L8
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img19
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img18
@@ -564,10 +542,8 @@ _memberstructassign_L9
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -591,12 +567,9 @@ _memberstructassign_L10
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L11
                 LDA     #30
                 PHA
@@ -604,12 +577,8 @@ _memberstructassign_L10
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -660,10 +629,8 @@ _memberstructassign_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -698,10 +665,8 @@ _memberstructassign_L13
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -730,12 +695,9 @@ _memberstructassign_L14
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L15
                 LDA     #40
                 PHA
@@ -743,12 +705,8 @@ _memberstructassign_L14
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -774,10 +732,8 @@ _memberstructassign_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 ASL
                 INC
@@ -819,10 +775,8 @@ _memberstructassign_L16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -858,12 +812,9 @@ _memberstructassign_L17
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L18
                 LDA     #50
                 PHA
@@ -871,12 +822,8 @@ _memberstructassign_L17
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1119,10 +1066,8 @@ _memberstructassign_L26
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -1152,12 +1097,9 @@ _memberstructassign_L27
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L28
                 LDA     #70
                 PHA
@@ -1165,12 +1107,8 @@ _memberstructassign_L27
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1196,10 +1134,8 @@ _memberstructassign_L28
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1244,12 +1180,8 @@ _memberstructassign_L29
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _memberstructassign_L30
                 LDA     #80
@@ -1268,12 +1200,8 @@ _memberstructassign_L29
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1320,10 +1248,8 @@ _memberstructassign_L34
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _memberstructassign_L32
                 INC     _fcc_img24
                 BRA     _memberstructassign_L31
@@ -1380,12 +1306,9 @@ _memberstructassign_L35
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L36
                 LDA     #90
                 PHA
@@ -1403,12 +1326,8 @@ _memberstructassign_L35
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1518,10 +1437,8 @@ _memberstructassign_L38
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -1576,12 +1493,9 @@ _memberstructassign_L39
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L40
                 LDA     #100
                 PHA
@@ -1599,12 +1513,8 @@ _memberstructassign_L39
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1658,10 +1568,8 @@ _memberstructassign_L42
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -1706,12 +1614,9 @@ _memberstructassign_L43
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _memberstructassign_L44
                 LDA     #110
                 PHA
@@ -1729,12 +1634,8 @@ _memberstructassign_L43
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _memberstructassign_landed
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -1774,10 +1675,8 @@ _memberstructassign_L46
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _memberstructassign_clear
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16

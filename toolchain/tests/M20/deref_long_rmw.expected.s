@@ -208,10 +208,8 @@ _deref_long_rmw_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pop
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     5,S   ; fccstk d=0 b=5
                 PHA
                 LDA     g_v+2

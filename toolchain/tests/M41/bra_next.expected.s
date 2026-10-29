@@ -80,10 +80,8 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL f
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #42
                 BEQ     _bra_next_L2
@@ -103,10 +101,8 @@ _bra_next_L2
                 LDA     #1
                 PHA
                 FGX2_FARCALL f
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

@@ -234,12 +234,11 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _fltpr_ecvt_L3
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -330,12 +329,11 @@ _fltpr_ecvt_L2
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _fltpr_ecvt_L5
                 LDA     1,S   ; fccstk d=0 b=1
                 TAX
@@ -431,12 +429,11 @@ _fltpr_ecvt_L4
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _fltpr_ecvt_L7
                 LDA     1,S   ; fccstk d=0 b=1
                 CMP     #$FFFE
@@ -527,12 +524,11 @@ _fltpr_ecvt_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L8
                 LDA     #4
                 TAY
@@ -615,12 +611,11 @@ _fltpr_ecvt_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L9
                 LDA     #5
                 TAY
@@ -703,12 +698,11 @@ _fltpr_ecvt_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L10
                 LDA     #6
                 TAY
@@ -791,12 +785,11 @@ _fltpr_ecvt_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L11
                 LDA     #7
                 TAY
@@ -879,12 +872,11 @@ _fltpr_ecvt_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L12
                 LDA     #8
                 TAY
@@ -967,12 +959,11 @@ _fltpr_ecvt_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L13
                 LDA     #9
                 TAY
@@ -1055,12 +1046,11 @@ _fltpr_ecvt_L13
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L14
                 LDA     #10
                 TAY
@@ -1159,12 +1149,10 @@ _fltpr_ecvt_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BNE     _fltpr_ecvt_L15
                 LDA     #11
@@ -1246,12 +1234,11 @@ _fltpr_ecvt_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L16
                 LDA     #12
                 TAY
@@ -1276,12 +1263,8 @@ _fltpr_ecvt_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atof
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1319,6 +1302,7 @@ _fltpr_ecvt_L16
                 LDA     #0
                 BRA     *+5
                 LDA     #1
+                CMP     #0
                 BEQ     _fltpr_ecvt_L17
                 LDA     #13
                 TAY
@@ -1343,12 +1327,8 @@ _fltpr_ecvt_L17
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atof
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1382,6 +1362,7 @@ _fltpr_ecvt_L17
                 LDA     #0
                 BRA     *+5
                 LDA     #1
+                CMP     #0
                 BEQ     _fltpr_ecvt_L18
                 LDA     #14
                 TAY
@@ -1406,12 +1387,8 @@ _fltpr_ecvt_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL atof
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -1756,12 +1733,11 @@ _fltpr_ecvt_L22
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L23
                 LDA     #18
                 TAY
@@ -1844,12 +1820,11 @@ _fltpr_ecvt_L23
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL streq
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _fltpr_ecvt_L24
                 LDA     #19
                 TAY

@@ -171,9 +171,7 @@ _stkfloor_L1
                 SBC     #1
                 PHA
                 FGX2_FARCALL rec
-                TAY
-                PLA
-                TYA
+                PLY
 _stkfloor_L0
                 TAY
                 TSC
@@ -204,9 +202,7 @@ main_stkok        TCS
                 LDA     depth
                 PHA
                 FGX2_FARCALL rec
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #42
                 TAY
                 TSC

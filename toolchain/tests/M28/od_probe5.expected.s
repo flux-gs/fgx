@@ -281,9 +281,7 @@ _od_probe5_L3
                 PHA
                 RTL
 _od_probe5_L4
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

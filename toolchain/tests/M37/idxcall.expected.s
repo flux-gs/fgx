@@ -173,9 +173,7 @@ main_stkok        TCS
                 LDA     #7
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 CLC
                 ADC     1,S
                 STA     _fcc_ptr
@@ -200,9 +198,7 @@ _idxcall_L0
                 LDA     #2
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 ASL
                 CLC
                 ADC     1,S
@@ -227,9 +223,7 @@ _idxcall_L1
                 LDA     #1
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 ASL
                 ASL
                 CLC
@@ -269,9 +263,7 @@ _idxcall_L2
                 LDA     #2
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 ASL
                 ASL
                 CLC
@@ -306,9 +298,7 @@ _idxcall_L3
                 LDA     #3
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 CLC
                 ADC     1,S
                 TAY
@@ -362,9 +352,7 @@ _idxcall_L4
                 LDA     #4
                 PHA
                 FGX2_FARCALL via
-                TAY
-                PLA
-                TYA
+                PLY
                 CLC
                 ADC     1,S
                 TAY

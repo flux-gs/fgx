@@ -136,9 +136,7 @@ _indir_promote_L8
                 PHA
                 RTL
 _indir_promote_L9
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

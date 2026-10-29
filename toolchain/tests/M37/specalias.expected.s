@@ -22,9 +22,7 @@ kc_panic_stkok        TCS
                 LDA     #99
                 PHA
                 FGX2_FARCALL exit
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC
@@ -338,9 +336,7 @@ _specalias_fs_close_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -371,9 +367,7 @@ _specalias_fs_inactive_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -404,9 +398,7 @@ _specalias_fs_reclaim_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -437,9 +429,7 @@ _specalias_sp_close_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -470,9 +460,7 @@ _specalias_sp_lock_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -503,9 +491,7 @@ _specalias_sp_unlock_stkok        TCS
                 LDA     #6
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -536,9 +522,7 @@ _specalias_sp_inactive_stkok        TCS
                 LDA     #7
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -569,9 +553,7 @@ _specalias_sp_reclaim_stkok        TCS
                 LDA     #8
                 PHA
                 FGX2_FARCALL _specalias_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -1092,10 +1074,9 @@ _specalias_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _specalias_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     vnode_free_head
                 TAY
@@ -1134,10 +1115,9 @@ _specalias_L19
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _specalias_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img18
 _specalias_L21
@@ -1187,10 +1167,8 @@ _specalias_L24
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L22
                 INC     _fcc_img18
                 BRA     _specalias_L21
@@ -1622,19 +1600,15 @@ _specalias_L27
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L30
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -1644,10 +1618,8 @@ _specalias_L30
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L31
                 LDA     #0
                 STA     [_fcc_img16]
@@ -1860,10 +1832,10 @@ _specalias_L32
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1972,10 +1944,8 @@ _specalias_L35
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L34
                 DO      8+vref_FRAMESIZE/256
                 TSC
@@ -2066,10 +2036,8 @@ vget_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 TAY
                 TSC
@@ -2085,10 +2053,8 @@ _specalias_L36
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L37
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -2178,10 +2144,8 @@ _specalias_L39
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L38
                 LDY     #2
                 LDA     [_fcc_img16],Y
@@ -2214,10 +2178,8 @@ _specalias_L40
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
@@ -2393,10 +2355,8 @@ _specalias_L44
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L43
                 DO      8+holdrele_FRAMESIZE/256
                 TSC
@@ -2909,10 +2869,8 @@ _specalias_L53
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -3212,15 +3170,14 @@ _specalias_L63
 _specalias_L62
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _specalias_L64
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -3230,12 +3187,8 @@ _specalias_L64
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vget
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _specalias_L65
                 LDAL    KFGX_YIELD_MIRROR
@@ -3295,6 +3248,7 @@ _specalias_L69
                 BNE     _specalias_L67
                 LDY     #58
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     *+5
                 BRL     _specalias_L66
 _specalias_L67
@@ -3308,12 +3262,8 @@ _specalias_L67
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL _specalias_specalloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -3461,10 +3411,8 @@ _specalias_L72
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L70
                 LDA     #0
                 STA     _fcc_fpr0
@@ -3474,7 +3422,7 @@ _specalias_L70
                 CLC
                 ADC     #checkalias_FRAMESIZE-8
                 TCS
-                BRL     checkalias_bandx
+                BRA     checkalias_bandx
 _specalias_L66
                 LDA     #0
                 PHA
@@ -3482,10 +3430,9 @@ _specalias_L66
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img18],Y
                 PHA
@@ -3539,10 +3486,10 @@ _specalias_L66
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -3775,10 +3722,8 @@ _specalias_L76
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vput
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -4057,9 +4002,7 @@ _specalias_L83
                 FIN
                 PHA
                 FGX2_FARCALL chrtoblk
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img18
                 TAX
                 CMP     #65535
@@ -4455,15 +4398,14 @@ _specalias_L99
 _specalias_L98
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _specalias_L100
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4615,10 +4557,8 @@ _specalias_L101
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4683,10 +4623,8 @@ vclean_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vref
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L102
                 LDA     [_fcc_img16]
                 TAX
@@ -4704,10 +4642,8 @@ _specalias_L102
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L103
                 LDA     [_fcc_img16]
                 TAX
@@ -4778,10 +4714,9 @@ _specalias_L104
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vinvalbuf
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
 _specalias_L105
                 LDY     #22
                 LDA     [_fcc_img16],Y
@@ -5007,10 +4942,8 @@ _specalias_L112
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L111
                 LDA     5,S   ; fccstk d=0 b=5
                 BEQ     _specalias_L113
@@ -5018,10 +4951,8 @@ _specalias_L111
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L113
                 LDA     [_fcc_img16]
                 PHA
@@ -5051,10 +4982,8 @@ _specalias_L113
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L114
                 TAY
                 TSC
@@ -5130,10 +5059,8 @@ vgone_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -5147,10 +5074,9 @@ _specalias_L115
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -5160,10 +5086,10 @@ _specalias_L115
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -5217,10 +5143,8 @@ _specalias_L120
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L118
                 LDY     #54
                 LDA     [_fcc_img16],Y
@@ -5485,10 +5409,8 @@ _specalias_L133
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L131
 _specalias_L124
                 LDA     [_fcc_img16]
@@ -5627,10 +5549,8 @@ _specalias_L137
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L140
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -5666,10 +5586,8 @@ _specalias_L134
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _specalias_specfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -5706,10 +5624,8 @@ _specalias_L116
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 SEP     #$20
                 MX      %10
@@ -5926,10 +5842,8 @@ vflush_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L145
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
@@ -6066,15 +5980,14 @@ _specalias_L152
 _specalias_L155
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _specalias_L156
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _specalias_L147
 _specalias_L156
                 LDA     _fcc_img22
@@ -6096,10 +6009,8 @@ _specalias_L156
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _specalias_L159
 _specalias_L158
                 LDA     #0
@@ -6108,10 +6019,9 @@ _specalias_L158
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     _specalias_vfs_specops+2
@@ -6144,10 +6054,8 @@ _specalias_L162
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _specalias_L147
 _specalias_L160
                 LDA     _fcc_img16
@@ -6179,10 +6087,10 @@ _specalias_L160
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _specalias_L159
                 BRA     _specalias_L147
 _specalias_L157
@@ -6725,10 +6633,8 @@ ndget_stkok        TCS
                 FGX2_FARCALL kc_curpid
                 PHA
                 FGX2_FARCALL ndslot
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -7237,10 +7143,8 @@ _specalias_L195
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L193
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -8099,10 +8003,8 @@ _specalias_ncdetach_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 STA     [_fcc_img16]
                 SEP     #$20
@@ -8488,10 +8390,8 @@ _specalias_L210
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L211
                 DEC     _fcc_img20
                 BRL     _specalias_L210
@@ -9312,26 +9212,20 @@ _specalias_L239
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _specalias_L235
                 LDA     _fcc_img21
                 STA     _fcc_fpr0+2
@@ -9508,12 +9402,8 @@ _specalias_L246
                 TYA
                 PHA
                 FGX2_FARCALL _specalias_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img21
                 LDA     _fcc_fpr0
@@ -9828,10 +9718,8 @@ _specalias_L263
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #2
                 TAY
                 TSC
@@ -9936,10 +9824,8 @@ _specalias_L265
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
@@ -9976,26 +9862,20 @@ _specalias_L260
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -10145,18 +10025,14 @@ _specalias_L270
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
@@ -10398,22 +10274,18 @@ _specalias_L277
                 TYA
                 PHA
                 FGX2_FARCALL _specalias_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _specalias_ncinshash
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -10684,10 +10556,8 @@ _specalias_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10702,10 +10572,8 @@ _specalias_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfs_setspecops
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     mnt_a+16
                 TAY
@@ -12184,9 +12052,7 @@ _specalias_L348
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #4
                 BEQ     _specalias_L351
@@ -12223,12 +12089,11 @@ _specalias_L351
                 LDA     #769
                 PHA
                 FGX2_FARCALL vfinddev
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _specalias_L352
                 LDA     #82
                 TAY
@@ -12324,12 +12189,11 @@ _specalias_L353
                 LDA     #769
                 PHA
                 FGX2_FARCALL vfinddev
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _specalias_L358
                 LDA     #84
                 TAY
@@ -12395,12 +12259,10 @@ _specalias_L359
                 LDA     #770
                 PHA
                 FGX2_FARCALL vfinddev
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _specalias_L362
@@ -12422,12 +12284,8 @@ _specalias_L362
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _specalias_L363
@@ -12449,10 +12307,8 @@ _specalias_L363
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vref
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12460,12 +12316,8 @@ _specalias_L363
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #3
                 BEQ     _specalias_L364
@@ -12487,12 +12339,8 @@ _specalias_L364
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #3
                 BEQ     _specalias_L365
@@ -12514,10 +12362,8 @@ _specalias_L365
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     15,S   ; fccstk d=0 b=15
                 STA     _fcc_fpr0+2
                 LDA     13,S   ; fccstk d=0 b=13
@@ -12525,12 +12371,8 @@ _specalias_L365
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     17,S   ; fccstk d=2 b=15
                 STA     _fcc_fpr0+2
@@ -12562,10 +12404,8 @@ _specalias_L366
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _specalias_spec_inuse
                 PHA
                 LDA     27,S   ; fccstk d=2 b=25
@@ -12877,9 +12717,7 @@ _specalias_L382
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #3
                 BEQ     _specalias_L385
@@ -12921,10 +12759,8 @@ _specalias_L386
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -12973,9 +12809,7 @@ _specalias_L387
                 LDA     27,S   ; fccstk d=0 b=27
                 PHA
                 FGX2_FARCALL _specalias_chainlen
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _specalias_L390
@@ -13006,12 +12840,10 @@ _specalias_L390
                 LDA     #770
                 PHA
                 FGX2_FARCALL bdevvp
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _specalias_L391
                 LDA     #104
                 TAY
@@ -13546,9 +13378,8 @@ _specalias_L416
                 LDA     #8
                 PHA
                 FGX2_FARCALL _specalias_saw
-                TAY
-                PLA
-                TYA
+                PLY
+                CMP     #0
                 BNE     _specalias_L417
                 LDA     #120
                 TAY
@@ -13564,9 +13395,8 @@ _specalias_L417
                 LDA     #4
                 PHA
                 FGX2_FARCALL _specalias_saw
-                TAY
-                PLA
-                TYA
+                PLY
+                CMP     #0
                 BEQ     _specalias_L418
                 LDA     #121
                 TAY
@@ -13599,10 +13429,8 @@ _specalias_L419
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vput
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _specalias_reset
                 SEP     #$20
                 MX      %10
@@ -13736,10 +13564,8 @@ _specalias_L421
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     27,S   ; fccstk d=0 b=27
                 ASL
                 ASL
@@ -14609,9 +14435,8 @@ _specalias_L466
                 LDA     #1
                 PHA
                 FGX2_FARCALL _specalias_saw
-                TAY
-                PLA
-                TYA
+                PLY
+                CMP     #0
                 BEQ     _specalias_L467
                 LDA     #146
                 TAY
@@ -14627,9 +14452,8 @@ _specalias_L467
                 LDA     #3
                 PHA
                 FGX2_FARCALL _specalias_saw
-                TAY
-                PLA
-                TYA
+                PLY
+                CMP     #0
                 BNE     _specalias_L468
                 LDA     #147
                 TAY

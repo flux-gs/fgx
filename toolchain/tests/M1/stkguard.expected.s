@@ -99,9 +99,7 @@ recurse_stkok        TCS
                 INC
                 PHA
                 FGX2_FARCALL recurse
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -153,9 +151,7 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL recurse
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

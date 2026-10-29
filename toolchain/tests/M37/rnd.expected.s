@@ -22,9 +22,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL srand
-                TAY
-                PLA
-                TYA
+                PLY
                 FGX2_FARCALL rand
                 TAX
                 CMP     #16838
@@ -73,9 +71,7 @@ _rnd_L2
                 LDA     #7
                 PHA
                 FGX2_FARCALL srandom
-                TAY
-                PLA
-                TYA
+                PLY
                 FGX2_FARCALL random
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
@@ -133,9 +129,7 @@ _rnd_L4
                 LDA     #42
                 PHA
                 FGX2_FARCALL srand
-                TAY
-                PLA
-                TYA
+                PLY
                 FGX2_FARCALL rand
                 TAX
                 LDA     #5
@@ -155,9 +149,7 @@ _rnd_L4
                 ADC     _fcc_tmp_b
                 PHA
                 FGX2_FARCALL abs
-                TAY
-                PLA
-                TYA
+                PLY
                 LDX     #80
                 STX     _fcc_tmp_b
                 JSR     _fcc_mods16
@@ -182,18 +174,14 @@ _rnd_L5
                 LDA     #$FFF9
                 PHA
                 FGX2_FARCALL abs
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #7
                 BNE     _rnd_L8
                 LDA     #7
                 PHA
                 FGX2_FARCALL abs
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #7
                 BEQ     _rnd_L7

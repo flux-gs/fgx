@@ -12980,12 +12980,8 @@ _softdouble_L145
                 TYA
                 PHA
                 FGX2_FARCALL __floatsidf
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -13080,12 +13076,10 @@ _softdouble_L145
                 TYA
                 PHA
                 FGX2_FARCALL __fixdfsi
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -13185,12 +13179,8 @@ _softdouble_L151
                 TYA
                 PHA
                 FGX2_FARCALL __extendsfdf2
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -13285,12 +13275,10 @@ _softdouble_L151
                 TYA
                 PHA
                 FGX2_FARCALL __truncdfsf2
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA

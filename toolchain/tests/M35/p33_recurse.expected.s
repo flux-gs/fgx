@@ -70,9 +70,7 @@ _p33_recurse_L0
                 DEC
                 PHA
                 FGX2_FARCALL fib
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 DO      6+fib_FRAMESIZE/256
                 TSC
@@ -89,9 +87,7 @@ _p33_recurse_L0
                 DEC
                 PHA
                 FGX2_FARCALL fib
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
@@ -179,9 +175,7 @@ _p33_recurse_L2
                 SBC     #1
                 PHA
                 FGX2_FARCALL fact
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -214,9 +208,7 @@ main_stkok        TCS
                 LDA     #10
                 PHA
                 FGX2_FARCALL fib
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #55
                 BEQ     _p33_recurse_L4
@@ -234,9 +226,7 @@ _p33_recurse_L4
                 LDA     #5
                 PHA
                 FGX2_FARCALL fact
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #120
                 BEQ     _p33_recurse_L5
@@ -254,9 +244,7 @@ _p33_recurse_L5
                 LDA     #15
                 PHA
                 FGX2_FARCALL fib
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #610
                 BEQ     _p33_recurse_L6

@@ -75,9 +75,7 @@ _fn_recurse_L0
                 SBC     #1
                 PHA
                 FGX2_FARCALL fact
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 JSR     _fcc_mul16
@@ -110,9 +108,7 @@ main_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL fact
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

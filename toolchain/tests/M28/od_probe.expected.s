@@ -206,12 +206,10 @@ main_stkok        TCS
                 PHA
                 RTL
 _od_probe_L0
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

@@ -103,9 +103,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL retneg
-                TAY
-                PLA
-                TYA
+                PLY
                 LDX     #65535
                 STX     _fcc_long_b_lo
                 LDX     #65535
@@ -127,9 +125,7 @@ _retlongneg_L1
                 LDA     #1
                 PHA
                 FGX2_FARCALL retneg
-                TAY
-                PLA
-                TYA
+                PLY
                 LDX     #0
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -151,9 +147,7 @@ _retlongneg_L2
                 LDA     #0
                 PHA
                 FGX2_FARCALL retneg
-                TAY
-                PLA
-                TYA
+                PLY
                 LDX     #65
                 STX     _fcc_long_b_lo
                 LDX     #0

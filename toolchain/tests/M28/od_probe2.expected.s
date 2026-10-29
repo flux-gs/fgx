@@ -158,10 +158,9 @@ main_stkok        TCS
                 PHA
                 RTL
 _od_probe2_L0
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     g_result
                 TAY
                 TSC

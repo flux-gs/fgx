@@ -154,9 +154,7 @@ _p33_soft_addr_L1
                 DEC
                 PHA
                 FGX2_FARCALL addr_of
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -483,9 +481,7 @@ _p33_soft_addr_L7
                 SBC     #1
                 PHA
                 FGX2_FARCALL elems
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -820,9 +816,7 @@ _p33_soft_addr_L13
                 DEC
                 PHA
                 FGX2_FARCALL rowsum
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -921,12 +915,8 @@ crosspath_sfok         STA     _fcc_sfp
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL psum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDY     #6
                 STA     [_fcc_sfp],Y
                 LDY     #4
@@ -986,9 +976,7 @@ _p33_soft_addr_L16
                 DEC
                 PHA
                 FGX2_FARCALL crosspath
-                TAY
-                PLA
-                TYA
+                PLY
                 LDY     #6
                 STA     [_fcc_sfp],Y
                 LDY     #6
@@ -1053,9 +1041,7 @@ main_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL addr_of
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #6
                 BEQ     _p33_soft_addr_L18
@@ -1073,9 +1059,7 @@ _p33_soft_addr_L18
                 LDA     #2
                 PHA
                 FGX2_FARCALL elems
-                TAY
-                PLA
-                TYA
+                PLY
                 LDX     #15
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -1097,9 +1081,7 @@ _p33_soft_addr_L19
                 LDA     #2
                 PHA
                 FGX2_FARCALL rowsum
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #18
                 BEQ     _p33_soft_addr_L20
@@ -1117,9 +1099,7 @@ _p33_soft_addr_L20
                 LDA     #2
                 PHA
                 FGX2_FARCALL crosspath
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #9
                 BEQ     _p33_soft_addr_L21

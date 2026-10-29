@@ -168,9 +168,7 @@ _bracescalar_L2
                 LDA     #1
                 PHA
                 FGX2_FARCALL f
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #2
                 CLC

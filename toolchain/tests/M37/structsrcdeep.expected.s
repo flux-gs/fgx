@@ -407,10 +407,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #200
                 PHA
                 PHA
@@ -427,10 +426,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img20
 _structsrcdeep_L4
@@ -524,16 +522,15 @@ _structsrcdeep_L7
                 REP     #$20
                 MX      %00
                 LDA     _fcc_fpr0
-                INC
-                INC
+                CLC
+                ADC     #2
                 STA     _fcc_fpr0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
 _structsrcdeep_L5
                 INC     _fcc_img20
                 BRL     _structsrcdeep_L4
@@ -558,10 +555,9 @@ _structsrcdeep_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 SEP     #$20
@@ -577,10 +573,9 @@ _structsrcdeep_L6
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -621,12 +616,10 @@ _structsrcdeep_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L9
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -649,10 +642,9 @@ _structsrcdeep_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -699,12 +691,10 @@ _structsrcdeep_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L11
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -774,12 +764,10 @@ _structsrcdeep_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L13
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -849,12 +837,10 @@ _structsrcdeep_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L15
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -879,10 +865,9 @@ _structsrcdeep_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_fill
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -935,12 +920,10 @@ _structsrcdeep_L16
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L17
                 LDA     17,S   ; fccstk d=0 b=17
                 TAX
@@ -1005,12 +988,9 @@ _structsrcdeep_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _structsrcdeep_L19
                 LDA     17,S   ; fccstk d=0 b=17
@@ -1066,12 +1046,10 @@ _structsrcdeep_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L21
                 LDA     #400
                 PHA
@@ -1089,12 +1067,10 @@ _structsrcdeep_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _structsrcdeep_same
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _structsrcdeep_L21
                 LDA     gt+2
                 TAX

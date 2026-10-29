@@ -33,12 +33,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL labs
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #5
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -55,12 +51,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL labs
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #5
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -77,12 +69,8 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL labs
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #0
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -119,12 +107,10 @@ _libcadds_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -155,10 +141,8 @@ _libcadds_L0
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #0
@@ -175,12 +159,10 @@ _libcadds_L0
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     7,S   ; fccstk d=0 b=7
                 SEP     #$20
                 MX      %10
@@ -196,12 +178,9 @@ _libcadds_L0
                 LDA     11,S   ; fccstk d=4 b=7
                 PHA
                 FGX2_FARCALL fdopen
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -313,18 +292,14 @@ _libcadds_L8
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _libcadds_L9
 _libcadds_L6
                 LDA     7,S   ; fccstk d=0 b=7
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
 _libcadds_L9
                 LDA     #0
                 PHA
@@ -342,12 +317,10 @@ _libcadds_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL open
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     7,S   ; fccstk d=0 b=7
                 SEP     #$20
                 MX      %10
@@ -363,12 +336,9 @@ _libcadds_L9
                 LDA     11,S   ; fccstk d=4 b=7
                 PHA
                 FGX2_FARCALL fdopen
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -424,18 +394,14 @@ _libcadds_L12
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _libcadds_L13
 _libcadds_L10
                 LDA     7,S   ; fccstk d=0 b=7
                 PHA
                 FGX2_FARCALL close
-                TAY
-                PLA
-                TYA
+                PLY
 _libcadds_L13
                 SEP     #$20
                 MX      %10
@@ -460,12 +426,10 @@ _libcadds_L13
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -501,10 +465,8 @@ _libcadds_L13
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     11,S   ; fccstk d=0 b=11
                 TAX
                 CMP     #4
@@ -552,12 +514,10 @@ _libcadds_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -565,12 +525,8 @@ _libcadds_L14
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fgetc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #97
@@ -581,12 +537,9 @@ _libcadds_L14
                 LDA     #90
                 PHA
                 FGX2_FARCALL ungetc
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #90
                 BNE     _libcadds_L15
@@ -594,12 +547,8 @@ _libcadds_L14
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fgetc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #90
                 BNE     _libcadds_L15
@@ -607,12 +556,8 @@ _libcadds_L14
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fgetc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #98
                 BNE     _libcadds_L15
@@ -626,10 +571,8 @@ _libcadds_L15
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -653,12 +596,10 @@ _libcadds_L15
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL fopen
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -671,12 +612,8 @@ _libcadds_L16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fgetc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BMI     _libcadds_L17
                 BRA     _libcadds_L16
@@ -687,12 +624,9 @@ _libcadds_L17
                 LDA     #81
                 PHA
                 FGX2_FARCALL ungetc
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #81
                 BNE     _libcadds_L18
@@ -700,12 +634,8 @@ _libcadds_L17
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fgetc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #81
                 BNE     _libcadds_L18
@@ -719,10 +649,8 @@ _libcadds_L18
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL fclose
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -735,10 +663,8 @@ _libcadds_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL unlink
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     5,S   ; fccstk d=0 b=5
                 TAY
                 TSC

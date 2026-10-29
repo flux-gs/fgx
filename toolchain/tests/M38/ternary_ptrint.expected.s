@@ -172,9 +172,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL _ternary_ptrint_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #1
@@ -245,9 +243,7 @@ _ternary_ptrint_L3
                 LDA     #2
                 PHA
                 FGX2_FARCALL _ternary_ptrint_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 TAX
                 CMP     #1
@@ -402,10 +398,9 @@ _ternary_ptrint_L13
                 LDA     #0
                 PHA
                 FGX2_FARCALL _ternary_ptrint_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BNE     _ternary_ptrint_L14
                 SEP     #$20
                 MX      %10
@@ -482,10 +477,9 @@ _ternary_ptrint_L19
                 LDA     #1
                 PHA
                 FGX2_FARCALL _ternary_ptrint_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BNE     _ternary_ptrint_L20
                 SEP     #$20
                 MX      %10
@@ -562,10 +556,9 @@ _ternary_ptrint_L25
                 LDA     #2
                 PHA
                 FGX2_FARCALL _ternary_ptrint_iv
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
+                CMP     #0
                 BNE     _ternary_ptrint_L26
                 SEP     #$20
                 MX      %10

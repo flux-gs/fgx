@@ -37,12 +37,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getpwnam
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -157,12 +153,11 @@ _pwdops_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _pwdops_L6
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -217,12 +212,11 @@ _pwdops_L11
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _pwdops_L9
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -233,9 +227,7 @@ _pwdops_L9
                 LDA     #0
                 PHA
                 FGX2_FARCALL getpwuid
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -285,12 +277,11 @@ _pwdops_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strcmp
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _pwdops_L12
                 LDA     5,S   ; fccstk d=0 b=5
                 TAX
@@ -310,12 +301,8 @@ _pwdops_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getpwnam
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2

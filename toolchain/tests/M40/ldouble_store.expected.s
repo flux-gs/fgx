@@ -1915,12 +1915,10 @@ _ldouble_store_L25
                 TYA
                 PHA
                 FGX2_FARCALL ident
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi
@@ -1991,12 +1989,10 @@ _ldouble_store_L26
                 TYA
                 PHA
                 FGX2_FARCALL kr
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 TAY
                 LDA     _fcc_long_hi

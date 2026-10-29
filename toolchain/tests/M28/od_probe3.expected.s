@@ -489,12 +489,10 @@ _od_probe3_L8
                 PHA
                 RTL
 _od_probe3_L10
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #16
                 BEQ     _od_probe3_L9

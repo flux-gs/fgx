@@ -126,18 +126,14 @@ main_stkok        TCS
                 LDA     #20
                 PHA
                 FGX2_FARCALL sub
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     #30
                 PHA
                 FGX2_FARCALL add
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

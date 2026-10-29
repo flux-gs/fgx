@@ -99,9 +99,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL lookup
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 CLC
                 ADC     #12
@@ -113,9 +111,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL lookup
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 CLC
                 ADC     #12
@@ -128,9 +124,7 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL lookup
-                TAY
-                PLA
-                TYA
+                PLY
                 LDY     #12
                 LDA     [_fcc_fpr0],Y
                 TAY

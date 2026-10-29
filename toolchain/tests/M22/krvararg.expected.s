@@ -24,10 +24,8 @@ main_stkok        TCS
                 LDA     #42
                 PHA
                 FGX2_FARCALL knr
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

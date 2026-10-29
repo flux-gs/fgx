@@ -640,12 +640,8 @@ _arraymemberdecay_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #3855
                 STX     _fcc_long_b_lo
                 LDX     #0
@@ -700,12 +696,8 @@ _arraymemberdecay_L10
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _arraymemberdecay_firstlong
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #255
                 STX     _fcc_long_b_lo
                 LDX     #0

@@ -45,12 +45,11 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL stat
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BNE     _statops_L0
                 LDA     1,S   ; fccstk d=0 b=1
                 CLC
@@ -115,12 +114,10 @@ _statops_L3
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL stat
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _statops_L4
                 LDA     1,S   ; fccstk d=0 b=1
@@ -132,9 +129,7 @@ _statops_L4
                 LDA     #2
                 PHA
                 FGX2_FARCALL strerror
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     [_fcc_fpr0]
                 AND     #$00FF
                 TAX

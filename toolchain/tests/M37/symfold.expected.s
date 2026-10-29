@@ -661,12 +661,9 @@ _symfold_L17
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL take
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #10
                 BEQ     _symfold_L18
@@ -715,12 +712,9 @@ _symfold_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL take
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     3,S   ; fccstk d=0 b=3
                 TAX
                 CMP     #9
@@ -817,12 +811,8 @@ _symfold_L23
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL addr
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_long_hi
                 PHA
@@ -842,12 +832,8 @@ _symfold_L23
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL addr
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     _fcc_long_b_lo
                 LDX     _fcc_long_hi
                 STX     _fcc_long_b_hi
@@ -1011,12 +997,11 @@ _symfold_L28
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL below
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _symfold_L30
                 PHA
                 SEP     #$20
@@ -1035,12 +1020,11 @@ _symfold_L28
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL below
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _symfold_L29
 _symfold_L30
                 LDA     #17

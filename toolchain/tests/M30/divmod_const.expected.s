@@ -133,16 +133,12 @@ main_stkok        TCS
                 LDA     #37
                 PHA
                 FGX2_FARCALL p2
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #37
                 PHA
                 FGX2_FARCALL np
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

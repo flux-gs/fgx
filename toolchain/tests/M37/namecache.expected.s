@@ -22,9 +22,7 @@ kc_panic_stkok        TCS
                 LDA     #99
                 PHA
                 FGX2_FARCALL exit
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC
@@ -677,10 +675,9 @@ _namecache_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     vnode_free_head
                 TAY
@@ -719,10 +716,9 @@ _namecache_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img18
 _namecache_L14
@@ -772,10 +768,8 @@ _namecache_L17
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L15
                 INC     _fcc_img18
                 BRA     _namecache_L14
@@ -1207,19 +1201,15 @@ _namecache_L20
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L23
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -1229,10 +1219,8 @@ _namecache_L23
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L24
                 LDA     #0
                 STA     [_fcc_img16]
@@ -1445,10 +1433,10 @@ _namecache_L25
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -1557,10 +1545,8 @@ _namecache_L28
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L27
                 DO      8+vref_FRAMESIZE/256
                 TSC
@@ -1651,10 +1637,8 @@ vget_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 TAY
                 TSC
@@ -1670,10 +1654,8 @@ _namecache_L29
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L30
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -1763,10 +1745,8 @@ _namecache_L32
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L31
                 LDY     #2
                 LDA     [_fcc_img16],Y
@@ -1799,10 +1779,8 @@ _namecache_L33
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
@@ -1978,10 +1956,8 @@ _namecache_L37
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L36
                 DO      8+holdrele_FRAMESIZE/256
                 TSC
@@ -2494,10 +2470,8 @@ _namecache_L46
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -2797,15 +2771,14 @@ _namecache_L56
 _namecache_L55
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _namecache_L57
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2815,12 +2788,8 @@ _namecache_L57
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vget
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _namecache_L58
                 LDAL    KFGX_YIELD_MIRROR
@@ -2880,6 +2849,7 @@ _namecache_L62
                 BNE     _namecache_L60
                 LDY     #58
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     *+5
                 BRL     _namecache_L59
 _namecache_L60
@@ -2893,12 +2863,8 @@ _namecache_L60
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL _namecache_specalloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -3046,10 +3012,8 @@ _namecache_L65
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L63
                 LDA     #0
                 STA     _fcc_fpr0
@@ -3059,7 +3023,7 @@ _namecache_L63
                 CLC
                 ADC     #checkalias_FRAMESIZE-8
                 TCS
-                BRL     checkalias_bandx
+                BRA     checkalias_bandx
 _namecache_L59
                 LDA     #0
                 PHA
@@ -3067,10 +3031,9 @@ _namecache_L59
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img18],Y
                 PHA
@@ -3124,10 +3087,10 @@ _namecache_L59
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -3360,10 +3323,8 @@ _namecache_L69
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vput
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -3642,9 +3603,7 @@ _namecache_L76
                 FIN
                 PHA
                 FGX2_FARCALL chrtoblk
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img18
                 TAX
                 CMP     #65535
@@ -4040,15 +3999,14 @@ _namecache_L92
 _namecache_L91
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _namecache_L93
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4200,10 +4158,8 @@ _namecache_L94
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4268,10 +4224,8 @@ vclean_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vref
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L95
                 LDA     [_fcc_img16]
                 TAX
@@ -4289,10 +4243,8 @@ _namecache_L95
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L96
                 LDA     [_fcc_img16]
                 TAX
@@ -4363,10 +4315,9 @@ _namecache_L97
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vinvalbuf
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
 _namecache_L98
                 LDY     #22
                 LDA     [_fcc_img16],Y
@@ -4592,10 +4543,8 @@ _namecache_L105
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L104
                 LDA     5,S   ; fccstk d=0 b=5
                 BEQ     _namecache_L106
@@ -4603,10 +4552,8 @@ _namecache_L104
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L106
                 LDA     [_fcc_img16]
                 PHA
@@ -4636,10 +4583,8 @@ _namecache_L106
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L107
                 TAY
                 TSC
@@ -4715,10 +4660,8 @@ vgone_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4732,10 +4675,9 @@ _namecache_L108
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -4745,10 +4687,10 @@ _namecache_L108
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -4802,10 +4744,8 @@ _namecache_L113
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L111
                 LDY     #54
                 LDA     [_fcc_img16],Y
@@ -5070,10 +5010,8 @@ _namecache_L126
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L124
 _namecache_L117
                 LDA     [_fcc_img16]
@@ -5212,10 +5150,8 @@ _namecache_L130
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L133
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -5251,10 +5187,8 @@ _namecache_L127
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_specfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -5291,10 +5225,8 @@ _namecache_L109
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 SEP     #$20
                 MX      %10
@@ -5511,10 +5443,8 @@ vflush_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L138
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
@@ -5651,15 +5581,14 @@ _namecache_L145
 _namecache_L148
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _namecache_L149
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _namecache_L140
 _namecache_L149
                 LDA     _fcc_img22
@@ -5681,10 +5610,8 @@ _namecache_L149
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _namecache_L152
 _namecache_L151
                 LDA     #0
@@ -5693,10 +5620,9 @@ _namecache_L151
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     _namecache_vfs_specops+2
@@ -5729,10 +5655,8 @@ _namecache_L155
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _namecache_L140
 _namecache_L153
                 LDA     _fcc_img16
@@ -5764,10 +5688,10 @@ _namecache_L153
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _namecache_L152
                 BRA     _namecache_L140
 _namecache_L150
@@ -6310,10 +6234,8 @@ ndget_stkok        TCS
                 FGX2_FARCALL kc_curpid
                 PHA
                 FGX2_FARCALL ndslot
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -6822,10 +6744,8 @@ _namecache_L188
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L186
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -7684,10 +7604,8 @@ _namecache_ncdetach_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 STA     [_fcc_img16]
                 SEP     #$20
@@ -8073,10 +7991,8 @@ _namecache_L203
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L204
                 DEC     _fcc_img20
                 BRL     _namecache_L203
@@ -8897,26 +8813,20 @@ _namecache_L232
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L228
                 LDA     _fcc_img21
                 STA     _fcc_fpr0+2
@@ -9093,12 +9003,8 @@ _namecache_L239
                 TYA
                 PHA
                 FGX2_FARCALL _namecache_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img21
                 LDA     _fcc_fpr0
@@ -9413,10 +9319,8 @@ _namecache_L256
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #2
                 TAY
                 TSC
@@ -9521,10 +9425,8 @@ _namecache_L258
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
@@ -9561,26 +9463,20 @@ _namecache_L253
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -9730,18 +9626,14 @@ _namecache_L263
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
@@ -9983,22 +9875,18 @@ _namecache_L270
                 TYA
                 PHA
                 FGX2_FARCALL _namecache_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _namecache_ncinshash
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -10138,12 +10026,9 @@ _namecache_L273
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL namehash
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 STA     nd+38
                 TAY
                 LDA     _fcc_long_hi
@@ -10535,19 +10420,13 @@ _namecache_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL nchinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10562,10 +10441,8 @@ _namecache_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vfs_setcacheops
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     mnt_a+16
                 TAY
@@ -10946,10 +10823,10 @@ _namecache_L306
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -10964,12 +10841,8 @@ _namecache_L306
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _namecache_L307
                 LDA     #60
@@ -11028,10 +10901,8 @@ _namecache_L308
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _namecache_hashed
                 TAX
                 CMP     #1
@@ -11062,10 +10933,10 @@ _namecache_L309
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11080,12 +10951,8 @@ _namecache_L309
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BEQ     _namecache_L310
                 LDA     #63
@@ -11228,10 +11095,10 @@ _namecache_L315
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11246,12 +11113,9 @@ _namecache_L315
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L316
                 LDA     #67
                 TAY
@@ -11279,10 +11143,10 @@ _namecache_L316
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11297,12 +11161,9 @@ _namecache_L316
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L317
                 LDA     #68
                 TAY
@@ -11330,10 +11191,10 @@ _namecache_L317
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11348,12 +11209,9 @@ _namecache_L317
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L318
                 LDA     #69
                 TAY
@@ -11384,10 +11242,8 @@ _namecache_L318
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -11406,10 +11262,10 @@ _namecache_L318
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     nchstats+6
                 STA     _fcc_long_hi
                 LDA     nchstats+4
@@ -11428,12 +11284,8 @@ _namecache_L318
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _namecache_L319
@@ -11622,10 +11474,10 @@ _namecache_L322
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11656,10 +11508,8 @@ _namecache_L322
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11667,10 +11517,8 @@ _namecache_L322
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -11678,10 +11526,8 @@ _namecache_L322
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     #0
@@ -11800,10 +11646,10 @@ _namecache_L324
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -11818,12 +11664,8 @@ _namecache_L324
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _namecache_L327
                 LDA     #76
@@ -12022,10 +11864,10 @@ _namecache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12056,10 +11898,8 @@ _namecache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12067,10 +11907,8 @@ _namecache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_purge
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -12089,10 +11927,10 @@ _namecache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -12107,12 +11945,9 @@ _namecache_L331
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L332
                 LDA     #81
                 TAY
@@ -12196,10 +12031,8 @@ _namecache_L333
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_purge
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -12372,10 +12205,10 @@ _namecache_L338
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -12390,12 +12223,9 @@ _namecache_L338
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L340
                 LDA     #85
                 TAY
@@ -12478,10 +12308,8 @@ _namecache_L342
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _namecache_hashed
                 CMP     #0
                 BEQ     _namecache_L343
@@ -12748,10 +12576,10 @@ _namecache_L349
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12782,10 +12610,8 @@ _namecache_L349
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _namecache_L347
                 INC     _fcc_img16
                 BRL     _namecache_L346
@@ -12874,10 +12700,10 @@ _namecache_L351
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -12892,12 +12718,8 @@ _namecache_L351
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BEQ     _namecache_L352
                 LDA     #93
@@ -12926,10 +12748,10 @@ _namecache_L352
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -12960,10 +12782,8 @@ _namecache_L352
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #main_sl_nm
                 PHA
                 LDA     #1
@@ -13024,10 +12844,10 @@ _namecache_L352
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13042,12 +12862,8 @@ _namecache_L352
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BEQ     _namecache_L353
                 LDA     #94
@@ -13118,10 +12934,10 @@ _namecache_L353
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13136,12 +12952,9 @@ _namecache_L353
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L354
                 LDA     #95
                 TAY
@@ -13376,10 +13189,10 @@ _namecache_L359
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13410,10 +13223,8 @@ _namecache_L359
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 PHB
@@ -13432,10 +13243,10 @@ _namecache_L359
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13466,10 +13277,8 @@ _namecache_L359
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _namecache_hashed
                 TAX
                 CMP     #2
@@ -13496,10 +13305,8 @@ _namecache_L360
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_purgevfs
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _namecache_hashed
                 TAX
                 CMP     #1
@@ -13530,10 +13337,10 @@ _namecache_L361
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13548,12 +13355,9 @@ _namecache_L361
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L362
                 LDA     #104
                 TAY
@@ -13581,10 +13385,10 @@ _namecache_L362
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13599,12 +13403,8 @@ _namecache_L362
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #$FFFF
                 BEQ     _namecache_L363
                 LDA     #105
@@ -13758,10 +13558,10 @@ _namecache_L366
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13792,10 +13592,8 @@ _namecache_L366
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     doingcache
                 SEP     #$20
@@ -13816,10 +13614,10 @@ _namecache_L366
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -13834,12 +13632,9 @@ _namecache_L366
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_lookup
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _namecache_L367
                 LDA     #109
                 TAY
@@ -13867,10 +13662,10 @@ _namecache_L367
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _namecache_seek
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -13901,10 +13696,8 @@ _namecache_L367
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL cache_enter
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 STA     doingcache
                 FGX2_FARCALL _namecache_hashed

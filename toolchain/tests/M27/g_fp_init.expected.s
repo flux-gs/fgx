@@ -119,9 +119,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _g_fp_init_L0
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #10
                 PHA
@@ -146,9 +144,7 @@ _g_fp_init_L0
                 PHA
                 RTL
 _g_fp_init_L1
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

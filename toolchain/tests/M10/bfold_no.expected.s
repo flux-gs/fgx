@@ -134,10 +134,8 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL _bfold_no_viacomplex
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -147,9 +145,7 @@ main_stkok        TCS
                 LDA     #0
                 PHA
                 FGX2_FARCALL _bfold_no_viaparam
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC

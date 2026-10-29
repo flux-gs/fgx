@@ -22,9 +22,7 @@ kc_panic_stkok        TCS
                 LDA     #99
                 PHA
                 FGX2_FARCALL exit
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC
@@ -187,10 +185,8 @@ _vreclaim_L1
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biodone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -270,10 +266,8 @@ _vreclaim_L4
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biodone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -1716,10 +1710,10 @@ _vreclaim_L21
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_binstailfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L19
                 INC     _fcc_img20
                 BRL     _vreclaim_L18
@@ -1837,12 +1831,10 @@ incore_stkok        TCS
                 PEI     _fcc_img21
                 PEI     _fcc_img20
                 FGX2_FARCALL _vreclaim_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2150,10 +2142,8 @@ _vreclaim_L36
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L31
                 BRL     _vreclaim_L30
 _vreclaim_L32
@@ -2173,25 +2163,22 @@ _vreclaim_L32
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 ORA     #8
                 STA     [_fcc_img16]
                 LDA     [_fcc_img16]
                 TAX
                 AND     #512
+                CMP     #0
                 BEQ     _vreclaim_L39
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2214,19 +2201,15 @@ _vreclaim_L39
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelvp
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L40
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 LDY     #2
                 STA     [_fcc_img16],Y
@@ -2390,10 +2373,8 @@ _vreclaim_L43
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L41
                 PHA
                 SEP     #$20
@@ -2420,12 +2401,10 @@ _vreclaim_L41
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _vreclaim_bufhashof
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -2558,6 +2537,7 @@ _vreclaim_L49
                 LDA     [_fcc_img16]
                 TAX
                 AND     #8
+                CMP     #0
                 BEQ     _vreclaim_L53
                 LDA     [_fcc_img16]
                 TAX
@@ -2567,10 +2547,8 @@ _vreclaim_L49
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -2580,10 +2558,8 @@ _vreclaim_L53
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -2625,10 +2601,10 @@ _vreclaim_L46
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL bgetvp
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img23
                 STA     _fcc_long_hi
                 LDA     _fcc_img22
@@ -2656,10 +2632,10 @@ _vreclaim_L46
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_binshash
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -2741,10 +2717,8 @@ brelse_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L54
                 LDA     #2
                 STA     _fcc_tmp_b
@@ -2814,10 +2788,8 @@ _vreclaim_L54
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L55
                 LDA     #1
                 STA     _fcc_tmp_b
@@ -2887,10 +2859,8 @@ _vreclaim_L55
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L56
                 LDA     [_fcc_img16]
                 AND     #4
@@ -2920,19 +2890,15 @@ _vreclaim_L57
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelvp
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L59
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 LDY     #2
                 STA     [_fcc_img16],Y
@@ -3060,10 +3026,10 @@ _vreclaim_L61
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_binsheadfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _vreclaim_L67
 _vreclaim_L66
                 LDA     _fcc_img18
@@ -3073,10 +3039,10 @@ _vreclaim_L66
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_binstailfree
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L67
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -3159,15 +3125,14 @@ _vreclaim_L68
                 LDA     [_fcc_img16]
                 TAX
                 AND     #2
+                CMP     #0
                 BNE     _vreclaim_L69
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _vreclaim_L68
 _vreclaim_L69
                 LDA     _fcc_img17
@@ -3278,10 +3243,8 @@ biodone_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L73
                 LDA     [_fcc_img16]
                 ORA     #2
@@ -3351,10 +3314,8 @@ _vreclaim_L76
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L77
                 LDA     [_fcc_img18]
                 PHA
@@ -3373,10 +3334,8 @@ _vreclaim_L77
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L75
 _vreclaim_L74
                 LDA     [_fcc_img16]
@@ -3387,10 +3346,8 @@ _vreclaim_L74
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -3418,10 +3375,8 @@ _vreclaim_L78
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L79
                 TAY
                 TSC
@@ -3511,12 +3466,10 @@ bread_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img17
                 LDA     _fcc_fpr0
@@ -3571,7 +3524,7 @@ bread_stkok        TCS
                 CLC
                 ADC     #bread_FRAMESIZE-4
                 TCS
-                BRL     bread_bandx
+                BRA     bread_bandx
 _vreclaim_L80
                 LDA     [_fcc_img16]
                 TAX
@@ -3639,12 +3592,8 @@ _vreclaim_L81
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biowait
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -3735,10 +3684,10 @@ bwrite_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L82
                 LDA     #0
                 LDY     #36
@@ -3826,21 +3775,15 @@ _vreclaim_L84
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biowait
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 STA     1,S   ; fccstk d=0 b=1
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     1,S   ; fccstk d=0 b=1
                 TAY
                 TSC
@@ -3919,10 +3862,10 @@ bdwrite_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L85
                 LDA     [_fcc_img16]
                 TAX
@@ -3932,10 +3875,8 @@ _vreclaim_L85
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -3996,10 +3937,8 @@ bawrite_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4099,10 +4038,8 @@ bgetvp_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L86
                 LDA     _fcc_img16
                 LDY     #38
@@ -4165,10 +4102,10 @@ _vreclaim_L89
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL _vreclaim_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -4269,10 +4206,8 @@ _vreclaim_L90
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bufremvn
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #38
                 LDA     [_fcc_img16],Y
                 PHA
@@ -4435,19 +4370,15 @@ _vreclaim_L96
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L94
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bufremvn
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 AND     #512
@@ -4464,10 +4395,10 @@ _vreclaim_L94
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _vreclaim_L98
 _vreclaim_L97
                 LDA     _fcc_img19
@@ -4482,10 +4413,10 @@ _vreclaim_L97
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bufinsvn
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L98
                 TAY
                 TSC
@@ -4612,19 +4543,15 @@ _vreclaim_L102
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L103
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 ORA     #8
                 STA     [_fcc_img16]
@@ -4640,25 +4567,22 @@ _vreclaim_L103
                 FIN
                 TAX
                 AND     #2
+                CMP     #0
                 BNE     _vreclaim_L104
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bawrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _vreclaim_L105
 _vreclaim_L104
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -4717,10 +4641,8 @@ _vreclaim_L107
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _vreclaim_L107
 _vreclaim_L108
                 LDY     #46
@@ -4925,10 +4847,8 @@ _vreclaim_L119
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -4937,12 +4857,8 @@ _vreclaim_L119
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -5118,6 +5034,7 @@ _vreclaim_L127
                 LDA     [_fcc_img16]
                 TAX
                 AND     #8
+                CMP     #0
                 BEQ     _vreclaim_L130
                 LDA     [_fcc_img16]
                 TAX
@@ -5127,20 +5044,16 @@ _vreclaim_L127
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _vreclaim_L129
 _vreclaim_L130
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_bremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     [_fcc_img16]
                 TAX
                 ORA     #8
@@ -5162,17 +5075,16 @@ _vreclaim_L130
                 AND     #512
                 BEQ     _vreclaim_L131
                 LDA     13,S   ; fccstk d=0 b=13
-                INC
+                CLC
+                ADC     #1
                 STA     13,S   ; fccstk d=0 b=13
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL bwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                BRL     _vreclaim_L129
+                PLY
+                PLY
+                BRA     _vreclaim_L129
 _vreclaim_L131
                 LDY     #38
                 LDA     [_fcc_img16],Y
@@ -5219,10 +5131,10 @@ _vreclaim_L134
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL reassignbuf
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 BRA     _vreclaim_L135
 _vreclaim_L132
                 LDA     [_fcc_img16]
@@ -5234,10 +5146,8 @@ _vreclaim_L135
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L128
                 LDA     _fcc_img23
                 STA     _fcc_fpr0+2
@@ -5291,10 +5201,8 @@ _vreclaim_L137
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L136
                 LDA     13,S   ; fccstk d=0 b=13
                 TAY
@@ -5434,9 +5342,7 @@ _vreclaim_fs_lock_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL _vreclaim_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -5467,9 +5373,7 @@ _vreclaim_fs_unlock_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL _vreclaim_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -5500,9 +5404,7 @@ _vreclaim_fs_close_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL _vreclaim_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -5533,9 +5435,7 @@ _vreclaim_fs_inactive_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL _vreclaim_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -5566,9 +5466,7 @@ _vreclaim_fs_reclaim_stkok        TCS
                 LDA     #5
                 PHA
                 FGX2_FARCALL _vreclaim_note
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _vreclaim_fs_reclaim_fails
                 TAY
                 TSC
@@ -5621,10 +5519,8 @@ _vreclaim_fs_strategy_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bio_strategy
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -5689,6 +5585,7 @@ _vreclaim_L140
                 LDA     [_fcc_fpr0]
                 TAX
                 AND     #256
+                CMP     #0
                 BEQ     _vreclaim_L141
                 LDA     [_fcc_img16]
                 TAX
@@ -5698,10 +5595,8 @@ _vreclaim_L140
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 STA     1,S   ; fccstk d=0 b=1
                 BRA     _vreclaim_L140
@@ -5816,12 +5711,9 @@ dead_read_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _vreclaim_L142
                 SEP     #$20
                 MX      %10
@@ -5835,10 +5727,8 @@ dead_read_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L142
                 DO      8+dead_read_FRAMESIZE/256
                 TSC
@@ -5930,12 +5820,9 @@ dead_write_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _vreclaim_L144
                 SEP     #$20
                 MX      %10
@@ -5949,10 +5836,8 @@ dead_write_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L144
                 LDA     #5
                 TAY
@@ -6009,12 +5894,9 @@ dead_ioctl_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _vreclaim_L145
                 LDA     #9
                 TAY
@@ -6263,12 +6145,9 @@ _vreclaim_L150
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _vreclaim_L147
 _vreclaim_L148
                 LDA     [_fcc_img16]
@@ -6279,10 +6158,8 @@ _vreclaim_L148
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL biodone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #5
                 TAY
                 TSC
@@ -6405,12 +6282,9 @@ dead_lock_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _vreclaim_L152
                 LDA     #0
                 TAY
@@ -6525,12 +6399,9 @@ dead_bmap_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_chkvnlock
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BNE     _vreclaim_L154
                 LDA     #5
                 TAY
@@ -6757,10 +6628,8 @@ dead_badop_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #5
                 TAY
                 TSC
@@ -7308,10 +7177,9 @@ _vreclaim_L168
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     vnode_free_head
                 TAY
@@ -7350,10 +7218,9 @@ _vreclaim_L168
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_zerobytes
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_img18
 _vreclaim_L170
@@ -7403,10 +7270,8 @@ _vreclaim_L173
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L171
                 INC     _fcc_img18
                 BRA     _vreclaim_L170
@@ -7838,19 +7703,15 @@ _vreclaim_L176
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L179
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -7860,10 +7721,8 @@ _vreclaim_L179
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L180
                 LDA     #0
                 STA     [_fcc_img16]
@@ -8076,10 +7935,10 @@ _vreclaim_L181
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 DO      18+getnewvnode_FRAMESIZE/256
                 TSC
                 CLC
@@ -8188,10 +8047,8 @@ _vreclaim_L184
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L183
                 DO      8+vref_FRAMESIZE/256
                 TSC
@@ -8282,10 +8139,8 @@ vget_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #1
                 TAY
                 TSC
@@ -8301,10 +8156,8 @@ _vreclaim_L185
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L186
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -8394,10 +8247,8 @@ _vreclaim_L188
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L187
                 LDY     #2
                 LDA     [_fcc_img16],Y
@@ -8430,10 +8281,8 @@ _vreclaim_L189
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img16],Y
                 PHA
@@ -8609,10 +8458,8 @@ _vreclaim_L193
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L192
                 DO      8+holdrele_FRAMESIZE/256
                 TSC
@@ -9125,10 +8972,8 @@ _vreclaim_L202
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -9428,15 +9273,14 @@ _vreclaim_L212
 _vreclaim_L211
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _vreclaim_L213
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -9446,12 +9290,8 @@ _vreclaim_L213
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vget
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 CMP     #0
                 BEQ     _vreclaim_L214
                 LDAL    KFGX_YIELD_MIRROR
@@ -9511,6 +9351,7 @@ _vreclaim_L218
                 BNE     _vreclaim_L216
                 LDY     #58
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     *+5
                 BRL     _vreclaim_L215
 _vreclaim_L216
@@ -9524,12 +9365,8 @@ _vreclaim_L216
                 PEI     _fcc_fpr1+2
                 PEI     _fcc_fpr1
                 FGX2_FARCALL _vreclaim_specalloc
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0
                 STA     _fcc_fpr1
                 LDA     _fcc_fpr0+2
@@ -9677,10 +9514,8 @@ _vreclaim_L221
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L219
                 LDA     #0
                 STA     _fcc_fpr0
@@ -9690,7 +9525,7 @@ _vreclaim_L219
                 CLC
                 ADC     #checkalias_FRAMESIZE-8
                 TCS
-                BRL     checkalias_bandx
+                BRA     checkalias_bandx
 _vreclaim_L215
                 LDA     #0
                 PHA
@@ -9698,10 +9533,9 @@ _vreclaim_L215
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDY     #22
                 LDA     [_fcc_img18],Y
                 PHA
@@ -9755,10 +9589,10 @@ _vreclaim_L215
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
                 LDA     _fcc_img16
@@ -9991,10 +9825,8 @@ _vreclaim_L225
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vput
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -10273,9 +10105,7 @@ _vreclaim_L232
                 FIN
                 PHA
                 FGX2_FARCALL chrtoblk
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_img18
                 TAX
                 CMP     #65535
@@ -10671,15 +10501,14 @@ _vreclaim_L248
 _vreclaim_L247
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _vreclaim_L249
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDAL    KFGX_YIELD_MIRROR
                 BEQ     *+5
                 JSR     _fcc_safepoint
@@ -10831,10 +10660,8 @@ _vreclaim_L250
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -10899,10 +10726,8 @@ vclean_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vref
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L251
                 LDA     [_fcc_img16]
                 TAX
@@ -10920,10 +10745,8 @@ _vreclaim_L251
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L252
                 LDA     [_fcc_img16]
                 TAX
@@ -10994,10 +10817,9 @@ _vreclaim_L253
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vinvalbuf
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
 _vreclaim_L254
                 LDY     #22
                 LDA     [_fcc_img16],Y
@@ -11223,10 +11045,8 @@ _vreclaim_L261
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L260
                 LDA     5,S   ; fccstk d=0 b=5
                 BEQ     _vreclaim_L262
@@ -11234,10 +11054,8 @@ _vreclaim_L260
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L262
                 LDA     [_fcc_img16]
                 PHA
@@ -11267,10 +11085,8 @@ _vreclaim_L262
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_wakeup
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L263
                 TAY
                 TSC
@@ -11346,10 +11162,8 @@ vgone_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL kc_sleep
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -11363,10 +11177,9 @@ _vreclaim_L264
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr0
                 STZ     _fcc_fpr0+2
@@ -11376,10 +11189,10 @@ _vreclaim_L264
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDY     #52
                 LDA     [_fcc_img16],Y
                 TAX
@@ -11433,10 +11246,8 @@ _vreclaim_L269
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L267
                 LDY     #54
                 LDA     [_fcc_img16],Y
@@ -11701,10 +11512,8 @@ _vreclaim_L282
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L280
 _vreclaim_L273
                 LDA     [_fcc_img16]
@@ -11843,10 +11652,8 @@ _vreclaim_L286
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L289
                 LDA     9,S   ; fccstk d=0 b=9
                 TAX
@@ -11882,10 +11689,8 @@ _vreclaim_L283
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_specfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     _fcc_fpr1
                 STZ     _fcc_fpr1+2
@@ -11922,10 +11727,8 @@ _vreclaim_L265
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vremfree
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 SEP     #$20
                 MX      %10
@@ -12142,10 +11945,8 @@ vflush_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL kc_panic
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L294
                 LDA     #0
                 STA     9,S   ; fccstk d=0 b=9
@@ -12282,15 +12083,14 @@ _vreclaim_L301
 _vreclaim_L304
                 LDY     #2
                 LDA     [_fcc_img16],Y
+                CMP     #0
                 BNE     _vreclaim_L305
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _vreclaim_L296
 _vreclaim_L305
                 LDA     _fcc_img22
@@ -12312,10 +12112,8 @@ _vreclaim_L305
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRL     _vreclaim_L308
 _vreclaim_L307
                 LDA     #0
@@ -12324,10 +12122,9 @@ _vreclaim_L307
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     _vreclaim_vfs_specops+2
@@ -12360,10 +12157,8 @@ _vreclaim_L311
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 BRA     _vreclaim_L296
 _vreclaim_L309
                 LDA     _fcc_img16
@@ -12395,10 +12190,10 @@ _vreclaim_L309
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL insmntque
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
 _vreclaim_L308
                 BRA     _vreclaim_L296
 _vreclaim_L306
@@ -12941,10 +12736,8 @@ ndget_stkok        TCS
                 FGX2_FARCALL kc_curpid
                 PHA
                 FGX2_FARCALL ndslot
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -13453,10 +13246,8 @@ _vreclaim_L344
                 PEI     _fcc_img19
                 PEI     _fcc_img18
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L342
                 LDA     _fcc_img17
                 STA     _fcc_fpr0+2
@@ -14315,10 +14106,8 @@ _vreclaim_ncdetach_stkok        TCS
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 STA     [_fcc_img16]
                 SEP     #$20
@@ -14704,10 +14493,8 @@ _vreclaim_L359
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L360
                 DEC     _fcc_img20
                 BRL     _vreclaim_L359
@@ -15528,26 +15315,20 @@ _vreclaim_L388
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
 _vreclaim_L384
                 LDA     _fcc_img21
                 STA     _fcc_fpr0+2
@@ -15724,12 +15505,8 @@ _vreclaim_L395
                 TYA
                 PHA
                 FGX2_FARCALL _vreclaim_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     _fcc_img21
                 LDA     _fcc_fpr0
@@ -16044,10 +15821,8 @@ _vreclaim_L412
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #2
                 TAY
                 TSC
@@ -16152,10 +15927,8 @@ _vreclaim_L414
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_totail
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #24
                 LDA     [_fcc_img16],Y
                 PHA
@@ -16192,26 +15965,20 @@ _vreclaim_L409
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_ncdetach
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_tohead
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 TAY
                 TSC
@@ -16361,18 +16128,14 @@ _vreclaim_L419
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_nclru_remove
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_ncremhash
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDY     #48
                 LDA     [_fcc_img18],Y
                 PHA
@@ -16614,22 +16377,18 @@ _vreclaim_L426
                 TYA
                 PHA
                 FGX2_FARCALL _vreclaim_nchbucket
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 LDA     _fcc_img16
                 PEI     _fcc_img17
                 PEI     _fcc_img16
                 FGX2_FARCALL _vreclaim_ncinshash
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC
@@ -16889,10 +16648,8 @@ _vreclaim_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bufinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -16907,10 +16664,8 @@ _vreclaim_reset_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vntblinit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 STA     mnt_a+16
                 TAY
@@ -17037,10 +16792,9 @@ _vreclaim_L439
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     _vreclaim_n_trace
                 TAX
                 CMP     #5
@@ -17602,10 +17356,9 @@ _vreclaim_L460
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vclean
-                TSC
-                CLC
-                ADC     #6
-                TCS
+                PLY
+                PLY
+                PLY
                 LDA     _vreclaim_n_trace
                 TAX
                 CMP     #4
@@ -17788,10 +17541,8 @@ _vreclaim_L468
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -17799,10 +17550,8 @@ _vreclaim_L468
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     vnode_free_head+2
@@ -17849,10 +17598,8 @@ _vreclaim_L469
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     freevnodes
                 TAX
                 LDA     _fcc_img19
@@ -18162,10 +17909,8 @@ _vreclaim_L489
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _vreclaim_nslept
                 TAX
                 LDA     _fcc_img18
@@ -18329,12 +18074,10 @@ _vreclaim_L493
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -18370,10 +18113,8 @@ _vreclaim_L493
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr0+2
                 LDA     1,S   ; fccstk d=0 b=1
@@ -18383,12 +18124,8 @@ _vreclaim_L493
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_blkcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _vreclaim_L494
@@ -18424,10 +18161,8 @@ _vreclaim_L495
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _vreclaim_fake_writes
                 STA     _fcc_img19
                 LDA     3,S   ; fccstk d=0 b=3
@@ -18437,10 +18172,8 @@ _vreclaim_L495
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vgone
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     _vreclaim_fake_writes
                 TAX
                 LDA     _fcc_img19
@@ -18487,12 +18220,9 @@ _vreclaim_L497
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_blkcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _vreclaim_L498
                 LDA     #87
                 TAY
@@ -18511,12 +18241,9 @@ _vreclaim_L498
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL _vreclaim_blkcount
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _vreclaim_L499
                 LDA     #88
                 TAY
@@ -18739,10 +18466,8 @@ _vreclaim_L507
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL brelse
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 FGX2_FARCALL _vreclaim_reset
                 LDA     #_vreclaim_fake_disk
                 PHA
@@ -18843,12 +18568,10 @@ _vreclaim_L508
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL getblk
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     15,S   ; fccstk d=0 b=15
                 LDA     _fcc_fpr0
@@ -18884,10 +18607,8 @@ _vreclaim_L508
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL bdwrite
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     5,S   ; fccstk d=2 b=3
@@ -18897,12 +18618,10 @@ _vreclaim_L508
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vinvalbuf
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _vreclaim_L509
                 LDA     #96
                 TAY
@@ -19083,10 +18802,8 @@ _vreclaim_L513
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     #0
                 PHA
                 LDA     #0
@@ -19386,10 +19103,8 @@ _vreclaim_L523
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5
@@ -19397,10 +19112,8 @@ _vreclaim_L523
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL vrele
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2
                 LDA     5,S   ; fccstk d=0 b=5

@@ -99,9 +99,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _fn_struct_L1
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

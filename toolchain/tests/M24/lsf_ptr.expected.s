@@ -92,10 +92,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL setit
-                TSC
-                CLC
-                ADC     #4
-                TCS
+                PLY
+                PLY
                 LDA     5,S   ; fccstk d=0 b=5
                 STA     _fcc_long_hi
                 LDA     3,S   ; fccstk d=0 b=3

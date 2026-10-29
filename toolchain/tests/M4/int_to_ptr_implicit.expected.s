@@ -150,9 +150,7 @@ main_stkok        TCS
                 LDA     _fcc_fpr0
                 PHA
                 FGX2_FARCALL bump
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -202,9 +200,7 @@ _int_to_ptr_implicit_L3
                 LDA     #9
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 AND     #$00FF
                 ORA     _fcc_fpr0
@@ -223,9 +219,7 @@ _int_to_ptr_implicit_L4
                 LDA     #0
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 SEP     #$20
                 MX      %10
                 LDA     cmdadr+2
@@ -278,9 +272,7 @@ _int_to_ptr_implicit_L5
                 LDA     _fcc_fpr0
                 PHA
                 FGX2_FARCALL bump
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0

@@ -660,12 +660,11 @@ _longptr_impl_L18
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL arg
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _longptr_impl_L21
                 LDA     21,S   ; fccstk d=0 b=21
                 STA     _fcc_long_hi
@@ -676,12 +675,8 @@ _longptr_impl_L18
                 TYA
                 PHA
                 FGX2_FARCALL ret
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDA     3,S   ; fccstk d=0 b=3
                 STA     _fcc_fpr1+2
                 LDA     1,S   ; fccstk d=0 b=1

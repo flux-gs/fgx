@@ -91,9 +91,7 @@ main_stkok        TCS
                 LDA     #3
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     3,S   ; fccstk d=0 b=3
                 LDA     _fcc_fpr0
@@ -124,9 +122,7 @@ _amp_call_chain_L1
                 LDA     #1
                 PHA
                 FGX2_FARCALL pick
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     _fcc_fpr0
                 INC
                 INC

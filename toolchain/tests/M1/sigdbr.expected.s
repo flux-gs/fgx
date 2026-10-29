@@ -114,12 +114,9 @@ main_stkok        TCS
                 LDA     #2
                 PHA
                 FGX2_FARCALL signal
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 CMP     #$FFFF
                 BNE     _sigdbr_L0
                 LDA     #1
@@ -136,16 +133,12 @@ _sigdbr_L0
                 LDA     #1
                 PHA
                 FGX2_FARCALL churn
-                TAY
-                PLA
-                TYA
+                PLY
                 PHA
                 LDA     #2
                 PHA
                 FGX2_FARCALL churn
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -170,10 +163,8 @@ _sigdbr_L2
                 FGX2_FARCALL getpid
                 PHA
                 FGX2_FARCALL kill
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 LDA     sig_flag
                 TAX
                 CMP     #16898

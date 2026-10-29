@@ -653,12 +653,10 @@ _deref_store_L3
                 TYA
                 PHA
                 FGX2_FARCALL _deref_store_half
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -722,6 +720,7 @@ _deref_store_L3
                 LDA     #0
                 BRA     *+5
                 LDA     #1
+                CMP     #0
                 BEQ     _deref_store_L5
                 LDA     #5
                 TAY
@@ -772,12 +771,10 @@ _deref_store_L5
                 TYA
                 PHA
                 FGX2_FARCALL _deref_store_half
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0
@@ -1397,12 +1394,10 @@ _deref_store_L15
                 TYA
                 PHA
                 FGX2_FARCALL _deref_store_half
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0

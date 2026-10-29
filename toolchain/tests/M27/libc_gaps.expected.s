@@ -38,12 +38,9 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL strchr
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDA     _fcc_fpr0+2
                 STA     7,S   ; fccstk d=0 b=7
                 LDA     _fcc_fpr0
@@ -64,12 +61,10 @@ main_stkok        TCS
                 LDA     #1
                 PHA
                 FGX2_FARCALL write
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 STA     9,S   ; fccstk d=0 b=9
                 LDA     7,S   ; fccstk d=0 b=7
                 STA     _fcc_fpr0+2

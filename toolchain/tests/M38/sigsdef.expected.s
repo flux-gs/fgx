@@ -135,12 +135,6 @@ _sigsdef_L0
                 DEY
                 BPL     _sigsdef_L0
                 FGX2_FARCALL strlen
-                TAY
-                TSC
-                CLC
-                ADC     #0
-                TCS
-                TYA
                 STA     _fcc_tmp_b
                 PLA
                 CLC

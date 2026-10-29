@@ -65,9 +65,7 @@ main_stkok        TCS
                 LDA     #$9C40
                 PHA
                 FGX2_FARCALL big
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

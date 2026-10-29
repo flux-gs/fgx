@@ -53,12 +53,10 @@ main_stkok        TCS
                 TYA
                 PHA
                 FGX2_FARCALL same
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 TSC
                 CLC

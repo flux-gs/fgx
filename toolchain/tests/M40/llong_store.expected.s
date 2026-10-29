@@ -658,12 +658,10 @@ _llong_store_L2
                 TYA
                 PHA
                 FGX2_FARCALL _llong_store_pass
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -716,12 +714,10 @@ _llong_store_L2
                 TYA
                 PHA
                 FGX2_FARCALL _llong_store_pass
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA

@@ -67,21 +67,15 @@ main_stkok        TCS
                 LDA     #40
                 PHA
                 FGX2_FARCALL add
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #1
                 PHA
                 FGX2_FARCALL add
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #1
                 PHA
                 FGX2_FARCALL add
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     g_acc
                 TAY
                 TSC

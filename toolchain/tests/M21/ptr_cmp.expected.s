@@ -364,10 +364,8 @@ _ptr_cmp_L6
                 LDA     #3
                 PHA
                 FGX2_FARCALL icmp
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _ptr_cmp_L7
@@ -387,10 +385,8 @@ _ptr_cmp_L7
                 LDA     #$FFFF
                 PHA
                 FGX2_FARCALL icmp
-                TAY
-                PLA
-                PLA
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _ptr_cmp_L8

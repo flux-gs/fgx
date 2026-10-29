@@ -102,9 +102,7 @@ main_stkok        TCS
                 LDA     #40
                 PHA
                 FGX2_FARCALL jump_from_deep
-                TAY
-                PLA
-                TYA
+                PLY
                 LDA     #1
                 TAY
                 TSC

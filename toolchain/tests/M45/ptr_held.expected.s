@@ -109,9 +109,7 @@ _ptr_held_L0
                 LDA     [_fcc_img16]
                 PHA
                 FGX2_FARCALL bump
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -546,9 +544,7 @@ deep_stkok        TCS
                 LDA     [_fcc_fpr0]
                 PHA
                 FGX2_FARCALL bump
-                TAY
-                PLA
-                TYA
+                PLY
                 STA     _fcc_tmp_b
                 PLA
                 CLC
@@ -728,12 +724,8 @@ main_stkok        TCS
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #69
                 BEQ     _ptr_held_L8
@@ -758,12 +750,9 @@ _ptr_held_L8
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pick
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -809,12 +798,9 @@ _ptr_held_L12
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pick
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -859,12 +845,9 @@ _ptr_held_L14
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pick
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 PHA
                 SEP     #$20
                 MX      %10
@@ -927,12 +910,8 @@ _ptr_held_L9
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL deep
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 TAX
                 CMP     #6
                 BNE     _ptr_held_L18
@@ -1088,12 +1067,11 @@ _ptr_held_L17
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL walker
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
+                CMP     #0
                 BEQ     _ptr_held_L22
                 SEP     #$20
                 MX      %10
@@ -1143,12 +1121,9 @@ _ptr_held_L21
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL pick
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 LDY     #6
                 LDA     [_fcc_fpr0],Y
                 PHA
@@ -1181,12 +1156,8 @@ _ptr_held_L21
                 PEI     _fcc_fpr0+2
                 PEI     _fcc_fpr0
                 FGX2_FARCALL sum
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 PHA
                 LDA     #20
                 CLC

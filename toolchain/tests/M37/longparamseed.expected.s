@@ -338,10 +338,10 @@ main_stkok        TCS
                 LDA     #4
                 PHA
                 FGX2_FARCALL store
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 TAX
                 LDA:    img,X
@@ -407,10 +407,10 @@ _longparamseed_L12
                 LDA     #3
                 PHA
                 FGX2_FARCALL store
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 TAX
                 LDA:    img,X
@@ -457,10 +457,10 @@ _longparamseed_L14
                 LDA     #3
                 PHA
                 FGX2_FARCALL store
-                TSC
-                CLC
-                ADC     #8
-                TCS
+                PLY
+                PLY
+                PLY
+                PLY
                 LDA     #0
                 TAX
                 LDA:    img,X
@@ -505,12 +505,9 @@ _longparamseed_L16
                 LDA     #3
                 PHA
                 FGX2_FARCALL top
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #18
                 BEQ     _longparamseed_L18
@@ -536,12 +533,9 @@ _longparamseed_L18
                 LDA     #2
                 PHA
                 FGX2_FARCALL top
-                TAY
-                TSC
-                CLC
-                ADC     #6
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #14
                 BEQ     _longparamseed_L19

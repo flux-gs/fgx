@@ -84,9 +84,7 @@ main_stkok        TCS
                 PHA
                 RTL
 _fn_local_L1
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 TSC
                 CLC

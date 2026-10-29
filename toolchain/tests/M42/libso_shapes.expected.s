@@ -205,9 +205,7 @@ main_stkok        TCS
                 LDA     [_fcc_fpr1]
                 PHA
                 FGX2_FARCALL sink
-                TAY
-                PLA
-                TYA
+                PLY
                 TAY
                 PLA
                 STA     _fcc_fpr0

@@ -2584,12 +2584,10 @@ _llong_conv_L43
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #1
                 BEQ     _llong_conv_L44
@@ -2654,12 +2652,10 @@ _llong_conv_L44
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #2
                 BEQ     _llong_conv_L45
@@ -2724,12 +2720,10 @@ _llong_conv_L45
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #3
                 BEQ     _llong_conv_L46
@@ -2794,12 +2788,10 @@ _llong_conv_L46
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #4
                 BEQ     _llong_conv_L47
@@ -2864,12 +2856,10 @@ _llong_conv_L47
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #9
                 BEQ     _llong_conv_L48
@@ -2934,12 +2924,10 @@ _llong_conv_L48
                 TYA
                 PHA
                 FGX2_FARCALL _llong_conv_sw
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #9
                 BEQ     _llong_conv_L49
@@ -2996,9 +2984,7 @@ _llong_conv_L49
                 LDA     a
                 PHA
                 FGX2_FARCALL takes_int
-                TAY
-                PLA
-                TYA
+                PLY
                 TAX
                 CMP     #52719
                 BEQ     _llong_conv_L50
@@ -3023,12 +3009,8 @@ _llong_conv_L50
                 TYA
                 PHA
                 FGX2_FARCALL takes_long
-                TAY
-                TSC
-                CLC
-                ADC     #4
-                TCS
-                TYA
+                PLY
+                PLY
                 LDX     #52719
                 STX     _fcc_long_b_lo
                 LDX     #35243
@@ -3061,12 +3043,10 @@ _llong_conv_L51
                 TYA
                 PHA
                 FGX2_FARCALL narrows
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAX
                 CMP     #52719
                 BEQ     _llong_conv_L52
@@ -3116,12 +3096,10 @@ _llong_conv_L52
                 TYA
                 PHA
                 FGX2_FARCALL takes_ll
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA
@@ -3186,12 +3164,10 @@ _llong_conv_L53
                 TYA
                 PHA
                 FGX2_FARCALL takes_ll
-                TAY
-                TSC
-                CLC
-                ADC     #8
-                TCS
-                TYA
+                PLY
+                PLY
+                PLY
+                PLY
                 TAY
                 LDA     _fcc_q3
                 PHA

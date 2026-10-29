@@ -3309,20 +3309,27 @@ emit_call_indirect(int kc)
     /* g_expr_type set by caller from the fn-ptr's signature. */
 }
 
+/* Drop `bytes' of arguments after a call, leaving A -- the return value --
+ * alone.  Up to four words go with a PLY each: Y is dead at every call site
+ * (expression evaluation uses A only, and the callee did not keep it), and a
+ * pop is a byte where the stack-pointer arithmetic is six, eight when A has
+ * to be kept in Y around it.  More than four take the arithmetic, which is
+ * shorter and quicker from there.  `discard': the value is not used. */
 void
-emit_drop_args(int n_args)
+emit_drop_arg_bytes(int bytes, int discard)
 {
-    /* PLA reads the popped value into A, which would clobber the
-     * callee's return value.  Stash A in Y across the cleanup.
-     * (Y is dead at every call site: expression eval uses A only.) */
-    if (n_args > 0) {
-        ir_record_raw(IR_TAY, 0, 0, NULL);
-        for (int i = 0; i < n_args; i++) {
-            ir_record_raw(IR_POP_A, 0, 0, NULL);
-        }
-        ir_record_raw(IR_TYA, 0, 0, NULL);
+    if (bytes <= 0) return;
+    if (bytes <= 8) {
+        for (int i = 0; i < bytes; i += 2)
+            ir_emitf("                PLY\n");
+    } else {
+        if (!discard) ir_record_raw(IR_TAY, 0, 0, NULL);
+        ir_emitf("                TSC\n");
+        ir_record_raw(IR_ADD_CONST, (unsigned)bytes, 0, NULL);
+        ir_emitf("                TCS\n");
+        if (!discard) ir_record_raw(IR_TYA, 0, 0, NULL);
     }
-    g_s_delta -= 2 * n_args;
+    g_s_delta -= bytes;
 }
 
 /* RTL-ABI: lower IR_ADDR_PARAM — the SP-relative address of a hardware-stack
