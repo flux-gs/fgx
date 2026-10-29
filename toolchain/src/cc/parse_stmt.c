@@ -1,5 +1,9 @@
 #include "fcc.h"
 
+static int init_group_open(int (*nest)[INIT_NEST], int n_leaves, int f,
+                           int n_grp, const int *grp_lvl, int *end);
+static int init_char_array_end(int (*nest)[INIT_NEST], int n_leaves, int f);
+
 int
 parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
 {
@@ -60,7 +64,7 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
             const char *ff_name_ptr;
             int         ff_name_len;
             int         ff_sig_id;
-            if (parse_fn_ptr_declarator(t, &ff_name_ptr, &ff_name_len, &ff_sig_id)) {
+            if (parse_fn_ptr_declarator(t, &ff_name_ptr, &ff_name_len, &ff_sig_id, NULL)) {
                 expect(TOK_SEMI, "';' after fn-pointer field");
                 if (s->n_fields >= MAX_FIELDS_PER_STRUCT)
                     die(g_cur.line, g_cur.col, "too many struct fields");
@@ -127,7 +131,7 @@ parse_struct_def(const char *tag_ptr, int tag_len, int is_union)
             int nl2 = md.name_len < MAX_IDENT - 1 ? md.name_len : MAX_IDENT - 1;
             f->name = lex_intern_ident(md.name, nl2);
             f->struct_id    = t.struct_id;
-            f->fn_sig_id    = -1;
+            f->fn_sig_id    = md.fn_sig_id;    /* -1 but for `int (**pp)()' */
             f->is_bit_field = 0;
             f->bit_offset   = 0;
             f->bit_width    = 0;
@@ -582,8 +586,8 @@ parse_type_spec(void)
          * stashed in TypeSpec.struct_id (overload).  parse_decl /
          * parse_global_decl recognise this and pick up the IDENT
          * directly. */
-        if (td->base_type == LT_FN_PTR) {
-            t.base = LT_FN_PTR;
+        if (fnptr_based(td->base_type)) {   /* `int (*)()', `int (**)()' */
+            t.base = td->base_type;
             t.struct_id = td->fn_sig_id;
             next_tok();
             return t;
@@ -633,7 +637,9 @@ parse_declarator(TypeSpec base, int allow_abstract)
     d.name_line   = g_cur.line;
     d.name_col    = g_cur.col;
     d.struct_id   = (BTYPE(base.base) == BT_STRUCT) ? base.struct_id : -1;
-    d.fn_sig_id   = -1;
+    /* A function-pointer base -- a typedef of one, or of a pointer to one --
+     * carries its signature in struct_id (parse_type_spec). */
+    d.fn_sig_id   = fnptr_based(base.base) ? base.struct_id : -1;
     d.n_dims      = 0;
     d.row_stride  = 0;
     for (int i = 0; i < MAX_DIMS; i++) d.dims[i] = 0;
@@ -661,23 +667,43 @@ parse_declarator(TypeSpec base, int allow_abstract)
          * outside UNLESS a `[` or `(` follows the group, which is the binding
          * change -- pointer to array / pointer to function.  Pointer to
          * function never reaches here (parse_fn_ptr_declarator owns it), and
-         * pointer to array has no tword, so that one case is refused. */
+         * pointer to array has no tword, so that one case is refused.
+         * Pointer to POINTER to function does reach here: `int (**pp)()'
+         * is, by A.8.6.1 applied twice, a pointer to a function pointer. */
         int depth = 0, inner = 0;
         while (g_cur.kind == TOK_LPAREN) {
             depth++;
             next_tok();
             while (g_cur.kind == TOK_STAR) { inner++; next_tok(); }
         }
-        if (g_cur.kind != TOK_IDENT)
+        if (g_cur.kind == TOK_IDENT) {
+            d.name      = g_cur.id_ptr;
+            d.name_len  = g_cur.id_len;
+            d.name_line = g_cur.line;
+            d.name_col  = g_cur.col;
+            next_tok();
+        } else if (!allow_abstract) {
             die(g_cur.line, g_cur.col,
                 "parse_declarator: expected a name inside `( declarator )'");
-        d.name      = g_cur.id_ptr;
-        d.name_len  = g_cur.id_len;
-        d.name_line = g_cur.line;
-        d.name_col  = g_cur.col;
-        next_tok();
+        }
         while (depth-- > 0)
             expect(TOK_RPAREN, "')'");
+        if (inner >= 1 && g_cur.kind == TOK_LPAREN) {
+            /* The innermost `*' and the `( params )' make the function
+             * pointer, whose return type is the base with the leading
+             * `*'s; each further inner `*' is a pointer to that (K&R
+             * A.8.6.1: "the type of the identifier of D is ... pointer to
+             * T").  The signature rides on the declarator, as a function
+             * pointer's rides on its symbol.  A named `(*fp)()' reaches
+             * here only from a type name -- a cast or sizeof -- since the
+             * declaration sites take parse_fn_ptr_declarator first. */
+            d.fn_sig_id = parse_fnptr_sig(base, stars);
+            d.struct_id = -1;
+            d.type      = LT_FN_PTR;
+            while (--inner > 0)
+                d.type = INCREF(d.type, DERIV_PTR);
+            return d;
+        }
         if (inner && (g_cur.kind == TOK_LBRACKET || g_cur.kind == TOK_LPAREN))
             die(g_cur.line, g_cur.col,
                 "parse_declarator: pointer to array/function declared as "
@@ -2546,13 +2572,18 @@ walk_stmt(int n)
         break;
     }
     case S_DECL_STRUCTINIT: {
+        /* One kid per LEAF in order (struct_init_leaves), -1 for a leaf the
+         * list left out; leaves past the last kid are zero too.  For an
+         * all-scalar struct the leaves are the fields. */
         Local *lc = g_ast[n].sym_lc;
-        Struct *st = &g_structs[lc->struct_id];
-        int fi = 0;
-        for (; fi < g_ast[n].n_kids; fi++) {
-            int kid = g_ast_kids[g_ast[n].kid0 + fi];
-            Field *f = &st->fields[fi];
-            if (ISPTR(f->type) || f->type == LT_FN_PTR) {
+        Field leaves[MAX_STRUCT_INIT_LEAVES];
+        int   nl = struct_init_leaves(lc->struct_id, leaves, NULL,
+                                      MAX_STRUCT_INIT_LEAVES);
+        for (int fi = 0; fi < nl; fi++) {
+            int kid = (fi < g_ast[n].n_kids)
+                      ? g_ast_kids[g_ast[n].kid0 + fi] : -1;
+            Field *f = &leaves[fi];
+            if (kid >= 0 && (ISPTR(f->type) || f->type == LT_FN_PTR)) {
                 /* P3-2.7b: ptr / fn-ptr field straight from the FPR
                  * (was carrier-fed via fpr_out + _fcc_ptr+2). */
                 int k = walk_fpr(kid);
@@ -2560,16 +2591,11 @@ walk_stmt(int n)
                 fpr_drop(k);
                 continue;
             }
-            walk_expr_root(kid);
-            emit_store_local_field(lc, f);
-        }
-        for (; fi < st->n_fields; fi++) {       /* zero-fill scalar fields */
-            Field *f = &st->fields[fi];
-            if (f->type == LT_STRUCT || f->type == LT_CHAR_ARRAY ||
-                f->type == LT_INT_ARRAY || f->type == LT_LONG_ARRAY ||
-                f->type == LT_LLONG_ARRAY || f->type == LT_DOUBLE_ARRAY ||
-                f->type == LT_STRUCT_ARRAY)
+            if (kid >= 0) {
+                walk_expr_root(kid);
+                emit_store_local_field(lc, f);
                 continue;
+            }
             ir_emitf("                LDA     #0\n");
             g_expr_type = LT_INT;
             if (f->type == LT_DOUBLE) {          /* +0.0 is all-zero bits */
@@ -2596,74 +2622,12 @@ walk_stmt(int n)
     }
 }
 
+/* The parameter list of a function-pointer declarator, `( params )' with
+ * g_cur at its '(', interned as a signature whose return type is `base_t'
+ * with `ret_stars' pointer groups.  Consumes through the closing ')'. */
 int
-parse_fn_ptr_declarator(TypeSpec base_t,
-                        const char **out_name_ptr, int *out_name_len,
-                        int *out_sig_id)
+parse_fnptr_sig(TypeSpec base_t, int ret_stars)
 {
-    g_fnptr_decl_arr = 0;
-    if (g_cur.kind != TOK_LPAREN && g_cur.kind != TOK_STAR) return 0;
-
-    /* Snapshot lexer state. */
-    LexPeek save_pk;
-    lex_peek_save(&save_pk);
-
-    /* P3-2: pointer-returning fn-ptr — `T *(*name)(...)`.  Consume the
-     * return-type stars before requiring `(*`; the bail-restore below
-     * keeps ordinary `T *name` / `T **name` declarators (and the paren'd
-     * `T *(name)()` form) on their existing paths.  Struct-by-value
-     * return stays deferred; struct POINTER return works (base+PTR). */
-    int ret_stars = 0;
-    while (g_cur.kind == TOK_STAR) { ret_stars++; next_tok(); }
-    if (g_cur.kind != TOK_LPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-
-    next_tok();                            /* past first '(' */
-    if (g_cur.kind != TOK_STAR) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-    next_tok();                            /* past '*' */
-    /* Name is OPTIONAL: `(*name)(...)` OR the abstract `(*)(...)`.  The abstract
-     * form appears in prototype externs, e.g. `extern int f(int (*)(int), int)`.
-     * fcc previously required a name here and rejected such a declaration with
-     * "expected parameter name"; a prototype only needs the type. */
-    const char *id_ptr = "";
-    int id_len = 0;
-    if (g_cur.kind == TOK_IDENT) {
-        id_ptr = g_cur.id_ptr;
-        id_len = g_cur.id_len;
-        next_tok();                        /* past IDENT */
-    }
-    /* B-7: array of fn-ptrs — `T (*name[N])(args)` / `(*name[])(args)`. */
-    if (g_cur.kind == TOK_LBRACKET) {
-        next_tok();                        /* past '[' */
-        if (g_cur.kind == TOK_RBRACKET) {
-            g_fnptr_decl_arr = -1;         /* [] — size from init list */
-        } else {
-            long an = parse_const_bin(0);
-            if (an <= 0)
-                die(g_cur.line, g_cur.col,
-                    "fn-ptr array size must be a positive integer constant");
-            g_fnptr_decl_arr = (int)an;
-        }
-        if (g_cur.kind != TOK_RBRACKET) {
-            lex_peek_restore(&save_pk);
-            return 0;
-        }
-        next_tok();                        /* past ']' */
-    }
-    if (g_cur.kind != TOK_RPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
-    next_tok();                            /* past ')' */
-    if (g_cur.kind != TOK_LPAREN) {
-        lex_peek_restore(&save_pk);
-        return 0;
-    }
     next_tok();                            /* past '(' (start of params) */
 
     /* Parse the param list into a fresh signature.  Params can be int,
@@ -2706,16 +2670,96 @@ parse_fn_ptr_declarator(TypeSpec base_t,
         die(g_cur.line, g_cur.col, "expected ')' after fn-ptr param list");
     next_tok();                            /* past closing ')' */
 
-    *out_name_ptr = id_ptr;
-    *out_name_len = id_len;
     /* Return type: base + ret_stars PTR groups.  type_for_decl only for
      * the starred case — a bare `void (*fp)()` return stays TW_VOID (the
      * historical sig encoding; type_for_decl would reject bare void). */
-    *out_sig_id   = fn_sig_intern(ret_stars ? type_for_decl(base_t, ret_stars, 0)
-                                            : base_t.base,
-                                   n_params, params,
-                                   param_struct_ids, is_variadic,
-                                   ret_stars ? 0 : base_t.is_unsigned);
+    return fn_sig_intern(ret_stars ? type_for_decl(base_t, ret_stars, 0)
+                                  : base_t.base,
+                         n_params, params,
+                         param_struct_ids, is_variadic,
+                         ret_stars ? 0 : base_t.is_unsigned);
+}
+
+int
+parse_fn_ptr_declarator(TypeSpec base_t,
+                        const char **out_name_ptr, int *out_name_len,
+                        int *out_sig_id, int *out_pp)
+{
+    g_fnptr_decl_arr = 0;
+    if (out_pp) *out_pp = 0;
+    if (g_cur.kind != TOK_LPAREN && g_cur.kind != TOK_STAR) return 0;
+
+    /* Snapshot lexer state. */
+    LexPeek save_pk;
+    lex_peek_save(&save_pk);
+
+    /* P3-2: pointer-returning fn-ptr — `T *(*name)(...)`.  Consume the
+     * return-type stars before requiring `(*`; the bail-restore below
+     * keeps ordinary `T *name` / `T **name` declarators (and the paren'd
+     * `T *(name)()` form) on their existing paths.  Struct-by-value
+     * return stays deferred; struct POINTER return works (base+PTR). */
+    int ret_stars = 0;
+    while (g_cur.kind == TOK_STAR) { ret_stars++; next_tok(); }
+    if (g_cur.kind != TOK_LPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+
+    next_tok();                            /* past first '(' */
+    if (g_cur.kind != TOK_STAR) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    next_tok();                            /* past '*' */
+    /* Pointer to a function pointer, `(**name)(...)' -- K&R A.8.6.1 applied
+     * once more -- where the caller can declare one (out_pp non-NULL): the
+     * count of further `*'s.  Other callers leave it to parse_declarator,
+     * whose declarations take an ordinary pointer initializer. */
+    while (out_pp && g_cur.kind == TOK_STAR) {
+        (*out_pp)++;
+        next_tok();
+    }
+    /* Name is OPTIONAL: `(*name)(...)` OR the abstract `(*)(...)`.  The abstract
+     * form appears in prototype externs, e.g. `extern int f(int (*)(int), int)`.
+     * fcc previously required a name here and rejected such a declaration with
+     * "expected parameter name"; a prototype only needs the type. */
+    const char *id_ptr = "";
+    int id_len = 0;
+    if (g_cur.kind == TOK_IDENT) {
+        id_ptr = g_cur.id_ptr;
+        id_len = g_cur.id_len;
+        next_tok();                        /* past IDENT */
+    }
+    /* B-7: array of fn-ptrs — `T (*name[N])(args)` / `(*name[])(args)`. */
+    if (g_cur.kind == TOK_LBRACKET) {
+        next_tok();                        /* past '[' */
+        if (g_cur.kind == TOK_RBRACKET) {
+            g_fnptr_decl_arr = -1;         /* [] — size from init list */
+        } else {
+            long an = parse_const_bin(0);
+            if (an <= 0)
+                die(g_cur.line, g_cur.col,
+                    "fn-ptr array size must be a positive integer constant");
+            g_fnptr_decl_arr = (int)an;
+        }
+        if (g_cur.kind != TOK_RBRACKET) {
+            lex_peek_restore(&save_pk);
+            return 0;
+        }
+        next_tok();                        /* past ']' */
+    }
+    if (g_cur.kind != TOK_RPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    next_tok();                            /* past ')' */
+    if (g_cur.kind != TOK_LPAREN) {
+        lex_peek_restore(&save_pk);
+        return 0;
+    }
+    *out_name_ptr = id_ptr;
+    *out_name_len = id_len;
+    *out_sig_id   = parse_fnptr_sig(base_t, ret_stars);
     return 1;
 }
 
@@ -2783,7 +2827,7 @@ build_decl(TypeSpec t)
          * parse_fn_ptr_declarator restores the lexer when it declines, so
          * trying it per element costs a peek and no state. */
         while (parse_fn_ptr_declarator(t, &fn_name_ptr, &fn_name_len,
-                                       &fn_sig_id)) {
+                                       &fn_sig_id, NULL)) {
             declare_fnptr_local(fn_name_ptr, fn_name_len, fn_sig_id, tmp, &cnt);
             if (g_cur.kind != TOK_COMMA) {
                 expect(TOK_SEMI, "';' after fn-ptr local decl");
@@ -2851,7 +2895,7 @@ build_decl(TypeSpec t)
             int         fp_name_len;
             int         fp_sig_id;
             if (parse_fn_ptr_declarator(t, &fp_name_ptr, &fp_name_len,
-                                        &fp_sig_id)) {
+                                        &fp_sig_id, NULL)) {
                 declare_fnptr_local(fp_name_ptr, fp_name_len, fp_sig_id,
                                     tmp, &cnt);
                 if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
@@ -3001,6 +3045,8 @@ build_decl(TypeSpec t)
         new_lc->struct_id = (BTYPE(decl_type) == BT_STRUCT)
                             ? t.struct_id : -1;
         new_lc->is_unsigned = t.is_unsigned;   /* A-1 */
+        if (d.fn_sig_id >= 0)                  /* `int (**pp)()' */
+            new_lc->fn_sig_id = d.fn_sig_id;
         new_lc->byte_size = slot_count * 2;
         if (is_array)
             new_lc->array_bytes = (decl_type == LT_STRUCT_ARRAY)
@@ -3088,25 +3134,66 @@ build_decl(TypeSpec t)
                 if (cnt >= 64) die(line, col, "too many declarators");
                 tmp[cnt++] = in;
             } else if (decl_type == LT_STRUCT && g_cur.kind == TOK_LBRACE) {
-                Struct *st = &g_structs[new_lc->struct_id];
-                next_tok();   /* '{' */
-                int etmp[64];
+                /* One expression per LEAF (struct_init_leaves), so an
+                 * aggregate member takes its nested list, braced or elided,
+                 * exactly as a static struct's does (K&R A.8.7).  A leaf the
+                 * list does not reach is -1, which the walker stores as zero:
+                 * "If there are fewer initializers in the list than members
+                 * of the structure, the trailing members are initialized with
+                 * 0", and a short brace group zero-fills its own aggregate. */
+                Field leaves[MAX_STRUCT_INIT_LEAVES];
+                int   nest[MAX_STRUCT_INIT_LEAVES][INIT_NEST];
+                int   nl = struct_init_leaves(new_lc->struct_id, leaves, nest,
+                                              MAX_STRUCT_INIT_LEAVES);
+                if (nl < 0)
+                    die(line, col, "struct initializer has too many leaf members");
+                int etmp[MAX_STRUCT_INIT_LEAVES];
+                int grp_end[INIT_NEST], grp_lvl[INIT_NEST], n_grp = 0;
                 int ecnt = 0;
-                while (g_cur.kind != TOK_RBRACE) {
-                    if (ecnt >= st->n_fields)
-                        die(g_cur.line, g_cur.col, "too many struct initializers");
-                    Field *f = &st->fields[ecnt];
-                    if (f->type == LT_STRUCT || f->type == LT_CHAR_ARRAY ||
-                        f->type == LT_INT_ARRAY || f->type == LT_LONG_ARRAY ||
-                        f->type == LT_STRUCT_ARRAY)
-                        die(g_cur.line, g_cur.col,
-                            "nested aggregate in local struct initializer not supported");
-                    if (ecnt >= 64)
-                        die(g_cur.line, g_cur.col, "too many struct initializers");
-                    etmp[ecnt++] = ast_build_assign();
+                next_tok();   /* '{' */
+                for (int f = 0; f < nl && g_cur.kind != TOK_RBRACE; f++) {
+                    while (g_cur.kind == TOK_LBRACE) {
+                        grp_lvl[n_grp] = init_group_open(nest, nl, f, n_grp,
+                                                         grp_lvl, &grp_end[n_grp]);
+                        n_grp++;
+                    }
+                    int ge = f;
+                    if (g_cur.kind == TOK_STR_LIT && leaves[f].type == LT_CHAR)
+                        ge = init_char_array_end(nest, nl, f);
+                    if (ge > f) {
+                        if (g_cur.str_len > ge - f + 1)
+                            die(g_cur.line, g_cur.col,
+                                "string initializer is longer than the char "
+                                "array member it initializes");
+                        for (int e = 0; f + e <= ge; e++) {
+                            int ln = ast_new(N_LIT_INT, g_cur.line, g_cur.col);
+                            g_ast[ln].val = (e < g_cur.str_len)
+                                ? (unsigned)(unsigned char)g_cur.str_ptr[e] : 0;
+                            etmp[ecnt++] = ln;
+                        }
+                        next_tok();   /* the string */
+                        f = ge;
+                    } else {
+                        etmp[ecnt++] = ast_build_assign();
+                    }
+                    /* Close the groups this leaf ends, or a '}' ends early;
+                     * the leaves a short group leaves out are zero. */
+                    while (n_grp > 0 &&
+                           (f == grp_end[n_grp - 1] || g_cur.kind == TOK_RBRACE)) {
+                        while (f < grp_end[n_grp - 1]) {
+                            f++;
+                            etmp[ecnt++] = -1;
+                        }
+                        expect(TOK_RBRACE, "'}' after struct member group");
+                        n_grp--;
+                    }
                     if (g_cur.kind == TOK_COMMA) { next_tok(); continue; }
-                    break;
+                    if (g_cur.kind != TOK_RBRACE)
+                        die(g_cur.line, g_cur.col,
+                            "expected ',' between struct field inits");
                 }
+                if (g_cur.kind != TOK_RBRACE)
+                    die(g_cur.line, g_cur.col, "too many struct initializers");
                 expect(TOK_RBRACE, "'}'");
                 if (g_n_ast_kids + ecnt > MAX_AST_KIDS)
                     die(line, col, "struct-init kid pool overflow");
@@ -3552,22 +3639,47 @@ sfld_ptr_addr_init(Global *g, int idx)
     if (tg == NULL)
         die(g_cur.line, g_cur.col, "pointer field init: unknown global");
     int off = 0, cur_sid = tg->struct_id;
+    LocalType cur_ty = tg->type;
     LexPeek pk;
     lex_peek_save(&pk);
     next_tok();                        /* tentatively consume the base IDENT */
-    while (g_cur.kind == TOK_DOT) {
-        next_tok();                    /* consume '.' */
-        if (g_cur.kind != TOK_IDENT)
-            die(g_cur.line, g_cur.col, "pointer field init: field name after '.'");
-        if (cur_sid < 0)
-            die(g_cur.line, g_cur.col, "pointer field init: '.' on a non-struct");
-        Field *mf = field_lookup_dot(cur_sid, g_cur.id_ptr, g_cur.id_len);
-        if (mf == NULL)
-            die(g_cur.line, g_cur.col, "pointer field init: no such field");
-        off += mf->byte_offset;
-        cur_sid = mf->struct_id;
-        lex_peek_save(&pk);            /* checkpoint at this field name */
-        next_tok();                    /* tentatively consume it */
+    for (;;) {
+        if (g_cur.kind == TOK_DOT) {
+            next_tok();                /* consume '.' */
+            if (g_cur.kind != TOK_IDENT)
+                die(g_cur.line, g_cur.col, "pointer field init: field name after '.'");
+            if (cur_sid < 0)
+                die(g_cur.line, g_cur.col, "pointer field init: '.' on a non-struct");
+            Field *mf = field_lookup_dot(cur_sid, g_cur.id_ptr, g_cur.id_len);
+            if (mf == NULL)
+                die(g_cur.line, g_cur.col, "pointer field init: no such field");
+            off += mf->byte_offset;
+            cur_ty = mf->type;
+            cur_sid = mf->struct_id;
+            lex_peek_save(&pk);        /* checkpoint at this field name */
+            next_tok();                /* tentatively consume it */
+            continue;
+        }
+        /* A constant subscript, as the scalar pointer initializer takes
+         * one: K&R A.7.19, "the unary & operator may be applied to
+         * external or static objects, and to external and static arrays
+         * subscripted with a constant expression": `&g.s[2]',
+         * `&g.c[2].v'. */
+        if (g_cur.kind == TOK_LBRACKET) {
+            int es = elem_size_for(cur_ty, cur_sid);
+            if (es == 0)
+                die(g_cur.line, g_cur.col, "pointer field init: subscripted "
+                    "operand is not an array or pointer");
+            next_tok();                /* consume '[' */
+            off += (int)(parse_const_bin(0) * es);
+            if (g_cur.kind != TOK_RBRACKET)
+                die(g_cur.line, g_cur.col, "expected ']'");
+            lex_peek_save(&pk);        /* checkpoint at the ']' */
+            next_tok();                /* tentatively consume it */
+            cur_ty = DECREF(cur_ty);
+            continue;
+        }
+        break;
     }
     lex_peek_restore(&pk);             /* leave g_cur AT the last value token */
     g->init_values[idx]    = (unsigned)(tg - g_globals) | ((unsigned)off << 16);
@@ -3657,6 +3769,56 @@ parse_ldouble_init_bits(void)
     return bits;
 }
 
+/* A '{' at leaf f of a struct initializer, inside n_grp open brace groups
+ * (grp_lvl[] their nest[] levels, innermost last).  K&R A.8.7: "If an
+ * aggregate contains members of aggregate type, the initialization rules
+ * apply recursively", and "if the initializer for an aggregate's member that
+ * itself is an aggregate begins with a left brace, then the succeeding
+ * comma-separated list of initializers initializes the members of the
+ * subaggregate".  The brace opens the aggregate one level inside the
+ * innermost open group -- or deeper, when the levels between were elided and
+ * f is in the middle of them: it then belongs to the outermost aggregate f
+ * begins.  Consumes the '{', sets *end to the aggregate's last leaf, and
+ * returns its level. */
+static int
+init_group_open(int (*nest)[INIT_NEST], int n_leaves, int f, int n_grp,
+                const int *grp_lvl, int *end)
+{
+    int lv = n_grp ? grp_lvl[n_grp - 1] + 1 : 0;
+    while (lv < INIT_NEST && nest[f][lv] >= 0 && f > 0 &&
+           nest[f - 1][lv] == nest[f][lv])
+        lv++;
+    if (lv >= INIT_NEST || nest[f][lv] < 0 || n_grp >= INIT_NEST)
+        die(g_cur.line, g_cur.col, "too many braces in struct initializer");
+    next_tok();                                   /* consume '{' */
+    int e = f;
+    while (e + 1 < n_leaves && nest[e + 1][lv] == nest[f][lv])
+        e++;
+    *end = e;
+    return lv;
+}
+
+/* The last leaf of the char array whose first ELEMENT is leaf f, for a string
+ * literal initializing it (K&R A.8.7: "a character array may be initialized
+ * by a string literal; successive characters of the string initialize
+ * successive members of the array"); f itself when f begins no char array.
+ * The array is the level just above the leaf's own, so a scalar `char c'
+ * member and a char in a struct are not arrays here, and each row of a
+ * char[2][4] is its own array. */
+static int
+init_char_array_end(int (*nest)[INIT_NEST], int n_leaves, int f)
+{
+    int lv = INIT_NEST - 1, e = f;
+    while (lv > 0 && nest[f][lv] < 0)
+        lv--;                                     /* the leaf's own level */
+    lv--;                                         /* its array, if any */
+    if (lv >= 0 && NEST_IS_ARRAY(nest[f][lv]) &&
+        (f == 0 || nest[f - 1][lv] != nest[f][lv]))
+        while (e + 1 < n_leaves && nest[e + 1][lv] == nest[f][lv])
+            e++;
+    return e;
+}
+
 static int
 parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
 {
@@ -3680,8 +3842,8 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
          * exactly ONE slot per field and derived the element count by dividing
          * by n_fields, so neither shape could be expressed. */
         Field  leaves[MAX_STRUCT_INIT_LEAVES];
-        int    leaf_owner[MAX_STRUCT_INIT_LEAVES];
-        int    n_fields = struct_init_leaves(g->struct_id, leaves, leaf_owner,
+        int    nest[MAX_STRUCT_INIT_LEAVES][INIT_NEST];
+        int    n_fields = struct_init_leaves(g->struct_id, leaves, nest,
                                              MAX_STRUCT_INIT_LEAVES);
         if (n_fields < 0)
             die(g_cur.line, g_cur.col,
@@ -3733,19 +3895,24 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                         "expected '{' for struct-array element");
                 next_tok();   /* consume inner '{' */
             }
-            int grp_end = -1;          /* last leaf of an open member group */
-            /* Close an open member group: either this leaf was the group's
-             * last, or a '}' arrived early -- a SHORT group, whose remaining
-             * leaves zero-fill WITHIN the member rather than spilling into the
-             * next one (`{{1},{2}}` for two timevals is 1,0,2,0, not 1,2,...).
-             * A macro because the per-field tails are separate code paths (the
-             * int/char/long/float arm and the pointer/string arm each have
-             * their own comma handling) and both must close the group. */
+            /* The open brace groups, innermost last: each one's last leaf
+             * and the nest[] level it was opened at. */
+            int grp_end[INIT_NEST], grp_lvl[INIT_NEST];
+            int n_grp = 0;
+            /* Close open member groups: a group closes when this leaf was its
+             * last, or when a '}' arrives early -- a SHORT group, whose
+             * remaining leaves zero-fill WITHIN the member rather than
+             * spilling into the next one (`{{1},{2}}` for two timevals is
+             * 1,0,2,0, not 1,2,...).  Groups nested to the same last leaf
+             * close together, one '}' each.  A macro because the per-field
+             * tails are separate code paths (the int/char/long/float arm and
+             * the pointer/string arm each have their own comma handling) and
+             * both must close the group. */
 #define CLOSE_MEMBER_GROUP()                                                   \
             do {                                                               \
-                if (grp_end >= 0 &&                                            \
-                    (f == grp_end || g_cur.kind == TOK_RBRACE)) {              \
-                    while (f < grp_end) {                                      \
+                while (n_grp > 0 &&                                            \
+                       (f == grp_end[n_grp - 1] || g_cur.kind == TOK_RBRACE)) { \
+                    while (f < grp_end[n_grp - 1]) {                           \
                         f++;                                                   \
                         if (n >= MAX_INIT_VALUES)                              \
                             die(g_cur.line, g_cur.col,                         \
@@ -3761,31 +3928,34 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                         die(g_cur.line, g_cur.col,                             \
                             "expected '}' after struct member group");         \
                     next_tok();                                                \
-                    grp_end = -1;                                              \
+                    n_grp--;                                                   \
                 }                                                              \
             } while (0)
             for (int f = 0; f < n_fields; f++) {
                 if (n >= MAX_INIT_VALUES)
                     die(g_cur.line, g_cur.col,
                         "too many init values");
-                /* Optional MEMBER-group braces (K&R A.8.7: an aggregate member
-                 * takes a nested list, which may also be ELIDED -- eliding is
-                 * the flat form the rest of this loop already handles).  A
-                 * group covers exactly the leaves sharing this leaf's
-                 * top-level owner, so a SHORT group (`{1}` for a 2-member
-                 * timeval) zero-fills the rest of that member instead of
-                 * spilling into the next one, which is what makes brace
-                 * groups safe to accept rather than merely skip. */
-                if (g_cur.kind == TOK_LBRACE && grp_end < 0) {
-                    next_tok();                    /* consume member '{' */
-                    grp_end = f;
-                    while (grp_end + 1 < n_fields &&
-                           leaf_owner[grp_end + 1] == leaf_owner[f])
-                        grp_end++;
-                } else if (g_cur.kind == TOK_LBRACE) {
-                    die(g_cur.line, g_cur.col,
-                        "nested member-group braces deeper than one level "
-                        "not supported");
+                /* Optional MEMBER-group braces, at any depth.  K&R A.8.7: "If
+                 * an aggregate contains members of aggregate type, the
+                 * initialization rules apply recursively", and "if the
+                 * initializer for an aggregate's member that itself is an
+                 * aggregate begins with a left brace, then the succeeding
+                 * comma-separated list of initializers initializes the
+                 * members of the subaggregate".  Braces may also be ELIDED,
+                 * which is the flat form the rest of this loop handles.
+                 *
+                 * A '{' opens a group one level inside the innermost open
+                 * one -- or deeper, when the levels between were elided and
+                 * this leaf is in the middle of them: the brace then belongs
+                 * to the outermost aggregate this leaf begins.  The group
+                 * covers exactly that aggregate's leaves, so a SHORT group
+                 * (`{1}` for a 2-member timeval) zero-fills the rest of it
+                 * instead of spilling into the next one, which is what makes
+                 * brace groups safe to accept rather than merely skip. */
+                while (g_cur.kind == TOK_LBRACE) {
+                    grp_lvl[n_grp] = init_group_open(nest, n_fields, f, n_grp,
+                                                     grp_lvl, &grp_end[n_grp]);
+                    n_grp++;
                 }
                 Field *fld = &leaves[f];
                 /* A char ARRAY member initialized by a STRING LITERAL, which
@@ -3805,12 +3975,14 @@ parse_struct_brace_init(Global *g, int size_from_init, int line, int col)
                  * this the string would land in the first leaf and every
                  * following value would shift up by one member -- the silent
                  * mis-fill that expanding char arrays was previously avoided
-                 * to prevent.  Identified by the leaf's owner group rather
-                 * than by type, so a scalar `char c' member is untouched. */
+                 * to prevent.  The array is the one whose ELEMENT this leaf
+                 * is -- the level just above the leaf's own -- and the leaf
+                 * must begin it, so a scalar `char c' member, a char in a
+                 * struct, and a row of a char[2][4] other than at its start
+                 * are untouched; each row of a char[2][4] takes its own
+                 * string. */
                 if (g_cur.kind == TOK_STR_LIT && fld->type == LT_CHAR) {
-                    int ge = f;
-                    while (ge + 1 < n_fields && leaf_owner[ge + 1] == leaf_owner[f])
-                        ge++;
+                    int ge = init_char_array_end(nest, n_fields, f);
                     if (ge > f) {
                         int nchars = ge - f + 1;
                         if (g_cur.str_len > nchars)
@@ -4813,6 +4985,9 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
      * sets it from the field, an index step INHERITS it (the element of an
      * `unsigned int[]` is unsigned).  See the head assignment below. */
     int unsig = 0;
+    /* The signature of a function-pointer leaf, which is what makes the
+     * chain's value callable: `pack.who->func(args)'. */
+    int sig = -1;
     /* A NAMED MULTI-DIMENSIONAL ARRAY keeps its rank in the symbol (n_dims,
      * dims[] outermost first) beside a single ARY derivation, so DECREF alone
      * would type `m[i]' as the ELEMENT and scale i by the element's size.
@@ -4907,6 +5082,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
             g_ast[stepn].struct_id = f->struct_id;
             g_ast[stepn].is_unsigned = f->is_unsigned;
             unsig = f->is_unsigned;
+            sig = fnptr_based(f->type) ? f->fn_sig_id : -1;
             cur = f->type;
             cur_sid = f->struct_id;
             /* M19b: `dk = -1' above ended the base's rank, which is right --
@@ -4939,6 +5115,7 @@ build_lvalue_suffixes(int head, LocalType cur, int cur_sid)
     g_ast[head].b = first;
     g_ast[head].type = cur;
     g_ast[head].struct_id = cur_sid;
+    g_ast[head].fn_sig = fnptr_based(cur) ? sig : -1;
     /* Carry the LEAF's unsignedness out with the type.  Without this a read
      * routed through the walker silently lost it -- an `unsigned int` member
      * compared with `>` emitted the SIGNED helper (_fcc_gts16 instead of
@@ -6083,7 +6260,9 @@ build_stmt(void)
         if (ret_t == LT_VOID)
             die(g_cur.line, g_cur.col,
                 "void function must use 'return;' (no value)");
-        int rv = ast_build_assign();
+        /* K&R A.9.6: "return expression(opt);", and an expression is the
+         * comma level (A.7.18): `return (*s)++, 127;'. */
+        int rv = ast_build_comma();
         expect(TOK_SEMI, "';'");
         int n = ast_new(S_RETURN, rline, rcol);
         g_ast[n].a = rv;
@@ -8045,15 +8224,22 @@ build_stmt(void)
                 return build_stmt();         /* inner statement; ';' from stream */
             }
         }
-        /* Plain parenthesized expression statement (G20). */
-        {
-            int e = ast_build_comma();
-            expect(TOK_SEMI, "';'");
-            int n = ast_new(S_EXPR, g_cur.line, g_cur.col);
-            g_ast[n].a = e;
-            return n;
-        }
+        /* Plain parenthesized expression statement (G20).  It is a whole
+         * statement, so a void operand of its comma is allowed, as in
+         * `(x), voidcall();' -- K&R A.7.18: the result has "the type and
+         * value of the right operand". */
+        return build_comma_expr_stmt(g_cur.line, g_cur.col);
     }
+
+    /* Any other expression is a statement too: K&R A.9.2,
+     * "expression-statement: expression(opt) ;".  A macro that expands to
+     * a constant leaves `0;'. */
+    if (g_cur.kind == TOK_INT_LIT || g_cur.kind == TOK_CHAR_LIT ||
+        g_cur.kind == TOK_STR_LIT || g_cur.kind == TOK_FLOAT_LIT ||
+        g_cur.kind == TOK_MINUS || g_cur.kind == TOK_PLUS ||
+        g_cur.kind == TOK_TILDE || g_cur.kind == TOK_BANG ||
+        g_cur.kind == TOK_SIZEOF_KW)
+        return build_comma_expr_stmt(g_cur.line, g_cur.col);
 
     die(g_cur.line, g_cur.col, "expected statement");
 }
@@ -8168,19 +8354,19 @@ parse_func_decl_with_spec(TypeSpec ret_t)
             const char *fn_pname_ptr;
             int         fn_pname_len;
             int         fn_psig_id;
-            if (parse_fn_ptr_declarator(pt, &fn_pname_ptr, &fn_pname_len, &fn_psig_id)) {
-                /* An ARRAY of fn-ptrs as a PARAMETER (`int (*g[N])()`) is not
-                 * supported — the array size is dropped and (*g)(..) would call
-                 * the array's address.  Fail loud instead of miscompiling
-                 * (Fable review 2026-07-19; same guard added to the K&R path). */
+            int         fn_pp;
+            if (parse_fn_ptr_declarator(pt, &fn_pname_ptr, &fn_pname_len, &fn_psig_id, &fn_pp)) {
+                /* An ARRAY of fn-ptrs as a PARAMETER (`int (*g[N])()`) is a
+                 * pointer to a function pointer: K&R A.8.6.3, "The types of
+                 * parameters that are arrays or functions are altered to
+                 * pointers".  `(**g)()' is one already. */
                 if (g_fnptr_decl_arr != 0)
-                    die(g_cur.line, g_cur.col,
-                        "array-of-function-pointer parameter not supported");
+                    fn_pp++;
                 params[n_params].ptr  = fn_pname_ptr;
                 params[n_params].len  = fn_pname_len;
                 params[n_params].line = g_cur.line;
                 params[n_params].col  = g_cur.col;
-                params[n_params].type = LT_FN_PTR;
+                params[n_params].type = fnptr_ptr_type(fn_pp);
                 params[n_params].struct_id = -1;
                 params[n_params].fn_sig_id = fn_psig_id;
                 params[n_params].row_stride = 0;
@@ -8334,7 +8520,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
         params[n_params].type = param_adjust_type(ptype);
         params[n_params].struct_id =
             (BTYPE(ptype) == BT_STRUCT) ? pt.struct_id : -1;  /* G52: any depth */
-        params[n_params].fn_sig_id = -1;
+        params[n_params].fn_sig_id = fnptr_based(ptype) ? pt.struct_id : -1;
         params[n_params].row_stride = 0;
         params[n_params].is_unsigned = pt.is_unsigned;   /* A-1 */
         n_params++;
@@ -8402,12 +8588,14 @@ parse_func_decl_with_spec(TypeSpec ret_t)
              * buf[]` / plain idents), so fall through to the star/ident logic
              * below on 0.  On match, re-type the named parameter to LT_FN_PTR. */
             {
-                const char *fkp; int fkl, fk_sig;
+                const char *fkp; int fkl, fk_sig, fk_pp;
                 int fkln = g_cur.line, fkcl = g_cur.col;
-                if (parse_fn_ptr_declarator(kt, &fkp, &fkl, &fk_sig)) {
+                if (parse_fn_ptr_declarator(kt, &fkp, &fkl, &fk_sig, &fk_pp)) {
+                    /* An array of fn-ptrs is a pointer to one here (K&R
+                     * A.8.6.3: parameter arrays "are altered to pointers"),
+                     * and `(**pp)()' is one already. */
                     if (g_fnptr_decl_arr != 0)
-                        die(fkln, fkcl,
-                            "array-of-function-pointer parameter not supported");
+                        fk_pp++;
                     if (fkl == 0)
                         die(fkln, fkcl,
                             "K&R function-pointer declaration must name a parameter");
@@ -8415,7 +8603,7 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     for (int pi = 0; pi < n_params; pi++) {
                         if (params[pi].len == fkl &&
                             memcmp(params[pi].ptr, fkp, (size_t)fkl) == 0) {
-                            params[pi].type       = LT_FN_PTR;
+                            params[pi].type       = fnptr_ptr_type(fk_pp);
                             params[pi].fn_sig_id  = fk_sig;
                             params[pi].struct_id  = -1;
                             fmatched = 1;
@@ -8456,6 +8644,8 @@ parse_func_decl_with_spec(TypeSpec ret_t)
                     params[pi].struct_id =
                         (BTYPE(kdt) == BT_STRUCT)      /* G52: any depth */
                         ? kt.struct_id : -1;
+                    if (fnptr_based(kdt))              /* a typedef'd `int (**)()' */
+                        params[pi].fn_sig_id = kt.struct_id;
                     params[pi].is_unsigned = kt.is_unsigned;
                     matched = 1;
                     break;
@@ -9240,7 +9430,7 @@ parse_global_decl(TypeSpec t)
          * init-declarator-list are independent declarators sharing only the
          * declaration-specifiers. */
         while (parse_fn_ptr_declarator(t, &fn_name_ptr, &fn_name_len,
-                                       &fn_sig_id)) {
+                                       &fn_sig_id, NULL)) {
             if (g_fnptr_decl_arr != 0) {   /* B-7: array of fn-ptrs (conv_vec) */
                 parse_fnptr_global_array(fn_name_ptr, fn_name_len, fn_sig_id,
                                          g_fnptr_decl_arr, t.is_static, t.is_extern);
@@ -9326,7 +9516,7 @@ parse_global_decl(TypeSpec t)
             int         fp_name_len;
             int         fp_sig_id;
             if (parse_fn_ptr_declarator(t, &fp_name_ptr, &fp_name_len,
-                                        &fp_sig_id)) {
+                                        &fp_sig_id, NULL)) {
                 if (g_fnptr_decl_arr != 0) {
                     parse_fnptr_global_array(fp_name_ptr, fp_name_len, fp_sig_id,
                                              g_fnptr_decl_arr, t.is_static,
@@ -9429,6 +9619,8 @@ parse_global_decl(TypeSpec t)
                                     t.is_extern || tentative_extern);
         g->is_static = t.is_static;
         g->is_unsigned = t.is_unsigned;   /* A-1 */
+        if (d.fn_sig_id >= 0)             /* `int (**pp)()' */
+            g->fn_sig_id = d.fn_sig_id;
         if (decl_type == LT_STRUCT) {
             g->struct_id = t.struct_id;
             g->n_bytes   = (g_structs[t.struct_id].total_size + 1) & ~1;
@@ -9904,13 +10096,14 @@ parse_typedef_def(void)
         const char *td_name_ptr;
         int         td_name_len;
         int         td_sig_id;
-        if (parse_fn_ptr_declarator(t, &td_name_ptr, &td_name_len, &td_sig_id)) {
+        int         td_pp;
+        if (parse_fn_ptr_declarator(t, &td_name_ptr, &td_name_len, &td_sig_id, &td_pp)) {
             expect(TOK_SEMI, "';' after typedef fn-pointer");
             FCC_GROW(g_typedefs, g_n_typedefs, g_typedefs_cap, Typedef);
             Typedef *td = &g_typedefs[g_n_typedefs++];
             int nl = td_name_len < MAX_IDENT - 1 ? td_name_len : MAX_IDENT - 1;
             td->name = lex_intern_ident(td_name_ptr, nl);
-            td->base_type = LT_FN_PTR;
+            td->base_type = fnptr_ptr_type(td_pp);
             td->struct_id = -1;
             td->fn_sig_id = td_sig_id;
             td->n_elems   = 1;

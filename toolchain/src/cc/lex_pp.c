@@ -1559,6 +1559,8 @@ typedef struct {
     int        n;
     int        cur;
     Tok       *owned;   /* substituted vector to free on pop; NULL = shared body */
+    int        line;    /* the invocation's location, given to every token */
+    int        col;     /* read from the frame; 0 = keep the tokens' own */
 } MxFrame;
 static MxFrame g_mx[PP_MX_DEPTH];
 static int     g_mx_n = 0;
@@ -1642,7 +1644,7 @@ mx_on_stack(int midx)
 }
 
 static void
-mx_push(int midx, const Tok *toks, int n, Tok *owned)
+mx_push(int midx, const Tok *toks, int n, Tok *owned, int line, int col)
 {
     if (g_mx_n >= PP_MX_DEPTH)
         die(g_line, g_col, "macro expansion depth exceeds 16");
@@ -1651,6 +1653,8 @@ mx_push(int midx, const Tok *toks, int n, Tok *owned)
     g_mx[g_mx_n].n     = n;
     g_mx[g_mx_n].cur   = 0;
     g_mx[g_mx_n].owned = owned;
+    g_mx[g_mx_n].line  = line;
+    g_mx[g_mx_n].col   = col;
     g_mx_n++;
 }
 
@@ -2000,6 +2004,13 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
              * defined it: a static a header macro declares is the invoking
              * member's (fcc --libso attributes by file). */
             t.file = g_cur_path;
+            /* A body token was scanned from the #define text, so its own
+             * line and column are positions in that text.  It is reported
+             * where the macro is used, as cpp does: a diagnostic on `0;'
+             * from `#define T(x) 0' names the line holding `T(r);'.  The
+             * invoking name was stamped the same way if it came from an
+             * outer body, so nested expansions keep the outermost use. */
+            if (f->line) { t.line = f->line; t.col = f->col; }
             from_mx = 1;
         } else if (raw_ok) {
             scan_tok();
@@ -2017,7 +2028,7 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
             if (!m->is_funclike) {
                 /* Object-like: recursion guard, then splice the body. */
                 if (mx_on_stack(midx)) { *out = t; return 1; }
-                mx_push(midx, m->body_toks, m->n_body_toks, NULL);
+                mx_push(midx, m->body_toks, m->n_body_toks, NULL, t.line, t.col);
                 continue;
             }
             {
@@ -2059,7 +2070,7 @@ pp_next_tok_above(int base, int raw_ok, Tok *out)
                     int sn = 0;
                     Tok *sv = pp_subst_body(m, args, n_args, &sn);
                     pp_free_args(args, n_args);
-                    mx_push(midx, sv, sn, sv);
+                    mx_push(midx, sv, sn, sv, t.line, t.col);
                 }
                 continue;
             }
@@ -2086,7 +2097,7 @@ pp_expand_span(const Tok *t, int n, int *out_n)
     Tok *v = NULL;
     int vn = 0, cap = 0;
     Tok tok;
-    mx_push(-1, t, n, NULL);
+    mx_push(-1, t, n, NULL, 0, 0);   /* argument tokens keep their own */
     while (pp_next_tok_above(base, 0, &tok)) {
         if (vn >= cap) {
             cap = cap ? cap * 2 : 16;

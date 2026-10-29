@@ -780,6 +780,24 @@ struct_field_lookup(int sid, const char *name, int name_len)
     return field_lookup_global(name, name_len, NULL);
 }
 
+/* A new aggregate id for nest[][]: unique across the compile, low bit set
+ * for an array. */
+static int
+init_nest_id(int is_array)
+{
+    static int next;
+    return (++next << 1) | (is_array ? 1 : 0);
+}
+
+/* Record leaf n's aggregates: path[0..depth-1], and -1 below them. */
+static void
+init_nest_put(int (*nest)[INIT_NEST], int n, const int *path, int depth)
+{
+    if (!nest) return;
+    for (int k = 0; k < INIT_NEST; k++)
+        nest[n][k] = (k < depth) ? path[k] : -1;
+}
+
 /* Flatten a struct's fields into the LEAF slots a brace initializer supplies
  * one value each for (K&R A.8.7: the initializer for a structure is a
  * brace-enclosed list for its members, and a member that is itself an
@@ -806,18 +824,23 @@ struct_field_lookup(int sid, const char *name, int name_len)
  * handles the string form explicitly against the expanded leaves, which is
  * what makes the expansion safe rather than mis-filling.
  *
- * owners[i] (optional) gets the index of the TOP-LEVEL field leaf i came from,
- * so a caller can find the extent of one nested brace group.
- * Returns the leaf count, or -1 if it would exceed `max`. */
+ * nest[i] (optional) gets the aggregates leaf i belongs to at each brace
+ * level (see INIT_NEST), so a caller can find the extent of a nested brace
+ * group at any depth.  A rank-2 array member has a row level between the
+ * member and its elements: its rows are row_stride bytes, the elements
+ * n_elems / rows to a row.  Returns the leaf count, or -1 if it would exceed
+ * `max`. */
 int
-struct_init_leaves(int sid, Field *out, int *owners, int max)
+struct_init_leaves(int sid, Field *out, int (*nest)[INIT_NEST], int max)
 {
-    return struct_init_leaves_at(sid, 0, out, owners, max, 0, -1);
+    int path[INIT_NEST];
+    return struct_init_leaves_at(sid, 0, out, nest, max, 0, path, 0);
 }
 
 int
-struct_init_leaves_at(int sid, int base_off, Field *out, int *owners, int max,
-                      int n, int owner)
+struct_init_leaves_at(int sid, int base_off, Field *out,
+                      int (*nest)[INIT_NEST], int max, int n, int *path,
+                      int depth)
 {
     Struct *s;
     int     f;
@@ -827,26 +850,39 @@ struct_init_leaves_at(int sid, int base_off, Field *out, int *owners, int max,
     for (f = 0; f < s->n_fields; f++) {
         Field fl  = s->fields[f];
         int   off = base_off + fl.byte_offset;
-        int   top = (owner >= 0) ? owner : f;
+        int   ary = ISARY(fl.type) && fl.n_elems > 1;
 
+        if (depth < INIT_NEST)
+            path[depth] = init_nest_id(ary);
         /* embedded struct VALUE -> its own leaves */
         if (fl.type == LT_STRUCT && fl.struct_id >= 0 && fl.n_elems <= 1) {
-            n = struct_init_leaves_at(fl.struct_id, off, out, owners, max,
-                                      n, top);
+            n = struct_init_leaves_at(fl.struct_id, off, out, nest, max,
+                                      n, path, depth + 1);
             if (n < 0) return -1;
             continue;
         }
         /* ARRAY member -> one leaf per element (recursing for a struct
          * element type).  byte_size/n_elems is the element stride. */
-        if (ISARY(fl.type) && fl.n_elems > 1) {
+        if (ary) {
             LocalType ety  = DECREF(fl.type);
             int       esz  = (fl.n_elems > 0) ? (fl.byte_size / fl.n_elems) : 0;
+            int       rows = (fl.n_dims >= 2 && fl.row_stride > 0)
+                             ? fl.byte_size / fl.row_stride : 0;
+            int       per_row = (rows > 0) ? fl.n_elems / rows : 0;
             int       e;
             if (esz <= 0) return -1;
             for (e = 0; e < fl.n_elems; e++) {
+                int d = depth + 1;
+                if (per_row > 0) {
+                    if (e % per_row == 0 && d < INIT_NEST)
+                        path[d] = init_nest_id(1);      /* a new row */
+                    d++;
+                }
+                if (d < INIT_NEST)
+                    path[d] = init_nest_id(0);          /* the element */
                 if (ety == LT_STRUCT && fl.struct_id >= 0) {
                     n = struct_init_leaves_at(fl.struct_id, off + e * esz, out,
-                                              owners, max, n, top);
+                                              nest, max, n, path, d + 1);
                     if (n < 0) return -1;
                     continue;
                 }
@@ -856,7 +892,7 @@ struct_init_leaves_at(int sid, int base_off, Field *out, int *owners, int max,
                 out[n].n_elems     = 1;
                 out[n].byte_offset = off + e * esz;
                 out[n].byte_size   = esz;
-                if (owners) owners[n] = top;
+                init_nest_put(nest, n, path, d + 1);
                 n++;
             }
             continue;
@@ -864,7 +900,7 @@ struct_init_leaves_at(int sid, int base_off, Field *out, int *owners, int max,
         if (n >= max) return -1;
         out[n] = fl;
         out[n].byte_offset = off;
-        if (owners) owners[n] = top;
+        init_nest_put(nest, n, path, depth + 1);
         n++;
     }
     return n;
