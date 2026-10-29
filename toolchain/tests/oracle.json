@@ -230,6 +230,7 @@
   "fnptr_arr_null": 42,
   "fnptr_drfcall": 42,
   "fnptr_drift": 42,
+  "fnptr_null": 42,
   "fnptr_ptrret": 42,
   "fnptr_table": 42,
   "fnptr_tyarr": 42,
