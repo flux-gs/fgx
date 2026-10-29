@@ -1164,6 +1164,24 @@ addr_run_needs_walker(void)
     return (n_arrow != 1 || n_dot != 0);                 /* only bare A is covered */
 }
 
+/* `&' of the suffix run at g_cur (from the first `.'/`->'), built by the
+ * uniform lvalue walker: the address of whatever lvalue the run names. */
+static int
+addr_of_run(Local *lc, Global *gv, LocalType bt, int sid, int line, int col)
+{
+    int head = ast_new(N_LV_CHAIN, line, col);
+    g_ast[head].c = -1;
+    g_ast[head].sym_lc = lc; g_ast[head].sym_gv = gv;
+    build_lvalue_suffixes(head, bt, sid);
+    int an = ast_new(N_ADDR_LV_E, line, col);
+    g_ast[an].a = head;
+    g_ast[an].type = (g_ast[head].type == LT_STRUCT)
+                   ? LT_STRUCT_PTR
+                   : INCREF(g_ast[head].type, DERIV_PTR);
+    g_ast[an].struct_id = g_ast[head].struct_id;
+    return an;
+}
+
 /* Transcribed decision structure of parse_unary (3a-D).  Result-descriptor
  * annotations mirror what the historical emission left in g_expr_*; arms that
  * historically left a field as a LEFTOVER get the nearest principled value —
@@ -1877,13 +1895,21 @@ build_unary(void)
                                g_cur.kind != TOK_ARROW);
                 LocalType ftype = f0 ? f0->type       : LT_INT;
                 int       fsid  = f0 ? f0->struct_id  : -1;
-                int is_arrfield = (f0 != NULL && after_lbr &&
-                                   (ftype == LT_CHAR_ARRAY ||
-                                    ftype == LT_INT_ARRAY ||
-                                    ftype == LT_LONG_ARRAY ||
-                                    ftype == LT_FLOAT_ARRAY ||
-                                    ftype == LT_STRUCT_ARRAY));
+                /* Any array member, whatever its element type (K&R A.7.3.1:
+                 * "the type of the subscript expression is T") -- an array of
+                 * pointers or of doubles as much as of ints.  A rank-2 member
+                 * takes two subscripts, which the uniform walker scales by
+                 * row and element. */
+                int is_arrfield = (f0 != NULL && after_lbr && ISARY(ftype) &&
+                                   f0->n_dims <= 1);
+                int is_rank2 = (f0 != NULL && after_lbr && ISARY(ftype) &&
+                                f0->n_dims >= 2);
                 lex_peek_restore(&pk_lp);
+                if (is_rank2) {
+                    int an = addr_of_run(lc, gv, bt, sid, op_line, op_col);
+                    while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
+                    return an;
+                }
                 if (is_bare) {
                     next_tok();                   /* consume '->' */
                     next_tok();                   /* consume field name */
@@ -2108,6 +2134,9 @@ build_unary(void)
             int dot_cum = 0;                  /* summed offset of intermediate
                                                * value-member hops (a.b.c) */
             Field *f = NULL;
+            int dsid0 = dsid;
+            LexPeek dpk;
+            lex_peek_save(&dpk);              /* at the first '.' */
             for (;;) {
                 next_tok();                   /* consume '.' */
                 if (g_cur.kind != TOK_IDENT)
@@ -2127,10 +2156,22 @@ build_unary(void)
                 }
                 break;
             }
-            if (g_cur.kind == TOK_LBRACKET &&
-                (f->type == LT_CHAR_ARRAY || f->type == LT_INT_ARRAY ||
-                 f->type == LT_LONG_ARRAY || f->type == LT_FLOAT_ARRAY ||
-                 f->type == LT_STRUCT_ARRAY)) {
+            /* A rank-2 member takes two subscripts, which the uniform walker
+             * scales by row and element: `&c.m[1][2]'. */
+            if (g_cur.kind == TOK_LBRACKET && ISARY(f->type) &&
+                f->n_dims >= 2) {
+                lex_peek_restore(&dpk);
+                int an = addr_of_run(lc, gv, lc ? lc->type : gv->type, dsid0,
+                                     op_line, op_col);
+                while (amp_paren-- > 0) expect(TOK_RPAREN, "')'");
+                return an;
+            }
+            /* Any array member: K&R A.7.3.1 puts no condition on the
+             * element type ("the type of the subscript expression is T"),
+             * and A.7.4.2 makes the result "pointer to T".  An array of
+             * pointers -- `&c.a[1]' with `char *a[2]' -- is a char **. */
+            if (g_cur.kind == TOK_LBRACKET && ISARY(f->type) &&
+                f->n_dims <= 1) {
                 int es = elem_size_for(f->type, f->struct_id);
                 next_tok();                   /* consume '[' */
                 int idx = build_comma_entry();

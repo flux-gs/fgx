@@ -717,5 +717,6 @@
   "sfld_subscript": 42,
   "fnptr_chain_call": 42,
   "init_nested": 42,
-  "init_nested_local": 42
+  "init_nested_local": 42,
+  "addr_member_elem": 42
 }
